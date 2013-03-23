@@ -1,0 +1,14 @@
+---
+pageable: true
+per_page: 5
+---
+<section id="blog" class="large-8 columns">
+  <ul class="index">
+    <% blog.articles.each do |article| %>
+      <li>
+        <a href="<%= article.url %>"><%= article.title %></a>
+        <br /><span class="font-light"><%= article.date.strftime('%b %e, %Y') %></span>
+      </li>
+    <% end %>
+  </ul>
+</section>

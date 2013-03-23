@@ -1,0 +1,78 @@
+@import '_settings';
+
+@mixin base-font {
+  font-family: $baseFont;
+}
+@mixin signature-font {
+  font-family: $signatureFont;
+}
+@mixin link-colors {
+  color: $secondaryColor;
+  &:hover {
+    color: $mainColor;
+  }
+}
+body {
+  padding: 2em 0;
+
+  @include base-font;
+  h1,h2,h3,h4,h5,h6 {
+    @include link-colors;
+    @include base-font;
+  }
+  a {
+    @include link-colors;
+  }
+  .logo {
+    font-family: "courier-prime",monospace;
+    color: $secondaryColor;
+    font-size:1.25em;
+    &:hover {
+      color: $secondaryColor;
+    }
+  }
+}
+header {
+  h1 { margin: 0;}
+  h2 { margin-top: 0;}
+  h1,h2,h3,h4,h5,h6 {
+    color: $mainColor;
+    @include signature-font;
+  }
+}
+
+#main {
+  padding-top:1em;
+  padding-bottom:1em;
+  margin-bottom:3em;
+  h2 { font-size:1.75em; margin-top:0;}
+  code {
+    overflow:auto;
+    margin-bottom:1.25em;
+    font-weight:normal;
+  }
+}
+
+#sidebar {
+  aside {
+    font-size: 90%;
+    h2, h3, h4 {
+      font-size: 100%;
+    }
+  }
+  .info {
+    margin-bottom: 2em;
+  }
+  .nav {
+    a {
+      @include button-base;
+      @include button-size(0.75em);
+      @include button-style(white);
+      color: #66666;
+    }
+  }
+}
+
+.font-light {
+  color:$greyColor;
+}

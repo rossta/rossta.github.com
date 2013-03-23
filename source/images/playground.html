@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+  <head>
+    <title></title>
+    <style type="text/css" media="screen">
+      body {
+        background-color:#ccc;
+        font-size: 1.5em;
+        color:#333;
+        font-family: "Lucida Grande", Tahoma, Verdana;
+      }
+      #header {
+        text-align:center;
+        color: #006633;
+        padding: 10px;
+        border: 1px solid #006600;
+        margin-bottom:10px;
+      }
+      .left { float:left;}
+      .column {
+        width: 50%;
+        height: 90%;
+      }
+      #show {
+        position:relative;
+      }
+      #tell .skin {
+        padding:10px;
+        border-left:1px solid #006600;
+      }
+      #tell textarea {
+        height: 50%;
+        width: 95%;
+        border-color:#666666;
+        border-width:1px;
+        font-size:1.5em;
+        color:#333333;
+        background-color:#efefef;
+        border-style:solid;
+        margin-bottom:0.25em;
+      }
+      #tell input {
+        background-color:#ff6600;
+        color: white;
+        font-size:1em;
+        border-width:5px;
+        padding:4px 20px;
+      }
+      #tell input:hover {
+        background-color:#66ff33;
+      }
+      #error {
+        color:blue;
+        margin-top: 1em;
+      }
+      #error .error {
+        color:red;
+      }
+      #player1 {
+        background-color:#66FF00;
+        position:absolute;
+        border:2px solid blue;
+        top:0;
+        left:10px;
+        z-index:2;
+        padding: 2px;
+      }
+      #home {
+        background-color:#aaa;
+        border:2px solid #666;
+        position:absolute;
+        color: white;
+        left:50%;
+        top:60%;
+        z-index:1;
+        padding: 25px 5px;
+      }
+      .box {
+        color:white;
+      }
+      #ok {
+        text-align:center;
+      }
+    </style>
+    <script src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript" charset="utf-8">
+      var PG = {};
+      PG.cheekyMessages = [
+        "I don't understand!",
+        "Whatch'you talkin' bout?",
+        "Try again",
+        "Seriously?",
+        "Keep trying",
+        "Don't give up",
+        "Not quite",
+        "This isn't what I had in mind"
+      ];
+      PG.cheekyMessage = function() {
+        var msgs = PG.cheekyMessages;
+        return msgs[Math.floor(Math.random()* (msgs.length))];
+      };
+    </script>
+    <script>
+      google.load("jquery", "1.4.2");
+      google.load("jqueryui", "1.8.1");
+      google.setOnLoadCallback(function() {
+        $("#playground input").click(function() {
+          var code = $("#playground textarea").val();
+          try {
+            eval(code.replace(/\'/g, "\""));
+            $("#error").html("");
+          } catch (err) {
+            $("#error").html("<div>" + PG.cheekyMessage() + "</div>");
+            $("#error").append("<div class='error'>" + err + "</div>");
+          }
+          return false;
+        });
+        $.fn.reset = function() { return window.location.reload(); };
+        $.reset = function() { return window.location.reload(); };
+        $.fn.move = function(x, y) {
+          $(this).animate({left: '+=' + x, top: '+=' + y});
+          return this;
+        };
+        $.fn.goto = function(x, y) {
+          $(this).animate({left: x, top: y});
+          return this;
+        };
+        $("#playground textarea").val('$("#player1")');
+        $("#ok").click(function() {
+          $(this).hide();
+          $('#playground').height($(window).height()).slideDown().find("textarea").height($(window).height()/2);
+          return false;
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="header">
+      Welcome to the Javascript Playground
+    </div>
+    <div id="ok"><a href="#">Ready to play?</a></div>
+    <div id="playground" style='display:none'>
+      <div id="show" class="column left">
+        <div id="home" class="box">Home</div>
+        <div id="player1" class="box"><image src="http://www.rosskaff.com/wp-content/uploads/2010/02/rossta.jpg" style="display:block" /></div>
+      </div>
+      <div id="tell" class="column left">
+        <div class="skin">
+          <textarea></textarea>
+          <input type="submit" value="Try" />
+          <div id="error"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

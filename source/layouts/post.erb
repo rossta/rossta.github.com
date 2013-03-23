@@ -1,0 +1,15 @@
+<% wrap_layout :layout do %>
+  <section id="blog">
+    <article class="post">
+      <h2>
+        <%= current_article.title %>
+        <br />
+        <small><%= current_article.date.strftime('%b %e') %></small>
+      </h2>
+      <%= yield %>
+    </article>
+    <section class="comments">
+      <!-- Comments -->
+    </section>
+  </section>
+<% end %>
