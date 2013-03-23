@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ross Kaffenberger</title>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
+  </head>
+  <body class="typekit">
+    <div class="row">
+      <section id="sidebar" class="large-4 columns">
+        <header class="signature-font">
+          <h1><a class="logo" href="/">rossta</a></h1>
+          <h2><a href="/"><small>ross kaffenberger</small></a><h2>
+        </header>
+        <section class="info">
+          <p>I make things</p>
+        </section>
+        <section class="nav">
+          <ul class="inline-list">
+  <li><a href="/writing">writing</a></li>
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/about">about</a></li>
+  <li><a href="http://twitter.com/rossta">twitter</a></li>
+  <li><a href="http://github.com/rossta">github</a></li>
+  <li><a href="mailto:rosskaff@gmail.com">email</a></li>
+</ul>
+
+        </section>
+      </section>
+
+      <section id="main" role="main" class="large-8 columns">
+          <article class="index-post">
+    <h2>
+      <a href="/writing/2011/06/23/lean-startup-meetup-ignited.html">Lean Startup Meetup Ignited</a>
+      <br />
+      <small>Jun 23</small>
+    </h2>
+    <p>The <a href="http://www.meetup.com/lean-startup">NYC Lean Startup Meetup</a> sponsored their first Ignite event last night at Pivotal Labs in Union Square. Fourteen speakers were given five minutes to share their thoughts and lessons learned relating to <a href="http://theleanstartup.com/">the lean startup</a> methodology. The catch with Ignite: the slides are fixed in number (20) and auto-advance every 15 seconds. Combine that with a packed house and open bar and the results are fast-paced, high-energy and fun.</p>
+
+<p>A few impressions:</p>
+
+<p><a href="http://twitter.com/ericries">Eris Reis</a> demonstrated how Ghostbusters is about a lean startup at its core… guys start something on the side, try to turn it into a business from nothing, get their first customer just when the money is about to run out, interesting things start to happen as the business grows. Perhaps the GBs were lucky that Zul arrived when he did, but real startups don’t have that luxury… instead of “waiting for Zul”, lean startups need to be more flexible and proactive…</p>
+
+<p><a href="http://twitter.com/farrahbostic">Farrah Bostic</a> quit her job at an ad agency after trying to apply lean methodology to a business model that wasn’t set up to interact with customers that way…</p>
+
+<p>When startups try to do much, it’s hard to do much well. It may be better to pick one idea to focus on, or as Brittany Laughlin explained about her experiences with here social travel app <a href="http://www.gtrot.com/">gtrot.com</a>, “It’s better to be young and simple, than young and stupid.”</p>
+
+<p>It was inspiring to hear that Yipit took off after a pivot that took days to turnaround. Their first attempt took 9 months to implement, the next, 3 months, but the idea that stuck was built in 3 days at first. They proved their idea with an initially low-tech solution–including an late night “crawler” that involved crawling out of bed at 3 am nightly to copy and paste data–that they were able to build into something more robust later with more confidence. Founder <a href="http://twitter.com/vacanti">Vin Vacanti</a> challenged the audience, “If we can prove a business idea in 3 days, why aren’t you doing it too?”</p>
+
+<p><a href="http://twitter.com/giffconstable">Giff Constable</a> provided a retrospective on one of his failed ideas: not enough resources, picking a difficult problem… His talk reinforced the lean notion that it’s okay to fail; the knowledge gained from our failures is invaluable to our future efforts.</p>
+
+<p>Shout outs to NYC Lean Startup for running a successful event and to Pivotal Labs for hosting.</p>
+
+  </article>
+  <article class="index-post">
+    <h2>
+      <a href="/writing/2011/02/26/opt-in-xss-protection-for-rails-3-upgrade.html">Opt-in XSS protection for Rails 3 upgrade</a>
+      <br />
+      <small>Feb 26</small>
+    </h2>
+    <p>When I’m really hungry, all I want is a Chipotle burrito. It seems like a good idea – it’s big, it tastes good and it’s right there across the street! It’s not long before I regret taking on that much food in one sitting. So it goes for upgrading <a href="http://www.weplay.com">Weplay</a> to Rails 3.</p>
+
+<p>A fundamental shift in Rails 3 is html escaping by default. A number of posts describe the need for this change, an important tool against cross-site scripting (XSS) attacks. Rather than rely on developers to escape user content where needed, all strings that don’t originate from Rails (link_to, form_for, etc.) are treated as unsafe. This is a good thing. Unfortunately, for most running Rails 2 apps, automatically html-escaping our views without adjustments results in a hot steaming pile of onscreen view-source dung.</p>
+
+<p><img alt="Weplay home page when html-escaped" src="http://www.rosskaff.com/wp-content/uploads/2011/02/The-Redskins-Golf-Team-Weplay.jpg" />
+This is exactly what you see the first time you install the recommended <a href="https://github.com/rails/rails_xss">rails_xss</a> plugin to provide Rails 3 XSS protection for your Rails 2 app. Despite the obvious work entailed to get things back to normal, this is another good thing. Making the switch to Rails 3 overnight may not be feasible, but adding XSS protection ahead of time will help smooth the transition.</p>
+
+<p>Except perhaps when your app is large. At the present count, we have over 1500 *.html.erb files in Weplay’s main repo. We simply can’t afford to devote the days to focus solely on fixes for excess html escaping in our templates. We need to be able to iterate on this change like everything else; incrementally instead of as an overhaul.</p>
+
+<p>We came up with an alternative: <a href="https://github.com/weplay/rails_xss">we forked rails_xss</a> to <em>disable</em> automatic html escaping by default while still providing the use of “html safe” strings and the Erubis ERB template engine. Developers can turn on html escaping locally using the <strong>autoescape</strong> block helper.</p>
+
+<p>Everything within the helper is escaped. Anything outside the helper is not escaped. Nesting autoescapes is ok: everything inside the outermost invocation is escaped.</p>
+
+<p>The autoescape helper allows us to apply the fixes on a view-by-view basis. We can devote most of our time to building features to help us make money and chip away at templates and partials as they pop up in our workflow. We even have a script to tell us how many files we still need to address.</p>
+
+<p>The key to this change is manipulating the original rails<em>xss plugin behavior. Rails 3 helpers are composed of the String subclass <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">SafeBuffer</a>, which will escape concatenated content not already marked as “html safe”. Internally, calling .html\</em>safe on a string simply sets a flag on the string object and this is flag is checked when adding to a string to SafeBuffer. By monkey-patching String, we disable the automatic escaping by always returning true for the html_safe? check. The autoescape flips on the flag, yields to the content block and flips the flag check back off afterwards. When autoescaping is already turned on, the block is returned as-is to allow nested autoescaping.</p>
+
+<p>There are alternatives. We could all crash on the upgrade (no time!) or we could keep the fully “escaped” version of our app in a separate branch, chip away at it, merge occasionally (not fun!).</p>
+
+<p>The opt-in approach works well for our agile mindset of fast incremental improvement and frequent deployment. I recommend using our fork if you have similar needs. It may even help with the heartburn.</p>
+
+<p>Resources</p>
+
+<ul>
+<li>  <a href="https://github.com/rails/rails_xss">rails/rails_xss</a></li>
+<li>  <a href="https://github.com/weplay/rails_xss">weplay/rails_xss</a></li>
+<li>  <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">Safe Buffer</a>
+*</li>
+</ul>
+
+  </article>
+  <article class="index-post">
+    <h2>
+      <a href="/writing/2010/12/27/behavior-driven-event-driven-eventmachine-rspec.html">How to Test Your Eventmachine Code with RSpec</a>
+      <br />
+      <small>Dec 27</small>
+    </h2>
+    <p>With all the hubbub around <a href="http://nodejs.org/">node.js</a> lately, it’s been easy to forget established event-driven server-side processing solutions in Ruby. One option is <a href="http://rubyeventmachine.com/">eventmachine</a>, which I recently used to develop a multi-player online sudoku game, <a href="http://rossta.github.com/sudokill/">Sudokill</a>, for my Heuristics class at NYU.</p>
+
+<p>As the game designer, I needed to build a game server that could easily handle multiple socket connections to player programs written by my classmates. Leveraging the event-driven nature of eventmachine, I was able to build a server that is fast, efficient and easy to maintain.</p>
+
+<p>A commonly-cited drawback to event-driven programming is that it’s hard. For starters, we can easily wrap our heads around a procedural approach to a server connecting to a client:
+</p>
+
+<p>Server waits for client 1
+Client attempts to connect to server
+Server accepts connection with client 1
+Server tells client 1 to wait
+Now server waits for client 2
+Repeat as before and so on&hellip;</p>
+
+<p></p>
+
+<p>This pattern is familiar: like a cookbook recipe or instructions for building a model airplane, we are well-equpped to handle things one step at a time. With the event model, we think in terms of discrete behaviors instead of ordered steps. We need to identify important events and their responses:</p>
+
+<p></p>
+
+<p>Whenever a socket connection is received, say hello
+Whenever a message through a socket connection, process it
+Whenever a socket connection disconnects, say goodbye</p>
+
+<p></p>
+
+<p>This model is common for front-end development (e.g. onclick, onmousever, etc.), but the notion of attaching events is not restricted to writing javascript for the DOM. Eventmachine provides some out-of-box hooks for adding behavior to expected events, like accepting socket connections. It also provides methods for defining and triggering our own custom behaviors.</p>
+
+<p>Speaking of behavior: what about behavior-driven development with eventmachine? Absorbing the conceptual leap to programming to events is one challenge, and now, the mechanics of writing tests for them present another.</p>
+
+<p>Let’s consider how we would test a client player connecting to my game server through a socket. I’ll build a class called Server which will be responsible for starting the eventmachine when its #start method is called. When a socket connection is made, I want to add the new player to a list of players kept on the server and send the message “READY” back to the client.</p>
+
+<p>How would we write an integration test for this with rspec? The test would have to start an instance of my server class and separately initiate a client socket connection. Once the connection is made, then the test assertions can be run. After some digging around, I found some good examples to follow in the Ilya Grigorik’s eventmachine-backed websocket server, <a href="https://github.com/igrigorik/em-websocket">em-websocket</a>. Here’s the basic approach:</p>
+
+<p>An eventmachine process runs in a loop: once we start the loop, it will run forever until we trigger the event to stop the loop. All of our eventmachine code will happen in the event loop. We setup the loop by passing our code in a block to the <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000461">run</a> method:</p>
+
+<p>So in our test, we’ll create the event loop with EM.run and pass a block with our test code in which we can start the game server and the socket connection. Once the assertions have been made, we’ll call EM.stop to end the event loop. Otherwise, it would run forever; we’d never get to the next test!</p>
+
+<p>An eventmachine socket server can be initiated with the <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000470">start_server</a> method. We’ll give this method a host and port where it will listen for clients.</p>
+
+<p>We’ll also use eventmachine’s <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000473">connect</a> method to make the client socket connection to the server. When a socket connection is made, eventmachine creates an instance of EventMachine::Connection which responds to certain methods representing different phases of the socket connection: after initialization, when a message is received, when the connection is broken, etc. EM.connect accepts a module or class inheriting from EventMachine::Connection which allows us to mix in our app or test logic to the connection.</p>
+
+<p>To take the place of a player client in the test, I’ve borrowed FakeSocketClient (which subclasses EventMachine::Connection) from the em-websocket test suite and defined it in my spec_helper.rb. The fake client exposes attr_accessors onopen, omessage and onclose that we’ll treat like callbacks in the test.</p>
+
+<p>We’ll assign a proc to the #onopen callback in FakeSocketClient. This proc will be triggered the first time the client socket receives a message. Since we want to the server to send a message when the connection is established, we expect this message to be “READY”. In addition, we’ll assert that there is one player added to the server’s list of players. Then we stop the event machine.</p>
+
+<p>The key for making our rspec assertions: the socket connection between the server and client is accepted after the rest of the code in the EM.run block has been called. The instance FakeSocketClient receives #initialize and #post_init when EM.connect is called, but then the context returns to our test: we can now assign procs to FakeSocketClient’s onopen, onmessage and onclose callbacks as needed.</p>
+
+<p>The #start method of our server is straightforward. It must start its own event loop and call EM.start_server previously discussed:</p>
+
+<p>Other tests may include multiple client connections where we may need to assert that different messages like “YOUR TURN” and “WAIT YOUR TURN” are sent to the correct players.</p>
+
+<p>For more reading on the subject of event programming, I recommend <a href="http://pdos.csail.mit.edu/~rtm/papers/dabek:event.pdf">Dabek, et.al, Event-driven Programming for Robust Software</a>.</p>
+
+  </article>
+  <article class="index-post">
+    <h2>
+      <a href="/writing/2010/12/25/heuristics.html">Heuristics</a>
+      <br />
+      <small>Dec 25</small>
+    </h2>
+    <p>I just completed another semester of grad school at NYU. Progress towards my computer science degree has been slow: this is my fourth year in the program. As a part-time student, one class at a time is all I can handle. This time, the course was <a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/index.html">Heuristics</a>, which by itself was more than almost anyone can handle.</p>
+
+<p>At its core, the course is about solving puzzles. What is the shortest route that passes through all the cities (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/travelingsalesman.html">Traveling Salesman</a>)? How many injured people around the city can you pick up in your ambulances in time (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/ambulance.html">Ambulance Planning</a>)? What strategy is best for winning more area than your opponents (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/voronoi.html">Voronoi</a>)? Who’s the best match across these 30 personality traits (Dating Game)?</p>
+
+<p>Most of these problems fall into the category called NP-hard, which may be roughly defined as the class of problems that are at least as hard as those that can be solved in non-deterministic polynomial time. The more useful way for us to think about the general definition is to say that there is a verifiable best answer to the problem, but it would be very difficult, perhaps impossible, to design a general approach that would find this solution quickly.</p>
+
+<p>Our goal for each problem then was to apply an appropriate set of heuristics: strategies to estimate a solution that would come as close as possible to the best solution in a reasonable amount of time. Two minutes in fact. Every week then, we had write a program to solve a NP-hard problem in competition with our classmates. If the program didn’t run, we lost. If it went over the two minute time limit, we lost.</p>
+
+<p>Most problems involved interacting with a server via sockets. One student was chosen as the “architect” each week. Instead of solving the problem, the architect created an interface and protocol for communicating with the player clients, and a GUI to display the game progress and results. Extra pressure came with this role: if the server didn’t work or if player clients had difficulty connecting, the competition would be a failure. I chose to be the architect for the final game of the semester, <a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html">Sudokill</a>, a form of competitive Sudoku. I plan to write more about Sudokill in the near future.</p>
+
+<p>By far, this course was the most difficult class I’ve taken in grad school, both conceptually and regarding the workload. At its peak, I spent 30-40 hours a week preparing for the Monday competition. This was often time spent in the early morning hours before and after work. By the end of the semester, fewer than 50% of students were completing their assignments on time. Despite the burden on my free time, this was also the most fun and rewarding class I’ve ever taken. It certainly helped that I was allowed to write my programs in Ruby; this is a rare opportunity in department where most of the faculty prefers Java and C .</p>
+
+<p>I’ve posted my class solutions in a single project on github:</p>
+
+<p>My code for the Sudokill game server:</p>
+
+<p>Check out the game too:
+<a href="http://rosskaff.github.com/sudokill/">http://rosskaff.github.com/sudokill</a>
+<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html">Game rules</a></p>
+
+  </article>
+  <article class="index-post">
+    <h2>
+      <a href="/writing/2010/09/08/step-up-to-the-soapbox.html">Step up to the soapbox</a>
+      <br />
+      <small>Sep  8</small>
+    </h2>
+    <p>Recently, I cobbled together an entry for the <a href="http://10k.aneventapart.com/">10K Apart Contest</a>. The contest encouraged participants to build an entirely front-end web application in HTML/CSS/Javascript in under 10 kb of total assets, not including some allowable third party libraries such as jQuery or Prototype. Entries must also leverage HTML5 features, some of which include local storage, the canvas API, and web workers.</p>
+
+<p>Several entries had already been submitted by the time I heard of the contest back in mid-July. I found games, like <a href="http://10k.aneventapart.com/Entry/62">Lines</a>, search engines, to-do lists, and so on. I considered implementing a Flickr slideshow that would make use of the contributions I’ve made to the <a href="http://github.com/weplay/supersized">supersized</a> jQuery plugin at Weplay, but ultimately decided on a Keynote/Powerpoint alternative.</p>
+
+<p>It’s called soapbox. The inspiration comes from <a href="http://github.com/schacon/showoff">showoff</a>, which is backed by a server. soapbox provides an in-browser interface to create, preview and present slides with <a href="http://daringfireball.net/projects/markdown/">markdown</a> or markup. Slides are auto-saved to local storage, if available, as json. I sent in <a href="http://10k.aneventapart.com/Entry/361">my 10K Apart entry</a> on the deadline day. You can also find the latest on <a href="http://github.com/rosskaff/soapbox">github</a>.</p>
+
+  </article>
+
+  <p>Page 2 of 3</p>
+  
+    <p><a href="/page/3/">Next page</a></p>
+  
+  
+    <p><a href="/">Previous page</a></p>
+  
+
+<section>
+  <a href="/writing">See all posts &raquo;</a>
+</section>
+
+      </section>
+    </div>
+    <div class="row">
+      <footer class="large-12 columns">
+        <ul class="inline-list">
+  <li><a href="/writing">writing</a></li>
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/about">about</a></li>
+  <li><a href="http://twitter.com/rossta">twitter</a></li>
+  <li><a href="http://github.com/rossta">github</a></li>
+  <li><a href="mailto:rosskaff@gmail.com">email</a></li>
+</ul>
+
+      </footer>
+    </div>
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </body>
+</html>

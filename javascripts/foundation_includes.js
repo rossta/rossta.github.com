@@ -1,0 +1,1 @@
+throw Error("Sprockets::FileNotFound: couldn't find file 'foundation/jquery'\n  (in /Users/ross/projects/rossta.io/home/source/javascripts/foundation_includes.js:2)");

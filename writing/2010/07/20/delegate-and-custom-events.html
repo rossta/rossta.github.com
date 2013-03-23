@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ross Kaffenberger</title>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
+  </head>
+  <body class="typekit">
+    <div class="row">
+      <section id="sidebar" class="large-4 columns">
+        <header class="signature-font">
+          <h1><a class="logo" href="/">rossta</a></h1>
+          <h2><a href="/"><small>ross kaffenberger</small></a><h2>
+        </header>
+        <section class="info">
+          <p>I make things</p>
+        </section>
+        <section class="nav">
+          <ul class="inline-list">
+  <li><a href="/writing">writing</a></li>
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/about">about</a></li>
+  <li><a href="http://twitter.com/rossta">twitter</a></li>
+  <li><a href="http://github.com/rossta">github</a></li>
+  <li><a href="mailto:rosskaff@gmail.com">email</a></li>
+</ul>
+
+        </section>
+      </section>
+
+      <section id="main" role="main" class="large-8 columns">
+          <section id="blog">
+    <article class="post">
+      <h2>
+        $.delegate and Custom Events
+        <br />
+        <small>Jul 20</small>
+      </h2>
+      <p>Sharing team photos and video is central to <a href="http://www.weplay.com">Weplay</a> and my team has been working hard recently to make some dramatic improvements to the media gallery experience.</p>
+
+<p>One area in dire need of attention was the ability to edit photo metadata easily: changing captions, deleting pictures, moving from one album to another, etc. A user was forced to submit changes for up to sixty photos at a time with one post request. The response was slow and the potential for losing lots of changes was unacceptable.</p>
+
+<p>We committed to swapping this experience with a more user-friendly ajaxified set of interactions. Each change is saved as you go and the updates take place in line. A key component of our front-end javascript is use of <a href="http://jquery.com/">jQuery</a>‘s <code>$.delegate</code>, available as of jQuery 1.4.2, and custom events.</p>
+
+<p>I put together a brown bag presentation for my team explaining the benefits of $.delegate and custom events, currently available at .</p>
+
+<p>The slides are written in markdown and presented using Scott Chacon’s excellent <a href="http://github.com/schacon/showoff">showoff</a>, which allows the embedding of printed, executable javascript. Note: since showoff ships with jQuery 1.4.0, the <code>$.delegate</code> examples are not currently executable.</p>
+
+    </article>
+    <section class="comments">
+      <!-- Comments -->
+    </section>
+  </section>
+
+      </section>
+    </div>
+    <div class="row">
+      <footer class="large-12 columns">
+        <ul class="inline-list">
+  <li><a href="/writing">writing</a></li>
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/about">about</a></li>
+  <li><a href="http://twitter.com/rossta">twitter</a></li>
+  <li><a href="http://github.com/rossta">github</a></li>
+  <li><a href="mailto:rosskaff@gmail.com">email</a></li>
+</ul>
+
+      </footer>
+    </div>
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+  </body>
+</html>
