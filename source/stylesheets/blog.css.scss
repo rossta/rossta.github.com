@@ -1,14 +1,17 @@
 @import "_settings";
-
 ul.index {
   list-style-type:none;
   li {
     display:block;
     padding:1em 0;
+    &:first-child {
+      padding-top:0;
+    }
     a {
       font-weight: bold;
     }
   }
+  li:first-child {padding-top:0;}
 }
 .index-post {
   padding-bottom: 2em;

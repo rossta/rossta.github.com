@@ -7,8 +7,8 @@ activate :directory_indexes
 # Time.zone = "UTC"
 
 activate :blog do |blog|
-  blog.prefix = "writing"
-  # blog.permalink = ":year/:month/:day/:title.html"
+  blog.prefix = "blog"
+  blog.permalink = ":year/:month/:title.html"
   blog.sources = ":year-:month-:day-:title.html"
   # blog.taglink = "tags/:tag.html"
   blog.layout = "post"
@@ -82,7 +82,7 @@ end
 # Per-page layout changes:
 #
 # With no layout
-# page "/path/to/file.html", :layout => false
+page "/playground.html", :layout => false
 #
 # With alternative layout
 # page "/path/to/file.html", :layout => :otherlayout
