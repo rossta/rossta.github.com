@@ -15,9 +15,14 @@ ul.index {
 }
 .index-post {
   padding-bottom: 2em;
-  margin-bottom: 2.25em;
+  margin-bottom: 2em;
   border-color: #ccc;
   border-width: 0;
   border-bottom-width: 1px;
   border-style: solid;
+}
+article {
+  p:last-child {
+    margin-bottom: 0;
+  }
 }

@@ -115,8 +115,9 @@ page "/playground.html", :layout => false
 helpers do
   def title
     [].tap do |names|
+      names << yield_content(:title)
       names << "Ross Kaffenberger"
-    end.join(" | ")
+    end.compact.join(" | ")
   end
 end
 
