@@ -33,30 +33,14 @@
       </section>
 
       <section id="main" role="main" class="large-8 columns">
-          <article class="index-post">
-    <h2>
-      <a href="/blog/2010/07/delegate-and-custom-events.html">$.delegate and Custom Events</a>
-      <br />
-      <small>Jul 20</small>
-    </h2>
-    <p>Sharing team photos and video is central to <a href="http://www.weplay.com">Weplay</a> and my team has been working hard recently to make some dramatic improvements to the media gallery experience.</p>
-
-<p>One area in dire need of attention was the ability to edit photo metadata easily: changing captions, deleting pictures, moving from one album to another, etc. A user was forced to submit changes for up to sixty photos at a time with one post request. The response was slow and the potential for losing lots of changes was unacceptable.</p>
-
-<p>We committed to swapping this experience with a more user-friendly ajaxified set of interactions. Each change is saved as you go and the updates take place in line. A key component of our front-end javascript is use of <a href="http://jquery.com/">jQuery</a>‘s <code>$.delegate</code>, available as of jQuery 1.4.2, and custom events.</p>
-
-<p>I put together a brown bag presentation for my team explaining the benefits of $.delegate and custom events, currently available at .</p>
-
-<p>The slides are written in markdown and presented using Scott Chacon’s excellent <a href="http://github.com/schacon/showoff">showoff</a>, which allows the embedding of printed, executable javascript. Note: since showoff ships with jQuery 1.4.0, the <code>$.delegate</code> examples are not currently executable.</p>
-
-  </article>
-  <article class="index-post">
-    <h2>
-      <a href="/blog/2010/05/mott-hall-iii-school-career-day.html">Mott Hall III School Career Day</a>
-      <br />
-      <small>May 17</small>
-    </h2>
-    <p>As Calvin was leaving the classroom, he turned back toward me with a smile and a glint in his eye. That was all I needed to see to know: the lesson had made an impression. As a teacher, nothing beats that feeling. I could sense he wanted to say something; he was looking for the right words. He then told me about a website he knew of where he wanted to try more on his own.</p>
+          <section id="blog">
+    <article class="post">
+      <h2>
+        Mott Hall III School Career Day
+        <br />
+        <small>May 17</small>
+      </h2>
+      <p>As Calvin was leaving the classroom, he turned back toward me with a smile and a glint in his eye. That was all I needed to see to know: the lesson had made an impression. As a teacher, nothing beats that feeling. I could sense he wanted to say something; he was looking for the right words. He then told me about a website he knew of where he wanted to try more on his own.</p>
 
 <p>A friend at the <a href="http://schools.nyc.gov/SchoolPortals/09/X128/default.htm">Mott Hall III in the Bronx</a> invited me to speak at the school’s career day this past Friday. I may have been slow to respond, but as a former teacher myself, I knew this was one opportunity I could not pass up.</p>
 
@@ -86,65 +70,11 @@
 
 <p>At each of the sessions, I never seemed to leave enough time for questions. I encouraged students to return to this blog to post comments. I hope I was able to make computer programming a little more accessible and enjoyable for these motivated students in the Bronx. I may have even caught a bit of the teaching bug again myself.</p>
 
-  </article>
-  <article class="index-post">
-    <h2>
-      <a href="/blog/2010/02/just-in-time-css.html">Just-in-Time CSS</a>
-      <br />
-      <small>Feb 17</small>
-    </h2>
-    <p>On top of the list of <a href="http://developer.yahoo.com/performance/rules.html">best practices for speeding up your website</a> is reducing the number of HTTP requests required to render the page. As our websites grow and there are more pages to style, we have more style rules to deliver to our visitors. Keeping the number of requests to a minimum usually means we either need to put all our styles in a single stylesheet, or use a bundling strategy such as <a href="http://documentcloud.github.com/jammit/">Jammit</a> or <a href="http://github.com/brynary/asset-trip">Asset Trip</a>, like we use at <a href="http://www.weplay.com">Weplay</a>, to pull our stylesheets together as one at deploy time.</p>
-
-<p>One problem with the single CSS request approach is we often send CSS rules that our users don’t need to render the page initially or at any time during the current page view. This is like making dinner for 10 when only 2 people have RSVP’d; it can potentially be a big waste. In this wacky ajaxy world we live in, who says all your CSS needs to be on the page at load time? Consider using just-in-time CSS for page elements that aren’t necessary to display right away.</p>
-
-<p>Let’s say we have a lightbox to display gallery images that is only rendered when a user clicks on a page link. The CSS rules needed to render the box shouldn’t have to be loaded during the initial request. We can pull these out into a separate stylesheet and load it on demand with javascript.
-</p>
-
-<p>&nbsp;&nbsp;Demo</p>
-
-<p>&nbsp;&nbsp;Hello World
-&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;function require(url) {
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// logic to determine url is for a css file here
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var element = document.createElement(&ldquo;link&rdquo;);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute(&ldquo;rel&rdquo;, &ldquo;stylesheet&rdquo;);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute(&ldquo;type&rdquo;, &ldquo;text/css&rdquo;);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute(&ldquo;href&rdquo;, url);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementsByTagName(&ldquo;head&rdquo;)[0].appendChild(element);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this;
-&nbsp;&nbsp;&nbsp;&nbsp;}
-&nbsp;&nbsp;</p>
-
-<p></p>
-
-<p>The code example defines a function ‘require’ that builds a stylesheet link tag and inserts it into the head of the document. The function is triggered as a callback from the onload event of the document body with a url to the ‘app.css’ file located in the same directory. Alternatively, we could attach the function call to a different event, such as click on a link to a popup that might need the styles.</p>
-
-<p>The key is that the HTTP request is not made until the stylesheet tag is appended to the document head tag after the page has already loaded. We decrease the number and/or size of the requests needed to render the page initially keeping our visitors satisfied.</p>
-
-  </article>
-  <article class="index-post">
-    <h2>
-      <a href="/blog/2010/01/hello-world.html">Hello World</a>
-      <br />
-      <small>Jan  4</small>
-    </h2>
-    <p>At some point we learned to walk, yet most of us find ourselves taking first steps time and again. Moving to another city. Going to a new school. Choosing a different career.</p>
-
-<p>Over the past five years, I have done all these things: I moved to New York from Houston, started a Computer Science degree at NYU, and switched to a career in Software Engineering from Education. Starting anew has been at times difficult, occasionally impossible. It hasn’t always been fun and I’ve made my share of mistakes. And now I’m looking forward to sharing what I’ve learned.</p>
-
-<p>Hello World.</p>
-
-  </article>
-
-  <p>Page 3 of 3</p>
-  
-  
-    <p><a href="/page/2/">Previous page</a></p>
-  
-
-<section>
-  <a href="/blog">See all posts &raquo;</a>
-</section>
+    </article>
+    <section class="comments">
+      <!-- Comments -->
+    </section>
+  </section>
 
       </section>
     </div>

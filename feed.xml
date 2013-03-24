@@ -11,8 +11,8 @@
   </author>
   <entry>
     <title>Create and Deploy an Ember App in 5 Minutes</title>
-    <link rel="alternate" href="/writing/2013/03/01/create-and-deploy-an-ember-app-in-5-minutes.html"/>
-    <id>/writing/2013/03/01/create-and-deploy-an-ember-app-in-5-minutes.html</id>
+    <link rel="alternate" href="/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html"/>
+    <id>/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html</id>
     <published>2013-03-01T00:00:00Z</published>
     <updated>2013-03-01T00:00:00Z</updated>
     <author>
@@ -49,8 +49,8 @@ If everything worked, you should be able to see your static web Ember app served
   </entry>
   <entry>
     <title>Presentation Intro to Javascript MVC</title>
-    <link rel="alternate" href="/writing/2012/02/09/presentation-intro-to-javascript-mvc.html"/>
-    <id>/writing/2012/02/09/presentation-intro-to-javascript-mvc.html</id>
+    <link rel="alternate" href="/blog/2012/02/presentation-intro-to-javascript-mvc.html"/>
+    <id>/blog/2012/02/presentation-intro-to-javascript-mvc.html</id>
     <published>2012-02-09T00:00:00Z</published>
     <updated>2012-02-09T00:00:00Z</updated>
     <author>
@@ -64,8 +64,8 @@ If everything worked, you should be able to see your static web Ember app served
   </entry>
   <entry>
     <title>Toggle Rails Caching in RSpec Suites</title>
-    <link rel="alternate" href="/writing/2011/12/22/toggle-rails-caching-in-rspec-suite.html"/>
-    <id>/writing/2011/12/22/toggle-rails-caching-in-rspec-suite.html</id>
+    <link rel="alternate" href="/blog/2011/12/toggle-rails-caching-in-rspec-suite.html"/>
+    <id>/blog/2011/12/toggle-rails-caching-in-rspec-suite.html</id>
     <published>2011-12-22T00:00:00Z</published>
     <updated>2011-12-22T00:00:00Z</updated>
     <author>
@@ -98,8 +98,8 @@ end
   </entry>
   <entry>
     <title>When Your Fat Models Need to Go on a Diet, Part 2</title>
-    <link rel="alternate" href="/writing/2011/10/03/when-your-fat-models-need-to-go-on-a-diet-part-2.html"/>
-    <id>/writing/2011/10/03/when-your-fat-models-need-to-go-on-a-diet-part-2.html</id>
+    <link rel="alternate" href="/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html"/>
+    <id>/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html</id>
     <published>2011-10-03T00:00:00Z</published>
     <updated>2011-10-03T00:00:00Z</updated>
     <author>
@@ -144,8 +144,8 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
   </entry>
   <entry>
     <title>When Your Fat Models Need to Go on a Diet</title>
-    <link rel="alternate" href="/writing/2011/09/30/when-your-fat-models-need-to-go-on-a-diet.html"/>
-    <id>/writing/2011/09/30/when-your-fat-models-need-to-go-on-a-diet.html</id>
+    <link rel="alternate" href="/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html"/>
+    <id>/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html</id>
     <published>2011-09-30T00:00:00Z</published>
     <updated>2011-09-30T00:00:00Z</updated>
     <author>
@@ -165,8 +165,8 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
   </entry>
   <entry>
     <title>Lean Startup Meetup Ignited</title>
-    <link rel="alternate" href="/writing/2011/06/23/lean-startup-meetup-ignited.html"/>
-    <id>/writing/2011/06/23/lean-startup-meetup-ignited.html</id>
+    <link rel="alternate" href="/blog/2011/06/lean-startup-meetup-ignited.html"/>
+    <id>/blog/2011/06/lean-startup-meetup-ignited.html</id>
     <published>2011-06-23T00:00:00Z</published>
     <updated>2011-06-23T00:00:00Z</updated>
     <author>
