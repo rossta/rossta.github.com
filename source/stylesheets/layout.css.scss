@@ -52,6 +52,11 @@ body {
     border-color: #CCC;
     border-style: solid;
     padding-top: 2em;
+
+    .twitter-share-button {
+      clear:both;
+      text-align:center;
+    }
   }
 }
 
@@ -98,7 +103,9 @@ body {
   }
 }
 
+.share { margin-top: 1em; }
 
+.margin-top { margin-top: 1em; }
 .font-light { color:$greyColor; }
 .center { text-align: center; }
 .center-inline-list {
