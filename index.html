@@ -8,6 +8,7 @@
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
   <body id="application" class="typekit">
     <div id="welcome" class="row">
@@ -67,6 +68,7 @@ If everything worked, you should be able to see your static web Ember app served
 
 <script class="speakerdeck-embed" data-id="974b0d70647701301b1e12313b100525" data-ratio="1.29456384323641" src="//speakerdeck.com/assets/embed.js"></script>
 
+
   </article>
   <article class="index-post">
     <h2>
@@ -77,6 +79,7 @@ If everything worked, you should be able to see your static web Ember app served
     <p>Today, I made a brown bag case to my colleagues: let’s approach client-side development in a more structured, disciplined and flexible way; in other words, add a model-view-controller javascript layer to our web app. Included is some background for the discussion and a brief introduction to Backbone.js. I use the phrase MV+ to embrace various implementations of MVC-like javascript frameworks, most of which have different takes on what object take on the responsibility for hooking up models and views.</p>
 
 <p><a href="http://daftpunkjs.heroku.com/">Brown Bag Presentation: Javascript MV+</a></p>
+
 
   </article>
   <article class="index-post">
@@ -107,6 +110,7 @@ end
   // test cached stuff
 end
 </code></pre>
+
 
   </article>
   <article class="index-post">
@@ -150,6 +154,7 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 
 <p>The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.</p>
 
+
   </article>
   <article class="index-post">
     <h2>
@@ -167,6 +172,7 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 
 <p>Added: Check out <a title="When Your Fat Models Need to Go on a Diet, Part 2" href="http://www.rosskaff.com/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/">part 2</a> of this post for thoughts on slimming down our models at runtime.</p>
 
+
   </article>
 
   <p>Page 1 of 3</p>
@@ -182,8 +188,9 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
       </section>
     </div>
     <div class="row">
-      <footer class="large-12 columns center-inline-list">
-        <ul class="inline-list">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
   <li><a href="/blog">blog</a></li>
   <li><a href="/projects">projects</a></li>
   <li><a href="/about">about</a></li>
@@ -192,6 +199,7 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
   <li><a href="mailto:rosskaff@gmail.com">email</a></li>
 </ul>
 
+        </section>
       </footer>
     </div>
     <script src="/javascripts/all.js" type="text/javascript"></script>
