@@ -9,9 +9,9 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
   </head>
-  <body class="typekit">
-    <div class="row">
-      <section id="sidebar" class="large-4 columns">
+  <body id="application" class="typekit">
+    <div id="welcome" class="row">
+      <section id="title" class="large-4 small-12 columns">
         <header class="signature-font">
           <h1><a class="logo" href="/">rossta</a></h1>
           <h2><a href="/"><small>ross kaffenberger</small></a><h2>
@@ -19,8 +19,9 @@
         <section class="info">
           <p>I make things</p>
         </section>
-        <section class="nav">
-          <ul class="inline-list">
+      </section>
+      <section id="nav" class="large-8 small-12 columns nav">
+        <ul class="inline-list">
   <li><a href="/blog">blog</a></li>
   <li><a href="/projects">projects</a></li>
   <li><a href="/about">about</a></li>
@@ -29,18 +30,38 @@
   <li><a href="mailto:rosskaff@gmail.com">email</a></li>
 </ul>
 
-        </section>
       </section>
-
-      <section id="main" role="main" class="large-8 columns">
+    </div>
+    <div class="row">
+      <section id="main" role="main" class="large-12 columns">
           <section id="page">
-    <p><strong><a href="http://www.turfcasts.com">turfcasts.com</a></strong> My friend Brenn got me into running not long after moving to New York. We’re both lifelong lovers of sport and we’ve shared many stories of athletic adventures and mishaps. <a href="http://www.turfcasts.com">turfcasts</a> was born out of the desire to share our own sports stories with the world. I build, design and maintain the site, while Brenn does most of the podcasting. We’ve had a few guest contributors and are always looking for new talent.Tools: Rails 3, mysql, apache, passenger, capistrano, jQuery, rspec, cucumber, capybara, jasmine</p>
+    <p><strong><a href="http://opticalfuzz.herokuapp.com">OptiCal</a></strong></p>
+
+<p>A visualization project: visualize a twitter user&#39;s tweeting history using a calendar heatmap, built on <a href="http://d3js.org">d3.js</a>, <a href="http://emberjs.com">ember.js</a> and <a href="http://www.sinatrarb.com">sinatra</a>.</p>
+
+<p><a href="http://opticalfuzz.herokuapp.com"><img src="/images/screenshots/screenshot-optical.png" /></a></p>
+
+<hr>
+
+<p><strong><a href="http://weplay-dropit.herokuapp.com">Weplay DropIt</a></strong></p>
+
+<p>A drag and drop photo upload for <a href="http://weplay.com">weplay.com</a> built on with <a href="http://www.w3.org/TR/FileAPI/">HTML5 File API</a>, <a href="http://backbonejs.org">backbone.js</a> and <a href="http://www.sinatrarb.com">sinatra</a>.</p>
+
+<p><a href="http://weplay-dropit.herokuapp.com"><img src="/images/screenshots/screenshot-dropit.png" /></a></p>
+
+<hr>
+
+<p><strong><a href="http://www.turfcasts.com">turfcasts.com</a></strong></p>
+
+<p>My friend Brenn got me into running not long after moving to New York. We’re both lifelong lovers of sport and we’ve shared many stories of athletic adventures and mishaps. <a href="http://www.turfcasts.com">turfcasts</a> was born out of the desire to share our own sports stories with the world. I build, design and maintain the site, while Brenn does most of the podcasting.</p>
 
 <p><a href="http://www.turfcasts.com"><img title="turfcasts: working hard at play" src="/images/screenshots/screenshot-turfcasts.png" /></a></p>
 
 <hr>
 
-<p><strong><a href="http://terraling.com/">terraling.com</a></strong> Professor Dennis Shasha at NYU recruited me to create a linguistics research tool. The vision is to provide a platform for linguists to make comparisons across a variety of attributes and properties of the world’s languages. Together with an undergrad developer, we built the site over a single semester and launched this past May, 2011. I continue to provide ongoing support.We devised a few database abstractions that would support a wide variety of use cases such as syntactic structures or phonetics. I engineered a multilevel search algorithm to filter results by a variety of potential inputs including linguistic properties, categories, keywords, parent and child relationships and examples.</p>
+<p><strong><a href="http://terraling.com/">terraling.com</a></strong></p>
+
+<p>Professor Dennis Shasha at NYU recruited me to create a linguistics research tool. The vision is to provide a platform for linguists to make comparisons across a variety of attributes and properties of the world’s languages. Together with an undergrad developer, we built the site over a single semester and launched this past May, 2011. I continue to provide ongoing support.We devised a few database abstractions that would support a wide variety of use cases such as syntactic structures or phonetics. I engineered a multilevel search algorithm to filter results by a variety of potential inputs including linguistic properties, categories, keywords, parent and child relationships and examples.</p>
 
 <p>Tools: Rails 3, mysql, apache, passenger, capistrano, jQuery, rspec, cucumber, capybara, jasmine</p>
 
@@ -48,35 +69,39 @@
 
 <hr>
 
-<p><strong><a href="http://rossta.github.com/sudokill/">Sudokill</a></strong>, one of my favorite projects, is a realtime multiplayer Sudoku implementation. The interface designed to support human vs human over the web, computer vs computer via TCP, or human vs computer. I built the game for NYU heuristics students to compete with their own Sudokill “player” programs.The object of the game is to force the other player to make an invalid Sudoku move. Players take turn playing valid sudoku moves. Moves are valid as long as they don’t violate traditional sudoku configuration. Moves need not conform to the final solution of the board as in solitary Sudoku; in fact, the possibility of invalid states increases as more moves are made which diverge from the actual solution. The best strategies work reduce valid possibilities for the opponent based by looking ahead to future board states.</p>
+<p><strong><a href="http://rossta.github.com/sudokill/">Sudokill</a></strong></p>
+
+<p>One of my favorite projects, Sudokill is a realtime multiplayer Sudoku implementation. The interface designed to support human vs human over the web, computer vs computer via TCP, or human vs computer. I built the game for NYU heuristics students to compete with their own Sudokill “player” programs.The object of the game is to force the other player to make an invalid Sudoku move. Players take turn playing valid sudoku moves. Moves are valid as long as they don’t violate traditional sudoku configuration. Moves need not conform to the final solution of the board as in solitary Sudoku; in fact, the possibility of invalid states increases as more moves are made which diverge from the actual solution. The best strategies work reduce valid possibilities for the opponent based by looking ahead to future board states.</p>
 
 <p>This project is particularly exciting to me as it leverages the HTML5 WebSocket protocol to make it possible to play the game in a web browser and communicate with a server in realtime using only HTML, CSS and Javascript on the front-end. I implemented a separate protocol to allow programs to connect to the server and play the game via TCP. Fellow students at NYU wrote computer “players” in a variety of languages (java, python, ruby, c ). The game also has some interesting features, such as configurable board density, an on-deck player queue, and a chat server.</p>
-
-<p>I got an A on the assignment.</p>
-
-<p>Tools: Ruby, eventmachine, em-websocket, jQuery, Raphael, rspec</p>
 
 <p><a href="http://rossta.github.com/sudokill/"><img title="Sudokill: Sudoku's not a one player game anymore" src="/images/screenshots/screenshot-sudokill.png" /></a></p>
 
 <hr>
 
-<p><strong><a href="http://www.alistapart.com/">soapbox</a></strong> In August 2010, I created a simple in-browser PowerPoint-like application as an entry in the 10K Apart contest from <a href="http://www.alistapart.com/">a list apart</a>. Contestants were challenged to use features of HTML5 to create front-end applications in less than 10K of code. Soapbox leverages HTML5 localStorage to save slides in stringified JSON for future use. Although my <a href="http://10k.aneventapart.com/Entry/361">my entry</a> didn’t win, it was a good experience to create something straightforward and useful under constraints and a tight timeline.</p>
+<p><strong><a href="http://www.alistapart.com/">soapbox</a></strong></p>
+
+<p>In August 2010, I created a simple in-browser PowerPoint-like application as an entry in the 10K Apart contest from <a href="http://www.alistapart.com/">a list apart</a>. Contestants were challenged to use features of HTML5 to create front-end applications in less than 10K of code. Soapbox leverages HTML5 localStorage to save slides in stringified JSON for future use. Although my <a href="http://10k.aneventapart.com/Entry/361">my entry</a> didn’t win, it was a good experience to create something straightforward and useful under constraints and a tight timeline.</p>
 
 <p><a href="http://www.alistapart.com/"><img src="/images/screenshots/screenshot-soapbox.png" /></a></p>
 
 <hr>
 
-<p><strong><a href="http://github.com/weplay/supersized">map-ready</a></strong> Map-ready was extracted from a Weplay Google map integration project. We wanted a way to visualize all the thousands of teams across Weplay in a visually compelling and performant manner. We decided on a roll-up approach where we would cluster closely located teams together as a single point on the map.Map-ready provides an abstraction for condensing thousands of mappable objects (which can be located via latitude-longitude coordinates) down to a smaller set of markers which represent the relative density and distribution of the original set. The clustering algorithm is somewhat configurable and allows for groupings of various sizes across bounding box coordinates and zoom level.</p>
+<p><a href="http://github.com/weplay/supersized">map-ready</a></p>
 
 <hr>
 
-<p><a href="http://github.com/rossta/heuristics"><img src="http://github.com/rossta/heuristics" /><strong>supersized</strong></a>Supersized is jQuery plugin for turning a set of images into a fullscreen, resizable media slideshow. It supports play, pause, forward, back, autoplay and number of custom events for hooking into any html interface.This is a good example of a project I forked and made significant improvements to. The original supersized project caught our attention at Weplay last year and we wanted to drop it in as an alternative way for our users to view their own photos. We found the original project to be lacking in providing support for configurable options and it was heavily tied to the DOM. We decided to rewrite it from scratch, adding a public api, callbacks to remove reliance on the DOM, and a full Jasmine unit test suite.</p>
+<p><a href="http://github.com/rossta/heuristics">supersized</a></p>
 
 <hr>
 
 <p><a href="http://github.com/rossta/heuristics">heuristics</a></p>
 
+<hr>
+
 <p><a href="http://jsdelegate.heroku.com">$.delegate and custom events</a></p>
+
+<hr>
 
 <p><a href="/playground">playground</a></p>
 
@@ -85,7 +110,7 @@
       </section>
     </div>
     <div class="row">
-      <footer class="large-12 columns">
+      <footer class="large-12 columns center-inline-list">
         <ul class="inline-list">
   <li><a href="/blog">blog</a></li>
   <li><a href="/projects">projects</a></li>

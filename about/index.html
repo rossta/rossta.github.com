@@ -9,9 +9,9 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
   </head>
-  <body class="typekit">
-    <div class="row">
-      <section id="sidebar" class="large-4 columns">
+  <body id="application" class="typekit">
+    <div id="welcome" class="row">
+      <section id="title" class="large-4 small-12 columns">
         <header class="signature-font">
           <h1><a class="logo" href="/">rossta</a></h1>
           <h2><a href="/"><small>ross kaffenberger</small></a><h2>
@@ -19,8 +19,9 @@
         <section class="info">
           <p>I make things</p>
         </section>
-        <section class="nav">
-          <ul class="inline-list">
+      </section>
+      <section id="nav" class="large-8 small-12 columns nav">
+        <ul class="inline-list">
   <li><a href="/blog">blog</a></li>
   <li><a href="/projects">projects</a></li>
   <li><a href="/about">about</a></li>
@@ -29,22 +30,20 @@
   <li><a href="mailto:rosskaff@gmail.com">email</a></li>
 </ul>
 
-        </section>
       </section>
-
-      <section id="main" role="main" class="large-8 columns">
+    </div>
+    <div class="row">
+      <section id="main" role="main" class="large-12 columns">
           <section id="page">
-    <p>I currently reside in New York City and work as a Senior Software Engineer for the public challenge platform, <a title="ChallengePost lets individuals and organizations challenge the public to solve problems and innovate." href="http://challengepost.com">ChallengePost</a>. I have been creating and maintaining Ruby on Rails applications for the past four years while going to school part-time. I recently completed my master’s degree program in Computer Science at New York University.</p>
+    <p>I currently reside in New York City where I have been creating and maintaining web applications for the past six years. I recently completed the Computer Science master’s degree program at New York University while working full-time. I am now the Head of Engineering at <a title="ChallengePost lets individuals and organizations challenge the public to solve problems and innovate." href="http://challengepost.com">ChallengePost</a>, the public challenge platform.</p>
 
 <p><a title="ChallengePost lets individuals and organizations challenge the public to solve problems and innovate." href="http://challengepost.com"><img src="/images/screenshots/screenshot-challengepost.png" /></a></p>
 
 <hr>
 
-<p>I previously worked at <a href="http://weplay.com">Weplay</a>, an online youth sports team platform and social community. We’ve grown to over 400,000 users on 25,000 teams across the country.Weplay teams have access to messaging, scheduling, recurring events, drill library, local sports news, activity distrubution, and group privacy controls.Some other notable features I’ve built include the team map visualization, media uploading and gallery, league management tools, color customization, user signup validation, inline-editing interfaces, team polling, and avataring.</p>
+<p>I previously worked at <a href="http://weplay.com">Weplay</a>, an online youth sports team platform and social community. We’ve grown to over 400,000 users on 25,000 teams across the country.Weplay teams have access to messaging, scheduling, recurring events, drill library, local sports news, activity distrubution, and group privacy controls. Some other notable features I’ve built include the team map visualization, media uploading and gallery, league management tools, color customization, user signup validation, inline-editing interfaces, team polling, and avataring.</p>
 
 <p>I’ve played large roles in defining the product vision, providing customer support, evangelizing best practices for Javascript coding and testing, and improving front-end performance.</p>
-
-<p>Tools: Ruby/Rails, mysql, redis, memcached, nginx, sphinx, unicorn, chef, jQuery, rspec, cucumber, webrat, jasmine</p>
 
 <p><a href="http://weplay.com"><img src="/images/screenshots/screenshot-weplay.png" /></a></p>
 
@@ -61,7 +60,7 @@
       </section>
     </div>
     <div class="row">
-      <footer class="large-12 columns">
+      <footer class="large-12 columns center-inline-list">
         <ul class="inline-list">
   <li><a href="/blog">blog</a></li>
   <li><a href="/projects">projects</a></li>
