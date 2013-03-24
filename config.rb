@@ -82,6 +82,7 @@ end
 # Per-page layout changes:
 #
 # With no layout
+page "/404.html", :layout => false
 page "/playground.html", :layout => false
 #
 # With alternative layout
@@ -110,4 +111,12 @@ page "/playground.html", :layout => false
 #     "Helping"
 #   end
 # end
+
+helpers do
+  def title
+    [].tap do |names|
+      names << "Ross Kaffenberger"
+    end.join(" | ")
+  end
+end
 

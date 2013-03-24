@@ -3,24 +3,21 @@ title: about
 author: admin
 layout: page
 ---
-I currently reside in New York City and work as a Senior Software Engineer for the public challenge platform, [ChallengePost][1]. I have been creating and maintaining Ruby on Rails applications for the past four years while going to school part-time. I recently completed my master’s degree program in Computer Science at New York University.
+I currently reside in New York City where I have been creating and maintaining web applications for the past six years. I recently completed the Computer Science master’s degree program at New York University while working full-time. I am now the Head of Engineering at [ChallengePost][1], the public challenge platform.
 
  [![][7]][1]
 
 * * *
 
-I previously worked at [Weplay][5], an online youth sports team platform and social community. We’ve grown to over 400,000 users on 25,000 teams across the country.Weplay teams have access to messaging, scheduling, recurring events, drill library, local sports news, activity distrubution, and group privacy controls.Some other notable features I’ve built include the team map visualization, media uploading and gallery, league management tools, color customization, user signup validation, inline-editing interfaces, team polling, and avataring.
+I previously worked at [Weplay][5], an online youth sports team platform and social community. We’ve grown to over 400,000 users on 25,000 teams across the country.Weplay teams have access to messaging, scheduling, recurring events, drill library, local sports news, activity distrubution, and group privacy controls. Some other notable features I’ve built include the team map visualization, media uploading and gallery, league management tools, color customization, user signup validation, inline-editing interfaces, team polling, and avataring.
 
 I’ve played large roles in defining the product vision, providing customer support, evangelizing best practices for Javascript coding and testing, and improving front-end performance.
-
-Tools: Ruby/Rails, mysql, redis, memcached, nginx, sphinx, unicorn, chef, jQuery, rspec, cucumber, webrat, jasmine
 
 [![][6]][5]
 
 * * *
 
 For more on my professional experience and background, please refer to my [resume][2].
-
 
 You can checkout my projects and open source contributions on [github.com/rossta][3].
 
