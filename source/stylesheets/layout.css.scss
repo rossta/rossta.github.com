@@ -34,9 +34,27 @@ body {
 }
 
 #application {
+  #welcome {
+    border-bottom: 1px solid #ccc;
+    text-align:center;
+    .nav {
+      padding-top:1em;
+      a {
+        @include button-base;
+        @include button-size(0.75em);
+        @include button-style(white);
+        &:hover {
+          color: white;
+          background-color: #024A68;
+        }
+      }
+    }
+  }
+
   header {
-    h1 { margin: 0;}
-    h2 { margin-top: 0;}
+    margin-top:1em;
+    h1 { margin: 0; line-height:1em;}
+    h2 { margin: 0 0 ; line-height:1.25em; margin-bottom: .25em;}
     h1,h2,h3,h4,h5,h6 {
       color: $mainColor;
       @include signature-font;
@@ -45,6 +63,7 @@ body {
         @include link-colors;
       }
     }
+    p { margin: 0;}
   }
 
   footer {
@@ -72,31 +91,6 @@ body {
   }
 }
 
-#welcome {
-  text-align:center;
-
-  aside {
-    font-size: 90%;
-    h2, h3, h4 {
-      font-size: 100%;
-    }
-  }
-  .info {
-    margin-bottom: 2em;
-  }
-  .nav {
-    padding-top:1em;
-    a {
-      @include button-base;
-      @include button-size(0.75em);
-      @include button-style(white);
-      &:hover {
-        color: white;
-        background-color: #024A68;
-      }
-    }
-  }
-}
 @media #{$small} {
   #sidebar {
     text-align:left;

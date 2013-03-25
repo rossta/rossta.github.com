@@ -29,6 +29,7 @@ As a result, we now have a simple, explicit mechanism for introducing caching to
 
 ```ruby
 describe "visit the homepage", :caching => true do
-  // test cached stuff
+  # test cached stuff
 end
 ```
+
