@@ -1,4 +1,4 @@
-# middleman-blog
+#
 
 middleman-blog is an extension for the [Middleman](http://middlemanapp.com) static site generator that adds blog-specific functionality. This includes handling blog articles, helpers for listing articles, and tagging support.
 
@@ -22,7 +22,7 @@ activate :blog
 
 See [the blog extension guide](http://middlemanapp.com/blogging/) for detailed information on configuring and using the blog extension.
 
-Up-to-date generated code documentation is available on RubyDoc: 
+Up-to-date generated code documentation is available on RubyDoc:
 http://rubydoc.info/github/middleman/middleman-blog
 
 # Community
