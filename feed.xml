@@ -5,10 +5,31 @@
   <id>http://rosskaff.com/</id>
   <link href="http://rosskaff.com/"/>
   <link href="http://rosskaff.com/feed.xml" rel="self"/>
-  <updated>2013-03-01T00:00:00Z</updated>
+  <updated>2013-03-25T00:00:00Z</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Why I Ditched Wordpress for Github</title>
+    <link rel="alternate" href="/blog/2013/03/why-i-ditched-wordpress-for-github.html"/>
+    <id>/blog/2013/03/why-i-ditched-wordpress-for-github.html</id>
+    <published>2013-03-25T00:00:00Z</published>
+    <updated>2013-03-25T00:00:00Z</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. But the sheer volume of options for plugins, themes and customizations are enough to make it worthwhile...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. But the sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.&lt;/p&gt;
+
+&lt;p&gt;And yet, yesterday, I ditched Wordpress. This site is now hosted on &lt;a href="http://pages.github.com/"&gt;Github Pages&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So why switch? There are a few reasons. For one, site performance benefits of Pages over Wordpress have been &lt;a href="http://mbmccormick.com/2011/10/ditching-wordpress-for-jekyll-and-github/"&gt;well-documented&lt;/a&gt;. Now I don&amp;#39;t have to worry about &lt;a href="http://go.janleow.com/2011/06/my-wordpress-website-in-bluehost-is.html"&gt;Bluehost suspending my service&lt;/a&gt; anymore. Pages is free. There&amp;#39;s also my personal distaste for PHP, though it hasn&amp;#39;t stopped me from hacking on my pages here and there.&lt;/p&gt;
+
+&lt;p&gt;There is, however, a more fundamental reason. After running into a close friend recently, I reached a tipping point. My friend is brilliant and well-regarded in his field (finance). When he remarked on that fact that I had built my own website, my first thought was &amp;ldquo;Well, not really&amp;hellip;&amp;rdquo;, though I said something more like &amp;ldquo;Thanks!&amp;rdquo; My friend and most people don&amp;#39;t care if a website runs on Wordpress, Django, .Net or C#&amp;hellip; but I do. If the general sentiment on Hacker News is any indication, most developers care as well. Many of us got into programming because we saw something that amazed us and we desperately wanted to know &lt;em&gt;how&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;To host on Github Pages means for me &lt;a href="https://help.github.com/articles/creating-project-pages-manually"&gt;using git&lt;/a&gt;, hand-crafting html and writing markdown in my editor of choice, building with &lt;a href="http://jekyllrb.com/"&gt;tools&lt;/a&gt; written in languages I love, and rolling my own theme built on &lt;a href="http://foundation.zurb.com/"&gt;CSS frameworks&lt;/a&gt; I like. It&amp;#39;s a better representation of what I do and how I prefer to do it. Using Wordpress has always felt a bit disingenuous. And that&amp;#39;s why I made the change.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Create and Deploy an Ember App in 5 Minutes</title>
     <link rel="alternate" href="/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html"/>
@@ -161,33 +182,6 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 &lt;p&gt;One convention is to place the modules in “#{model_name}_extensions” folders in your app/models directory to group the code logically. For example, UserExtensions::Admin would be located at app/models/user_extensions/admin.rb. Breaking out the code in to functional chunks like this is a good first step in downsizing your model files. It also more easily allows methods and associations to be extracted into other classes/tables.&lt;/p&gt;
 
 &lt;p&gt;Added: Check out &lt;a title="When Your Fat Models Need to Go on a Diet, Part 2" href="http://www.rosskaff.com/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/"&gt;part 2&lt;/a&gt; of this post for thoughts on slimming down our models at runtime.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Lean Startup Meetup Ignited</title>
-    <link rel="alternate" href="/blog/2011/06/lean-startup-meetup-ignited.html"/>
-    <id>/blog/2011/06/lean-startup-meetup-ignited.html</id>
-    <published>2011-06-23T00:00:00Z</published>
-    <updated>2011-06-23T00:00:00Z</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;The &lt;a href="http://www.meetup.com/lean-startup"&gt;NYC Lean Startup Meetup&lt;/a&gt; sponsored their first Ignite event last night at Pivotal Labs in Union Square. Fourteen speakers were given five minutes to share their thoughts and lessons learned relating to &lt;a href="http://theleanstartup.com/"&gt;the lean startup&lt;/a&gt; methodology. The catch with...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;The &lt;a href="http://www.meetup.com/lean-startup"&gt;NYC Lean Startup Meetup&lt;/a&gt; sponsored their first Ignite event last night at Pivotal Labs in Union Square. Fourteen speakers were given five minutes to share their thoughts and lessons learned relating to &lt;a href="http://theleanstartup.com/"&gt;the lean startup&lt;/a&gt; methodology. The catch with Ignite: the slides are fixed in number (20) and auto-advance every 15 seconds. Combine that with a packed house and open bar and the results are fast-paced, high-energy and fun.&lt;/p&gt;
-
-&lt;p&gt;A few impressions:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://twitter.com/ericries"&gt;Eris Reis&lt;/a&gt; demonstrated how Ghostbusters is about a lean startup at its core… guys start something on the side, try to turn it into a business from nothing, get their first customer just when the money is about to run out, interesting things start to happen as the business grows. Perhaps the GBs were lucky that Zul arrived when he did, but real startups don’t have that luxury… instead of “waiting for Zul”, lean startups need to be more flexible and proactive…&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://twitter.com/farrahbostic"&gt;Farrah Bostic&lt;/a&gt; quit her job at an ad agency after trying to apply lean methodology to a business model that wasn’t set up to interact with customers that way…&lt;/p&gt;
-
-&lt;p&gt;When startups try to do much, it’s hard to do much well. It may be better to pick one idea to focus on, or as Brittany Laughlin explained about her experiences with here social travel app &lt;a href="http://www.gtrot.com/"&gt;gtrot.com&lt;/a&gt;, “It’s better to be young and simple, than young and stupid.”&lt;/p&gt;
-
-&lt;p&gt;It was inspiring to hear that Yipit took off after a pivot that took days to turnaround. Their first attempt took 9 months to implement, the next, 3 months, but the idea that stuck was built in 3 days at first. They proved their idea with an initially low-tech solution–including an late night “crawler” that involved crawling out of bed at 3 am nightly to copy and paste data–that they were able to build into something more robust later with more confidence. Founder &lt;a href="http://twitter.com/vacanti"&gt;Vin Vacanti&lt;/a&gt; challenged the audience, “If we can prove a business idea in 3 days, why aren’t you doing it too?”&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://twitter.com/giffconstable"&gt;Giff Constable&lt;/a&gt; provided a retrospective on one of his failed ideas: not enough resources, picking a difficult problem… His talk reinforced the lean notion that it’s okay to fail; the knowledge gained from our failures is invaluable to our future efforts.&lt;/p&gt;
-
-&lt;p&gt;Shout outs to NYC Lean Startup for running a successful event and to Pivotal Labs for hosting.&lt;/p&gt;
 </content>
   </entry>
 </feed>

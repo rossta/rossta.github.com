@@ -38,6 +38,24 @@
       <section id="main" role="main" class="large-12 columns">
           <article class="index-post">
     <h2>
+      <a href="/blog/2013/03/why-i-ditched-wordpress-for-github.html">Why I Ditched Wordpress for Github</a>
+      <br />
+      <small>Mar 25</small>
+    </h2>
+    <p>By statistics alone, Wordpress is a winner. According to the <a href="http://en.wikipedia.org/wiki/WordPress">stats on Wikipedia</a>, it is a clear favorite amongst the top and new websites worldwide. But the sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.</p>
+
+<p>And yet, yesterday, I ditched Wordpress. This site is now hosted on <a href="http://pages.github.com/">Github Pages</a>.</p>
+
+<p>So why switch? There are a few reasons. For one, site performance benefits of Pages over Wordpress have been <a href="http://mbmccormick.com/2011/10/ditching-wordpress-for-jekyll-and-github/">well-documented</a>. Now I don&#39;t have to worry about <a href="http://go.janleow.com/2011/06/my-wordpress-website-in-bluehost-is.html">Bluehost suspending my service</a> anymore. Pages is free. There&#39;s also my personal distaste for PHP, though it hasn&#39;t stopped me from hacking on my pages here and there.</p>
+
+<p>There is, however, a more fundamental reason. After running into a close friend recently, I reached a tipping point. My friend is brilliant and well-regarded in his field (finance). When he remarked on that fact that I had built my own website, my first thought was &ldquo;Well, not really&hellip;&rdquo;, though I said something more like &ldquo;Thanks!&rdquo; My friend and most people don&#39;t care if a website runs on Wordpress, Django, .Net or C#&hellip; but I do. If the general sentiment on Hacker News is any indication, most developers care as well. Many of us got into programming because we saw something that amazed us and we desperately wanted to know <em>how</em>.</p>
+
+<p>To host on Github Pages means for me <a href="https://help.github.com/articles/creating-project-pages-manually">using git</a>, hand-crafting html and writing markdown in my editor of choice, building with <a href="http://jekyllrb.com/">tools</a> written in languages I love, and rolling my own theme built on <a href="http://foundation.zurb.com/">CSS frameworks</a> I like. It&#39;s a better representation of what I do and how I prefer to do it. Using Wordpress has always felt a bit disingenuous. And that&#39;s why I made the change.</p>
+
+
+  </article>
+  <article class="index-post">
+    <h2>
       <a href="/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html">Create and Deploy an Ember App in 5 Minutes</a>
       <br />
       <small>Mar  1</small>
@@ -154,24 +172,6 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 <p><img alt="All as gravatars" src="/images/screenshots/gravatar-user-perf-test.jpg" /></p>
 
 <p>The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.</p>
-
-
-  </article>
-  <article class="index-post">
-    <h2>
-      <a href="/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html">When Your Fat Models Need to Go on a Diet</a>
-      <br />
-      <small>Sep 30</small>
-    </h2>
-    <p>Most Rails apps I’ve worked on have followed the pattern “<a title="the buckblogs here" href="http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model">skinny controllers, fat models</a>.” The controller shouldn’t have know what attributes and joins to make when asking for data from the models; one line methods calls in controller actions are a thing of beauty. Controller specs are simplified and the complexity of business logic and database access can be stuffed into the models. Fatten’ up those models!</p>
-
-<p>But what happens when your models grow too large? It’s common to have one or two models (Users and Groups, anyone?) carry a large burden. Over time, we see Ruby files approaching and surpassing thousands of lines and their associated tables accumulating column excess. Before you know it, it’s time to put your models on a diet. It’s useful to have some patterns in your tool-belt to start trimming the fat.</p>
-
-<p>A good refactoring step is to pull out modules of related behavior. In the User model, for example, we might extract modules for related instance methods, associations and validations for functional scopes like admin access or group memberships. I prefer to namespace the modules under UserExtensions so it’s clear, at least in this case, that these are meant for composition of the User model rather than for sharing code across objects. Now ActiveSupport::Concern makes it super-simple to define both instance and class methods in your module and ensure they’re included properly. (Some good reading on <a href="http://yehudakatz.com/2009/11/12/better-ruby-idioms/">better ruby idioms</a> for <a href="http://www.fakingfantastic.com/2010/09/20/concerning-yourself-with-active-support-concern/">mixing in class and instance methods</a>).</p>
-
-<p>One convention is to place the modules in “#{model_name}_extensions” folders in your app/models directory to group the code logically. For example, UserExtensions::Admin would be located at app/models/user_extensions/admin.rb. Breaking out the code in to functional chunks like this is a good first step in downsizing your model files. It also more easily allows methods and associations to be extracted into other classes/tables.</p>
-
-<p>Added: Check out <a title="When Your Fat Models Need to Go on a Diet, Part 2" href="http://www.rosskaff.com/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/">part 2</a> of this post for thoughts on slimming down our models at runtime.</p>
 
 
   </article>
