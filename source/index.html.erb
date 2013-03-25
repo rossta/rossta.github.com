@@ -10,7 +10,9 @@ per_page: 5
       <small><%= article.date.strftime('%b %e') %></small>
     </h2>
     <%= article.body %>
-
+    <div class="comments">
+      <%= link_to "Comments", article, anchor: "disqus_thread" %>
+    </div>
   </article>
 <% end %>
 
@@ -27,3 +29,5 @@ per_page: 5
 <section>
   <a href="/blog">See all posts &raquo;</a>
 </section>
+
+<%= partial "layouts/comment_count" %>
