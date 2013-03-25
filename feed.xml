@@ -18,14 +18,14 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. But the sheer volume of options for plugins, themes and customizations are enough to make it worthwhile...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. But the sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.&lt;/p&gt;
 
 &lt;p&gt;And yet, yesterday, I ditched Wordpress. This site is now hosted on &lt;a href="http://pages.github.com/"&gt;Github Pages&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;So why switch? There are a few reasons. For one, site performance benefits of Pages over Wordpress have been &lt;a href="http://mbmccormick.com/2011/10/ditching-wordpress-for-jekyll-and-github/"&gt;well-documented&lt;/a&gt;. Now I don&amp;#39;t have to worry about &lt;a href="http://go.janleow.com/2011/06/my-wordpress-website-in-bluehost-is.html"&gt;Bluehost suspending my service&lt;/a&gt; anymore. Pages is free. There&amp;#39;s also my personal distaste for PHP, though it hasn&amp;#39;t stopped me from hacking on my pages here and there.&lt;/p&gt;
 
-&lt;p&gt;There is, however, a more fundamental reason. After running into a close friend recently, I reached a tipping point. My friend is brilliant and well-regarded in his field (finance). When he remarked on that fact that I had built my own website, my first thought was &amp;ldquo;Well, not really&amp;hellip;&amp;rdquo;, though I said something more like &amp;ldquo;Thanks!&amp;rdquo; My friend and most people don&amp;#39;t care if a website runs on Wordpress, Django, .Net or C#&amp;hellip; but I do. If the general sentiment on Hacker News is any indication, most developers care as well. Many of us got into programming because we saw something that amazed us and we desperately wanted to know &lt;em&gt;how&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;There is, however, a more fundamental reason, illustrated when I ran into a close friend recently. My friend is brilliant and well-regarded in his field (finance). When he remarked on that fact that I had built my own website, my first thought was &amp;ldquo;Well, not really&amp;hellip;&amp;rdquo;, though I said something more like &amp;ldquo;Thanks!&amp;rdquo; My friend and most people don&amp;#39;t care if a website runs on Wordpress, Django, .Net or C#&amp;hellip; but I do. If the general sentiment on Hacker News is any indication, most developers care as well. Many of us got into programming because we saw something that amazed us and we desperately wanted to know &lt;em&gt;how&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;To host on Github Pages means for me &lt;a href="https://help.github.com/articles/creating-project-pages-manually"&gt;using git&lt;/a&gt;, hand-crafting html and writing markdown in my editor of choice, building with &lt;a href="http://jekyllrb.com/"&gt;tools&lt;/a&gt; written in languages I love, and rolling my own theme built on &lt;a href="http://foundation.zurb.com/"&gt;CSS frameworks&lt;/a&gt; I like. It&amp;#39;s a better representation of what I do and how I prefer to do it. Using Wordpress has always felt a bit disingenuous. And that&amp;#39;s why I made the change.&lt;/p&gt;
 </content>
@@ -112,7 +112,7 @@ end
 &lt;p&gt;As a result, we now have a simple, explicit mechanism for introducing caching to individual specs and suites:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;describe &amp;quot;visit the homepage&amp;quot;, :caching =&amp;gt; true do
-  // test cached stuff
+  # test cached stuff
 end
 &lt;/code&gt;&lt;/pre&gt;
 </content>

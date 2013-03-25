@@ -15,11 +15,11 @@
       <section id="title" class="large-4 small-12 columns">
         <header class="signature-font">
           <h1><a class="logo" href="/">rossta</a></h1>
-          <h2><a href="/"><small>ross kaffenberger</small></a><h2>
+          <h2><a href="/"><small>ross kaffenberger</small></a></h2>
         </header>
-        <section class="info">
+        <aside class="info">
           <p>I make things</p>
-        </section>
+        </aside>
       </section>
       <section id="nav" class="large-8 small-12 columns nav">
         <ul class="inline-list">
@@ -44,45 +44,43 @@
         <br />
         <small>Mar 25</small>
       </h2>
-      <p>By statistics alone, Wordpress is a winner. According to the <a href="http://en.wikipedia.org/wiki/WordPress">stats on Wikipedia</a>, it is a clear favorite amongst the top and new websites worldwide. But the sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.</p>
+      <p>By statistics alone, Wordpress is a winner. According to the <a href="http://en.wikipedia.org/wiki/WordPress">stats on Wikipedia</a>, it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.</p>
 
 <p>And yet, yesterday, I ditched Wordpress. This site is now hosted on <a href="http://pages.github.com/">Github Pages</a>.</p>
 
 <p>So why switch? There are a few reasons. For one, site performance benefits of Pages over Wordpress have been <a href="http://mbmccormick.com/2011/10/ditching-wordpress-for-jekyll-and-github/">well-documented</a>. Now I don&#39;t have to worry about <a href="http://go.janleow.com/2011/06/my-wordpress-website-in-bluehost-is.html">Bluehost suspending my service</a> anymore. Pages is free. There&#39;s also my personal distaste for PHP, though it hasn&#39;t stopped me from hacking on my pages here and there.</p>
 
-<p>There is, however, a more fundamental reason. After running into a close friend recently, I reached a tipping point. My friend is brilliant and well-regarded in his field (finance). When he remarked on that fact that I had built my own website, my first thought was &ldquo;Well, not really&hellip;&rdquo;, though I said something more like &ldquo;Thanks!&rdquo; My friend and most people don&#39;t care if a website runs on Wordpress, Django, .Net or C#&hellip; but I do. If the general sentiment on Hacker News is any indication, most developers care as well. Many of us got into programming because we saw something that amazed us and we desperately wanted to know <em>how</em>.</p>
+<p>There is, however, a more fundamental reason, illustrated when I ran into a close friend recently. My friend is brilliant and well-regarded in his field (finance). When he remarked on that fact that I had built my own website, my first thought was &ldquo;Well, not really&hellip;&rdquo;, though I said something more like &ldquo;Thanks!&rdquo; My friend and most people don&#39;t care if a website runs on Wordpress, Django, .Net or C#&hellip; but I do. If the general sentiment on Hacker News is any indication, most developers care as well. Many of us got into programming because we saw something that amazed us and we desperately wanted to know <em>how</em>.</p>
 
 <p>To host on Github Pages means for me <a href="https://help.github.com/articles/creating-project-pages-manually">using git</a>, hand-crafting html and writing markdown in my editor of choice, building with <a href="http://jekyllrb.com/">tools</a> written in languages I love, and rolling my own theme built on <a href="http://foundation.zurb.com/">CSS frameworks</a> I like. It&#39;s a better representation of what I do and how I prefer to do it. Using Wordpress has always felt a bit disingenuous. And that&#39;s why I made the change.</p>
 
     </article>
     <section class="comments">
-      <!-- Comments -->
-    </section>
-
-    <section class="share">
+      <section class="share">
   <a href="https://twitter.com/share" class="twitter-share-button" data-via="rossta">Tweet</a>
   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </section>
 
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = 'rosskaff';
+    var disqus_identifier = 'why-i-ditched-wordpress-for-github';
+    var disqus_title      = 'Why I Ditched Wordpress for Github';
 
-    <div id="disqus_thread"></div>
-      <script type="text/javascript">
-          /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-          var disqus_shortname  = 'rosskaff';
-          var disqus_identifier = 'why-i-ditched-wordpress-for-github';
-          var disqus_title      = 'Why I Ditched Wordpress for Github';
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
 
-          /* * * DON'T EDIT BELOW THIS LINE * * */
-          (function() {
-              var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-              dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-              (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-          })();
-      </script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
 
-      <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    </section>
   </section>
 
       </section>
