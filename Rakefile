@@ -65,7 +65,7 @@ task :publish => [:not_dirty, :prepare_git_remote_in_build_dir, :sync, :build] d
     head = `git log --pretty="%h" -n1`.strip
     message = "Site updated to #{head}"
 
-    %w[README.md].each do |file|
+    %w[CNAME README.md].each do |file|
       cp file, 'build/'
     end
   end
