@@ -38,6 +38,34 @@
       <section id="main" role="main" class="large-12 columns">
           <article class="index-post">
     <h2>
+      <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html">Configuring Rack Test Driver in Capybara 2</a>
+      <br />
+      <small>Mar 26</small>
+    </h2>
+    <p>First of all, I don&#39;t recommended excessive redirects.</p>
+
+<p>Sometimes though, you need more than 5 in your Capybara specs; this is the default redirect limit for <a href="https://github.com/jnicklas/capybara">Capybara</a>. When you exceed this limit, you get a dreaded <code>Capybara::InfiniteRedirectError</code>.</p>
+
+<p>In Capybara 2.0+, this limit is configurable:</p>
+
+<pre><code class="ruby">Capybara.register_driver :rack_test do |app|
+  Capybara::RackTest::Driver.new app, \
+    redirect_limit: 15,
+    follow_redirects: true,
+    respect_data_method: true
+end
+</code></pre>
+
+<p>Register a new instance of the rack test driver with options, as shown above. If you&#39;re on Rails, it may be necessary for you to set <code>:respect_data_method</code> to <code>true</code>; this instructs capybara to simulate the request method specified via data-method attributes in your link. With Rails, an extension like <a href="https://github.com/rails/jquery-ujs">rails/jquery-ujs</a> allows you to enable additional request methods via unobtrusive javascript in real browsers. This setting currently defaults to false in the RackTest driver; one of the primary configurations in <a href="https://github.com/jnicklas/capybara/blob/master/lib/capybara/rails.rb"><code>capybara/rails</code></a> is to set this option. So&hellip; you may be surprised if you omit this option and suddenly get missing route exceptions in your specs.</p>
+
+<p>The best long term solution for you and your users is to figure out how to reduce or eliminate unnecessary redirects. Playing with the redirect limit in your test environment may be a good way to identify potential problem areas of your app.</p>
+
+    <div class="comments">
+      <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html#disqus_thread">Comments</a>
+    </div>
+  </article>
+  <article class="index-post">
+    <h2>
       <a href="/blog/2013/03/why-i-ditched-wordpress-for-github.html">Why I Ditched Wordpress for Github</a>
       <br />
       <small>Mar 25</small>
@@ -140,53 +168,8 @@ end
       <a href="/blog/2011/12/toggle-rails-caching-in-rspec-suite.html#disqus_thread">Comments</a>
     </div>
   </article>
-  <article class="index-post">
-    <h2>
-      <a href="/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html">When Your Fat Models Need to Go on a Diet, Part 2</a>
-      <br />
-      <small>Oct  3</small>
-    </h2>
-    <p>In <a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet">part 1</a> of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As <a title="XP in Anger" href="http://blog.arielvalentin.com/">Ariel Valentin</a> pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.</p>
 
-<p>Let’s imagine we have an application with a <code>User</code> model (might not be a stretch) and we’re building a page that loads a bunch of user gravatars. Our <code>User</code> model has accumulated a ton of attributes, but we may only need a limited set to render the gravatar properly. We might add a line like this in the controller action to select only the needed attributes:</p>
-
-<pre><code class="ruby">@users = User.select(%w[ id name gravatar_id ]).all
-</code></pre>
-
-<p>Perhaps to make this more readable, we’ll extract our select statement into a scope in the <code>User</code> model:</p>
-
-<pre><code class="ruby"># user.rb
-scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
-
-# controller action
-@users = User.select_gravatar_attributes.all
-</code></pre>
-
-<p>We’ll incur less memory overhead during this action at runtime since the app won’t have to load as much data. The caveat is that our <code>@users</code> won’t have access to the data we left behind, so we need to take care only to call methods that rely on the data we have actually loaded. It would be easier to test our lighter users if we could treat them as a different type.</p>
-
-<p>Applying the model-slimming refactoring we discussed in <a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet/">part 1</a>, we can extract gravatar related functionality into a <code>UserExtensions::Gravatar</code> module and create a <code>Gravatar::User</code> that inherits from our <code>User</code> model. Furthermore, we can change our <code>select_gravatar_attributes</code> to a <code>default_scope</code> in the subclass, so whenever we grab <code>Gravatar::User</code> from the db, it’ll have only the attributes we need. Our controller action would now look like this:</p>
-
-<pre><code class="ruby">@users = Gravatar::User.all
-</code></pre>
-
-<p>To put our savings to the test, we can run some basic benchmark tests. I created a sample rails 3.1 app and created ~2000 users records in my development database and ran the <code>rails benchmarker</code> script to load all users both normally and as gravatars. Here are the results:</p>
-
-<p>All users</p>
-
-<p><img alt="All users" src="/images/screenshots/user-perf-test.jpg" /></p>
-
-<p>All as gravatars</p>
-
-<p><img alt="All as gravatars" src="/images/screenshots/gravatar-user-perf-test.jpg" /></p>
-
-<p>The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.</p>
-
-    <div class="comments">
-      <a href="/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html#disqus_thread">Comments</a>
-    </div>
-  </article>
-
-  <p>Page 1 of 3</p>
+  <p>Page 1 of 4</p>
   
     <p><a href="/page/2/">Next page</a></p>
   

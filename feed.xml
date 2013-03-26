@@ -5,10 +5,42 @@
   <id>http://rosskaff.com/</id>
   <link href="http://rosskaff.com/"/>
   <link href="http://rosskaff.com/feed.xml" rel="self"/>
-  <updated>2013-03-25T00:00:00Z</updated>
+  <updated>2013-03-26T00:00:00Z</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Configuring Rack Test Driver in Capybara 2</title>
+    <link rel="alternate" href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html"/>
+    <id>/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html</id>
+    <published>2013-03-26T00:00:00Z</published>
+    <updated>2013-03-26T00:00:00Z</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;First of all, I don't recommended excessive redirects.&lt;/p&gt;
+
+&lt;p&gt;Sometimes though, you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
+...</summary>
+    <content type="html">&lt;p&gt;First of all, I don&amp;#39;t recommended excessive redirects.&lt;/p&gt;
+
+&lt;p&gt;Sometimes though, you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In Capybara 2.0+, this limit is configurable:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;Capybara.register_driver :rack_test do |app|
+  Capybara::RackTest::Driver.new app, \
+    redirect_limit: 15,
+    follow_redirects: true,
+    respect_data_method: true
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Register a new instance of the rack test driver with options, as shown above. If you&amp;#39;re on Rails, it may be necessary for you to set &lt;code&gt;:respect_data_method&lt;/code&gt; to &lt;code&gt;true&lt;/code&gt;; this instructs capybara to simulate the request method specified via data-method attributes in your link. With Rails, an extension like &lt;a href="https://github.com/rails/jquery-ujs"&gt;rails/jquery-ujs&lt;/a&gt; allows you to enable additional request methods via unobtrusive javascript in real browsers. This setting currently defaults to false in the RackTest driver; one of the primary configurations in &lt;a href="https://github.com/jnicklas/capybara/blob/master/lib/capybara/rails.rb"&gt;&lt;code&gt;capybara/rails&lt;/code&gt;&lt;/a&gt; is to set this option. So&amp;hellip; you may be surprised if you omit this option and suddenly get missing route exceptions in your specs.&lt;/p&gt;
+
+&lt;p&gt;The best long term solution for you and your users is to figure out how to reduce or eliminate unnecessary redirects. Playing with the redirect limit in your test environment may be a good way to identify potential problem areas of your app.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Why I Ditched Wordpress for Github</title>
     <link rel="alternate" href="/blog/2013/03/why-i-ditched-wordpress-for-github.html"/>
@@ -161,27 +193,6 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 &lt;p&gt;&lt;img alt="All as gravatars" src="/images/screenshots/gravatar-user-perf-test.jpg" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>When Your Fat Models Need to Go on a Diet</title>
-    <link rel="alternate" href="/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html"/>
-    <id>/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html</id>
-    <published>2011-09-30T00:00:00Z</published>
-    <updated>2011-09-30T00:00:00Z</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Most Rails apps I’ve worked on have followed the pattern “&lt;a title="the buckblogs here" href="http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model"&gt;skinny controllers, fat models&lt;/a&gt;.” The controller shouldn’t have know what attributes and joins to make when asking for data from the models; one line methods calls in controller actions are a...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Most Rails apps I’ve worked on have followed the pattern “&lt;a title="the buckblogs here" href="http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model"&gt;skinny controllers, fat models&lt;/a&gt;.” The controller shouldn’t have know what attributes and joins to make when asking for data from the models; one line methods calls in controller actions are a thing of beauty. Controller specs are simplified and the complexity of business logic and database access can be stuffed into the models. Fatten’ up those models!&lt;/p&gt;
-
-&lt;p&gt;But what happens when your models grow too large? It’s common to have one or two models (Users and Groups, anyone?) carry a large burden. Over time, we see Ruby files approaching and surpassing thousands of lines and their associated tables accumulating column excess. Before you know it, it’s time to put your models on a diet. It’s useful to have some patterns in your tool-belt to start trimming the fat.&lt;/p&gt;
-
-&lt;p&gt;A good refactoring step is to pull out modules of related behavior. In the User model, for example, we might extract modules for related instance methods, associations and validations for functional scopes like admin access or group memberships. I prefer to namespace the modules under UserExtensions so it’s clear, at least in this case, that these are meant for composition of the User model rather than for sharing code across objects. Now ActiveSupport::Concern makes it super-simple to define both instance and class methods in your module and ensure they’re included properly. (Some good reading on &lt;a href="http://yehudakatz.com/2009/11/12/better-ruby-idioms/"&gt;better ruby idioms&lt;/a&gt; for &lt;a href="http://www.fakingfantastic.com/2010/09/20/concerning-yourself-with-active-support-concern/"&gt;mixing in class and instance methods&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;One convention is to place the modules in “#{model_name}_extensions” folders in your app/models directory to group the code logically. For example, UserExtensions::Admin would be located at app/models/user_extensions/admin.rb. Breaking out the code in to functional chunks like this is a good first step in downsizing your model files. It also more easily allows methods and associations to be extracted into other classes/tables.&lt;/p&gt;
-
-&lt;p&gt;Added: Check out &lt;a title="When Your Fat Models Need to Go on a Diet, Part 2" href="http://www.rosskaff.com/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/"&gt;part 2&lt;/a&gt; of this post for thoughts on slimming down our models at runtime.&lt;/p&gt;
 </content>
   </entry>
 </feed>

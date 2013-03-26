@@ -38,6 +38,51 @@
       <section id="main" role="main" class="large-12 columns">
           <article class="index-post">
     <h2>
+      <a href="/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html">When Your Fat Models Need to Go on a Diet, Part 2</a>
+      <br />
+      <small>Oct  3</small>
+    </h2>
+    <p>In <a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet">part 1</a> of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As <a title="XP in Anger" href="http://blog.arielvalentin.com/">Ariel Valentin</a> pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.</p>
+
+<p>Let’s imagine we have an application with a <code>User</code> model (might not be a stretch) and we’re building a page that loads a bunch of user gravatars. Our <code>User</code> model has accumulated a ton of attributes, but we may only need a limited set to render the gravatar properly. We might add a line like this in the controller action to select only the needed attributes:</p>
+
+<pre><code class="ruby">@users = User.select(%w[ id name gravatar_id ]).all
+</code></pre>
+
+<p>Perhaps to make this more readable, we’ll extract our select statement into a scope in the <code>User</code> model:</p>
+
+<pre><code class="ruby"># user.rb
+scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
+
+# controller action
+@users = User.select_gravatar_attributes.all
+</code></pre>
+
+<p>We’ll incur less memory overhead during this action at runtime since the app won’t have to load as much data. The caveat is that our <code>@users</code> won’t have access to the data we left behind, so we need to take care only to call methods that rely on the data we have actually loaded. It would be easier to test our lighter users if we could treat them as a different type.</p>
+
+<p>Applying the model-slimming refactoring we discussed in <a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet/">part 1</a>, we can extract gravatar related functionality into a <code>UserExtensions::Gravatar</code> module and create a <code>Gravatar::User</code> that inherits from our <code>User</code> model. Furthermore, we can change our <code>select_gravatar_attributes</code> to a <code>default_scope</code> in the subclass, so whenever we grab <code>Gravatar::User</code> from the db, it’ll have only the attributes we need. Our controller action would now look like this:</p>
+
+<pre><code class="ruby">@users = Gravatar::User.all
+</code></pre>
+
+<p>To put our savings to the test, we can run some basic benchmark tests. I created a sample rails 3.1 app and created ~2000 users records in my development database and ran the <code>rails benchmarker</code> script to load all users both normally and as gravatars. Here are the results:</p>
+
+<p>All users</p>
+
+<p><img alt="All users" src="/images/screenshots/user-perf-test.jpg" /></p>
+
+<p>All as gravatars</p>
+
+<p><img alt="All as gravatars" src="/images/screenshots/gravatar-user-perf-test.jpg" /></p>
+
+<p>The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.</p>
+
+    <div class="comments">
+      <a href="/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html#disqus_thread">Comments</a>
+    </div>
+  </article>
+  <article class="index-post">
+    <h2>
       <a href="/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html">When Your Fat Models Need to Go on a Diet</a>
       <br />
       <small>Sep 30</small>
@@ -186,38 +231,8 @@ Whenever a socket connection disconnects, say goodbye</p>
       <a href="/blog/2010/12/behavior-driven-event-driven-eventmachine-rspec.html#disqus_thread">Comments</a>
     </div>
   </article>
-  <article class="index-post">
-    <h2>
-      <a href="/blog/2010/12/heuristics.html">Heuristics</a>
-      <br />
-      <small>Dec 25</small>
-    </h2>
-    <p>I just completed another semester of grad school at NYU. Progress towards my computer science degree has been slow: this is my fourth year in the program. As a part-time student, one class at a time is all I can handle. This time, the course was <a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/index.html">Heuristics</a>, which by itself was more than almost anyone can handle.</p>
 
-<p>At its core, the course is about solving puzzles. What is the shortest route that passes through all the cities (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/travelingsalesman.html">Traveling Salesman</a>)? How many injured people around the city can you pick up in your ambulances in time (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/ambulance.html">Ambulance Planning</a>)? What strategy is best for winning more area than your opponents (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/voronoi.html">Voronoi</a>)? Who’s the best match across these 30 personality traits (Dating Game)?</p>
-
-<p>Most of these problems fall into the category called NP-hard, which may be roughly defined as the class of problems that are at least as hard as those that can be solved in non-deterministic polynomial time. The more useful way for us to think about the general definition is to say that there is a verifiable best answer to the problem, but it would be very difficult, perhaps impossible, to design a general approach that would find this solution quickly.</p>
-
-<p>Our goal for each problem then was to apply an appropriate set of heuristics: strategies to estimate a solution that would come as close as possible to the best solution in a reasonable amount of time. Two minutes in fact. Every week then, we had write a program to solve a NP-hard problem in competition with our classmates. If the program didn’t run, we lost. If it went over the two minute time limit, we lost.</p>
-
-<p>Most problems involved interacting with a server via sockets. One student was chosen as the “architect” each week. Instead of solving the problem, the architect created an interface and protocol for communicating with the player clients, and a GUI to display the game progress and results. Extra pressure came with this role: if the server didn’t work or if player clients had difficulty connecting, the competition would be a failure. I chose to be the architect for the final game of the semester, <a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html">Sudokill</a>, a form of competitive Sudoku. I plan to write more about Sudokill in the near future.</p>
-
-<p>By far, this course was the most difficult class I’ve taken in grad school, both conceptually and regarding the workload. At its peak, I spent 30-40 hours a week preparing for the Monday competition. This was often time spent in the early morning hours before and after work. By the end of the semester, fewer than 50% of students were completing their assignments on time. Despite the burden on my free time, this was also the most fun and rewarding class I’ve ever taken. It certainly helped that I was allowed to write my programs in Ruby; this is a rare opportunity in department where most of the faculty prefers Java and C .</p>
-
-<p>I’ve posted my class solutions in a single project on github:</p>
-
-<p>My code for the Sudokill game server:</p>
-
-<p>Check out the game too:
-<a href="http://rosskaff.github.com/sudokill/">http://rosskaff.github.com/sudokill</a>
-<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html">Game rules</a></p>
-
-    <div class="comments">
-      <a href="/blog/2010/12/heuristics.html#disqus_thread">Comments</a>
-    </div>
-  </article>
-
-  <p>Page 2 of 3</p>
+  <p>Page 2 of 4</p>
   
     <p><a href="/page/3/">Next page</a></p>
   
