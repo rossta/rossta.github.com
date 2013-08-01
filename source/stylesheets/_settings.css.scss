@@ -65,7 +65,7 @@
 // Grid Variables
 //
 
-$row-width: 47.5em;
+$row-width: 62.5em;
 // $column-gutter: 1.875em;
 // $total-columns: 12;
 
@@ -1016,9 +1016,12 @@ $row-width: 47.5em;
 // $topbar-breakpoint: emCalc(940px); // Change to 9999px for always mobile layout
 // $topbar-media-query: "only screen and (min-width "#{$topbar-breakpoint}")";
 
+// $mainColor: #237455 !default;
+// $secondaryColor: #04A367 !default;
 $baseFont: proxima-nova, Helvetica, Arial, sans-serif;
 $signatureFont: $baseFont;
 $primaryColor: #0B5FA5;
-$mainColor: #237455 !default;
-$secondaryColor: #04A367 !default;
+$mainColor: #666 !default;
+$secondaryColor: #666 !default;
 $greyColor: #666666 !default;
+$paragraph-line-height: 1.7;

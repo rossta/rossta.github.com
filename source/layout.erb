@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title><%= title_tag %></title>
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -12,28 +12,32 @@
   </head>
   <body id="application" class="typekit">
     <div id="welcome" class="row">
-      <section id="title" class="large-4 small-12 columns">
+      <section id="title" class="large-6 small-12 columns">
         <header class="signature-font">
-          <h1><a class="logo" href="/">rossta</a></h1>
-          <h2><a href="/"><small>ross kaffenberger</small></a></h2>
+          <h1><a class="logo" href="/">ross k</a></h1>
         </header>
-        <aside class="info">
-          <p>I make things</p>
-        </aside>
       </section>
-      <section id="nav" class="large-8 small-12 columns nav">
+      <section id="nav" class="large-6 small-12 columns nav">
         <%= partial 'layouts/nav' %>
       </section>
     </div>
+    <div id="neck">
+      <div class="row">
+        <div class="large-12 columns"><%= section %></div>
+      </div>
+    </div>
     <div class="row">
-      <section id="main" role="main" class="large-12 columns">
+      <section id="main" role="main" class="large-8 small-12 columns">
         <%= yield %>
+      </section>
+      <section id="sidebar" role="sidebar" class="large-4 small-12 columns">
+        <%= partial 'layouts/sidebar' %>
       </section>
     </div>
     <div class="row">
       <footer>
         <section class="large-12 columns center-inline-list">
-          <%= partial 'layouts/nav' %>
+          <%= partial 'layouts/contact' %>
         </section>
       </footer>
     </div>

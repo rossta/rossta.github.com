@@ -113,11 +113,19 @@ page "/playground.html", :layout => false
 # end
 
 helpers do
-  def title
+  def title_tag
     [].tap do |names|
       names << yield_content(:title)
       names << "Ross Kaffenberger"
     end.compact.join(" | ")
+  end
+
+  def title
+    yield_content(:title)
+  end
+
+  def section
+    (yield_content(:section) || title).downcase
   end
 end
 

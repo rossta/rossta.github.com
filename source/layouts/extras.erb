@@ -1,27 +1,27 @@
-<section id="extras" class="large-8 columns">
+<section id="extras">
   <aside>
-    <h2>Recent Articles</h2>
-    <ol>
+    <h6>Recent Articles</h6>
+    <ul>
       <% blog.articles[0...7].each do |article| %>
         <li>
           <a href="<%= article.url %>"><%= article.title %></a> <span><%= article.date.strftime('%b %e, %Y') %></span>
         </li>
       <% end %>
-    </ol>
+    </ul>
 
-    <h2>Tags</h2>
-    <ol>
+    <h6>Tags</h6>
+    <ul>
       <% blog.tags.each do |tag, articles| %>
-        <li><a href="<%= tag_path tag %>"><%= tag %> (<%= articles.size %>)</a></li>
+        <li><a href="<%= tag_path tag %>"><%= tag %> [<%= articles.size %>]</a></li>
       <% end %>
-    </ol>
+    </ul>
 
-    <h2>By Year</h2>
-    <ol>
+    <h6>By Year</h6>
+    <ul>
       <% blog.articles.group_by {|a| a.date.year }.each do |year, articles| %>
-        <li><a href="<%= blog_year_path year %>"><%= year %> (<%= articles.size %>)</a></li>
+        <li><a href="<%= blog_year_path year %>"><%= year %> [<%= articles.size %>]</a></li>
       <% end %>
-    </ol>
+    </ul>
   </aside>
 
 </section>

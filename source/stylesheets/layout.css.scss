@@ -14,7 +14,7 @@
 }
 
 body {
-  padding: 2em 0;
+  padding: 0 0 2em;
 
   @include base-font;
   h1,h2,h3,h4,h5,h6 {
@@ -35,27 +35,22 @@ body {
 
 #application {
   #welcome {
-    border-bottom: 1px solid #ccc;
     text-align:center;
-    margin-bottom:1em;
     .nav {
-      padding-top:1em;
-      a {
-        @include button-base;
-        @include button-size(0.75em);
-        @include button-style(white);
-        &:hover {
-          color: white;
-          background-color: #024A68;
-        }
+      float:right;
+      margin: 0;
+      ul {
+        line-height:100px;
+        float: right;
+        margin: 0;
       }
+
     }
   }
 
   header {
-    margin-top:1em;
-    h1 { margin: 0; line-height:1em;}
-    h2 { margin: 0 0 ; line-height:1.25em; margin-bottom: .25em;}
+    text-align: left;
+    h1 { margin: 0; line-height:100px;}
     h1,h2,h3,h4,h5,h6 {
       color: $mainColor;
       @include signature-font;
@@ -80,6 +75,12 @@ body {
   }
 }
 
+#neck {
+  line-height: 80px;
+  background-color:#EDEDED;
+  margin-bottom:2em;
+}
+
 #main {
   padding-top:1em;
   padding-bottom:1em;
@@ -99,6 +100,13 @@ body {
     text-align:left;
   }
 }
+
+#sidebar {
+  ul {
+    list-style-type: none;
+  }
+}
+
 
 .share { margin-top: 1em; }
 
@@ -142,3 +150,4 @@ img {
     }
   }
 }
+
