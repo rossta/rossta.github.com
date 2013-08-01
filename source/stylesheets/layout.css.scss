@@ -37,20 +37,41 @@ body {
   #welcome {
     text-align:center;
     .nav {
-      float:right;
       margin: 0;
       ul {
-        line-height:100px;
-        float: right;
-        margin: 0;
+        text-align: left;
+        padding: 0;
+        list-style: none;
+        overflow: hidden;
+        li {
+          line-height: 2em;
+        }
       }
-
+      @media #{$small} {
+        ul {
+          line-height:100px;
+          float: right;
+          margin: 0;
+          li {
+            list-style: none;
+            float: left;
+            margin-left: 1.375em;
+            display: block;
+            line-height: inherit;
+            text-align: center;
+            float:left;
+          }
+        }
+      }
     }
   }
 
   header {
     text-align: left;
-    h1 { margin: 0; line-height:100px;}
+    h1 { margin: 0; line-height:60px;}
+    @media #{$small} {
+      h1 { line-height:100px;}
+    }
     h1,h2,h3,h4,h5,h6 {
       color: $mainColor;
       @include signature-font;
@@ -92,12 +113,6 @@ body {
     font-weight:normal;
     line-height:1.45em;
     font-size:14px;
-  }
-}
-
-@media #{$small} {
-  #sidebar {
-    text-align:left;
   }
 }
 
@@ -151,3 +166,19 @@ img {
   }
 }
 
+
+// @media #{$small} {
+//   #sidebar {
+//     text-align:left;
+//   }
+
+//   #nav-links {
+//     float:none;
+//     .inline-list {
+//       text-align:left;
+//       > li {
+//         float: none;
+//       }
+//     }
+//   }
+// }
