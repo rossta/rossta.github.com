@@ -125,7 +125,7 @@ helpers do
   end
 
   def section
-    (yield_content(:section) || title).downcase
+    (yield_content(:section) || title || "").downcase
   end
 end
 
