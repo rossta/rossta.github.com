@@ -10,9 +10,11 @@
       </h2>
       <%= yield %>
     </article>
+    <% if build? %>
     <section class="comments">
       <%= partial "layouts/share" %>
       <%= partial "layouts/current_article_comments" %>
     </section>
+    <% end %>
   </section>
 <% end %>
