@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem "middleman"
+gem "middleman", '~> 3.1'
 gem "middleman-blog"
 gem "redcarpet"
 gem "nokogiri"
