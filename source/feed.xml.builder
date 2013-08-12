@@ -1,3 +1,4 @@
+# encoding: utf-8
 xml.instruct!
 xml.feed "xmlns" => "http://www.w3.org/2005/Atom" do
   xml.title "rosskaff.com"

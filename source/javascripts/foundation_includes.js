@@ -1,21 +1,21 @@
 /*
-=require foundation/jquery
-=require foundation/modernizr.foundation
-=require foundation/jquery.placeholder
-=require foundation/jquery.foundation.alerts
-=require foundation/jquery.foundation.accordion
-=require foundation/jquery.foundation.buttons
-=require foundation/jquery.foundation.tooltips
-=require foundation/jquery.foundation.forms
-=require foundation/jquery.foundation.tabs
-=require foundation/jquery.foundation.navigation
-=require foundation/jquery.foundation.topbar
-=require foundation/jquery.foundation.reveal
-=require foundation/jquery.foundation.orbit
-=require foundation/jquery.foundation.magellan
-=require foundation/jquery.foundation.joyride
-=require foundation/jquery.foundation.clearing
-=require foundation/jquery.foundation.mediaQueryToggle
-=require foundation/app
+foundation/jquery
+foundation/modernizr.foundation
+foundation/jquery.placeholder
+foundation/jquery.foundation.alerts
+foundation/jquery.foundation.accordion
+foundation/jquery.foundation.buttons
+foundation/jquery.foundation.tooltips
+foundation/jquery.foundation.forms
+foundation/jquery.foundation.tabs
+foundation/jquery.foundation.navigation
+foundation/jquery.foundation.topbar
+foundation/jquery.foundation.reveal
+foundation/jquery.foundation.orbit
+foundation/jquery.foundation.magellan
+foundation/jquery.foundation.joyride
+foundation/jquery.foundation.clearing
+foundation/jquery.foundation.mediaQueryToggle
+require foundation/app
 =require highlight/highlight.pack
 */
