@@ -11,32 +11,31 @@
     <link href="/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
   <body id="application" class="typekit">
-    <div id="welcome" class="row">
-      <section id="title" class="large-4 small-12 columns">
+    <nav id="welcome" class="row">
+      <section id="title" class="large-6 small-12 columns">
         <header class="signature-font">
-          <h1><a class="logo" href="/">rossta</a></h1>
-          <h2><a href="/"><small>ross kaffenberger</small></a></h2>
+          <h1><a class="logo" href="/">ross kaffenberger</a></h1>
         </header>
-        <aside class="info">
-          <p>I make things</p>
-        </aside>
       </section>
-      <section id="nav" class="large-8 small-12 columns nav">
-        <ul class="inline-list">
-  <li><a href="/blog">blog</a></li>
+      <section id="nav" class="large-6 small-12 columns nav">
+        <ul>
   <li><a href="/projects">projects</a></li>
+  <li><a href="/blog">blog</a></li>
   <li><a href="/about">about</a></li>
   <li><a href="/feed.xml">feed</a></li>
-  <li><a href="mailto:rosskaff@gmail.com">email</a></li>
-  <li><a href="http://twitter.com/rossta">twitter</a></li>
-  <li><a href="http://github.com/rossta">github</a></li>
 </ul>
 
       </section>
+    </nav>
+    <div id="neck">
+      <div class="row">
+        <div class="large-12 columns">Blog</div>
+      </div>
     </div>
     <div class="row">
-      <section id="main" role="main" class="large-12 columns">
+      <section id="main" role="main" class="large-8 small-12 columns">
           
+  
   <section id="blog">
     <article class="post">
       <h2>
@@ -55,6 +54,7 @@
 <p>Added: Check out <a title="When Your Fat Models Need to Go on a Diet, Part 2" href="http://www.rosskaff.com/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/">part 2</a> of this post for thoughts on slimming down our models at runtime.</p>
 
     </article>
+    
     <section class="comments">
       <section class="share">
   <a href="https://twitter.com/share" class="twitter-share-button" data-via="rossta">Tweet</a>
@@ -67,6 +67,7 @@
     var disqus_shortname  = 'rosskaff';
     var disqus_identifier = 'when-your-fat-models-need-to-go-on-a-diet';
     var disqus_title      = 'When Your Fat Models Need to Go on a Diet';
+    var disqus_url        = 'http://rosskaff.com/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
@@ -81,7 +82,70 @@
 <!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
 
     </section>
+    
   </section>
+
+      </section>
+      <section id="sidebar" role="sidebar" class="large-4 small-12 columns">
+        <section id="extras">
+  <aside>
+    <h6>Recent Articles</h6>
+    <ul>
+      
+        <li>
+          <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html">Configuring Rack Test Driver in Capybara 2</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/03/why-i-ditched-wordpress-for-github.html">Why I Ditched Wordpress for Github</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html">Create and Deploy an Ember App in 5 Minutes</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2012/02/presentation-intro-to-javascript-mvc.html">Presentation Intro to Javascript MVC</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2011/12/toggle-rails-caching-in-rspec-suite.html">Toggle Rails Caching in RSpec Suites</a>
+        </li>
+      
+    </ul>
+
+    <h6>Tags</h6>
+    <ul>
+      
+        <li><a href="/blog/tags/eventmachine.html">eventmachine [1]</a></li>
+      
+        <li><a href="/blog/tags/html-escaping.html">html escaping [1]</a></li>
+      
+        <li><a href="/blog/tags/rails-3-upgrade.html">Rails 3 upgrade [1]</a></li>
+      
+        <li><a href="/blog/tags/rails_xss.html">rails_xss [1]</a></li>
+      
+        <li><a href="/blog/tags/weplay.html">Weplay [1]</a></li>
+      
+        <li><a href="/blog/tags/xss-protection.html">XSS protection [1]</a></li>
+      
+    </ul>
+
+    <h6>By Year</h6>
+    <ul>
+      
+        <li><a href="/blog/2013.html">2013 [3]</a></li>
+      
+        <li><a href="/blog/2012.html">2012 [1]</a></li>
+      
+        <li><a href="/blog/2011.html">2011 [5]</a></li>
+      
+        <li><a href="/blog/2010.html">2010 [7]</a></li>
+      
+    </ul>
+  </aside>
+
+</section>
 
       </section>
     </div>
@@ -89,10 +153,6 @@
       <footer>
         <section class="large-12 columns center-inline-list">
           <ul class="inline-list">
-  <li><a href="/blog">blog</a></li>
-  <li><a href="/projects">projects</a></li>
-  <li><a href="/about">about</a></li>
-  <li><a href="/feed.xml">feed</a></li>
   <li><a href="mailto:rosskaff@gmail.com">email</a></li>
   <li><a href="http://twitter.com/rossta">twitter</a></li>
   <li><a href="http://github.com/rossta">github</a></li>

@@ -18,10 +18,7 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;First of all, I don't recommended excessive redirects.&lt;/p&gt;
-
-&lt;p&gt;Sometimes though, you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
-...</summary>
+    <summary type="html"></summary>
     <content type="html">&lt;p&gt;First of all, I don&amp;#39;t recommended excessive redirects.&lt;/p&gt;
 
 &lt;p&gt;Sometimes though, you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
@@ -50,7 +47,7 @@ end
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile...&lt;/p&gt;</summary>
+    <summary type="html"></summary>
     <content type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.&lt;/p&gt;
 
 &lt;p&gt;And yet, yesterday, I ditched Wordpress. This site is now hosted on &lt;a href="http://pages.github.com/"&gt;Github Pages&lt;/a&gt;.&lt;/p&gt;
