@@ -2,7 +2,8 @@
 pageable: true
 per_page: 5
 ---
-<section id="blog" class="large-8 columns">
+<% content_for(:section) { 'Blog' } %>
+<section id="blog">
   <ul class="index">
     <% blog.articles.each do |article| %>
       <li>

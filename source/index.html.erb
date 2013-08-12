@@ -2,6 +2,8 @@
 pageable: true
 per_page: 5
 ---
+<% content_for(:title) { 'Home' } %>
+<% content_for(:section) { 'I make things' } %>
 <% page_articles.each_with_index do |article, i| %>
   <article class="index-post">
     <h2>

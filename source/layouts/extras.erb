@@ -2,9 +2,9 @@
   <aside>
     <h6>Recent Articles</h6>
     <ul>
-      <% blog.articles[0...7].each do |article| %>
+      <% blog.articles[0...5].each do |article| %>
         <li>
-          <a href="<%= article.url %>"><%= article.title %></a> <span><%= article.date.strftime('%b %e, %Y') %></span>
+          <a href="<%= article.url %>"><%= article.title %></a>
         </li>
       <% end %>
     </ul>
