@@ -2,9 +2,8 @@
 title: $.delegate and Custom Events
 author: rossta
 permalink: /2010/07/delegate-and-custom-events/
-categories:
-  - Javascript
-  - Performance
+tags:
+  - Code
 ---
 Sharing team photos and video is central to [Weplay][1] and my team has been working hard recently to make some dramatic improvements to the media gallery experience.
 

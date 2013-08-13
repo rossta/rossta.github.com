@@ -2,8 +2,8 @@
 title: Hello World
 author: rossta
 permalink: /2010/01/hello-world/
-categories:
-  - Bio
+tags:
+  - Life
 ---
 At some point we learned to walk, yet most of us find ourselves taking first steps time and again. Moving to another city. Going to a new school. Choosing a different career.
 

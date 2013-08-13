@@ -2,8 +2,8 @@
 title: When Your Fat Models Need to Go on a Diet
 author: rossta
 permalink: /2011/09/when-your-fat-models-need-to-go-on-a-diet/
-categories:
-  - Ruby
+tags:
+  - Code
 ---
 Most Rails apps I’ve worked on have followed the pattern “[skinny controllers, fat models][1].” The controller shouldn’t have know what attributes and joins to make when asking for data from the models; one line methods calls in controller actions are a thing of beauty. Controller specs are simplified and the complexity of business logic and database access can be stuffed into the models. Fatten’ up those models!
 

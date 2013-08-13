@@ -2,9 +2,8 @@
 title: Heuristics
 author: rossta
 permalink: /2010/12/heuristics/
-categories:
-  - Computer Science
-  - Ruby
+tags:
+  - Code
 ---
 I just completed another semester of grad school at NYU. Progress towards my computer science degree has been slow: this is my fourth year in the program. As a part-time student, one class at a time is all I can handle. This time, the course was [Heuristics][1], which by itself was more than almost anyone can handle.
 

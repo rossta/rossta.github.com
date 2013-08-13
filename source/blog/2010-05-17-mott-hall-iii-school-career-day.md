@@ -2,10 +2,9 @@
 title: Mott Hall III School Career Day
 author: rossta
 permalink: /2010/05/mott-hall-iii-school-career-day/
-categories:
-  - Bio
-  - Education
-  - Javascript
+tags:
+  - Code
+  - Life
 ---
 As Calvin was leaving the classroom, he turned back toward me with a smile and a glint in his eye. That was all I needed to see to know: the lesson had made an impression. As a teacher, nothing beats that feeling. I could sense he wanted to say something; he was looking for the right words. He then told me about a website he knew of where he wanted to try more on his own.
 

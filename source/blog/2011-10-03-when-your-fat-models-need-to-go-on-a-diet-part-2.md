@@ -2,9 +2,8 @@
 title: When Your Fat Models Need to Go on a Diet, Part 2
 author: rossta
 permalink: /2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/
-categories:
-  - Performance
-  - Ruby
+tags:
+  - Code
 ---
 In [part 1][1] of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As [Ariel Valentin][2] pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.
 

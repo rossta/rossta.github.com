@@ -5,12 +5,8 @@ excerpt: >
   A walkthrough example of testing a server-client socket connection through
   eventmachine with rspec.
 permalink: /2010/12/behavior-driven-event-driven-eventmachine-rspec/
-categories:
-  - Computer Science
-  - Performance
-  - Ruby
 tags:
-  - eventmachine
+  - Code
 ---
 With all the hubbub around [node.js][1] lately, it’s been easy to forget established event-driven server-side processing solutions in Ruby. One option is [eventmachine][2], which I recently used to develop a multi-player online sudoku game, [Sudokill][3], for my Heuristics class at NYU.
 

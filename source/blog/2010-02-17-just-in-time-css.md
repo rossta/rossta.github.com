@@ -2,10 +2,8 @@
 title: Just-in-Time CSS
 author: rossta
 permalink: /2010/02/just-in-time-css/
-categories:
-  - CSS
-  - Javascript
-  - Performance
+tags:
+  - Code
 ---
 On top of the list of [best practices for speeding up your website][1] is reducing the number of HTTP requests required to render the page. As our websites grow and there are more pages to style, we have more style rules to deliver to our visitors. Keeping the number of requests to a minimum usually means we either need to put all our styles in a single stylesheet, or use a bundling strategy such as [Jammit][2] or [Asset Trip][3], like we use at [Weplay][4], to pull our stylesheets together as one at deploy time.
 

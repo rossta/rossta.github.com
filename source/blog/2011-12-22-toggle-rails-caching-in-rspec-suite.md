@@ -2,9 +2,8 @@
 title: Toggle Rails Caching in RSpec Suites
 author: rossta
 permalink: /2011/12/toggle-rails-caching-in-rspec-suite/
-categories:
-  - Performance
-  - Ruby
+tags:
+  - Code
 ---
 A useful feature of RSpec is the ability to pass metadata to tests and suites and configure the test environment according. For example, [Capybara][1] provides :js options to enable the javascript driver for a given spec. Another use case for RSpec metadata is to test the effects of Rails caching in requests.
 

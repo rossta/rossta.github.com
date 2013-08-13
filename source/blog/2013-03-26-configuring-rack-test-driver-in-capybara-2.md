@@ -1,6 +1,8 @@
 ---
 title: Configuring Rack Test Driver in Capybara 2
 author: rossta
+tags:
+  - Code
 ---
 
 First of all, I don't recommended excessive redirects.

@@ -1,6 +1,8 @@
 ---
 title: Why I Ditched Wordpress for Github
 author: rossta
+tags:
+  - Life
 ---
 
 By statistics alone, Wordpress is a winner. According to the [stats on Wikipedia][2], it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.

@@ -1,8 +1,8 @@
 ---
 title: Step up to the soapbox
 author: rossta
-categories:
-  - Javascript
+tags:
+  - Code
 ---
 Recently, I cobbled together an entry for the [10K Apart Contest][1]. The contest encouraged participants to build an entirely front-end web application in HTML/CSS/Javascript in under 10 kb of total assets, not including some allowable third party libraries such as jQuery or Prototype. Entries must also leverage HTML5 features, some of which include local storage, the canvas API, and web workers.
 
