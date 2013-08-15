@@ -77,20 +77,27 @@ end
 
 &lt;p&gt;&lt;code&gt;$ gem install middleman&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;A key feature for getting up and running quickly with Middleman are its use of project templates. You can use some out-of-the-box templates for setting up a Middleman project with the &lt;a href="http://html5boilerplate.com/"&gt;HTML5 Boilerplate&lt;/a&gt;. I’ve got a fork of an &lt;a href="https://github.com/rossta/middleman-ember-template"&gt;Ember app template&lt;/a&gt; that you can download or clone into &lt;code&gt;~/.middleman/&lt;/code&gt; to get up and running with ember-1.0.0-rc1 with ember-data. To start a new Middleman project with my ember template:
-&lt;code&gt;
-$ git clone git://github.com/rossta/middleman-ember-template.git ~/.middleman/ember
-$ middleman init my_new_project --template=ember
-$ middleman server
-&lt;/code&gt;
-If everything worked, you should be able to navigate to http://localhost:4567 to see Hello World generated with Ember.&lt;/p&gt;
+&lt;p&gt;A key feature for getting up and running quickly with Middleman are its use of project templates. You can use some out-of-the-box templates for setting up a Middleman project with the &lt;a href="http://html5boilerplate.com/"&gt;HTML5 Boilerplate&lt;/a&gt;. I’ve got a fork of an &lt;a href="https://github.com/rossta/middleman-ember-template"&gt;Ember app template&lt;/a&gt; that you can download or clone into &lt;code&gt;~/.middleman/&lt;/code&gt; to get up and running with ember-1.0.0-rc1 with ember-data. To start a new Middleman project with my ember template:&lt;/p&gt;
 
-&lt;p&gt;There are lots of options for deploying a Middleman app. To deploy easily with Heroku, we can use a &lt;a href="https://devcenter.heroku.com/articles/buildpacks"&gt;buildpack&lt;/a&gt;. Buildpacks are scripts that take advantage of hooks provided by the Heroku build process and also us to customize what happens when we run “git push heroku master”. For the app generated from my ember template, we’ll want this process to build the Middleman app, which will minify assets and provide cacheable asset urls through the asset pipeline, and serve it on Rack using the &lt;a href="https://github.com/rack/rack-contrib/blob/master/lib/rack/contrib/try_static.rb"&gt;Rack::TryStatic&lt;/a&gt; middleware. Luckily, there are already some buildpacks out there that fit these requirements. It’s easy to configure our Heroku app to use a custom buildpack via a git url
-&lt;code&gt;
-$ heroku create my_app --buildpack git://github.com/indirect/heroku-buildpack-middleman.git
-$ git push heroku master
-&lt;/code&gt;
-If everything worked, you should be able to see your static web Ember app served up on Heroku.&lt;/p&gt;
+&lt;p&gt;
+$ git clone git://github.com/rossta/middleman-ember-template.git ~/.middleman/ember&lt;/p&gt;
+
+&lt;p&gt;$ middleman init my&lt;em&gt;new&lt;/em&gt;project &amp;ndash;template=ember&lt;/p&gt;
+
+&lt;p&gt;$ middleman server
+&lt;/p&gt;
+
+&lt;p&gt;If everything worked, you should be able to navigate to http://localhost:4567 to see Hello World generated with Ember.&lt;/p&gt;
+
+&lt;p&gt;There are lots of options for deploying a Middleman app. To deploy easily with Heroku, we can use a &lt;a href="https://devcenter.heroku.com/articles/buildpacks"&gt;buildpack&lt;/a&gt;. Buildpacks are scripts that take advantage of hooks provided by the Heroku build process and also us to customize what happens when we run “git push heroku master”. For the app generated from my ember template, we’ll want this process to build the Middleman app, which will minify assets and provide cacheable asset urls through the asset pipeline, and serve it on Rack using the &lt;a href="https://github.com/rack/rack-contrib/blob/master/lib/rack/contrib/try_static.rb"&gt;Rack::TryStatic&lt;/a&gt; middleware. Luckily, there are already some buildpacks out there that fit these requirements. It’s easy to configure our Heroku app to use a custom buildpack via a git url&lt;/p&gt;
+
+&lt;p&gt;
+$ heroku create my_app &amp;ndash;buildpack git://github.com/indirect/heroku-buildpack-middleman.git&lt;/p&gt;
+
+&lt;p&gt;$ git push heroku master
+&lt;/p&gt;
+
+&lt;p&gt;If everything worked, you should be able to see your static web Ember app served up on Heroku.&lt;/p&gt;
 
 &lt;p&gt;I gave a quick lightning talk on this topic at the &lt;a href="http://www.meetup.com/EmberJS-NYC/events/100237642/"&gt;Ember.js NYC Meetup&lt;/a&gt; yesterday. Check out the slides, &lt;a href="https://speakerdeck.com/rossta/create-and-deploy-an-ember-app-in-5-minutes"&gt;also on Speaker Deck&lt;/a&gt;&lt;/p&gt;
 
