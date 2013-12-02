@@ -19,9 +19,7 @@
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html"></summary>
-    <content type="html">&lt;p&gt;First of all, I don&amp;#39;t recommended excessive redirects.&lt;/p&gt;
-
-&lt;p&gt;Sometimes though, you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
+    <content type="html">&lt;p&gt;Though I don&amp;#39;t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;In Capybara 2.0+, this limit is configurable:&lt;/p&gt;
 
