@@ -5,9 +5,7 @@ tags:
   - Code
 ---
 
-First of all, I don't recommended excessive redirects.
-
-Sometimes though, you need more than 5 in your Capybara specs; this is the default redirect limit for [Capybara][1]. When you exceed this limit, you get a dreaded `Capybara::InfiniteRedirectError`.
+Though I don't recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for [Capybara][1]. When you exceed this limit, you get a dreaded `Capybara::InfiniteRedirectError`.
 
 In Capybara 2.0+, this limit is configurable:
 
