@@ -12,7 +12,7 @@ With all the hubbub around [node.js][1] lately, it’s been easy to forget estab
 
  [1]: http://nodejs.org/
  [2]: http://rubyeventmachine.com/
- [3]: http://rossta.github.com/sudokill/
+ [3]: http://playsudokill.com
 
 As the game designer, I needed to build a game server that could easily handle multiple socket connections to player programs written by my classmates. Leveraging the event-driven nature of eventmachine, I was able to build a server that is fast, efficient and easy to maintain.
 
