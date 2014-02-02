@@ -145,7 +145,7 @@ $ pg_dump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
 <p>You can verify it&#39;s in the bucket:</p>
 
 <pre><code>$ s3cmd ls s3://myname-backups/
-2014-02-01 22:32   1109702   s3://rossta-backups/test/backup-2014-02-01.sql
+2014-02-01 22:32   1109702   s3://myname-backups/test/backup-2014-02-01.sql
 </code></pre>
 
 <p>And retrieve it (with automatic decryption when performed on your machine):</p>
@@ -174,7 +174,7 @@ rm &quot;$TEMP_FILE&quot;
 <p>To edit your crontab, <code>crontab -e</code>, and set it to run everyday at 10PM:</p>
 
 <pre><code># Backup database to S3 daily
-* 22 * * * /Users/yourname/bin/database_backup.sh
+* 22 * * * /Users/myname/bin/database_backup.sh
 </code></pre>
 
 <p>Easy, right?</p>
