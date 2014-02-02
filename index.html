@@ -53,7 +53,16 @@
 <li><code>cron</code></li>
 </ul>
 
-<p>As of this writing, Mac users can install with <code>brew install s3cmd</code> and Linux users can use <code>yum install s3cmd</code> or <code>apt-get install s3cmd</code> depending on the distribution.</p>
+<p>The <code>cron</code> is pretty standard on unix-based systems. As of this writing, <code>s3cmd</code> should be straightforward:</p>
+
+<pre><code># Mac users
+$ brew install s3cmd
+
+# Linux
+$ yum install s3cmd
+# or
+$ apt-get install s3cmd
+</code></pre>
 
 <p>Optional:</p>
 
@@ -162,11 +171,7 @@ rm &quot;$TEMP_FILE&quot;
 
 <p>Save this in a directory for your local scripts, like <code>$HOME/bin/database_backup.sh</code> and add execute permissions with <code>chmod +x ~/bin/database_backup.sh</code>.</p>
 
-<p>To edit your crontab:
-<code>
-$ crontab -e
-</code>
-Set it to run everyday at 10PM:</p>
+<p>To edit your crontab, <code>crontab -e</code>, and set it to run everyday at 10PM:</p>
 
 <pre><code># Backup database to S3 daily
 * 22 * * * /Users/yourname/bin/database_backup.sh
