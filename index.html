@@ -149,9 +149,9 @@ $ heroku create my_app &ndash;buildpack git://github.com/indirect/heroku-buildpa
       <br />
       <small>Dec 22</small>
     </h2>
-    <p>A useful feature of RSpec is the ability to pass metadata to tests and suites and configure the test environment according. For example, <a href="https://github.com/jnicklas/capybara">Capybara</a> provides :js options to enable the javascript driver for a given spec. Another use case for RSpec metadata is to test the effects of Rails caching in requests.</p>
+    <p>A useful feature of RSpec is the ability to pass metadata to tests and suites. You may already be familiar with examples in <a href="https://github.com/jnicklas/capybara">Capybara</a>, such as passing <code>:js</code> to enable the javascript driver for a given spec. You may reach a point in the maturity of your test suite when it makes sense add your own configuration options.</p>
 
-<p>The Rails test environment ships with controller caching disabled, which you might not prefer. Otherwise, it may be useful to be able to toggle it on/off during the test run. To provide an optional caching mechanism for your specs, configure an around block:</p>
+<p>Once you introduce caching in your view layer, it can be easy for bugs to crop up around expiry logic. Since the Rails test environment ships with controller caching disabled, it may be useful to be able to toggle it on/off during the test run. To provide an optional caching mechanism for your specs, configure an around block:</p>
 
 <pre><code class="ruby">RSpec.configure do |config|
   config.around(:each, :caching) do |example|
@@ -163,7 +163,7 @@ $ heroku create my_app &ndash;buildpack git://github.com/indirect/heroku-buildpa
 end
 </code></pre>
 
-<p>The around block takes the RSpec example object as an argument. The block is triggered when :caching is detected as a key in an example’s metadata. The example object provides a number of methods for test introspection, allowing you to make changes before and after calling #run to execute the spec. Here, we are storing the previously set value of ActionContoller::Base.perform_caching, setting it for the local suite, and setting it back to the original value after it completes.</p>
+<p>The around block takes the RSpec example object as an argument. The block is triggered when :caching is detected as a key in an example’s metadata. The example object provides a number of methods for test introspection, allowing you to make changes before and after calling run to execute the spec. Here, we are storing the previously set value of <code>ActionContoller::Base.perform_caching</code>, setting it for the local suite, and setting it back to the original value after it completes.</p>
 
 <p>As a result, we now have a simple, explicit mechanism for introducing caching to individual specs and suites:</p>
 
@@ -171,6 +171,8 @@ end
   # test cached stuff
 end
 </code></pre>
+
+<p>Happy testing.</p>
 
     <div class="comments">
       <a href="/blog/2011/12/toggle-rails-caching-in-rspec-suite.html#disqus_thread">Comments</a>
