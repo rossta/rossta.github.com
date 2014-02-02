@@ -12,7 +12,17 @@ You have good reason to backup your files. Amazon S3 is a cost-effective storage
 - `s3cmd`: command line interface to S3.
 - `cron`
 
-As of this writing, Mac users can install with `brew install s3cmd` and Linux users can use `yum install s3cmd` or `apt-get install s3cmd` depending on the distribution.
+The `cron` is pretty standard on unix-based systems. As of this writing, `s3cmd` should be straightforward:
+
+```
+# Mac users
+$ brew install s3cmd
+
+# Linux
+$ yum install s3cmd
+# or
+$ apt-get install s3cmd
+```
 
 Optional:
 
@@ -125,11 +135,7 @@ rm "$TEMP_FILE"
 ```
 Save this in a directory for your local scripts, like `$HOME/bin/database_backup.sh` and add execute permissions with `chmod +x ~/bin/database_backup.sh`.
 
-To edit your crontab:
-```
-$ crontab -e
-```
-Set it to run everyday at 10PM:
+To edit your crontab, `crontab -e`, and set it to run everyday at 10PM:
 
 ```
 # Backup database to S3 daily
