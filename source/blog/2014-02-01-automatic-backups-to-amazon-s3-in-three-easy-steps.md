@@ -108,7 +108,7 @@ You can verify it's in the bucket:
 
 ```
 $ s3cmd ls s3://myname-backups/
-2014-02-01 22:32   1109702   s3://rossta-backups/test/backup-2014-02-01.sql
+2014-02-01 22:32   1109702   s3://myname-backups/test/backup-2014-02-01.sql
 ```
 
 And retrieve it (with automatic decryption when performed on your machine):
@@ -139,7 +139,7 @@ To edit your crontab, `crontab -e`, and set it to run everyday at 10PM:
 
 ```
 # Backup database to S3 daily
-* 22 * * * /Users/yourname/bin/database_backup.sh
+* 22 * * * /Users/myname/bin/database_backup.sh
 ```
 Easy, right?
 
