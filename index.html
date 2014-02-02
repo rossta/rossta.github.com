@@ -39,6 +39,147 @@
       <section id="main" role="main" class="large-8 small-12 columns">
           <article class="index-post">
     <h2>
+      <a href="/blog/2014/02/automatic-backups-to-amazon-s3-in-three-easy-steps.html">Automatic Backups to Amazon S3 are Easy</a>
+      <br />
+      <small>Feb  1</small>
+    </h2>
+    <p>You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&#39;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.</p>
+
+<h2>Pre-requisites</h2>
+
+<ul>
+<li>An <a href="http://aws.amazon.com/">Amazon web services account</a> and <a href="http://aws.amazon.com/iam/">your Amazon access credentials</a></li>
+<li><code>s3cmd</code>: command line interface to S3.</li>
+<li><code>cron</code></li>
+</ul>
+
+<p>As of this writing, Mac users can install with <code>brew install s3cmd</code> and Linux users can use <code>yum install s3cmd</code> or <code>apt-get install s3cmd</code> depending on the distribution.</p>
+
+<p>Optional:</p>
+
+<ul>
+<li><code>gpg</code>: opensource encryption program</li>
+</ul>
+
+<h2>Setup</h2>
+
+<p>First you&#39;ll need to configure s3cmd: <code>s3cmd --configure</code>. Have your Amazon access key and secret key at the ready.</p>
+
+<p>If you plan to store sensitive data on S3, enter the path to your <code>gpg</code> executable; <code>s3cmd</code> will encrypt your data before transferring from your machine to S3. It also decrypts when downloading to your machine. Keep in mind, encrypted files won&#39;t be readable by others with direct access.</p>
+
+<p>Here&#39;s a sample result:</p>
+
+<pre><code>$ s3cmd --configure
+
+Enter new values or accept defaults in brackets with Enter.
+Refer to user manual for detailed description of all options.
+
+Access key and Secret key are your identifiers for Amazon S3
+Access Key: xxxxxxxxxxxxxxxxxxxx
+Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Encryption password is used to protect your files from reading
+by unauthorized persons while in transfer to S3
+Encryption password: xxxxxxxxxx
+Path to GPG program: /usr/local/bin/gpg
+
+When using secure HTTPS protocol all communication with Amazon S3
+servers is protected from 3rd party eavesdropping. This method is
+slower than plain HTTP and can&#39;t be used if you&#39;re behind a proxy
+Use HTTPS protocol [No]: Yes
+
+New settings:
+  Access Key: xxxxxxxxxxxxxxxxxxxx
+  Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Encryption password: xxxxxxxxxx
+  Path to GPG program: /usr/local/bin/gpg
+  Use HTTPS protocol: True
+  HTTP Proxy server name:
+  HTTP Proxy server port: 0
+
+Test access with supplied credentials? [Y/n] Y
+Please wait...
+Success. Your access key and secret key worked fine :-)
+
+Now verifying that encryption works...
+Success. Encryption and decryption worked fine :-)
+
+Save settings? [y/N] y
+Configuration saved to &#39;$HOME/.s3cfg&#39;
+</code></pre>
+
+<h2>Backup</h2>
+
+<p>Now all you need is a file to backup and an S3 bucket to store it.</p>
+
+<p>Let&#39;s say you&#39;re a web developer like me and you want to back up your MySQL or Postgres development data. First, generate the backup file (you may need to add database credentials command-line options, of course):</p>
+
+<pre><code># mysql
+$ mysqldump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
+
+# or postgres
+$ pg_dump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
+</code></pre>
+
+<p>You can use <code>s3cmd</code> to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be using to <em>all</em> S3 users, you won&#39;t be able to call it something like &ldquo;backups&rdquo;. It&#39;s helpful to use a prefix like your email or handle.</p>
+
+<p>Creates an S3 bucket called &#39;myname-backups&#39;:</p>
+
+<pre><code>$ s3cmd mb s3://myname-backups
+</code></pre>
+
+<p>Now you&#39;re ready to deliver. Encrypt and send your sql dump file to your new S3 bucket:</p>
+
+<pre><code>$ s3cmd put backup-2014-02-01.sql s3://myname-backups/backup-2014-02-01.sql --encrypt
+</code></pre>
+
+<p>You can verify it&#39;s in the bucket:</p>
+
+<pre><code>$ s3cmd ls s3://myname-backups/
+2014-02-01 22:32   1109702   s3://rossta-backups/test/backup-2014-02-01.sql
+</code></pre>
+
+<p>And retrieve it (with automatic decryption when performed on your machine):</p>
+
+<pre><code>s3cmd get s3://myname-backups/backup-2014-02-01.sql
+</code></pre>
+
+<p><code>s3cmd</code> supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your <code>.s3cfg</code> file, typically saved in your home directory. You can also set options at the command line.</p>
+
+<h2>Automate</h2>
+
+<p>Backups are all good but performing backups on a regular basis is even better. Like saving money, to get done when automated. Let&#39;s add a cron task:</p>
+
+<pre><code>#!/usr/bin/env bash
+
+TIMESTAMP=$(date +%Y-%m-%d)
+TEMP_FILE=$(mktemp tmp.XXXXXXXXXX)
+S3_FILE=&quot;s3://myname-backups/local/data/backup-$TIMESTAMP&quot;
+pg_dump directory_development &gt; $TEMP_FILE
+s3cmd put $TEMP_FILE $S3_FILE --encrypt
+rm &quot;$TEMP_FILE&quot;
+</code></pre>
+
+<p>Save this in a directory for your local scripts, like <code>$HOME/bin/database_backup.sh</code> and add execute permissions with <code>chmod +x ~/bin/database_backup.sh</code>.</p>
+
+<p>To edit your crontab:
+<code>
+$ crontab -e
+</code>
+Set it to run everyday at 10PM:</p>
+
+<pre><code># Backup database to S3 daily
+* 22 * * * /Users/yourname/bin/database_backup.sh
+</code></pre>
+
+<p>Easy, right?</p>
+
+    <div class="comments">
+      <a href="/blog/2014/02/automatic-backups-to-amazon-s3-in-three-easy-steps.html#disqus_thread">Comments</a>
+    </div>
+  </article>
+  <article class="index-post">
+    <h2>
       <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html">Configuring Rack Test Driver in Capybara 2</a>
       <br />
       <small>Mar 26</small>
@@ -143,41 +284,6 @@ $ heroku create my_app &ndash;buildpack git://github.com/indirect/heroku-buildpa
       <a href="/blog/2012/02/presentation-intro-to-javascript-mvc.html#disqus_thread">Comments</a>
     </div>
   </article>
-  <article class="index-post">
-    <h2>
-      <a href="/blog/2011/12/toggle-rails-caching-in-rspec-suite.html">Toggle Rails Caching in RSpec Suites</a>
-      <br />
-      <small>Dec 22</small>
-    </h2>
-    <p>A useful feature of RSpec is the ability to pass metadata to tests and suites. You may already be familiar with examples in <a href="https://github.com/jnicklas/capybara">Capybara</a>, such as passing <code>:js</code> to enable the javascript driver for a given spec. You may reach a point in the maturity of your test suite when it makes sense add your own configuration options.</p>
-
-<p>Once you introduce caching in your view layer, it can be easy for bugs to crop up around expiry logic. Since the Rails test environment ships with controller caching disabled, it may be useful to be able to toggle it on/off during the test run. To provide an optional caching mechanism for your specs, configure an around block:</p>
-
-<pre><code class="ruby">RSpec.configure do |config|
-  config.around(:each, :caching) do |example|
-    caching = ActionController::Base.perform_caching
-    ActionController::Base.perform_caching = example.metadata[:caching]
-    example.run
-    ActionController::Base.perform_caching = caching
-  end
-end
-</code></pre>
-
-<p>The around block takes the RSpec example object as an argument. The block is triggered when :caching is detected as a key in an example’s metadata. The example object provides a number of methods for test introspection, allowing you to make changes before and after calling run to execute the spec. Here, we are storing the previously set value of <code>ActionContoller::Base.perform_caching</code>, setting it for the local suite, and setting it back to the original value after it completes.</p>
-
-<p>As a result, we now have a simple, explicit mechanism for introducing caching to individual specs and suites:</p>
-
-<pre><code class="ruby">describe &quot;visit the homepage&quot;, :caching =&gt; true do
-  # test cached stuff
-end
-</code></pre>
-
-<p>Happy testing.</p>
-
-    <div class="comments">
-      <a href="/blog/2011/12/toggle-rails-caching-in-rspec-suite.html#disqus_thread">Comments</a>
-    </div>
-  </article>
 
   <p>Page 1 of 4</p>
   
@@ -209,6 +315,10 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
     <ul>
       
         <li>
+          <a href="/blog/2014/02/automatic-backups-to-amazon-s3-in-three-easy-steps.html">Automatic Backups to Amazon S3 are Easy</a>
+        </li>
+      
+        <li>
           <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html">Configuring Rack Test Driver in Capybara 2</a>
         </li>
       
@@ -222,10 +332,6 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
       
         <li>
           <a href="/blog/2012/02/presentation-intro-to-javascript-mvc.html">Presentation Intro to Javascript MVC</a>
-        </li>
-      
-        <li>
-          <a href="/blog/2011/12/toggle-rails-caching-in-rspec-suite.html">Toggle Rails Caching in RSpec Suites</a>
         </li>
       
     </ul>
@@ -243,6 +349,8 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
 
     <h6>By Year</h6>
     <ul>
+      
+        <li><a href="/blog/2014.html">2014 [1]</a></li>
       
         <li><a href="/blog/2013.html">2013 [3]</a></li>
       

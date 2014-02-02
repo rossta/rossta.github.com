@@ -1,0 +1,298 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Automatic Backups to Amazon S3 are Easy | Ross Kaffenberger</title>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="The homepage of Ross Kaffenberger.">
+    <meta name="keywords" content="Ross Kaffenberger, software, software developer,
+    ruby, javascript, web development, startups">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/stylesheets/all.css" media="screen" rel="stylesheet" type="text/css" />
+    <link href="/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome" class="row">
+      <section id="title" class="large-6 small-12 columns">
+        <header class="signature-font">
+          <h1><a class="logo" href="/">ross kaffenberger</a></h1>
+        </header>
+      </section>
+      <section id="nav" class="large-6 small-12 columns nav">
+        <ul>
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/blog">blog</a></li>
+  <li><a href="/about">about</a></li>
+  <li><a href="/feed.xml">feed</a></li>
+</ul>
+
+      </section>
+    </nav>
+    <div id="neck">
+      <div class="row">
+        <div class="large-12 columns">Blog</div>
+      </div>
+    </div>
+    <div class="row">
+      <section id="main" role="main" class="large-8 small-12 columns">
+          
+  
+  <section id="blog">
+    <article class="post">
+      <h2>
+        Automatic Backups to Amazon S3 are Easy
+        <br />
+        <small>Feb  1</small>
+      </h2>
+      <p>You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&#39;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.</p>
+
+<h2>Pre-requisites</h2>
+
+<ul>
+<li>An <a href="http://aws.amazon.com/">Amazon web services account</a> and <a href="http://aws.amazon.com/iam/">your Amazon access credentials</a></li>
+<li><code>s3cmd</code>: command line interface to S3.</li>
+<li><code>cron</code></li>
+</ul>
+
+<p>As of this writing, Mac users can install with <code>brew install s3cmd</code> and Linux users can use <code>yum install s3cmd</code> or <code>apt-get install s3cmd</code> depending on the distribution.</p>
+
+<p>Optional:</p>
+
+<ul>
+<li><code>gpg</code>: opensource encryption program</li>
+</ul>
+
+<h2>Setup</h2>
+
+<p>First you&#39;ll need to configure s3cmd: <code>s3cmd --configure</code>. Have your Amazon access key and secret key at the ready.</p>
+
+<p>If you plan to store sensitive data on S3, enter the path to your <code>gpg</code> executable; <code>s3cmd</code> will encrypt your data before transferring from your machine to S3. It also decrypts when downloading to your machine. Keep in mind, encrypted files won&#39;t be readable by others with direct access.</p>
+
+<p>Here&#39;s a sample result:</p>
+
+<pre><code>$ s3cmd --configure
+
+Enter new values or accept defaults in brackets with Enter.
+Refer to user manual for detailed description of all options.
+
+Access key and Secret key are your identifiers for Amazon S3
+Access Key: xxxxxxxxxxxxxxxxxxxx
+Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Encryption password is used to protect your files from reading
+by unauthorized persons while in transfer to S3
+Encryption password: xxxxxxxxxx
+Path to GPG program: /usr/local/bin/gpg
+
+When using secure HTTPS protocol all communication with Amazon S3
+servers is protected from 3rd party eavesdropping. This method is
+slower than plain HTTP and can&#39;t be used if you&#39;re behind a proxy
+Use HTTPS protocol [No]: Yes
+
+New settings:
+  Access Key: xxxxxxxxxxxxxxxxxxxx
+  Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Encryption password: xxxxxxxxxx
+  Path to GPG program: /usr/local/bin/gpg
+  Use HTTPS protocol: True
+  HTTP Proxy server name:
+  HTTP Proxy server port: 0
+
+Test access with supplied credentials? [Y/n] Y
+Please wait...
+Success. Your access key and secret key worked fine :-)
+
+Now verifying that encryption works...
+Success. Encryption and decryption worked fine :-)
+
+Save settings? [y/N] y
+Configuration saved to &#39;$HOME/.s3cfg&#39;
+</code></pre>
+
+<h2>Backup</h2>
+
+<p>Now all you need is a file to backup and an S3 bucket to store it.</p>
+
+<p>Let&#39;s say you&#39;re a web developer like me and you want to back up your MySQL or Postgres development data. First, generate the backup file (you may need to add database credentials command-line options, of course):</p>
+
+<pre><code># mysql
+$ mysqldump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
+
+# or postgres
+$ pg_dump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
+</code></pre>
+
+<p>You can use <code>s3cmd</code> to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be using to <em>all</em> S3 users, you won&#39;t be able to call it something like &ldquo;backups&rdquo;. It&#39;s helpful to use a prefix like your email or handle.</p>
+
+<p>Creates an S3 bucket called &#39;myname-backups&#39;:</p>
+
+<pre><code>$ s3cmd mb s3://myname-backups
+</code></pre>
+
+<p>Now you&#39;re ready to deliver. Encrypt and send your sql dump file to your new S3 bucket:</p>
+
+<pre><code>$ s3cmd put backup-2014-02-01.sql s3://myname-backups/backup-2014-02-01.sql --encrypt
+</code></pre>
+
+<p>You can verify it&#39;s in the bucket:</p>
+
+<pre><code>$ s3cmd ls s3://myname-backups/
+2014-02-01 22:32   1109702   s3://rossta-backups/test/backup-2014-02-01.sql
+</code></pre>
+
+<p>And retrieve it (with automatic decryption when performed on your machine):</p>
+
+<pre><code>s3cmd get s3://myname-backups/backup-2014-02-01.sql
+</code></pre>
+
+<p><code>s3cmd</code> supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your <code>.s3cfg</code> file, typically saved in your home directory. You can also set options at the command line.</p>
+
+<h2>Automate</h2>
+
+<p>Backups are all good but performing backups on a regular basis is even better. Like saving money, to get done when automated. Let&#39;s add a cron task:</p>
+
+<pre><code>#!/usr/bin/env bash
+
+TIMESTAMP=$(date +%Y-%m-%d)
+TEMP_FILE=$(mktemp tmp.XXXXXXXXXX)
+S3_FILE=&quot;s3://myname-backups/local/data/backup-$TIMESTAMP&quot;
+pg_dump directory_development &gt; $TEMP_FILE
+s3cmd put $TEMP_FILE $S3_FILE --encrypt
+rm &quot;$TEMP_FILE&quot;
+</code></pre>
+
+<p>Save this in a directory for your local scripts, like <code>$HOME/bin/database_backup.sh</code> and add execute permissions with <code>chmod +x ~/bin/database_backup.sh</code>.</p>
+
+<p>To edit your crontab:
+<code>
+$ crontab -e
+</code>
+Set it to run everyday at 10PM:</p>
+
+<pre><code># Backup database to S3 daily
+* 22 * * * /Users/yourname/bin/database_backup.sh
+</code></pre>
+
+<p>Easy, right?</p>
+
+    </article>
+    
+    <section class="comments">
+      <section class="share">
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="rossta">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+</section>
+
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = 'rosskaff';
+    var disqus_identifier = 'automatic-backups-to-amazon-s3-in-three-easy-steps';
+    var disqus_title      = 'Automatic Backups to Amazon S3 are Easy';
+    var disqus_url        = 'http://rosskaff.com/blog/2014/02/automatic-backups-to-amazon-s3-in-three-easy-steps.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+    
+  </section>
+
+      </section>
+      <section id="sidebar" role="sidebar" class="large-4 small-12 columns">
+        <section id="extras">
+  <aside>
+    <h6>Recent Articles</h6>
+    <ul>
+      
+        <li>
+          <a href="/blog/2014/02/automatic-backups-to-amazon-s3-in-three-easy-steps.html">Automatic Backups to Amazon S3 are Easy</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html">Configuring Rack Test Driver in Capybara 2</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/03/why-i-ditched-wordpress-for-github.html">Why I Ditched Wordpress for Github</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html">Create and Deploy an Ember App in 5 Minutes</a>
+        </li>
+      
+        <li>
+          <a href="/blog/2012/02/presentation-intro-to-javascript-mvc.html">Presentation Intro to Javascript MVC</a>
+        </li>
+      
+    </ul>
+
+    <h6>Tags</h6>
+    <ul>
+      
+        <li><a href="/blog/tags/life.html">Life [4]</a></li>
+      
+        <li><a href="/blog/tags/code.html">Code [14]</a></li>
+      
+        <li><a href="/blog/tags/work.html">Work [1]</a></li>
+      
+    </ul>
+
+    <h6>By Year</h6>
+    <ul>
+      
+        <li><a href="/blog/2014.html">2014 [1]</a></li>
+      
+        <li><a href="/blog/2013.html">2013 [3]</a></li>
+      
+        <li><a href="/blog/2012.html">2012 [1]</a></li>
+      
+        <li><a href="/blog/2011.html">2011 [5]</a></li>
+      
+        <li><a href="/blog/2010.html">2010 [7]</a></li>
+      
+    </ul>
+  </aside>
+
+</section>
+
+      </section>
+    </div>
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:rosskaff@gmail.com">email</a></li>
+  <li><a href="http://twitter.com/rossta">twitter</a></li>
+  <li><a href="http://github.com/rossta">github</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/javascripts/all.js" type="text/javascript"></script>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16458563-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

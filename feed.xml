@@ -5,10 +5,152 @@
   <id>http://rosskaff.com/</id>
   <link href="http://rosskaff.com/"/>
   <link href="http://rosskaff.com/feed.xml" rel="self"/>
-  <updated>2013-03-26T00:00:00Z</updated>
+  <updated>2014-02-01T00:00:00Z</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Automatic Backups to Amazon S3 are Easy</title>
+    <link rel="alternate" href="/blog/2014/02/automatic-backups-to-amazon-s3-in-three-easy-steps.html"/>
+    <id>/blog/2014/02/automatic-backups-to-amazon-s3-in-three-easy-steps.html</id>
+    <published>2014-02-01T00:00:00Z</published>
+    <updated>2014-02-01T00:00:00Z</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html"></summary>
+    <content type="html">&lt;p&gt;You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&amp;#39;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.&lt;/p&gt;
+
+&lt;h2&gt;Pre-requisites&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;An &lt;a href="http://aws.amazon.com/"&gt;Amazon web services account&lt;/a&gt; and &lt;a href="http://aws.amazon.com/iam/"&gt;your Amazon access credentials&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;s3cmd&lt;/code&gt;: command line interface to S3.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cron&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As of this writing, Mac users can install with &lt;code&gt;brew install s3cmd&lt;/code&gt; and Linux users can use &lt;code&gt;yum install s3cmd&lt;/code&gt; or &lt;code&gt;apt-get install s3cmd&lt;/code&gt; depending on the distribution.&lt;/p&gt;
+
+&lt;p&gt;Optional:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;gpg&lt;/code&gt;: opensource encryption program&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Setup&lt;/h2&gt;
+
+&lt;p&gt;First you&amp;#39;ll need to configure s3cmd: &lt;code&gt;s3cmd --configure&lt;/code&gt;. Have your Amazon access key and secret key at the ready.&lt;/p&gt;
+
+&lt;p&gt;If you plan to store sensitive data on S3, enter the path to your &lt;code&gt;gpg&lt;/code&gt; executable; &lt;code&gt;s3cmd&lt;/code&gt; will encrypt your data before transferring from your machine to S3. It also decrypts when downloading to your machine. Keep in mind, encrypted files won&amp;#39;t be readable by others with direct access.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s a sample result:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ s3cmd --configure
+
+Enter new values or accept defaults in brackets with Enter.
+Refer to user manual for detailed description of all options.
+
+Access key and Secret key are your identifiers for Amazon S3
+Access Key: xxxxxxxxxxxxxxxxxxxx
+Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Encryption password is used to protect your files from reading
+by unauthorized persons while in transfer to S3
+Encryption password: xxxxxxxxxx
+Path to GPG program: /usr/local/bin/gpg
+
+When using secure HTTPS protocol all communication with Amazon S3
+servers is protected from 3rd party eavesdropping. This method is
+slower than plain HTTP and can&amp;#39;t be used if you&amp;#39;re behind a proxy
+Use HTTPS protocol [No]: Yes
+
+New settings:
+  Access Key: xxxxxxxxxxxxxxxxxxxx
+  Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  Encryption password: xxxxxxxxxx
+  Path to GPG program: /usr/local/bin/gpg
+  Use HTTPS protocol: True
+  HTTP Proxy server name:
+  HTTP Proxy server port: 0
+
+Test access with supplied credentials? [Y/n] Y
+Please wait...
+Success. Your access key and secret key worked fine :-)
+
+Now verifying that encryption works...
+Success. Encryption and decryption worked fine :-)
+
+Save settings? [y/N] y
+Configuration saved to &amp;#39;$HOME/.s3cfg&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Backup&lt;/h2&gt;
+
+&lt;p&gt;Now all you need is a file to backup and an S3 bucket to store it.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s say you&amp;#39;re a web developer like me and you want to back up your MySQL or Postgres development data. First, generate the backup file (you may need to add database credentials command-line options, of course):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# mysql
+$ mysqldump my_app_development &amp;gt; backup-`date +%Y-%m-%d`.sql
+
+# or postgres
+$ pg_dump my_app_development &amp;gt; backup-`date +%Y-%m-%d`.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can use &lt;code&gt;s3cmd&lt;/code&gt; to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be using to &lt;em&gt;all&lt;/em&gt; S3 users, you won&amp;#39;t be able to call it something like &amp;ldquo;backups&amp;rdquo;. It&amp;#39;s helpful to use a prefix like your email or handle.&lt;/p&gt;
+
+&lt;p&gt;Creates an S3 bucket called &amp;#39;myname-backups&amp;#39;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ s3cmd mb s3://myname-backups
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you&amp;#39;re ready to deliver. Encrypt and send your sql dump file to your new S3 bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ s3cmd put backup-2014-02-01.sql s3://myname-backups/backup-2014-02-01.sql --encrypt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can verify it&amp;#39;s in the bucket:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ s3cmd ls s3://myname-backups/
+2014-02-01 22:32   1109702   s3://rossta-backups/test/backup-2014-02-01.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And retrieve it (with automatic decryption when performed on your machine):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s3cmd get s3://myname-backups/backup-2014-02-01.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;s3cmd&lt;/code&gt; supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your &lt;code&gt;.s3cfg&lt;/code&gt; file, typically saved in your home directory. You can also set options at the command line.&lt;/p&gt;
+
+&lt;h2&gt;Automate&lt;/h2&gt;
+
+&lt;p&gt;Backups are all good but performing backups on a regular basis is even better. Like saving money, to get done when automated. Let&amp;#39;s add a cron task:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/env bash
+
+TIMESTAMP=$(date +%Y-%m-%d)
+TEMP_FILE=$(mktemp tmp.XXXXXXXXXX)
+S3_FILE=&amp;quot;s3://myname-backups/local/data/backup-$TIMESTAMP&amp;quot;
+pg_dump directory_development &amp;gt; $TEMP_FILE
+s3cmd put $TEMP_FILE $S3_FILE --encrypt
+rm &amp;quot;$TEMP_FILE&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Save this in a directory for your local scripts, like &lt;code&gt;$HOME/bin/database_backup.sh&lt;/code&gt; and add execute permissions with &lt;code&gt;chmod +x ~/bin/database_backup.sh&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To edit your crontab:
+&lt;code&gt;
+$ crontab -e
+&lt;/code&gt;
+Set it to run everyday at 10PM:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Backup database to S3 daily
+* 22 * * * /Users/yourname/bin/database_backup.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Easy, right?&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Configuring Rack Test Driver in Capybara 2</title>
     <link rel="alternate" href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html"/>
@@ -153,52 +295,6 @@ end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Happy testing.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>When Your Fat Models Need to Go on a Diet, Part 2</title>
-    <link rel="alternate" href="/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html"/>
-    <id>/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html</id>
-    <published>2011-10-03T00:00:00Z</published>
-    <updated>2011-10-03T00:00:00Z</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;In &lt;a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet"&gt;part 1&lt;/a&gt; of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As &lt;a title="XP in Anger" href="http://blog.arielvalentin.com/"&gt;Ariel Valentin&lt;/a&gt; pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;In &lt;a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet"&gt;part 1&lt;/a&gt; of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As &lt;a title="XP in Anger" href="http://blog.arielvalentin.com/"&gt;Ariel Valentin&lt;/a&gt; pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.&lt;/p&gt;
-
-&lt;p&gt;Let’s imagine we have an application with a &lt;code&gt;User&lt;/code&gt; model (might not be a stretch) and we’re building a page that loads a bunch of user gravatars. Our &lt;code&gt;User&lt;/code&gt; model has accumulated a ton of attributes, but we may only need a limited set to render the gravatar properly. We might add a line like this in the controller action to select only the needed attributes:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;@users = User.select(%w[ id name gravatar_id ]).all
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Perhaps to make this more readable, we’ll extract our select statement into a scope in the &lt;code&gt;User&lt;/code&gt; model:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# user.rb
-scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
-
-# controller action
-@users = User.select_gravatar_attributes.all
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We’ll incur less memory overhead during this action at runtime since the app won’t have to load as much data. The caveat is that our &lt;code&gt;@users&lt;/code&gt; won’t have access to the data we left behind, so we need to take care only to call methods that rely on the data we have actually loaded. It would be easier to test our lighter users if we could treat them as a different type.&lt;/p&gt;
-
-&lt;p&gt;Applying the model-slimming refactoring we discussed in &lt;a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet/"&gt;part 1&lt;/a&gt;, we can extract gravatar related functionality into a &lt;code&gt;UserExtensions::Gravatar&lt;/code&gt; module and create a &lt;code&gt;Gravatar::User&lt;/code&gt; that inherits from our &lt;code&gt;User&lt;/code&gt; model. Furthermore, we can change our &lt;code&gt;select_gravatar_attributes&lt;/code&gt; to a &lt;code&gt;default_scope&lt;/code&gt; in the subclass, so whenever we grab &lt;code&gt;Gravatar::User&lt;/code&gt; from the db, it’ll have only the attributes we need. Our controller action would now look like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;@users = Gravatar::User.all
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To put our savings to the test, we can run some basic benchmark tests. I created a sample rails 3.1 app and created ~2000 users records in my development database and ran the &lt;code&gt;rails benchmarker&lt;/code&gt; script to load all users both normally and as gravatars. Here are the results:&lt;/p&gt;
-
-&lt;p&gt;All users&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt="All users" src="/images/screenshots/user-perf-test.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;All as gravatars&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt="All as gravatars" src="/images/screenshots/gravatar-user-perf-test.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.&lt;/p&gt;
 </content>
   </entry>
 </feed>
