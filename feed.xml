@@ -5,10 +5,156 @@
   <id>http://rosskaff.com/</id>
   <link href="http://rosskaff.com/"/>
   <link href="http://rosskaff.com/feed.xml" rel="self"/>
-  <updated>2014-02-01T00:00:00Z</updated>
+  <updated>2014-02-05T00:00:00Z</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Ruby, You Autocomplete Me</title>
+    <link rel="alternate" href="/blog/2014/02/ruby,-you-autocomplete-me.html"/>
+    <id>/blog/2014/02/ruby,-you-autocomplete-me.html</id>
+    <published>2014-02-05T00:00:00Z</published>
+    <updated>2014-02-05T00:00:00Z</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html"></summary>
+    <content type="html">&lt;p&gt;My team recently added a tagging feature to our web app. As the user types in
+the text input, the app supplies autocomplete suggestions from our database via
+javascript; a familiar UX. While backporting tags to existing records on the
+&lt;code&gt;rails console&lt;/code&gt;, it hit me: &amp;ldquo;Why not bring tag autocompletion to the command
+line?&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;The default &lt;code&gt;rails console&lt;/code&gt; provides completion out-of-the-box though all the script 
+does is start &lt;code&gt;irb&lt;/code&gt; with the rails environment and &lt;code&gt;irb/completion&lt;/code&gt; required.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;#!/usr/bin/env ruby
+require File.expand_path(&amp;#39;../../load_paths&amp;#39;, __FILE__)
+require &amp;#39;rails/all&amp;#39;
+require &amp;#39;active_support/all&amp;#39;
+require &amp;#39;irb&amp;#39;
+require &amp;#39;irb/completion&amp;#39;
+IRB.start
+
+# from https://github.com/rails/rails/blob/master/tools/console
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Turns out that all &lt;code&gt;irb/completion&lt;/code&gt; does is configure the ruby interface to the
+&lt;a href="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html"&gt;GNU Readline Library&lt;/a&gt;.
+This is done with the ruby &lt;a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html"&gt;Readline&lt;/a&gt;
+module. &lt;code&gt;Readline&lt;/code&gt; accepts a &lt;code&gt;proc&lt;/code&gt; that determines completion behavior by returning an array of string 
+candidates given an input string triggered, typically, by pressing &lt;code&gt;TAB&lt;/code&gt;. &lt;/p&gt;
+
+&lt;p&gt;From &lt;code&gt;irb/completion&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;if Readline.respond_to?(&amp;quot;basic_word_break_characters=&amp;quot;)
+#  Readline.basic_word_break_characters= &amp;quot; \t\n\&amp;quot;\\&amp;#39;`&amp;gt;&amp;lt;=;|&amp;amp;{(&amp;quot;
+  Readline.basic_word_break_characters= &amp;quot; \t\n`&amp;gt;&amp;lt;=;|&amp;amp;{(&amp;quot;
+end
+Readline.completion_append_character = nil
+Readline.completion_proc = IRB::InputCompletor::CompletionProc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;IRB::InputCompletor::CompletionProc&lt;/code&gt; is a proc that evaluates a large case
+statement of regular expressions that attempt to determine the type of given
+object and provide a set of candidates to match, such as &lt;code&gt;String&lt;/code&gt; instance methods when
+the input matches &lt;code&gt;/^(([&amp;quot;&amp;#39;&lt;/code&gt;]).&lt;em&gt;\2).([^.]&lt;/em&gt;)$/.&lt;/p&gt;
+
+&lt;p&gt;To give &lt;code&gt;Readline&lt;/code&gt; a spin, fire up &lt;code&gt;irb&lt;/code&gt; and paste in the following example, borrowed
+from the &lt;a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html"&gt;ruby docs&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;readline&amp;#39;
+
+LIST = [
+  &amp;#39;search&amp;#39;, &amp;#39;download&amp;#39;, &amp;#39;open&amp;#39;,
+  &amp;#39;help&amp;#39;, &amp;#39;history&amp;#39;, &amp;#39;quit&amp;#39;,
+  &amp;#39;url&amp;#39;, &amp;#39;next&amp;#39;, &amp;#39;clear&amp;#39;,
+  &amp;#39;prev&amp;#39;, &amp;#39;past&amp;#39;
+].sort
+
+comp = proc { |s| LIST.grep(/^#{Regexp.escape(s)}/) }
+
+Readline.completion_append_character = &amp;quot; &amp;quot;
+Readline.completion_proc = comp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There&amp;#39;s nothing stopping us from taking this to the &lt;code&gt;rails console&lt;/code&gt; to take
+advantage of our rails environment and even access the database. Building off
+the example, we can replace the hard-coded array with a list of tags plucked
+from a simple activerecord query:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;readline&amp;#39;
+
+comp = proc { |s| ActsAsTaggableOn::Tag.named_like(s).pluck(:name) }
+
+Readline.completion_proc = comp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We have room for improvement. For one thing, this makes a new query every time
+you attempt to autocomplete. For a reasonable number of tags, we could load the
+tag list in memory and grep for the matches instead. There is still another problem; 
+by replacing the &lt;code&gt;Readline.completion_proc&lt;/code&gt;, we&amp;#39;ve clobbered the functionality 
+provided by &lt;code&gt;irb/completion&lt;/code&gt;. One approach would be to fall back to the 
+&lt;code&gt;IRB::InputCompletor::CompletionProc&lt;/code&gt; or add its result to the array of candidates.
+Given IRB has documented, &lt;a href="https://github.com/cldwalker/bond#irbs-incorrect-completions"&gt;incorrect completions&lt;/a&gt;
+(try completing methods on a proc) and no built-in support for extending completion behavior, 
+this could get messy.&lt;/p&gt;
+
+&lt;p&gt;Enter &lt;a href="https://github.com/cldwalker/bond"&gt;bond&lt;/a&gt;, a drop-in replacement for IRB
+completion. It aims to improve on IRB&amp;#39;s shortcomings and provides methods for
+adding custom completions. To take advantage of Bond in the console:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;bond&amp;#39;
+Bond.start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bond allows you to extend the strategies for autocompleting text with &lt;a href="https://github.com/cldwalker/bond/blob/master/lib/bond.rb#L21"&gt;the
+&lt;code&gt;Bond.completion&lt;/code&gt; method&lt;/a&gt;.
+To set up a Bond completion, we need a condition and an action; when the condition is matched, 
+then the given action will determine which candidates are returned. Calling
+&lt;code&gt;Bond.start&lt;/code&gt; will register Bond&amp;#39;s default completions. For example, the
+following completion is triggered with the text for completion starts with a
+letter preceded by &amp;ldquo;::&amp;rdquo;; the search space is scoped to &lt;code&gt;Object.constants&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# https://github.com/cldwalker/bond/blob/master/lib/bond/completion.rb#L13
+complete(:prefix=&amp;gt;&amp;#39;::&amp;#39;, :anywhere=&amp;gt;&amp;#39;[A-Z][^:\.\(]*&amp;#39;) {|e| Object.constants }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To add tag autocompletion whenever we start a new string, we could use the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;include Bond::Search # provides methods to search lists
+
+TAG_NAMES = ActsAsTaggableOn::Tag.pluck(:name) # load tag names in memory
+
+Bond.complete(:name=&amp;gt;:tags, prefix: &amp;#39;&amp;quot;&amp;#39;, :anywhere=&amp;gt;&amp;#39;([A-Z][^,]*)&amp;#39;) {|e|
+  tag = e.matched[2]
+  normal_search(tag, TAG_NAMES)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Boom! Now we when autocomplete with some text inside an open double-quote, matching
+tags from the database appear on the console.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;irb(main)&amp;gt; &amp;quot;Face[TAB]
+Face++                     Facebook Graph             FaceCash
+Face.com                   Facebook Graph API         FaceDetection
+Facebook                   Facebook Opengraph         Facelets
+Facebook Ads               Facebook Real-time Updates Faces.com
+Facebook Chat              Facebook SDK               Facetly
+Facebook Credits           Facebook Social Plugins
+irb(main):010:0&amp;gt; &amp;quot;Facebook&amp;quot;, &amp;quot;Twit[TAB]
+Twitcher          TwitLonger        Twitter           Twitter Streaming Twitxr
+TwitchTV          TwitPic           Twitter API       TwitterBrite
+TwitDoc           TwitrPix          Twitter Bootstrap TwitterCounter
+Twitgoo           Twitscoop         Twitter Grader    Twittervision
+Twitlbl           TwitSprout        Twitter Oauth     Twitvid
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Even though we ended up using an existing gem, it was helpful to dig into the
+Ruby standard library source code to shed some light on the features that can be
+easily taken for granted.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Automatic Backups to Amazon S3 are Easy</title>
     <link rel="alternate" href="/blog/2014/02/automatic-backups-to-amazon-s3-are-easy.html"/>
@@ -166,9 +312,7 @@ rm &amp;quot;$TEMP_FILE&amp;quot;
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html"></summary>
-    <content type="html">&lt;p&gt;First of all, I don&amp;#39;t recommended excessive redirects.&lt;/p&gt;
-
-&lt;p&gt;Sometimes though, you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
+    <content type="html">&lt;p&gt;Though I don&amp;#39;t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;In Capybara 2.0+, this limit is configurable:&lt;/p&gt;
 
@@ -264,42 +408,6 @@ $ heroku create my_app &amp;ndash;buildpack git://github.com/indirect/heroku-bui
     <content type="html">&lt;p&gt;Today, I made a brown bag case to my colleagues: let’s approach client-side development in a more structured, disciplined and flexible way; in other words, add a model-view-controller javascript layer to our web app. Included is some background for the discussion and a brief introduction to Backbone.js. I use the phrase MV+ to embrace various implementations of MVC-like javascript frameworks, most of which have different takes on what object take on the responsibility for hooking up models and views.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://daftpunkjs.heroku.com/"&gt;Brown Bag Presentation: Javascript MV+&lt;/a&gt;&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Toggle Rails Caching in RSpec Suites</title>
-    <link rel="alternate" href="/blog/2011/12/toggle-rails-caching-in-rspec-suite.html"/>
-    <id>/blog/2011/12/toggle-rails-caching-in-rspec-suite.html</id>
-    <published>2011-12-22T00:00:00Z</published>
-    <updated>2011-12-22T00:00:00Z</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites. You may already be familiar with examples in &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;, such as passing &lt;code&gt;:js&lt;/code&gt; to enable the javascript driver for a given spec. You may reach a point in the maturity of your...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites. You may already be familiar with examples in &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;, such as passing &lt;code&gt;:js&lt;/code&gt; to enable the javascript driver for a given spec. You may reach a point in the maturity of your test suite when it makes sense add your own configuration options.&lt;/p&gt;
-
-&lt;p&gt;Once you introduce caching in your view layer, it can be easy for bugs to crop up around expiry logic. Since the Rails test environment ships with controller caching disabled, it may be useful to be able to toggle it on/off during the test run. To provide an optional caching mechanism for your specs, configure an around block:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;RSpec.configure do |config|
-  config.around(:each, :caching) do |example|
-    caching = ActionController::Base.perform_caching
-    ActionController::Base.perform_caching = example.metadata[:caching]
-    example.run
-    ActionController::Base.perform_caching = caching
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The around block takes the RSpec example object as an argument. The block is triggered when :caching is detected as a key in an example’s metadata. The example object provides a number of methods for test introspection, allowing you to make changes before and after calling run to execute the spec. Here, we are storing the previously set value of &lt;code&gt;ActionContoller::Base.perform_caching&lt;/code&gt;, setting it for the local suite, and setting it back to the original value after it completes.&lt;/p&gt;
-
-&lt;p&gt;As a result, we now have a simple, explicit mechanism for introducing caching to individual specs and suites:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;describe &amp;quot;visit the homepage&amp;quot;, :caching =&amp;gt; true do
-  # test cached stuff
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Happy testing.&lt;/p&gt;
 </content>
   </entry>
 </feed>

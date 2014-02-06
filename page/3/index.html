@@ -39,6 +39,46 @@
       <section id="main" role="main" class="large-8 small-12 columns">
           <article class="index-post">
     <h2>
+      <a href="/blog/2011/02/opt-in-xss-protection-for-rails-3-upgrade.html">Opt-in XSS protection for Rails 3 upgrade</a>
+      <br />
+      <small>Feb 26</small>
+    </h2>
+    <p>When I’m really hungry, all I want is a Chipotle burrito. It seems like a good idea – it’s big, it tastes good and it’s right there across the street! It’s not long before I regret taking on that much food in one sitting. So it goes for upgrading <a href="http://www.weplay.com">Weplay</a> to Rails 3.</p>
+
+<p>A fundamental shift in Rails 3 is html escaping by default. A number of posts describe the need for this change, an important tool against cross-site scripting (XSS) attacks. Rather than rely on developers to escape user content where needed, all strings that don’t originate from Rails (link_to, form_for, etc.) are treated as unsafe. This is a good thing. Unfortunately, for most running Rails 2 apps, automatically html-escaping our views without adjustments results in a hot steaming pile of onscreen view-source dung.</p>
+
+<p><img alt="Weplay home page when html-escaped" src="http://www.rosskaff.com/wp-content/uploads/2011/02/The-Redskins-Golf-Team-Weplay.jpg" />
+This is exactly what you see the first time you install the recommended <a href="https://github.com/rails/rails_xss">rails_xss</a> plugin to provide Rails 3 XSS protection for your Rails 2 app. Despite the obvious work entailed to get things back to normal, this is another good thing. Making the switch to Rails 3 overnight may not be feasible, but adding XSS protection ahead of time will help smooth the transition.</p>
+
+<p>Except perhaps when your app is large. At the present count, we have over 1500 *.html.erb files in Weplay’s main repo. We simply can’t afford to devote the days to focus solely on fixes for excess html escaping in our templates. We need to be able to iterate on this change like everything else; incrementally instead of as an overhaul.</p>
+
+<p>We came up with an alternative: <a href="https://github.com/weplay/rails_xss">we forked rails_xss</a> to <em>disable</em> automatic html escaping by default while still providing the use of “html safe” strings and the Erubis ERB template engine. Developers can turn on html escaping locally using the <strong>autoescape</strong> block helper.</p>
+
+<p>Everything within the helper is escaped. Anything outside the helper is not escaped. Nesting autoescapes is ok: everything inside the outermost invocation is escaped.</p>
+
+<p>The autoescape helper allows us to apply the fixes on a view-by-view basis. We can devote most of our time to building features to help us make money and chip away at templates and partials as they pop up in our workflow. We even have a script to tell us how many files we still need to address.</p>
+
+<p>The key to this change is manipulating the original rails<em>xss plugin behavior. Rails 3 helpers are composed of the String subclass <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">SafeBuffer</a>, which will escape concatenated content not already marked as “html safe”. Internally, calling .html\</em>safe on a string simply sets a flag on the string object and this is flag is checked when adding to a string to SafeBuffer. By monkey-patching String, we disable the automatic escaping by always returning true for the html_safe? check. The autoescape flips on the flag, yields to the content block and flips the flag check back off afterwards. When autoescaping is already turned on, the block is returned as-is to allow nested autoescaping.</p>
+
+<p>There are alternatives. We could all crash on the upgrade (no time!) or we could keep the fully “escaped” version of our app in a separate branch, chip away at it, merge occasionally (not fun!).</p>
+
+<p>The opt-in approach works well for our agile mindset of fast incremental improvement and frequent deployment. I recommend using our fork if you have similar needs. It may even help with the heartburn.</p>
+
+<p>Resources</p>
+
+<ul>
+<li>  <a href="https://github.com/rails/rails_xss">rails/rails_xss</a></li>
+<li>  <a href="https://github.com/weplay/rails_xss">weplay/rails_xss</a></li>
+<li>  <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">Safe Buffer</a>
+*</li>
+</ul>
+
+    <div class="comments">
+      <a href="/blog/2011/02/opt-in-xss-protection-for-rails-3-upgrade.html#disqus_thread">Comments</a>
+    </div>
+  </article>
+  <article class="index-post">
+    <h2>
       <a href="/blog/2010/12/behavior-driven-event-driven-eventmachine-rspec.html">How to Test Your Eventmachine Code with RSpec</a>
       <br />
       <small>Dec 27</small>
@@ -167,46 +207,6 @@ Whenever a socket connection disconnects, say goodbye</p>
       <a href="/blog/2010/07/delegate-and-custom-events.html#disqus_thread">Comments</a>
     </div>
   </article>
-  <article class="index-post">
-    <h2>
-      <a href="/blog/2010/05/mott-hall-iii-school-career-day.html">Mott Hall III School Career Day</a>
-      <br />
-      <small>May 17</small>
-    </h2>
-    <p>As Calvin was leaving the classroom, he turned back toward me with a smile and a glint in his eye. That was all I needed to see to know: the lesson had made an impression. As a teacher, nothing beats that feeling. I could sense he wanted to say something; he was looking for the right words. He then told me about a website he knew of where he wanted to try more on his own.</p>
-
-<p>A friend at the <a href="http://schools.nyc.gov/SchoolPortals/09/X128/default.htm">Mott Hall III in the Bronx</a> invited me to speak at the school’s career day this past Friday. I may have been slow to respond, but as a former teacher myself, I knew this was one opportunity I could not pass up.</p>
-
-<p>Mott Hall III is a not a typical public school school. At some 320 students in grades 6 through 8, it’s small. Students are admitted by application. There is an air of curiosity and respect that accompanies a school where students are held to high expectations.</p>
-
-<p>I was one of about twenty speakers to speak with four groups of students for 30 minutes at a time. I wasn’t sure how to present until I learned I was offered the computer lab. I couldn’t resist: I would have students write a computer program.</p>
-
-<p>Having left myself only a day to put something together, I decided it would be easiest for students to access a web page with a javascript console where we could walk through a few commands. Visual feedback would be key. There are some great in browser javascript consoles that came to mind: <a href="http://www.jconsole.com/">jconsole</a> comes to mind. But the console needed a visual aspect&emdash;something to manipulate and see results. As I had done for many lessons as a teacher for years, I decided to roll my own.</p>
-
-<p>The <a href="http://www.rosskaff.com/wp-content/uploads/2010/05/playground.html">Javascript Playground</a> was born. Dirt simple, but effective for a short lesson, it is intended to be a lightweight introduction to using javascript. For career day, my aim was simply to have the students dip their toes in the process. Maybe experience a setback and (hopefully) find success. They would enter middle school students and leave computer programmers.</p>
-
-<p>I put together a Keynote presentation to introduce the lesson and help students see why software engineers and computer programmers were relevant as builders of software for familiar technology like iPhone Apps, Facebook and Twitter. A segment I called “Computers are Dumb”, (common responses: Wha’? and Huh?) was inspired by my colleague <a href="http://boxornot.com/2008/07/21/how-i-became-a-programmer/">Noah Davis</a>, who had done something similar for his own career day talk. I pretended to be a walking, listening computer who needed instructions to get around desks from one side of the room to the next. I let students shout out instructions which initially led to some comical results. “Turn right” resulted in my spinning in an endless loop and “Walk straight” usually ended with me walking into a wall or chair. The point: computers will do exactly what we tell them to do, not always what we <em>think</em> we’re telling them to do. This was important prelude to the playground.</p>
-
-<p>We then turned our attention to the computers. Once I had led them to the playground and introduced a few commands, within minutes, they were hiding, showing, fading, and moving “Player 1″, a 50×50 pixel image of me. To keep things simple, I made <a href="http://jquery.com/">jQuery</a> available and loaded the console textarea with the player one selector prefilled: <code>$(&quot;#player1&quot;)</code></p>
-
-<p>I would demonstrate a command like</p>
-
-<p><code>$(&quot;#player1&quot;).hide()</code></p>
-
-<p>or</p>
-
-<p><code>$(&quot;#player1&quot;).fadeOut()</code></p>
-
-<p>and many students were quick to discover the complements: <code>.show()</code> and <code>.fadeIn()</code>. The real challenge for the ten minute lesson was to <em>move</em> player 1 from one corner of the screen to the “Home” area.</p>
-
-<p>I could have used the <code>.animate()</code> function with options for manipulating <code>top</code> and <code>left</code> properties, but to simplify things, I wrote a more literal plugin <code>$.fn.move(x, y)</code> as a wrapper around <code>animate</code>. The <code>move</code> command simple takes x and y coordinates as paramaters&emdash;something I could tell was familiar for them from their math classes. While <code>move</code> added the x and y values to their current position, <code>$.fn.goto(x, y)</code> was introduced to jump directly to a place on (or off) the screen. It wasn’t long before the experimentation had begun. A few students figured out how to run multiple commands at once, some even used chained commands on their own: <code>$(&quot;#player1&quot;).fadeOut().fadeIn()</code>. Students were soon signaling me to show how they had led player 1 home.</p>
-
-<p>At each of the sessions, I never seemed to leave enough time for questions. I encouraged students to return to this blog to post comments. I hope I was able to make computer programming a little more accessible and enjoyable for these motivated students in the Bronx. I may have even caught a bit of the teaching bug again myself.</p>
-
-    <div class="comments">
-      <a href="/blog/2010/05/mott-hall-iii-school-career-day.html#disqus_thread">Comments</a>
-    </div>
-  </article>
 
   <p>Page 3 of 4</p>
   
@@ -240,6 +240,10 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
     <ul>
       
         <li>
+          <a href="/blog/2014/02/ruby,-you-autocomplete-me.html">Ruby, You Autocomplete Me</a>
+        </li>
+      
+        <li>
           <a href="/blog/2014/02/automatic-backups-to-amazon-s3-are-easy.html">Automatic Backups to Amazon S3 are Easy</a>
         </li>
       
@@ -253,10 +257,6 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
       
         <li>
           <a href="/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html">Create and Deploy an Ember App in 5 Minutes</a>
-        </li>
-      
-        <li>
-          <a href="/blog/2012/02/presentation-intro-to-javascript-mvc.html">Presentation Intro to Javascript MVC</a>
         </li>
       
     </ul>
@@ -275,7 +275,7 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
     <h6>By Year</h6>
     <ul>
       
-        <li><a href="/blog/2014.html">2014 [1]</a></li>
+        <li><a href="/blog/2014.html">2014 [2]</a></li>
       
         <li><a href="/blog/2013.html">2013 [3]</a></li>
       
