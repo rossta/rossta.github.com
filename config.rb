@@ -127,5 +127,9 @@ helpers do
   def section
     (yield_content(:section) || title || "")
   end
+
+  def url_with_host(path)
+    "http://rosskaff.com" + path
+  end
 end
 
