@@ -58,7 +58,7 @@ Readline.completion_proc = IRB::InputCompletor::CompletionProc
 &lt;p&gt;&lt;code&gt;IRB::InputCompletor::CompletionProc&lt;/code&gt; is a proc that evaluates a large case
 statement of regular expressions that attempt to determine the type of given
 object and provide a set of candidates to match, such as &lt;code&gt;String&lt;/code&gt; instance methods when
-the input matches &lt;code&gt;/^(([&amp;quot;&amp;#39;&lt;/code&gt;]).&lt;em&gt;\2).([^.]&lt;/em&gt;)$/.&lt;/p&gt;
+the input matches &lt;code&gt;$r{^(([&amp;quot;&amp;#39;]).*\2)\.([^.]*)$}&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;To give &lt;code&gt;Readline&lt;/code&gt; a spin, fire up &lt;code&gt;irb&lt;/code&gt; and paste in the following example, borrowed
 from the &lt;a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html"&gt;ruby docs&lt;/a&gt;:&lt;/p&gt;
