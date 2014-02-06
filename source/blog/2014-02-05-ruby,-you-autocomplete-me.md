@@ -2,6 +2,8 @@
 title: Ruby, You Autocomplete Me
 author: rossta
 published: true
+tags:
+  - Code
 ---
 
 My team recently added a tagging feature to our web app. As the user types in
@@ -10,7 +12,7 @@ javascript; a familiar UX. While backporting tags to existing records on the
 `rails console`, it hit me: "Why not bring tag autocompletion to the command
 line?"
 
-The default `rails console` provides completion out-of-the-box though all the script 
+The default `rails console` provides completion out-of-the-box though all the script
 does is start `irb` with the rails environment and `irb/completion` required.
 
 ```ruby
@@ -28,8 +30,8 @@ IRB.start
 Turns out that all `irb/completion` does is configure the ruby interface to the
 [GNU Readline Library](http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html).
 This is done with the ruby [Readline](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html)
-module. `Readline` accepts a `proc` that determines completion behavior by returning an array of string 
-candidates given an input string triggered, typically, by pressing `TAB`. 
+module. `Readline` accepts a `proc` that determines completion behavior by returning an array of string
+candidates given an input string triggered, typically, by pressing `TAB`.
 
 From `irb/completion`:
 
@@ -76,15 +78,15 @@ require 'readline'
 comp = proc { |s| ActsAsTaggableOn::Tag.named_like(s).pluck(:name) }
 
 Readline.completion_proc = comp
-``` 
+```
 We have room for improvement. For one thing, this makes a new query every time
 you attempt to autocomplete. For a reasonable number of tags, we could load the
-tag list in memory and grep for the matches instead. There is still another problem; 
-by replacing the `Readline.completion_proc`, we've clobbered the functionality 
-provided by `irb/completion`. One approach would be to fall back to the 
+tag list in memory and grep for the matches instead. There is still another problem;
+by replacing the `Readline.completion_proc`, we've clobbered the functionality
+provided by `irb/completion`. One approach would be to fall back to the
 `IRB::InputCompletor::CompletionProc` or add its result to the array of candidates.
 Given IRB has documented, [incorrect completions](https://github.com/cldwalker/bond#irbs-incorrect-completions)
-(try completing methods on a proc) and no built-in support for extending completion behavior, 
+(try completing methods on a proc) and no built-in support for extending completion behavior,
 this could get messy.
 
 Enter [bond](https://github.com/cldwalker/bond), a drop-in replacement for IRB
@@ -98,7 +100,7 @@ Bond.start
 
 Bond allows you to extend the strategies for autocompleting text with [the
 `Bond.completion` method](https://github.com/cldwalker/bond/blob/master/lib/bond.rb#L21).
-To set up a Bond completion, we need a condition and an action; when the condition is matched, 
+To set up a Bond completion, we need a condition and an action; when the condition is matched,
 then the given action will determine which candidates are returned. Calling
 `Bond.start` will register Bond's default completions. For example, the
 following completion is triggered with the text for completion starts with a

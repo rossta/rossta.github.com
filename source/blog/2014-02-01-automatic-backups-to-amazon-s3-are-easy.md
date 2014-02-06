@@ -2,6 +2,8 @@
 title: Automatic Backups to Amazon S3 are Easy
 author: rossta
 published: true
+tags:
+  - Code
 ---
 
 You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn't take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.
