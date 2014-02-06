@@ -133,7 +133,7 @@ Facebook                   Facebook Opengraph         Facelets
 Facebook Ads               Facebook Real-time Updates Faces.com
 Facebook Chat              Facebook SDK               Facetly
 Facebook Credits           Facebook Social Plugins
-irb(main):010:0> "Facebook", "Twit[TAB]
+irb(main)> "Facebook", "Twit[TAB]
 Twitcher          TwitLonger        Twitter           Twitter Streaming Twitxr
 TwitchTV          TwitPic           Twitter API       TwitterBrite
 TwitDoc           TwitrPix          Twitter Bootstrap TwitterCounter
@@ -141,7 +141,7 @@ Twitgoo           Twitscoop         Twitter Grader    Twittervision
 Twitlbl           TwitSprout        Twitter Oauth     Twitvid
 ```
 
-Even though we ended up using an existing gem, it was helpful to dig into the
-Ruby standard library source code to shed some light on the features that can be
-easily taken for granted.
+Even though we ended up leveraging an existing gem, digging into the
+Ruby standard library source code proved to be a useful exercise, revealing some
+simple ways to hook into features easily taken for granted.
 
