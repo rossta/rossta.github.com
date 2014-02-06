@@ -52,7 +52,7 @@ javascript; a familiar UX. While backporting tags to existing records on the
 <code>rails console</code>, it hit me: &ldquo;Why not bring tag autocompletion to the command
 line?&rdquo;</p>
 
-<p>The default <code>rails console</code> provides completion out-of-the-box though all the script 
+<p>The default <code>rails console</code> provides completion out-of-the-box though all the script
 does is start <code>irb</code> with the rails environment and <code>irb/completion</code> required.</p>
 
 <pre><code class="ruby">#!/usr/bin/env ruby
@@ -69,8 +69,8 @@ IRB.start
 <p>Turns out that all <code>irb/completion</code> does is configure the ruby interface to the
 <a href="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html">GNU Readline Library</a>.
 This is done with the ruby <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html">Readline</a>
-module. <code>Readline</code> accepts a <code>proc</code> that determines completion behavior by returning an array of string 
-candidates given an input string triggered, typically, by pressing <code>TAB</code>. </p>
+module. <code>Readline</code> accepts a <code>proc</code> that determines completion behavior by returning an array of string
+candidates given an input string triggered, typically, by pressing <code>TAB</code>.</p>
 
 <p>From <code>irb/completion</code>:</p>
 
@@ -119,12 +119,12 @@ Readline.completion_proc = comp
 
 <p>We have room for improvement. For one thing, this makes a new query every time
 you attempt to autocomplete. For a reasonable number of tags, we could load the
-tag list in memory and grep for the matches instead. There is still another problem; 
-by replacing the <code>Readline.completion_proc</code>, we&#39;ve clobbered the functionality 
-provided by <code>irb/completion</code>. One approach would be to fall back to the 
+tag list in memory and grep for the matches instead. There is still another problem;
+by replacing the <code>Readline.completion_proc</code>, we&#39;ve clobbered the functionality
+provided by <code>irb/completion</code>. One approach would be to fall back to the
 <code>IRB::InputCompletor::CompletionProc</code> or add its result to the array of candidates.
 Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorrect-completions">incorrect completions</a>
-(try completing methods on a proc) and no built-in support for extending completion behavior, 
+(try completing methods on a proc) and no built-in support for extending completion behavior,
 this could get messy.</p>
 
 <p>Enter <a href="https://github.com/cldwalker/bond">bond</a>, a drop-in replacement for IRB
@@ -137,7 +137,7 @@ Bond.start
 
 <p>Bond allows you to extend the strategies for autocompleting text with <a href="https://github.com/cldwalker/bond/blob/master/lib/bond.rb#L21">the
 <code>Bond.completion</code> method</a>.
-To set up a Bond completion, we need a condition and an action; when the condition is matched, 
+To set up a Bond completion, we need a condition and an action; when the condition is matched,
 then the given action will determine which candidates are returned. Calling
 <code>Bond.start</code> will register Bond&#39;s default completions. For example, the
 following completion is triggered with the text for completion starts with a
@@ -229,15 +229,15 @@ simple ways to hook into features easily taken for granted.</p>
         </li>
       
         <li>
+          <a href="/blog/2013/08/featured-post-for-speed-awareness-month.html">Featured Post for Speed Awareness Month</a>
+        </li>
+      
+        <li>
           <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html">Configuring Rack Test Driver in Capybara 2</a>
         </li>
       
         <li>
           <a href="/blog/2013/03/why-i-ditched-wordpress-for-github.html">Why I Ditched Wordpress for Github</a>
-        </li>
-      
-        <li>
-          <a href="/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html">Create and Deploy an Ember App in 5 Minutes</a>
         </li>
       
     </ul>
@@ -247,7 +247,7 @@ simple ways to hook into features easily taken for granted.</p>
       
         <li><a href="/blog/tags/life.html">Life [4]</a></li>
       
-        <li><a href="/blog/tags/code.html">Code [14]</a></li>
+        <li><a href="/blog/tags/code.html">Code [17]</a></li>
       
         <li><a href="/blog/tags/work.html">Work [1]</a></li>
       
@@ -258,7 +258,7 @@ simple ways to hook into features easily taken for granted.</p>
       
         <li><a href="/blog/2014.html">2014 [2]</a></li>
       
-        <li><a href="/blog/2013.html">2013 [3]</a></li>
+        <li><a href="/blog/2013.html">2013 [4]</a></li>
       
         <li><a href="/blog/2012.html">2012 [1]</a></li>
       

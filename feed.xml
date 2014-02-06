@@ -25,7 +25,7 @@ javascript; a familiar UX. While backporting tags to existing records on the
 &lt;code&gt;rails console&lt;/code&gt;, it hit me: &amp;ldquo;Why not bring tag autocompletion to the command
 line?&amp;rdquo;&lt;/p&gt;
 
-&lt;p&gt;The default &lt;code&gt;rails console&lt;/code&gt; provides completion out-of-the-box though all the script 
+&lt;p&gt;The default &lt;code&gt;rails console&lt;/code&gt; provides completion out-of-the-box though all the script
 does is start &lt;code&gt;irb&lt;/code&gt; with the rails environment and &lt;code&gt;irb/completion&lt;/code&gt; required.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;#!/usr/bin/env ruby
@@ -42,8 +42,8 @@ IRB.start
 &lt;p&gt;Turns out that all &lt;code&gt;irb/completion&lt;/code&gt; does is configure the ruby interface to the
 &lt;a href="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html"&gt;GNU Readline Library&lt;/a&gt;.
 This is done with the ruby &lt;a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html"&gt;Readline&lt;/a&gt;
-module. &lt;code&gt;Readline&lt;/code&gt; accepts a &lt;code&gt;proc&lt;/code&gt; that determines completion behavior by returning an array of string 
-candidates given an input string triggered, typically, by pressing &lt;code&gt;TAB&lt;/code&gt;. &lt;/p&gt;
+module. &lt;code&gt;Readline&lt;/code&gt; accepts a &lt;code&gt;proc&lt;/code&gt; that determines completion behavior by returning an array of string
+candidates given an input string triggered, typically, by pressing &lt;code&gt;TAB&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;From &lt;code&gt;irb/completion&lt;/code&gt;:&lt;/p&gt;
 
@@ -92,12 +92,12 @@ Readline.completion_proc = comp
 
 &lt;p&gt;We have room for improvement. For one thing, this makes a new query every time
 you attempt to autocomplete. For a reasonable number of tags, we could load the
-tag list in memory and grep for the matches instead. There is still another problem; 
-by replacing the &lt;code&gt;Readline.completion_proc&lt;/code&gt;, we&amp;#39;ve clobbered the functionality 
-provided by &lt;code&gt;irb/completion&lt;/code&gt;. One approach would be to fall back to the 
+tag list in memory and grep for the matches instead. There is still another problem;
+by replacing the &lt;code&gt;Readline.completion_proc&lt;/code&gt;, we&amp;#39;ve clobbered the functionality
+provided by &lt;code&gt;irb/completion&lt;/code&gt;. One approach would be to fall back to the
 &lt;code&gt;IRB::InputCompletor::CompletionProc&lt;/code&gt; or add its result to the array of candidates.
 Given IRB has documented, &lt;a href="https://github.com/cldwalker/bond#irbs-incorrect-completions"&gt;incorrect completions&lt;/a&gt;
-(try completing methods on a proc) and no built-in support for extending completion behavior, 
+(try completing methods on a proc) and no built-in support for extending completion behavior,
 this could get messy.&lt;/p&gt;
 
 &lt;p&gt;Enter &lt;a href="https://github.com/cldwalker/bond"&gt;bond&lt;/a&gt;, a drop-in replacement for IRB
@@ -110,7 +110,7 @@ Bond.start
 
 &lt;p&gt;Bond allows you to extend the strategies for autocompleting text with &lt;a href="https://github.com/cldwalker/bond/blob/master/lib/bond.rb#L21"&gt;the
 &lt;code&gt;Bond.completion&lt;/code&gt; method&lt;/a&gt;.
-To set up a Bond completion, we need a condition and an action; when the condition is matched, 
+To set up a Bond completion, we need a condition and an action; when the condition is matched,
 then the given action will determine which candidates are returned. Calling
 &lt;code&gt;Bond.start&lt;/code&gt; will register Bond&amp;#39;s default completions. For example, the
 following completion is triggered with the text for completion starts with a
@@ -303,6 +303,19 @@ rm &amp;quot;$TEMP_FILE&amp;quot;
 </content>
   </entry>
   <entry>
+    <title>Featured Post for Speed Awareness Month</title>
+    <link rel="alternate" href="/blog/2013/08/featured-post-for-speed-awareness-month.html"/>
+    <id>/blog/2013/08/featured-post-for-speed-awareness-month.html</id>
+    <published>2013-08-26T00:00:00Z</published>
+    <updated>2013-08-26T00:00:00Z</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html"></summary>
+    <content type="html">&lt;p&gt;Check out my contribution to &lt;a href="http://www.speedawarenessmonth.com/"&gt;Speed Awareness Month&lt;/a&gt; to help make the web a faster place where I &lt;a href="http://www.speedawarenessmonth.com/speeding-up-asset-delivery-from-your-rails-app/"&gt;share tips to improve delivery of static assets&lt;/a&gt;, like images, stylesheets, and javascript files, by serving from a cookie-free domain to reduce bandwidth and levaraging CDN pull zones to improve delivery times.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Configuring Rack Test Driver in Capybara 2</title>
     <link rel="alternate" href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html"/>
     <id>/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html</id>
@@ -393,21 +406,6 @@ $ heroku create my_app &amp;ndash;buildpack git://github.com/indirect/heroku-bui
 &lt;p&gt;I gave a quick lightning talk on this topic at the &lt;a href="http://www.meetup.com/EmberJS-NYC/events/100237642/"&gt;Ember.js NYC Meetup&lt;/a&gt; yesterday. Check out the slides, &lt;a href="https://speakerdeck.com/rossta/create-and-deploy-an-ember-app-in-5-minutes"&gt;also on Speaker Deck&lt;/a&gt;&lt;/p&gt;
 
 &lt;script class="speakerdeck-embed" data-id="974b0d70647701301b1e12313b100525" data-ratio="1.29456384323641" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Presentation Intro to Javascript MVC</title>
-    <link rel="alternate" href="/blog/2012/02/presentation-intro-to-javascript-mvc.html"/>
-    <id>/blog/2012/02/presentation-intro-to-javascript-mvc.html</id>
-    <published>2012-02-09T00:00:00Z</published>
-    <updated>2012-02-09T00:00:00Z</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Today, I made a brown bag case to my colleagues: let’s approach client-side development in a more structured, disciplined and flexible way; in other words, add a model-view-controller javascript layer to our web app. Included is some background for...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Today, I made a brown bag case to my colleagues: let’s approach client-side development in a more structured, disciplined and flexible way; in other words, add a model-view-controller javascript layer to our web app. Included is some background for the discussion and a brief introduction to Backbone.js. I use the phrase MV+ to embrace various implementations of MVC-like javascript frameworks, most of which have different takes on what object take on the responsibility for hooking up models and views.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://daftpunkjs.heroku.com/"&gt;Brown Bag Presentation: Javascript MV+&lt;/a&gt;&lt;/p&gt;
 </content>
   </entry>
 </feed>
