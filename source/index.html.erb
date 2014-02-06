@@ -12,7 +12,7 @@ per_page: 5
         <br />
         <small><%= article.date.strftime('%b %e') %></small>
       </h2>
-      <% if !build? %>
+      <% if build? %>
         <%= partial "layouts/share", locals: { article: article } %>
       <% end %>
     </header>
