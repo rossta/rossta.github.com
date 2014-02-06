@@ -7,9 +7,9 @@
   font-family: $signatureFont;
 }
 @mixin link-colors {
-  color: $secondaryColor;
+  color: $primaryColor;
   &:hover {
-    color: $mainColor;
+    color: $secondaryColor;
   }
 }
 
@@ -85,7 +85,7 @@ body {
     h1,h2,h3,h4,h5,h6 {
       color: $mainColor;
       @include signature-font;
-      @include link-colors;
+      @include header-link-colors;
       a {
         @include header-link-colors;
       }
