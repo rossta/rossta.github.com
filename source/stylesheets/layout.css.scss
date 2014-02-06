@@ -14,7 +14,7 @@
 }
 
 @mixin header-link-colors {
-  color: $primaryColor;
+  color: $mainColor;
   &:hover {
     color: $secondaryColor;
   }
@@ -87,7 +87,7 @@ body {
       @include signature-font;
       @include link-colors;
       a {
-        @include link-colors;
+        @include header-link-colors;
       }
     }
     p { margin: 0;}
