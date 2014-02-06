@@ -46,7 +46,7 @@ Readline.completion_proc = IRB::InputCompletor::CompletionProc
 `IRB::InputCompletor::CompletionProc` is a proc that evaluates a large case
 statement of regular expressions that attempt to determine the type of given
 object and provide a set of candidates to match, such as `String` instance methods when
-the input matches `/^((["'`]).*\2)\.([^.]*)$/`.
+the input matches `$r{^((["']).*\2)\.([^.]*)$}`.
 
 To give `Readline` a spin, fire up `irb` and paste in the following example, borrowed
 from the [ruby docs](http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html):
