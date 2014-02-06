@@ -13,12 +13,22 @@
   }
 }
 
+@mixin header-link-colors {
+  color: $primaryColor;
+  &:hover {
+    color: $secondaryColor;
+  }
+}
+
 body {
   padding: 0 0 2em;
 
   @include base-font;
   h1,h2,h3,h4,h5,h6 {
     @include base-font;
+    a {
+      @include header-link-colors;
+    }
   }
   a {
     @include link-colors;
