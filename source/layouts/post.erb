@@ -8,11 +8,13 @@
           <%= current_article.title %>
           <br /><small><%= current_article.date.strftime('%b %e') %></small>
         </h2>
-        <%= partial "layouts/share" %>
+        <% if !build? %>
+          <%= partial "layouts/share" %>
+        <% end %>
       </header>
       <%= yield %>
     </article>
-    <% if !build? %>
+    <% if build? %>
     <section class="comments">
       <%= partial "layouts/share" %>
       <%= partial "layouts/current_article_comments" %>

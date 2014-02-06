@@ -6,11 +6,16 @@ per_page: 5
 <% content_for(:section) { 'I make things' } %>
 <% page_articles.each_with_index do |article, i| %>
   <article class="index-post">
-    <h2>
-      <%= link_to article.title, article %>
-      <br />
-      <small><%= article.date.strftime('%b %e') %></small>
-    </h2>
+    <header>
+      <h2>
+        <%= link_to article.title, article %>
+        <br />
+        <small><%= article.date.strftime('%b %e') %></small>
+      </h2>
+      <% if !build? %>
+        <%= partial "layouts/share", locals: { article: article } %>
+      <% end %>
+    </header>
     <%= article.body %>
     <div class="comments">
       <%= link_to "Comments", article, anchor: "disqus_thread" %>

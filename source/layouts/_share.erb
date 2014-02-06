@@ -1,6 +1,7 @@
+<% article ||= current_article %>
 <section class="share">
   <!-- AddThis Button BEGIN -->
-  <div class="addthis_toolbox addthis_default_style" addthis:url="<%= url_with_host current_article.url %>" addthis:title="<%= current_article.title %>">
+  <div class="addthis_toolbox addthis_default_style" addthis:url="<%= url_with_host article.url %>" addthis:title="<%= article.title %>">
     <a class="addthis_button_preferred_1"></a>
     <a class="addthis_button_preferred_2"></a>
     <a class="addthis_button_preferred_3"></a>
