@@ -1,0 +1,7 @@
+{
+  "name": "rosskaff.com",
+  "dependencies": {
+    "foundation": "~5.1.0",
+    "highlightjs": "~8.0.0"
+  }
+}

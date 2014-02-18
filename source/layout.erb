@@ -11,19 +11,11 @@
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <%= stylesheet_link_tag "all" %>
+    <%= javascript_include_tag 'head' %>
     <%= favicon_tag 'favicon.ico' %>
   </head>
   <body id="application" class="typekit">
-    <nav id="welcome" class="row">
-      <section id="title" class="large-6 small-12 columns">
-        <header class="signature-font">
-          <h1><a class="logo" href="/">ross kaffenberger</a></h1>
-        </header>
-      </section>
-      <section id="nav" class="large-6 small-12 columns nav">
-        <%= partial 'layouts/nav' %>
-      </section>
-    </nav>
+    <%= partial 'layouts/topbar' %>
     <div id="neck">
       <div class="row">
         <div class="large-12 columns"><%= section %></div>

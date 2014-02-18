@@ -1,10 +1,15 @@
-require 'zurb-foundation'
 preferred_syntax = :scss
 
 activate :livereload
 activate :directory_indexes
 
 # Time.zone = "UTC"
+
+ready do
+  sprockets.append_path File.join root, 'bower_components'
+  sprockets.append_path File.join root, 'bower_components/foundation/scss'
+  sprockets.append_path File.join root, 'bower_components/foundation/js'
+end
 
 activate :blog do |blog|
   blog.prefix = "blog"
