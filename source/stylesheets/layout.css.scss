@@ -35,7 +35,7 @@ body {
   }
   .logo {
     font-family: "courier-prime",monospace;
-    color: #024A68;
+    color: $greyColor !important;
     font-size:1.25em;
     &:hover {
       color: $secondaryColor;
