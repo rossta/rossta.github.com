@@ -18,7 +18,10 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html"></summary>
+    <summary type="html">&lt;p&gt;My team recently added a tagging feature to our web app. As the user types in
+the text input, the app supplies autocomplete suggestions from our database via
+javascript; a familiar UX. While backporting tags to existing records on the
+&lt;code&gt;rails console&lt;/code&gt;&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;My team recently added a tagging feature to our web app. As the user types in
 the text input, the app supplies autocomplete suggestions from our database via
 javascript; a familiar UX. While backporting tags to existing records on the
@@ -164,7 +167,7 @@ simple ways to hook into features easily taken for granted.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html"></summary>
+    <summary type="html">&lt;p&gt;You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn't take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&amp;#39;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.&lt;/p&gt;
 
 &lt;h2&gt;Pre-requisites&lt;/h2&gt;
@@ -311,7 +314,7 @@ rm &amp;quot;$TEMP_FILE&amp;quot;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html"></summary>
+    <summary type="html">&lt;p&gt;Check out my contribution to &lt;a href="http://www.speedawarenessmonth.com/"&gt;Speed Awareness Month&lt;/a&gt; to help make the web a faster place where I &lt;a href="http://www.speedawarenessmonth.com/speeding-up-asset-delivery-from-your-rails-app/"&gt;share tips to improve delivery of static assets&lt;/a&gt;, like images, stylesheets, and javascript files, by serving from a cookie-free domain to reduce bandwidth...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Check out my contribution to &lt;a href="http://www.speedawarenessmonth.com/"&gt;Speed Awareness Month&lt;/a&gt; to help make the web a faster place where I &lt;a href="http://www.speedawarenessmonth.com/speeding-up-asset-delivery-from-your-rails-app/"&gt;share tips to improve delivery of static assets&lt;/a&gt;, like images, stylesheets, and javascript files, by serving from a cookie-free domain to reduce bandwidth and levaraging CDN pull zones to improve delivery times.&lt;/p&gt;
 </content>
   </entry>
@@ -324,7 +327,9 @@ rm &amp;quot;$TEMP_FILE&amp;quot;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html"></summary>
+    <summary type="html">&lt;p&gt;Though I don't recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In Capybara 2.0+,...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Though I don&amp;#39;t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;In Capybara 2.0+, this limit is configurable:&lt;/p&gt;
@@ -351,7 +356,7 @@ end
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html"></summary>
+    <summary type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;By statistics alone, Wordpress is a winner. According to the &lt;a href="http://en.wikipedia.org/wiki/WordPress"&gt;stats on Wikipedia&lt;/a&gt;, it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.&lt;/p&gt;
 
 &lt;p&gt;And yet, yesterday, I ditched Wordpress. This site is now hosted on &lt;a href="http://pages.github.com/"&gt;Github Pages&lt;/a&gt;.&lt;/p&gt;
