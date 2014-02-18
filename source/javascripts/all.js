@@ -1,4 +1,5 @@
 //= require vendor/jquery
+//= require vendor/jquery.cookie
 //= require foundation
 // require foundation/js/foundation/foundation.abide
 // require foundation/js/foundation/foundation.accordion
@@ -16,8 +17,11 @@
 //= require foundation/foundation.topbar
 //= require highlightjs/highlight.pack
 
+//= require zen
+
 hljs.initHighlightingOnLoad();
 $(document).foundation();
+
 $(function() {
-  $.get('https://api.github.com/zen', function(toBe) { $('#zen').find('.enlightenment').text(toBe); });
+   $.zen(function(toBe) { $('#zen').find('.enlightenment').text(toBe); });
 });
