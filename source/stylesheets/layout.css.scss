@@ -73,7 +73,7 @@ body {
   }
 }
 
-#neck {
+#zen {
   line-height: 80px;
   background-color:#EDEDED;
   margin-bottom:2em;
@@ -143,19 +143,3 @@ img {
     }
   }
 }
-
-// @media #{$small} {
-//   #sidebar {
-//     text-align:left;
-//   }
-
-//   #nav-links {
-//     float:none;
-//     .inline-list {
-//       text-align:left;
-//       > li {
-//         float: none;
-//       }
-//     }
-//   }
-// }

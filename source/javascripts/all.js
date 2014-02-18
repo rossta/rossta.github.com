@@ -18,3 +18,6 @@
 
 hljs.initHighlightingOnLoad();
 $(document).foundation();
+$(function() {
+  $.get('https://api.github.com/zen', function(toBe) { $('#zen').find('.enlightenment').text(toBe); });
+});
