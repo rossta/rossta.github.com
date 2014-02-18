@@ -44,38 +44,9 @@ body {
 }
 
 #application {
-  #welcome {
-    text-align:center;
-    .nav {
-      margin: 0;
-      ul {
-        text-align: left;
-        padding: 0;
-        list-style: none;
-        overflow: hidden;
-        li {
-          line-height: 2em;
-        }
-      }
-      @media #{$small} {
-        ul {
-          line-height:100px;
-          float: right;
-          margin: 0;
-          li {
-            list-style: none;
-            float: left;
-            margin-left: 1.375em;
-            display: block;
-            line-height: inherit;
-            text-align: center;
-            float:left;
-          }
-        }
-      }
-    }
+  @media #{$small-up} {
+    .top-bar .name h1 a { padding: 0 15px; }
   }
-
   header {
     text-align: left;
     h1 { margin: 0; line-height:60px; font-size: 2.25em; }
@@ -94,15 +65,11 @@ body {
   }
 
   footer {
+    @include clearfix;
     border-width: 1px 0 0;
     border-color: #CCC;
     border-style: solid;
-    padding-top: 2em;
-
-    .twitter-share-button {
-      clear:both;
-      text-align:center;
-    }
+    padding: 2em 0;
   }
 }
 
@@ -130,9 +97,9 @@ body {
   margin-top: 1em;
   ul {
     list-style-type: none;
+    margin-left: 0;
   }
 }
-
 
 .share { margin-top: 1em; }
 
@@ -150,11 +117,11 @@ img {
   }
 }
 .center-inline-list {
-   float:left;
-   width:100%;
-   background:#fff;
-   overflow:hidden;
-   position:relative;
+  float:left;
+  width:100%;
+  background:#fff;
+  overflow:hidden;
+  position:relative;
 
   .inline-list {
     clear:left;
@@ -176,7 +143,6 @@ img {
     }
   }
 }
-
 
 // @media #{$small} {
 //   #sidebar {
