@@ -17,8 +17,12 @@ Zen = (function($) {
   };
 
   Zen.prototype.retrieve = function(callback) {
-    var self = this
-    return $.get('https://api.github.com/zen', function(enlightenment) {
+    var self, url;
+    self = this;
+    // url  = 'http://localhost:3000/says';
+    // url  = 'https://github.com/zen';
+    url  = 'http://zenkaffe.com/says';
+    return $.get(url, function(enlightenment) {
       self.setEnlightenment(enlightenment);
     }).then(function() {
       callback.call(self, self.getEnlightenment());
@@ -32,7 +36,7 @@ Zen = (function($) {
   Zen.prototype.setEnlightenment = function(enlightenment) {
     var self = this;
     self.enlightenment = enlightenment;
-    self.cookie('enlightenment', enlightenment, { expires: 1 });
+    self.cookie('enlightenment', enlightenment, { expires: 0.1 });
     return enlightenment;
   };
 
