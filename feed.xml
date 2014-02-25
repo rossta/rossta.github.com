@@ -5,10 +5,24 @@
   <id>http://rosskaff.com/</id>
   <link href="http://rosskaff.com/"/>
   <link href="http://rosskaff.com/feed.xml" rel="self"/>
-  <updated>2014-02-05T00:00:00Z</updated>
+  <updated>2014-02-25T00:00:00Z</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Three Steps to Effective Code Reviews</title>
+    <link rel="alternate" href="/blog/2014/02/three-steps-to-effective-code-reviews.html"/>
+    <id>/blog/2014/02/three-steps-to-effective-code-reviews.html</id>
+    <published>2014-02-25T00:00:00Z</published>
+    <updated>2014-02-25T00:00:00Z</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;How can a Rubber Duck help with Github pull requests? I cover that topic and more in &lt;a href="http://blog.challengepost.com/post/77811098097/three-steps-to-effective-code-reviews"&gt;the article I wrote&lt;/a&gt; for the &lt;a href="http://challengepost.com"&gt;ChallengePost&lt;/a&gt; blog this month: &lt;a href="http://blog.challengepost.com/post/77811098097/three-steps-to-effective-code-reviews"&gt;Three Steps to Effective Code Reviews&lt;/a&gt;.&lt;/p&gt;
+</summary>
+    <content type="html">&lt;p&gt;How can a Rubber Duck help with Github pull requests? I cover that topic and more in &lt;a href="http://blog.challengepost.com/post/77811098097/three-steps-to-effective-code-reviews"&gt;the article I wrote&lt;/a&gt; for the &lt;a href="http://challengepost.com"&gt;ChallengePost&lt;/a&gt; blog this month: &lt;a href="http://blog.challengepost.com/post/77811098097/three-steps-to-effective-code-reviews"&gt;Three Steps to Effective Code Reviews&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Ruby, You Autocomplete Me</title>
     <link rel="alternate" href="/blog/2014/02/ruby,-you-autocomplete-me.html"/>
@@ -366,51 +380,6 @@ end
 &lt;p&gt;There is, however, a more fundamental reason, illustrated when I ran into a close friend recently. My friend is brilliant and well-regarded in his field (finance). When he remarked on that fact that I had built my own website, my first thought was &amp;ldquo;Well, not really&amp;hellip;&amp;rdquo;, though I said something more like &amp;ldquo;Thanks!&amp;rdquo; My friend and most people don&amp;#39;t care if a website runs on Wordpress, Django, .Net or C#&amp;hellip; but I do. If the general sentiment on Hacker News is any indication, most developers care as well. Many of us got into programming because we saw something that amazed us and we desperately wanted to know &lt;em&gt;how&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;To host on Github Pages means for me &lt;a href="https://help.github.com/articles/creating-project-pages-manually"&gt;using git&lt;/a&gt;, hand-crafting html and writing markdown in my editor of choice, building with &lt;a href="http://jekyllrb.com/"&gt;tools&lt;/a&gt; written in languages I love, and rolling my own theme built on &lt;a href="http://foundation.zurb.com/"&gt;CSS frameworks&lt;/a&gt; I like. It&amp;#39;s a better representation of what I do and how I prefer to do it. Using Wordpress has always felt a bit disingenuous. And that&amp;#39;s why I made the change.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Create and Deploy an Ember App in 5 Minutes</title>
-    <link rel="alternate" href="/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html"/>
-    <id>/blog/2013/03/create-and-deploy-an-ember-app-in-5-minutes.html</id>
-    <published>2013-03-01T00:00:00Z</published>
-    <updated>2013-03-01T00:00:00Z</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;The &lt;a href="https://github.com/emberjs/ember-rails"&gt;ember-rails&lt;/a&gt; gem is a great way to get started with &lt;a href="http://emberjs.com/"&gt;Ember.js&lt;/a&gt; in a Rails project. Another approach is to create and serve an Ember app on a static webpage, totally decoupled from the backend environment. It would be great to have some of the modern...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;The &lt;a href="https://github.com/emberjs/ember-rails"&gt;ember-rails&lt;/a&gt; gem is a great way to get started with &lt;a href="http://emberjs.com/"&gt;Ember.js&lt;/a&gt; in a Rails project. Another approach is to create and serve an Ember app on a static webpage, totally decoupled from the backend environment. It would be great to have some of the modern front-end development tools we get with something like Rails in a static web environment. A great project to consider for this is &lt;a href="http://middlemanapp.com/"&gt;Middleman&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Middleman is a static website generator enhanced with some key tools like the asset pipeline. It works really well as an alternative to &lt;a href="https://github.com/mojombo/jekyll"&gt;Jekyll&lt;/a&gt; for rolling a blog. It’s comparable to &lt;a href="http://yeoman.io/"&gt;Yeoman&lt;/a&gt; for the benefits it provides for the front-end workflow, though the underlying tools both are quite different. Middleman builds on top of Rack and Sinatra, so you can take advantage of Rack middleware in development or deployment.&lt;/p&gt;
-
-&lt;p&gt;To install middleman:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;$ gem install middleman&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;A key feature for getting up and running quickly with Middleman are its use of project templates. You can use some out-of-the-box templates for setting up a Middleman project with the &lt;a href="http://html5boilerplate.com/"&gt;HTML5 Boilerplate&lt;/a&gt;. I’ve got a fork of an &lt;a href="https://github.com/rossta/middleman-ember-template"&gt;Ember app template&lt;/a&gt; that you can download or clone into &lt;code&gt;~/.middleman/&lt;/code&gt; to get up and running with ember-1.0.0-rc1 with ember-data. To start a new Middleman project with my ember template:&lt;/p&gt;
-
-&lt;p&gt;
-$ git clone git://github.com/rossta/middleman-ember-template.git ~/.middleman/ember&lt;/p&gt;
-
-&lt;p&gt;$ middleman init my&lt;em&gt;new&lt;/em&gt;project &amp;ndash;template=ember&lt;/p&gt;
-
-&lt;p&gt;$ middleman server
-&lt;/p&gt;
-
-&lt;p&gt;If everything worked, you should be able to navigate to http://localhost:4567 to see Hello World generated with Ember.&lt;/p&gt;
-
-&lt;p&gt;There are lots of options for deploying a Middleman app. To deploy easily with Heroku, we can use a &lt;a href="https://devcenter.heroku.com/articles/buildpacks"&gt;buildpack&lt;/a&gt;. Buildpacks are scripts that take advantage of hooks provided by the Heroku build process and also us to customize what happens when we run “git push heroku master”. For the app generated from my ember template, we’ll want this process to build the Middleman app, which will minify assets and provide cacheable asset urls through the asset pipeline, and serve it on Rack using the &lt;a href="https://github.com/rack/rack-contrib/blob/master/lib/rack/contrib/try_static.rb"&gt;Rack::TryStatic&lt;/a&gt; middleware. Luckily, there are already some buildpacks out there that fit these requirements. It’s easy to configure our Heroku app to use a custom buildpack via a git url&lt;/p&gt;
-
-&lt;p&gt;
-$ heroku create my_app &amp;ndash;buildpack git://github.com/indirect/heroku-buildpack-middleman.git&lt;/p&gt;
-
-&lt;p&gt;$ git push heroku master
-&lt;/p&gt;
-
-&lt;p&gt;If everything worked, you should be able to see your static web Ember app served up on Heroku.&lt;/p&gt;
-
-&lt;p&gt;I gave a quick lightning talk on this topic at the &lt;a href="http://www.meetup.com/EmberJS-NYC/events/100237642/"&gt;Ember.js NYC Meetup&lt;/a&gt; yesterday. Check out the slides, &lt;a href="https://speakerdeck.com/rossta/create-and-deploy-an-ember-app-in-5-minutes"&gt;also on Speaker Deck&lt;/a&gt;&lt;/p&gt;
-
-&lt;script class="speakerdeck-embed" data-id="974b0d70647701301b1e12313b100525" data-ratio="1.29456384323641" src="//speakerdeck.com/assets/embed.js"&gt;&lt;/script&gt;
 </content>
   </entry>
 </feed>

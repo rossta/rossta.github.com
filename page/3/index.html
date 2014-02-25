@@ -44,6 +44,28 @@
           <article class="index-post">
     <header>
       <h2>
+        <a href="/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html">When Your Fat Models Need to Go on a Diet</a>
+        <br />
+        <small>Sep 30</small>
+      </h2>
+    </header>
+    <p>Most Rails apps I’ve worked on have followed the pattern “<a title="the buckblogs here" href="http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model">skinny controllers, fat models</a>.” The controller shouldn’t have know what attributes and joins to make when asking for data from the models; one line methods calls in controller actions are a thing of beauty. Controller specs are simplified and the complexity of business logic and database access can be stuffed into the models. Fatten’ up those models!</p>
+
+<p>But what happens when your models grow too large? It’s common to have one or two models (Users and Groups, anyone?) carry a large burden. Over time, we see Ruby files approaching and surpassing thousands of lines and their associated tables accumulating column excess. Before you know it, it’s time to put your models on a diet. It’s useful to have some patterns in your tool-belt to start trimming the fat.</p>
+
+<p>A good refactoring step is to pull out modules of related behavior. In the User model, for example, we might extract modules for related instance methods, associations and validations for functional scopes like admin access or group memberships. I prefer to namespace the modules under UserExtensions so it’s clear, at least in this case, that these are meant for composition of the User model rather than for sharing code across objects. Now ActiveSupport::Concern makes it super-simple to define both instance and class methods in your module and ensure they’re included properly. (Some good reading on <a href="http://yehudakatz.com/2009/11/12/better-ruby-idioms/">better ruby idioms</a> for <a href="http://www.fakingfantastic.com/2010/09/20/concerning-yourself-with-active-support-concern/">mixing in class and instance methods</a>).</p>
+
+<p>One convention is to place the modules in “#{model_name}_extensions” folders in your app/models directory to group the code logically. For example, UserExtensions::Admin would be located at app/models/user_extensions/admin.rb. Breaking out the code in to functional chunks like this is a good first step in downsizing your model files. It also more easily allows methods and associations to be extracted into other classes/tables.</p>
+
+<p>Added: Check out <a title="When Your Fat Models Need to Go on a Diet, Part 2" href="http://www.rosskaff.com/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/">part 2</a> of this post for thoughts on slimming down our models at runtime.</p>
+
+    <div class="comments">
+      <a href="/blog/2011/09/when-your-fat-models-need-to-go-on-a-diet.html#disqus_thread">Comments</a>
+    </div>
+  </article>
+  <article class="index-post">
+    <header>
+      <h2>
         <a href="/blog/2011/06/lean-startup-meetup-ignited.html">Lean Startup Meetup Ignited</a>
         <br />
         <small>Jun 23</small>
@@ -209,24 +231,6 @@ Whenever a socket connection disconnects, say goodbye</p>
       <a href="/blog/2010/12/heuristics.html#disqus_thread">Comments</a>
     </div>
   </article>
-  <article class="index-post">
-    <header>
-      <h2>
-        <a href="/blog/2010/09/step-up-to-the-soapbox.html">Step up to the soapbox</a>
-        <br />
-        <small>Sep  8</small>
-      </h2>
-    </header>
-    <p>Recently, I cobbled together an entry for the <a href="http://10k.aneventapart.com/">10K Apart Contest</a>. The contest encouraged participants to build an entirely front-end web application in HTML/CSS/Javascript in under 10 kb of total assets, not including some allowable third party libraries such as jQuery or Prototype. Entries must also leverage HTML5 features, some of which include local storage, the canvas API, and web workers.</p>
-
-<p>Several entries had already been submitted by the time I heard of the contest back in mid-July. I found games, like <a href="http://10k.aneventapart.com/Entry/62">Lines</a>, search engines, to-do lists, and so on. I considered implementing a Flickr slideshow that would make use of the contributions I’ve made to the <a href="http://github.com/weplay/supersized">supersized</a> jQuery plugin at Weplay, but ultimately decided on a Keynote/Powerpoint alternative.</p>
-
-<p>It’s called soapbox. The inspiration comes from <a href="http://github.com/schacon/showoff">showoff</a>, which is backed by a server. soapbox provides an in-browser interface to create, preview and present slides with <a href="http://daringfireball.net/projects/markdown/">markdown</a> or markup. Slides are auto-saved to local storage, if available, as json. I sent in <a href="http://10k.aneventapart.com/Entry/361">my 10K Apart entry</a> on the deadline day. You can also find the latest on <a href="http://github.com/rosskaff/soapbox">github</a>.</p>
-
-    <div class="comments">
-      <a href="/blog/2010/09/step-up-to-the-soapbox.html#disqus_thread">Comments</a>
-    </div>
-  </article>
 
   <p>Page 3 of 4</p>
   
@@ -261,6 +265,10 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
     <ul>
       
         <li>
+          <a href="/blog/2014/02/three-steps-to-effective-code-reviews.html">Three Steps to Effective Code Reviews</a>
+        </li>
+      
+        <li>
           <a href="/blog/2014/02/ruby,-you-autocomplete-me.html">Ruby, You Autocomplete Me</a>
         </li>
       
@@ -276,10 +284,6 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
           <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html">Configuring Rack Test Driver in Capybara 2</a>
         </li>
       
-        <li>
-          <a href="/blog/2013/03/why-i-ditched-wordpress-for-github.html">Why I Ditched Wordpress for Github</a>
-        </li>
-      
     </ul>
 
     <h6>Tags</h6>
@@ -287,7 +291,7 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
       
         <li><a href="/blog/tags/life.html">Life [4]</a></li>
       
-        <li><a href="/blog/tags/code.html">Code [17]</a></li>
+        <li><a href="/blog/tags/code.html">Code [18]</a></li>
       
         <li><a href="/blog/tags/work.html">Work [1]</a></li>
       
@@ -296,7 +300,7 @@ s.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
     <h6>By Year</h6>
     <ul>
       
-        <li><a href="/blog/2014.html">2014 [2]</a></li>
+        <li><a href="/blog/2014.html">2014 [3]</a></li>
       
         <li><a href="/blog/2013.html">2013 [4]</a></li>
       
