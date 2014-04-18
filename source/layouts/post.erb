@@ -6,9 +6,13 @@
       <header>
         <h2>
           <%= current_article.title %>
-          <br /><small><%= current_article.date.strftime('%b %e') %></small>
+          <% if current_page.data.alt_title %>
+          <br />
+          <small><%= current_page.data.alt_title %></small>
+          <% end %>
         </h2>
       </header>
+
       <%= yield %>
     </article>
     <% if build? %>

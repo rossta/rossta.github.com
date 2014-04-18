@@ -28,7 +28,10 @@ ul.index {
 }
 article {
   header {
-    margin-bottom: 1em;
+    margin-bottom: 2.25em;
+  }
+  h3,h4,h5 {
+    margin-top: .5em;
   }
 
   p:last-child {

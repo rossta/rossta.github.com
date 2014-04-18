@@ -8,7 +8,7 @@ tags:
 
 You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn't take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.
 
-## Pre-requisites
+### Pre-requisites
 
 - An [Amazon web services account](http://aws.amazon.com/) and [your Amazon access credentials](http://aws.amazon.com/iam/)
 - `s3cmd`: command line interface to S3.
@@ -30,7 +30,7 @@ Optional:
 
 - `gpg`: opensource encryption program
 
-## Setup
+### Setup
 
 First you'll need to configure s3cmd: `s3cmd --configure`. Have your Amazon access key and secret key at the ready.
 
@@ -78,7 +78,7 @@ Save settings? [y/N] y
 Configuration saved to '$HOME/.s3cfg'
 ```
 
-## Backup
+### Backup
 
 Now all you need is a file to backup and an S3 bucket to store it.
 
@@ -121,7 +121,7 @@ s3cmd get s3://myname-backups/backup-2014-02-01.sql
 
 `s3cmd` supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your `.s3cfg` file, typically saved in your home directory. You can also set options at the command line.
 
-## Automate
+### Automate
 
 Backups are all good but performing backups on a regular basis is even better. Like saving money, to get done when automated. Let's add a cron task:
 
@@ -144,4 +144,3 @@ To edit your crontab, `crontab -e`, and set it to run everyday at 10PM:
 * 22 * * * /Users/myname/bin/database_backup.sh
 ```
 Easy, right?
-

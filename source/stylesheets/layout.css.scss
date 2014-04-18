@@ -83,7 +83,13 @@ body {
   padding-bottom:1em;
   margin-top:1em;
   margin-bottom:1em;
-  h2 { font-size:1.75em; margin-top:0;}
+  h2 {
+    font-weight: bold;
+    margin-top:0;
+    small {
+      font-weight: normal;
+    }
+  }
   code {
     overflow:auto;
     margin-bottom:1.25em;
