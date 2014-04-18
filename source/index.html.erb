@@ -16,6 +16,8 @@ per_page: 5
       </h2>
     </header>
     <%= article.body %>
+
+    <h2><small><%= article.date.strftime('%b %e') %></small></h2>
     <div class="comments">
       <%= link_to "Comments", article, anchor: "disqus_thread" %>
     </div>

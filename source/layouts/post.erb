@@ -14,6 +14,8 @@
       </header>
 
       <%= yield %>
+
+      <h2><small><%= current_article.date.strftime('%b %e') %></small></h2>
     </article>
     <% if build? %>
       <section class="comments">
