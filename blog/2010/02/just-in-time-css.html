@@ -48,9 +48,10 @@
       <header>
         <h2>
           Just-in-Time CSS
-          <br /><small>Feb 17</small>
+          
         </h2>
       </header>
+
       <p>On top of the list of <a href="http://developer.yahoo.com/performance/rules.html">best practices for speeding up your website</a> is reducing the number of HTTP requests required to render the page. As our websites grow and there are more pages to style, we have more style rules to deliver to our visitors. Keeping the number of requests to a minimum usually means we either need to put all our styles in a single stylesheet, or use a bundling strategy such as <a href="http://documentcloud.github.com/jammit/">Jammit</a> or <a href="http://github.com/brynary/asset-trip">Asset Trip</a>, like we use at <a href="http://www.weplay.com">Weplay</a>, to pull our stylesheets together as one at deploy time.</p>
 
 <p>One problem with the single CSS request approach is we often send CSS rules that our users don’t need to render the page initially or at any time during the current page view. This is like making dinner for 10 when only 2 people have RSVP’d; it can potentially be a big waste. In this wacky ajaxy world we live in, who says all your CSS needs to be on the page at load time? Consider using just-in-time CSS for page elements that aren’t necessary to display right away.</p>
@@ -79,6 +80,8 @@
 
 <p>The key is that the HTTP request is not made until the stylesheet tag is appended to the document head tag after the page has already loaded. We decrease the number and/or size of the requests needed to render the page initially keeping our visitors satisfied.</p>
 
+
+      <h2><small>Feb 17</small></h2>
     </article>
     
       <section class="comments">

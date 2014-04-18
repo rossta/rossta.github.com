@@ -48,9 +48,10 @@
       <header>
         <h2>
           When Your Fat Models Need to Go on a Diet, Part 2
-          <br /><small>Oct  3</small>
+          
         </h2>
       </header>
+
       <p>In <a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet">part 1</a> of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As <a title="XP in Anger" href="http://blog.arielvalentin.com/">Ariel Valentin</a> pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.</p>
 
 <p>Let’s imagine we have an application with a <code>User</code> model (might not be a stretch) and we’re building a page that loads a bunch of user gravatars. Our <code>User</code> model has accumulated a ton of attributes, but we may only need a limited set to render the gravatar properly. We might add a line like this in the controller action to select only the needed attributes:</p>
@@ -86,6 +87,8 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 
 <p>The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.</p>
 
+
+      <h2><small>Oct  3</small></h2>
     </article>
     
       <section class="comments">

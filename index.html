@@ -45,12 +45,55 @@
     <header>
       <h2>
         <a href="/blog/2014/02/three-steps-to-effective-code-reviews.html">Three Steps to Effective Code Reviews</a>
+        
         <br />
-        <small>Feb 25</small>
+        <small>Exchanging feedback doesn&#8217;t have to be painful</small>
+        
       </h2>
     </header>
-    <p>How can a Rubber Duck help with Github pull requests? I cover that topic and more in <a href="http://blog.challengepost.com/post/77811098097/three-steps-to-effective-code-reviews">the article I wrote</a> for the <a href="http://challengepost.com">ChallengePost</a> blog this month: <a href="http://blog.challengepost.com/post/77811098097/three-steps-to-effective-code-reviews">Three Steps to Effective Code Reviews</a>.</p>
+    <p>These days, software developers are living in a <a href="http://scottchacon.com/2011/08/31/github-flow.html">GitHub Workflow</a></a> world. They develop new code on version-controlled <a href="http://git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging">branches</a> and gather feedback prior to inclusion in the primary release, or “master” branch, through <a href="https://help.github.com/articles/using-pull-requests">pull requests</a>.</p>
 
+<p>Our development team at ChallengePost has been using this workflow for almost two years with great success, although we&#8217;ve had our share of pain points. For better or worse, feedback typically happens asynchronously and is in written form. Convenient, yes, although this approach is not free of the wrinkles, especially when we use poor word choice, hyperbole, sarcasm, and other forms of counterproductive commentary.</p>
+
+<p>This has led to resentment and injured relationships on occasion. In response, I’m working to improve how we give and receive criticism.</p>
+
+<h3>Building trust</h3>
+
+<p>Let&#8217;s assume that, when done well, code reviews are a good thing. That is to say, the practice of giving and receiving feedback in a consistent, continual manner has true benefits. These may include improving code quality over time and driving convergence of ideas and practices within your team. In my experience, for feedback to be effective, trust amongst team members is a key requirement.</p>
+
+<p>This may not be an issue for teams that have been together for a long time or share common values, but for others, trust has to be earned. In the absence of trust, there&#8217;s more opportunity for personal differences to get intertwined with feedback. While there are no quick fixes, what follows are code review practices that we have adopted to foster our shared sense of trust.</p>
+
+<h3>1. Adopt a style guide</h3>
+
+<p><strong>Spoiler alert</strong>: code syntax and formatting are trivial choices. What&#8217;s most important is your team agrees on and adheres to a set of guidelines.</p>
+
+<p>Take a few hours as a team to hammer out a style guide for each of the languages you use. Better yet, use a public example like <a href="https://github.com/styleguide">GitHub&#8217;s style guide</a> as a starting point. Besides the obvious benefits of consistency and maintainability, style guides reduce the likelihood of flared tempers during reviews; when you’re pushing to get a new feature out the door, it&#8217;s unhealthy to argue over whitespace. This works when your team respectfully follows and comments on style issues respectfully, saving concerns about existing guidelines for separate discussions.</p>
+
+<h3>2. Start with the end in mind</h3>
+
+<p>Imagine a developer who emerges, after hours or days off in the “zone,” with a sparkly new feature and asks for a review. All is good, right? Except that the rest of the team has issues with the implementation. Words are exchanged, the developer takes the feedback personally, and suddenly the entire team is distracted from shipping code.</p>
+
+<p>Personally, I believe code review should begin well before the final commit. It can happen early on; in short discussions with teammates once the ideas start to take shape. Get buy-in on your approach before you’re ready to merge your branch. Opening a pull request and asking for feedback while work is still in progress is a great way to build trust between teammates, and reduce the likelihood that criticism may be interpreted as a personal attack.</p>
+
+<h3>3. Use the Rubber Duck</h3>
+
+<p><a href="http://en.wikipedia.org/wiki/Rubber_duck_debugging">Rubber duck</a> debugging is a method of finding solutions simply by explaining code line-by-line to an inanimate object. We&#8217;ve found it helps to do the same with our writing, especially when our first instinct is to respond to code or another comment with sarcasm or anger. Take a moment to read your response aloud and question the wording, timing, and appropriateness. This includes taking into account the personality of the team members you’re addressing. <a href="http://thoughtbot.com">Thoughtbot</a> has compiled a useful set of <a href="https://github.com/thoughtbot/guides/tree/master/code-review">code review guidelines</a> to help both readers and writers respond thoughtfully. I also suggest that teammates share meta-feedback to ensure that everyone is hitting the right notes of tone and instruction.</p>
+
+<p>The next time you feel pain in a code review, take a step back to consider what’s missing. It could be that your team needs to adopt some guidelines to reduce friction and ensure feedback is exchanged in as a constructive and positive manner as possible. After all, you have both code and relationships to maintain.</p>
+
+<h3>Resources</h3>
+
+<ul>
+<li><a href="https://github.com/bbatsov/ruby-style-guide">Community ruby style guide</a></li>
+<li><a href="https://github.com/styleguide">GitHub style guide</a></li>
+<li><a href="http://mdswanson.com/blog/2012/11/04/code-reviews-good-idea-bad-idea.html">Code reviews: Good idea / bad idea?</a></li>
+<li><a href="http://code.dblock.org/why-i-love-code-reviews">Why I Love Code Reviews</a></li>
+<li><a href="http://whilefalse.blogspot.com/2012/06/code-reviews-code-stories.html">Code Review, Code Stories</a></li>
+<li><a href="https://github.com/blog/1124-how-we-use-pull-requests-to-build-github">How we use pull requests to build GitHub</a></li>
+</ul>
+
+
+    <h2><small>Feb 25</small></h2>
     <div class="comments">
       <a href="/blog/2014/02/three-steps-to-effective-code-reviews.html#disqus_thread">Comments</a>
     </div>
@@ -59,8 +102,7 @@
     <header>
       <h2>
         <a href="/blog/2014/02/ruby,-you-autocomplete-me.html">Ruby, You Autocomplete Me</a>
-        <br />
-        <small>Feb  5</small>
+        
       </h2>
     </header>
     <p>My team recently added a tagging feature to our web app. As the user types in
@@ -198,6 +240,8 @@ Twitlbl           TwitSprout        Twitter Oauth     Twitvid
 Ruby standard library source code proved to be a useful exercise, revealing some
 simple ways to hook into features easily taken for granted.</p>
 
+
+    <h2><small>Feb  5</small></h2>
     <div class="comments">
       <a href="/blog/2014/02/ruby,-you-autocomplete-me.html#disqus_thread">Comments</a>
     </div>
@@ -206,13 +250,12 @@ simple ways to hook into features easily taken for granted.</p>
     <header>
       <h2>
         <a href="/blog/2014/02/automatic-backups-to-amazon-s3-are-easy.html">Automatic Backups to Amazon S3 are Easy</a>
-        <br />
-        <small>Feb  1</small>
+        
       </h2>
     </header>
     <p>You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&#39;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.</p>
 
-<h2>Pre-requisites</h2>
+<h3>Pre-requisites</h3>
 
 <ul>
 <li>An <a href="http://aws.amazon.com/">Amazon web services account</a> and <a href="http://aws.amazon.com/iam/">your Amazon access credentials</a></li>
@@ -237,7 +280,7 @@ $ apt-get install s3cmd
 <li><code>gpg</code>: opensource encryption program</li>
 </ul>
 
-<h2>Setup</h2>
+<h3>Setup</h3>
 
 <p>First you&#39;ll need to configure s3cmd: <code>s3cmd --configure</code>. Have your Amazon access key and secret key at the ready.</p>
 
@@ -284,7 +327,7 @@ Save settings? [y/N] y
 Configuration saved to &#39;$HOME/.s3cfg&#39;
 </code></pre>
 
-<h2>Backup</h2>
+<h3>Backup</h3>
 
 <p>Now all you need is a file to backup and an S3 bucket to store it.</p>
 
@@ -322,7 +365,7 @@ $ pg_dump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
 
 <p><code>s3cmd</code> supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your <code>.s3cfg</code> file, typically saved in your home directory. You can also set options at the command line.</p>
 
-<h2>Automate</h2>
+<h3>Automate</h3>
 
 <p>Backups are all good but performing backups on a regular basis is even better. Like saving money, to get done when automated. Let&#39;s add a cron task:</p>
 
@@ -346,6 +389,8 @@ rm &quot;$TEMP_FILE&quot;
 
 <p>Easy, right?</p>
 
+
+    <h2><small>Feb  1</small></h2>
     <div class="comments">
       <a href="/blog/2014/02/automatic-backups-to-amazon-s3-are-easy.html#disqus_thread">Comments</a>
     </div>
@@ -354,12 +399,13 @@ rm &quot;$TEMP_FILE&quot;
     <header>
       <h2>
         <a href="/blog/2013/08/featured-post-for-speed-awareness-month.html">Featured Post for Speed Awareness Month</a>
-        <br />
-        <small>Aug 26</small>
+        
       </h2>
     </header>
     <p>Check out my contribution to <a href="http://www.speedawarenessmonth.com/">Speed Awareness Month</a> to help make the web a faster place where I <a href="http://www.speedawarenessmonth.com/speeding-up-asset-delivery-from-your-rails-app/">share tips to improve delivery of static assets</a>, like images, stylesheets, and javascript files, by serving from a cookie-free domain to reduce bandwidth and levaraging CDN pull zones to improve delivery times.</p>
 
+
+    <h2><small>Aug 26</small></h2>
     <div class="comments">
       <a href="/blog/2013/08/featured-post-for-speed-awareness-month.html#disqus_thread">Comments</a>
     </div>
@@ -368,8 +414,7 @@ rm &quot;$TEMP_FILE&quot;
     <header>
       <h2>
         <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html">Configuring Rack Test Driver in Capybara 2</a>
-        <br />
-        <small>Mar 26</small>
+        
       </h2>
     </header>
     <p>Though I don&#39;t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for <a href="https://github.com/jnicklas/capybara">Capybara</a>. When you exceed this limit, you get a dreaded <code>Capybara::InfiniteRedirectError</code>.</p>
@@ -388,6 +433,8 @@ end
 
 <p>The best long term solution for you and your users is to figure out how to reduce or eliminate unnecessary redirects. Playing with the redirect limit in your test environment may be a good way to identify potential problem areas of your app.</p>
 
+
+    <h2><small>Mar 26</small></h2>
     <div class="comments">
       <a href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html#disqus_thread">Comments</a>
     </div>

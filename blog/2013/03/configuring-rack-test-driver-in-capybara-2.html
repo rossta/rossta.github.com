@@ -48,9 +48,10 @@
       <header>
         <h2>
           Configuring Rack Test Driver in Capybara 2
-          <br /><small>Mar 26</small>
+          
         </h2>
       </header>
+
       <p>Though I don&#39;t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for <a href="https://github.com/jnicklas/capybara">Capybara</a>. When you exceed this limit, you get a dreaded <code>Capybara::InfiniteRedirectError</code>.</p>
 
 <p>In Capybara 2.0+, this limit is configurable:</p>
@@ -67,6 +68,8 @@ end
 
 <p>The best long term solution for you and your users is to figure out how to reduce or eliminate unnecessary redirects. Playing with the redirect limit in your test environment may be a good way to identify potential problem areas of your app.</p>
 
+
+      <h2><small>Mar 26</small></h2>
     </article>
     
       <section class="comments">

@@ -48,9 +48,10 @@
       <header>
         <h2>
           Toggle Rails Caching in RSpec Suites
-          <br /><small>Dec 22</small>
+          
         </h2>
       </header>
+
       <p>A useful feature of RSpec is the ability to pass metadata to tests and suites. You may already be familiar with examples in <a href="https://github.com/jnicklas/capybara">Capybara</a>, such as passing <code>:js</code> to enable the javascript driver for a given spec. You may reach a point in the maturity of your test suite when it makes sense add your own configuration options.</p>
 
 <p>Once you introduce caching in your view layer, it can be easy for bugs to crop up around expiry logic. Since the Rails test environment ships with controller caching disabled, it may be useful to be able to toggle it on/off during the test run. To provide an optional caching mechanism for your specs, configure an around block:</p>
@@ -76,6 +77,8 @@ end
 
 <p>Happy testing.</p>
 
+
+      <h2><small>Dec 22</small></h2>
     </article>
     
       <section class="comments">

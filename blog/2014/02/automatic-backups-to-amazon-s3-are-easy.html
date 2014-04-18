@@ -48,12 +48,13 @@
       <header>
         <h2>
           Automatic Backups to Amazon S3 are Easy
-          <br /><small>Feb  1</small>
+          
         </h2>
       </header>
+
       <p>You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&#39;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.</p>
 
-<h2>Pre-requisites</h2>
+<h3>Pre-requisites</h3>
 
 <ul>
 <li>An <a href="http://aws.amazon.com/">Amazon web services account</a> and <a href="http://aws.amazon.com/iam/">your Amazon access credentials</a></li>
@@ -78,7 +79,7 @@ $ apt-get install s3cmd
 <li><code>gpg</code>: opensource encryption program</li>
 </ul>
 
-<h2>Setup</h2>
+<h3>Setup</h3>
 
 <p>First you&#39;ll need to configure s3cmd: <code>s3cmd --configure</code>. Have your Amazon access key and secret key at the ready.</p>
 
@@ -125,7 +126,7 @@ Save settings? [y/N] y
 Configuration saved to &#39;$HOME/.s3cfg&#39;
 </code></pre>
 
-<h2>Backup</h2>
+<h3>Backup</h3>
 
 <p>Now all you need is a file to backup and an S3 bucket to store it.</p>
 
@@ -163,7 +164,7 @@ $ pg_dump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
 
 <p><code>s3cmd</code> supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your <code>.s3cfg</code> file, typically saved in your home directory. You can also set options at the command line.</p>
 
-<h2>Automate</h2>
+<h3>Automate</h3>
 
 <p>Backups are all good but performing backups on a regular basis is even better. Like saving money, to get done when automated. Let&#39;s add a cron task:</p>
 
@@ -187,6 +188,8 @@ rm &quot;$TEMP_FILE&quot;
 
 <p>Easy, right?</p>
 
+
+      <h2><small>Feb  1</small></h2>
     </article>
     
       <section class="comments">
