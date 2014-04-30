@@ -9,4 +9,4 @@ Today, I made a brown bag case to my colleagues: let’s approach client-side de
 
 [Brown Bag Presentation: Javascript MV+][1]
 
- [1]: http://daftpunkjs.heroku.com/
+ [1]: http://daftpunkjs.herokuapp.com/
