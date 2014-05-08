@@ -45,7 +45,7 @@ $include-html-classes: true;
 // We use these to control various global styles
 // $body-bg: #fff;
 // $body-font-color: #222;
-// $body-font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+$body-font-family: "freight-text-pro", Georgia, "Times New Roman", serif;
 // $body-font-weight: normal;
 // $body-font-style: normal;
 
@@ -120,10 +120,10 @@ $include-html-classes: true;
 // $include-html-type-classes: $include-html-classes;
 
 // We use these to control header font styles
-// $header-font-family: $body-font-family;
+$header-font-family: proxima-nova, Helvetica, Arial, sans-serif;
 // $header-font-weight: 300;
 // $header-font-style: normal;
-// $header-font-color: #222;
+$header-font-color: #222;
 // $header-line-height: 1.4;
 // $header-top-margin: .2rem;
 // $header-bottom-margin: .5rem;
@@ -146,7 +146,7 @@ $include-html-classes: true;
 
 // A general <small> styling
 // $small-font-size: 60%;
-// $small-font-color: scale-color($header-font-color, $lightness: 35%);
+$small-font-color: scale-color($header-font-color, $lightness: 55%);
 
 // We use these to style paragraphs
 // $paragraph-font-family: inherit;
@@ -1157,7 +1157,7 @@ $include-html-classes: true;
 // $topbar-link-bg-hover: #272727  ;
 // $topbar-link-bg-active: $primary-color;
 // $topbar-link-bg-active-hover: scale-color($primary-color, $lightness: -14%);
-// $topbar-link-font-family: $body-font-family;
+$topbar-link-font-family: $header-font-family;
 
 // $topbar-button-font-size: 0.75rem;
 
@@ -1199,14 +1199,15 @@ $include-html-classes: true;
 // $include-legacy-visibility-classes: true;
 
 $row-width: 42.5em;
-$baseFont: proxima-nova, Helvetica, Arial, sans-serif;
-$signatureFont: $baseFont;
+$signatureFont: $body-font-family;
 $primaryColor: #0B5FA5;
-$mainColor: #666 !default;
+$mainColor: rgba(0,0,0,0.8);
 $secondaryColor: #41921E !default;
-$greyColor: #666666 !default;
+$greyColor: #777 !default;
 $paragraph-line-height: 1.7;
 $lightGreyColor: #ededed;
+$borderColor: #ccc;
+$subtleColor: #999;
 
 // Top Bar settings
 $topbar-bg-color: #FFF;
@@ -1272,4 +1273,27 @@ $topbar-menu-icon-color: $greyColor;
 // Sticky Class
 // $topbar-sticky-class: ".sticky";
 // $topbar-arrows: true; //Set false to remove the triangle icon from the menu item
+
+@mixin base-font {
+  font-family: $body-font-family;
+}
+@mixin header-font {
+  font-family: $header-font-family;
+}
+@mixin signature-font {
+  font-family: $signatureFont;
+}
+@mixin link-colors {
+  color: $primaryColor;
+  &:hover {
+    color: $secondaryColor;
+  }
+}
+
+@mixin header-link-colors {
+  color: $mainColor;
+  &:hover {
+    color: $secondaryColor;
+  }
+}
 

@@ -1,4 +1,5 @@
 @import "_settings";
+
 ul.index {
   list-style-type:none;
   margin-left: 0;
@@ -17,7 +18,7 @@ ul.index {
 .index-post {
   padding-bottom: 2em;
   margin-bottom: 2em;
-  border-color: #ccc;
+  border-color: $borderColor;
   border-width: 0;
   border-bottom-width: 1px;
   border-style: solid;
@@ -27,14 +28,31 @@ ul.index {
   }
 }
 article {
+  @include base-font;
   header {
+    @include base-font;
     margin-bottom: 2.25em;
   }
   h3,h4,h5 {
     margin-top: .5em;
   }
-
+  p {
+    color: $mainColor;
+    font-size: 1.1rem;
+  }
   p:last-child {
     margin-bottom: 0;
   }
 }
+
+.profile {
+  padding-bottom: 2em;
+  text-align: center;
+
+  img { width: 30%; }
+  .profile-name {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+}
+

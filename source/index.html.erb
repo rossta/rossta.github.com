@@ -9,34 +9,44 @@ per_page: 5
     <header>
       <h2>
         <%= link_to article.title, article %>
-        <% if article.data.alt_title %>
-        <br />
-        <small><%= article.data.alt_title %></small>
-        <% end %>
       </h2>
+        <% if article.data.alt_title %>
+          <p class="alt-title subtle"><%= article.data.alt_title %></p>
+        <% end %>
     </header>
     <%= article.body %>
 
-    <h2><small><%= article.date.strftime('%b %e') %></small></h2>
+    <h3><small><%= article.date.strftime('%b %e') %></small></h3>
     <div class="comments">
       <%= link_to "Comments", article, anchor: "disqus_thread" %>
+      <% if build? %>
+        <%= partial "layouts/comment_count" %>
+      <% end %>
     </div>
   </article>
 <% end %>
 
 <% if paginate %>
-  <p>Page <%= page_number %> of <%= num_pages %></p>
-  <% if next_page %>
-    <p><%= link_to 'Next page', next_page %></p>
-  <% end %>
-  <% if prev_page %>
-    <p><%= link_to 'Previous page', prev_page %></p>
-  <% end %>
-<% end %>
-
-<section>
-  <a href="/blog">See all posts &raquo;</a>
-</section>
-<% if build? %>
-  <%= partial "layouts/comment_count" %>
+  <section class="row pagination">
+    <div class="columns large-3 small-6">
+      Page <%= page_number %> of <%= num_pages %>
+    </div>
+    <div class="columns large-3 small-6">
+      <% if next_page %>
+        <%= link_to 'Next page', next_page %>
+      <% else %>
+        <span class="subtle">Next page</span>
+      <% end %>
+    </div>
+    <div class="columns large-3 small-6">
+      <% if prev_page %>
+        <%= link_to 'Previous page', prev_page %>
+      <% else %>
+        <span class="subtle">Previous page</span>
+      <% end %>
+    </div>
+    <div class="columns large-3 small-6">
+      <a href="/blog">See all posts &raquo;</a>
+    </div>
+  </section>
 <% end %>

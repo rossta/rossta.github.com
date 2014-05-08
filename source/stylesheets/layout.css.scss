@@ -1,31 +1,11 @@
 @import '_settings';
 
-@mixin base-font {
-  font-family: $baseFont;
-}
-@mixin signature-font {
-  font-family: $signatureFont;
-}
-@mixin link-colors {
-  color: $primaryColor;
-  &:hover {
-    color: $secondaryColor;
-  }
-}
-
-@mixin header-link-colors {
-  color: $mainColor;
-  &:hover {
-    color: $secondaryColor;
-  }
-}
-
 body {
   padding: 0 0 2em;
 
   @include base-font;
   h1,h2,h3,h4,h5,h6 {
-    @include base-font;
+    @include header-font;
     a {
       @include header-link-colors;
     }
@@ -35,7 +15,7 @@ body {
   }
   .logo {
     font-family: "courier-prime",monospace;
-    color: $greyColor !important;
+    color: $mainColor !important;
     font-size:1.25em;
     &:hover {
       color: $secondaryColor;
@@ -43,70 +23,9 @@ body {
   }
 }
 
-#application {
-  @media #{$small-up} {
-    .top-bar .name h1 a { padding: 0 15px; }
-  }
-  header {
-    text-align: left;
-    h1 { margin: 0; line-height:60px; font-size: 2.25em; }
-    @media #{$small} {
-      h1 { line-height:100px;}
-    }
-    h1,h2,h3,h4,h5,h6 {
-      color: $mainColor;
-      @include signature-font;
-      @include header-link-colors;
-      a {
-        @include header-link-colors;
-      }
-    }
-    p { margin: 0;}
-  }
-
-  footer {
-    @include clearfix;
-    border-width: 1px 0 0;
-    border-color: #CCC;
-    border-style: solid;
-    padding: 2em 0;
-  }
+.clearfix {
+  overflow: auto;
 }
-
-#zen {
-  line-height: 80px;
-  background-color:#EDEDED;
-  margin-bottom:2em;
-}
-
-#main {
-  padding-bottom:1em;
-  margin-top:1em;
-  margin-bottom:1em;
-  h2 {
-    font-weight: bold;
-    margin-top:0;
-    small {
-      font-weight: normal;
-    }
-  }
-  code {
-    overflow:auto;
-    margin-bottom:1.25em;
-    font-weight:normal;
-    line-height:1.45em;
-    font-size:14px;
-  }
-}
-
-#sidebar {
-  margin-top: 1em;
-  ul {
-    list-style-type: none;
-    margin-left: 0;
-  }
-}
-
 .share { margin-top: 1em; }
 
 .margin-top { margin-top: 1em; }
@@ -115,6 +34,14 @@ body {
 .font-light { color:$greyColor; }
 
 .text-center { text-align: center; }
+
+.subtle { color: $subtleColor; }
+
+.alt-title {
+  @include header-font;
+  font-size: 1.2rem;
+  color: $subtleColor;
+}
 
 img {
   &.th.center {
@@ -149,3 +76,93 @@ img {
     }
   }
 }
+#application {
+  @include base-font;
+  @media #{$small-up} {
+    .top-bar .name h1 a { padding: 0 15px; }
+  }
+  header {
+    text-align: left;
+    h1 { margin: 0; line-height:60px; font-size: 2.25em; }
+    @media #{$small} {
+      h1 { line-height:100px;}
+    }
+    h1,h2,h3,h4,h5,h6 {
+      color: $mainColor;
+      @include header-font;
+      @include header-link-colors;
+      a {
+        @include header-font;
+        @include header-link-colors;
+      }
+
+    }
+    p { margin: 0;}
+  }
+
+  footer {
+    @include clearfix;
+    border-width: 1px 0 0;
+    border-color: #CCC;
+    border-style: solid;
+    padding: 2em 0;
+  }
+
+  .pagination {
+    .columns {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+#zen {
+  @include header-font;
+  line-height: 80px;
+  background-color:#EDEDED;
+  margin-bottom:2em;
+}
+
+#main {
+  @include base-font;
+  padding-bottom:1em;
+  margin-top:1em;
+  margin-bottom:1em;
+  h1,h2,h3,h4,h5,h6 {
+    font-weight: bold;
+    color: $mainColor;
+    @include header-font;
+    a {
+      @include header-font;
+    }
+    &.subtle {
+      font-weight:normal;
+      color: $subtleColor;
+    }
+  }
+  h2 {
+    color: black;
+    font-weight: bold;
+    margin-top:0;
+    small {
+      font-weight: normal;
+    }
+    a {
+      color: black;
+    }
+  }
+  code {
+    overflow:auto;
+    margin-bottom:1.25em;
+    font-weight:normal;
+    line-height:1.45em;
+    font-size:14px;
+  }
+}
+
+#sidebar {
+  ul {
+    list-style-type: none;
+    margin-left: 0;
+  }
+}
+
