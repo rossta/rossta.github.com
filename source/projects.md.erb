@@ -6,6 +6,12 @@ layout: page
 
 <% content_for(:title) { 'Projects' } %>
 
+**[zenkaffe][zsay]**
+
+A simple API for inspiration. Provides the dynamic snippets in the banner of this blog. Built on [node.js][node]
+
+[Source code on github][zgit]
+
 **[OptiCal][19]**
 
 A visualization project: visualize a twitter user's tweeting history using a calendar heatmap, built on [d3.js](http://d3js.org), [ember.js](http://emberjs.com) and [sinatra][22].
@@ -16,13 +22,25 @@ A visualization project: visualize a twitter user's tweeting history using a cal
 
 * * *
 
+**[Sudokill][8]**
+
+One of my favorite projects, Sudokill is a realtime multiplayer Sudoku implementation. The interface designed to support human vs human over the web, computer vs computer via TCP, or human vs computer. I built the game for NYU heuristics students to compete with their own Sudokill “player” programs.The object of the game is to force the other player to make an invalid Sudoku move. Players take turn playing valid sudoku moves. Moves are valid as long as they don’t violate traditional sudoku configuration. Moves need not conform to the final solution of the board as in solitary Sudoku; in fact, the possibility of invalid states increases as more moves are made which diverge from the actual solution. The best strategies work reduce valid possibilities for the opponent based by looking ahead to future board states.
+
+This project is particularly exciting to me as it leverages the HTML5 WebSocket protocol to make it possible to play the game in a web browser and communicate with a server in realtime using only HTML, CSS and Javascript on the front-end. I implemented a separate protocol to allow programs to connect to the server and play the game via TCP. Fellow students at NYU wrote computer “players” in a variety of languages (java, python, ruby, c ). The game also has some interesting features, such as configurable board density, an on-deck player queue, and a chat server.
+
+[Source code on Github][kill]
+
+[![][7]][8]
+
+* * *
+
 **Weplay DropIt [offline]**
 
 A drag and drop photo upload for [weplay.com](http://weplay.com) built on with [HTML5 File API](http://www.w3.org/TR/FileAPI/), [backbone.js](http://backbonejs.org) and [sinatra][22].
 
 [Source code on Github][drop]
 
-[![][20][drop]
+[![][20]][drop]
 
 * * *
 
@@ -43,18 +61,6 @@ Tools: Rails 3, mysql, apache, passenger, capistrano, jQuery, rspec, cucumber, c
 [Source code on Github][ling]
 
 [![][5]][6]
-
-* * *
-
-**[Sudokill][8]**
-
-One of my favorite projects, Sudokill is a realtime multiplayer Sudoku implementation. The interface designed to support human vs human over the web, computer vs computer via TCP, or human vs computer. I built the game for NYU heuristics students to compete with their own Sudokill “player” programs.The object of the game is to force the other player to make an invalid Sudoku move. Players take turn playing valid sudoku moves. Moves are valid as long as they don’t violate traditional sudoku configuration. Moves need not conform to the final solution of the board as in solitary Sudoku; in fact, the possibility of invalid states increases as more moves are made which diverge from the actual solution. The best strategies work reduce valid possibilities for the opponent based by looking ahead to future board states.
-
-This project is particularly exciting to me as it leverages the HTML5 WebSocket protocol to make it possible to play the game in a web browser and communicate with a server in realtime using only HTML, CSS and Javascript on the front-end. I implemented a separate protocol to allow programs to connect to the server and play the game via TCP. Fellow students at NYU wrote computer “players” in a variety of languages (java, python, ruby, c ). The game also has some interesting features, such as configurable board density, an on-deck player queue, and a chat server.
-
-[Source code on Github][kill]
-
-[![][7]][8]
 
 * * *
 
@@ -122,3 +128,5 @@ I was asked to talk to 8th graders in the Bronx on career day a few years back. 
  [soap]: https://github.com/rossta/soapbox
  [kill]: https://github.com/rossta/sudokill
  [opti]: https://github.com/rossta/optical
+ [zsay]: http://zenkaffe.com/says
+ [zgit]: https://github.com/rossta/zenkaffe
