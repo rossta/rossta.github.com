@@ -16,7 +16,7 @@ body {
   .logo {
     font-family: "courier-prime",monospace;
     color: $mainColor !important;
-    font-size:1.25em;
+    font-size:rem-calc(25);
     &:hover {
       color: $secondaryColor;
     }
