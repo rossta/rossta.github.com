@@ -17,5 +17,4 @@ foundation/jquery.foundation.joyride
 foundation/jquery.foundation.clearing
 foundation/jquery.foundation.mediaQueryToggle
 require foundation/app
-=require highlight/highlight.pack
 */
