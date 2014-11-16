@@ -9,6 +9,8 @@ ready do
   sprockets.append_path File.join root, 'bower_components'
   sprockets.append_path File.join root, 'bower_components/foundation/scss'
   sprockets.append_path File.join root, 'bower_components/foundation/js'
+  sprockets.append_path File.join root, 'bower_components/highlightjs'
+  sprockets.append_path File.join root, 'bower_components/highlightjs'
 end
 
 activate :blog do |blog|

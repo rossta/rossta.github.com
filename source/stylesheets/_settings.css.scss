@@ -165,6 +165,9 @@ $paragraph-font-size: 1.3rem;
 // $code-color: scale-color($alert-color, $lightness: -27%);
 // $code-font-family: Consolas, 'Liberation Mono', Courier, monospace;
 // $code-font-weight: bold;
+$code-color: #333;
+$code-font-family: Consolas, 'Liberation Mono', Courier, monospace;
+$code-font-weight: normal;
 
 // We use these to style anchors
 // $anchor-text-decoration: none;
@@ -1208,7 +1211,7 @@ $mainColor: rgba(0,0,0,0.8);
 $secondaryColor: #41921E !default;
 $greyColor: #777 !default;
 $paragraph-line-height: 1.7;
-$lightGreyColor: #ededed;
+$lightGreyColor: #f8f8ff;
 $borderColor: #ccc;
 $subtleColor: #999;
 

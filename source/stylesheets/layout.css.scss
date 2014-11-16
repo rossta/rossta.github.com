@@ -22,6 +22,12 @@ body {
     }
   }
 }
+code {
+  // background-color: rgba(0,0,0,0.04);
+  background-color: $lightGreyColor;
+  font-size: .8em;
+  padding: 0.2em 0.3em;
+}
 
 .clearfix {
   overflow: auto;
@@ -118,8 +124,9 @@ img {
 #zen {
   @include header-font;
   line-height: 80px;
-  background-color:#EDEDED;
+  background-color: $lightGreyColor;
   margin-bottom:2em;
+  text-align: center;
 }
 
 #main {
@@ -150,12 +157,16 @@ img {
       color: black;
     }
   }
-  code {
-    overflow:auto;
-    margin-bottom:1.25em;
-    font-weight:normal;
-    line-height:1.45em;
-    font-size:14px;
+
+  pre {
+    code {
+      overflow:auto;
+      margin-bottom:1.25em;
+      font-weight:normal;
+      line-height:1.45em;
+      font-size:1em;
+      padding: 1.25em;
+    }
   }
 }
 
