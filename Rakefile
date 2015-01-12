@@ -96,3 +96,5 @@ META
     end
   end
 end
+
+task :article => ['article:new']
