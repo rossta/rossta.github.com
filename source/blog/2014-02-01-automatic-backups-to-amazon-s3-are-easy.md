@@ -144,6 +144,6 @@ To edit your crontab, `crontab -e`, and set it to run everyday at 10PM:
 
 ```
 # Backup database to S3 daily
-* 22 * * * /Users/myname/bin/database_backup.sh
+0 22 * * * /Users/myname/bin/database_backup.sh
 ```
 Easy, right?
