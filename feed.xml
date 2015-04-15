@@ -309,7 +309,7 @@ $ mysqldump my_app_development &amp;gt; backup-`date +%Y-%m-%d`.sql
 $ pg_dump my_app_development &amp;gt; backup-`date +%Y-%m-%d`.sql
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;You can use &lt;code&gt;s3cmd&lt;/code&gt; to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be using to &lt;em&gt;all&lt;/em&gt; S3 users, you won&amp;#39;t be able to call it something like &amp;ldquo;backups&amp;rdquo;. It&amp;#39;s helpful to use a prefix like your email or handle.&lt;/p&gt;
+&lt;p&gt;You can use &lt;code&gt;s3cmd&lt;/code&gt; to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be unique to &lt;em&gt;all&lt;/em&gt; S3 users, you won&amp;#39;t be able to call it something like &amp;ldquo;backups&amp;rdquo;. It&amp;#39;s helpful to use a prefix like your email or handle.&lt;/p&gt;
 
 &lt;p&gt;Creates an S3 bucket called &amp;#39;myname-backups&amp;#39;:&lt;/p&gt;
 
@@ -336,7 +336,9 @@ $ pg_dump my_app_development &amp;gt; backup-`date +%Y-%m-%d`.sql
 
 &lt;h3&gt;Automate&lt;/h3&gt;
 
-&lt;p&gt;Backups are all good but performing backups on a regular basis is even better. Like saving money, to get done when automated. Let&amp;#39;s add a cron task:&lt;/p&gt;
+&lt;p&gt;Backing up is good but automatic, recurring backups are even better; like saving money, it&amp;#39;s more likely to happen when you make a computer do it for you.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s add a cron task:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;#!/usr/bin/env bash
 
