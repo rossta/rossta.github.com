@@ -93,7 +93,7 @@ $ mysqldump my_app_development > backup-`date +%Y-%m-%d`.sql
 $ pg_dump my_app_development > backup-`date +%Y-%m-%d`.sql
 ```
 
-You can use `s3cmd` to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be using to *all* S3 users, you won't be able to call it something like "backups". It's helpful to use a prefix like your email or handle.
+You can use `s3cmd` to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be unique to *all* S3 users, you won't be able to call it something like "backups". It's helpful to use a prefix like your email or handle.
 
 Creates an S3 bucket called 'myname-backups':
 
@@ -124,7 +124,9 @@ s3cmd get s3://myname-backups/backup-2014-02-01.sql
 
 ### Automate
 
-Backups are all good but performing backups on a regular basis is even better. Like saving money, to get done when automated. Let's add a cron task:
+Backing up is good but automatic, recurring backups are even better; like saving money, it's more likely to happen when you make a computer do it for you.
+
+Let's add a cron task:
 
 ```
 #!/usr/bin/env bash
