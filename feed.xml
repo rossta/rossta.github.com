@@ -355,7 +355,7 @@ rm &amp;quot;$TEMP_FILE&amp;quot;
 &lt;p&gt;To edit your crontab, &lt;code&gt;crontab -e&lt;/code&gt;, and set it to run everyday at 10PM:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;# Backup database to S3 daily
-* 22 * * * /Users/myname/bin/database_backup.sh
+0 22 * * * /Users/myname/bin/database_backup.sh
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Easy, right?&lt;/p&gt;
