@@ -15,13 +15,11 @@ ul.index {
   }
   li:first-child {padding-top:0;}
 }
+
 .index-post {
-  padding-bottom: 2em;
-  margin-bottom: 2em;
-  border-color: $borderColor;
-  border-width: 0;
-  border-bottom-width: 1px;
-  border-style: solid;
+  padding-bottom: 0em;
+  margin-bottom: 1em;
+  border: none;
 
   .comments {
     margin-top: 1em;

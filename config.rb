@@ -124,7 +124,7 @@ helpers do
     [].tap do |names|
       names << yield_content(:title)
       names << "Ross Kaffenberger"
-    end.compact.join(" | ")
+    end.compact.reject(&:blank?).join(" | ")
   end
 
   def title

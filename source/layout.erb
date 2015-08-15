@@ -16,16 +16,15 @@
   </head>
   <body id="application" class="typekit">
     <%= partial 'layouts/topbar' %>
-    <%= partial 'layouts/zen' %>
     <div class="row">
       <section id="main" role="main" class="large-12 small-12 columns">
         <%= yield %>
       </section>
       <section id="sidebar" role="sidebar" class="large-12 small-12 columns">
-        <%= partial 'layouts/sidebar' %>
         <%= partial 'profile' %>
       </section>
     </div>
+    <%= partial 'layouts/zen' %>
     <div class="row">
       <footer>
         <section class="large-12 columns center-inline-list">
