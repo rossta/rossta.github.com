@@ -118,6 +118,10 @@ img {
       margin-bottom: 1rem;
     }
   }
+
+  .button {
+    @include header-font;
+  }
 }
 
 #zen {
@@ -177,7 +181,7 @@ img {
 
 #hero {
   background-color: $lightGreyColor;
-  margin: -2em -2.5em 10em -2.5em;
+  margin: -2em -2.5em 8em -2.5em;
   padding-top: 1em;
   padding-left: 2.5em;
   padding-right: 2.5em;
@@ -199,7 +203,7 @@ form {
     padding: 0.5em 1em;
 
     &[type=submit] {
-      font-family: Helvetica;
+      @include header-font;
       background-color: $secondaryColor;
       &:hover {
         opacity:0.95;

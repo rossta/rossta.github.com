@@ -150,6 +150,10 @@ helpers do
     "http://rossta.net" + path
   end
 
+  def email_url
+    "mailto:ross@rossta.net"
+  end
+
   def signup_form_url
     "//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=#{settings.mailchimp_form_id}"
   end
