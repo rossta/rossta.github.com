@@ -10,16 +10,16 @@ per_page: 5
     <h1>Hello, I'm Ross. I build web apps</h1>
   </header>
   <section>
-    <p>Writing apps with Ruby on Rails is HARD. I know, I've been at it for nearly ten years.</p>
-    <p>How do you ship and scale while staying on top of the latest tools and techniques?</p>
-    <p>I can help. Sign up to get tips on writing better Ruby and Javascript for the web.</p>
+    <p>Are you struggling through coding challenges, tutorials, and your side projects at night trying the transition from another career into web development? Companies want developers with experience&mdash;but how do you get experience without the opportunity to develop it? How do you ship and scale while staying on top of the latest tools and techniques?</p>
+
+    <p>Writing apps with Ruby on Rails is HARD. I know, I've been at it for nearly ten years. You want to get there faster? I can help.</p>
   </section>
   <section class="signup-form">
-    <%= partial "signup" %>
+    <%= partial "layouts/signup" %>
   </section>
 </section>
 
-<h2 class="margin-bottom">Latest posts on coding for the web</h2>
+<h2 class="margin-bottom">Latest posts on taming Rails</h2>
 <section class="index-posts margin-top">
   <% page_articles.each_with_index do |article, i| %>
     <article class="index-post">

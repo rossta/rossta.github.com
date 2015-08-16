@@ -176,14 +176,19 @@ img {
 }
 
 #hero {
-  margin-top: 3em;
-  margin-bottom: 10em;
+  background-color: $lightGreyColor;
+  margin: -2em -2.5em 10em -2.5em;
+  padding-top: 1em;
+  padding-left: 2.5em;
+  padding-right: 2.5em;
+  padding-bottom: 1em;
 
   header {
-    margin-bottom: 1em;
+    margin-bottom: 0em;
   }
+
   .signup-form {
-    padding-top: 0.75em;
+    padding-top: 0.5em;
   }
 }
 
@@ -204,5 +209,5 @@ form {
 }
 
 .signup-form {
-  margin: 2em 0;
+  margin: 1.5em 0;
 }

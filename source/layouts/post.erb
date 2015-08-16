@@ -17,6 +17,9 @@
 
       <h2><small><%= current_article.date.strftime('%b %e') %></small></h2>
     </article>
+    <section class="signup-form">
+      <%= partial "layouts/signup" %>
+    </section>
     <% if build? %>
       <section class="comments">
         <%= partial "layouts/share" %>
