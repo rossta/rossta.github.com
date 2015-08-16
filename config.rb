@@ -67,6 +67,17 @@ configure :build do
 
   # Or use a different image path
   # set :http_path, "/Content/images/"
+
+  set :google_analytics_id, 'UA-16458563-1'
+  set :mailchimp_form_id,   '96030b0bda'
+end
+
+configure :development do
+  set :google_analytics_id, 'UA-xxxxxxxx-x'
+  set :mailchimp_form_id,   'a57e354058'
+end
+
+configure :build do
 end
 
 ###
@@ -136,7 +147,11 @@ helpers do
   end
 
   def url_with_host(path)
-    "http://rosskaff.com" + path
+    "http://rossta.net" + path
+  end
+
+  def signup_form_url
+    "//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=#{settings.mailchimp_form_id}"
   end
 end
 
