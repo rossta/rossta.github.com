@@ -68,7 +68,7 @@ configure :build do
   # Or use a different image path
   # set :http_path, "/Content/images/"
 
-  set :google_analytics_id, 'UA-16458563-1'
+  set :google_analytics_id, 'UA-16458563-2'
   set :mailchimp_form_id,   '96030b0bda'
 end
 
