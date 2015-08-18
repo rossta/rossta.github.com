@@ -38,475 +38,475 @@
         <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://rosskaff.com/404.html</loc>
+    <loc>https://rossta.net/404.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/about.html</loc>
+    <loc>https://rossta.net/about.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010-01-04-hello-world.html</loc>
+    <loc>https://rossta.net/blog/2010-01-04-hello-world.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010-02-17-just-in-time-css.html</loc>
+    <loc>https://rossta.net/blog/2010-02-17-just-in-time-css.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010-05-17-mott-hall-iii-school-career-day.html</loc>
+    <loc>https://rossta.net/blog/2010-05-17-mott-hall-iii-school-career-day.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010-07-20-delegate-and-custom-events.html</loc>
+    <loc>https://rossta.net/blog/2010-07-20-delegate-and-custom-events.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010-09-08-step-up-to-the-soapbox.html</loc>
+    <loc>https://rossta.net/blog/2010-09-08-step-up-to-the-soapbox.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010-12-25-heuristics.html</loc>
+    <loc>https://rossta.net/blog/2010-12-25-heuristics.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010-12-27-behavior-driven-event-driven-eventmachine-rspec.html</loc>
+    <loc>https://rossta.net/blog/2010-12-27-behavior-driven-event-driven-eventmachine-rspec.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011-02-26-opt-in-xss-protection-for-rails-3-upgrade.html</loc>
+    <loc>https://rossta.net/blog/2011-02-26-opt-in-xss-protection-for-rails-3-upgrade.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011-06-23-lean-startup-meetup-ignited.html</loc>
+    <loc>https://rossta.net/blog/2011-06-23-lean-startup-meetup-ignited.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011-09-30-when-your-fat-models-need-to-go-on-a-diet.html</loc>
+    <loc>https://rossta.net/blog/2011-09-30-when-your-fat-models-need-to-go-on-a-diet.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011-10-03-when-your-fat-models-need-to-go-on-a-diet-part-2.html</loc>
+    <loc>https://rossta.net/blog/2011-10-03-when-your-fat-models-need-to-go-on-a-diet-part-2.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011-12-22-toggle-rails-caching-in-rspec-suite.html</loc>
+    <loc>https://rossta.net/blog/2011-12-22-toggle-rails-caching-in-rspec-suite.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2012-02-09-presentation-intro-to-javascript-mvc.html</loc>
+    <loc>https://rossta.net/blog/2012-02-09-presentation-intro-to-javascript-mvc.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013-03-01-create-and-deploy-an-ember-app-in-5-minutes.html</loc>
+    <loc>https://rossta.net/blog/2013-03-01-create-and-deploy-an-ember-app-in-5-minutes.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013-03-25-why-i-ditched-wordpress-for-github.html</loc>
+    <loc>https://rossta.net/blog/2013-03-25-why-i-ditched-wordpress-for-github.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013-03-26-configuring-rack-test-driver-in-capybara-2.html</loc>
+    <loc>https://rossta.net/blog/2013-03-26-configuring-rack-test-driver-in-capybara-2.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013-08-26-featured-post-for-speed-awareness-month.html</loc>
+    <loc>https://rossta.net/blog/2013-08-26-featured-post-for-speed-awareness-month.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2014-02-01-automatic-backups-to-amazon-s3-are-easy.html</loc>
+    <loc>https://rossta.net/blog/2014-02-01-automatic-backups-to-amazon-s3-are-easy.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2014-02-05-ruby,-you-autocomplete-me.html</loc>
+    <loc>https://rossta.net/blog/2014-02-05-ruby,-you-autocomplete-me.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2014-02-25-three-steps-to-effective-code-reviews.html</loc>
+    <loc>https://rossta.net/blog/2014-02-25-three-steps-to-effective-code-reviews.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/index.html</loc>
+    <loc>https://rossta.net/blog/index.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/index.html</loc>
+    <loc>https://rossta.net/index.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/playground.html</loc>
+    <loc>https://rossta.net/js-playground.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/projects.html</loc>
+    <loc>https://rossta.net/projects.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/README.html</loc>
+    <loc>https://rossta.net/README.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/sitemap.html</loc>
+    <loc>https://rossta.net/sitemap.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/thanks.html</loc>
+    <loc>https://rossta.net/thanks.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/tags/life.html</loc>
+    <loc>https://rossta.net/blog/tags/life.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/tags/code.html</loc>
+    <loc>https://rossta.net/blog/tags/code.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/tags/work.html</loc>
+    <loc>https://rossta.net/blog/tags/work.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2014.html</loc>
+    <loc>https://rossta.net/blog/2014.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2014/02.html</loc>
+    <loc>https://rossta.net/blog/2014/02.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2014/02/25.html</loc>
+    <loc>https://rossta.net/blog/2014/02/25.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2014/02/05.html</loc>
+    <loc>https://rossta.net/blog/2014/02/05.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2014/02/01.html</loc>
+    <loc>https://rossta.net/blog/2014/02/01.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013.html</loc>
+    <loc>https://rossta.net/blog/2013.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013/08.html</loc>
+    <loc>https://rossta.net/blog/2013/08.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013/08/26.html</loc>
+    <loc>https://rossta.net/blog/2013/08/26.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013/03.html</loc>
+    <loc>https://rossta.net/blog/2013/03.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013/03/26.html</loc>
+    <loc>https://rossta.net/blog/2013/03/26.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013/03/25.html</loc>
+    <loc>https://rossta.net/blog/2013/03/25.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2013/03/01.html</loc>
+    <loc>https://rossta.net/blog/2013/03/01.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2012.html</loc>
+    <loc>https://rossta.net/blog/2012.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2012/02.html</loc>
+    <loc>https://rossta.net/blog/2012/02.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2012/02/09.html</loc>
+    <loc>https://rossta.net/blog/2012/02/09.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011.html</loc>
+    <loc>https://rossta.net/blog/2011.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/12.html</loc>
+    <loc>https://rossta.net/blog/2011/12.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/12/22.html</loc>
+    <loc>https://rossta.net/blog/2011/12/22.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/10.html</loc>
+    <loc>https://rossta.net/blog/2011/10.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/10/03.html</loc>
+    <loc>https://rossta.net/blog/2011/10/03.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/09.html</loc>
+    <loc>https://rossta.net/blog/2011/09.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/09/30.html</loc>
+    <loc>https://rossta.net/blog/2011/09/30.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/06.html</loc>
+    <loc>https://rossta.net/blog/2011/06.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/06/23.html</loc>
+    <loc>https://rossta.net/blog/2011/06/23.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/02.html</loc>
+    <loc>https://rossta.net/blog/2011/02.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2011/02/26.html</loc>
+    <loc>https://rossta.net/blog/2011/02/26.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010.html</loc>
+    <loc>https://rossta.net/blog/2010.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/12.html</loc>
+    <loc>https://rossta.net/blog/2010/12.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/12/27.html</loc>
+    <loc>https://rossta.net/blog/2010/12/27.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/12/25.html</loc>
+    <loc>https://rossta.net/blog/2010/12/25.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/09.html</loc>
+    <loc>https://rossta.net/blog/2010/09.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/09/08.html</loc>
+    <loc>https://rossta.net/blog/2010/09/08.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/07.html</loc>
+    <loc>https://rossta.net/blog/2010/07.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/07/20.html</loc>
+    <loc>https://rossta.net/blog/2010/07/20.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/05.html</loc>
+    <loc>https://rossta.net/blog/2010/05.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/05/17.html</loc>
+    <loc>https://rossta.net/blog/2010/05/17.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/02.html</loc>
+    <loc>https://rossta.net/blog/2010/02.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/02/17.html</loc>
+    <loc>https://rossta.net/blog/2010/02/17.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/01.html</loc>
+    <loc>https://rossta.net/blog/2010/01.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/2010/01/04.html</loc>
+    <loc>https://rossta.net/blog/2010/01/04.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/page/2/index.html</loc>
+    <loc>https://rossta.net/blog/page/2/index.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/page/3/index.html</loc>
+    <loc>https://rossta.net/blog/page/3/index.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/page/4/index.html</loc>
+    <loc>https://rossta.net/blog/page/4/index.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/page/2/index.html</loc>
+    <loc>https://rossta.net/page/2/index.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/page/3/index.html</loc>
+    <loc>https://rossta.net/page/3/index.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/page/4/index.html</loc>
+    <loc>https://rossta.net/page/4/index.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>http://rosskaff.com/blog/tags/code/page/2.html</loc>
+    <loc>https://rossta.net/blog/tags/code/page/2.html</loc>
     <lastmod>2015-08-18T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -551,7 +551,7 @@
     <script src="/javascripts/all.js" type="text/javascript"></script>
     <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', UA-16458563-2 ]);
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
   _gaq.push(['_trackPageview']);
 
   (function() {

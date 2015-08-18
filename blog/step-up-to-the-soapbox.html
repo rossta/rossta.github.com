@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Automatic Backups to Amazon S3 are Easy | Ross Kaffenberger</title>
+    <title>Step up to the soapbox | Ross Kaffenberger</title>
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -41,154 +41,19 @@
     <article class="post">
       <header>
         <h2>
-          Automatic Backups to Amazon S3 are Easy
-          
-          <br />
-          <small>Push important files to the cloud with s3cmd and cron</small>
+          Step up to the soapbox
           
         </h2>
       </header>
 
-      <p>You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&#39;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.</p>
+      <p>Recently, I cobbled together an entry for the <a href="http://10k.aneventapart.com/">10K Apart Contest</a>. The contest encouraged participants to build an entirely front-end web application in HTML/CSS/Javascript in under 10 kb of total assets, not including some allowable third party libraries such as jQuery or Prototype. Entries must also leverage HTML5 features, some of which include local storage, the canvas API, and web workers.</p>
 
-<h3>Pre-requisites</h3>
+<p>Several entries had already been submitted by the time I heard of the contest back in mid-July. I found games, like <a href="http://10k.aneventapart.com/Entry/62">Lines</a>, search engines, to-do lists, and so on. I considered implementing a Flickr slideshow that would make use of the contributions I’ve made to the <a href="http://github.com/weplay/supersized">supersized</a> jQuery plugin at Weplay, but ultimately decided on a Keynote/Powerpoint alternative.</p>
 
-<ul>
-<li>An <a href="http://aws.amazon.com/">Amazon web services account</a> and <a href="http://aws.amazon.com/iam/">your Amazon access credentials</a></li>
-<li><code>s3cmd</code>: command line interface to S3.</li>
-<li><code>cron</code></li>
-</ul>
-
-<p>The <code>cron</code> is pretty standard on unix-based systems. As of this writing, <code>s3cmd</code> should be straightforward:</p>
-
-<pre><code># Mac users
-$ brew install s3cmd
-
-# Linux
-$ yum install s3cmd
-# or
-$ apt-get install s3cmd
-</code></pre>
-
-<p>Optional:</p>
-
-<ul>
-<li><code>gpg</code>: opensource encryption program</li>
-</ul>
-
-<h3>Setup</h3>
-
-<p>First you&#39;ll need to configure s3cmd: <code>s3cmd --configure</code>. Have your Amazon access key and secret key at the ready.</p>
-
-<p>If you plan to store sensitive data on S3, enter the path to your <code>gpg</code> executable; <code>s3cmd</code> will encrypt your data before transferring from your machine to S3. It also decrypts when downloading to your machine. Keep in mind, encrypted files won&#39;t be readable by others with direct access.</p>
-
-<p>Here&#39;s a sample result:</p>
-
-<pre><code>$ s3cmd --configure
-
-Enter new values or accept defaults in brackets with Enter.
-Refer to user manual for detailed description of all options.
-
-Access key and Secret key are your identifiers for Amazon S3
-Access Key: xxxxxxxxxxxxxxxxxxxx
-Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-Encryption password is used to protect your files from reading
-by unauthorized persons while in transfer to S3
-Encryption password: xxxxxxxxxx
-Path to GPG program: /usr/local/bin/gpg
-
-When using secure HTTPS protocol all communication with Amazon S3
-servers is protected from 3rd party eavesdropping. This method is
-slower than plain HTTP and can&#39;t be used if you&#39;re behind a proxy
-Use HTTPS protocol [No]: Yes
-
-New settings:
-  Access Key: xxxxxxxxxxxxxxxxxxxx
-  Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  Encryption password: xxxxxxxxxx
-  Path to GPG program: /usr/local/bin/gpg
-  Use HTTPS protocol: True
-  HTTP Proxy server name:
-  HTTP Proxy server port: 0
-
-Test access with supplied credentials? [Y/n] Y
-Please wait...
-Success. Your access key and secret key worked fine :-)
-
-Now verifying that encryption works...
-Success. Encryption and decryption worked fine :-)
-
-Save settings? [y/N] y
-Configuration saved to &#39;$HOME/.s3cfg&#39;
-</code></pre>
-
-<h3>Backup</h3>
-
-<p>Now all you need is a file to backup and an S3 bucket to store it.</p>
-
-<p>Let&#39;s say you&#39;re a web developer like me and you want to back up your MySQL or Postgres development data. First, generate the backup file (you may need to add database credentials command-line options, of course):</p>
-
-<pre><code># mysql
-$ mysqldump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
-
-# or postgres
-$ pg_dump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
-</code></pre>
-
-<p>You can use <code>s3cmd</code> to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be unique to <em>all</em> S3 users, you won&#39;t be able to call it something like &ldquo;backups&rdquo;. It&#39;s helpful to use a prefix like your email or handle.</p>
-
-<p>Creates an S3 bucket called &#39;myname-backups&#39;:</p>
-
-<pre><code>$ s3cmd mb s3://myname-backups
-</code></pre>
-
-<p>Now you&#39;re ready to deliver. Encrypt and send your sql dump file to your new S3 bucket:</p>
-
-<pre><code>$ s3cmd put backup-2014-02-01.sql s3://myname-backups/backup-2014-02-01.sql --encrypt
-</code></pre>
-
-<p>You can verify it&#39;s in the bucket:</p>
-
-<pre><code>$ s3cmd ls s3://myname-backups/
-2014-02-01 22:32   1109702   s3://myname-backups/test/backup-2014-02-01.sql
-</code></pre>
-
-<p>And retrieve it (with automatic decryption when performed on your machine):</p>
-
-<pre><code>s3cmd get s3://myname-backups/backup-2014-02-01.sql
-</code></pre>
-
-<p><code>s3cmd</code> supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your <code>.s3cfg</code> file, typically saved in your home directory. You can also set options at the command line.</p>
-
-<h3>Automate</h3>
-
-<p>Backing up is good but automatic, recurring backups are even better; like saving money, it&#39;s more likely to happen when you make a computer do it for you.</p>
-
-<p>Let&#39;s add a cron task:</p>
-
-<pre><code>#!/usr/bin/env bash
-
-TIMESTAMP=$(date +%Y-%m-%d)
-TEMP_FILE=$(mktemp tmp.XXXXXXXXXX)
-S3_FILE=&quot;s3://myname-backups/local/data/backup-$TIMESTAMP&quot;
-pg_dump directory_development &gt; $TEMP_FILE
-s3cmd put $TEMP_FILE $S3_FILE --encrypt
-rm &quot;$TEMP_FILE&quot;
-</code></pre>
-
-<p>Save this in a directory for your local scripts, like <code>$HOME/bin/database_backup.sh</code> and add execute permissions with <code>chmod +x ~/bin/database_backup.sh</code>.</p>
-
-<p>To edit your crontab, <code>crontab -e</code>, and set it to run everyday at 10PM:</p>
-
-<pre><code># Backup database to S3 daily
-0 22 * * * /Users/myname/bin/database_backup.sh
-</code></pre>
-
-<p>Easy, right?</p>
+<p>It’s called soapbox. The inspiration comes from <a href="http://github.com/schacon/showoff">showoff</a>, which is backed by a server. soapbox provides an in-browser interface to create, preview and present slides with <a href="http://daringfireball.net/projects/markdown/">markdown</a> or markup. Slides are auto-saved to local storage, if available, as json. I sent in <a href="http://10k.aneventapart.com/Entry/361">my 10K Apart entry</a> on the deadline day. You can also find the latest on <a href="http://github.com/rosskaff/soapbox">github</a>.</p>
 
 
-      <h2><small>Feb  1</small></h2>
+      <h2><small>Sep  8</small></h2>
     </article>
     <section class="signup-form">
       <!-- Begin MailChimp Signup Form -->
@@ -230,7 +95,7 @@ rm &quot;$TEMP_FILE&quot;
       <section class="comments">
         <section class="share">
   <!-- AddThis Button BEGIN -->
-  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/2014/02/automatic-backups-to-amazon-s3-are-easy.html" addthis:title="Automatic Backups to Amazon S3 are Easy">
+  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/step-up-to-the-soapbox.html" addthis:title="Step up to the soapbox">
     <a class="addthis_button_preferred_1"></a>
     <a class="addthis_button_preferred_2"></a>
     <a class="addthis_button_preferred_3"></a>
@@ -247,9 +112,9 @@ rm &quot;$TEMP_FILE&quot;
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = 'rosskaff';
-    var disqus_identifier = 'automatic-backups-to-amazon-s3-are-easy';
-    var disqus_title      = 'Automatic Backups to Amazon S3 are Easy';
-    var disqus_url        = 'http://rosskaff.com/blog/2014/02/automatic-backups-to-amazon-s3-are-easy.html';
+    var disqus_identifier = 'step-up-to-the-soapbox';
+    var disqus_title      = 'Step up to the soapbox';
+    var disqus_url        = 'https://rossta.net/blog/step-up-to-the-soapbox.html';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
@@ -305,7 +170,7 @@ rm &quot;$TEMP_FILE&quot;
     <script src="/javascripts/all.js" type="text/javascript"></script>
     <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', UA-16458563-2 ]);
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
   _gaq.push(['_trackPageview']);
 
   (function() {

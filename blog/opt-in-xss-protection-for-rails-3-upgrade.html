@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Presentation Intro to Javascript MVC | Ross Kaffenberger</title>
+    <title>Opt-in XSS protection for Rails 3 upgrade | Ross Kaffenberger</title>
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -41,17 +41,42 @@
     <article class="post">
       <header>
         <h2>
-          Presentation Intro to Javascript MVC
+          Opt-in XSS protection for Rails 3 upgrade
           
         </h2>
       </header>
 
-      <p>Today, I made a brown bag case to my colleagues: let’s approach client-side development in a more structured, disciplined and flexible way; in other words, add a model-view-controller javascript layer to our web app. Included is some background for the discussion and a brief introduction to Backbone.js. I use the phrase MV+ to embrace various implementations of MVC-like javascript frameworks, most of which have different takes on what object take on the responsibility for hooking up models and views.</p>
+      <p>When I’m really hungry, all I want is a Chipotle burrito. It seems like a good idea – it’s big, it tastes good and it’s right there across the street! It’s not long before I regret taking on that much food in one sitting. So it goes for upgrading <a href="http://www.weplay.com">Weplay</a> to Rails 3.</p>
 
-<p><a href="http://daftpunkjs.herokuapp.com/">Brown Bag Presentation: Javascript MV+</a></p>
+<p>A fundamental shift in Rails 3 is html escaping by default. A number of posts describe the need for this change, an important tool against cross-site scripting (XSS) attacks. Rather than rely on developers to escape user content where needed, all strings that don’t originate from Rails (link_to, form_for, etc.) are treated as unsafe. This is a good thing. Unfortunately, for most running Rails 2 apps, automatically html-escaping our views without adjustments results in a hot steaming pile of onscreen view-source dung.</p>
+
+<p>This is exactly what you see the first time you install the recommended <a href="https://github.com/rails/rails_xss">rails_xss</a> plugin to provide Rails 3 XSS protection for your Rails 2 app. Despite the obvious work entailed to get things back to normal, this is another good thing. Making the switch to Rails 3 overnight may not be feasible, but adding XSS protection ahead of time will help smooth the transition.</p>
+
+<p>Except perhaps when your app is large. At the present count, we have over 1500 *.html.erb files in Weplay’s main repo. We simply can’t afford to devote the days to focus solely on fixes for excess html escaping in our templates. We need to be able to iterate on this change like everything else; incrementally instead of as an overhaul.</p>
+
+<p>We came up with an alternative: <a href="https://github.com/weplay/rails_xss">we forked rails_xss</a> to <em>disable</em> automatic html escaping by default while still providing the use of “html safe” strings and the Erubis ERB template engine. Developers can turn on html escaping locally using the <strong>autoescape</strong> block helper.</p>
+
+<p>Everything within the helper is escaped. Anything outside the helper is not escaped. Nesting autoescapes is ok: everything inside the outermost invocation is escaped.</p>
+
+<p>The autoescape helper allows us to apply the fixes on a view-by-view basis. We can devote most of our time to building features to help us make money and chip away at templates and partials as they pop up in our workflow. We even have a script to tell us how many files we still need to address.</p>
+
+<p>The key to this change is manipulating the original rails<em>xss plugin behavior. Rails 3 helpers are composed of the String subclass <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">SafeBuffer</a>, which will escape concatenated content not already marked as “html safe”. Internally, calling .html\</em>safe on a string simply sets a flag on the string object and this is flag is checked when adding to a string to SafeBuffer. By monkey-patching String, we disable the automatic escaping by always returning true for the html_safe? check. The autoescape flips on the flag, yields to the content block and flips the flag check back off afterwards. When autoescaping is already turned on, the block is returned as-is to allow nested autoescaping.</p>
+
+<p>There are alternatives. We could all crash on the upgrade (no time!) or we could keep the fully “escaped” version of our app in a separate branch, chip away at it, merge occasionally (not fun!).</p>
+
+<p>The opt-in approach works well for our agile mindset of fast incremental improvement and frequent deployment. I recommend using our fork if you have similar needs. It may even help with the heartburn.</p>
+
+<p>Resources</p>
+
+<ul>
+<li>  <a href="https://github.com/rails/rails_xss">rails/rails_xss</a></li>
+<li>  <a href="https://github.com/weplay/rails_xss">weplay/rails_xss</a></li>
+<li>  <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">Safe Buffer</a>
+*</li>
+</ul>
 
 
-      <h2><small>Feb  9</small></h2>
+      <h2><small>Feb 26</small></h2>
     </article>
     <section class="signup-form">
       <!-- Begin MailChimp Signup Form -->
@@ -93,7 +118,7 @@
       <section class="comments">
         <section class="share">
   <!-- AddThis Button BEGIN -->
-  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/2012/02/presentation-intro-to-javascript-mvc.html" addthis:title="Presentation Intro to Javascript MVC">
+  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/opt-in-xss-protection-for-rails-3-upgrade.html" addthis:title="Opt-in XSS protection for Rails 3 upgrade">
     <a class="addthis_button_preferred_1"></a>
     <a class="addthis_button_preferred_2"></a>
     <a class="addthis_button_preferred_3"></a>
@@ -110,9 +135,9 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = 'rosskaff';
-    var disqus_identifier = 'presentation-intro-to-javascript-mvc';
-    var disqus_title      = 'Presentation Intro to Javascript MVC';
-    var disqus_url        = 'http://rosskaff.com/blog/2012/02/presentation-intro-to-javascript-mvc.html';
+    var disqus_identifier = 'opt-in-xss-protection-for-rails-3-upgrade';
+    var disqus_title      = 'Opt-in XSS protection for Rails 3 upgrade';
+    var disqus_url        = 'https://rossta.net/blog/opt-in-xss-protection-for-rails-3-upgrade.html';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
@@ -168,7 +193,7 @@
     <script src="/javascripts/all.js" type="text/javascript"></script>
     <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', UA-16458563-2 ]);
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
   _gaq.push(['_trackPageview']);
 
   (function() {

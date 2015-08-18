@@ -46,7 +46,7 @@
         </h2>
       </header>
 
-      <p>In <a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet">part 1</a> of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As <a title="XP in Anger" href="http://blog.arielvalentin.com/">Ariel Valentin</a> pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.</p>
+      <p>In <a href="/when-your-fat-models-need-to-go-on-a-diet">part 1</a> of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As <a title="XP in Anger" href="http://blog.arielvalentin.com/">Ariel Valentin</a> pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.</p>
 
 <p>Let’s imagine we have an application with a <code>User</code> model (might not be a stretch) and we’re building a page that loads a bunch of user gravatars. Our <code>User</code> model has accumulated a ton of attributes, but we may only need a limited set to render the gravatar properly. We might add a line like this in the controller action to select only the needed attributes:</p>
 
@@ -64,7 +64,7 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 
 <p>We’ll incur less memory overhead during this action at runtime since the app won’t have to load as much data. The caveat is that our <code>@users</code> won’t have access to the data we left behind, so we need to take care only to call methods that rely on the data we have actually loaded. It would be easier to test our lighter users if we could treat them as a different type.</p>
 
-<p>Applying the model-slimming refactoring we discussed in <a href="http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet/">part 1</a>, we can extract gravatar related functionality into a <code>UserExtensions::Gravatar</code> module and create a <code>Gravatar::User</code> that inherits from our <code>User</code> model. Furthermore, we can change our <code>select_gravatar_attributes</code> to a <code>default_scope</code> in the subclass, so whenever we grab <code>Gravatar::User</code> from the db, it’ll have only the attributes we need. Our controller action would now look like this:</p>
+<p>Applying the model-slimming refactoring we discussed in <a href="/when-your-fat-models-need-to-go-on-a-diet/">part 1</a>, we can extract gravatar related functionality into a <code>UserExtensions::Gravatar</code> module and create a <code>Gravatar::User</code> that inherits from our <code>User</code> model. Furthermore, we can change our <code>select_gravatar_attributes</code> to a <code>default_scope</code> in the subclass, so whenever we grab <code>Gravatar::User</code> from the db, it’ll have only the attributes we need. Our controller action would now look like this:</p>
 
 <pre><code class="ruby">@users = Gravatar::User.all
 </code></pre>
@@ -124,7 +124,7 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
       <section class="comments">
         <section class="share">
   <!-- AddThis Button BEGIN -->
-  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html" addthis:title="When Your Fat Models Need to Go on a Diet, Part 2">
+  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/when-your-fat-models-need-to-go-on-a-diet-part-2.html" addthis:title="When Your Fat Models Need to Go on a Diet, Part 2">
     <a class="addthis_button_preferred_1"></a>
     <a class="addthis_button_preferred_2"></a>
     <a class="addthis_button_preferred_3"></a>
@@ -143,7 +143,7 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
     var disqus_shortname  = 'rosskaff';
     var disqus_identifier = 'when-your-fat-models-need-to-go-on-a-diet-part-2';
     var disqus_title      = 'When Your Fat Models Need to Go on a Diet, Part 2';
-    var disqus_url        = 'http://rosskaff.com/blog/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2.html';
+    var disqus_url        = 'https://rossta.net/blog/when-your-fat-models-need-to-go-on-a-diet-part-2.html';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
@@ -199,7 +199,7 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
     <script src="/javascripts/all.js" type="text/javascript"></script>
     <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', UA-16458563-2 ]);
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
   _gaq.push(['_trackPageview']);
 
   (function() {

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>rosskaff.com</title>
+  <title>rossta.net</title>
   <subtitle>Ross Kaffenberger</subtitle>
-  <id>http://rosskaff.com/</id>
-  <link href="http://rosskaff.com/"/>
-  <link href="http://rosskaff.com/feed.xml" rel="self"/>
+  <id>https://rossta.net/</id>
+  <link href="https://rossta.net/"/>
+  <link href="https://rossta.net/feed.xml" rel="self"/>
   <updated>2014-02-25T00:00:00Z</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
     <title>Three Steps to Effective Code Reviews</title>
-    <link rel="alternate" href="/blog/2014/02/three-steps-to-effective-code-reviews.html"/>
-    <id>/blog/2014/02/three-steps-to-effective-code-reviews.html</id>
+    <link rel="alternate" href="/blog/three-steps-to-effective-code-reviews.html"/>
+    <id>/blog/three-steps-to-effective-code-reviews.html</id>
     <published>2014-02-25T00:00:00Z</published>
     <updated>2014-02-25T00:00:00Z</updated>
     <author>
@@ -65,8 +65,8 @@
   </entry>
   <entry>
     <title>Ruby, You Autocomplete Me</title>
-    <link rel="alternate" href="/blog/2014/02/ruby,-you-autocomplete-me.html"/>
-    <id>/blog/2014/02/ruby,-you-autocomplete-me.html</id>
+    <link rel="alternate" href="/blog/ruby,-you-autocomplete-me.html"/>
+    <id>/blog/ruby,-you-autocomplete-me.html</id>
     <published>2014-02-05T00:00:00Z</published>
     <updated>2014-02-05T00:00:00Z</updated>
     <author>
@@ -214,8 +214,8 @@ simple ways to hook into features easily taken for granted.&lt;/p&gt;
   </entry>
   <entry>
     <title>Automatic Backups to Amazon S3 are Easy</title>
-    <link rel="alternate" href="/blog/2014/02/automatic-backups-to-amazon-s3-are-easy.html"/>
-    <id>/blog/2014/02/automatic-backups-to-amazon-s3-are-easy.html</id>
+    <link rel="alternate" href="/blog/automatic-backups-to-amazon-s3-are-easy.html"/>
+    <id>/blog/automatic-backups-to-amazon-s3-are-easy.html</id>
     <published>2014-02-01T00:00:00Z</published>
     <updated>2014-02-01T00:00:00Z</updated>
     <author>
@@ -363,8 +363,8 @@ rm &amp;quot;$TEMP_FILE&amp;quot;
   </entry>
   <entry>
     <title>Featured Post for Speed Awareness Month</title>
-    <link rel="alternate" href="/blog/2013/08/featured-post-for-speed-awareness-month.html"/>
-    <id>/blog/2013/08/featured-post-for-speed-awareness-month.html</id>
+    <link rel="alternate" href="/blog/featured-post-for-speed-awareness-month.html"/>
+    <id>/blog/featured-post-for-speed-awareness-month.html</id>
     <published>2013-08-26T00:00:00Z</published>
     <updated>2013-08-26T00:00:00Z</updated>
     <author>
@@ -376,8 +376,8 @@ rm &amp;quot;$TEMP_FILE&amp;quot;
   </entry>
   <entry>
     <title>Configuring Rack Test Driver in Capybara 2</title>
-    <link rel="alternate" href="/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html"/>
-    <id>/blog/2013/03/configuring-rack-test-driver-in-capybara-2.html</id>
+    <link rel="alternate" href="/blog/configuring-rack-test-driver-in-capybara-2.html"/>
+    <id>/blog/configuring-rack-test-driver-in-capybara-2.html</id>
     <published>2013-03-26T00:00:00Z</published>
     <updated>2013-03-26T00:00:00Z</updated>
     <author>
@@ -405,8 +405,8 @@ end
   </entry>
   <entry>
     <title>Why I Ditched Wordpress for Github</title>
-    <link rel="alternate" href="/blog/2013/03/why-i-ditched-wordpress-for-github.html"/>
-    <id>/blog/2013/03/why-i-ditched-wordpress-for-github.html</id>
+    <link rel="alternate" href="/blog/why-i-ditched-wordpress-for-github.html"/>
+    <id>/blog/why-i-ditched-wordpress-for-github.html</id>
     <published>2013-03-25T00:00:00Z</published>
     <updated>2013-03-25T00:00:00Z</updated>
     <author>

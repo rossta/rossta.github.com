@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>$.delegate and Custom Events | Ross Kaffenberger</title>
+    <title>Just-in-Time CSS | Ross Kaffenberger</title>
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -41,23 +41,41 @@
     <article class="post">
       <header>
         <h2>
-          $.delegate and Custom Events
+          Just-in-Time CSS
           
         </h2>
       </header>
 
-      <p>Sharing team photos and video is central to <a href="http://www.weplay.com">Weplay</a> and my team has been working hard recently to make some dramatic improvements to the media gallery experience.</p>
+      <p>On top of the list of <a href="http://developer.yahoo.com/performance/rules.html">best practices for speeding up your website</a> is reducing the number of HTTP requests required to render the page. As our websites grow and there are more pages to style, we have more style rules to deliver to our visitors. Keeping the number of requests to a minimum usually means we either need to put all our styles in a single stylesheet, or use a bundling strategy such as <a href="http://documentcloud.github.com/jammit/">Jammit</a> or <a href="http://github.com/brynary/asset-trip">Asset Trip</a>, like we use at <a href="http://www.weplay.com">Weplay</a>, to pull our stylesheets together as one at deploy time.</p>
 
-<p>One area in dire need of attention was the ability to edit photo metadata easily: changing captions, deleting pictures, moving from one album to another, etc. A user was forced to submit changes for up to sixty photos at a time with one post request. The response was slow and the potential for losing lots of changes was unacceptable.</p>
+<p>One problem with the single CSS request approach is we often send CSS rules that our users don’t need to render the page initially or at any time during the current page view. This is like making dinner for 10 when only 2 people have RSVP’d; it can potentially be a big waste. In this wacky ajaxy world we live in, who says all your CSS needs to be on the page at load time? Consider using just-in-time CSS for page elements that aren’t necessary to display right away.</p>
 
-<p>We committed to swapping this experience with a more user-friendly ajaxified set of interactions. Each change is saved as you go and the updates take place in line. A key component of our front-end javascript is use of <a href="http://jquery.com/">jQuery</a>‘s <code>$.delegate</code>, available as of jQuery 1.4.2, and custom events.</p>
+<p>Let’s say we have a lightbox to display gallery images that is only rendered when a user clicks on a page link. The CSS rules needed to render the box shouldn’t have to be loaded during the initial request. We can pull these out into a separate stylesheet and load it on demand with javascript.
+</p>
 
-<p>I put together a brown bag presentation for my team explaining the benefits of $.delegate and custom events, currently available at .</p>
+<p>&nbsp;&nbsp;Demo</p>
 
-<p>The slides are written in markdown and presented using Scott Chacon’s excellent <a href="http://github.com/schacon/showoff">showoff</a>, which allows the embedding of printed, executable javascript. Note: since showoff ships with jQuery 1.4.0, the <code>$.delegate</code> examples are not currently executable.</p>
+<p>&nbsp;&nbsp;Hello World
+&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;function require(url) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// logic to determine url is for a css file here
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var element = document.createElement(&ldquo;link&rdquo;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute(&ldquo;rel&rdquo;, &ldquo;stylesheet&rdquo;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute(&ldquo;type&rdquo;, &ldquo;text/css&rdquo;);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute(&ldquo;href&rdquo;, url);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementsByTagName(&ldquo;head&rdquo;)[0].appendChild(element);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;</p>
+
+<p></p>
+
+<p>The code example defines a function ‘require’ that builds a stylesheet link tag and inserts it into the head of the document. The function is triggered as a callback from the onload event of the document body with a url to the ‘app.css’ file located in the same directory. Alternatively, we could attach the function call to a different event, such as click on a link to a popup that might need the styles.</p>
+
+<p>The key is that the HTTP request is not made until the stylesheet tag is appended to the document head tag after the page has already loaded. We decrease the number and/or size of the requests needed to render the page initially keeping our visitors satisfied.</p>
 
 
-      <h2><small>Jul 20</small></h2>
+      <h2><small>Feb 17</small></h2>
     </article>
     <section class="signup-form">
       <!-- Begin MailChimp Signup Form -->
@@ -99,7 +117,7 @@
       <section class="comments">
         <section class="share">
   <!-- AddThis Button BEGIN -->
-  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/2010/07/delegate-and-custom-events.html" addthis:title="$.delegate and Custom Events">
+  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/just-in-time-css.html" addthis:title="Just-in-Time CSS">
     <a class="addthis_button_preferred_1"></a>
     <a class="addthis_button_preferred_2"></a>
     <a class="addthis_button_preferred_3"></a>
@@ -116,9 +134,9 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = 'rosskaff';
-    var disqus_identifier = 'delegate-and-custom-events';
-    var disqus_title      = '$.delegate and Custom Events';
-    var disqus_url        = 'http://rosskaff.com/blog/2010/07/delegate-and-custom-events.html';
+    var disqus_identifier = 'just-in-time-css';
+    var disqus_title      = 'Just-in-Time CSS';
+    var disqus_url        = 'https://rossta.net/blog/just-in-time-css.html';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
@@ -174,7 +192,7 @@
     <script src="/javascripts/all.js" type="text/javascript"></script>
     <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', UA-16458563-2 ]);
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
   _gaq.push(['_trackPageview']);
 
   (function() {
