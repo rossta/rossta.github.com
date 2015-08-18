@@ -22,7 +22,7 @@ Having left myself only a day to put something together, I decided it would be e
 
 The [Javascript Playground][3] was born. Dirt simple, but effective for a short lesson, it is intended to be a lightweight introduction to using javascript. For career day, my aim was simply to have the students dip their toes in the process. Maybe experience a setback and (hopefully) find success. They would enter middle school students and leave computer programmers.
 
- [3]: http://www.rosskaff.com/wp-content/uploads/2010/05/playground.html
+ [3]: /js-playground/
 
 I put together a Keynote presentation to introduce the lesson and help students see why software engineers and computer programmers were relevant as builders of software for familiar technology like iPhone Apps, Facebook and Twitter. A segment I called “Computers are Dumb”, (common responses: Wha’? and Huh?) was inspired by my colleague [Noah Davis][4], who had done something similar for his own career day talk. I pretended to be a walking, listening computer who needed instructions to get around desks from one side of the room to the next. I let students shout out instructions which initially led to some comical results. “Turn right” resulted in my spinning in an endless loop and “Walk straight” usually ended with me walking into a wall or chair. The point: computers will do exactly what we tell them to do, not always what we *think* we’re telling them to do. This was important prelude to the playground.
 

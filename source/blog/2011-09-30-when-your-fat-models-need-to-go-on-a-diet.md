@@ -16,12 +16,8 @@ A good refactoring step is to pull out modules of related behavior. In the User 
  [2]: http://yehudakatz.com/2009/11/12/better-ruby-idioms/
  [3]: http://www.fakingfantastic.com/2010/09/20/concerning-yourself-with-active-support-concern/
 
-
-
-
-
 One convention is to place the modules in “#{model\_name}\_extensions” folders in your app/models directory to group the code logically. For example, UserExtensions::Admin would be located at app/models/user_extensions/admin.rb. Breaking out the code in to functional chunks like this is a good first step in downsizing your model files. It also more easily allows methods and associations to be extracted into other classes/tables.
 
 Added: Check out [part 2][4] of this post for thoughts on slimming down our models at runtime.
 
- [4]: http://www.rosskaff.com/2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/ "When Your Fat Models Need to Go on a Diet, Part 2"
+ [4]: /when-your-fat-models-need-to-go-on-a-diet-part-2/ "When Your Fat Models Need to Go on a Diet, Part 2"

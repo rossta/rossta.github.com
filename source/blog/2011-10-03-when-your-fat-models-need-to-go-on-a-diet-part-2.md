@@ -7,7 +7,7 @@ tags:
 ---
 In [part 1][1] of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As [Ariel Valentin][2] pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.
 
- [1]: http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet
+ [1]: /when-your-fat-models-need-to-go-on-a-diet
  [2]: http://blog.arielvalentin.com/ "XP in Anger"
 
 Let’s imagine we have an application with a `User` model (might not be a stretch) and we’re building a page that loads a bunch of user gravatars. Our `User` model has accumulated a ton of attributes, but we may only need a limited set to render the gravatar properly. We might add a line like this in the controller action to select only the needed attributes:
@@ -17,7 +17,6 @@ Let’s imagine we have an application with a `User` model (might not be a stret
 ```
 
 Perhaps to make this more readable, we’ll extract our select statement into a scope in the `User` model:
-
 
 ```ruby
 # user.rb
@@ -31,7 +30,7 @@ We’ll incur less memory overhead during this action at runtime since the app w
 
 Applying the model-slimming refactoring we discussed in [part 1][3], we can extract gravatar related functionality into a `UserExtensions::Gravatar` module and create a `Gravatar::User` that inherits from our `User` model. Furthermore, we can change our `select_gravatar_attributes` to a `default_scope` in the subclass, so whenever we grab `Gravatar::User` from the db, it’ll have only the attributes we need. Our controller action would now look like this:
 
- [3]: http://www.rosskaff.com/2011/09/when-your-fat-models-need-to-go-on-a-diet/
+ [3]: /when-your-fat-models-need-to-go-on-a-diet/
 
 ```ruby
 @users = Gravatar::User.all
@@ -42,7 +41,6 @@ To put our savings to the test, we can run some basic benchmark tests. I created
 All users
 
 ![All users](/images/screenshots/user-perf-test.jpg)
-
 
 All as gravatars
 
