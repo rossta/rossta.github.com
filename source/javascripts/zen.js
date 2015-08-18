@@ -21,7 +21,7 @@ Zen = (function($) {
     self = this;
     // url  = 'http://localhost:3000/says';
     // url  = 'https://github.com/zen';
-    url  = 'http://zenkaffe.herokuapp.com/says';
+    url  = 'https://zenkaffe.herokuapp.com/says';
     return $.get(url, function(enlightenment) {
       self.setEnlightenment(enlightenment);
     }).then(function() {
