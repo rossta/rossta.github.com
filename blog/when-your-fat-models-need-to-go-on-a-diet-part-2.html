@@ -70,11 +70,11 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 
 <p>All users</p>
 
-<p><img alt="All users" src="/images/screenshots/user-perf-test.jpg?1445744793" /></p>
+<p><img alt="All users" src="/images/screenshots/user-perf-test.jpg" /></p>
 
 <p>All as gravatars</p>
 
-<p><img alt="All as gravatars" src="/images/screenshots/gravatar-user-perf-test.jpg?1445744793" /></p>
+<p><img alt="All as gravatars" src="/images/screenshots/gravatar-user-perf-test.jpg" /></p>
 
 <p>The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.</p>
 
@@ -118,21 +118,6 @@ scope :select_gravatar_attributes, select(%w[ id name gravatar_id ])
 
     </section>
       <section class="comments">
-        <section class="share">
-  <!-- AddThis Button BEGIN -->
-  <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="http://rossta.net/blog/when-your-fat-models-need-to-go-on-a-diet-part-2.html" addthis:title="When Your Fat Models Need to Go on a Diet, Part 2">
-    <a class="addthis_button_preferred_1"></a>
-    <a class="addthis_button_preferred_2"></a>
-    <a class="addthis_button_preferred_3"></a>
-    <a class="addthis_button_preferred_4"></a>
-    <a class="addthis_button_compact"></a>
-    <a class="addthis_counter addthis_bubble_style"></a>
-  </div>
-  <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-52f3af16161832f9"></script>
-  <!-- AddThis Button END -->
-</section>
-
         <div id="disqus_thread"></div>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
