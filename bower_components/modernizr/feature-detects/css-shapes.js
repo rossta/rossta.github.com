@@ -1,0 +1,1 @@
+Modernizr.addTest("shapes",Modernizr.testAllProps("shapeOutside","content-box",!0));

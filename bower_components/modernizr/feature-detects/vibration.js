@@ -1,0 +1,1 @@
+Modernizr.addTest("vibrate",!!Modernizr.prefixed("vibrate",navigator));

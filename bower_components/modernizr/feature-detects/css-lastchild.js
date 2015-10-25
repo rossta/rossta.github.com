@@ -1,0 +1,1 @@
+Modernizr.addTest("lastchild",function(){return Modernizr.testStyles("#modernizr div {width:100px} #modernizr :last-child{width:200px;display:block}",function(t){return t.lastChild.offsetWidth>t.firstChild.offsetWidth},2)});

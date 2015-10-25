@@ -1,0 +1,1 @@
+Modernizr.addTest("seamless","seamless"in document.createElement("iframe"));

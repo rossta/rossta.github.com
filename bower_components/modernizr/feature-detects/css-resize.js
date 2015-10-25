@@ -1,0 +1,1 @@
+Modernizr.addTest("cssresize",Modernizr.testAllProps("resize"));

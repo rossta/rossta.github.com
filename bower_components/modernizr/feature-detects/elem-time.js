@@ -1,0 +1,1 @@
+Modernizr.addTest("time","valueAsDate"in document.createElement("time"));

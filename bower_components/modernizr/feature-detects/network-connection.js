@@ -1,0 +1,1 @@
+Modernizr.addTest("lowbandwidth",function(){var t=navigator.connection||{type:0};return 3==t.type||4==t.type||/^[23]g$/.test(t.type)});

@@ -1,0 +1,1 @@
+Modernizr.addTest("quotamanagement",function(){var n=Modernizr.prefixed("StorageInfo",window);return!!(n&&"TEMPORARY"in n&&"PERSISTENT"in n)});

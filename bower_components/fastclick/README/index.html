@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="The homepage of Ross Kaffenberger.">
+    <meta name="keywords" content="Ross Kaffenberger, software, software developer,
+    ruby, javascript, web development, startups">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/all.css?1445744797" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1445744814"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="right">
+      <li><a href="/blog">blog</a></li>
+      <li><a href="/about">about</a></li>
+      <li><a href="/projects">projects</a></li>
+      <li><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+        <h1>FastClick</h1>
+
+<p>FastClick is a simple, easy-to-use library for eliminating the 300ms delay between a physical tap and the firing of a <code>click</code> event on mobile browsers. The aim is to make your application feel less laggy and more responsive while avoiding any interference with your current logic.</p>
+
+<p>FastClick is developed by <a href="http://labs.ft.com/">FT Labs</a>, part of the Financial Times.</p>
+
+<p><a href="http://maxime.sh/2013/02/supprimer-le-lag-des-clics-sur-mobile-avec-fastclick/">Explication en français</a>.</p>
+
+<p><a href="https://developer.mozilla.org/ja/docs/Mozilla/Firefox_OS/Apps/Tips_and_techniques#Make_events_immediate">日本語で説明</a>。</p>
+
+<h2>Why does the delay exist?</h2>
+
+<p>According to <a href="https://developers.google.com/mobile/articles/fast_buttons">Google</a>:</p>
+
+<blockquote>
+<p>&hellip;mobile browsers will wait approximately 300ms from the time that you tap the button to fire the click event. The reason for this is that the browser is waiting to see if you are actually performing a double tap.</p>
+</blockquote>
+
+<h2>Compatibility</h2>
+
+<p>The library has been deployed as part of the <a href="http://app.ft.com/">FT Web App</a> and is tried and tested on the following mobile browsers:</p>
+
+<ul>
+<li>Mobile Safari on iOS 3 and upwards</li>
+<li>Chrome on iOS 5 and upwards</li>
+<li>Chrome on Android (ICS)</li>
+<li>Opera Mobile 11.5 and upwards</li>
+<li>Android Browser since Android 2</li>
+<li>PlayBook OS 1 and upwards</li>
+</ul>
+
+<h2>When it isn&rsquo;t needed</h2>
+
+<p>FastClick doesn&rsquo;t attach any listeners on desktop browsers.</p>
+
+<p>Chrome 32+ on Android with <code>width=device-width</code> in the <a href="https://developer.mozilla.org/en-US/docs/Mobile/Viewport_meta_tag">viewport meta tag</a> doesn&rsquo;t have a 300ms delay, therefore listeners aren&rsquo;t attached.</p>
+
+<p>Same goes for Chrome on Android (all versions) with <code>user-scalable=no</code> in the viewport meta tag. But be aware that <code>user-scalable=no</code> also disables pinch zooming, which may be an accessibility concern.</p>
+
+<pre><code class="html">&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1.0, user-scalable=no&quot;&gt;
+</code></pre>
+
+<p>For IE10, you can use <code>-ms-touch-action: none</code> to disable double-tap-to-zoom on certain elements (like links and buttons) as described in <a href="http://blogs.msdn.com/b/askie/archive/2013/01/06/how-to-implement-the-ms-touch-action-none-property-to-disable-double-tap-zoom-on-touch-devices.aspx">this MSDN blog post</a>. For example:</p>
+
+<pre><code class="css">a, input, button {
+    -ms-touch-action: none !important;
+}
+</code></pre>
+
+<p>You&rsquo;ll then have no tap delay on those elements, without needing FastClick.</p>
+
+<h2>Usage</h2>
+
+<p>Include fastclick.js in your JavaScript bundle or add it to your HTML page like this:</p>
+
+<pre><code class="html">&lt;script type=&#39;application/javascript&#39; src=&#39;/path/to/fastclick.js&#39;&gt;&lt;/script&gt;
+</code></pre>
+
+<p>The script must be loaded prior to instantiating FastClick on any element of the page.</p>
+
+<p>To instantiate FastClick on the <code>body</code>, which is the recommended method of use:</p>
+
+<pre><code class="js">window.addEventListener(&#39;load&#39;, function() {
+    FastClick.attach(document.body);
+}, false);
+</code></pre>
+
+<p>Don&rsquo;t forget to add a <a href="https://developer.mozilla.org/en-US/docs/DOM/EventTarget.removeEventListener#Compatibility">shim</a> for <code>addEventListener</code> if you want to support IE8 and below.</p>
+
+<p>Otherwise, if you&rsquo;re using jQuery:</p>
+
+<pre><code class="js">$(function() {
+    FastClick.attach(document.body);
+});
+</code></pre>
+
+<p>If you&rsquo;re using Browserify or another CommonJS-style module system, the <code>FastClick.attach</code> function will be returned when you call <code>require(&#39;fastclick&#39;)</code>. As a result, the easiest way to use FastClick with these loaders is as follows:</p>
+
+<pre><code class="js">var attachFastClick = require(&#39;fastclick&#39;);
+attachFastClick(document.body);
+</code></pre>
+
+<h3>Minified</h3>
+
+<p>Run <code>make</code> to build a minified version of FastClick using the Closure Compiler REST API. The minified file is saved to <code>build/fastclick.min.js</code>.</p>
+
+<h3>AMD</h3>
+
+<p>FastClick has AMD (Asynchronous Module Definition) support. This allows it to be lazy-loaded with an AMD loader, such as <a href="http://requirejs.org/">RequireJS</a>.</p>
+
+<h3>Package managers</h3>
+
+<p>You can install FastClick using <a href="https://github.com/component/component">Component</a>, <a href="https://npmjs.org/package/fastclick">npm</a> or <a href="http://bower.io/">Bower</a>.</p>
+
+<p>For Ruby, there&rsquo;s a third-party gem called <a href="http://rubygems.org/gems/fastclick-rails">fastclick-rails</a>. For .NET there&rsquo;s a <a href="http://nuget.org/packages/FastClick">NuGet package</a>.</p>
+
+<h2>Advanced</h2>
+
+<h3>Ignore certain elements with <code>needsclick</code></h3>
+
+<p>Sometimes you need FastClick to ignore certain elements. You can do this easily by adding the <code>needsclick</code> class.
+<code>html
+&lt;a class=&quot;needsclick&quot;&gt;Ignored by FastClick&lt;/a&gt;
+</code></p>
+
+<h4>Use case 1: non-synthetic click required</h4>
+
+<p>Internally, FastClick uses <code>document.createEvent</code> to fire a synthetic <code>click</code> event as soon as <code>touchend</code> is fired by the browser. It then suppresses the additional <code>click</code> event created by the browser after that. In some cases, the non-synthetic <code>click</code> event created by the browser is required, as described in the <a href="http://ftlabs.github.com/fastclick/examples/focus.html">triggering focus example</a>.</p>
+
+<p>This is where the <code>needsclick</code> class comes in. Add the class to any element that requires a non-synthetic click.</p>
+
+<h4>Use case 2: Twitter Bootstrap 2.2.2 dropdowns</h4>
+
+<p>Another example of when to use the <code>needsclick</code> class is with dropdowns in Twitter Bootstrap 2.2.2. Bootstrap add its own <code>touchstart</code> listener for dropdowns, so you want to tell FastClick to ignore those. If you don&rsquo;t, touch devices will automatically close the dropdown as soon as it is clicked, because both FastClick and Bootstrap execute the synthetic click, one opens the dropdown, the second closes it immediately after.</p>
+
+<pre><code class="html">&lt;a class=&quot;dropdown-toggle needsclick&quot; data-toggle=&quot;dropdown&quot;&gt;Dropdown&lt;/a&gt;
+</code></pre>
+
+<h2>Examples</h2>
+
+<p>FastClick is designed to cope with many different browser oddities. Here are some examples to illustrate this:</p>
+
+<ul>
+<li><a href="http://ftlabs.github.com/fastclick/examples/layer.html">basic use</a> showing the increase in perceived responsiveness</li>
+<li><a href="http://ftlabs.github.com/fastclick/examples/focus.html">triggering focus</a> on an input element from a <code>click</code> handler</li>
+<li><a href="http://ftlabs.github.com/fastclick/examples/input.html">input element</a> which never receives clicks but gets fast focus</li>
+</ul>
+
+<h2>Tests</h2>
+
+<p>There are no automated tests. The files in <code>tests/</code> are manual reduced test cases. We&rsquo;ve had a think about how best to test these cases, but they tend to be very browser/device specific and sometimes subjective which means it&rsquo;s not so trivial to test.</p>
+
+<h2>Credits and collaboration</h2>
+
+<p>The lead developer of FastClick is <a href="http://twitter.com/rowanbeentje">Rowan Beentje</a> at FT Labs. This fork is currently maintained by <a href="http://twitter.com/mcaruanagalizia">Matthew Caruana Galizia</a>. All open source code released by FT Labs is licenced under the MIT licence. We welcome comments, feedback and suggestions.  Please feel free to raise an issue or pull request. Enjoy.</p>
+
+      </section>
+      <section id="sidebar" role="sidebar" class="large-12 small-12 columns">
+        <section class="profile">
+  <img class="th center margin-bottom" src="/assets/images/rossta.jpg?1445744800" />
+
+  <h5 class="profile-name">Ross Kaffenberger</h5>
+  <h6 class="subtle">New York, New York</h6>
+  <a href="https://twitter.com/rossta" class="twitter-follow-button" data-show-count="true">Follow @rossta</a>
+
+<script>
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+</script>
+
+</section>
+
+      </section>
+    </div>
+    <div id="zen">
+  <div class="row">
+    <div class="enlightenment large-12 columns"></div>
+  </div>
+</div>
+
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/pub/ross-kaffenberger/4/675/5b9">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/all.js?1445744805"></script>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

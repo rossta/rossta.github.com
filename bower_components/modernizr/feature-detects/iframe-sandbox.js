@@ -1,0 +1,1 @@
+Modernizr.addTest("sandbox","sandbox"in document.createElement("iframe"));

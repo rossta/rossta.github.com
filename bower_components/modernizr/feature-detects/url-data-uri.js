@@ -1,0 +1,1 @@
+!function(){var A=new Image;A.onerror=function(){Modernizr.addTest("datauri",function(){return!1})},A.onload=function(){Modernizr.addTest("datauri",function(){return 1==A.width&&1==A.height})},A.src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="}();

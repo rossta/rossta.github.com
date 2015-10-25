@@ -1,0 +1,1 @@
+Modernizr.addTest("blobconstructor",function(){try{return!!new Blob}catch(r){return!1}});

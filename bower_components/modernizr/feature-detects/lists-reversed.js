@@ -1,0 +1,1 @@
+Modernizr.addTest("olreversed","reversed"in document.createElement("ol"));

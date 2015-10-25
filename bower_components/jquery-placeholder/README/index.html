@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="The homepage of Ross Kaffenberger.">
+    <meta name="keywords" content="Ross Kaffenberger, software, software developer,
+    ruby, javascript, web development, startups">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/all.css?1445744797" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1445744814"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="right">
+      <li><a href="/blog">blog</a></li>
+      <li><a href="/about">about</a></li>
+      <li><a href="/projects">projects</a></li>
+      <li><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+        <h1>HTML5 Placeholder jQuery Plugin</h1>
+
+<h2>Demo &amp; Examples</h2>
+
+<p><a href="http://mathiasbynens.be/demo/placeholder">http://mathiasbynens.be/demo/placeholder</a></p>
+
+<h2>Example Usage</h2>
+
+<h3>HTML</h3>
+
+<pre><code class="html">&lt;input type=&quot;text&quot; name=&quot;name&quot; placeholder=&quot;e.g. John Doe&quot;&gt;
+&lt;input type=&quot;email&quot; name=&quot;email&quot; placeholder=&quot;e.g. address@example.ext&quot;&gt;
+&lt;input type=&quot;url&quot; name=&quot;url&quot; placeholder=&quot;e.g. http://mathiasbynens.be/&quot;&gt;
+&lt;input type=&quot;tel&quot; name=&quot;tel&quot; placeholder=&quot;e.g. +32 472 77 69 88&quot;&gt;
+&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;e.g. h4x0rpr00fz&quot;&gt;
+&lt;input type=&quot;search&quot; name=&quot;search&quot; placeholder=&quot;Search this site…&quot;&gt;
+&lt;textarea name=&quot;message&quot; placeholder=&quot;Your message goes here&quot;&gt;&lt;/textarea&gt;
+</code></pre>
+
+<h3>jQuery</h3>
+
+<p>Use the plugin as follows:</p>
+
+<pre><code class="js">$(&#39;input, textarea&#39;).placeholder();
+</code></pre>
+
+<p>You’ll still be able to use <code>jQuery#val()</code> to get and set the input values. If the element is currently showing a placeholder, <code>.val()</code> will return an empty string instead of the placeholder text, just like it does in browsers with a native <code>@placeholder</code> implementation. Calling <code>.val(&#39;&#39;)</code> to set an element’s value to the empty string will result in the placeholder text (re)appearing.</p>
+
+<h3>CSS</h3>
+
+<p>The plugin automatically adds <code>class=&quot;placeholder&quot;</code> to the elements who are currently showing their placeholder text. You can use this to style placeholder text differently:</p>
+
+<pre><code class="css">input, textarea { color: #000; }
+.placeholder { color: #aaa; }
+</code></pre>
+
+<p>I’d suggest sticking to the <code>#aaa</code> color for placeholder text, as it’s the default in most browsers that support <code>@placeholder</code>. If you really want to, though, you can <a href="http://stackoverflow.com/questions/2610497/change-an-inputs-html5-placeholder-color-with-css/2610741#2610741">style the placeholder text in some of the browsers that natively support it</a>.</p>
+
+<h2>Installation</h2>
+
+<p>You can install jquery-placeholder by using <a href="http://bower.io">Bower</a>.</p>
+
+<pre><code class="bash">bower install jquery-placeholder
+</code></pre>
+
+<h2>Notes</h2>
+
+<ul>
+<li>Requires jQuery 1.6+. For an older version of this plugin that works under jQuery 1.4.2+, see <a href="https://github.com/mathiasbynens/jquery-placeholder/tree/v1.8.7">v1.8.7</a>.</li>
+<li>Works in all A-grade browsers, including IE6.</li>
+<li>Automatically checks if the browser natively supports the HTML5 <code>placeholder</code> attribute for <code>input</code> and <code>textarea</code> elements. If this is the case, the plugin won’t do anything. If <code>@placeholder</code> is only supported for <code>input</code> elements, the plugin will leave those alone and apply to <code>textarea</code>s exclusively. (This is the case for Safari 4, Opera 11.00, and possibly other browsers.)</li>
+<li>Caches the results of its two feature tests in <code>jQuery.fn.placeholder.input</code> and <code>jQuery.fn.placeholder.textarea</code>. For example, if <code>@placeholder</code> is natively supported for <code>input</code> elements, <code>jQuery.fn.placeholder.input</code> will be <code>true</code>. After loading the plugin, you can re-use these properties in your own code.</li>
+<li><p>Makes sure it never causes duplicate IDs in your DOM, even in browsers that need an extra <code>input</code> element to fake <code>@placeholder</code> for password inputs. This means you can safely do stuff like:</p>
+
+<pre><code class="html">&lt;label for=&quot;bar&quot;&gt;Example label&lt;/label&gt;
+&lt;input type=&quot;password&quot; placeholder=&quot;foo&quot; id=&quot;bar&quot;&gt;
+</code></pre>
+
+<p>And the <code>&lt;label&gt;</code> will always point to the <code>&lt;input&gt;</code> element you’d expect. Also, all CSS styles based on the ID will just work™.</p></li>
+</ul>
+
+<h2>License</h2>
+
+<p>This plugin is available under <a href="http://mths.be/mit">the MIT license</a>.</p>
+
+<h2>Thanks to…</h2>
+
+<ul>
+<li><a href="http://paulirish.com/">Paul Irish</a> for his inspiring snippet in <a href="http://jquery14.com/day-05/jquery-1-4-hawtness-1-with-paul-irish">jQuery 1.4 Hawtness #1</a></li>
+<li>everyone from <a href="http://webchat.freenode.net/?channels=jquery">#jquery</a> for the tips, ideas and patches</li>
+<li>temp01 for his major contributions</li>
+<li>anyone who <a href="https://github.com/mathiasbynens/jquery-placeholder/contributors">contributed a patch</a> or <a href="https://github.com/mathiasbynens/jquery-placeholder/issues">made a helpful suggestion</a></li>
+</ul>
+
+<p><em>– <a href="http://mathiasbynens.be/">Mathias</a></em></p>
+
+      </section>
+      <section id="sidebar" role="sidebar" class="large-12 small-12 columns">
+        <section class="profile">
+  <img class="th center margin-bottom" src="/assets/images/rossta.jpg?1445744800" />
+
+  <h5 class="profile-name">Ross Kaffenberger</h5>
+  <h6 class="subtle">New York, New York</h6>
+  <a href="https://twitter.com/rossta" class="twitter-follow-button" data-show-count="true">Follow @rossta</a>
+
+<script>
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+</script>
+
+</section>
+
+      </section>
+    </div>
+    <div id="zen">
+  <div class="row">
+    <div class="enlightenment large-12 columns"></div>
+  </div>
+</div>
+
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/pub/ross-kaffenberger/4/675/5b9">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/all.js?1445744805"></script>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

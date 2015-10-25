@@ -1,0 +1,1 @@
+Modernizr.addTest("webintents",function(){return!!Modernizr.prefixed("startActivity",navigator)});

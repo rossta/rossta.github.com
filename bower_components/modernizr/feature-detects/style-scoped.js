@@ -1,0 +1,1 @@
+Modernizr.addTest("stylescoped","scoped"in document.createElement("style"));
