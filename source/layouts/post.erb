@@ -20,13 +20,15 @@
 
       <h2><small>Published on <%= current_article.date.strftime('%b %e, %Y') %></small></h2>
     </article>
-    <section class="signup-form">
-      <%= partial "layouts/signup" %>
-    </section>
     <% if build? %>
       <section class="comments">
         <%= partial "layouts/current_article_comments" %>
       </section>
     <% end %>
   </section>
+  <br /><br />
+  <section class="signup-form">
+    <%= partial "layouts/signup" %>
+  </section>
+  <br /><br />
 <% end %>
