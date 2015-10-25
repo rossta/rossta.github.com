@@ -1,5 +1,5 @@
-//= require vendor/jquery
-//= require vendor/jquery.cookie
+//= require foundation/js/vendor/jquery
+//= require foundation/js/vendor/jquery.cookie
 //= require foundation
 // require foundation/js/foundation/foundation.abide
 // require foundation/js/foundation/foundation.accordion
@@ -14,7 +14,7 @@
 // require foundation/js/foundation/foundation.reveal
 // require foundation/js/foundation/foundation.tab
 // require foundation/js/foundation/foundation.tooltip
-//= require foundation/foundation.topbar
+//= require foundation/js/foundation/foundation.topbar
 //= require highlightjs/highlight.pack
 
 //= require zen

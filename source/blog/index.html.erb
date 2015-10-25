@@ -3,6 +3,10 @@ pageable: true
 per_page: 5
 ---
 <% content_for(:section) { 'Blog' } %>
+
+<h1>Articles</h1>
+
+<br/>
 <section id="blog" class="index-posts">
   <% blog.articles.each do |article| %>
     <article class="index-post">

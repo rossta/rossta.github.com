@@ -92,6 +92,10 @@ end
 after_configuration do
   @bower_config = JSON.parse(IO.read("#{root}/.bowerrc"))
   sprockets.append_path File.join(root, @bower_config["directory"]).tap { |f| puts "file_path #{f}"}
+
+  sprockets.import_asset "foundation/js/vendor/modernizr.js"
+  sprockets.import_asset "foundation/js/vendor/jquery.js"
+  sprockets.import_asset "foundation/js/vendor/jquery.cookie.js"
 end
 
 ###

@@ -1,1 +1,1 @@
-//= require vendor/modernizr
+//= require foundation/js/vendor/modernizr
