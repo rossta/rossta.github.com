@@ -6,13 +6,38 @@ layout: page
 
 <% content_for(:title) { 'Projects' } %>
 
+# Projects
+
+Check out selected side projects and free open source software.
+
+<br/>
+* * *
+<br/>
+
+###[Tacokit.rb](https://github.com/rossta/tacokit.rb)
+
+Ruby toolkit for the [Trello API](https://developer.trello.com)... a work-in-progress. Design and philosophy inspired by [ocktokit.rb](https://gitbhub.com/octokit/octokit.rb). I love using [Trello](https://trello.com) almost everyday for work and personal stuff - which means there's a treasure trove of data waiting to be unlocked. The `Tacokit` gem is a simple ruby interface. It's well-tested and (on its way) to being well-documented and easy to use by Rubyists.
+
+`$ gem install tacokit`
+
+[Source code on github](https://github.com/rossta/tacokit)
+
+![Taco][taco]
+[taco]: http://cl.ly/image/2p1x3K1X160b/taco.png
+
+<br/>
+* * *
+<br/>
+
 ###[OpenSesame][sesg]
 
 [OpenSesame][sesg] is a [Warden][ward] strategy for providing "walled garden" authentication for access to Rack-based applications via Omniauth. For example, your company has internal apps and/or staging enviroments for multiple projects and you want something better than HTTP basic auth. The intent is protect the visibility of your app from the out
 
+`$ gem install opensesame`
+
 [Source code on github][sesg]
 
-[![][23]][sesg]
+<%= link_to image_tag("screenshots/screenshot-opensesame.png"), "https://rossta.net/opensesame" %>
 
 <br/>
 * * *
@@ -20,7 +45,9 @@ layout: page
 
 ###[LionelRichie][liog]
 
-LionelRichie is a script for exporting Trello data to Google Docs.
+LionelRichie is a script for exporting Trello data to Google Docs. Written in ruby, it provides a DSL for mapping data from a Trello board to Google spreadsheets cells. It can be installed via rubygems:
+
+`$ gem install lionel_richie`
 
 [Source code on github][liog]
 
@@ -30,7 +57,7 @@ LionelRichie is a script for exporting Trello data to Google Docs.
 
 ###[zenkaffe][zens]
 
-A simple API for inspiration that provides the dynamic snippets in the banner of this blog. Built on [node.js][node]
+A simple API for inspiration that provides the dynamic snippets in the banner of this blog. Built on [node.js][node], [express](http://expressjs.com/), [passport](http://passportjs.org/), and [mongoose](http://mongoosejs.com/).
 
 [Source code on github][zeng]
 
@@ -44,7 +71,7 @@ A visualization project: represents a twitter user's tweeting history on a calen
 
 [Source code on Github][opti]
 
-[![][18]][19]
+<%= link_to image_tag("screenshots/screenshot-optical.png"), "https://opticalfuzz.herokuapp.com" %>
 
 <br/>
 * * *
@@ -52,7 +79,9 @@ A visualization project: represents a twitter user's tweeting history on a calen
 
 ###[seymour][seyp]
 
-A Ruby gem for distributing activity items to Redis-backed activity feeds in a Rails application.
+A Ruby gem for distributing activity items to Redis-backed activity feeds in a Rails application. Abstractions are provided to make it easy to declare "recipients" of a given event and how these activities should be rendered. To install:
+
+`$ gem install seymour`
 
 [Source code on github][seyg]
 
@@ -68,7 +97,8 @@ This project is particularly exciting to me as it leverages the HTML5 WebSocket 
 
 [Source code on Github][kill]
 
-[![][7]][8]
+<%= link_to image_tag("screenshots/screenshot-sudokill.png", alt: "Sudokill: Sudoku's not a one player game anymore"),
+  "http://playsudokill.com" %>
 
 <br/>
 * * *
@@ -80,7 +110,7 @@ A drag and drop photo upload for [weplay.com](http://weplay.com) built on with [
 
 [Source code on Github][drop]
 
-[![][20]][drop]
+<%= image_tag "screenshots/screenshot-dropit.png" %>
 
 <br/>
 * * *
@@ -90,7 +120,7 @@ A drag and drop photo upload for [weplay.com](http://weplay.com) built on with [
 
 My friend Brenn got me into running not long after moving to New York. We’re both lifelong lovers of sport and we’ve shared many stories of athletic adventures and mishaps. [runningontilt][4] was born out of the desire to share our own sports stories with the world. I build, design and maintain the site, while Brenn does most of the podcasting. This site is formerly known as *turfcasts*.
 
-[![][3]][4]
+<%= image_tag "screenshots/screenshot-runningontilt.png", alt: "Running on Tilt" %>
 
 <br/>
 * * *
@@ -104,7 +134,9 @@ Tools: Rails 3, mysql, apache, passenger, capistrano, jQuery, rspec, cucumber, c
 
 [Source code on Github][ling]
 
-[![][5]][6]
+<%= link_to image_tag("screenshots/screenshot-terraling.png",
+                      alt: "Terraling: searchable database of the world's languages"),
+                      "http://terraling.com" %>
 
 <br/>
 * * *
@@ -116,7 +148,7 @@ In August 2010, I created a simple in-browser PowerPoint-like application as an 
 
 [Source code on Github][soap]
 
-[![][15]][10]
+<%= link_to image_tag("screenshots/screenshot-soapbox.png"), "https://rossta.net/soapbox" %>
 
 <br/>
 * * *
@@ -146,27 +178,20 @@ A few years back, I was asked to talk about being a software engineer for career
 * * *
 <br/>
 
- [3]: /images/screenshots/screenshot-runningontilt.png "Amateur athletes tell their stories"
  [4]: http://www.runningontilt.com
- [5]: /images/screenshots/screenshot-terraling.png "Terraling: searchable database of the world's languages"
  [6]: http://terraling.com/
- [7]: /images/screenshots/screenshot-sudokill.png "Sudokill: Sudoku's not a one player game anymore"
  [8]: http://playsudokill.com
- [9]: http://rossta.github.com/soapbox/
+ [9]: https://rossta.net/soapbox/
  [10]: http://www.alistapart.com/
  [11]: http://10k.aneventapart.com/1/Entry/361
  [12]: https://github.com/rossta/map_ready
  [13]: http://github.com/weplay/supersized
  [14]: http://github.com/rossta/heuristics
- [15]: /images/screenshots/screenshot-soapbox.png
  [16]: http://jsdelegate.heroku.com
  [17]: /playground
- [18]: /images/screenshots/screenshot-optical.png
  [19]: http://opticalfuzz.herokuapp.com
- [20]: /images/screenshots/screenshot-dropit.png
  [21]: http://weplay-dropit.herokuapp.com
  [22]: http://www.sinatrarb.com
- [23]: /images/screenshots/screenshot-opensesame.png
 
  [drop]: https://github.com/rossta/dropit
  [ling]: https://github.com/linguisticexplorer/Linguistic-Explorer
@@ -176,7 +201,7 @@ A few years back, I was asked to talk about being a software engineer for career
  [zens]: https://zenkaffe.herokuapp.com/says
  [zeng]: https://github.com/rossta/zenkaffe
  [seyg]: https://github.com/rossta/seymour
- [seyp]: https://rossta.github.com/seymour
+ [seyp]: https://rossta.net/seymour/
  [node]: http://nodejs.org/
  [sesg]: https://rossta.net/opensesame/
  [ward]: https://github.com/hassox/warden

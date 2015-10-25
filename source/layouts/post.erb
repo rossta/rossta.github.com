@@ -1,6 +1,9 @@
 <% wrap_layout :layout do %>
   <% content_for(:title) { current_article.title } %>
   <% content_for(:section) { 'I write about things' } %>
+  <% title current_article.title %>
+  <% description current_page.data.alt_title %>
+  <% keywords current_page.data.tags.join(', ') %>
   <section id="blog">
     <article class="post">
       <header>

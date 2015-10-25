@@ -1,17 +1,8 @@
-preferred_syntax = :scss
-
 activate :livereload
 activate :directory_indexes
+activate :meta_tags
 
 # Time.zone = "UTC"
-
-ready do
-  sprockets.append_path File.join root, 'bower_components'
-  sprockets.append_path File.join root, 'bower_components/foundation/scss'
-  sprockets.append_path File.join root, 'bower_components/foundation/js'
-  sprockets.append_path File.join root, 'bower_components/highlightjs'
-  sprockets.append_path File.join root, 'bower_components/highlightjs'
-end
 
 activate :blog do |blog|
   blog.prefix = "blog"
@@ -34,14 +25,6 @@ activate :blog do |blog|
   # blog.page_link = "page/:num"
 end
 
-page "/feed.xml", :layout => false
-
-set :css_dir, 'stylesheets'
-
-set :js_dir, 'javascripts'
-
-set :images_dir, 'images'
-
 set :markdown_engine, :redcarpet
 set :markdown, :layout_engine => :erb,
           :fenced_code_blocks => true,
@@ -49,13 +32,17 @@ set :markdown, :layout_engine => :erb,
           :smartypants => true,
           :lax_html_blocks => true
 
+set :css_dir, 'assets/stylesheets'
+set :js_dir, 'assets/javascripts'
+set :images_dir, 'assets/images'
+
 # Build-specific configuration
 configure :build do
   activate :minify_css
   activate :minify_javascript
 
   # Enable cache buster
-  # activate :cache_buster
+  activate :cache_buster
 
   # Use relative URLs
   # activate :relative_assets
@@ -77,9 +64,6 @@ configure :development do
   set :mailchimp_form_id,   'a57e354058'
 end
 
-configure :build do
-end
-
 ###
 # Compass
 ###
@@ -93,6 +77,23 @@ end
 #   config.output_style = :compact
 # end
 
+compass_config do |config|
+  # Require any additional compass plugins here.
+  config.add_import_path "bower_components/foundation/scss"
+
+  # Set this to the root of your project when deployed:
+  config.http_path = "/"
+  config.css_dir = "stylesheets"
+  config.sass_dir = "stylesheets"
+  config.images_dir = "images"
+  config.javascripts_dir = "javascripts"
+end
+
+after_configuration do
+  @bower_config = JSON.parse(IO.read("#{root}/.bowerrc"))
+  sprockets.append_path File.join(root, @bower_config["directory"]).tap { |f| puts "file_path #{f}"}
+end
+
 ###
 # Page options, layouts, aliases and proxies
 ###
@@ -102,6 +103,8 @@ end
 # With no layout
 page "/404.html", :layout => false
 page "/playground.html", :layout => false
+page "/feed.xml", :layout => false
+
 #
 # With alternative layout
 # page "/path/to/file.html", :layout => :otherlayout
@@ -132,13 +135,13 @@ page "/playground.html", :layout => false
 
 helpers do
   def title_tag
-    [].tap do |names|
-      names << yield_content(:title)
-      names << "Ross Kaffenberger"
-    end.compact.reject(&:blank?).join(" | ")
+    # [].tap do |names|
+    #   names << page_title || ""
+    #   names << "Ross Kaffenberger"
+    # end.compact.reject(&:blank?).join(" | ")
   end
 
-  def title
+  def page_title
     yield_content(:title)
   end
 
@@ -158,4 +161,3 @@ helpers do
     "//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=#{settings.mailchimp_form_id}"
   end
 end
-

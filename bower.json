@@ -1,7 +1,7 @@
 {
   "name": "rossta.net",
   "dependencies": {
-    "foundation": "~5.1.0",
+    "foundation": "zurb/bower-foundation",
     "highlightjs": "~8.3.0"
   }
 }
