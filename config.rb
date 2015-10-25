@@ -139,10 +139,7 @@ page "/feed.xml", :layout => false
 
 helpers do
   def title_tag
-    # [].tap do |names|
-    #   names << page_title || ""
-    #   names << "Ross Kaffenberger"
-    # end.compact.reject(&:blank?).join(" | ")
+    "Ross Kaffenberger"
   end
 
   def page_title
