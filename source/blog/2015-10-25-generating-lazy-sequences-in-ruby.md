@@ -377,12 +377,32 @@ puts pascal.rows.first(5).map(&:inspect)
 # [1, 4, 6, 4, 1]
 ```
 
+We can write a custom enumerator for the sum of squares where we want to
+iterate over natural numbers and emit the sum of all previous squares.
+
+```ruby
 Enumerator.new do |y|
-  n = 1
-  s = n ** 2
+  n = s = 0
   loop do
     y << s
     n += 1
     s += n ** 2
   end
 end
+```
+
+or with the [derived formula](http://www.trans4mind.com/personal_development/mathematics/series/sumNaturalSquares.htm):
+
+```ruby
+Enumerator.new do |y|
+  n = s = 0
+  loop do
+    y << s
+    n += 1
+    s = n * (n + 1) * (2 * n + 1)) / 6
+  end
+end
+```
+
+So, infinite sequences are great and may help on Project Euler or an interview,
+but we also have work to do.
