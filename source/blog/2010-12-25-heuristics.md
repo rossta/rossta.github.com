@@ -1,6 +1,6 @@
 ---
 title: Heuristics
-author: rossta
+author: Ross Kaffenberger
 permalink: /2010/12/heuristics/
 tags:
   - Code

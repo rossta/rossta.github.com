@@ -1,6 +1,6 @@
 ---
 title: Why I Ditched Wordpress for Github
-author: rossta
+author: Ross Kaffenberger
 tags:
   - Life
 ---

@@ -1,6 +1,6 @@
 ---
 title: When Your Fat Models Need to Go on a Diet, Part 2
-author: rossta
+author: Ross Kaffenberger
 permalink: /2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/
 tags:
   - Code

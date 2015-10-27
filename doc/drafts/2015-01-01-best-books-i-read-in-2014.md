@@ -1,7 +1,7 @@
 ---
 title: Best Books I read in 2014
-alt_title: Bite-sized book reports
-author: rossta
+summary: Bite-sized book reports
+author: Ross Kaffenberger
 published: false
 ---
 

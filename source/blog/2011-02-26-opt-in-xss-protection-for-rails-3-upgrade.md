@@ -1,6 +1,6 @@
 ---
 title: Opt-in XSS protection for Rails 3 upgrade
-author: rossta
+author: Ross Kaffenberger
 permalink: /2011/02/opt-in-xss-protection-for-rails-3-upgrade/
 tags:
   - Code

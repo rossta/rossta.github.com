@@ -1,6 +1,6 @@
 ---
 title: Create and Deploy an Ember App in 5 Minutes
-author: rossta
+author: Ross Kaffenberger
 permalink: /2013/03/create-and-deploy-an-ember-app-in-5-minutes/
 tags:
   - Code

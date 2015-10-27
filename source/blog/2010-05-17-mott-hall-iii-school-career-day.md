@@ -1,6 +1,6 @@
 ---
 title: Mott Hall III School Career Day
-author: rossta
+author: Ross Kaffenberger
 permalink: /2010/05/mott-hall-iii-school-career-day/
 tags:
   - Code

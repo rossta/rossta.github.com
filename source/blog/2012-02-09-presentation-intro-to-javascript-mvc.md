@@ -1,6 +1,6 @@
 ---
 title: Presentation Intro to Javascript MVC
-author: rossta
+author: Ross Kaffenberger
 permalink: /2012/02/presentation-intro-to-javascript-mvc/
 tags:
   - Code

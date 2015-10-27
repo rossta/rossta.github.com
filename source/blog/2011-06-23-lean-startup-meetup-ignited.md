@@ -1,6 +1,6 @@
 ---
 title: Lean Startup Meetup Ignited
-author: rossta
+author: Ross Kaffenberger
 permalink: /2011/06/lean-startup-meetup-ignited/
 tags:
   - Code

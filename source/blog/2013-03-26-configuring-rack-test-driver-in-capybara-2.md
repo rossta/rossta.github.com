@@ -1,6 +1,6 @@
 ---
 title: Configuring Rack Test Driver in Capybara 2
-author: rossta
+author: Ross Kaffenberger
 tags:
   - Code
 ---

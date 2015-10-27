@@ -1,6 +1,6 @@
 ---
 title: Hello World
-author: rossta
+author: Ross Kaffenberger
 permalink: /2010/01/hello-world/
 tags:
   - Life

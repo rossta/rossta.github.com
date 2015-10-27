@@ -1,6 +1,6 @@
 ---
 title: Push Data to Rails Client
-author: rossta
+author: Ross Kaffenberger
 published: false
 ---
 

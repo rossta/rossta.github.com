@@ -1,6 +1,6 @@
 ---
 title: Just-in-Time CSS
-author: rossta
+author: Ross Kaffenberger
 permalink: /2010/02/just-in-time-css/
 tags:
   - Code

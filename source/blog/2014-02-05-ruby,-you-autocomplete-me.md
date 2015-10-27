@@ -1,7 +1,7 @@
 ---
 title: Ruby, You Autocomplete Me
-author: rossta
-alt_title: Hacking on a smarter ruby console
+author: Ross Kaffenberger
+summary: Hacking on a smarter ruby console
 published: true
 tags:
   - Code

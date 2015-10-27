@@ -14,8 +14,8 @@ per_page: 5
         <h4>
           <%= link_to article.title, article %>
         </h4>
-        <% if article.data.alt_title %>
-          <p class="alt-title subtle"><%= article.data.alt_title %></p>
+        <% if article.data.summary %>
+          <p class="alt-title subtle"><%= article.data.summary %></p>
         <% end %>
       </header>
     </article>

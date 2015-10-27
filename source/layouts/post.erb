@@ -2,21 +2,23 @@
   <% content_for(:title) { current_article.title } %>
   <% content_for(:section) { 'I write about things' } %>
   <% title current_article.title %>
-  <% description current_page.data.alt_title %>
-  <% keywords current_page.data.tags.join(', ') %>
+  <% description current_page.data.description %>
+  <% keywords (current_page.data.tags || []).join(', ') %>
   <section id="blog">
     <article class="post">
       <header>
         <h2>
           <%= current_article.title %>
-          <% if current_page.data.alt_title %>
+          <% if current_page.data.summary %>
           <br />
-          <small><%= current_page.data.alt_title %></small>
+          <small><%= current_page.data.summary %></small>
           <% end %>
         </h2>
       </header>
 
       <%= yield %>
+
+      <br />
 
       <h2><small>Published on <%= current_article.date.strftime('%b %e, %Y') %></small></h2>
     </article>

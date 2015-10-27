@@ -1,6 +1,6 @@
 ---
 title: Toggle Rails Caching in RSpec Suites
-author: rossta
+author: Ross Kaffenberger
 permalink: /2011/12/toggle-rails-caching-in-RSpec-suite/
 tags:
   - Code

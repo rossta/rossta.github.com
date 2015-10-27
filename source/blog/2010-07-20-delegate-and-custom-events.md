@@ -1,6 +1,6 @@
 ---
 title: $.delegate and Custom Events
-author: rossta
+author: Ross Kaffenberger
 permalink: /2010/07/delegate-and-custom-events/
 tags:
   - Code

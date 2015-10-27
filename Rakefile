@@ -89,7 +89,7 @@ namespace :article do
       f.write <<-META
 ---
 title: #{title}
-author: rossta
+author: Ross Kaffenberger
 published: false
 ---
 META
