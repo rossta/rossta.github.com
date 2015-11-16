@@ -2,6 +2,30 @@ activate :livereload
 activate :directory_indexes
 activate :meta_tags
 
+# Configure Babel
+require 'babel'
+::Babel.options do |o|
+  o[:loose] = %w{es6.classes es6.modules} # loose mode enables better IE <= 10 compatibility
+end
+
+# Output .js.es6 files as .js
+def remap_es6_files(dir)
+  Dir.foreach(File.join(config[:source], dir)) do |file|
+    next if file == '.' or file == '..'
+
+    path = File.join(dir, file)
+    if File.directory?(File.join(config[:source], path))
+      remap_es6_files(path)
+    elsif file =~ /\.es6$/
+      proxy path.gsub(/\.es6$/, ''), path
+      ignore path
+    elsif file =~ /\.es6\.erb$/
+      proxy path.gsub(/\.es6\.erb$/, ''), path.gsub(/\.erb$/, '')
+      ignore path
+    end
+  end
+end
+
 # Time.zone = "UTC"
 
 activate :blog do |blog|
@@ -35,6 +59,8 @@ set :markdown, :layout_engine => :erb,
 set :css_dir, 'assets/stylesheets'
 set :js_dir, 'assets/javascripts'
 set :images_dir, 'assets/images'
+
+remap_es6_files(config[:js_dir])
 
 # Build-specific configuration
 configure :build do
