@@ -1,12 +1,14 @@
 const Project = React.createClass({
   descriptionHtml() {
+    if (!this.props.description) { return { __html: ""}; }
     return { __html: marked(this.props.description) }
   },
 
   render() {
     return (
       <div>
-        <h3><a href="{this.props.url}">{this.props.name}</a></h3>
+        <hr /><br />
+        <h2><a href="{this.props.url}">{this.props.name}</a></h2>
         <div><img src={this.props.thumbnailUrl} /></div>
         <div dangerouslySetInnerHTML={this.descriptionHtml()} />
       </div>
@@ -18,6 +20,7 @@ const Portfolio = React.createClass({
   getInitialState() {
     return { software: [] }
   },
+
   componentDidMount() {
     const self = this;
     $.get('http://api.devpost.dev/users/rossta/software')
@@ -28,11 +31,11 @@ const Portfolio = React.createClass({
   },
 
   render() {
-    const software = this.state.software;
+    const software = this.state.software.filter(project => project.name.match(/Lionel/));
     return (
       <div>
         <h1>Projects</h1>
-        <p>Check out selected side projects and free open source software.</p>
+        <p>Check out selected side projects and free open source software of mine, <strong>powered by Devpost</strong>.</p>
         <p><br/></p>
         {
           software.map((project, i) => {
