@@ -168,7 +168,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/2014-02-05-ruby,-you-autocomplete-me.html</loc>
+    <loc>https://rossta.net/blog/2014-02-05-ruby-you-autocomplete-me.html</loc>
     <lastmod>2015-11-17T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -205,24 +205,6 @@
   </url>
   <url>
     <loc>https://rossta.net/bower_components/highlightjs/README.html</loc>
-    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/jquery-placeholder/demo.html</loc>
-    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/jquery-placeholder/README.html</loc>
-    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/jquery-placeholder/tests/index.html</loc>
     <lastmod>2015-11-17T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
