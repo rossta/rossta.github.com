@@ -9,7 +9,7 @@ tags:
   - Code
   - Ruby
 ---
-I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first to Ruby as a full-time developer, I rediscovered that joy.
+I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first learned Ruby as a full-time developer, I rediscovered that joy.
 
 A big reason for my love of Ruby is the [Enumerable][1] module because of its simple, functional style and ability to be combined and chained to form useful constructs - a lot like Legos.
 
