@@ -72,6 +72,12 @@
 		<array>
 			<string>2015-01-01-best-books-i-read-in-2014.md</string>
 		</array>
+		<array>
+			<string>2015-10-25-generating-lazy-sequences-in-ruby.md</string>
+		</array>
+		<array>
+			<string>enumerable-ruby.md</string>
+		</array>
 	</array>
 </dict>
 </plist>
