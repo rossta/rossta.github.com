@@ -18,8 +18,8 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first to Ruby as a full-time developer, I rediscovered that joy.&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first to Ruby as a full-time developer, I rediscovered that joy.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first learned Ruby as a full-time developer, I rediscovered that...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first learned Ruby as a full-time developer, I rediscovered that joy.&lt;/p&gt;
 
 &lt;p&gt;A big reason for my love of Ruby is the &lt;a href="http://ruby-doc.org/core-2.2.3/Enumerable.html"&gt;Enumerable&lt;/a&gt; module because of its simple, functional style and ability to be combined and chained to form useful constructs - a lot like Legos.&lt;/p&gt;
 
