@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 permalink: /2013/03/create-and-deploy-an-ember-app-in-5-minutes/
 tags:
   - Code
-- Javascript
+  - Javascript
 ---
 The [ember-rails][1] gem is a great way to get started with [Ember.js][2] in a Rails project. Another approach is to create and serve an Ember app on a static webpage, totally decoupled from the backend environment. It would be great to have some of the modern front-end development tools we get with something like Rails in a static web environment. A great project to consider for this is [Middleman][3].
 

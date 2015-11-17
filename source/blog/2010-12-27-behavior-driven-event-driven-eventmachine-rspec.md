@@ -5,7 +5,7 @@ summary: A walkthrough example of testing a server-client socket connection thro
 permalink: /2010/12/behavior-driven-event-driven-eventmachine-rspec/
 tags:
   - Ruby
-- RSpec
+  - RSpec
 ---
 With all the hubbub around [node.js][1] lately, it’s been easy to forget established event-driven server-side processing solutions in Ruby. One option is [eventmachine][2], which I recently used to develop a multi-player online sudoku game, [Sudokill][3], for my Heuristics class at NYU.
 
@@ -51,17 +51,11 @@ We’ll also use eventmachine’s [connect][7] method to make the client socket 
 
 To take the place of a player client in the test, I’ve borrowed FakeSocketClient (which subclasses EventMachine::Connection) from the em-websocket test suite and defined it in my spec\_helper.rb. The fake client exposes attr\_accessors onopen, omessage and onclose that we’ll treat like callbacks in the test.
 
-
-
 We’ll assign a proc to the #onopen callback in FakeSocketClient. This proc will be triggered the first time the client socket receives a message. Since we want to the server to send a message when the connection is established, we expect this message to be “READY”. In addition, we’ll assert that there is one player added to the server’s list of players. Then we stop the event machine.
-
-
 
 The key for making our rspec assertions: the socket connection between the server and client is accepted after the rest of the code in the EM.run block has been called. The instance FakeSocketClient receives #initialize and #post\_init when EM.connect is called, but then the context returns to our test: we can now assign procs to FakeSocketClient’s onopen, onmessage and onclose callbacks as needed.
 
 The #start method of our server is straightforward. It must start its own event loop and call EM.start\_server previously discussed:
-
-
 
 Other tests may include multiple client connections where we may need to assert that different messages like “YOUR TURN” and “WAIT YOUR TURN” are sent to the correct players.
 

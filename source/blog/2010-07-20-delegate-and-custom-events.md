@@ -5,7 +5,7 @@ summary: Use event delegation to attach javascript callbacks
 permalink: /2010/07/delegate-and-custom-events/
 tags:
   - Code
-- Javascript
+  - Javascript
 ---
 Sharing team photos and video is central to [Weplay][1] and my team has been working hard recently to make some dramatic improvements to the media gallery experience.
 

@@ -13,9 +13,7 @@ One problem with the single CSS request approach is we often send CSS rules that
 Let’s say we have a lightbox to display gallery images that is only rendered when a user clicks on a page link. The CSS rules needed to render the box shouldn’t have to be loaded during the initial request. We can pull these out into a separate stylesheet and load it on demand with javascript.
 \`
 
-
 &nbsp;&nbsp;Demo
-
 
 &nbsp;&nbsp;Hello World
 &nbsp;&nbsp;
@@ -29,7 +27,6 @@ Let’s say we have a lightbox to display gallery images that is only rendered w
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this;
 &nbsp;&nbsp;&nbsp;&nbsp;}
 &nbsp;&nbsp;
-
 
 \`
 

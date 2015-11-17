@@ -5,7 +5,7 @@ summary: Hacking on a smarter ruby console
 published: true
 tags:
   - Code
-- Ruby
+  - Ruby
 ---
 
 My team recently added a tagging feature to our web app. As the user types in

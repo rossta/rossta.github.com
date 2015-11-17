@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 summary: More thoughts on refactoring large model classes in Rails
 permalink: /2011/10/when-your-fat-models-need-to-go-on-a-diet-part-2/
 tags:
-- Ruby
-- Rails
+  - Ruby
+  - Rails
 ---
 In [part 1][1] of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As [Ariel Valentin][2] pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.
 

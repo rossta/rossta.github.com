@@ -4,8 +4,9 @@ author: Ross Kaffenberger
 summary: Using Ruby's Enumerable module and Enumerator class
 description: You may not be using enough of the Enumerable API or doing enough with Enumerator.
 published: true
-permalink: /2015/11/enumerable-ruby/
+permalink: /2015/11/ruby-enumerable/
 tags:
+  - Code
   - Ruby
 ---
 I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first to Ruby as a full-time developer, I rediscovered that joy.

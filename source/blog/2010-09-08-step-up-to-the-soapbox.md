@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 summary: Entry in the 10K Apart Contest to build a web-based app in less than 10kb of javascript
 tags:
   - Code
-- Javascript
+  - Javascript
 ---
 Recently, I cobbled together an entry for the [10K Apart Contest][1]. The contest encouraged participants to build an entirely front-end web application in HTML/CSS/Javascript in under 10 kb of total assets, not including some allowable third party libraries such as jQuery or Prototype. Entries must also leverage HTML5 features, some of which include local storage, the canvas API, and web workers.
 

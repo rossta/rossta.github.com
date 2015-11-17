@@ -5,8 +5,8 @@ thoughts: An RSpec helper for testing Rails caching in acceptance tests
 permalink: /2011/12/toggle-rails-caching-in-RSpec-suite/
 tags:
   - Code
-- Ruby
-- Rails
+  - Ruby
+  - Rails
 ---
 A useful feature of RSpec is the ability to pass metadata to tests and suites. You may already be familiar with examples in [Capybara][1], such as passing `:js` to enable the javascript driver for a given spec. You may reach a point in the maturity of your test suite when it makes sense add your own configuration options.
 

@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 summary: Helpful techniques for serving static assets from a website
 tags:
   - Code
-- Web
+  - Web
 ---
 
 Check out my contribution to [Speed Awareness Month][1] to help make the web a faster place where I [share tips to improve delivery of static assets][2], like images, stylesheets, and javascript files, by serving from a cookie-free domain to reduce bandwidth and levaraging CDN pull zones to improve delivery times.

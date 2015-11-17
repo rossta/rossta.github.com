@@ -5,7 +5,7 @@ summary: A useful technique for upgrading ERB templates in Rails 3
 permalink: /2011/02/opt-in-xss-protection-for-rails-3-upgrade/
 tags:
   - Code
-  - Work
+  - Ruby
 ---
 When I’m really hungry, all I want is a Chipotle burrito. It seems like a good idea – it’s big, it tastes good and it’s right there across the street! It’s not long before I regret taking on that much food in one sitting. So it goes for upgrading [Weplay][1] to Rails 3.
 
