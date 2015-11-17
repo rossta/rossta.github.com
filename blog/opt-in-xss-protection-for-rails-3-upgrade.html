@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Opt-in XSS protection for Rails 3 upgrade | rossta.net</title>
 <meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta name="keywords" content="Code, Work" />
+<meta name="keywords" content="Code, Ruby" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -57,7 +57,7 @@
 
       <p>When I’m really hungry, all I want is a Chipotle burrito. It seems like a good idea – it’s big, it tastes good and it’s right there across the street! It’s not long before I regret taking on that much food in one sitting. So it goes for upgrading <a href="http://www.weplay.com">Weplay</a> to Rails 3.</p>
 
-<p>A fundamental shift in Rails 3 is html escaping by default. A number of posts describe the need for this change, an important tool against cross-site scripting (XSS) attacks. Rather than rely on developers to escape user content where needed, all strings that don’t originate from Rails (link_to, form_for, etc.) are treated as unsafe. This is a good thing. Unfortunately, for most running Rails 2 apps, automatically html-escaping our views without adjustments results in a hot steaming pile of onscreen view-source dung.</p>
+<p>A fundamental shift in Rails 3 is html escaping by default. A number of posts describe the need for this change, an important tool against cross-site scripting (XSS) attacks. Rather than rely on developers to escape user content where needed, all strings that don’t originate from Rails (link<em>to, form</em>for, etc.) are treated as unsafe. This is a good thing. Unfortunately, for most running Rails 2 apps, automatically html-escaping our views without adjustments results in a hot steaming pile of onscreen view-source dung.</p>
 
 <p>This is exactly what you see the first time you install the recommended <a href="https://github.com/rails/rails_xss">rails_xss</a> plugin to provide Rails 3 XSS protection for your Rails 2 app. Despite the obvious work entailed to get things back to normal, this is another good thing. Making the switch to Rails 3 overnight may not be feasible, but adding XSS protection ahead of time will help smooth the transition.</p>
 
@@ -69,7 +69,7 @@
 
 <p>The autoescape helper allows us to apply the fixes on a view-by-view basis. We can devote most of our time to building features to help us make money and chip away at templates and partials as they pop up in our workflow. We even have a script to tell us how many files we still need to address.</p>
 
-<p>The key to this change is manipulating the original rails_xss plugin behavior. Rails 3 helpers are composed of the String subclass <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">SafeBuffer</a>, which will escape concatenated content not already marked as “html safe”. Internally, calling .html_safe on a string simply sets a flag on the string object and this is flag is checked when adding to a string to SafeBuffer. By monkey-patching String, we disable the automatic escaping by always returning true for the html_safe? check. The autoescape flips on the flag, yields to the content block and flips the flag check back off afterwards. When autoescaping is already turned on, the block is returned as-is to allow nested autoescaping.</p>
+<p>The key to this change is manipulating the original rails<em>xss plugin behavior. Rails 3 helpers are composed of the String subclass <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">SafeBuffer</a>, which will escape concatenated content not already marked as “html safe”. Internally, calling .html</em>safe on a string simply sets a flag on the string object and this is flag is checked when adding to a string to SafeBuffer. By monkey-patching String, we disable the automatic escaping by always returning true for the html_safe? check. The autoescape flips on the flag, yields to the content block and flips the flag check back off afterwards. When autoescaping is already turned on, the block is returned as-is to allow nested autoescaping.</p>
 
 <p>There are alternatives. We could all crash on the upgrade (no time!) or we could keep the fully “escaped” version of our app in a separate branch, chip away at it, merge occasionally (not fun!).</p>
 
@@ -78,10 +78,9 @@
 <p>Resources</p>
 
 <ul>
-<li>  <a href="https://github.com/rails/rails_xss">rails/rails_xss</a></li>
-<li>  <a href="https://github.com/weplay/rails_xss">weplay/rails_xss</a></li>
-<li>  <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">Safe Buffer</a>
-*</li>
+<li><a href="https://github.com/rails/rails_xss">rails/rails_xss</a></li>
+<li><a href="https://github.com/weplay/rails_xss">weplay/rails_xss</a></li>
+<li><a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">Safe Buffer</a></li>
 </ul>
 
 

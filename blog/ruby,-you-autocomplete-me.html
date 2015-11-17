@@ -5,18 +5,19 @@
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Ross Kaffenberger | rossta.net</title>
+    <title>Ruby, You Autocomplete Me | rossta.net</title>
 <meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta name="keywords" content="Code, Ruby" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/rossta.jpg" />
-<meta name="twitter:title" content="Ross Kaffenberger" />
+<meta name="twitter:title" content="Ruby, You Autocomplete Me" />
 <meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
 <meta property="og:image" content="https://rossta.net/assets/images/rossta.jpg" />
-<meta property="og:title" content="Ross Kaffenberger" />
+<meta property="og:title" content="Ruby, You Autocomplete Me" />
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     <link href="/assets/stylesheets/all.css?1447766118" rel="stylesheet" />
@@ -48,22 +49,13 @@
     <article class="post">
       <header>
         <h2>
-          
+          Ruby, You Autocomplete Me
+          <br />
+          <small>Hacking on a smarter ruby console</small>
         </h2>
       </header>
 
-      <hr>
-
-<p>title: Ruby, You Autocomplete Me
-author: Ross Kaffenberger
-summary: Hacking on a smarter ruby console
-published: true
-tags:
-  - Code</p>
-
-<h2>- Ruby</h2>
-
-<p>My team recently added a tagging feature to our web app. As the user types in
+      <p>My team recently added a tagging feature to our web app. As the user types in
 the text input, the app supplies autocomplete suggestions from our database via
 javascript; a familiar UX. While backporting tags to existing records on the
 <code>rails console</code>, it hit me: &ldquo;Why not bring tag autocompletion to the command
@@ -72,20 +64,16 @@ line?&rdquo;</p>
 <p>The default <code>rails console</code> provides completion out-of-the-box though all the script
 does is start <code>irb</code> with the rails environment and <code>irb/completion</code> required.</p>
 
-<p>&ldquo;`ruby</p>
+<pre><code class="ruby"># !/usr/bin/env ruby
+require File.expand\_path(&#39;../../load\_paths&#39;, __FILE__)
+require &#39;rails/all&#39;
+require &#39;active\_support/all&#39;
+require &#39;irb&#39;
+require &#39;irb/completion&#39;
+IRB.start
 
-<h1>!/usr/bin/env ruby</h1>
-
-<p>require File.expand_path(&rsquo;../../load_paths&rsquo;, <strong>FILE</strong>)
-require &lsquo;rails/all&rsquo;
-require &#39;active_support/all&rsquo;
-require &#39;irb&rsquo;
-require &#39;irb/completion&rsquo;
-IRB.start</p>
-
-<h1>from <a href="https://github.com/rails/rails/blob/master/tools/console">https://github.com/rails/rails/blob/master/tools/console</a></h1>
-
-<p>&rdquo;`</p>
+# from https://github.com/rails/rails/blob/master/tools/console
+</code></pre>
 
 <p>Turns out that all <code>irb/completion</code> does is configure the ruby interface to the
 <a href="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html">GNU Readline Library</a>.
@@ -95,17 +83,15 @@ candidates given an input string triggered, typically, by pressing <code>TAB</co
 
 <p>From <code>irb/completion</code>:</p>
 
-<p>&ldquo;`ruby
-if Readline.respond_to?(&quot;basic_word_break_characters=&rdquo;)</p>
-
-<h1>Readline.basic_word_break_characters= &ldquo; \t\n\&rdquo;\&rsquo;`&gt;&lt;=;|&amp;{(&ldquo;</h1>
-
-<p>Readline.basic_word_break_characters= &rdquo; \t\n`&gt;&lt;=;|&amp;{(&ldquo;
+<pre><code class="ruby">if Readline.respond\_to?(&quot;basic\_word\_break\_characters=&quot;)
+# Readline.basic\_word\_break\_characters= &quot; \t\n\&quot;\\&#39;\`\&gt;\&lt;=;|&amp;{(&quot;
+  Readline.basic\_word\_break\_characters= &quot; \t\n\`\&gt;\&lt;=;|&amp;{(&quot;
 end
-Readline.completion_append_character = nil
-Readline.completion_proc = IRB::InputCompletor::CompletionProc
-&rdquo;`
-<code>IRB::InputCompletor::CompletionProc</code> is a proc that evaluates a large case
+Readline.completion\_append\_character = nil
+Readline.completion\_proc = IRB::InputCompletor::CompletionProc
+</code></pre>
+
+<p><code>IRB::InputCompletor::CompletionProc</code> is a proc that evaluates a large case
 statement of regular expressions that attempt to determine the type of given
 object and provide a set of candidates to match, such as <code>String</code> instance methods when
 the input matches <code>$r{^(([&quot;&#39;]).*\2)\.([^.]*)$}</code>.</p>
@@ -113,35 +99,34 @@ the input matches <code>$r{^(([&quot;&#39;]).*\2)\.([^.]*)$}</code>.</p>
 <p>To give <code>Readline</code> a spin, fire up <code>irb</code> and paste in the following example, borrowed
 from the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html">ruby docs</a>:</p>
 
-<p>&ldquo;`ruby
-require &#39;readline&rsquo;</p>
+<pre><code class="ruby">require &#39;readline&#39;
 
-<p>LIST = [
-  &#39;search&rsquo;, &#39;download&rsquo;, &#39;open&rsquo;,
-  &#39;help&rsquo;, &#39;history&rsquo;, &#39;quit&rsquo;,
-  &#39;url&rsquo;, &#39;next&rsquo;, &#39;clear&rsquo;,
-  &#39;prev&rsquo;, &#39;past&rsquo;
-].sort</p>
+LIST = [
+  &#39;search&#39;, &#39;download&#39;, &#39;open&#39;,
+  &#39;help&#39;, &#39;history&#39;, &#39;quit&#39;,
+  &#39;url&#39;, &#39;next&#39;, &#39;clear&#39;,
+  &#39;prev&#39;, &#39;past&#39;
+].sort
 
-<p>comp = proc { |s| LIST.grep(/^#{Regexp.escape(s)}/) }</p>
+comp = proc { |s| LIST.grep(/^#{Regexp.escape(s)}/) }
 
-<p>Readline.completion_append_character = &rdquo; &ldquo;
-Readline.completion_proc = comp
-&rdquo;`</p>
+Readline.completion\_append\_character = &quot; &quot;
+Readline.completion\_proc = comp
+</code></pre>
 
 <p>There&rsquo;s nothing stopping us from taking this to the <code>rails console</code> to take
 advantage of our rails environment and even access the database. Building off
 the example, we can replace the hard-coded array with a list of tags plucked
 from a simple activerecord query:</p>
 
-<p>&ldquo;`ruby
-require &#39;readline&rsquo;</p>
+<pre><code class="ruby">require &#39;readline&#39;
 
-<p>comp = proc { |s| ActsAsTaggableOn::Tag.named_like(s).pluck(:name) }</p>
+comp = proc { |s| ActsAsTaggableOn::Tag.named\_like(s).pluck(:name) }
 
-<p>Readline.completion_proc = comp
-&rdquo;`
-We have room for improvement. For one thing, this makes a new query every time
+Readline.completion\_proc = comp
+</code></pre>
+
+<p>We have room for improvement. For one thing, this makes a new query every time
 you attempt to autocomplete. For a reasonable number of tags, we could load the
 tag list in memory and grep for the matches instead. There is still another problem;
 by replacing the <code>Readline.completion_proc</code>, we&rsquo;ve clobbered the functionality
@@ -155,10 +140,9 @@ this could get messy.</p>
 completion. It aims to improve on IRB&rsquo;s shortcomings and provides methods for
 adding custom completions. To take advantage of Bond in the console:</p>
 
-<p>&ldquo;`ruby
-require &#39;bond&rsquo;
+<pre><code class="ruby">require &#39;bond&#39;
 Bond.start
-&rdquo;`</p>
+</code></pre>
 
 <p>Bond allows you to extend the strategies for autocompleting text with <a href="https://github.com/cldwalker/bond/blob/master/lib/bond.rb#L21">the
 <code>Bond.completion</code> method</a>.
@@ -168,44 +152,39 @@ then the given action will determine which candidates are returned. Calling
 following completion is triggered with the text for completion starts with a
 letter preceded by &ldquo;::&rdquo;; the search space is scoped to <code>Object.constants</code>.</p>
 
-<p>&ldquo;`ruby</p>
-
-<h1><a href="https://github.com/cldwalker/bond/blob/master/lib/bond/completion.rb#L13">https://github.com/cldwalker/bond/blob/master/lib/bond/completion.rb#L13</a></h1>
-
-<p>complete(:prefix=&gt;&rsquo;::&rsquo;, :anywhere=&gt;&rsquo;[A-Z][^:.(]*&rsquo;) {|e| Object.constants }
-&rdquo;`</p>
+<pre><code class="ruby"># https://github.com/cldwalker/bond/blob/master/lib/bond/completion.rb#L13
+complete(:prefix=\&gt;&#39;::&#39;, :anywhere=\&gt;&#39;[A-Z][^:\.\(]\*&#39;) {|e| Object.constants }
+</code></pre>
 
 <p>To add tag autocompletion whenever we start a new string, we could use the following:</p>
 
-<p>&ldquo;`ruby
-include Bond::Search # provides methods to search lists</p>
+<pre><code class="ruby">include Bond::Search # provides methods to search lists
 
-<p>TAG_NAMES = ActsAsTaggableOn::Tag.pluck(:name) # load tag names in memory</p>
+TAG\_NAMES = ActsAsTaggableOn::Tag.pluck(:name) # load tag names in memory
 
-<p>Bond.complete(:name=&gt;:tags, prefix: &rsquo;&rdquo;&rsquo;, :anywhere=&gt;&rsquo;([A-Z][^,]*)&rsquo;) {|e|
-  tag = e.matched<a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html">2</a>
-  normal_search(tag, TAG_NAMES)
+Bond.complete(:name=\&gt;:tags, prefix: &#39;&quot;&#39;, :anywhere=\&gt;&#39;([A-Z][^,]\*)&#39;) {|e|
+  tag = e.matched[2]
+  normal\_search(tag, TAG\_NAMES)
 }
-&ldquo;`</p>
+</code></pre>
 
 <p>Boom! Now we when autocomplete with some text inside an open double-quote, matching
 tags from the database appear on the console.</p>
 
-<p>&rdquo;`
-irb(main)&gt; &ldquo;Face[TAB]
+<pre><code>irb(main)\&gt; &quot;Face[TAB]
 Face++                     Facebook Graph             FaceCash
 Face.com                   Facebook Graph API         FaceDetection
 Facebook                   Facebook Opengraph         Facelets
 Facebook Ads               Facebook Real-time Updates Faces.com
 Facebook Chat              Facebook SDK               Facetly
 Facebook Credits           Facebook Social Plugins
-irb(main)&gt; &quot;Facebook&rdquo;, &ldquo;Twit[TAB]
+irb(main)\&gt; &quot;Facebook&quot;, &quot;Twit[TAB]
 Twitcher          TwitLonger        Twitter           Twitter Streaming Twitxr
 TwitchTV          TwitPic           Twitter API       TwitterBrite
 TwitDoc           TwitrPix          Twitter Bootstrap TwitterCounter
 Twitgoo           Twitscoop         Twitter Grader    Twittervision
 Twitlbl           TwitSprout        Twitter Oauth     Twitvid
-&rdquo;`</p>
+</code></pre>
 
 <p>Even though we ended up leveraging an existing gem, digging into the
 Ruby standard library source code proved to be a useful exercise, revealing some
@@ -222,7 +201,7 @@ simple ways to hook into features easily taken for granted.</p>
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = 'rosskaff';
     var disqus_identifier = 'ruby,-you-autocomplete-me';
-    var disqus_title      = '';
+    var disqus_title      = 'Ruby, You Autocomplete Me';
     var disqus_url        = 'https://rossta.net/blog/ruby,-you-autocomplete-me.html';
 
     /* * * DON'T EDIT BELOW THIS LINE * * */

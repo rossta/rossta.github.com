@@ -180,7 +180,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/enumerable-ruby.html</loc>
+    <loc>https://rossta.net/blog/2015-11-17-ruby-enumerable.html</loc>
     <lastmod>2015-11-17T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -378,7 +378,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/tags/work.html</loc>
+    <loc>https://rossta.net/blog/tags/javascript.html</loc>
     <lastmod>2015-11-17T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -390,7 +390,37 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/tags/web.html</loc>
+    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/tags/rspec.html</loc>
+    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/tags/rails.html</loc>
+    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2015.html</loc>
+    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2015/11.html</loc>
+    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2015/11/17.html</loc>
     <lastmod>2015-11-17T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -654,6 +684,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/page/5/index.html</loc>
+    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/page/2/index.html</loc>
     <lastmod>2015-11-17T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -667,6 +703,18 @@
   </url>
   <url>
     <loc>https://rossta.net/page/4/index.html</loc>
+    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/page/5/index.html</loc>
+    <lastmod>2015-11-17T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/tags/code/page/2.html</loc>
     <lastmod>2015-11-17T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
