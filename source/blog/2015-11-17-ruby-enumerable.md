@@ -15,7 +15,7 @@ A big reason for my love of Ruby is the [Enumerable][1] module because of its si
 
 I recently gave a talk at both [NYC.rb][2] and [DCRUG][3] about some great features of `Enumerable` that deserve more attention. I touch on interesting use cases for using `Enumerable` and `Enumerator` including API client libraries, streaming HTTP, web crawlers, CSV parsing, and infinite sequences.
 
-\<script async class="speakerdeck-embed" data-id="df623bc08aa642328c303a619c92fab0" data-ratio="1.55386949924127" src="//speakerdeck.com/assets/embed.js"\>\</script\>
+<script async class="speakerdeck-embed" data-id="df623bc08aa642328c303a619c92fab0" data-ratio="1.55386949924127" src="//speakerdeck.com/assets/embed.js"></script>
 
 I put together a bunch of code samples for the talk and assembled them in a repository on GitHub:
 
