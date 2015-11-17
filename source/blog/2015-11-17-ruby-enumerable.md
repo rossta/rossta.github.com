@@ -24,17 +24,17 @@ I put together a bunch of code samples for the talk and assembled them in a repo
 To run a sample, clone the repo and install the gems:
 
 ```bash
-`$ git clone https://github.com/rossta/loves-enumerable.git
+$ git clone https://github.com/rossta/loves-enumerable.git
 $ cd loves-enumerable
 $ bundle install
 ```
-`
+
 Then simply run the code with the ruby executable.
 
 ```bash
-`$ ruby code/pascals_triangle.rb
+$ ruby code/pascals_triangle.rb
 ```
-`
+
 You'll get the most out of this repo by inspecting the source along with following the presentation.
 
 [1]:	http://ruby-doc.org/core-2.2.3/Enumerable.html

@@ -11,24 +11,22 @@ On top of the list of [best practices for speeding up your website][1] is reduci
 One problem with the single CSS request approach is we often send CSS rules that our users don’t need to render the page initially or at any time during the current page view. This is like making dinner for 10 when only 2 people have RSVP’d; it can potentially be a big waste. In this wacky ajaxy world we live in, who says all your CSS needs to be on the page at load time? Consider using just-in-time CSS for page elements that aren’t necessary to display right away.
 
 Let’s say we have a lightbox to display gallery images that is only rendered when a user clicks on a page link. The CSS rules needed to render the box shouldn’t have to be loaded during the initial request. We can pull these out into a separate stylesheet and load it on demand with javascript.
-\`
 
-&nbsp;&nbsp;Demo
+```javascript
+// Demo
+// Hello World
 
-&nbsp;&nbsp;Hello World
-&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;function require(url) {
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// logic to determine url is for a css file here
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;var element = document.createElement("link");
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute("rel", "stylesheet");
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute("type", "text/css");
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;element.setAttribute("href", url);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementsByTagName("head")[0].appendChild(element);
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return this;
-&nbsp;&nbsp;&nbsp;&nbsp;}
-&nbsp;&nbsp;
+function require(url) {
+  // logic to determine url is for a css file here
+  var element = document.createElement("link");
+  element.setAttribute("rel", "stylesheet");
+  element.setAttribute("type", "text/css");
+  element.setAttribute("href", url);
+  document.getElementsByTagName("head")[0].appendChild(element);
+  return this;
+}
 
-\`
+```
 
 The code example defines a function ‘require’ that builds a stylesheet link tag and inserts it into the head of the document. The function is triggered as a callback from the onload event of the document body with a url to the ‘app.css’ file located in the same directory. Alternatively, we could attach the function call to a different event, such as click on a link to a popup that might need the styles.
 

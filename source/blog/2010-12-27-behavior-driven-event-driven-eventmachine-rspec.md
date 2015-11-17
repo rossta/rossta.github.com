@@ -7,31 +7,29 @@ tags:
   - Ruby
   - RSpec
 ---
+
 With all the hubbub around [node.js][1] lately, it’s been easy to forget established event-driven server-side processing solutions in Ruby. One option is [eventmachine][2], which I recently used to develop a multi-player online sudoku game, [Sudokill][3], for my Heuristics class at NYU.
 
 As the game designer, I needed to build a game server that could easily handle multiple socket connections to player programs written by my classmates. Leveraging the event-driven nature of eventmachine, I was able to build a server that is fast, efficient and easy to maintain.
 
 A commonly-cited drawback to event-driven programming is that it’s hard. For starters, we can easily wrap our heads around a procedural approach to a server connecting to a client:
-\`
 
+```
 Server waits for client 1
 Client attempts to connect to server
 Server accepts connection with client 1
 Server tells client 1 to wait
 Now server waits for client 2
 Repeat as before and so on...
-
-\`
+```
 
 This pattern is familiar: like a cookbook recipe or instructions for building a model airplane, we are well-equpped to handle things one step at a time. With the event model, we think in terms of discrete behaviors instead of ordered steps. We need to identify important events and their responses:
 
-\`
-
+```
 Whenever a socket connection is received, say hello
 Whenever a message through a socket connection, process it
 Whenever a socket connection disconnects, say goodbye
-
-\`
+```
 
 This model is common for front-end development (e.g. onclick, onmousever, etc.), but the notion of attaching events is not restricted to writing javascript for the DOM. Eventmachine provides some out-of-box hooks for adding behavior to expected events, like accepting socket connections. It also provides methods for defining and triggering our own custom behaviors.
 

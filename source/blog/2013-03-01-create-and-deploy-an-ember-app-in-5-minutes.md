@@ -16,23 +16,23 @@ To install middleman:
 
 A key feature for getting up and running quickly with Middleman are its use of project templates. You can use some out-of-the-box templates for setting up a Middleman project with the [HTML5 Boilerplate][6]. I’ve got a fork of an [Ember app template][7] that you can download or clone into `~/.middleman/` to get up and running with ember-1.0.0-rc1 with ember-data. To start a new Middleman project with my ember template:
 
-\`
+```
 $ git clone git://github.com/rossta/middleman-ember-template.git \~/.middleman/ember
 
 $ middleman init my\_new\_project --template=ember
 
 $ middleman server
-\`
+```
 
 If everything worked, you should be able to navigate to http://localhost:4567 to see Hello World generated with Ember.
 
 There are lots of options for deploying a Middleman app. To deploy easily with Heroku, we can use a [buildpack][8]. Buildpacks are scripts that take advantage of hooks provided by the Heroku build process and also us to customize what happens when we run “git push heroku master”. For the app generated from my ember template, we’ll want this process to build the Middleman app, which will minify assets and provide cacheable asset urls through the asset pipeline, and serve it on Rack using the [Rack::TryStatic][9] middleware. Luckily, there are already some buildpacks out there that fit these requirements. It’s easy to configure our Heroku app to use a custom buildpack via a git url
 
-\`
-$ heroku create my\_app --buildpack git://github.com/indirect/heroku-buildpack-middleman.git
+```
+$ heroku create my_app --buildpack git://github.com/indirect/heroku-buildpack-middleman.git
 
 $ git push heroku master
-\`
+```
 
 If everything worked, you should be able to see your static web Ember app served up on Heroku.
 
