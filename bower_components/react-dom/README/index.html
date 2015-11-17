@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ross Kaffenberger</title>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Ross Kaffenberger | rossta.net</title>
+<meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta name="keywords" content="Ross Kaffenberger, software, software developer, software engineering, computer programming, , web development, test driven development, Ruby, Javascript, Ruby on Rails, RSpec, Clojure, HTML, CSS" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/rossta.jpg" />
+<meta name="twitter:title" content="Ross Kaffenberger" />
+<meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta property="og:image" content="https://rossta.net/assets/images/rossta.jpg" />
+<meta property="og:title" content="Ross Kaffenberger" />
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/all.css?1447766118" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1445744814"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta.net</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li><a href="/blog">blog</a></li>
+      <li><a href="/about">about</a></li>
+      <li><a href="/projects">projects</a></li>
+      <li><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+        <h1>DOM</h1>
+
+<p>DOM is a <code>React.DOM</code> wrapper with — subjectively — more sanity and awesome helpers.</p>
+
+<h2>API</h2>
+
+<h4>Optional <code>options</code></h4>
+
+<pre><code class="js">DOM.div(&#39;foo&#39;)
+// =&gt; React.DOM.div(null, &#39;foo&#39;)
+</code></pre>
+
+<h4>Allow <code>class</code> attribute</h4>
+
+<pre><code class="js">DOM.div({ class: &#39;foozle&#39; }, &#39;foo&#39;)
+// =&gt; React.DOM.div({ className: &#39;foozle&#39; }, &#39;foo&#39;)
+</code></pre>
+
+<h3>The <code>data</code> attribute</h3>
+
+<h4>Nest objects</h4>
+
+<pre><code class="js">DOM.div({ data: { state: &#39;selected&#39; }}, &#39;foo&#39;)
+// =&gt; React.DOM.div({ &#39;data-state&#39;: &#39;selected&#39; }, &#39;foo&#39;)
+</code></pre>
+
+<h4>Handle arrays</h4>
+
+<pre><code class="js">DOM.div({ data: { state: [&#39;selected&#39;, &#39;opened&#39;] } }, &#39;foo&#39;)
+// =&gt; React.DOM.div({ &#39;data-state-selected&#39;: true, &#39;data-state-opened&#39;: true }, &#39;foo&#39;)
+</code></pre>
+
+<h2>CoffeeScript bliss</h2>
+
+<p>I’ll be honest, I don’t really like <a href="http://facebook.github.io/react/docs/jsx-in-depth.html">JSX</a>. It makes you think you’re writing HTML while it is in fact XML. It is getting converted into JavaScript anyway and I prefer not confusing any of my collegues into thinking this is HTML. Since most (read: all) of the projects that I work on are in CoffeeScript, I find the syntax bearable enough.</p>
+
+<pre><code class="coffee">Hello = React.createClass
+  componentWillMount: -&gt; console.log(&#39;componentWillMount&#39;)
+  componentDidMount:  -&gt; console.log(&#39;componentDidMount&#39;)
+  # …
+
+  render: -&gt;
+    DOM.div class: &#39;container&#39;, [
+      DOM.span
+        data:
+          foo: bar: &#39;baz&#39;
+          much: much: &#39;fun&#39;
+        class: &#39;test&#39;
+      , &quot;Hello #{@props.name}&quot;
+
+      DOM.span &#39;, goodbye.&#39;
+    ]
+
+console.log React.renderComponentToString Hello(name: &#39;World&#39;)
+# &lt;div class=&quot;container&quot;&gt;
+#   &lt;span data-foo-bar=&quot;baz&quot; data-much-much=&quot;fun&quot; class=&quot;test&quot;&gt;Hello World&lt;/span&gt;
+#   &lt;span&gt;, goodbye.&lt;/span&gt;
+# &lt;/div&gt;
+</code></pre>
+
+<p>Now, I know that not everybody works with CoffeeScript, so <a href="https://gist.github.com/EtienneLem/3c52167b2ccb6e180132">here’s the snippet in JavaScript</a>. You can also <a href="/examples/index.html">see the examples</a>, which are in JavaScript.</p>
+
+<h2>Usage</h2>
+
+<p>react-dom is available via <code>npm install react-dom</code> or <code>bower install react-dom</code>. AMD, CommonJS and broswer globals are supported.</p>
+
+<h2>Tests</h2>
+
+<p>Run the <code>npm test</code> task.</p>
+
+      </section>
+    </div>
+    <div id="zen">
+  <div class="row">
+    <div class="enlightenment large-12 columns"></div>
+  </div>
+</div>
+
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/pub/ross-kaffenberger/4/675/5b9">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/all.js?1445744805"></script>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

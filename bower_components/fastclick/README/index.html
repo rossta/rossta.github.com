@@ -20,7 +20,7 @@
 <meta property="og:title" content="Ross Kaffenberger" />
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/all.css?1445744797" rel="stylesheet" />
+    <link href="/assets/stylesheets/all.css?1447766118" rel="stylesheet" />
     <script src="/assets/javascripts/head.js?1445744814"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -34,7 +34,7 @@
   </ul>
 
   <section class="top-bar-section">
-    <ul class="right">
+    <ul class="left">
       <li><a href="/blog">blog</a></li>
       <li><a href="/about">about</a></li>
       <li><a href="/projects">projects</a></li>
@@ -82,19 +82,12 @@
 
 <p>Chrome 32+ on Android with <code>width=device-width</code> in the <a href="https://developer.mozilla.org/en-US/docs/Mobile/Viewport_meta_tag">viewport meta tag</a> doesn&rsquo;t have a 300ms delay, therefore listeners aren&rsquo;t attached.</p>
 
+<pre><code class="html">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+</code></pre>
+
 <p>Same goes for Chrome on Android (all versions) with <code>user-scalable=no</code> in the viewport meta tag. But be aware that <code>user-scalable=no</code> also disables pinch zooming, which may be an accessibility concern.</p>
 
-<pre><code class="html">&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1.0, user-scalable=no&quot;&gt;
-</code></pre>
-
-<p>For IE10, you can use <code>-ms-touch-action: none</code> to disable double-tap-to-zoom on certain elements (like links and buttons) as described in <a href="http://blogs.msdn.com/b/askie/archive/2013/01/06/how-to-implement-the-ms-touch-action-none-property-to-disable-double-tap-zoom-on-touch-devices.aspx">this MSDN blog post</a>. For example:</p>
-
-<pre><code class="css">a, input, button {
-    -ms-touch-action: none !important;
-}
-</code></pre>
-
-<p>You&rsquo;ll then have no tap delay on those elements, without needing FastClick.</p>
+<p>For IE11+, you can use <code>touch-action: manipulation;</code> to disable double-tap-to-zoom on certain elements (like links and buttons).  For IE10 use <code>-ms-touch-action: manipulation</code>.</p>
 
 <h2>Usage</h2>
 
@@ -107,14 +100,14 @@
 
 <p>To instantiate FastClick on the <code>body</code>, which is the recommended method of use:</p>
 
-<pre><code class="js">window.addEventListener(&#39;load&#39;, function() {
-    FastClick.attach(document.body);
-}, false);
+<pre><code class="js">if (&#39;addEventListener&#39; in document) {
+    document.addEventListener(&#39;DOMContentLoaded&#39;, function() {
+        FastClick.attach(document.body);
+    }, false);
+}
 </code></pre>
 
-<p>Don&rsquo;t forget to add a <a href="https://developer.mozilla.org/en-US/docs/DOM/EventTarget.removeEventListener#Compatibility">shim</a> for <code>addEventListener</code> if you want to support IE8 and below.</p>
-
-<p>Otherwise, if you&rsquo;re using jQuery:</p>
+<p>Or, if you&rsquo;re using jQuery:</p>
 
 <pre><code class="js">$(function() {
     FastClick.attach(document.body);
@@ -129,11 +122,21 @@ attachFastClick(document.body);
 
 <h3>Minified</h3>
 
-<p>Run <code>make</code> to build a minified version of FastClick using the Closure Compiler REST API. The minified file is saved to <code>build/fastclick.min.js</code>.</p>
+<p>Run <code>make</code> to build a minified version of FastClick using the Closure Compiler REST API. The minified file is saved to <code>build/fastclick.min.js</code> or you can <a href="http://build.origami.ft.com/bundles/js?modules=fastclick">download a pre-minified version</a>.</p>
+
+<p>Note: the pre-minified version is built using <a href="http://origami.ft.com/docs/developer-guide/build-service/">our build service</a> which exposes the <code>FastClick</code> object through <code>Origami.fastclick</code> and will have the Browserify/CommonJS API (see above).</p>
+
+<pre><code class="js">var attachFastClick = Origami.fastclick;
+attachFastClick(document.body);
+</code></pre>
 
 <h3>AMD</h3>
 
-<p>FastClick has AMD (Asynchronous Module Definition) support. This allows it to be lazy-loaded with an AMD loader, such as <a href="http://requirejs.org/">RequireJS</a>.</p>
+<p>FastClick has AMD (Asynchronous Module Definition) support. This allows it to be lazy-loaded with an AMD loader, such as <a href="http://requirejs.org/">RequireJS</a>. Note that when using the AMD style require, the full <code>FastClick</code> object will be returned, <em>not</em> <code>FastClick.attach</code></p>
+
+<pre><code class="js">var FastClick = require(&#39;fastclick&#39;);
+FastClick.attach(document.body, options);
+</code></pre>
 
 <h3>Package managers</h3>
 
@@ -179,7 +182,7 @@ attachFastClick(document.body);
 
 <h2>Credits and collaboration</h2>
 
-<p>The lead developer of FastClick is <a href="http://twitter.com/rowanbeentje">Rowan Beentje</a> at FT Labs. This fork is currently maintained by <a href="http://twitter.com/mcaruanagalizia">Matthew Caruana Galizia</a>. All open source code released by FT Labs is licenced under the MIT licence. We welcome comments, feedback and suggestions.  Please feel free to raise an issue or pull request. Enjoy.</p>
+<p>FastClick is maintained by <a href="http://twitter.com/rowanbeentje">Rowan Beentje</a>, <a href="http://twitter.com/mcaruanagalizia">Matthew Caruana Galizia</a> and <a href="http://twitter.com/andrewsmatt">Matthew Andrews</a> at <a href="http://labs.ft.com">FT Labs</a>. All open source code released by FT Labs is licenced under the MIT licence. We welcome comments, feedback and suggestions.  Please feel free to raise an issue or pull request.</p>
 
       </section>
     </div>

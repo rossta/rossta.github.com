@@ -1,0 +1,485 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ross Kaffenberger</title>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Ross Kaffenberger | rossta.net</title>
+<meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta name="keywords" content="Ross Kaffenberger, software, software developer, software engineering, computer programming, , web development, test driven development, Ruby, Javascript, Ruby on Rails, RSpec, Clojure, HTML, CSS" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/rossta.jpg" />
+<meta name="twitter:title" content="Ross Kaffenberger" />
+<meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta property="og:image" content="https://rossta.net/assets/images/rossta.jpg" />
+<meta property="og:title" content="Ross Kaffenberger" />
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/all.css?1447766118" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1445744814"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta.net</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li><a href="/blog">blog</a></li>
+      <li><a href="/about">about</a></li>
+      <li><a href="/projects">projects</a></li>
+      <li><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+        <h1>Markdown is broken</h1>
+
+<p>I have a lot of scraps of markdown engine oddities that I&rsquo;ve collected over the
+years. What you see below is slightly messy, but it&rsquo;s what I&rsquo;ve managed to
+cobble together to illustrate the differences between markdown engines, and
+why, if there ever is a markdown specification, it has to be absolutely
+thorough. There are a lot more of these little differences I have documented
+elsewhere. I know I will find them lingering on my disk one day, but until
+then, I&rsquo;ll continue to add whatever strange nonsensical things I find.</p>
+
+<p>Some of these examples may only mention a particular engine compared to marked.
+However, the examples with markdown.pl could easily be swapped out for
+discount, upskirt, or markdown.js, and you would very easily see even more
+inconsistencies.</p>
+
+<p>A lot of this was written when I was very unsatisfied with the inconsistencies
+between markdown engines. Please excuse the frustration noticeable in my
+writing.</p>
+
+<h2>Examples of markdown&rsquo;s &ldquo;stupid&rdquo; list parsing</h2>
+
+<pre><code>$ markdown.pl
+
+  * item1
+
+    * item2
+
+  text
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;item1&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;p&gt;text&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+</code></pre>
+
+<pre><code>$ marked
+  * item1
+
+    * item2
+
+  text
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;item1&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;text&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>Which looks correct to you?</p>
+
+<hr>
+
+<pre><code>$ markdown.pl
+* hello
+  &gt; world
+^D
+&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;hello&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;world&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</code></pre>
+
+<pre><code>$ marked
+* hello
+  &gt; world
+^D
+&lt;ul&gt;
+&lt;li&gt;hello&lt;blockquote&gt;
+&lt;p&gt;world&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>Again, which looks correct to you?</p>
+
+<hr>
+
+<p>EXAMPLE:</p>
+
+<pre><code>$ markdown.pl
+* hello
+  * world
+    * hi
+          code
+^D
+&lt;ul&gt;
+&lt;li&gt;hello
+&lt;ul&gt;
+&lt;li&gt;world&lt;/li&gt;
+&lt;li&gt;hi
+  code&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>The code isn&rsquo;t a code block even though it&rsquo;s after the bullet margin. I know,
+lets give it two more spaces, effectively making it 8 spaces past the bullet.</p>
+
+<pre><code>$ markdown.pl
+* hello
+  * world
+    * hi
+            code
+^D
+&lt;ul&gt;
+&lt;li&gt;hello
+&lt;ul&gt;
+&lt;li&gt;world&lt;/li&gt;
+&lt;li&gt;hi
+    code&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>And, it&rsquo;s still not a code block. Did you also notice that the 3rd item isn&rsquo;t
+even its own list? Markdown screws that up too because of its indentation
+unaware parsing.</p>
+
+<hr>
+
+<p>Let&rsquo;s look at some more examples of markdown&rsquo;s list parsing:</p>
+
+<pre><code>$ markdown.pl
+
+  * item1
+
+    * item2
+
+  text
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;item1&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;p&gt;text&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+</code></pre>
+
+<p>Misnested tags.</p>
+
+<pre><code>$ marked
+  * item1
+
+    * item2
+
+  text
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;item1&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;text&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>Which looks correct to you?</p>
+
+<hr>
+
+<pre><code>$ markdown.pl
+* hello
+  &gt; world
+^D
+&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;hello&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;world&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</code></pre>
+
+<p>More misnested tags.</p>
+
+<pre><code>$ marked
+* hello
+  &gt; world
+^D
+&lt;ul&gt;
+&lt;li&gt;hello&lt;blockquote&gt;
+&lt;p&gt;world&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>Again, which looks correct to you?</p>
+
+<hr>
+
+<h1>Why quality matters - Part 2</h1>
+
+<pre><code class="bash">$ markdown.pl
+* hello
+  &gt; world
+^D
+&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;hello&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;world&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</code></pre>
+
+<pre><code class="bash">$ sundown # upskirt
+* hello
+  &gt; world
+^D
+&lt;ul&gt;
+&lt;li&gt;hello
+&amp;gt; world&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<pre><code class="bash">$ marked
+* hello
+  &gt; world
+^D
+&lt;ul&gt;&lt;li&gt;hello &lt;blockquote&gt;&lt;p&gt;world&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ul&gt;
+</code></pre>
+
+<p>Which looks correct to you?</p>
+
+<hr>
+
+<p>See: <a href="https://github.com/evilstreak/markdown-js/issues/23">https://github.com/evilstreak/markdown-js/issues/23</a></p>
+
+<pre><code class="bash">$ markdown.pl # upskirt/markdown.js/discount
+* hello
+      var a = 1;
+* world
+^D
+&lt;ul&gt;
+&lt;li&gt;hello
+var a = 1;&lt;/li&gt;
+&lt;li&gt;world&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<pre><code class="bash">$ marked
+* hello
+      var a = 1;
+* world
+^D
+&lt;ul&gt;&lt;li&gt;hello
+&lt;pre&gt;code&gt;var a = 1;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;world&lt;/li&gt;&lt;/ul&gt;
+</code></pre>
+
+<p>Which looks more reasonable? Why shouldn&rsquo;t code blocks be able to appear in
+list items in a sane way?</p>
+
+<hr>
+
+<pre><code class="bash">$ markdown.js
+&lt;div&gt;hello&lt;/div&gt;
+
+&lt;span&gt;hello&lt;/span&gt;
+^D
+&lt;p&gt;&amp;lt;div&amp;gt;hello&amp;lt;/div&amp;gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;span&amp;gt;hello&amp;lt;/span&amp;gt;&lt;/p&gt;
+</code></pre>
+
+<pre><code class="bash">$ marked
+&lt;div&gt;hello&lt;/div&gt;
+
+&lt;span&gt;hello&lt;/span&gt;
+^D
+&lt;div&gt;hello&lt;/div&gt;
+
+
+&lt;p&gt;&lt;span&gt;hello&lt;/span&gt;
+&lt;/p&gt;
+</code></pre>
+
+<hr>
+
+<p>See: <a href="https://github.com/evilstreak/markdown-js/issues/27">https://github.com/evilstreak/markdown-js/issues/27</a></p>
+
+<pre><code class="bash">$ markdown.js
+[![an image](/image)](/link)
+^D
+&lt;p&gt;&lt;a href=&quot;/image)](/link&quot;&gt;![an image&lt;/a&gt;&lt;/p&gt;
+</code></pre>
+
+<pre><code class="bash">$ marked
+[![an image](/image)](/link)
+^D
+&lt;p&gt;&lt;a href=&quot;/link&quot;&gt;&lt;img src=&quot;/image&quot; alt=&quot;an image&quot;&gt;&lt;/a&gt;
+&lt;/p&gt;
+</code></pre>
+
+<hr>
+
+<p>See: <a href="https://github.com/evilstreak/markdown-js/issues/24">https://github.com/evilstreak/markdown-js/issues/24</a></p>
+
+<pre><code class="bash">$ markdown.js
+&gt; a
+
+&gt; b
+
+&gt; c
+^D
+&lt;blockquote&gt;&lt;p&gt;a&lt;/p&gt;&lt;p&gt;bundefined&amp;gt; c&lt;/p&gt;&lt;/blockquote&gt;
+</code></pre>
+
+<pre><code class="bash">$ marked
+&gt; a
+
+&gt; b
+
+&gt; c
+^D
+&lt;blockquote&gt;&lt;p&gt;a
+
+&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;&lt;p&gt;b
+
+&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;&lt;p&gt;c
+&lt;/p&gt;&lt;/blockquote&gt;
+</code></pre>
+
+<hr>
+
+<pre><code class="bash">$ markdown.pl
+* hello
+  * world
+    how
+
+    are
+    you
+
+  * today
+* hi
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;hello&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;world
+how&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;are
+you&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;today&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;hi&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<pre><code class="bash">$ marked
+* hello
+  * world
+    how
+
+    are
+    you
+
+  * today
+* hi
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;hello&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;world
+how&lt;/p&gt;
+&lt;p&gt;are
+you&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;today&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;hi&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+      </section>
+    </div>
+    <div id="zen">
+  <div class="row">
+    <div class="enlightenment large-12 columns"></div>
+  </div>
+</div>
+
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/pub/ross-kaffenberger/4/675/5b9">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/all.js?1445744805"></script>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>
