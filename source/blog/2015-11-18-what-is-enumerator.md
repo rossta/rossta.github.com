@@ -128,7 +128,7 @@ ERB
 
 p ERB.new(erb).result(binding).gsub(/^$\n/, "")
 
-=> <table>
+=> '<table>
  <tr style="background: aliceblue">
    <td>1</td>
    <td>TODO</td>
@@ -141,7 +141,7 @@ p ERB.new(erb).result(binding).gsub(/^$\n/, "")
    <td>3</td>
    <td>Home</td>
  </tr>
-</table>
+</table>'
 ```
 
 Brilliant! Notice how, in each enumeration of `project`, we're calling `colors.next`. So external enumeration is one technique for enumerating more than one collection at a time.
