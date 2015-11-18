@@ -134,7 +134,7 @@ ERB
 
 p ERB.new(erb).result(binding).gsub(/^$\n/, &amp;quot;&amp;quot;)
 
-=&amp;gt; &amp;lt;table&amp;gt;
+=&amp;gt; &amp;#39;&amp;lt;table&amp;gt;
  &amp;lt;tr style=&amp;quot;background: aliceblue&amp;quot;&amp;gt;
    &amp;lt;td&amp;gt;1&amp;lt;/td&amp;gt;
    &amp;lt;td&amp;gt;TODO&amp;lt;/td&amp;gt;
@@ -147,7 +147,7 @@ p ERB.new(erb).result(binding).gsub(/^$\n/, &amp;quot;&amp;quot;)
    &amp;lt;td&amp;gt;3&amp;lt;/td&amp;gt;
    &amp;lt;td&amp;gt;Home&amp;lt;/td&amp;gt;
  &amp;lt;/tr&amp;gt;
-&amp;lt;/table&amp;gt;
+&amp;lt;/table&amp;gt;&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Brilliant! Notice how, in each enumeration of &lt;code&gt;project&lt;/code&gt;, we&amp;rsquo;re calling &lt;code&gt;colors.next&lt;/code&gt;. So external enumeration is one technique for enumerating more than one collection at a time.&lt;/p&gt;
