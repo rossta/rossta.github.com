@@ -9,14 +9,13 @@ tags:
   - Code
   - Ruby
 ---
-Let's pretend we know about Ruby's Enumerable module - that it's included in
+Let's pretend we know about Ruby's [Enumerable](http://ruby-doc.org/core-2.2.3/Enumerable.html) module - that it's included in
 Ruby's core collection classes like Array and Hash and provides a bunch of
 methods for traversal, searching and sorting, and that we can can introduce it
 to plain old ruby classes through inclusion and implementing the `#each` method.
 Check out this [dated - yet reliable - Enumerable primer](http://ruby.bastardsbook.com/chapters/enumerables/) if you'd like a refresher.
 
-`Enumerator` is like `Enumerable's` kid sister; while `Enumerable` is getting
-all the attention, `Enumerator`, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it's time you took notice, Ma.
+[Enumerator](http://ruby-doc.org/core-2.2.0/Enumerator.html) is like `Enumerable's` kid sister; while `Enumerable` is getting all the attention, `Enumerator`, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it's time you took notice, Ma.
 
 So what exactly is `Enumerator`?. For one, it's a class. You can instantiate an
 instance of `Enumerator` by calling certain `Enumerable` instance methods, like `Array#each`, without a block:
