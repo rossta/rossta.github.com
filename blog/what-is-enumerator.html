@@ -85,7 +85,7 @@ LocalJumpError: no block given
 
 <p>Okay, big deal. What does this get us? Glad you asked.</p>
 
-<p>Instances of Enumerator are enumerable objects so you can call enumerable methods on them:</p>
+<p>Instances of Enumerator are enumerable:</p>
 
 <pre><code class="ruby">e = [1, 2, 3].map
 e.each { |n| p n }
@@ -95,18 +95,20 @@ e.each { |n| p n }
 =&gt; [nil, nil, nil]
 </code></pre>
 
-<p>See what happened there? Notice how the expression printed out each digit, but returned <code>[nil, nil, nil]</code> instead of of <code>[1, 2, 3]</code>? The <code>Enumerator</code> implemented <code>map</code> in the context of <code>each</code>; since <code>p n</code> returns <code>nil</code>, we got three entries of <code>nil</code> in the return value. We chained the behavior of two enumerable methods.</p>
+<p>See what happened there? The expression printed out each digit, but returned <code>[nil, nil, nil]</code> instead of of <code>[1, 2, 3]</code>. The <code>Enumerator</code> implemented <code>map</code> in the context of <code>each</code>; since <code>p n</code> returns <code>nil</code>, we got three entries of <code>nil</code> in the return value. We chained the behavior of two enumerable methods.</p>
 
-<p>Here&rsquo;s another example: Although we <code>Enumerable#each_with_index</code>, we don&rsquo;t have
-<code>Enumerable#map_with_index</code>. But we can chain enumerators together to get what
-is effectively the same result:</p>
+<p>Here&rsquo;s another example. It&rsquo;s often useful to enumerate collection members along
+with the index. We can use <code>Enumerable#each_with_index</code>, we don&rsquo;t have
+<code>Enumerable#map_with_index</code>. Javascript <code>forEach</code> and <code>map</code> gets this right, but not Ruby&hellip; or does it?</p>
+
+<p>Almost - we can chain enumerators together to get effectively the same result:</p>
 
 <pre><code class="ruby">e = [1, 2, 3].map
 e.each_with_index { |n, i| n * i }
 =&gt; [0, 2, 6]
 </code></pre>
 
-<p>The block receives both each member of the original array along with its index
+<p>The block receives each member of the original array along with its index
 for each iteration. This usage is common enough, that <code>Enumerator</code> provides
 <code>with_index</code> to give:</p>
 
@@ -239,10 +241,9 @@ e.next
 =&gt; 1
 </code></pre>
 
-<p>So enumerators have a few interesting methods and uses. In a future post, we&rsquo;ll
-take a look at how to create our own enumerators outside of arrays and hashes and some good reasons for doing so.</p>
+<p>So enumerators give us flexible and composable uses for enumerables. Combine them to extend behavior of existing enumerable methods. Use them for external enumeration with methods like <code>#next</code> and <code>#peek</code> for iterating over multiple arrays. In a future post, we&rsquo;ll take a look at how to create our own enumerators outside the context of arrays and hashes and some good reasons for doing so.</p>
 
-<p>In case you missed it, <a href="blog/ruby-enumerable.html">check out my presentation in the previous post</a> on the <code>Enumerable</code> module.</p>
+<p>In case you missed it, <a href="blog/ruby-enumerable.html">check out my presentation in the previous post</a> on the <code>Enumerable</code> module for more examples on how to get the most out of this terrific Ruby module.</p>
 
 
       <br />

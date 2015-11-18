@@ -52,7 +52,7 @@ LocalJumpError: no block given
 
 &lt;p&gt;Okay, big deal. What does this get us? Glad you asked.&lt;/p&gt;
 
-&lt;p&gt;Instances of Enumerator are enumerable objects so you can call enumerable methods on them:&lt;/p&gt;
+&lt;p&gt;Instances of Enumerator are enumerable:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].map
 e.each { |n| p n }
@@ -62,18 +62,20 @@ e.each { |n| p n }
 =&amp;gt; [nil, nil, nil]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;See what happened there? Notice how the expression printed out each digit, but returned &lt;code&gt;[nil, nil, nil]&lt;/code&gt; instead of of &lt;code&gt;[1, 2, 3]&lt;/code&gt;? The &lt;code&gt;Enumerator&lt;/code&gt; implemented &lt;code&gt;map&lt;/code&gt; in the context of &lt;code&gt;each&lt;/code&gt;; since &lt;code&gt;p n&lt;/code&gt; returns &lt;code&gt;nil&lt;/code&gt;, we got three entries of &lt;code&gt;nil&lt;/code&gt; in the return value. We chained the behavior of two enumerable methods.&lt;/p&gt;
+&lt;p&gt;See what happened there? The expression printed out each digit, but returned &lt;code&gt;[nil, nil, nil]&lt;/code&gt; instead of of &lt;code&gt;[1, 2, 3]&lt;/code&gt;. The &lt;code&gt;Enumerator&lt;/code&gt; implemented &lt;code&gt;map&lt;/code&gt; in the context of &lt;code&gt;each&lt;/code&gt;; since &lt;code&gt;p n&lt;/code&gt; returns &lt;code&gt;nil&lt;/code&gt;, we got three entries of &lt;code&gt;nil&lt;/code&gt; in the return value. We chained the behavior of two enumerable methods.&lt;/p&gt;
 
-&lt;p&gt;Here&amp;rsquo;s another example: Although we &lt;code&gt;Enumerable#each_with_index&lt;/code&gt;, we don&amp;rsquo;t have
-&lt;code&gt;Enumerable#map_with_index&lt;/code&gt;. But we can chain enumerators together to get what
-is effectively the same result:&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s another example. It&amp;rsquo;s often useful to enumerate collection members along
+with the index. We can use &lt;code&gt;Enumerable#each_with_index&lt;/code&gt;, we don&amp;rsquo;t have
+&lt;code&gt;Enumerable#map_with_index&lt;/code&gt;. Javascript &lt;code&gt;forEach&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; gets this right, but not Ruby&amp;hellip; or does it?&lt;/p&gt;
+
+&lt;p&gt;Almost - we can chain enumerators together to get effectively the same result:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].map
 e.each_with_index { |n, i| n * i }
 =&amp;gt; [0, 2, 6]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The block receives both each member of the original array along with its index
+&lt;p&gt;The block receives each member of the original array along with its index
 for each iteration. This usage is common enough, that &lt;code&gt;Enumerator&lt;/code&gt; provides
 &lt;code&gt;with_index&lt;/code&gt; to give:&lt;/p&gt;
 
@@ -206,10 +208,9 @@ e.next
 =&amp;gt; 1
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;So enumerators have a few interesting methods and uses. In a future post, we&amp;rsquo;ll
-take a look at how to create our own enumerators outside of arrays and hashes and some good reasons for doing so.&lt;/p&gt;
+&lt;p&gt;So enumerators give us flexible and composable uses for enumerables. Combine them to extend behavior of existing enumerable methods. Use them for external enumeration with methods like &lt;code&gt;#next&lt;/code&gt; and &lt;code&gt;#peek&lt;/code&gt; for iterating over multiple arrays. In a future post, we&amp;rsquo;ll take a look at how to create our own enumerators outside the context of arrays and hashes and some good reasons for doing so.&lt;/p&gt;
 
-&lt;p&gt;In case you missed it, &lt;a href="blog/ruby-enumerable.html"&gt;check out my presentation in the previous post&lt;/a&gt; on the &lt;code&gt;Enumerable&lt;/code&gt; module.&lt;/p&gt;
+&lt;p&gt;In case you missed it, &lt;a href="blog/ruby-enumerable.html"&gt;check out my presentation in the previous post&lt;/a&gt; on the &lt;code&gt;Enumerable&lt;/code&gt; module for more examples on how to get the most out of this terrific Ruby module.&lt;/p&gt;
 </content>
   </entry>
   <entry>
