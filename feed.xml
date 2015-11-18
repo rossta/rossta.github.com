@@ -18,18 +18,17 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Let’s pretend we know about Ruby’s Enumerable module - that it’s included in
+    <summary type="html">&lt;p&gt;Let’s pretend we know about Ruby’s &lt;a href="http://ruby-doc.org/core-2.2.3/Enumerable.html"&gt;Enumerable&lt;/a&gt; module - that it’s included in
 Ruby’s core collection classes like Array and Hash and provides a bunch of
 methods for traversal, searching and sorting, and that we can can introduce it
 to plain old ruby...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Let&amp;rsquo;s pretend we know about Ruby&amp;rsquo;s Enumerable module - that it&amp;rsquo;s included in
+    <content type="html">&lt;p&gt;Let&amp;rsquo;s pretend we know about Ruby&amp;rsquo;s &lt;a href="http://ruby-doc.org/core-2.2.3/Enumerable.html"&gt;Enumerable&lt;/a&gt; module - that it&amp;rsquo;s included in
 Ruby&amp;rsquo;s core collection classes like Array and Hash and provides a bunch of
 methods for traversal, searching and sorting, and that we can can introduce it
 to plain old ruby classes through inclusion and implementing the &lt;code&gt;#each&lt;/code&gt; method.
 Check out this &lt;a href="http://ruby.bastardsbook.com/chapters/enumerables/"&gt;dated - yet reliable - Enumerable primer&lt;/a&gt; if you&amp;rsquo;d like a refresher.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;Enumerator&lt;/code&gt; is like &lt;code&gt;Enumerable&amp;#39;s&lt;/code&gt; kid sister; while &lt;code&gt;Enumerable&lt;/code&gt; is getting
-all the attention, &lt;code&gt;Enumerator&lt;/code&gt;, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&amp;rsquo;s time you took notice, Ma.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://ruby-doc.org/core-2.2.0/Enumerator.html"&gt;Enumerator&lt;/a&gt; is like &lt;code&gt;Enumerable&amp;#39;s&lt;/code&gt; kid sister; while &lt;code&gt;Enumerable&lt;/code&gt; is getting all the attention, &lt;code&gt;Enumerator&lt;/code&gt;, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&amp;rsquo;s time you took notice, Ma.&lt;/p&gt;
 
 &lt;p&gt;So what exactly is &lt;code&gt;Enumerator&lt;/code&gt;?. For one, it&amp;rsquo;s a class. You can instantiate an
 instance of &lt;code&gt;Enumerator&lt;/code&gt; by calling certain &lt;code&gt;Enumerable&lt;/code&gt; instance methods, like &lt;code&gt;Array#each&lt;/code&gt;, without a block:&lt;/p&gt;
