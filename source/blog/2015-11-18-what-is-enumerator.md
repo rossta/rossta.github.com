@@ -41,7 +41,7 @@ LocalJumpError: no block given
 
 Okay, big deal. What does this get us? Glad you asked.
 
-Instances of Enumerator are enumerable objects so you can call enumerable methods on them:
+Instances of Enumerator are enumerable:
 
 ```ruby
 e = [1, 2, 3].map
@@ -52,11 +52,13 @@ e.each { |n| p n }
 => [nil, nil, nil]
 ```
 
-See what happened there? Notice how the expression printed out each digit, but returned `[nil, nil, nil]` instead of of `[1, 2, 3]`? The `Enumerator` implemented `map` in the context of `each`; since `p n` returns `nil`, we got three entries of `nil` in the return value. We chained the behavior of two enumerable methods.
+See what happened there? The expression printed out each digit, but returned `[nil, nil, nil]` instead of of `[1, 2, 3]`. The `Enumerator` implemented `map` in the context of `each`; since `p n` returns `nil`, we got three entries of `nil` in the return value. We chained the behavior of two enumerable methods.
 
-Here's another example: Although we `Enumerable#each_with_index`, we don't have
-`Enumerable#map_with_index`. But we can chain enumerators together to get what
-is effectively the same result:
+Here's another example. It's often useful to enumerate collection members along
+with the index. We can use `Enumerable#each_with_index`, we don't have
+`Enumerable#map_with_index`. Javascript `forEach` and `map` gets this right, but not Ruby... or does it?
+
+Almost - we can chain enumerators together to get effectively the same result:
 
 ```ruby
 e = [1, 2, 3].map
@@ -64,7 +66,7 @@ e.each_with_index { |n, i| n * i }
 => [0, 2, 6]
 ```
 
-The block receives both each member of the original array along with its index
+The block receives each member of the original array along with its index
 for each iteration. This usage is common enough, that `Enumerator` provides
 `with_index` to give:
 
@@ -203,7 +205,6 @@ e.next
 => 1
 ```
 
-So enumerators have a few interesting methods and uses. In a future post, we'll
-take a look at how to create our own enumerators outside of arrays and hashes and some good reasons for doing so.
+So enumerators give us flexible and composable uses for enumerables. Combine them to extend behavior of existing enumerable methods. Use them for external enumeration with methods like `#next` and `#peek` for iterating over multiple arrays. In a future post, we'll take a look at how to create our own enumerators outside the context of arrays and hashes and some good reasons for doing so.
 
-In case you missed it, [check out my presentation in the previous post](blog/ruby-enumerable.html) on the `Enumerable` module.
+In case you missed it, [check out my presentation in the previous post](blog/ruby-enumerable.html) on the `Enumerable` module for more examples on how to get the most out of this terrific Ruby module.
