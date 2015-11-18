@@ -5,10 +5,214 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2015-11-16T19:00:00-05:00</updated>
+  <updated>2015-11-17T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>What the Heck is a Ruby Enumerator?</title>
+    <link rel="alternate" href="/blog/what-is-enumerator.html"/>
+    <id>/blog/what-is-enumerator.html</id>
+    <published>2015-11-17T19:00:00-05:00</published>
+    <updated>2015-11-17T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Let’s pretend we know about Ruby’s Enumerable module - that it’s included in
+Ruby’s core collection classes like Array and Hash and provides a bunch of
+methods for traversal, searching and sorting, and that we can can introduce it
+to plain old ruby...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Let&amp;rsquo;s pretend we know about Ruby&amp;rsquo;s Enumerable module - that it&amp;rsquo;s included in
+Ruby&amp;rsquo;s core collection classes like Array and Hash and provides a bunch of
+methods for traversal, searching and sorting, and that we can can introduce it
+to plain old ruby classes through inclusion and implementing the &lt;code&gt;#each&lt;/code&gt; method.
+Check out this &lt;a href="http://ruby.bastardsbook.com/chapters/enumerables/"&gt;dated - yet reliable - Enumerable primer&lt;/a&gt; if you&amp;rsquo;d like a refresher.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Enumerator&lt;/code&gt; is like &lt;code&gt;Enumerable&amp;#39;s&lt;/code&gt; kid sister; while &lt;code&gt;Enumerable&lt;/code&gt; is getting
+all the attention, &lt;code&gt;Enumerator&lt;/code&gt;, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&amp;rsquo;s time you took notice, Ma.&lt;/p&gt;
+
+&lt;p&gt;So what exactly is &lt;code&gt;Enumerator&lt;/code&gt;?. For one, it&amp;rsquo;s a class. You can instantiate an
+instance of &lt;code&gt;Enumerator&lt;/code&gt; by calling many of &lt;code&gt;Array#each&lt;/code&gt; without a block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;[1, 2, 3].each
+=&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:each&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In fact, you can do this for many (but not all) of Array&amp;rsquo;s &lt;code&gt;Enumerable&lt;/code&gt; methods
+that expect a block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;[1, 2, 3].map
+=&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:map&amp;gt;
+
+[1, 2, 3].select
+=&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:select&amp;gt;
+
+[1, 2, 3].reduce
+LocalJumpError: no block given
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Okay, big deal. What does this get us? Glad you asked.&lt;/p&gt;
+
+&lt;p&gt;Instances of Enumerator are enumerable objects so you can call enumerable methods on them:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].map
+e.each { |n| p n }
+1
+2
+3
+=&amp;gt; [nil, nil, nil]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;See what happened there? Notice how the expression printed out each digit, but returned &lt;code&gt;[nil, nil, nil]&lt;/code&gt; instead of of &lt;code&gt;[1, 2, 3]&lt;/code&gt;? The &lt;code&gt;Enumerator&lt;/code&gt; implemented &lt;code&gt;map&lt;/code&gt; in the context of &lt;code&gt;each&lt;/code&gt;; since &lt;code&gt;p n&lt;/code&gt; returns &lt;code&gt;nil&lt;/code&gt;, we got three entries of &lt;code&gt;nil&lt;/code&gt; in the return value. We chained the behavior of two enumerable methods.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s another example: Although we &lt;code&gt;Enumerable#each_with_index&lt;/code&gt;, we don&amp;rsquo;t have
+&lt;code&gt;Enumerable#map_with_index&lt;/code&gt;. But we can chain enumerators together to get what
+is effectively the same result:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].map
+e.each_with_index { |n, i| n * i }
+=&amp;gt; [0, 2, 6]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The block receives both each member of the original array along with its index
+for each iteration. This usage is common enough, that &lt;code&gt;Enumerator&lt;/code&gt; provides
+&lt;code&gt;with_index&lt;/code&gt; to give:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].map.with_index { |n, i| n * i }
+=&amp;gt; [0, 2, 6]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Reads pretty well, eh? What&amp;rsquo;s really interesting here is that enumerators package
+up knowledge of a collection and a method with which we want to enumerate.&lt;/p&gt;
+
+&lt;p&gt;We can combine several enumerators in different orders to get different
+behaviors. Here&amp;rsquo;s an nice example borrowed from &lt;a href="http://dgiim.github.io/blog/2015/08/24/ruby-enumerators/#the-enumerator-class"&gt;another recent post on the subject&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;letters = %w[a b c d e]
+
+group_1 = letters.reverse_each.group_by.each_with_index do |item, index|
+  index % 3
+end
+
+group_2 = letters.reverse_each.each_with_index.group_by do |item, index|
+  index % 3
+end
+
+p group_1
+=&amp;gt; {0=&amp;gt;[&amp;quot;e&amp;quot;, &amp;quot;b&amp;quot;], 1=&amp;gt;[&amp;quot;d&amp;quot;, &amp;quot;a&amp;quot;], 2=&amp;gt;[&amp;quot;c&amp;quot;]}
+
+p group_2
+=&amp;gt; {0=&amp;gt;[[&amp;quot;e&amp;quot;, 0], [&amp;quot;b&amp;quot;, 3]], 1=&amp;gt;[[&amp;quot;d&amp;quot;, 1], [&amp;quot;a&amp;quot;, 4]], 2=&amp;gt;[[&amp;quot;c&amp;quot;, 2]]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Enumerator&lt;/code&gt; provides some additional methods that allow for &amp;ldquo;external&amp;rdquo;
+enumeration as well. With an enumerator instance, we can call &lt;code&gt;next&lt;/code&gt; to get each
+successive member of the collection.&lt;/p&gt;
+
+&lt;p&gt;Consider &lt;code&gt;Enumerable#cycle&lt;/code&gt;. Calling &amp;ldquo;cycle&amp;rdquo; on an enumerable collection (without a limit arg) will enumerate over members of a collection ad nauseum. When implemented as an enumerator of css colors, we can use &lt;code&gt;cycle&lt;/code&gt; to create striped table rows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;Project = Struct.new(:name)
+
+colors = [&amp;#39;aliceblue&amp;#39;, &amp;#39;ghostwhite&amp;#39;].cycle
+projects = [Project.new(&amp;quot;TODO&amp;quot;),
+            Project.new(&amp;quot;Work&amp;quot;),
+            Project.new(&amp;quot;Home&amp;quot;)]
+
+require &amp;#39;erb&amp;#39;
+
+erb = (&amp;lt;&amp;lt;-ERB)
+&amp;lt;table&amp;gt;
+&amp;lt;% projects.each_with_index do |project, index| %&amp;gt;
+ &amp;lt;tr style=&amp;quot;background: &amp;lt;%= colors.next %&amp;gt;&amp;quot;&amp;gt;
+   &amp;lt;td&amp;gt;&amp;lt;%= index + 1 %&amp;gt;&amp;lt;/td&amp;gt;
+   &amp;lt;td&amp;gt;&amp;lt;%= project.name %&amp;gt;&amp;lt;/td&amp;gt;
+ &amp;lt;/tr&amp;gt;
+&amp;lt;% end %&amp;gt;
+&amp;lt;/table&amp;gt;
+ERB
+
+p ERB.new(erb).result(binding).gsub(/^$\n/, &amp;quot;&amp;quot;)
+
+=&amp;gt; &amp;lt;table&amp;gt;
+ &amp;lt;tr style=&amp;quot;background: aliceblue&amp;quot;&amp;gt;
+   &amp;lt;td&amp;gt;1&amp;lt;/td&amp;gt;
+   &amp;lt;td&amp;gt;TODO&amp;lt;/td&amp;gt;
+ &amp;lt;/tr&amp;gt;
+ &amp;lt;tr style=&amp;quot;background: ghostwhite&amp;quot;&amp;gt;
+   &amp;lt;td&amp;gt;2&amp;lt;/td&amp;gt;
+   &amp;lt;td&amp;gt;Work&amp;lt;/td&amp;gt;
+ &amp;lt;/tr&amp;gt;
+ &amp;lt;tr style=&amp;quot;background: aliceblue&amp;quot;&amp;gt;
+   &amp;lt;td&amp;gt;3&amp;lt;/td&amp;gt;
+   &amp;lt;td&amp;gt;Home&amp;lt;/td&amp;gt;
+ &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Brilliant! Notice how, in each enumeration of &lt;code&gt;project&lt;/code&gt;, we&amp;rsquo;re calling &lt;code&gt;colors.next&lt;/code&gt;. So external enumeration is one technique for enumerating more than one collection at a time.&lt;/p&gt;
+
+&lt;p&gt;Not all enumerators will enumerate forever. Using cycle with a limit will result
+in a &lt;code&gt;StopIteration&lt;/code&gt; error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;numbers = [1,2].cycle(1)
+=&amp;gt; #&amp;lt;Enumerator: [1, 2]:cycle(1)&amp;gt;
+
+numbers.next
+# =&amp;gt; 1
+
+numbers.next
+=&amp;gt; 2
+
+numbers.next
+StopIteration: iteration reached an end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;loop&lt;/code&gt; construct knows how to rescues from this error and treats it as a
+&lt;code&gt;break&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;numbers = [1,2].cycle(1)
+=&amp;gt; #&amp;lt;Enumerator: [1, 2]:cycle(1)&amp;gt;
+
+loop do
+  p numbers.next
+end
+
+puts &amp;quot;Tada!&amp;quot;
+
+1
+2
+=&amp;gt; nil
+
+Tada!
+=&amp;gt; nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can rewind enumerators or peek at their next values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].each
+
+e.next
+=&amp;gt; 1
+
+e.peek
+=&amp;gt; 2
+
+e.next
+=&amp;gt; 2
+
+e.rewind
+=&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:each&amp;gt;
+
+e.next
+=&amp;gt; 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So enumerators have a few interesting methods and uses. In a future post, we&amp;rsquo;ll
+take a look at how to create our own enumerators outside of arrays and hashes and some good reasons for doing so.&lt;/p&gt;
+
+&lt;p&gt;In case you missed it, &lt;a href="blog/ruby-enumerable.html"&gt;check out my presentation in the previous post&lt;/a&gt; on the &lt;code&gt;Enumerable&lt;/code&gt; module.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Enumerable - Why I Fell in Love with Ruby</title>
     <link rel="alternate" href="/blog/ruby-enumerable.html"/>
@@ -409,35 +613,6 @@ rm &amp;quot;$TEMP_FILE&amp;quot;
     </author>
     <summary type="html">&lt;p&gt;Check out my contribution to &lt;a href="http://www.speedawarenessmonth.com/"&gt;Speed Awareness Month&lt;/a&gt; to help make the web a faster place where I &lt;a href="http://www.speedawarenessmonth.com/speeding-up-asset-delivery-from-your-rails-app/"&gt;share tips to improve delivery of static assets&lt;/a&gt;, like images, stylesheets, and javascript files, by serving from a cookie-free domain to reduce bandwidth...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Check out my contribution to &lt;a href="http://www.speedawarenessmonth.com/"&gt;Speed Awareness Month&lt;/a&gt; to help make the web a faster place where I &lt;a href="http://www.speedawarenessmonth.com/speeding-up-asset-delivery-from-your-rails-app/"&gt;share tips to improve delivery of static assets&lt;/a&gt;, like images, stylesheets, and javascript files, by serving from a cookie-free domain to reduce bandwidth and levaraging CDN pull zones to improve delivery times.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Configuring Rack Test Driver in Capybara 2</title>
-    <link rel="alternate" href="/blog/configuring-rack-test-driver-in-capybara-2.html"/>
-    <id>/blog/configuring-rack-test-driver-in-capybara-2.html</id>
-    <published>2013-03-25T20:00:00-04:00</published>
-    <updated>2013-03-25T20:00:00-04:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Though I don’t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;In Capybara 2.0+,...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Though I don&amp;rsquo;t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt;. When you exceed this limit, you get a dreaded &lt;code&gt;Capybara::InfiniteRedirectError&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;In Capybara 2.0+, this limit is configurable:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;Capybara.register\_driver :rack\_test do |app|
-  Capybara::RackTest::Driver.new app, \\
-    redirect_limit: 15,
-    follow_redirects: true,
-    respect_data_method: true
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Register a new instance of the rack test driver with options, as shown above. If you&amp;rsquo;re on Rails, it may be necessary for you to set &lt;code&gt;:respect_data_method&lt;/code&gt; to &lt;code&gt;true&lt;/code&gt;; this instructs capybara to simulate the request method specified via data-method attributes in your link. With Rails, an extension like &lt;a href="https://github.com/rails/jquery-ujs"&gt;rails/jquery-ujs&lt;/a&gt; allows you to enable additional request methods via unobtrusive javascript in real browsers. This setting currently defaults to false in the RackTest driver; one of the primary configurations in &lt;a href="https://github.com/jnicklas/capybara/blob/master/lib/capybara/rails.rb"&gt;&lt;code&gt;capybara/rails&lt;/code&gt;&lt;/a&gt; is to set this option. So&amp;hellip; you may be surprised if you omit this option and suddenly get missing route exceptions in your specs.&lt;/p&gt;
-
-&lt;p&gt;The best long term solution for you and your users is to figure out how to reduce or eliminate unnecessary redirects. Playing with the redirect limit in your test environment may be a good way to identify potential problem areas of your app.&lt;/p&gt;
 </content>
   </entry>
 </feed>
