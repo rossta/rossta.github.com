@@ -3,8 +3,8 @@ title: What the Heck is a Ruby Enumerator?
 author: Ross Kaffenberger
 summary: Exploring Ruby Enumerators for fun and profit
 description: You may not be using enough of the Enumerable API or doing enough with Enumerator.
+pull_image: 'https://rossta.net/assets/images/blog/enumerator-1-2-3.jpg'
 published: true
-permalink: /2015/11/what-the-heck-is-a-ruby-enumerator/
 tags:
   - Code
   - Ruby

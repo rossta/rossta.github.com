@@ -5,4 +5,5 @@ keywords: 'Ross Kaffenberger, software, software developer, software engineering
 twitter_card: 'summary_large_image'
 twitter_author: 'Ross Kaffenberger'
 twitter_description: 'Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS'
-pull_image: 'https://rossta.net/assets/images/rossta.jpg'
+pull_image: 'https://rossta.net/assets/images/icon-ruby.jpg'
+customize_by_frontmatter: true

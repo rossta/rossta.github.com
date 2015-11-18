@@ -3,8 +3,8 @@ title: Enumerable - Why I Fell in Love with Ruby
 author: Ross Kaffenberger
 summary: Using Ruby's Enumerable module and Enumerator class
 description: You may not be using enough of the Enumerable API or doing enough with Enumerator.
+pull_image: 'https://rossta.net/assets/images/blog/enumerator-1-2-3.jpg'
 published: true
-permalink: /2015/11/ruby-enumerable/
 tags:
   - Code
   - Ruby
