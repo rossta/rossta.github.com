@@ -19,7 +19,7 @@ Check out this [dated - yet reliable - Enumerable primer](http://ruby.bastardsbo
 all the attention, `Enumerator`, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it's time you took notice, Ma.
 
 So what exactly is `Enumerator`?. For one, it's a class. You can instantiate an
-instance of `Enumerator` by calling many of `Array#each` without a block:
+instance of `Enumerator` by calling certain `Enumerable` instance methods, like `Array#each`, without a block:
 
 ```ruby
 [1, 2, 3].each
