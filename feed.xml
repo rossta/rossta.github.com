@@ -32,7 +32,7 @@ Check out this &lt;a href="http://ruby.bastardsbook.com/chapters/enumerables/"&g
 all the attention, &lt;code&gt;Enumerator&lt;/code&gt;, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&amp;rsquo;s time you took notice, Ma.&lt;/p&gt;
 
 &lt;p&gt;So what exactly is &lt;code&gt;Enumerator&lt;/code&gt;?. For one, it&amp;rsquo;s a class. You can instantiate an
-instance of &lt;code&gt;Enumerator&lt;/code&gt; by calling many of &lt;code&gt;Array#each&lt;/code&gt; without a block:&lt;/p&gt;
+instance of &lt;code&gt;Enumerator&lt;/code&gt; by calling certain &lt;code&gt;Enumerable&lt;/code&gt; instance methods, like &lt;code&gt;Array#each&lt;/code&gt;, without a block:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;[1, 2, 3].each
 =&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:each&amp;gt;

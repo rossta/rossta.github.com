@@ -65,7 +65,7 @@ Check out this <a href="http://ruby.bastardsbook.com/chapters/enumerables/">date
 all the attention, <code>Enumerator</code>, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&rsquo;s time you took notice, Ma.</p>
 
 <p>So what exactly is <code>Enumerator</code>?. For one, it&rsquo;s a class. You can instantiate an
-instance of <code>Enumerator</code> by calling many of <code>Array#each</code> without a block:</p>
+instance of <code>Enumerator</code> by calling certain <code>Enumerable</code> instance methods, like <code>Array#each</code>, without a block:</p>
 
 <pre><code class="ruby">[1, 2, 3].each
 =&gt; #&lt;Enumerator: [1, 2, 3]:each&gt;
