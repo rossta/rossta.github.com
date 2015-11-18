@@ -4,7 +4,7 @@ gem "middleman"
 gem "middleman-blog"
 gem "redcarpet"
 gem "nokogiri"
-gem "middleman-meta-tags"
+gem "middleman-meta-tags", github: "tiste/middleman-meta-tags"
 
 # For feed.xml.builder
 gem "builder"

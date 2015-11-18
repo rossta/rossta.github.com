@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/tiste/middleman-meta-tags.git
+  revision: 67b368f45861cb614b3402ed6d2371b18a59dc75
+  specs:
+    middleman-meta-tags (0.1.3)
+      middleman-core (>= 3.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -82,8 +89,6 @@ GEM
       em-websocket (~> 0.5.1)
       middleman-core (>= 3.3)
       rack-livereload (~> 0.3.15)
-    middleman-meta-tags (0.1.3)
-      middleman-core (>= 3.0.0)
     middleman-sprockets (3.4.2)
       middleman-core (>= 3.3)
       sprockets (~> 2.12.1)
@@ -141,7 +146,7 @@ DEPENDENCIES
   middleman
   middleman-blog
   middleman-livereload
-  middleman-meta-tags
+  middleman-meta-tags!
   nokogiri
   redcarpet
 
