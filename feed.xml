@@ -119,7 +119,7 @@ end
     result &amp;lt;&amp;lt; block.call
   end
 
-  return result
+  result
 end
 &lt;/code&gt;&lt;/pre&gt;
 
