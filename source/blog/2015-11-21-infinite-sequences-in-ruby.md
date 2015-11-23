@@ -118,7 +118,7 @@ def repeatedly_foo(n, &block)
     result << block.call
   end
 
-  return result
+  result
 end
 ```
 
