@@ -14,7 +14,7 @@ Functional languages like Clojure have [sequences][1]. Sequences are pretty amaz
 
 The Ruby standard library doesn’t have an official sequence class or module, but we can get pretty far with the `Enumerable` module. Rubyists are typically introduced to `Enumerable` through methods on `Array`,  like `#map` and `#select`. Arrays like `[1,2,3,4]` may be thought of as finite, eagerly loaded sequences; they already contains all the members we want to enumerate with methods. We can also extend this API to sequences like “give me multiples of 5” in Ruby.
 
-## Enumerable Fibonacci
+### Enumerable Fibonacci
 
 Consider an infinite sequence like fibonacci. We could create a method that generates the first `n` fibonacci members given `n` as a paramter. This implementation could look like this:
 
@@ -87,7 +87,7 @@ Notice we only need to enumerate 13 items to retrieve 10 odd numbers from fibona
 
 Try creating other numerical sequences with enumerators on your own, like multiples of `n`, factorials for the first `n` integers or enumerating sums of squares. Also be sure to check out Pat Shaughnessy's [great primer on lazy enumerators][3].
 
-## Sequence Functions
+### Sequence Functions
 
 Clojure also has a number of useful functions that allow us to generate sequences from other functions. Let’s look at `repeatedly` which simply calls the given function over and over, emitting the results as a sequence. To get a sequence of five random numbers between 0 - 100:
 
@@ -143,7 +143,7 @@ repeatedly { rand(100) }.take(5)
 => [48, 48, 72, 41, 70] # your results will vary... they're random!
 ```
 
-## To Infinity and Beyond
+### To Infinity and Beyond
 
 Of course, sequences of numbers aren’t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.
 
