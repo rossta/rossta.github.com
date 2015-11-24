@@ -59,7 +59,7 @@
 
 <p>The Ruby standard library doesn’t have an official sequence class or module, but we can get pretty far with the <code>Enumerable</code> module. Rubyists are typically introduced to <code>Enumerable</code> through methods on <code>Array</code>,  like <code>#map</code> and <code>#select</code>. Arrays like <code>[1,2,3,4]</code> may be thought of as finite, eagerly loaded sequences; they already contains all the members we want to enumerate with methods. We can also extend this API to sequences like “give me multiples of 5” in Ruby.</p>
 
-<h2>Enumerable Fibonacci</h2>
+<h3>Enumerable Fibonacci</h3>
 
 <p>Consider an infinite sequence like fibonacci. We could create a method that generates the first <code>n</code> fibonacci members given <code>n</code> as a paramter. This implementation could look like this:</p>
 
@@ -126,7 +126,7 @@ fibonacci.lazy.with_index.select { |n, i| n.even? }.first(10)
 
 <p>Try creating other numerical sequences with enumerators on your own, like multiples of <code>n</code>, factorials for the first <code>n</code> integers or enumerating sums of squares. Also be sure to check out Pat Shaughnessy&rsquo;s <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">great primer on lazy enumerators</a>.</p>
 
-<h2>Sequence Functions</h2>
+<h3>Sequence Functions</h3>
 
 <p>Clojure also has a number of useful functions that allow us to generate sequences from other functions. Let’s look at <code>repeatedly</code> which simply calls the given function over and over, emitting the results as a sequence. To get a sequence of five random numbers between 0 - 100:</p>
 
@@ -178,7 +178,7 @@ end
 =&gt; [48, 48, 72, 41, 70] # your results will vary... they&#39;re random!
 </code></pre>
 
-<h2>To Infinity and Beyond</h2>
+<h3>To Infinity and Beyond</h3>
 
 <p>Of course, sequences of numbers aren’t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.</p>
 

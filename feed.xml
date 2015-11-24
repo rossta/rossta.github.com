@@ -23,7 +23,7 @@
 
 &lt;p&gt;The Ruby standard library doesn’t have an official sequence class or module, but we can get pretty far with the &lt;code&gt;Enumerable&lt;/code&gt; module. Rubyists are typically introduced to &lt;code&gt;Enumerable&lt;/code&gt; through methods on &lt;code&gt;Array&lt;/code&gt;,  like &lt;code&gt;#map&lt;/code&gt; and &lt;code&gt;#select&lt;/code&gt;. Arrays like &lt;code&gt;[1,2,3,4]&lt;/code&gt; may be thought of as finite, eagerly loaded sequences; they already contains all the members we want to enumerate with methods. We can also extend this API to sequences like “give me multiples of 5” in Ruby.&lt;/p&gt;
 
-&lt;h2&gt;Enumerable Fibonacci&lt;/h2&gt;
+&lt;h3&gt;Enumerable Fibonacci&lt;/h3&gt;
 
 &lt;p&gt;Consider an infinite sequence like fibonacci. We could create a method that generates the first &lt;code&gt;n&lt;/code&gt; fibonacci members given &lt;code&gt;n&lt;/code&gt; as a paramter. This implementation could look like this:&lt;/p&gt;
 
@@ -90,7 +90,7 @@ fibonacci.lazy.with_index.select { |n, i| n.even? }.first(10)
 
 &lt;p&gt;Try creating other numerical sequences with enumerators on your own, like multiples of &lt;code&gt;n&lt;/code&gt;, factorials for the first &lt;code&gt;n&lt;/code&gt; integers or enumerating sums of squares. Also be sure to check out Pat Shaughnessy&amp;rsquo;s &lt;a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy"&gt;great primer on lazy enumerators&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h2&gt;Sequence Functions&lt;/h2&gt;
+&lt;h3&gt;Sequence Functions&lt;/h3&gt;
 
 &lt;p&gt;Clojure also has a number of useful functions that allow us to generate sequences from other functions. Let’s look at &lt;code&gt;repeatedly&lt;/code&gt; which simply calls the given function over and over, emitting the results as a sequence. To get a sequence of five random numbers between 0 - 100:&lt;/p&gt;
 
@@ -142,7 +142,7 @@ end
 =&amp;gt; [48, 48, 72, 41, 70] # your results will vary... they&amp;#39;re random!
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2&gt;To Infinity and Beyond&lt;/h2&gt;
+&lt;h3&gt;To Infinity and Beyond&lt;/h3&gt;
 
 &lt;p&gt;Of course, sequences of numbers aren’t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.&lt;/p&gt;
 </content>
