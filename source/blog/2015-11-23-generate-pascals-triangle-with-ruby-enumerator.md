@@ -6,39 +6,87 @@ published: false
 
 Sequences need not be numbers either. Pascal’s Triangle, a favorite of mine, represents a [“triangular array of the binomial coefficients”]. We can model this in Ruby as an array of arrays. The first array member is `[1]`. Each successive array (or “row”) will increase in size, and each array member will be the sum of the member at the same index `n` in the `k-1` row, where `k` is the current row, and the `n-1` member in the `k-1` row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first 5 rows as follows:
 
-''[
-''[1],
-''[1, 1],
-''[1, 2, 1],
-''[1, 3, 3, 1],
-''[1, 4, 6, 4, 1]
-'']
+```ruby
+[
+  [1],
+  [1, 1],
+  [1, 2, 1],
+  [1, 3, 3, 1],
+  [1, 4, 6, 4, 1]
+]
+```
 
 Let’s solve this with Ruby. To be certain, there are a number of approaches to generating Pascal’s Triangle, including both recursive and iterative solutions, so consider the following as just one technique that emphasizes use of the Enumerable API.
 
-Pascal’s Triangle is another infinite sequence where each item is a row. Starting with the first row, `[1]`, we can write a Ruby method that will generate the next row `[1, 1]`. Let’s write this in a way so it will be possible to generate any row `k` from row `k-1`. Here’s what the usage of this method will look like:
+Pascal’s Triangle is an infinite sequence where each item is a row. Starting with the first row, `[1]`, we can write a Ruby method that will generate the next row `[1, 1]`. Let’s write this in a way so it will be possible to generate any row `k` from row `k-1`. Here’s what the usage of this method will look like:
 
-''pascal_row([1])
-''=> [1, 1]
-''pascal_row([1, 3, 3, 1])
-''=> [1, 4, 6, 4, 1]
+```ruby
+pascal_row([1])
+=> [1, 1]
+pascal_row([1, 3, 3, 1])
+=> [1, 4, 6, 4, 1]
+```
 
-Let’s engineer how we’ll do this by deconstructing down this fifth row: `[1, 4, 6, 4, 1]`. Each member is the sum of `n` and `n-1` (or 0) from the previous row, `[1, 3, 3, 1]`. Therefore, we can rewrite the fifth row as
+We'll use Test-Driven Development to validate our implementation starting with a
+few assertions to ensure the first several rows are returned as expected.
 
-''[(0 + 1), (1 + 3), (3 + 3), (3 + 1), (1 + 0)]
-''=> [1, 4, 6, 4, 1]
+```ruby
+require 'minitest/autorun'
+
+def pascals_row(row)
+end
+
+class TestPascalsTriangle < Minitest::Test
+  def test_pascals_row
+    assert_equal [1, 1], pascals_row([1])
+    assert_equal [1, 2, 1], pascals_row([1, 1])
+    assert_equal [1, 3, 3, 1], pascals_row([1, 2, 1])
+    assert_equal [1, 4, 6, 4, 1], pascals_row([1, 3, 3, 1])
+    assert_equal [1, 5, 10, 10, 5, 1], pascals_row([1, 4, 6, 4, 1])
+  end
+end
+```
+
+```ruby
+$ ruby pascals_triangle_test.rb
+Run options: --seed 45117
+
+# Running:
+
+F
+
+Finished in 0.001035s, 966.0380 runs/s, 966.0380 assertions/s.
+
+  1) Failure:
+TestPascalsTriangle#test_pascals_row [code/pascals_row_test.rb:8]:
+Expected: [1, 1]
+  Actual: nil
+
+1 runs, 1 assertions, 1 failures, 0 errors, 0 skips
+```
+
+To extract a general method, let’s deconstruct a single row. We'll examine the fifth: `[1, 4, 6, 4, 1]`. Each member is the sum of `n` and `n-1` from the previous row, `[1, 3, 3, 1]`. We substitute zero when `n` or `n-1` is missing. Therefore, we can rewrite the fifth row as
+
+```ruby
+[(0 + 1), (1 + 3), (3 + 3), (3 + 1), (1 + 0)]
+=> [1, 4, 6, 4, 1]
+```
 
 We could create that construct from a nested array of number pairs and collecting the sum of each pair like so:
 
-''[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]].collect { |a, b| a + b }
-''=> [1, 4, 6, 4, 1]
+```ruby
+[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]].collect { |a, b| a + b }
+=> [1, 4, 6, 4, 1]
+```
 
-Look closely at those array pairs for a pattern: the first members of each pair form the array `[0, 1, 3, 3, 1]` and the second members of each pair are `[1, 3, 3, 1, 0]`. These are instances of row 4 augmented by prepending or appending zero. Given these two arrays, we can form the nested array of pairs with the `Enumerable#zip` method:
+Look closely at those array pairs for a pattern. Taking just first members of each pair form the array we get `[0, 1, 3, 3, 1]`. The second members of each pair are `[1, 3, 3, 1, 0]`. In each we see the members of row four, `[1, 3, 3, 1]` augmented by prepending zero or appending zero respectively.
+
+This step is perfect for the `Enumerable#zip` method: `zip` groups members of given arrays by position. Therefore, we can use `zip` to combine `[0, 1, 3, 3, 1]` with `[1, 3, 3, 1, 0]` to produce `[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]`:
 
 [0, 1, 3, 3, 1].zip([1, 3, 3, 1, 0])
 => [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
 
-Let's extract a variable to represent row 4:
+Let's extract a variable to represent row four:
 
 ```ruby
 row = [1, 3, 3, 1]
@@ -70,8 +118,7 @@ row = [1, 2, 1]
 => [1, 3, 3, 1]
 ```
 
-Yes! We now have the implementation for our method to produce any row
-for Pascal's Triangle given the preceding row:
+Yes! We now have the implementation for our method to produce any row for Pascal's Triangle given the preceding row:
 
 ```ruby
 def pascal_row(row)
@@ -79,4 +126,37 @@ def pascal_row(row)
 end
 ```
 
+Plugging this implementation into our test:
 
+```ruby
+require 'minitest/autorun'
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle < Minitest::Test
+  def test_pascals_row
+    assert_equal [1, 1], pascals_row([1])
+    assert_equal [1, 2, 1], pascals_row([1, 1])
+    assert_equal [1, 3, 3, 1], pascals_row([1, 2, 1])
+    assert_equal [1, 4, 6, 4, 1], pascals_row([1, 3, 3, 1])
+    assert_equal [1, 5, 10, 10, 5, 1], pascals_row([1, 4, 6, 4, 1])
+  end
+end
+```
+
+... we get passing tests
+
+```
+$ ruby code/pascals_row_test.rb
+Run options: --seed 61039
+
+# Running:
+
+.
+
+Finished in 0.001020s, 980.6882 runs/s, 4903.4412 assertions/s.
+
+1 runs, 5 assertions, 0 failures, 0 errors, 0 skips
+```
