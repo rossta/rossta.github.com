@@ -33,4 +33,50 @@ We could create that construct from a nested array of number pairs and collectin
 ''[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]].collect { |a, b| a + b }
 ''=> [1, 4, 6, 4, 1]
 
-Look closely at those array pairs and we see a pattern. Take the first element
+Look closely at those array pairs for a pattern: the first members of each pair form the array `[0, 1, 3, 3, 1]` and the second members of each pair are `[1, 3, 3, 1, 0]`. These are instances of row 4 augmented by prepending or appending zero. Given these two arrays, we can form the nested array of pairs with the `Enumerable#zip` method:
+
+[0, 1, 3, 3, 1].zip([1, 3, 3, 1, 0])
+=> [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
+
+Let's extract a variable to represent row 4:
+
+```ruby
+row = [1, 3, 3, 1]
+([0] + row).zip(row + [0])
+=> [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
+```
+
+Putting it altogether, we can now produce the fifth row from the fourth:
+
+```ruby
+row = [1, 3, 3, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=> [1, 4, 6, 4, 1]
+```
+
+Let's confirm this expression works with for other row conversions:
+
+```ruby
+row = [1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=> [1, 1]
+
+row = [1, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=> [1, 2, 1]
+
+row = [1, 2, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=> [1, 3, 3, 1]
+```
+
+Yes! We now have the implementation for our method to produce any row
+for Pascal's Triangle given the preceding row:
+
+```ruby
+def pascal_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+```
+
+
