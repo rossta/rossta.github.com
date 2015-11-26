@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Infinite Sequences in Ruby | rossta.net</title>
 <meta name="description" content="Wrap algorithms in Enumerable or Enumerator to have them behave like infinite collections." />
-<meta name="keywords" content="Code, Ruby" />
+<meta name="keywords" content="Code, Ruby, Enumerable" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
@@ -48,12 +48,13 @@
           <section id="blog">
     <article class="post">
       <header>
-        <h2>
-          Infinite Sequences in Ruby
-          <br />
-          <small>Treat your algorithms like enumerables with Enumerator</small>
-        </h2>
-      </header>
+  <h2>
+    Infinite Sequences in Ruby
+      <br />
+      <small>Treat your algorithms like enumerables with Enumerator</small>
+  </h2>
+</header>
+
 
       <p>Functional languages like Clojure have <a href="http://clojure.org/sequences">sequences</a>. Sequences are pretty amazing: they let us treat algorithms as data structures. We can call functions on the data as it is produced, allowing us to interact with the results like a collection even when the sequence is infinite.</p>
 
@@ -187,28 +188,6 @@ end
 
       <h2><small>Published on Nov 21, 2015</small></h2>
     </article>
-      <section class="comments">
-        <div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-    var disqus_shortname  = 'rosskaff';
-    var disqus_identifier = 'infinite-sequences-in-ruby';
-    var disqus_title      = 'Infinite Sequences in Ruby';
-    var disqus_url        = 'https://rossta.net/blog/infinite-sequences-in-ruby.html';
-
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
-
-      </section>
   </section>
   <br /><br />
   <section class="signup-form">
@@ -248,6 +227,28 @@ end
 
   </section>
   <br /><br />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = 'rosskaff';
+    var disqus_identifier = 'infinite-sequences-in-ruby';
+    var disqus_title      = 'Infinite Sequences in Ruby';
+    var disqus_url        = 'https://rossta.net/blog/infinite-sequences-in-ruby.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
 
       </section>
     </div>

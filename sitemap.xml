@@ -402,6 +402,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/tags/enumerable.html</loc>
+    <lastmod>2015-11-26T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/2015.html</loc>
     <lastmod>2015-11-26T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
