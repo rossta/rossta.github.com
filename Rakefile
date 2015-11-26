@@ -57,16 +57,19 @@ task :build do
   end
 end
 
-desc "Build and publish to Github Pages"
-task :publish => [:not_dirty, :prepare_git_remote_in_build_dir, :sync, :build] do
-  message = nil
-
+desc "Push to develop"
+task :push_to_develop_branch do
   if /nothing to commit/ =~ `git status`
-    puts "No changes to commit."
+    puts "No changes to commit to develop branch."
   else
     sh "git commit -m \"#{message}\""
     sh "git push origin develop"
   end
+end
+
+desc "Build and publish to Github Pages"
+task :publish => [:push_to_develop_branch, :not_dirty, :prepare_git_remote_in_build_dir, :sync, :build] do
+  message = nil
 
   cd PROJECT_ROOT do
     head = `git log --pretty="%h" -n1`.strip
