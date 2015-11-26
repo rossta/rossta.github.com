@@ -61,6 +61,13 @@ desc "Build and publish to Github Pages"
 task :publish => [:not_dirty, :prepare_git_remote_in_build_dir, :sync, :build] do
   message = nil
 
+  if /nothing to commit/ =~ `git status`
+    puts "No changes to commit."
+  else
+    sh "git commit -m \"#{message}\""
+    sh "git push origin develop"
+  end
+
   cd PROJECT_ROOT do
     head = `git log --pretty="%h" -n1`.strip
     message = "Site updated to #{head}"
