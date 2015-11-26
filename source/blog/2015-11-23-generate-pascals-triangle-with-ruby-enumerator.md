@@ -1,10 +1,21 @@
 ---
-title: Generate Pascals Triangle with Ruby Enumerator
+title: Pascal's Triangle in Ruby
 author: Ross Kaffenberger
 published: false
+summary: Building an Enumerable Sequence with Enumerator
+description: Building Pascal's Triangle as an Enumerable sequence with Ruby's Enumerator.
+pull\_image: 'https://rossta.net/assets/images/blog/pascals_triangle_color.jpg'
+published: false
+tags:
+  - Code
+  - Ruby
 ---
 
-Sequences need not be numbers either. Pascal’s Triangle, a favorite of mine, represents a [“triangular array of the binomial coefficients”]. We can model this in Ruby as an array of arrays. The first array member is `[1]`. Each successive array (or “row”) will increase in size, and each array member will be the sum of the member at the same index `n` in the `k-1` row, where `k` is the current row, and the `n-1` member in the `k-1` row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first 5 rows as follows:
+Pascal’s Triangle is a sequence that represents a [“triangular array of the binomial coefficients”](https://en.wikipedia.org/wiki/Pascal%27s_triangle). Each row contains an increasing count of numbers, each of which can be derived from members of the previous row.
+
+![Pascal's Triangle](blog/pascals_triangle_animated.gif)
+
+We can model this in Ruby as an array of arrays. The first array member is `[1]`. Each successive array (or “row”) will increase in size, and each array member will be the sum of the member at the same index `n` in the `k-1` row, where `k` is the current row, and the `n-1` member in the `k-1` row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:
 
 ```ruby
 [
@@ -16,9 +27,9 @@ Sequences need not be numbers either. Pascal’s Triangle, a favorite of mine, r
 ]
 ```
 
-Let’s solve this with Ruby. To be certain, there are a number of approaches to generating Pascal’s Triangle, including both recursive and iterative solutions, so consider the following as just one technique that emphasizes use of the Enumerable API.
+Let’s solve this with Ruby. While there are a number of approaches to generating Pascal’s Triangle, including both recursive and iterative solutions, we'll consider the following to explore use of the Enumerable API.
 
-Pascal’s Triangle is an infinite sequence where each item is a row. Starting with the first row, `[1]`, we can write a Ruby method that will generate the next row `[1, 1]`. Let’s write this in a way so it will be possible to generate any row `k` from row `k-1`. Here’s what the usage of this method will look like:
+Starting with the first row, `[1]`, we can write a Ruby method that will generate the next row `[1, 1]`. Let’s write this in a way so it will be possible to generate any row `k` from row `k-1`. Here’s what the usage of this method will look like:
 
 ```ruby
 pascal_row([1])
@@ -67,7 +78,7 @@ Expected: [1, 1]
 
 To extract a general method, let’s deconstruct a single row. We'll examine the fifth: `[1, 4, 6, 4, 1]`. Each member is the sum of `n` and `n-1` from the previous row, `[1, 3, 3, 1]`. We substitute zero when `n` or `n-1` is missing. Therefore, we can rewrite the fifth row as
 
-```ruby
+```ruby_
 [(0 + 1), (1 + 3), (3 + 3), (3 + 1), (1 + 0)]
 => [1, 4, 6, 4, 1]
 ```
@@ -126,7 +137,7 @@ def pascal_row(row)
 end
 ```
 
-Plugging this implementation into our test:
+Plugging in this implementation...
 
 ```ruby
 require 'minitest/autorun'
@@ -160,3 +171,154 @@ Finished in 0.001020s, 980.6882 runs/s, 4903.4412 assertions/s.
 
 1 runs, 5 assertions, 0 failures, 0 errors, 0 skips
 ```
+
+### In Sequence
+
+Our row method serves as a nice building block for a sequence. We can call `pascals_row` repeatedly on its own return values to generate many rows of the
+triangle, even infinitely. I previously wrote about creating [infinite sequences in Ruby](https://rossta.net/blog/infinite-sequences-in-ruby.html) with Enumerator and we'll apply this approach here.
+
+We'd like to be able to call a method and enumerate the rows representing
+Pascal's Triangle as we would for an array. Since we'll be using `Enumerator`,
+which exposes the `Enumerable` api, we can use external enumeration with
+`Enumerator#next` to extract rows in succession.
+
+Let's rewrite our previous test to demonstrate:
+
+```ruby
+require 'minitest/autorun'
+
+def pascals_triangle
+  # should return an Enumerator
+end
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle < Minitest::Test
+  def test_pascals_triangle
+    rows = pascals_triangle
+    assert_equal [1], rows.next
+    assert_equal [1, 1], rows.next
+    assert_equal [1, 2, 1], rows.next
+    assert_equal [1, 3, 3, 1], rows.next
+    assert_equal [1, 4, 6, 4, 1], rows.next
+    assert_equal [1, 5, 10, 10, 5, 1], rows.next
+  end
+end
+```
+
+With no implementation, the test fails on calling `next`:
+
+```ruby
+$ ruby pascals_triangle_test.rb
+Run options: --seed 62081
+
+# Running:
+
+E
+
+Finished in 0.000949s, 1053.4832 runs/s, 0.0000 assertions/s.
+
+  1) Error:
+TestPascalsTriangle#test_pascals_rows:
+NoMethodError: undefined method `next' for nil:NilClass
+    code/pascals_row_test.rb:14:in `test_pascals_rows'
+
+1 runs, 0 assertions, 0 failures, 1 errors, 0 skips
+```
+
+Our enumerator needs to call the `pascals_row` method repeatedly with the
+previous result. We'll maintain the current row as `current`, pass this as the
+arg to `pascals_row`, replace it with the result and repeat in a loop. Returning the
+`Enumerator` from the method will allow the caller to control how it's
+enumerated.
+
+Here's what the implementation could look like:
+
+```ruby
+current = [1]
+Enumerator.new do |y|
+  loop do
+    y << current
+    current = pascals_row(current)
+  end
+end
+```
+
+Let's plug this into our method and rerun:
+
+```ruby
+require 'minitest/autorun'
+
+def pascals_triangle(row = [1])
+  current = row
+  Enumerator.new do |y|
+    loop do
+      y << current
+      current = pascals_row(current)
+    end
+  end
+end
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle < Minitest::Test
+  def test_pascals_rows
+    rows = pascals_triangle
+    assert_equal [1], rows.next
+    assert_equal [1, 1], rows.next
+    assert_equal [1, 2, 1], rows.next
+    assert_equal [1, 3, 3, 1], rows.next
+    assert_equal [1, 4, 6, 4, 1], rows.next
+    assert_equal [1, 5, 10, 10, 5, 1], rows.next
+  end
+end
+```
+
+The thing that excites me about this implementation is we can apply enumerable
+methods with the enumerator, like chaining `Enumerator#with_index` and using `Enumerator#each` to
+print a "pretty" triangle of each row with its row number.
+
+```ruby
+pascals_triangle.with_index(1).take(10).each do |row, i|
+  puts "%d:%#{20+(row.inspect.length/2)}s" % [i, row.inspect]
+end
+
+1:                  [1]
+2:                 [1, 1]
+3:               [1, 2, 1]
+4:              [1, 3, 3, 1]
+5:            [1, 4, 6, 4, 1]
+6:          [1, 5, 10, 10, 5, 1]
+7:        [1, 6, 15, 20, 15, 6, 1]
+8:      [1, 7, 21, 35, 35, 21, 7, 1]
+9:    [1, 8, 28, 56, 70, 56, 28, 8, 1]
+10: [1, 9, 36, 84, 126, 126, 84, 36, 9, 1]
+
+=>
+[[[1], 1],
+ [[1, 1], 2],
+ [[1, 2, 1], 3],
+ [[1, 3, 3, 1], 4],
+ [[1, 4, 6, 4, 1], 5],
+ [[1, 5, 10, 10, 5, 1], 6],
+ [[1, 6, 15, 20, 15, 6, 1], 7],
+ [[1, 7, 21, 35, 35, 21, 7, 1], 8],
+ [[1, 8, 28, 56, 70, 56, 28, 8, 1], 9],
+ [[1, 9, 36, 84, 126, 126, 84, 36, 9, 1], 10]]
+```
+Notice the return value combines the each row with its index, an interesting outcome of how enumerator
+chains can augment the enumerated values.
+
+We can also take advantage of `Enumerator#lazy` to operate on rows without
+relying on eager evaluation. Here we use a lazy enumerator chain to demonstrate
+that the sum of numbers in each row is 2^n:
+
+```ruby
+pascals_triangle.lazy.map { |row| Math.log(row.reduce(:+), 2) }.take_while { |n| n < 9 }.force
+=> [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]
+```
+
