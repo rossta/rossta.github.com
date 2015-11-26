@@ -59,10 +59,17 @@ end
 
 desc "Push to develop"
 task :push_to_develop_branch do
-  if /nothing to commit/ =~ `git status`
-    puts "No changes to commit to develop branch."
-  else
-    sh "git commit -m \"#{message}\""
+  status = `git status`
+
+  if /On branch develop/ !~ status
+    warn "Please publish from the develop branch"
+  end
+
+  if /nothing to commit/ !~ status
+    warn "Please commit or stash changes first"
+  end
+
+  if /Your branch is ahead/ =~ status
     sh "git push origin develop"
   end
 end
