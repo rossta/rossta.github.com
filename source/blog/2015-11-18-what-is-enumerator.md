@@ -8,6 +8,7 @@ published: true
 tags:
   - Code
   - Ruby
+  - Enumerable
 ---
 Let's pretend we know about Ruby's [Enumerable](http://ruby-doc.org/core-2.2.3/Enumerable.html) module - that it's included in
 Ruby's core collection classes like Array and Hash and provides a bunch of

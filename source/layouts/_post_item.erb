@@ -1,0 +1,11 @@
+<% summary ||= nil %>
+<section class="index-posts magin-top">
+   <article>
+     <header>
+       <h4><%= link_to title, path %></h4>
+       <% if summary %>
+         <p class="alt-title subtle"><%= summary %></p>
+       <% end %>
+     </header>
+   </article>
+</section>

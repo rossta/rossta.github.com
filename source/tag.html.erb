@@ -2,24 +2,28 @@
 pageable: true
 per_page: 12
 ---
-<h1>Articles tagged '<%= tagname %>'</h1>
 
+<%= page_header tagname, 'Another rossta.net series' %>
+
+<br>
+<section class="index-posts margin-top">
+  <% page_articles.each_with_index do |article, i| %>
+    <%= partial 'layouts/post_item', locals: { title: article.title, path: article, summary: article.data.summary} %>
+  <% end %>
+</section>
+
+<br>
 <% if paginate %>
   <p>Page <%= page_number %> of <%= num_pages %></p>
 
-  <% if prev_page %>
-    <p><%= link_to 'Previous page', prev_page %></p>
-  <% end %>
-<% end %>
-
-<ul>
-  <% page_articles.each_with_index do |article, i| %>
-    <li><%= link_to article.title, article %> <span><%= article.date.strftime('%b %e') %></span></li>
-  <% end %>
-</ul>
-
-<% if paginate %>
-  <% if next_page %>
-    <p><%= link_to 'Next page', next_page %></p>
+  <% if prev_page || next_page %>
+    <p>
+      <% if prev_page %>
+        <%= link_to 'Previous', prev_page %></p>
+      <% end %>
+      <% if next_page %>
+        <%= link_to 'Next page', next_page %>
+      <% end %>
+    </p>
   <% end %>
 <% end %>

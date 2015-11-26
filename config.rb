@@ -146,6 +146,10 @@ helpers do
     yield_content(:title)
   end
 
+  def page_header(title, summary = nil)
+    partial 'layouts/page_header', locals: { title: title, summary: summary }
+  end
+
   def section
     (yield_content(:section) || title || "")
   end

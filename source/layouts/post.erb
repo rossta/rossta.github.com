@@ -6,15 +6,7 @@
   <% keywords (current_page.data.tags || []).join(', ') %>
   <section id="blog">
     <article class="post">
-      <header>
-        <h2>
-          <%= current_article.title %>
-          <% if current_page.data.summary %>
-          <br />
-          <small><%= current_page.data.summary %></small>
-          <% end %>
-        </h2>
-      </header>
+      <%= page_header current_article.title, current_page.data.summary %>
 
       <%= yield %>
 
@@ -22,15 +14,15 @@
 
       <h2><small>Published on <%= current_article.date.strftime('%b %e, %Y') %></small></h2>
     </article>
-    <% if build? %>
-      <section class="comments">
-        <%= partial "layouts/current_article_comments" %>
-      </section>
-    <% end %>
   </section>
   <br /><br />
   <section class="signup-form">
     <%= partial "layouts/signup" %>
   </section>
   <br /><br />
+  <% if build? %>
+    <section class="comments">
+      <%= partial "layouts/current_article_comments" %>
+    </section>
+  <% end %>
 <% end %>

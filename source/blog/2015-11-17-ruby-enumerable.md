@@ -8,6 +8,7 @@ published: true
 tags:
   - Code
   - Ruby
+  - Enumerable
 ---
 
 I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first learned Ruby as a full-time developer, I rediscovered that joy.

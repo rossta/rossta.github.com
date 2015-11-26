@@ -9,6 +9,7 @@ published: false
 tags:
   - Code
   - Ruby
+  - Enumerable
 ---
 
 Pascal’s Triangle is a sequence that represents a [“triangular array of the binomial coefficients”](https://en.wikipedia.org/wiki/Pascal%27s_triangle). Each row contains an increasing count of numbers, each of which can be derived from members of the previous row.
@@ -45,6 +46,7 @@ few assertions to ensure the first several rows are returned as expected.
 require 'minitest/autorun'
 
 def pascals_row(row)
+  # yo no se
 end
 
 class TestPascalsTriangle < Minitest::Test
@@ -57,6 +59,8 @@ class TestPascalsTriangle < Minitest::Test
   end
 end
 ```
+
+Our failing test run will look something like this:
 
 ```ruby
 $ ruby pascals_triangle_test.rb
@@ -159,7 +163,7 @@ end
 
 ... we get passing tests
 
-```
+```bash
 $ ruby code/pascals_row_test.rb
 Run options: --seed 61039
 
@@ -174,8 +178,7 @@ Finished in 0.001020s, 980.6882 runs/s, 4903.4412 assertions/s.
 
 ### In Sequence
 
-Our row method serves as a nice building block for a sequence. We can call `pascals_row` repeatedly on its own return values to generate many rows of the
-triangle, even infinitely. I previously wrote about creating [infinite sequences in Ruby](https://rossta.net/blog/infinite-sequences-in-ruby.html) with Enumerator and we'll apply this approach here.
+Our row method serves as a nice building block for a sequence. We can call `pascals_row` repeatedly on its own return values to generate many rows of the triangle, even infinitely. I previously wrote about creating [infinite sequences in Ruby](https://rossta.net/blog/infinite-sequences-in-ruby.html) with Enumerator and we'll apply this approach here.
 
 We'd like to be able to call a method and enumerate the rows representing
 Pascal's Triangle as we would for an array. Since we'll be using `Enumerator`,
@@ -184,11 +187,11 @@ which exposes the `Enumerable` api, we can use external enumeration with
 
 Let's rewrite our previous test to demonstrate:
 
-```ruby
+```bash
 require 'minitest/autorun'
 
 def pascals_triangle
-  # should return an Enumerator
+  # Enumerator, please
 end
 
 def pascals_row(row)
@@ -210,7 +213,7 @@ end
 
 With no implementation, the test fails on calling `next`:
 
-```ruby
+```bash
 $ ruby pascals_triangle_test.rb
 Run options: --seed 62081
 
@@ -278,9 +281,7 @@ class TestPascalsTriangle < Minitest::Test
 end
 ```
 
-The thing that excites me about this implementation is we can apply enumerable
-methods with the enumerator, like chaining `Enumerator#with_index` and using `Enumerator#each` to
-print a "pretty" triangle of each row with its row number.
+The exciting thing about this implementation is we can treat our sequence like a collection and call enumerable methods. We can also chain enumerable methods like `Enumerator#with_index` and `Enumerator#each` to print a "pretty" triangle of each row with its row number.
 
 ```ruby
 pascals_triangle.with_index(1).take(10).each do |row, i|
@@ -313,12 +314,13 @@ end
 Notice the return value combines the each row with its index, an interesting outcome of how enumerator
 chains can augment the enumerated values.
 
-We can also take advantage of `Enumerator#lazy` to operate on rows without
-relying on eager evaluation. Here we use a lazy enumerator chain to demonstrate
-that the sum of numbers in each row is 2^n:
+We can also take advantage of `Enumerator#lazy` to operate on rows without relying on eager evaluation. Here we use a lazy enumerator chain to demonstrate that the sum of numbers in each row is 2^n:
 
 ```ruby
 pascals_triangle.lazy.map { |row| Math.log(row.reduce(:+), 2) }.take_while { |n| n < 9 }.force
 => [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]
 ```
 
+Enumerators allow us to provide an enumerable interface to generated data in
+much the same way we do for collections. Try test-driving an enumerable
+implementation [other sequences](https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/) on your own.
