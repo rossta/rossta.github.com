@@ -12,7 +12,11 @@ tags:
   - Enumerable
 ---
 
-Pascal’s Triangle is a sequence that represents a [“triangular array of the binomial coefficients”](https://en.wikipedia.org/wiki/Pascal%27s_triangle). Each row contains an increasing count of numbers, each of which can be derived from members of the previous row.
+Pascal’s Triangle is a fun sequence. Here's what it looks like:
+
+![Pascal's Triangle](blog/pascals_triangle_color.jpg)
+
+It represents a [“triangular array of the binomial coefficients”](https://en.wikipedia.org/wiki/Pascal%27s_triangle). Each row contains an increasing count of numbers, each of which can be derived from members of the previous row.
 
 ![Pascal's Triangle](blog/pascals_triangle_animated.gif)
 
@@ -323,4 +327,4 @@ pascals_triangle.lazy.map { |row| Math.log(row.reduce(:+), 2) }.take_while { |n|
 
 Enumerators allow us to provide an enumerable interface to generated data in
 much the same way we do for collections. Try test-driving an enumerable
-implementation [other sequences](https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/) on your own.
+implementation of [other sequences](https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/) on your own.
