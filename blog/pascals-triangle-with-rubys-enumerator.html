@@ -1,0 +1,454 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ross Kaffenberger</title>
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Pascal's Triangle with Ruby's Enumerator | rossta.net</title>
+<meta name="description" content="Generating Pascal's Triangle as an Enumerable sequence with Ruby's Enumerator." />
+<meta name="keywords" content="Code, Ruby, Enumerable" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Generating Pascal's Triangle as an Enumerable sequence with Ruby's Enumerator." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/pascals_triangle_color.jpg" />
+<meta name="twitter:title" content="Pascal's Triangle with Ruby's Enumerator" />
+<meta property="og:description" content="Generating Pascal's Triangle as an Enumerable sequence with Ruby's Enumerator." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/pascals_triangle_color.jpg" />
+<meta property="og:title" content="Pascal's Triangle with Ruby's Enumerator" />
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/all.css?1447766118" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1445744814"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta.net</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li><a href="/blog">blog</a></li>
+      <li><a href="/about">about</a></li>
+      <li><a href="/projects">projects</a></li>
+      <li><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog">
+    <article class="post">
+      <header>
+  <h2>
+    Pascal's Triangle with Ruby's Enumerator
+      <br />
+      <small>Pascals' Triangle as an Enumerable Sequence with Ruby Enumerator</small>
+  </h2>
+</header>
+
+
+      <p>Pascal&rsquo;s Triangle is a fun sequence. Here&rsquo;s what it looks like:</p>
+
+<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389" /></p>
+
+<p>It represents a <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">&ldquo;triangular array of the binomial coefficients&rdquo;</a>. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.</p>
+
+<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1448546389" /></p>
+
+<p>We can model this in Ruby as an array of arrays. The first array member is <code>[1]</code>. Each successive array (or &ldquo;row&rdquo;) will increase in size, and each array member will be the sum of the member at the same index <code>n</code> in the <code>k-1</code> row, where <code>k</code> is the current row, and the <code>n-1</code> member in the <code>k-1</code> row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:</p>
+
+<pre><code class="ruby">[
+  [1],
+  [1, 1],
+  [1, 2, 1],
+  [1, 3, 3, 1],
+  [1, 4, 6, 4, 1]
+]
+</code></pre>
+
+<p>Let&rsquo;s solve this with Ruby. While there are a number of approaches to generating Pascal&rsquo;s Triangle, including both recursive and iterative solutions, we&rsquo;ll explore an approach to treating this as <a href="/blog/infinite-sequences-in-ruby.html">an enumerable</a>.</p>
+
+<p>Starting with the first row, <code>[1]</code>, we can write a Ruby method that will generate the next row <code>[1, 1]</code>. Let&rsquo;s write this in a way so it will be possible to generate any row <code>k</code> from row <code>k-1</code>. Here&rsquo;s what the usage of this method will look like:</p>
+
+<pre><code class="ruby">pascal_row([1])
+=&gt; [1, 1]
+pascal_row([1, 3, 3, 1])
+=&gt; [1, 4, 6, 4, 1]
+</code></pre>
+
+<p>We&rsquo;ll use Test-Driven Development to validate our implementation starting with a few assertions to ensure the first several rows are returned as expected.</p>
+
+<pre><code class="ruby">require &#39;minitest/autorun&#39;
+
+def pascals_row(row)
+  # yo no se
+end
+
+class TestPascalsTriangle &lt; Minitest::Test
+  def test_pascals_row
+    assert_equal [1, 1], pascals_row([1])
+    assert_equal [1, 2, 1], pascals_row([1, 1])
+    assert_equal [1, 3, 3, 1], pascals_row([1, 2, 1])
+    assert_equal [1, 4, 6, 4, 1], pascals_row([1, 3, 3, 1])
+    assert_equal [1, 5, 10, 10, 5, 1], pascals_row([1, 4, 6, 4, 1])
+  end
+end
+</code></pre>
+
+<p>Our failing test run will look something like this:</p>
+
+<pre><code class="ruby">$ ruby pascals_triangle_test.rb
+Run options: --seed 45117
+
+# Running:
+
+F
+
+Finished in 0.001035s, 966.0380 runs/s, 966.0380 assertions/s.
+
+  1) Failure:
+TestPascalsTriangle#test_pascals_row [code/pascals_row_test.rb:8]:
+Expected: [1, 1]
+  Actual: nil
+
+1 runs, 1 assertions, 1 failures, 0 errors, 0 skips
+</code></pre>
+
+<p>To extract a general method, let&rsquo;s deconstruct a single row, the fifth: <code>[1, 4, 6, 4, 1]</code>. Each member is the sum of <code>n</code> and <code>n-1</code> from the previous row, <code>[1, 3, 3, 1]</code>. We substitute zero when <code>n</code> or <code>n-1</code> is missing. Therefore, we can rewrite the fifth row as</p>
+
+<pre><code class="ruby_">[(0 + 1), (1 + 3), (3 + 3), (3 + 1), (1 + 0)]
+=&gt; [1, 4, 6, 4, 1]
+</code></pre>
+
+<p>We can also represent this as a nested array of number pairs then collect the sum of each pair like so:</p>
+
+<pre><code class="ruby">[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]].collect { |a, b| a + b }
+=&gt; [1, 4, 6, 4, 1]
+</code></pre>
+
+<p>Looking closely at the pairs, taking just first members of each pair form the array we get <code>[0, 1, 3, 3, 1]</code>. The second members of each pair are <code>[1, 3, 3, 1, 0]</code>. Written differently, the groups are <code>([0] + [1, 3, 3, 1])</code> and <code>([1, 3, 3, 1] + [0])</code>. In each we see the members of row four, <code>[1, 3, 3, 1]</code> augmented by prepending zero or appending zero respectively.</p>
+
+<p>Getting the nested array pairs from these groups is perfect for the <code>Enumerable#zip</code> method: <code>zip</code> groups members of given arrays by position. Therefore, we can &ldquo;zip&rdquo; <code>[0, 1, 3, 3, 1]</code> with <code>[1, 3, 3, 1, 0]</code> to produce <code>[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]</code>:</p>
+
+<p>[0, 1, 3, 3, 1].zip([1, 3, 3, 1, 0])
+=&gt; [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]</p>
+
+<p>Let&rsquo;s extract a variable to represent row four:</p>
+
+<pre><code class="ruby">row = [1, 3, 3, 1]
+([0] + row).zip(row + [0])
+=&gt; [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
+</code></pre>
+
+<p>Putting it altogether, we can now produce the fifth row from the fourth:</p>
+
+<pre><code class="ruby">row = [1, 3, 3, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=&gt; [1, 4, 6, 4, 1]
+</code></pre>
+
+<p>Let&rsquo;s confirm this expression works with for other row conversions:</p>
+
+<pre><code class="ruby">row = [1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=&gt; [1, 1]
+
+row = [1, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=&gt; [1, 2, 1]
+
+row = [1, 2, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=&gt; [1, 3, 3, 1]
+</code></pre>
+
+<p>Yes! We now have the implementation for our method to produce any row for Pascal&rsquo;s Triangle given the preceding row:</p>
+
+<pre><code class="ruby">def pascal_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+</code></pre>
+
+<p>Plugging in this implementation&hellip;</p>
+
+<pre><code class="ruby">require &#39;minitest/autorun&#39;
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle &lt; Minitest::Test
+  def test_pascals_row
+    assert_equal [1, 1], pascals_row([1])
+    assert_equal [1, 2, 1], pascals_row([1, 1])
+    assert_equal [1, 3, 3, 1], pascals_row([1, 2, 1])
+    assert_equal [1, 4, 6, 4, 1], pascals_row([1, 3, 3, 1])
+    assert_equal [1, 5, 10, 10, 5, 1], pascals_row([1, 4, 6, 4, 1])
+  end
+end
+</code></pre>
+
+<p>&hellip; we get passing tests</p>
+
+<pre><code class="bash">$ ruby code/pascals_row_test.rb
+Run options: --seed 61039
+
+# Running:
+
+.
+
+Finished in 0.001020s, 980.6882 runs/s, 4903.4412 assertions/s.
+
+1 runs, 5 assertions, 0 failures, 0 errors, 0 skips
+</code></pre>
+
+<h3>In Sequence</h3>
+
+<p>Now that we have a method to convert one row to its successor, we have a nice building block for an infinite sequence. We can call <code>pascals_row</code> repeatedly to generate the triangle rows infinitely. I previously wrote about creating <a href="/blog/infinite-sequences-in-ruby.html">infinite sequences in Ruby</a> with Enumerator and we&rsquo;ll apply this approach here.</p>
+
+<p>We&rsquo;d like to be able to call a method and enumerate the rows representing Pascal&rsquo;s Triangle as we would for an array. Since we&rsquo;ll be using <code>Enumerator</code>, which exposes the <code>Enumerable</code> api, we can use external enumeration with <code>Enumerator#next</code> to extract rows in succession. Let&rsquo;s rewrite our previous test to demonstrate:</p>
+
+<pre><code class="bash">require &#39;minitest/autorun&#39;
+
+def pascals_triangle
+  # Enumerator, please
+end
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle &lt; Minitest::Test
+  def test_pascals_triangle
+    rows = pascals_triangle
+    assert_equal [1], rows.next
+    assert_equal [1, 1], rows.next
+    assert_equal [1, 2, 1], rows.next
+    assert_equal [1, 3, 3, 1], rows.next
+    assert_equal [1, 4, 6, 4, 1], rows.next
+    assert_equal [1, 5, 10, 10, 5, 1], rows.next
+  end
+end
+</code></pre>
+
+<p>With no implementation, the test fails on calling <code>next</code>:</p>
+
+<pre><code class="bash">$ ruby pascals_triangle_test.rb
+Run options: --seed 62081
+
+# Running:
+
+E
+
+Finished in 0.000949s, 1053.4832 runs/s, 0.0000 assertions/s.
+
+  1) Error:
+TestPascalsTriangle#test_pascals_rows:
+NoMethodError: undefined method `next&#39; for nil:NilClass
+    code/pascals_row_test.rb:14:in `test_pascals_rows&#39;
+
+1 runs, 0 assertions, 0 failures, 1 errors, 0 skips
+</code></pre>
+
+<p>Our enumerator needs to call the <code>pascals_row</code> method repeatedly with the
+previous result. We&rsquo;ll maintain the current row as <code>current</code>, pass this as the
+arg to <code>pascals_row</code>, replace it with the result and repeat in a loop. Returning the
+<code>Enumerator</code> from the method will allow the caller to control how it&rsquo;s
+enumerated.</p>
+
+<p>Here&rsquo;s what the implementation could look like:</p>
+
+<pre><code class="ruby">current = [1]
+Enumerator.new do |y|
+  loop do
+    y &lt;&lt; current
+    current = pascals_row(current)
+  end
+end
+</code></pre>
+
+<p>Let&rsquo;s plug this into our method and rerun:</p>
+
+<pre><code class="ruby">require &#39;minitest/autorun&#39;
+
+def pascals_triangle(row = [1])
+  current = row
+  Enumerator.new do |y|
+    loop do
+      y &lt;&lt; current
+      current = pascals_row(current)
+    end
+  end
+end
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle &lt; Minitest::Test
+  def test_pascals_rows
+    rows = pascals_triangle
+    assert_equal [1], rows.next
+    assert_equal [1, 1], rows.next
+    assert_equal [1, 2, 1], rows.next
+    assert_equal [1, 3, 3, 1], rows.next
+    assert_equal [1, 4, 6, 4, 1], rows.next
+    assert_equal [1, 5, 10, 10, 5, 1], rows.next
+  end
+end
+</code></pre>
+
+<p>The exciting thing about this implementation is we can treat our sequence like a collection and call enumerable methods. We can also chain enumerable methods like <code>Enumerator#with_index</code> and <code>Enumerator#each</code> to print a &ldquo;pretty&rdquo; triangle of each row with its row number.</p>
+
+<pre><code class="ruby">pascals_triangle.with_index(1).take(10).each do |row, i|
+  puts &quot;%d:%#{20+(row.inspect.length/2)}s&quot; % [i, row.inspect]
+end
+
+1:                  [1]
+2:                 [1, 1]
+3:               [1, 2, 1]
+4:              [1, 3, 3, 1]
+5:            [1, 4, 6, 4, 1]
+6:          [1, 5, 10, 10, 5, 1]
+7:        [1, 6, 15, 20, 15, 6, 1]
+8:      [1, 7, 21, 35, 35, 21, 7, 1]
+9:    [1, 8, 28, 56, 70, 56, 28, 8, 1]
+10: [1, 9, 36, 84, 126, 126, 84, 36, 9, 1]
+
+=&gt;
+[[[1], 1],
+ [[1, 1], 2],
+ [[1, 2, 1], 3],
+ [[1, 3, 3, 1], 4],
+ [[1, 4, 6, 4, 1], 5],
+ [[1, 5, 10, 10, 5, 1], 6],
+ [[1, 6, 15, 20, 15, 6, 1], 7],
+ [[1, 7, 21, 35, 35, 21, 7, 1], 8],
+ [[1, 8, 28, 56, 70, 56, 28, 8, 1], 9],
+ [[1, 9, 36, 84, 126, 126, 84, 36, 9, 1], 10]]
+</code></pre>
+
+<p>Notice the return value combines the each row with its index, an interesting outcome of how enumerator
+chains can augment the enumerated values.</p>
+
+<p>We can also take advantage of <code>Enumerator#lazy</code> to operate on rows without relying on eager evaluation. Here we use a lazy enumerator chain to demonstrate that the sum of numbers in each row is 2^n:</p>
+
+<pre><code class="ruby">pascals_triangle.lazy.map { |row| Math.log(row.reduce(:+), 2) }.take_while { |n| n &lt; 9 }.force
+=&gt; [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]
+</code></pre>
+
+<p>Enumerators allow us to provide an enumerable interface to generated data in much the same way we do for collections. Try test-driving an enumerable implementation of <a href="https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/">other sequences</a> on your own.</p>
+
+
+      <br />
+
+      <h2><small>Published on Nov 30, 2015</small></h2>
+    </article>
+  </section>
+  <br /><br />
+  <section class="signup-form">
+    <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Stop Wrangling with Rails</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+    </form>
+  </div>
+
+  <!--End mc_embed_signup-->
+</div>
+
+  </section>
+  <br /><br />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = 'rosskaff';
+    var disqus_identifier = 'pascals-triangle-with-rubys-enumerator';
+    var disqus_title      = 'Pascal's Triangle with Ruby's Enumerator';
+    var disqus_url        = 'https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    <div id="zen">
+  <div class="row">
+    <div class="enlightenment large-12 columns">I write about things</div>
+  </div>
+</div>
+
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/pub/ross-kaffenberger/4/675/5b9">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/all.js?1445744805"></script>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16458563-2' ]);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+  </body>
+</html>

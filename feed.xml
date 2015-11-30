@@ -5,10 +5,317 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2015-11-20T19:00:00-05:00</updated>
+  <updated>2015-11-29T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Pascal's Triangle with Ruby's Enumerator</title>
+    <link rel="alternate" href="/blog/pascals-triangle-with-rubys-enumerator.html"/>
+    <id>/blog/pascals-triangle-with-rubys-enumerator.html</id>
+    <published>2015-11-29T19:00:00-05:00</published>
+    <updated>2015-11-29T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Pascal’s Triangle is a fun sequence. Here’s what it looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389"&gt;&lt;/p&gt;
+
+&lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;“triangular array of the binomial coefficients”&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Pascal&amp;rsquo;s Triangle is a fun sequence. Here&amp;rsquo;s what it looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389" /&gt;&lt;/p&gt;
+
+&lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;&amp;ldquo;triangular array of the binomial coefficients&amp;rdquo;&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1448546389" /&gt;&lt;/p&gt;
+
+&lt;p&gt;We can model this in Ruby as an array of arrays. The first array member is &lt;code&gt;[1]&lt;/code&gt;. Each successive array (or &amp;ldquo;row&amp;rdquo;) will increase in size, and each array member will be the sum of the member at the same index &lt;code&gt;n&lt;/code&gt; in the &lt;code&gt;k-1&lt;/code&gt; row, where &lt;code&gt;k&lt;/code&gt; is the current row, and the &lt;code&gt;n-1&lt;/code&gt; member in the &lt;code&gt;k-1&lt;/code&gt; row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;[
+  [1],
+  [1, 1],
+  [1, 2, 1],
+  [1, 3, 3, 1],
+  [1, 4, 6, 4, 1]
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s solve this with Ruby. While there are a number of approaches to generating Pascal&amp;rsquo;s Triangle, including both recursive and iterative solutions, we&amp;rsquo;ll explore an approach to treating this as &lt;a href="/blog/infinite-sequences-in-ruby.html"&gt;an enumerable&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Starting with the first row, &lt;code&gt;[1]&lt;/code&gt;, we can write a Ruby method that will generate the next row &lt;code&gt;[1, 1]&lt;/code&gt;. Let&amp;rsquo;s write this in a way so it will be possible to generate any row &lt;code&gt;k&lt;/code&gt; from row &lt;code&gt;k-1&lt;/code&gt;. Here&amp;rsquo;s what the usage of this method will look like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;pascal_row([1])
+=&amp;gt; [1, 1]
+pascal_row([1, 3, 3, 1])
+=&amp;gt; [1, 4, 6, 4, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ll use Test-Driven Development to validate our implementation starting with a few assertions to ensure the first several rows are returned as expected.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
+
+def pascals_row(row)
+  # yo no se
+end
+
+class TestPascalsTriangle &amp;lt; Minitest::Test
+  def test_pascals_row
+    assert_equal [1, 1], pascals_row([1])
+    assert_equal [1, 2, 1], pascals_row([1, 1])
+    assert_equal [1, 3, 3, 1], pascals_row([1, 2, 1])
+    assert_equal [1, 4, 6, 4, 1], pascals_row([1, 3, 3, 1])
+    assert_equal [1, 5, 10, 10, 5, 1], pascals_row([1, 4, 6, 4, 1])
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Our failing test run will look something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;$ ruby pascals_triangle_test.rb
+Run options: --seed 45117
+
+# Running:
+
+F
+
+Finished in 0.001035s, 966.0380 runs/s, 966.0380 assertions/s.
+
+  1) Failure:
+TestPascalsTriangle#test_pascals_row [code/pascals_row_test.rb:8]:
+Expected: [1, 1]
+  Actual: nil
+
+1 runs, 1 assertions, 1 failures, 0 errors, 0 skips
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To extract a general method, let&amp;rsquo;s deconstruct a single row, the fifth: &lt;code&gt;[1, 4, 6, 4, 1]&lt;/code&gt;. Each member is the sum of &lt;code&gt;n&lt;/code&gt; and &lt;code&gt;n-1&lt;/code&gt; from the previous row, &lt;code&gt;[1, 3, 3, 1]&lt;/code&gt;. We substitute zero when &lt;code&gt;n&lt;/code&gt; or &lt;code&gt;n-1&lt;/code&gt; is missing. Therefore, we can rewrite the fifth row as&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby_"&gt;[(0 + 1), (1 + 3), (3 + 3), (3 + 1), (1 + 0)]
+=&amp;gt; [1, 4, 6, 4, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can also represent this as a nested array of number pairs then collect the sum of each pair like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]].collect { |a, b| a + b }
+=&amp;gt; [1, 4, 6, 4, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Looking closely at the pairs, taking just first members of each pair form the array we get &lt;code&gt;[0, 1, 3, 3, 1]&lt;/code&gt;. The second members of each pair are &lt;code&gt;[1, 3, 3, 1, 0]&lt;/code&gt;. Written differently, the groups are &lt;code&gt;([0] + [1, 3, 3, 1])&lt;/code&gt; and &lt;code&gt;([1, 3, 3, 1] + [0])&lt;/code&gt;. In each we see the members of row four, &lt;code&gt;[1, 3, 3, 1]&lt;/code&gt; augmented by prepending zero or appending zero respectively.&lt;/p&gt;
+
+&lt;p&gt;Getting the nested array pairs from these groups is perfect for the &lt;code&gt;Enumerable#zip&lt;/code&gt; method: &lt;code&gt;zip&lt;/code&gt; groups members of given arrays by position. Therefore, we can &amp;ldquo;zip&amp;rdquo; &lt;code&gt;[0, 1, 3, 3, 1]&lt;/code&gt; with &lt;code&gt;[1, 3, 3, 1, 0]&lt;/code&gt; to produce &lt;code&gt;[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;[0, 1, 3, 3, 1].zip([1, 3, 3, 1, 0])
+=&amp;gt; [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s extract a variable to represent row four:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;row = [1, 3, 3, 1]
+([0] + row).zip(row + [0])
+=&amp;gt; [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Putting it altogether, we can now produce the fifth row from the fourth:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;row = [1, 3, 3, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=&amp;gt; [1, 4, 6, 4, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s confirm this expression works with for other row conversions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;row = [1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=&amp;gt; [1, 1]
+
+row = [1, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=&amp;gt; [1, 2, 1]
+
+row = [1, 2, 1]
+([0] + row).zip(row + [0]).collect { |a, b| a + b }
+=&amp;gt; [1, 3, 3, 1]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yes! We now have the implementation for our method to produce any row for Pascal&amp;rsquo;s Triangle given the preceding row:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def pascal_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Plugging in this implementation&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle &amp;lt; Minitest::Test
+  def test_pascals_row
+    assert_equal [1, 1], pascals_row([1])
+    assert_equal [1, 2, 1], pascals_row([1, 1])
+    assert_equal [1, 3, 3, 1], pascals_row([1, 2, 1])
+    assert_equal [1, 4, 6, 4, 1], pascals_row([1, 3, 3, 1])
+    assert_equal [1, 5, 10, 10, 5, 1], pascals_row([1, 4, 6, 4, 1])
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;hellip; we get passing tests&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;$ ruby code/pascals_row_test.rb
+Run options: --seed 61039
+
+# Running:
+
+.
+
+Finished in 0.001020s, 980.6882 runs/s, 4903.4412 assertions/s.
+
+1 runs, 5 assertions, 0 failures, 0 errors, 0 skips
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;In Sequence&lt;/h3&gt;
+
+&lt;p&gt;Now that we have a method to convert one row to its successor, we have a nice building block for an infinite sequence. We can call &lt;code&gt;pascals_row&lt;/code&gt; repeatedly to generate the triangle rows infinitely. I previously wrote about creating &lt;a href="/blog/infinite-sequences-in-ruby.html"&gt;infinite sequences in Ruby&lt;/a&gt; with Enumerator and we&amp;rsquo;ll apply this approach here.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;d like to be able to call a method and enumerate the rows representing Pascal&amp;rsquo;s Triangle as we would for an array. Since we&amp;rsquo;ll be using &lt;code&gt;Enumerator&lt;/code&gt;, which exposes the &lt;code&gt;Enumerable&lt;/code&gt; api, we can use external enumeration with &lt;code&gt;Enumerator#next&lt;/code&gt; to extract rows in succession. Let&amp;rsquo;s rewrite our previous test to demonstrate:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;require &amp;#39;minitest/autorun&amp;#39;
+
+def pascals_triangle
+  # Enumerator, please
+end
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle &amp;lt; Minitest::Test
+  def test_pascals_triangle
+    rows = pascals_triangle
+    assert_equal [1], rows.next
+    assert_equal [1, 1], rows.next
+    assert_equal [1, 2, 1], rows.next
+    assert_equal [1, 3, 3, 1], rows.next
+    assert_equal [1, 4, 6, 4, 1], rows.next
+    assert_equal [1, 5, 10, 10, 5, 1], rows.next
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;With no implementation, the test fails on calling &lt;code&gt;next&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;$ ruby pascals_triangle_test.rb
+Run options: --seed 62081
+
+# Running:
+
+E
+
+Finished in 0.000949s, 1053.4832 runs/s, 0.0000 assertions/s.
+
+  1) Error:
+TestPascalsTriangle#test_pascals_rows:
+NoMethodError: undefined method `next&amp;#39; for nil:NilClass
+    code/pascals_row_test.rb:14:in `test_pascals_rows&amp;#39;
+
+1 runs, 0 assertions, 0 failures, 1 errors, 0 skips
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Our enumerator needs to call the &lt;code&gt;pascals_row&lt;/code&gt; method repeatedly with the
+previous result. We&amp;rsquo;ll maintain the current row as &lt;code&gt;current&lt;/code&gt;, pass this as the
+arg to &lt;code&gt;pascals_row&lt;/code&gt;, replace it with the result and repeat in a loop. Returning the
+&lt;code&gt;Enumerator&lt;/code&gt; from the method will allow the caller to control how it&amp;rsquo;s
+enumerated.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s what the implementation could look like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;current = [1]
+Enumerator.new do |y|
+  loop do
+    y &amp;lt;&amp;lt; current
+    current = pascals_row(current)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s plug this into our method and rerun:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
+
+def pascals_triangle(row = [1])
+  current = row
+  Enumerator.new do |y|
+    loop do
+      y &amp;lt;&amp;lt; current
+      current = pascals_row(current)
+    end
+  end
+end
+
+def pascals_row(row)
+  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
+end
+
+class TestPascalsTriangle &amp;lt; Minitest::Test
+  def test_pascals_rows
+    rows = pascals_triangle
+    assert_equal [1], rows.next
+    assert_equal [1, 1], rows.next
+    assert_equal [1, 2, 1], rows.next
+    assert_equal [1, 3, 3, 1], rows.next
+    assert_equal [1, 4, 6, 4, 1], rows.next
+    assert_equal [1, 5, 10, 10, 5, 1], rows.next
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The exciting thing about this implementation is we can treat our sequence like a collection and call enumerable methods. We can also chain enumerable methods like &lt;code&gt;Enumerator#with_index&lt;/code&gt; and &lt;code&gt;Enumerator#each&lt;/code&gt; to print a &amp;ldquo;pretty&amp;rdquo; triangle of each row with its row number.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;pascals_triangle.with_index(1).take(10).each do |row, i|
+  puts &amp;quot;%d:%#{20+(row.inspect.length/2)}s&amp;quot; % [i, row.inspect]
+end
+
+1:                  [1]
+2:                 [1, 1]
+3:               [1, 2, 1]
+4:              [1, 3, 3, 1]
+5:            [1, 4, 6, 4, 1]
+6:          [1, 5, 10, 10, 5, 1]
+7:        [1, 6, 15, 20, 15, 6, 1]
+8:      [1, 7, 21, 35, 35, 21, 7, 1]
+9:    [1, 8, 28, 56, 70, 56, 28, 8, 1]
+10: [1, 9, 36, 84, 126, 126, 84, 36, 9, 1]
+
+=&amp;gt;
+[[[1], 1],
+ [[1, 1], 2],
+ [[1, 2, 1], 3],
+ [[1, 3, 3, 1], 4],
+ [[1, 4, 6, 4, 1], 5],
+ [[1, 5, 10, 10, 5, 1], 6],
+ [[1, 6, 15, 20, 15, 6, 1], 7],
+ [[1, 7, 21, 35, 35, 21, 7, 1], 8],
+ [[1, 8, 28, 56, 70, 56, 28, 8, 1], 9],
+ [[1, 9, 36, 84, 126, 126, 84, 36, 9, 1], 10]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice the return value combines the each row with its index, an interesting outcome of how enumerator
+chains can augment the enumerated values.&lt;/p&gt;
+
+&lt;p&gt;We can also take advantage of &lt;code&gt;Enumerator#lazy&lt;/code&gt; to operate on rows without relying on eager evaluation. Here we use a lazy enumerator chain to demonstrate that the sum of numbers in each row is 2^n:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;pascals_triangle.lazy.map { |row| Math.log(row.reduce(:+), 2) }.take_while { |n| n &amp;lt; 9 }.force
+=&amp;gt; [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Enumerators allow us to provide an enumerable interface to generated data in much the same way we do for collections. Try test-driving an enumerable implementation of &lt;a href="https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/"&gt;other sequences&lt;/a&gt; on your own.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Infinite Sequences in Ruby</title>
     <link rel="alternate" href="/blog/infinite-sequences-in-ruby.html"/>
@@ -589,155 +896,6 @@ Twitlbl           TwitSprout        Twitter Oauth     Twitvid
 &lt;p&gt;Even though we ended up leveraging an existing gem, digging into the
 Ruby standard library source code proved to be a useful exercise, revealing some
 simple ways to hook into features easily taken for granted.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Automatic Backups to Amazon S3 are Easy</title>
-    <link rel="alternate" href="/blog/automatic-backups-to-amazon-s3-are-easy.html"/>
-    <id>/blog/automatic-backups-to-amazon-s3-are-easy.html</id>
-    <published>2014-01-31T19:00:00-05:00</published>
-    <updated>2014-01-31T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn’t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&amp;rsquo;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.&lt;/p&gt;
-
-&lt;h3&gt;Pre-requisites&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;An &lt;a href="http://aws.amazon.com/"&gt;Amazon web services account&lt;/a&gt; and &lt;a href="http://aws.amazon.com/iam/"&gt;your Amazon access credentials&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;s3cmd&lt;/code&gt;: command line interface to S3.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;cron&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The &lt;code&gt;cron&lt;/code&gt; is pretty standard on unix-based systems. As of this writing, &lt;code&gt;s3cmd&lt;/code&gt; should be straightforward:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# Mac users
-$ brew install s3cmd
-
-# Linux
-$ yum install s3cmd
-# or
-$ apt-get install s3cmd
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Optional:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;gpg&lt;/code&gt;: opensource encryption program&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;Setup&lt;/h3&gt;
-
-&lt;p&gt;First you&amp;rsquo;ll need to configure s3cmd: &lt;code&gt;s3cmd --configure&lt;/code&gt;. Have your Amazon access key and secret key at the ready.&lt;/p&gt;
-
-&lt;p&gt;If you plan to store sensitive data on S3, enter the path to your &lt;code&gt;gpg&lt;/code&gt; executable; &lt;code&gt;s3cmd&lt;/code&gt; will encrypt your data before transferring from your machine to S3. It also decrypts when downloading to your machine. Keep in mind, encrypted files won&amp;rsquo;t be readable by others with direct access.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s a sample result:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ s3cmd --configure
-
-Enter new values or accept defaults in brackets with Enter.
-Refer to user manual for detailed description of all options.
-
-Access key and Secret key are your identifiers for Amazon S3
-Access Key: xxxxxxxxxxxxxxxxxxxx
-Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-Encryption password is used to protect your files from reading
-by unauthorized persons while in transfer to S3
-Encryption password: xxxxxxxxxx
-Path to GPG program: /usr/local/bin/gpg
-
-When using secure HTTPS protocol all communication with Amazon S3
-servers is protected from 3rd party eavesdropping. This method is
-slower than plain HTTP and can&amp;#39;t be used if you&amp;#39;re behind a proxy
-Use HTTPS protocol [No]: Yes
-
-New settings:
-  Access Key: xxxxxxxxxxxxxxxxxxxx
-  Secret Key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  Encryption password: xxxxxxxxxx
-  Path to GPG program: /usr/local/bin/gpg
-  Use HTTPS protocol: True
-  HTTP Proxy server name:
-  HTTP Proxy server port: 0
-
-Test access with supplied credentials? [Y/n] Y
-Please wait...
-Success. Your access key and secret key worked fine :-)
-
-Now verifying that encryption works...
-Success. Encryption and decryption worked fine :-)
-
-Save settings? [y/N] y
-Configuration saved to &amp;#39;$HOME/.s3cfg&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;Backup&lt;/h3&gt;
-
-&lt;p&gt;Now all you need is a file to backup and an S3 bucket to store it.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s say you&amp;rsquo;re a web developer like me and you want to back up your MySQL or Postgres development data. First, generate the backup file (you may need to add database credentials command-line options, of course):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# mysql
-$ mysqldump my_app_development &amp;gt; backup-`date +%Y-%m-%d`.sql
-
-# or postgres
-$ pg_dump my_app_development &amp;gt; backup-`date +%Y-%m-%d`.sql
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can use &lt;code&gt;s3cmd&lt;/code&gt; to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be unique to &lt;em&gt;all&lt;/em&gt; S3 users, you won&amp;rsquo;t be able to call it something like &amp;ldquo;backups&amp;rdquo;. It&amp;rsquo;s helpful to use a prefix like your email or handle.&lt;/p&gt;
-
-&lt;p&gt;Creates an S3 bucket called &amp;lsquo;myname-backups&amp;rsquo;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ s3cmd mb s3://myname-backups
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now you&amp;rsquo;re ready to deliver. Encrypt and send your sql dump file to your new S3 bucket:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ s3cmd put backup-2014-02-01.sql s3://myname-backups/backup-2014-02-01.sql --encrypt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can verify it&amp;rsquo;s in the bucket:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ s3cmd ls s3://myname-backups/
-2014-02-01 22:32   1109702   s3://myname-backups/test/backup-2014-02-01.sql
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And retrieve it (with automatic decryption when performed on your machine):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;s3cmd get s3://myname-backups/backup-2014-02-01.sql
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;s3cmd&lt;/code&gt; supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your &lt;code&gt;.s3cfg&lt;/code&gt; file, typically saved in your home directory. You can also set options at the command line.&lt;/p&gt;
-
-&lt;h3&gt;Automate&lt;/h3&gt;
-
-&lt;p&gt;Backing up is good but automatic, recurring backups are even better; like saving money, it&amp;rsquo;s more likely to happen when you make a computer do it for you.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s add a cron task:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#!/usr/bin/env bash
-
-TIMESTAMP=$(date +%Y-%m-%d)
-TEMP_FILE=$(mktemp tmp.XXXXXXXXXX)
-S3_FILE=&amp;quot;s3://myname-backups/local/data/backup-$TIMESTAMP&amp;quot;
-pg_dump directory_development &amp;gt; $TEMP_FILE
-s3cmd put $TEMP_FILE $S3_FILE --encrypt
-rm &amp;quot;$TEMP_FILE&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Save this in a directory for your local scripts, like &lt;code&gt;$HOME/bin/database_backup.sh&lt;/code&gt; and add execute permissions with &lt;code&gt;chmod +x ~/bin/database_backup.sh&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;To edit your crontab, &lt;code&gt;crontab -e&lt;/code&gt;, and set it to run everyday at 10PM:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# Backup database to S3 daily
-0 22 * * * /Users/myname/bin/database_backup.sh
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Easy, right?&lt;/p&gt;
 </content>
   </entry>
 </feed>
