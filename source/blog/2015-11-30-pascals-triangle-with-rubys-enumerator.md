@@ -1,26 +1,26 @@
 ---
-title: Pascal's Triangle in Ruby
+title: Pascal's Triangle with Ruby's Enumerator
 author: Ross Kaffenberger
 published: false
-summary: Building an Enumerable Sequence with Enumerator
-description: Building Pascal's Triangle as an Enumerable sequence with Ruby's Enumerator.
-pull\_image: 'https://rossta.net/assets/images/blog/pascals_triangle_color.jpg'
-published: false
+summary: Pascals' Triangle as an Enumerable Sequence with Ruby Enumerator
+description: Generating Pascal's Triangle as an Enumerable sequence with Ruby's Enumerator.
+pull_image: 'https://rossta.net/assets/images/blog/pascals_triangle_color.jpg'
+published: true
 tags:
   - Code
   - Ruby
   - Enumerable
 ---
 
-Pascal’s Triangle is a fun sequence. Here's what it looks like:
+Pascal's Triangle is a fun sequence. Here's what it looks like:
 
 ![Pascal's Triangle](blog/pascals_triangle_color.jpg)
 
-It represents a [“triangular array of the binomial coefficients”](https://en.wikipedia.org/wiki/Pascal%27s_triangle). Each row contains an increasing count of numbers, each of which can be derived from members of the previous row.
+It represents a ["triangular array of the binomial coefficients"](https://en.wikipedia.org/wiki/Pascal%27s_triangle). Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.
 
 ![Pascal's Triangle](blog/pascals_triangle_animated.gif)
 
-We can model this in Ruby as an array of arrays. The first array member is `[1]`. Each successive array (or “row”) will increase in size, and each array member will be the sum of the member at the same index `n` in the `k-1` row, where `k` is the current row, and the `n-1` member in the `k-1` row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:
+We can model this in Ruby as an array of arrays. The first array member is `[1]`. Each successive array (or "row") will increase in size, and each array member will be the sum of the member at the same index `n` in the `k-1` row, where `k` is the current row, and the `n-1` member in the `k-1` row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:
 
 ```ruby
 [
@@ -32,9 +32,9 @@ We can model this in Ruby as an array of arrays. The first array member is `[1]`
 ]
 ```
 
-Let’s solve this with Ruby. While there are a number of approaches to generating Pascal’s Triangle, including both recursive and iterative solutions, we'll consider the following to explore use of the Enumerable API.
+Let's solve this with Ruby. While there are a number of approaches to generating Pascal's Triangle, including both recursive and iterative solutions, we'll explore an approach to treating this as [an enumerable](/blog/infinite-sequences-in-ruby.html).
 
-Starting with the first row, `[1]`, we can write a Ruby method that will generate the next row `[1, 1]`. Let’s write this in a way so it will be possible to generate any row `k` from row `k-1`. Here’s what the usage of this method will look like:
+Starting with the first row, `[1]`, we can write a Ruby method that will generate the next row `[1, 1]`. Let's write this in a way so it will be possible to generate any row `k` from row `k-1`. Here's what the usage of this method will look like:
 
 ```ruby
 pascal_row([1])
@@ -43,8 +43,7 @@ pascal_row([1, 3, 3, 1])
 => [1, 4, 6, 4, 1]
 ```
 
-We'll use Test-Driven Development to validate our implementation starting with a
-few assertions to ensure the first several rows are returned as expected.
+We'll use Test-Driven Development to validate our implementation starting with a few assertions to ensure the first several rows are returned as expected.
 
 ```ruby
 require 'minitest/autorun'
@@ -84,23 +83,23 @@ Expected: [1, 1]
 1 runs, 1 assertions, 1 failures, 0 errors, 0 skips
 ```
 
-To extract a general method, let’s deconstruct a single row. We'll examine the fifth: `[1, 4, 6, 4, 1]`. Each member is the sum of `n` and `n-1` from the previous row, `[1, 3, 3, 1]`. We substitute zero when `n` or `n-1` is missing. Therefore, we can rewrite the fifth row as
+To extract a general method, let's deconstruct a single row, the fifth: `[1, 4, 6, 4, 1]`. Each member is the sum of `n` and `n-1` from the previous row, `[1, 3, 3, 1]`. We substitute zero when `n` or `n-1` is missing. Therefore, we can rewrite the fifth row as
 
 ```ruby_
 [(0 + 1), (1 + 3), (3 + 3), (3 + 1), (1 + 0)]
 => [1, 4, 6, 4, 1]
 ```
 
-We could create that construct from a nested array of number pairs and collecting the sum of each pair like so:
+We can also represent this as a nested array of number pairs then collect the sum of each pair like so:
 
 ```ruby
 [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]].collect { |a, b| a + b }
 => [1, 4, 6, 4, 1]
 ```
 
-Look closely at those array pairs for a pattern. Taking just first members of each pair form the array we get `[0, 1, 3, 3, 1]`. The second members of each pair are `[1, 3, 3, 1, 0]`. In each we see the members of row four, `[1, 3, 3, 1]` augmented by prepending zero or appending zero respectively.
+Looking closely at the pairs, taking just first members of each pair form the array we get `[0, 1, 3, 3, 1]`. The second members of each pair are `[1, 3, 3, 1, 0]`. Written differently, the groups are `([0] + [1, 3, 3, 1])` and `([1, 3, 3, 1] + [0])`. In each we see the members of row four, `[1, 3, 3, 1]` augmented by prepending zero or appending zero respectively.
 
-This step is perfect for the `Enumerable#zip` method: `zip` groups members of given arrays by position. Therefore, we can use `zip` to combine `[0, 1, 3, 3, 1]` with `[1, 3, 3, 1, 0]` to produce `[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]`:
+Getting the nested array pairs from these groups is perfect for the `Enumerable#zip` method: `zip` groups members of given arrays by position. Therefore, we can "zip" `[0, 1, 3, 3, 1]` with `[1, 3, 3, 1, 0]` to produce `[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]`:
 
 [0, 1, 3, 3, 1].zip([1, 3, 3, 1, 0])
 => [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
@@ -182,14 +181,9 @@ Finished in 0.001020s, 980.6882 runs/s, 4903.4412 assertions/s.
 
 ### In Sequence
 
-Our row method serves as a nice building block for a sequence. We can call `pascals_row` repeatedly on its own return values to generate many rows of the triangle, even infinitely. I previously wrote about creating [infinite sequences in Ruby](https://rossta.net/blog/infinite-sequences-in-ruby.html) with Enumerator and we'll apply this approach here.
+Now that we have a method to convert one row to its successor, we have a nice building block for an infinite sequence. We can call `pascals_row` repeatedly to generate the triangle rows infinitely. I previously wrote about creating [infinite sequences in Ruby](/blog/infinite-sequences-in-ruby.html) with Enumerator and we'll apply this approach here.
 
-We'd like to be able to call a method and enumerate the rows representing
-Pascal's Triangle as we would for an array. Since we'll be using `Enumerator`,
-which exposes the `Enumerable` api, we can use external enumeration with
-`Enumerator#next` to extract rows in succession.
-
-Let's rewrite our previous test to demonstrate:
+We'd like to be able to call a method and enumerate the rows representing Pascal's Triangle as we would for an array. Since we'll be using `Enumerator`, which exposes the `Enumerable` api, we can use external enumeration with `Enumerator#next` to extract rows in succession. Let's rewrite our previous test to demonstrate:
 
 ```bash
 require 'minitest/autorun'
@@ -325,6 +319,4 @@ pascals_triangle.lazy.map { |row| Math.log(row.reduce(:+), 2) }.take_while { |n|
 => [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]
 ```
 
-Enumerators allow us to provide an enumerable interface to generated data in
-much the same way we do for collections. Try test-driving an enumerable
-implementation of [other sequences](https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/) on your own.
+Enumerators allow us to provide an enumerable interface to generated data in much the same way we do for collections. Try test-driving an enumerable implementation of [other sequences](https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/) on your own.
