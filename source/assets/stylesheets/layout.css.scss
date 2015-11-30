@@ -21,6 +21,9 @@ body {
       color: $secondaryColor;
     }
   }
+  .nav {
+    text-transform: lowercase;
+  }
 }
 code {
   // background-color: rgba(0,0,0,0.04);
