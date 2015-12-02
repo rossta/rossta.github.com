@@ -16,6 +16,13 @@
     </article>
   </section>
   <br /><br />
+  <% if current_page.data.series %>
+    <% series =  current_page.data.series %>
+    <section class="blog-series">
+      <p>This post is part of the <%= link_to series, series_path(series) %> series.</p>
+    </section>
+    <br /><br />
+  <% end %>
   <section class="signup-form">
     <%= partial "layouts/signup" %>
   </section>

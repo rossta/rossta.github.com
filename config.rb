@@ -23,6 +23,13 @@ activate :blog do |blog|
   blog.paginate = true
   # blog.per_page = 10
   # blog.page_link = "page/:num"
+
+  blog.custom_collections = {
+    series: {
+      link: '/series/{series}.html',
+      template: '/series.html'
+    }
+  }
 end
 
 set :markdown_engine, :redcarpet

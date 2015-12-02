@@ -5,10 +5,10 @@ summary: Exploring Ruby Enumerators for fun and profit
 description: You may not be using enough of the Enumerable API or doing enough with Enumerator.
 pull_image: 'https://rossta.net/assets/images/blog/enumerator-1-2-3.jpg'
 published: true
+series: Enumerable
 tags:
   - Code
   - Ruby
-  - Enumerable
 ---
 Let's pretend we know about Ruby's [Enumerable](http://ruby-doc.org/core-2.2.3/Enumerable.html) module - that it's included in
 Ruby's core collection classes like Array and Hash and provides a bunch of

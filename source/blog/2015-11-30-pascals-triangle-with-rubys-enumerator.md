@@ -6,10 +6,10 @@ summary: Pascals' Triangle as an Enumerable Sequence with Ruby Enumerator
 description: Generating Pascal's Triangle as an Enumerable sequence with Ruby's Enumerator.
 pull_image: 'https://rossta.net/assets/images/blog/pascals_triangle_color.jpg'
 published: true
+series: Enumerable
 tags:
   - Code
   - Ruby
-  - Enumerable
 ---
 
 Pascal's Triangle is a fun sequence. Here's what it looks like:

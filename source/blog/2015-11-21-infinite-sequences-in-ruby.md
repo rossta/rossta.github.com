@@ -5,10 +5,10 @@ summary: Treat your algorithms like enumerables with Enumerator
 description: Wrap algorithms in Enumerable or Enumerator to have them behave like infinite collections.
 pull\_image: 'https://rossta.net/assets/images/blog/enumerator-1-2-3.jpg'
 published: true
+series: Enumerable
 tags:
   - Code
   - Ruby
-  - Enumerable
 ---
 
 Functional languages like Clojure have [sequences][1]. Sequences are pretty amazing: they let us treat algorithms as data structures. We can call functions on the data as it is produced, allowing us to interact with the results like a collection even when the sequence is infinite.

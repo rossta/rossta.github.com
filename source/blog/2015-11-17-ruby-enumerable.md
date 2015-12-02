@@ -5,10 +5,10 @@ summary: Using Ruby's Enumerable module and Enumerator class
 description: You may not be using enough of the Enumerable API or doing enough with Enumerator.
 pull_image: 'https://rossta.net/assets/images/blog/enumerator-1-2-3.jpg'
 published: true
+series: Enumerable
 tags:
   - Code
   - Ruby
-  - Enumerable
 ---
 
 I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first learned Ruby as a full-time developer, I rediscovered that joy.
