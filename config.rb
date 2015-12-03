@@ -64,11 +64,13 @@ configure :build do
 
   set :google_analytics_id, 'UA-16458563-2'
   set :mailchimp_form_id,   '96030b0bda'
+  set :segmentio_id, 'NdBtrprkAGAjQryMShljRdVf90saElAU'
 end
 
 configure :development do
   set :google_analytics_id, 'UA-xxxxxxxx-x'
   set :mailchimp_form_id,   'a57e354058'
+  set :segmentio_id, '7KlQZWWPWr2MDj4pWepIF7O95JPZ9wfp'
 end
 
 ###
