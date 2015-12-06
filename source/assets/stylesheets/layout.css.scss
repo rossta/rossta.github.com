@@ -179,13 +179,20 @@ img {
   }
 }
 
-#hero {
+@mixin hero($side) {
   background-color: $lightGreyColor;
-  margin: -2em -2.5em 8em -2.5em;
   padding-top: 1em;
-  padding-left: 2.5em;
-  padding-right: 2.5em;
+  padding-left: $side;
+  padding-right: $side;
   padding-bottom: 1em;
+}
+
+#hero {
+  $side: 2.5em;
+
+  @include hero($side);
+
+  margin: -2em -$side 8em -$side;
 
   header {
     margin-bottom: 0em;
@@ -214,4 +221,9 @@ form {
 
 .signup-form {
   margin: 1.5em 0;
+
+  &.standalone {
+    @include hero(2.5em);
+    border: solid 1px #dfdfdf;
+  }
 }
