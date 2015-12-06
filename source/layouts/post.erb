@@ -5,30 +5,33 @@
   <% title current_article.title %>
   <% description current_page.data.description %>
   <% keywords (current_page.data.tags || []).join(', ') %>
-  <section id="blog">
-    <article class="post">
+  <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
       <%= page_header current_article.title, current_page.data.summary %>
 
       <%= yield %>
 
-      <br />
-
-      <h2><small>Published on <%= current_article.date.strftime('%b %e, %Y') %></small></h2>
     </article>
-  </section>
-  <br /><br />
-  <% if current_page.data.series %>
-    <% series =  current_page.data.series %>
-    <section class="blog-series">
-      <p>This post is part of the <%= link_to series, series_path(series) %> series.</p>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        <% if current_page.data.series %>
+          <% series =  current_page.data.series %>
+          This post is part of the <%= link_to series, series_path(series) %> series.
+        <% end %>
+        Published on <%= current_article.date.strftime('%b %e, %Y') %>
+      </p>
+      <%= partial "layouts/tweet" %>
+      <%= partial "layouts/follow" %>
     </section>
-    <br /><br />
-  <% end %>
-  <section class="signup-form">
+  </section>
+  <section class="share margin-bottom double">
+  </section>
+  <section class="signup-form standalone margin-bottom double">
     <%= partial "layouts/signup" %>
   </section>
-  <br /><br />
   <% if build? %>
+    <hr />
     <section class="comments">
       <%= partial "layouts/current_article_comments" %>
     </section>
