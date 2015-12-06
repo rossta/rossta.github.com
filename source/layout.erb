@@ -27,6 +27,7 @@
       </footer>
     </div>
     <%= javascript_include_tag "all" %>
+    <%= yield_content :javascripts %>
     <%= partial "layouts/analytics" %>
   </body>
 </html>
