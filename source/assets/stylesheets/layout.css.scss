@@ -202,7 +202,7 @@ img {
 
   @include hero($side);
 
-  margin: -2em -$side 8em -$side;
+  margin: -2em (-$side) 8em (-$side);
 
   header {
     margin-bottom: 0em;
