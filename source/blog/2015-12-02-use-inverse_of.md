@@ -1,9 +1,141 @@
 ---
-title: Improve your ActiveRecord Associations
-summary: Add "inverse_of" to your belongs_to/has_many ActiveRecord associations
+title: Use "inverse_of"
+summary: Improve most of your belongs_to/has_many/has_one ActiveRecord associations with this one weird trick
 author: Ross Kaffenberger
 published: false
 ---
+
+I noticed something odd while reviewing code from a colleague for our Rails app the other day. He was introducing a presenter class
+that would be responsible for rendering list of items given by a `has_many` association from another object.
+
+Here's a contrived version of the code.
+
+We've got a few ActiveRecord models in our Rails app. An author `has_many` posts
+and tweets. `Tweet` uses single-table inheritance (STI) to inherit from `Post`
+and add additional functionality.
+
+```ruby
+# app/models/author.rb
+class Author < ActiveRecord::Base
+  has_many :posts, dependent: :destroy
+  has_many :tweets, class_name: 'Tweet'
+end
+
+# app/models/post.rb
+class Post < ActiveRecord::Base
+  belongs_to :author
+end
+
+# app/models/tweet.rb
+class Tweet < Post
+  validates :text, length: { maximum: 140 }
+end
+```
+
+We were extracting a family of presenters to take a collection of tweets and the author, to render information about each post,
+the author, and some metadata.
+
+The `TweetsController` instantiates a `TweetsPresenter` to wrap the collection
+of tweets along with the author.
+
+```ruby
+# app/controllers/tweets_controller.rb
+class TweetsController
+  def index
+    author = Author.find(params[:author_id])
+    @posts = TweetsPresenter.new(@posts, author)
+  end
+end
+```
+
+The view iterates over the tweets yielded by `@posts.each`.
+
+```erb
+# app/views/posts/_index.html.erb
+<section class="posts">
+<% @posts.each do |post| %>
+  <p><%= post.text %></p>
+  <p><%= post.author_name %></p>
+  <p><%= post.author_handle %></p>
+<% end %>
+</section>
+```
+
+This is possible because the presenter defines `#each` to yield each tweet
+wrapped in a `TweetPresenter` responsible for decorating each `tweet`.
+
+```ruby
+# app/presenters/tweets_presenter.rb
+class TweetsPresenter
+  def initialize(tweets, author)
+    @tweets = tweets
+    @author = author
+  end
+
+  def each(&block)
+    @tweets.each do |tweet|
+      yield TweetPresenter.new(tweet, @author)
+    end
+  end
+end
+```
+The `TweetPresenter` takes each tweet and the author and defines some additional methods including those shown below.
+
+```ruby
+
+# app/presenters/tweet_presenter.rb
+class TweetPresenter
+  def initialize(tweet, author)
+    @tweet = tweet
+    @author = author
+  end
+
+  def text
+    @tweet.text
+  end
+
+  def author_handle
+    @author.twitter_handle
+  end
+
+  def author_name
+    @author.name
+  end
+end
+```
+
+After absorbing all this, it seemed odd to pass the author all the way down from the controller. Each `tweet` defines its `author` association since it inherits from `Post`:
+
+```ruby
+tweet = Tweet.last
+# => #<Tweet:0x007fc24c1dadd8 ...>
+tweet.author
+# => #<Author:0x007fc248e11998# ...>
+```
+
+I had a hunch as I had knew my colleague would have had a good reason for doing
+passing the `author` instance along so I opened up a rails console:
+
+```
+pry(main)> author = Author.find(1)
+  Author Load (0.2ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+=> #<Author:0x007fc24dee1ad0 ...>
+
+pry(main)> author.tweets.map { |t| t.author.twitter_handle }
+  Tweet Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."type" IN ('Tweet') AND "posts"."author_id" = $1  [["author_id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+  Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+=> ["vicenta", ... ]
+```
 
 A common problem we have when rendering a `has_many` association is when we need to refer back to the `belongs_to` object in the rendering context.
 

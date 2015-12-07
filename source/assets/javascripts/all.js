@@ -22,6 +22,3 @@
 hljs.initHighlightingOnLoad();
 $(document).foundation();
 
-$(function() {
-   $.zen(function(toBe) { $('#zen').find('.enlightenment').text(toBe); });
-});
