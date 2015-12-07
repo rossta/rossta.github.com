@@ -169,13 +169,19 @@ Tweet Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."type" IN ('Twee
 => ["vicenta", ... ]
 ```
 
-No more `N+1`!
+Notice that additional queries for the author (`Author Load...`) don't appear in the query log: no more "N+1"!
 
 You might be asking... why doesn't Rails just do this by default? That's a good question. Turns out, it's not so easy. The [Rails guides]() say:
 
 > Every association will attempt to automatically find the inverse association and set the `:inverse_of` option heuristically (based on the association name). Most associations with standard names will be supported.
 
-So, most of the time it will work automatically, but sometimes it won't. The uncertainty is not something to be relied on. To avoid this uncertainy, **always** set `:inverse_of` for any standard `:has_many` or `:has_one` association.
+The guides are saying Rails will "try hard" to make the inverse association work automatically to prevent the extra queries. Consider our `Post` again, this time, with the `:inverse_of` option removed again.
+
+But sometimes the heuristics won't work. Depending on the association name, I may not the automatic inverse lookup and the uncertainty makes me uncomfortable. As a developer using Rails, I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations.
+
+Even if the inverse correctly resolves on its own today, I can expect my application to change - how can I be sure the inverse association will still be working in six months or longer? Rails is also frequently changing and I'd like to guard against upgrades that result in new heuristics I didn't anticipate.
+
+To avoid all this uncertainty, I recommend to **always** set `:inverse_of` for valid `belongs_to`, `:has_many`, and `:has_one` associations.
 
                         >>
 # http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#module-ActiveRecord::Associations::ClassMethods-label-Setting+Inverses
