@@ -279,7 +279,9 @@ queries for objects that already exist in memory.</p>
 
 <p>Yeah, Rails will try hard to do automatic inverses on your behalf, but leaving it up to Rails adds uncertainty. The uncertainty makes me uncomfortable. Here&rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&rsquo;t really want to write tests to be sure I&rsquo;m not unintentionally generating a &ldquo;N+1&rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.</p>
 
-<p>Beware of the gotchas: <a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">check out to the Rails docs on bi-directional associations</a>, <code>:inverse_of</code> will only work with <code>has_many</code>, <code>has_one</code>, and <code>belong_to</code> and must also not contain <code>:conditions</code>, <code>:through</code>, <code>:polymorphic</code>, and <code>:foreign_key</code>.</p>
+<p><strong>Beware of the gotchas</strong>: <code>:inverse_of</code> will only work with <code>has_many</code>, <code>has_one</code>, and <code>belong_to</code> associations which must also not contain <code>:conditions</code>, <code>:through</code>, <code>:polymorphic</code>, and <code>:foreign_key</code> options.</p>
+
+<p><a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Check out to the Rails docs on bi-directional associations</a> for more info.</p>
 
 <p>Save yourself the trouble and set <code>:inverse_of</code> for valid <code>belongs_to</code>, <code>:has_many</code>, and <code>:has_one</code> associations.</p>
 
