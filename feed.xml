@@ -249,7 +249,7 @@ queries for objects that already exist in memory.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations"&gt;Check out to the Rails docs on bi-directional associations&lt;/a&gt; for more info.&lt;/p&gt;
 
-&lt;p&gt;Save yourself the trouble and set &lt;code&gt;:inverse_of&lt;/code&gt; for valid &lt;code&gt;belongs_to&lt;/code&gt;, &lt;code&gt;:has_many&lt;/code&gt;, and &lt;code&gt;:has_one&lt;/code&gt; associations.&lt;/p&gt;
+&lt;p&gt;Save yourself the trouble and set &lt;code&gt;:inverse_of&lt;/code&gt; for valid &lt;code&gt;belongs_to&lt;/code&gt;, &lt;code&gt;has_many&lt;/code&gt;, and &lt;code&gt;has_one&lt;/code&gt; associations.&lt;/p&gt;
 </content>
   </entry>
   <entry>
