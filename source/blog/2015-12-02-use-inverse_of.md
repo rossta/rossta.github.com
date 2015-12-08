@@ -247,6 +247,8 @@ Here's my recommendation:
 
 Yeah, Rails will try hard to do automatic inverses on your behalf, but leaving it up to Rails adds uncertainty. The uncertainty makes me uncomfortable. Here's an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations. I want to make it easier to introduce other changes into my app later.
 
-Beware of the gotchas: [check out to the Rails docs on bi-directional associations](http://guides.rubyonrails.org/association_basics.html#bi-directional-associations), `:inverse_of` will only work with `has_many`, `has_one`, and `belong_to` and must also not contain `:conditions`, `:through`, `:polymorphic`, and `:foreign_key`.
+**Beware of the gotchas**: `:inverse_of` will only work with `has_many`, `has_one`, and `belong_to` associations which must also not contain `:conditions`, `:through`, `:polymorphic`, and `:foreign_key` options.
+
+[Check out to the Rails docs on bi-directional associations](http://guides.rubyonrails.org/association_basics.html#bi-directional-associations) for more info.
 
 Save yourself the trouble and set `:inverse_of` for valid `belongs_to`, `:has_many`, and `:has_one` associations.
