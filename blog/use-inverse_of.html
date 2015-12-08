@@ -148,7 +148,7 @@ setting the correct inverse instances as we might expect.</p>
 
 <p>I noticed something odd the other day.</p>
 
-<p>I while reviewing code from a colleague for our Rails app which introduced abstraction to render a list of items given by a <code>has_many</code> association. The code was passing around the inverse instance (the original owner of the association) all over the place.</p>
+<p>I was reviewing code for our Rails app which introduced abstraction to render a list of items given by a <code>has_many</code> association. The code was passing around the inverse instance (the original owner of the association) all over the place.</p>
 
 <p>Wouldn&rsquo;t we expect the inverse to be available on our <code>has_many</code> items?</p>
 
@@ -180,8 +180,7 @@ tweet.author
 #=&gt; #&lt;Author:0x007fc248e11998# id: 1, ... &gt;
 </code></pre>
 
-<p>He was rendering each tweet in a list and each tweet needed to refer back to the author for
-additional data.</p>
+<p>The code was rendering each tweet in a list and each tweet needed to refer back to the author for additional data.</p>
 
 <pre><code class="ruby">author = Author.find(1)
 # Author Load (0.2ms)  SELECT  &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; = $1 LIMIT 1  [[&quot;id&quot;, 1]]

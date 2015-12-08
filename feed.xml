@@ -114,7 +114,7 @@ setting the correct inverse instances as we might expect.&lt;/p&gt;
 
 &lt;p&gt;I noticed something odd the other day.&lt;/p&gt;
 
-&lt;p&gt;I while reviewing code from a colleague for our Rails app which introduced abstraction to render a list of items given by a &lt;code&gt;has_many&lt;/code&gt; association. The code was passing around the inverse instance (the original owner of the association) all over the place.&lt;/p&gt;
+&lt;p&gt;I was reviewing code for our Rails app which introduced abstraction to render a list of items given by a &lt;code&gt;has_many&lt;/code&gt; association. The code was passing around the inverse instance (the original owner of the association) all over the place.&lt;/p&gt;
 
 &lt;p&gt;Wouldn&amp;rsquo;t we expect the inverse to be available on our &lt;code&gt;has_many&lt;/code&gt; items?&lt;/p&gt;
 
@@ -146,8 +146,7 @@ tweet.author
 #=&amp;gt; #&amp;lt;Author:0x007fc248e11998# id: 1, ... &amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;He was rendering each tweet in a list and each tweet needed to refer back to the author for
-additional data.&lt;/p&gt;
+&lt;p&gt;The code was rendering each tweet in a list and each tweet needed to refer back to the author for additional data.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;author = Author.find(1)
 # Author Load (0.2ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
