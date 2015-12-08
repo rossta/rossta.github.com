@@ -19,7 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/all.css?1449417221" rel="stylesheet" />
+    <link href="/assets/stylesheets/all.css?1449617571" rel="stylesheet" />
     <script src="/assets/javascripts/head.js?1445744814"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -198,6 +198,12 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2015-11-30-pascals-triangle-with-rubys-enumerator.html</loc>
+    <lastmod>2015-12-08T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2015-12-02-use-inverse_of.html</loc>
     <lastmod>2015-12-08T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -408,6 +414,18 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2015.html</loc>
+    <lastmod>2015-12-08T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2015/12.html</loc>
+    <lastmod>2015-12-08T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2015/12/02.html</loc>
     <lastmod>2015-12-08T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

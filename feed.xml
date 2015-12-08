@@ -5,10 +5,252 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2015-11-29T19:00:00-05:00</updated>
+  <updated>2015-12-01T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Use inverse_of</title>
+    <link rel="alternate" href="/blog/use-inverse_of.html"/>
+    <id>/blog/use-inverse_of.html</id>
+    <published>2015-12-01T19:00:00-05:00</published>
+    <updated>2015-12-01T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Let’s talk about &lt;code&gt;:inverse_of&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We know Rails has ActiveRecord and ActiveRecord gives us associations and associations can really simplify our interactions with databases. These associations provide a number of configuration options, one of which is...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Let&amp;rsquo;s talk about &lt;code&gt;:inverse_of&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We know Rails has ActiveRecord and ActiveRecord gives us associations and associations can really simplify our interactions with databases. These associations provide a number of configuration options, one of which is to set the &amp;ldquo;inverse of&amp;rdquo; your current relation.&lt;/p&gt;
+
+&lt;p&gt;This option name can be a little confusing at first so let&amp;rsquo;s use an example. Let&amp;rsquo;s say we have an
+&lt;code&gt;Author&lt;/code&gt; class and it &lt;code&gt;has_many :posts&lt;/code&gt;. This means we should have a &lt;code&gt;Post&lt;/code&gt; class that maintains a
+column, &lt;code&gt;:author_id&lt;/code&gt;, so it we can say it &lt;code&gt;belongs_to :author&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# app/models/author.rb
+class Author &amp;lt; ActiveRecord::Base
+  has_many :posts
+end
+
+# app/models/post.rb
+class Post &amp;lt; ActiveRecord::Base
+  belongs_to :author
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, so we know this means if we have an author, we can ask for her posts.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# Loading development environment (Rails 4.2.5)
+author = Author.find(1)
+#  Author Load (0.3ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+#=&amp;gt; #&amp;lt;Author:0x007fde81898868 id: 1, ... &amp;gt;
+
+author.posts
+#  Post Load (0.4ms)  SELECT &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; WHERE &amp;quot;posts&amp;quot;.&amp;quot;author_id&amp;quot; = $1  [[&amp;quot;author_id&amp;quot;, 1]]
+#=&amp;gt; [#&amp;lt;Post:0x007fde810cb4a0 id: 1, ... &amp;gt;, #&amp;lt;Post:0x007fde810cb248 id: 2, ... &amp;gt;, ... ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can also query for a post and ask for its author.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;post = Post.find(1)
+#  Post Load (0.3ms)  SELECT  &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; WHERE &amp;quot;posts&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+#=&amp;gt; #&amp;lt;Post:0x007fde81c7d730 id: 1, ... &amp;gt;
+
+post.author
+#  Author Load (0.3ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+#=&amp;gt; #&amp;lt;Author:0x007fde7a5c8518 id: 1, ... &amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;What It&amp;rsquo;s For&lt;/h3&gt;
+
+&lt;p&gt;Now, for most of our associations, Rails helps us find the &lt;strong&gt;inverse&lt;/strong&gt; relation. For example, if we
+start with an author, then ask for her posts, each post will &amp;ldquo;know&amp;rdquo; that the inverse instance of this
+relationship is the author. If we iterate over each of &lt;code&gt;author.posts&lt;/code&gt; and ask each post for its
+author, we expect to get the same author record:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;author.posts.map { |post| post.author }
+# =&amp;gt; [#&amp;lt;Author:0x007fde81898868 id: 1, ... &amp;gt;, #&amp;lt;Author:0x007fde81898868 id: 1, ... &amp;gt;, ...]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For consistency, we want each post&amp;rsquo;s author not only to be the same record, but the same
+&lt;strong&gt;instance&lt;/strong&gt; in memory. If I modify one author&amp;rsquo;s attributes, I expect that change to be reflected no
+matter with inverse I&amp;rsquo;m working with. Let&amp;rsquo;s confirm by inspecting the &lt;code&gt;:object_id&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;author.object_id
+# =&amp;gt; 70296816370740
+
+object_ids = [author.object_id] + author.posts.map { |post| post.author.object_id }
+# =&amp;gt; [70296816370740, 70296816370740, 70296816370740, ... ]
+
+object_ids.uniq.size == 1
+# =&amp;gt; true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Great!, This means we can say that, for the &lt;code&gt;Author&lt;/code&gt; class, &lt;code&gt;:author&lt;/code&gt; is the &amp;ldquo;inverse of&amp;rdquo; the
+&lt;code&gt;has_many :posts&lt;/code&gt; association. So we could add the &lt;code&gt;:inverse_of&lt;/code&gt; option to specify the name of the
+inverse association to ensure our object instances match up.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# app/models/author.rb
+class Author &amp;lt; ActiveRecord::Base
+  has_many :posts, inverse_of: :author
+end
+
+# app/models/post.rb
+class Post &amp;lt; ActiveRecord::Base
+  belongs_to :author, inverse_of: :post
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For this example, providing this option will not change the behavior because Rails is already
+setting the correct inverse instances as we might expect.&lt;/p&gt;
+
+&lt;p&gt;It may seem obvious, but Rails has to do some work to set the inverse instance on records in an association and must infer the object based on the class name and association name.&lt;/p&gt;
+
+&lt;p&gt;So it should &lt;strong&gt;just work™&lt;/strong&gt;!&lt;/p&gt;
+
+&lt;h3&gt;It Doesn&amp;rsquo;t Always Work&lt;/h3&gt;
+
+&lt;p&gt;I noticed something odd the other day.&lt;/p&gt;
+
+&lt;p&gt;I while reviewing code from a colleague for our Rails app which introduced abstraction to render a list of items given by a &lt;code&gt;has_many&lt;/code&gt; association. The code was passing around the inverse instance (the original owner of the association) all over the place.&lt;/p&gt;
+
+&lt;p&gt;Wouldn&amp;rsquo;t we expect the inverse to be available on our &lt;code&gt;has_many&lt;/code&gt; items?&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at an oversimplified example of what we were dealing with. Building on our &lt;code&gt;Author&lt;/code&gt; and &lt;code&gt;Post&lt;/code&gt; from earlier, we&amp;rsquo;ll add a &lt;code&gt;Tweet&lt;/code&gt; class. Using ActiveRecord&amp;rsquo;s single-table inheritance mechanism, &lt;code&gt;Tweet&lt;/code&gt; inherits functionality from &lt;code&gt;Post&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# app/models/author.rb
+class Author &amp;lt; ActiveRecord::Base
+  has_many :posts
+  has_many :tweets, class_name: &amp;#39;Tweet&amp;#39;
+end
+
+# app/models/post.rb
+class Post &amp;lt; ActiveRecord::Base
+  belongs_to :author
+end
+
+# app/models/tweet.rb
+class Tweet &amp;lt; Post
+  validates :text, length: { maximum: 140 }
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;Author&lt;/code&gt; class &lt;code&gt;has_many :tweets&lt;/code&gt; and each tweet has an author since it inherits its associations from &lt;code&gt;Post&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;tweet = Tweet.last
+#=&amp;gt; #&amp;lt;Tweet:0x007fc24c1dadd8 id: 10, ... &amp;gt;
+
+tweet.author
+#=&amp;gt; #&amp;lt;Author:0x007fc248e11998# id: 1, ... &amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;He was rendering each tweet in a list and each tweet needed to refer back to the author for
+additional data.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;author = Author.find(1)
+# Author Load (0.2ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+#=&amp;gt; #&amp;lt;Author:0x007fc24dee1ad0 ...&amp;gt;
+
+author.tweets.map { |tw| author.twitter_handle }
+# Tweet Load (0.3ms)  SELECT &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; WHERE &amp;quot;posts&amp;quot;.&amp;quot;type&amp;quot; IN (&amp;#39;Tweet&amp;#39;) AND &amp;quot;posts&amp;quot;.&amp;quot;author_id&amp;quot; = $1  [[&amp;quot;author_id&amp;quot;, 1]]
+#=&amp;gt; [&amp;#39;vicenta&amp;#39;, &amp;#39;vicenta&amp;#39;, ... ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It seemed odd to pass the author author around.&lt;/p&gt;
+
+&lt;p&gt;Each &lt;code&gt;tweet&lt;/code&gt; defines its &lt;code&gt;author&lt;/code&gt; association since it inherits from &lt;code&gt;Post&lt;/code&gt;. I knew my colleague would have had a good reason for passing the &lt;code&gt;author&lt;/code&gt; instance along so I opened up a &lt;code&gt;rails console&lt;/code&gt; to find out what happened if I used the inverse association instead:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;author = Author.find(1)
+# Author Load (0.2ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+#=&amp;gt; #&amp;lt;Author:0x007fc24dee1ad0 ...&amp;gt;
+
+author.tweets.map { |tw| tw.author.twitter_handle }
+# Tweet Load (0.3ms)  SELECT &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; WHERE &amp;quot;posts&amp;quot;.&amp;quot;type&amp;quot; IN (&amp;#39;Tweet&amp;#39;) AND &amp;quot;posts&amp;quot;.&amp;quot;author_id&amp;quot; = $1  [[&amp;quot;author_id&amp;quot;, 1]]
+# Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+# Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+# Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+# Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+# Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+# Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+# Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+# ...
+#=&amp;gt; [&amp;#39;vicenta&amp;#39;, &amp;#39;vicenta&amp;#39;, ... ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s a lot of database queries for one author!&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s the classic problem with &lt;code&gt;has_many&lt;/code&gt; associations: the &amp;ldquo;N+1&amp;rdquo; query. After the initial &lt;code&gt;author.tweet&lt;/code&gt; query, &amp;ldquo;N&amp;rdquo; additional queries are needed to call each &lt;code&gt;tweet.author&lt;/code&gt; back through the &lt;code&gt;belongs_to&lt;/code&gt; association. We were avoiding the extra lookups by passing around the original author instance.&lt;/p&gt;
+
+&lt;p&gt;This is unfortunate because we, as we have seen, it should be possible to avoid these extra queries so that each tweet&amp;rsquo;s author points to the same author object in memory.&lt;/p&gt;
+
+&lt;p&gt;Not only do we want to avoid the extra queries, but if modifications are made in one place, we&amp;rsquo;d like them to be reflected elsewhere. I want to avoid something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;tweet_1 = author.tweets.first
+tweet_2 = author.tweets.second
+
+tweet_1.author.name # =&amp;gt; &amp;quot;Cecily&amp;quot;
+tweet_1.author.name # =&amp;gt; &amp;quot;Cecily&amp;quot;
+
+tweet_1.author.name = &amp;quot;Martha&amp;quot;
+
+tweet_1.author.name # =&amp;gt; &amp;quot;Martha&amp;quot;
+tweet_1.author.name # =&amp;gt; &amp;quot;Cecily&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So passing the &lt;code&gt;author&lt;/code&gt; instance variable into the block, as an additional argument to method calls, or down to a view template is one workaround. But this can be difficult to maintain, especially if we&amp;rsquo;re dealing with more than one author&amp;rsquo;s posts. Wouldn&amp;rsquo;t it be better not to make those unnecessary queries?&lt;/p&gt;
+
+&lt;p&gt;Well, it&amp;rsquo;s possible! &lt;code&gt;:inverse_of&lt;/code&gt; to the rescue.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Author &amp;lt; ActiveRecord::Base
+  has_many :tweets, inverse_of: :author
+end
+
+class Tweet &amp;lt; ActiveRecord::Base
+  belongs_to :author, inverse_of: :tweets
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now when iterate over the tweets and reference the author, no additional queries
+are needed because each tweet can now assign its author association from the
+instance that exists already in memory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;author = Author.find(1)
+# Author Load (0.3ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT 1  [[&amp;quot;id&amp;quot;, 1]]
+#=&amp;gt; #&amp;lt;Author:0x007fc24c65c028 ... &amp;gt;
+author.tweets.map { |tw| tw.author.twitter_handle }
+# Tweet Load (0.3ms)  SELECT &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; WHERE &amp;quot;posts&amp;quot;.&amp;quot;type&amp;quot; IN (&amp;#39;Tweet&amp;#39;) AND &amp;quot;posts&amp;quot;.&amp;quot;author_id&amp;quot; = $1  [[&amp;quot;author_id&amp;quot;, 1]]
+=&amp;gt; [&amp;quot;vicenta&amp;quot;, ... ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice that additional queries for the author (&lt;code&gt;Author Load...&lt;/code&gt;) don&amp;rsquo;t appear in the query log: no more &amp;ldquo;N+1&amp;rdquo;!&lt;/p&gt;
+
+&lt;p&gt;You might be asking&amp;hellip; why doesn&amp;rsquo;t Rails just do this by default all the time? That&amp;rsquo;s a good question. Turns out, it&amp;rsquo;s not so easy. The &lt;a href="#"&gt;Rails guides&lt;/a&gt; say:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Every association will attempt to automatically find the inverse association and set the &lt;code&gt;:inverse_of&lt;/code&gt; option heuristically (based on the association name). Most associations with standard names will be supported.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So Rails will &amp;ldquo;try hard&amp;rdquo; to make the inverse association work automatically to prevent the extra queries. If no name is found with the &lt;code&gt;:inverse_of&lt;/code&gt; key in the association options, ActiveRecord will try to find the inverse association automatically inferring the class name from the association name, i.e. as &lt;code&gt;Post&lt;/code&gt; is implied by &lt;code&gt;has_many :posts&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;But when the name of the association and the name of the class Rails expects to find in the
+association don&amp;rsquo;t match, setting the inverse won&amp;rsquo;t work automatically. Then you may see extra
+queries for objects that already exist in memory.&lt;/p&gt;
+
+&lt;h3&gt;Avoid Uncertainty, Be Explicit&lt;/h3&gt;
+
+&lt;p&gt;Here&amp;rsquo;s my recommendation:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Set the &lt;code&gt;:inverse_of&lt;/code&gt; option wherever you can.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Yeah, Rails will try hard to do automatic inverses on your behalf, but leaving it up to Rails adds uncertainty. The uncertainty makes me uncomfortable. Here&amp;rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&amp;rsquo;t really want to write tests to be sure I&amp;rsquo;m not unintentionally generating a &amp;ldquo;N+1&amp;rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.&lt;/p&gt;
+
+&lt;p&gt;Beware of the gotchas: &lt;a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations"&gt;check out to the Rails docs on bi-directional associations&lt;/a&gt;, &lt;code&gt;:inverse_of&lt;/code&gt; will only work with &lt;code&gt;has_many&lt;/code&gt;, &lt;code&gt;has_one&lt;/code&gt;, and &lt;code&gt;belong_to&lt;/code&gt; and must also not contain &lt;code&gt;:conditions&lt;/code&gt;, &lt;code&gt;:through&lt;/code&gt;, &lt;code&gt;:polymorphic&lt;/code&gt;, and &lt;code&gt;:foreign_key&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Save yourself the trouble and set &lt;code&gt;:inverse_of&lt;/code&gt; for valid &lt;code&gt;belongs_to&lt;/code&gt;, &lt;code&gt;:has_many&lt;/code&gt;, and &lt;code&gt;:has_one&lt;/code&gt; associations.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Pascal's Triangle with Ruby's Enumerator</title>
     <link rel="alternate" href="/blog/pascals-triangle-with-rubys-enumerator.html"/>
@@ -747,155 +989,6 @@ $ bundle install
 &lt;li&gt;&lt;a href="http://whilefalse.blogspot.com/2012/06/code-reviews-code-stories.html"&gt;Code Review, Code Stories&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/blog/1124-how-we-use-pull-requests-to-build-github"&gt;How we use pull requests to build GitHub&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Ruby, You Autocomplete Me</title>
-    <link rel="alternate" href="/blog/ruby-you-autocomplete-me.html"/>
-    <id>/blog/ruby-you-autocomplete-me.html</id>
-    <published>2014-02-04T19:00:00-05:00</published>
-    <updated>2014-02-04T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;My team recently added a tagging feature to our web app. As the user types in
-the text input, the app supplies autocomplete suggestions from our database via
-javascript; a familiar UX. While backporting tags to existing records on the
-&lt;code&gt;rails console&lt;/code&gt;&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;My team recently added a tagging feature to our web app. As the user types in
-the text input, the app supplies autocomplete suggestions from our database via
-javascript; a familiar UX. While backporting tags to existing records on the
-&lt;code&gt;rails console&lt;/code&gt;, it hit me: &amp;ldquo;Why not bring tag autocompletion to the command
-line?&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;The default &lt;code&gt;rails console&lt;/code&gt; provides completion out-of-the-box though all the script
-does is start &lt;code&gt;irb&lt;/code&gt; with the rails environment and &lt;code&gt;irb/completion&lt;/code&gt; required.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# !/usr/bin/env ruby
-require File.expand\_path(&amp;#39;../../load\_paths&amp;#39;, __FILE__)
-require &amp;#39;rails/all&amp;#39;
-require &amp;#39;active\_support/all&amp;#39;
-require &amp;#39;irb&amp;#39;
-require &amp;#39;irb/completion&amp;#39;
-IRB.start
-
-# from https://github.com/rails/rails/blob/master/tools/console
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Turns out that all &lt;code&gt;irb/completion&lt;/code&gt; does is configure the ruby interface to the
-&lt;a href="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html"&gt;GNU Readline Library&lt;/a&gt;.
-This is done with the ruby &lt;a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html"&gt;Readline&lt;/a&gt;
-module. &lt;code&gt;Readline&lt;/code&gt; accepts a &lt;code&gt;proc&lt;/code&gt; that determines completion behavior by returning an array of string
-candidates given an input string triggered, typically, by pressing &lt;code&gt;TAB&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;From &lt;code&gt;irb/completion&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;if Readline.respond\_to?(&amp;quot;basic\_word\_break\_characters=&amp;quot;)
-# Readline.basic\_word\_break\_characters= &amp;quot; \t\n\&amp;quot;\\&amp;#39;\`\&amp;gt;\&amp;lt;=;|&amp;amp;{(&amp;quot;
-  Readline.basic\_word\_break\_characters= &amp;quot; \t\n\`\&amp;gt;\&amp;lt;=;|&amp;amp;{(&amp;quot;
-end
-Readline.completion\_append\_character = nil
-Readline.completion\_proc = IRB::InputCompletor::CompletionProc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;IRB::InputCompletor::CompletionProc&lt;/code&gt; is a proc that evaluates a large case
-statement of regular expressions that attempt to determine the type of given
-object and provide a set of candidates to match, such as &lt;code&gt;String&lt;/code&gt; instance methods when
-the input matches &lt;code&gt;$r{^(([&amp;quot;&amp;#39;]).*\2)\.([^.]*)$}&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;To give &lt;code&gt;Readline&lt;/code&gt; a spin, fire up &lt;code&gt;irb&lt;/code&gt; and paste in the following example, borrowed
-from the &lt;a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html"&gt;ruby docs&lt;/a&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;readline&amp;#39;
-
-LIST = [
-  &amp;#39;search&amp;#39;, &amp;#39;download&amp;#39;, &amp;#39;open&amp;#39;,
-  &amp;#39;help&amp;#39;, &amp;#39;history&amp;#39;, &amp;#39;quit&amp;#39;,
-  &amp;#39;url&amp;#39;, &amp;#39;next&amp;#39;, &amp;#39;clear&amp;#39;,
-  &amp;#39;prev&amp;#39;, &amp;#39;past&amp;#39;
-].sort
-
-comp = proc { |s| LIST.grep(/^#{Regexp.escape(s)}/) }
-
-Readline.completion\_append\_character = &amp;quot; &amp;quot;
-Readline.completion\_proc = comp
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There&amp;rsquo;s nothing stopping us from taking this to the &lt;code&gt;rails console&lt;/code&gt; to take
-advantage of our rails environment and even access the database. Building off
-the example, we can replace the hard-coded array with a list of tags plucked
-from a simple activerecord query:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;readline&amp;#39;
-
-comp = proc { |s| ActsAsTaggableOn::Tag.named\_like(s).pluck(:name) }
-
-Readline.completion\_proc = comp
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We have room for improvement. For one thing, this makes a new query every time
-you attempt to autocomplete. For a reasonable number of tags, we could load the
-tag list in memory and grep for the matches instead. There is still another problem;
-by replacing the &lt;code&gt;Readline.completion_proc&lt;/code&gt;, we&amp;rsquo;ve clobbered the functionality
-provided by &lt;code&gt;irb/completion&lt;/code&gt;. One approach would be to fall back to the
-&lt;code&gt;IRB::InputCompletor::CompletionProc&lt;/code&gt; or add its result to the array of candidates.
-Given IRB has documented, &lt;a href="https://github.com/cldwalker/bond#irbs-incorrect-completions"&gt;incorrect completions&lt;/a&gt;
-(try completing methods on a proc) and no built-in support for extending completion behavior,
-this could get messy.&lt;/p&gt;
-
-&lt;p&gt;Enter &lt;a href="https://github.com/cldwalker/bond"&gt;bond&lt;/a&gt;, a drop-in replacement for IRB
-completion. It aims to improve on IRB&amp;rsquo;s shortcomings and provides methods for
-adding custom completions. To take advantage of Bond in the console:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;bond&amp;#39;
-Bond.start
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Bond allows you to extend the strategies for autocompleting text with &lt;a href="https://github.com/cldwalker/bond/blob/master/lib/bond.rb#L21"&gt;the
-&lt;code&gt;Bond.completion&lt;/code&gt; method&lt;/a&gt;.
-To set up a Bond completion, we need a condition and an action; when the condition is matched,
-then the given action will determine which candidates are returned. Calling
-&lt;code&gt;Bond.start&lt;/code&gt; will register Bond&amp;rsquo;s default completions. For example, the
-following completion is triggered with the text for completion starts with a
-letter preceded by &amp;ldquo;::&amp;rdquo;; the search space is scoped to &lt;code&gt;Object.constants&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# https://github.com/cldwalker/bond/blob/master/lib/bond/completion.rb#L13
-complete(:prefix=\&amp;gt;&amp;#39;::&amp;#39;, :anywhere=\&amp;gt;&amp;#39;[A-Z][^:\.\(]\*&amp;#39;) {|e| Object.constants }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To add tag autocompletion whenever we start a new string, we could use the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;include Bond::Search # provides methods to search lists
-
-TAG\_NAMES = ActsAsTaggableOn::Tag.pluck(:name) # load tag names in memory
-
-Bond.complete(:name=\&amp;gt;:tags, prefix: &amp;#39;&amp;quot;&amp;#39;, :anywhere=\&amp;gt;&amp;#39;([A-Z][^,]\*)&amp;#39;) {|e|
-  tag = e.matched[2]
-  normal\_search(tag, TAG\_NAMES)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Boom! Now we when autocomplete with some text inside an open double-quote, matching
-tags from the database appear on the console.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;irb(main)\&amp;gt; &amp;quot;Face[TAB]
-Face++                     Facebook Graph             FaceCash
-Face.com                   Facebook Graph API         FaceDetection
-Facebook                   Facebook Opengraph         Facelets
-Facebook Ads               Facebook Real-time Updates Faces.com
-Facebook Chat              Facebook SDK               Facetly
-Facebook Credits           Facebook Social Plugins
-irb(main)\&amp;gt; &amp;quot;Facebook&amp;quot;, &amp;quot;Twit[TAB]
-Twitcher          TwitLonger        Twitter           Twitter Streaming Twitxr
-TwitchTV          TwitPic           Twitter API       TwitterBrite
-TwitDoc           TwitrPix          Twitter Bootstrap TwitterCounter
-Twitgoo           Twitscoop         Twitter Grader    Twittervision
-Twitlbl           TwitSprout        Twitter Oauth     Twitvid
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Even though we ended up leveraging an existing gem, digging into the
-Ruby standard library source code proved to be a useful exercise, revealing some
-simple ways to hook into features easily taken for granted.&lt;/p&gt;
 </content>
   </entry>
 </feed>
