@@ -251,4 +251,4 @@ Yeah, Rails will try hard to do automatic inverses on your behalf, but leaving i
 
 [Check out to the Rails docs on bi-directional associations](http://guides.rubyonrails.org/association_basics.html#bi-directional-associations) for more info.
 
-Save yourself the trouble and set `:inverse_of` for valid `belongs_to`, `:has_many`, and `:has_one` associations.
+Save yourself the trouble and set `:inverse_of` for valid `belongs_to`, `has_many`, and `has_one` associations.
