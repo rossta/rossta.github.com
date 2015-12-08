@@ -175,35 +175,18 @@ The guides are saying Rails will "try hard" to make the inverse association work
 But sometimes the heuristics won't work. Just what are these "heuristics"
 anyways? Glad you asked!
 
-We're going to dive into Rails a bit. For posterity, we'll citing source code
+We're going to dive into Rails a bit. We'll be looking citing source code
 from ActiveRecord 4.2-stable so if you're on a different version of Rails, your
 mileage may vary.
 
-ActiveRecord will attempt to "figure out" the inverse relationship on an
-association based on its `inverse_name`, defined as a private method in
-`ActiveRecord::Reflection::AssociationReflection` - a class that works under the
-hood of your `belongs_to`, `has_many`, and `has_one` associations:
-
-```ruby
-https://github.com/rails/rails/blob/e38e0c61e9d73b3531a02c6dd44c9694f64f2c0a/activerecord/lib/active_record/reflection.rb#L538
-
-# Attempts to find the inverse association name automatically.
-# If it cannot find a suitable inverse association name, it returns
-# nil.
-def inverse_name
-  options.fetch(:inverse_of) do
-    if @automatic_inverse_of == false
-      nil
-    else
-      @automatic_inverse_of ||= automatic_inverse_of
-    end
-  end
-end
-```
-
 If no name is found with the `:inverse_of` key in the association options,
-ActiveRecord will try to find the `automatic_inverse_of` the association if it
-hasn't already been cached. Let's look at that method:
+ActiveRecord will try to find the inverse association automatically inferring
+the class name from the association name, i.e. as `Post` is implied by `has_many :posts`.
+
+We can find the key method determining this logic [in
+`activerecord/lib/active_record/reflection.rb`](https://github.com/rails/rails/blob/a61e4ae58d65d43a97e90bdb02b6c407791e3c53/activerecord/lib/active_record/reflection.rb) defined in subclasses of `ActiveRecord::Reflection::AssociationReflection`.
+
+This method is [`automatic_inverse_of`](https://github.com/rails/rails/blob/a61e4ae58d65d43a97e90bdb02b6c407791e3c53/activerecord/lib/active_record/reflection.rb#L549). Here's the implementation.
 
 ```ruby
 # returns either nil or the inverse association name that it finds.
@@ -228,47 +211,18 @@ def automatic_inverse_of
 end
 ```
 
-Ok, it looks like there's a lot going on there. ActiveRecord is simply
-attempting to take the name of the association class, which in the case of
-`tweet.author` is "Author" and check if an existing inverse association exists for it. The key questions are `can_find_inverse_of_automatically?` and `valid_inverse_reflection?`
+First, the reflection class determines if it's even possible to do an automatic lookup with [`can_find_inverse_of_automatically?`](https://github.com/rails/rails/blob/a61e4ae58d65d43a97e90bdb02b6c407791e3c53/activerecord/lib/active_record/reflection.rb#L592).
 
-Let's take a closer look at those methods.
+It will only work with `:has_many`, `:has_one`, and `:belong_to` associations, and must also not contain any options that would make automatic lookup impossible, which are `:conditions`, `:through`, `:polymorphic`, and `:foreign_key`.
 
-```ruby
-# Checks to see if the reflection doesn't have any options that prevent
-# us from being able to guess the inverse automatically. First, the
-# <tt>inverse_of</tt> option cannot be set to false. Second, we must
-# have <tt>has_many</tt>, <tt>has_one</tt>, <tt>belongs_to</tt> associations.
-# Third, we must not have options such as <tt>:polymorphic</tt> or
-# <tt>:foreign_key</tt> which prevent us from correctly guessing the
-# inverse association.
-#
-# Anything with a scope can additionally ruin our attempt at finding an
-# inverse, so we exclude reflections with scopes.
-def can_find_inverse_of_automatically?(reflection)
-  reflection.options[:inverse_of] != false &&
-    VALID_AUTOMATIC_INVERSE_MACROS.include?(reflection.macro) &&
-    !INVALID_AUTOMATIC_INVERSE_OPTIONS.any? { |opt| reflection.options[opt] } &&
-    !reflection.scope
-end
-```
+The name is then "guessed" with `inverse_name = ActiveSupport::Inflector.underscore(options[:as] || active_record.name.demodulize).to_sym`. The `active_record` object is the actual class, in our example `Tweet`. Since the `inverse_name` will resolve to "tweet",
+the reflection will attempt to find a class
 
-```ruby
-# Checks if the inverse reflection that is returned from the
-# +automatic_inverse_of+ method is a valid reflection. We must
-# make sure that the reflection's active_record name matches up
-# with the current reflection's klass name.
-#
-# Note: klass will always be valid because when there's a NameError
-# from calling +klass+, +reflection+ will already be set to false.
-def valid_inverse_reflection?(reflection)
-  reflection &&
-    klass.name == reflection.active_record.name &&
-    can_find_inverse_of_automatically?(reflection)
-end
-```
+Given our `tweet`, when we ask for its author by `tweet.author`, if an author
+instance is not already associated with the tweet in memory and the `:inverse_of` is not specified, the
+`belongs_to` association's reflection class will first determine if the `author` record can be determined automatically given the limitations of the current options.
 
-You may be interested to know that `ActiveRecord::Reflection::AssociationReflection` is a base class for `HasManyReflection`, `HasOneReflection`, and `BelongsToReflection`.
+The association must be "valid" for inverse lookup - it will only work with `:has_many`, `:has_one`, and `:belong_to` associations. It must also not contain any options that would make automatic lookup impossible, which are `:conditions`, `:through`, `:polymorphic`, and `:foreign_key`.
 
 Depending on the association name, I may not the automatic inverse lookup and the uncertainty makes me uncomfortable. As a developer using Rails, I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations.
 
