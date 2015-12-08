@@ -111,7 +111,7 @@ So it should **just work™**!
 
 I noticed something odd the other day.
 
-I while reviewing code from a colleague for our Rails app which introduced abstraction to render a list of items given by a `has_many` association. The code was passing around the inverse instance (the original owner of the association) all over the place.
+I was reviewing code for our Rails app which introduced abstraction to render a list of items given by a `has_many` association. The code was passing around the inverse instance (the original owner of the association) all over the place.
 
 Wouldn't we expect the inverse to be available on our `has_many` items?
 
@@ -145,8 +145,7 @@ tweet.author
 #=> #<Author:0x007fc248e11998# id: 1, ... >
 ```
 
-He was rendering each tweet in a list and each tweet needed to refer back to the author for
-additional data.
+The code was rendering each tweet in a list and each tweet needed to refer back to the author for additional data.
 
 ```ruby
 author = Author.find(1)
