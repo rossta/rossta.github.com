@@ -1,22 +1,126 @@
 ---
-title: Use "inverse_of"
-summary: Improve most of your belongs_to/has_many/has_one ActiveRecord associations with this one weird trick
+title: Use inverse_of
+summary: Skip the Rails magic and set the :inverse_of option on your ActiveRecord associations
 author: Ross Kaffenberger
-published: false
+description: ActiveRecord will try hard to infer the inverse relation for your associations, but you may benefit from setting the inverse_of option wherever possible
+pull_image: 'https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg'
+published: true
+# series: ActiveRecord
+tags:
+  - Rails
+  - Code
+  - Ruby
 ---
 
-I noticed something odd while reviewing code from a colleague for our Rails app the other day. He was introducing a presenter class that would be responsible for rendering list of items given by a `has_many` association from another object.
+Let's talk about `:inverse_of`.
 
-Here's a contrived version of the code.
+We know Rails has ActiveRecord and ActiveRecord gives us associations and associations can really simplify our interactions with databases. These associations provide a number of configuration options, one of which is to set the "inverse of" your current relation.
 
-We've got a few ActiveRecord models in our Rails app. An author `has_many` posts
-and tweets. `Tweet` uses single-table inheritance (STI) to inherit from `Post`
-and add additional functionality.
+This option name can be a little confusing at first so let's use an example. Let's say we have an
+`Author` class and it `has_many :posts`. This means we should have a `Post` class that maintains a
+column, `:author_id`, so it we can say it `belongs_to :author`.
 
 ```ruby
 # app/models/author.rb
 class Author < ActiveRecord::Base
-  has_many :posts, dependent: :destroy
+  has_many :posts
+end
+
+# app/models/post.rb
+class Post < ActiveRecord::Base
+  belongs_to :author
+end
+```
+
+Ok, so we know this means if we have an author, we can ask for her posts.
+
+```ruby
+# Loading development environment (Rails 4.2.5)
+author = Author.find(1)
+#  Author Load (0.3ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+#=> #<Author:0x007fde81898868 id: 1, ... >
+
+author.posts
+#  Post Load (0.4ms)  SELECT "posts".* FROM "posts" WHERE "posts"."author_id" = $1  [["author_id", 1]]
+#=> [#<Post:0x007fde810cb4a0 id: 1, ... >, #<Post:0x007fde810cb248 id: 2, ... >, ... ]
+```
+
+We can also query for a post and ask for its author.
+
+```ruby
+post = Post.find(1)
+#  Post Load (0.3ms)  SELECT  "posts".* FROM "posts" WHERE "posts"."id" = $1 LIMIT 1  [["id", 1]]
+#=> #<Post:0x007fde81c7d730 id: 1, ... >
+
+post.author
+#  Author Load (0.3ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+#=> #<Author:0x007fde7a5c8518 id: 1, ... >
+```
+
+### What It's For
+
+Now, for most of our associations, Rails helps us find the **inverse** relation. For example, if we
+start with an author, then ask for her posts, each post will "know" that the inverse instance of this
+relationship is the author. If we iterate over each of `author.posts` and ask each post for its
+author, we expect to get the same author record:
+
+```ruby
+author.posts.map { |post| post.author }
+# => [#<Author:0x007fde81898868 id: 1, ... >, #<Author:0x007fde81898868 id: 1, ... >, ...]
+```
+
+For consistency, we want each post's author not only to be the same record, but the same
+**instance** in memory. If I modify one author's attributes, I expect that change to be reflected no
+matter with inverse I'm working with. Let's confirm by inspecting the `:object_id`:
+
+```ruby
+author.object_id
+# => 70296816370740
+
+object_ids = [author.object_id] + author.posts.map { |post| post.author.object_id }
+# => [70296816370740, 70296816370740, 70296816370740, ... ]
+
+object_ids.uniq.size == 1
+# => true
+```
+
+Great!, This means we can say that, for the `Author` class, `:author` is the "inverse of" the
+`has_many :posts` association. So we could add the `:inverse_of` option to specify the name of the
+inverse association to ensure our object instances match up.
+
+```ruby
+# app/models/author.rb
+class Author < ActiveRecord::Base
+  has_many :posts, inverse_of: :author
+end
+
+# app/models/post.rb
+class Post < ActiveRecord::Base
+  belongs_to :author, inverse_of: :post
+end
+```
+
+For this example, providing this option will not change the behavior because Rails is already
+setting the correct inverse instances as we might expect.
+
+It may seem obvious, but Rails has to do some work to set the inverse instance on records in an association and must infer the object based on the class name and association name.
+
+So it should **just work™**!
+
+### It Doesn't Always Work
+
+I noticed something odd the other day.
+
+I while reviewing code from a colleague for our Rails app which introduced abstraction to render a list of items given by a `has_many` association. The code was passing around the inverse instance (the original owner of the association) all over the place.
+
+Wouldn't we expect the inverse to be available on our `has_many` items?
+
+Let's look at an oversimplified example of what we were dealing with. Building on our `Author` and `Post` from earlier, we'll add a `Tweet` class. Using ActiveRecord's single-table inheritance mechanism, `Tweet` inherits functionality from `Post`.
+
+```ruby
+# app/models/author.rb
+class Author < ActiveRecord::Base
+  has_many :posts
   has_many :tweets, class_name: 'Tweet'
 end
 
@@ -31,123 +135,83 @@ class Tweet < Post
 end
 ```
 
-We were extracting a family of presenters to take a collection of tweets and the author, to render information about each post, the author, and some metadata.
-
-The `TweetsController` instantiates a `TweetsPresenter` to wrap the collection
-of tweets along with the author.
-
-```ruby
-# app/controllers/tweets_controller.rb
-class TweetsController
-  def index
-    author = Author.find(params[:author_id])
-    @posts = TweetsPresenter.new(@posts, author)
-  end
-end
-```
-
-The view iterates over the tweets yielded by `@posts.each`.
-
-```erb
-# app/views/posts/_index.html.erb
-<section class="posts">
-  <% @posts.each do |post| %>
-  <p><%= post.text %></p>
-  <p><%= post.author_name %></p>
-  <p><%= post.author_handle %></p>
-  <% end %>
-</section>
-```
-
-This is possible because the presenter defines `#each` to yield each tweet wrapped in a `TweetPresenter` responsible for decorating each `tweet`.
-
-```ruby
-# app/presenters/tweets_presenter.rb
-class TweetsPresenter
-  def initialize(tweets, author)
-    @tweets = tweets
-    @author = author
-  end
-
-  def each(&block)
-    @tweets.each do |tweet|
-      yield TweetPresenter.new(tweet, @author)
-    end
-  end
-end
-```
-The `TweetPresenter` takes each tweet and the author and defines some additional methods including those shown below.
-
-```ruby
-
-# app/presenters/tweet_presenter.rb
-class TweetPresenter
-  def initialize(tweet, author)
-    @tweet = tweet
-    @author = author
-  end
-
-  def text
-    @tweet.text
-  end
-
-  def author_handle
-    @author.twitter_handle
-  end
-
-  def author_name
-    @author.name
-  end
-end
-```
-
-After absorbing all this, it seemed odd to pass the author all the way down from the controller. Each `tweet` defines its `author` association since it inherits from `Post`:
+The `Author` class `has_many :tweets` and each tweet has an author since it inherits its associations from `Post`.
 
 ```ruby
 tweet = Tweet.last
-# => #<Tweet:0x007fc24c1dadd8 ...>
+#=> #<Tweet:0x007fc24c1dadd8 id: 10, ... >
+
 tweet.author
-# => #<Author:0x007fc248e11998# ...>
+#=> #<Author:0x007fc248e11998# id: 1, ... >
 ```
 
-I had a hunch as I had knew my colleague would have had a good reason for doing
-passing the `author` instance along so I opened up a rails console:
+He was rendering each tweet in a list and each tweet needed to refer back to the author for
+additional data.
 
-```
-pry(main)> author = Author.find(1)
-Author Load (0.2ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
-=> #<Author:0x007fc24dee1ad0 ...>
+```ruby
+author = Author.find(1)
+# Author Load (0.2ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+#=> #<Author:0x007fc24dee1ad0 ...>
 
-pry(main)> author.tweets.map { |t| t.author.twitter_handle }
-Tweet Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."type" IN ('Tweet') AND "posts"."author_id" = $1  [["author_id", 1]]
-Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
-Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
-Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
-Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
-Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
-....
- => ["vicenta", ... ]
+author.tweets.map { |tw| author.twitter_handle }
+# Tweet Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."type" IN ('Tweet') AND "posts"."author_id" = $1  [["author_id", 1]]
+#=> ['vicenta', 'vicenta', ... ]
 ```
 
-That's a lot of database queries for one author! It's the classic problem with `has_many` associations: the "N+1" query. After the initial `author.tweet` query, "N" additional queries are needed to call each `tweet.author` back through the `belongs_to` association.
+It seemed odd to pass the author author around.
 
-This is unfortunate because we already have a reference to the `author`. The
-extra queries mean the author for each individual tweet does not point to the
-same author object in memory, even though it represents the same record.
+Each `tweet` defines its `author` association since it inherits from `Post`. I knew my colleague would have had a good reason for passing the `author` instance along so I opened up a `rails console` to find out what happened if I used the inverse association instead:
 
-So passing the `author` instance variable into the block (like we've done with the presenter) is one workaround. But this can be difficult to maintain, especially if we're dealing with more than one author's posts. Wouldn't it be better not to make those unnecessary queries?
+```ruby
+author = Author.find(1)
+# Author Load (0.2ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+#=> #<Author:0x007fc24dee1ad0 ...>
 
-Well, it's possible! We can let Rails know how to resolve the "inverse" relation whether we're working with a tweet or author.
+author.tweets.map { |tw| tw.author.twitter_handle }
+# Tweet Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."type" IN ('Tweet') AND "posts"."author_id" = $1  [["author_id", 1]]
+# Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+# Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+# Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+# Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+# Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+# Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+# Author Load (0.1ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+# ...
+#=> ['vicenta', 'vicenta', ... ]
+```
 
-We can do this by adding the `inverse_of` option to both the `belongs_to` and the `has_many` association:
+That's a lot of database queries for one author!
+
+It's the classic problem with `has_many` associations: the "N+1" query. After the initial `author.tweet` query, "N" additional queries are needed to call each `tweet.author` back through the `belongs_to` association. We were avoiding the extra lookups by passing around the original author instance.
+
+This is unfortunate because we, as we have seen, it should be possible to avoid these extra queries so that each tweet's author points to the same author object in memory.
+
+Not only do we want to avoid the extra queries, but if modifications are made in one place, we'd like them to be reflected elsewhere. I want to avoid something like this:
+
+```ruby
+tweet_1 = author.tweets.first
+tweet_2 = author.tweets.second
+
+tweet_1.author.name # => "Cecily"
+tweet_1.author.name # => "Cecily"
+
+tweet_1.author.name = "Martha"
+
+tweet_1.author.name # => "Martha"
+tweet_1.author.name # => "Cecily"
+```
+
+So passing the `author` instance variable into the block, as an additional argument to method calls, or down to a view template is one workaround. But this can be difficult to maintain, especially if we're dealing with more than one author's posts. Wouldn't it be better not to make those unnecessary queries?
+
+Well, it's possible! `:inverse_of` to the rescue.
 
 ```ruby
 class Author < ActiveRecord::Base
-  has_many :posts, dependent: :destroy, inverse_of: true
+  has_many :tweets, inverse_of: :author
 end
 
-class Post < ActiveRecord::Base
-  belongs_to :author, dependent: :destroy, inverse_of: true
+class Tweet < ActiveRecord::Base
+  belongs_to :author, inverse_of: :tweets
 end
 ```
 
@@ -156,237 +220,34 @@ are needed because each tweet can now assign its author association from the
 instance that exists already in memory:
 
 ```ruby
-pry(main)> author = Author.find(1)
-Author Load (0.3ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
-=> #<Author:0x007fc24c65c028 ... >
-pry(main)> author.tweets.map { |t| t.author.twitter_handle }
-  Tweet Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."type" IN ('Tweet') AND "posts"."author_id" = $1  [["author_id", 1]]
-  => ["vicenta", ... ]
-  ```
+author = Author.find(1)
+# Author Load (0.3ms)  SELECT  "authors".* FROM "authors" WHERE "authors"."id" = $1 LIMIT 1  [["id", 1]]
+#=> #<Author:0x007fc24c65c028 ... >
+author.tweets.map { |tw| tw.author.twitter_handle }
+# Tweet Load (0.3ms)  SELECT "posts".* FROM "posts" WHERE "posts"."type" IN ('Tweet') AND "posts"."author_id" = $1  [["author_id", 1]]
+=> ["vicenta", ... ]
+```
 
 Notice that additional queries for the author (`Author Load...`) don't appear in the query log: no more "N+1"!
 
-You might be asking... why doesn't Rails just do this by default? That's a good question. Turns out, it's not so easy. The [Rails guides]() say:
+You might be asking... why doesn't Rails just do this by default all the time? That's a good question. Turns out, it's not so easy. The [Rails guides]() say:
 
 > Every association will attempt to automatically find the inverse association and set the `:inverse_of` option heuristically (based on the association name). Most associations with standard names will be supported.
 
-The guides are saying Rails will "try hard" to make the inverse association work automatically to prevent the extra queries. Consider our `Post` again, this time, with the `:inverse_of` option removed again.
+So Rails will "try hard" to make the inverse association work automatically to prevent the extra queries. If no name is found with the `:inverse_of` key in the association options, ActiveRecord will try to find the inverse association automatically inferring the class name from the association name, i.e. as `Post` is implied by `has_many :posts`.
 
-But sometimes the heuristics won't work. Just what are these "heuristics"
-anyways? Glad you asked!
+But when the name of the association and the name of the class Rails expects to find in the
+association don't match, setting the inverse won't work automatically. Then you may see extra
+queries for objects that already exist in memory.
 
-We're going to dive into Rails a bit. We'll be looking citing source code
-from ActiveRecord 4.2-stable so if you're on a different version of Rails, your
-mileage may vary.
+### Avoid Uncertainty, Be Explicit
 
-If no name is found with the `:inverse_of` key in the association options,
-ActiveRecord will try to find the inverse association automatically inferring
-the class name from the association name, i.e. as `Post` is implied by `has_many :posts`.
+Here's my recommendation:
 
-We can find the key method determining this logic [in
-`activerecord/lib/active_record/reflection.rb`](https://github.com/rails/rails/blob/a61e4ae58d65d43a97e90bdb02b6c407791e3c53/activerecord/lib/active_record/reflection.rb) defined in subclasses of `ActiveRecord::Reflection::AssociationReflection`.
+**Set the `:inverse_of` option wherever you can.**
 
-This method is [`automatic_inverse_of`](https://github.com/rails/rails/blob/a61e4ae58d65d43a97e90bdb02b6c407791e3c53/activerecord/lib/active_record/reflection.rb#L549). Here's the implementation.
+Yeah, Rails will try hard to do automatic inverses on your behalf, but leaving it up to Rails adds uncertainty. The uncertainty makes me uncomfortable. Here's an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations. I want to make it easier to introduce other changes into my app later.
 
-```ruby
-# returns either nil or the inverse association name that it finds.
-def automatic_inverse_of
-  if can_find_inverse_of_automatically?(self)
-    inverse_name = ActiveSupport::Inflector.underscore(options[:as] || active_record.name.demodulize).to_sym
+Beware of the gotchas: [check out to the Rails docs on bi-directional associations](http://guides.rubyonrails.org/association_basics.html#bi-directional-associations), `:inverse_of` will only work with `has_many`, `has_one`, and `belong_to` and must also not contain `:conditions`, `:through`, `:polymorphic`, and `:foreign_key`.
 
-    begin
-      reflection = klass._reflect_on_association(inverse_name)
-    rescue NameError
-      # Give up: we couldn't compute the klass type so we won't be able
-      # to find any associations either.
-      reflection = false
-    end
-
-    if valid_inverse_reflection?(reflection)
-      return inverse_name
-    end
-  end
-
-  false
-end
-```
-
-First, the reflection class determines if it's even possible to do an automatic lookup with [`can_find_inverse_of_automatically?`](https://github.com/rails/rails/blob/a61e4ae58d65d43a97e90bdb02b6c407791e3c53/activerecord/lib/active_record/reflection.rb#L592).
-
-It will only work with `:has_many`, `:has_one`, and `:belong_to` associations, and must also not contain any options that would make automatic lookup impossible, which are `:conditions`, `:through`, `:polymorphic`, and `:foreign_key`.
-
-The name is then "guessed" with `inverse_name = ActiveSupport::Inflector.underscore(options[:as] || active_record.name.demodulize).to_sym`. The `active_record` object is the actual class, in our example `Tweet`. Since the `inverse_name` will resolve to "tweet",
-the reflection will attempt to find a class
-
-Given our `tweet`, when we ask for its author by `tweet.author`, if an author
-instance is not already associated with the tweet in memory and the `:inverse_of` is not specified, the
-`belongs_to` association's reflection class will first determine if the `author` record can be determined automatically given the limitations of the current options.
-
-The association must be "valid" for inverse lookup - it will only work with `:has_many`, `:has_one`, and `:belong_to` associations. It must also not contain any options that would make automatic lookup impossible, which are `:conditions`, `:through`, `:polymorphic`, and `:foreign_key`.
-
-Depending on the association name, I may not the automatic inverse lookup and the uncertainty makes me uncomfortable. As a developer using Rails, I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations.
-
-Even if the inverse correctly resolves on its own today, I can expect my application to change - how can I be sure the inverse association will still be working in six months or longer? Rails is also frequently changing and I'd like to guard against upgrades that result in new heuristics I didn't anticipate.
-
-  To avoid all this uncertainty, I recommend to **always** set `:inverse_of` for valid `belongs_to`, `:has_many`, and `:has_one` associations.
-
-  >>
-# http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#module-ActiveRecord::Associations::ClassMethods-label-Setting+Inverses
-
-  == Setting Inverses
-#
-# If you are using a #belongs_to on the join model, it is a good idea to set the
-# <tt>:inverse_of</tt> option on the #belongs_to, which will mean that the following example
-# works correctly (where <tt>tags</tt> is a #has_many <tt>:through</tt> association):
-#
-#   @post = Post.first
-#   @tag = @post.tags.build name: "ruby"
-#   @tag.save
-#
-# The last line ought to save the through record (a <tt>Tagging</tt>). This will only work if the
-# <tt>:inverse_of</tt> is set:
-#
-#   class Tagging < ActiveRecord::Base
-#     belongs_to :post
-#     belongs_to :tag, inverse_of: :taggings
-#   end
-#
-# If you do not set the <tt>:inverse_of</tt> record, the association will
-# do its best to match itself up with the correct inverse. Automatic
-# inverse detection only works on #has_many, #has_one, and
-# #belongs_to associations.
-#
-  >>
-
-#
-# == Bi-directional associations
-#
-# When you specify an association there is usually an association on the associated model
-# that specifies the same relationship in reverse. For example, with the following models:
-#
-#    class Dungeon < ActiveRecord::Base
-#      has_many :traps
-#      has_one :evil_wizard
-#    end
-#
-#    class Trap < ActiveRecord::Base
-#      belongs_to :dungeon
-#    end
-#
-#    class EvilWizard < ActiveRecord::Base
-#      belongs_to :dungeon
-#    end
-#
-# The +traps+ association on +Dungeon+ and the +dungeon+ association on +Trap+ are
-# the inverse of each other and the inverse of the +dungeon+ association on +EvilWizard+
-# is the +evil_wizard+ association on +Dungeon+ (and vice-versa). By default,
-# Active Record can guess the inverse of the association based on the name
-# of the class. The result is the following:
-#
-#    d = Dungeon.first
-#    t = d.traps.first
-#    d.object_id == t.dungeon.object_id # => true
-#
-# The +Dungeon+ instances +d+ and <tt>t.dungeon</tt> in the above example refer to
-# the same in-memory instance since the association matches the name of the class.
-# The result would be the same if we added +:inverse_of+ to our model definitions:
-#
-#    class Dungeon < ActiveRecord::Base
-#      has_many :traps, inverse_of: :dungeon
-#      has_one :evil_wizard, inverse_of: :dungeon
-#    end
-#
-#    class Trap < ActiveRecord::Base
-#      belongs_to :dungeon, inverse_of: :traps
-#    end
-#
-#    class EvilWizard < ActiveRecord::Base
-#      belongs_to :dungeon, inverse_of: :evil_wizard
-#    end
-#
-# There are limitations to <tt>:inverse_of</tt> support:
-#
-# * does not work with <tt>:through</tt> associations.
-# * does not work with <tt>:polymorphic</tt> associations.
-# * for #belongs_to associations #has_many inverse associations are ignored.
-
-# has_many docs
-# [:inverse_of]
-#   Specifies the name of the #belongs_to association on the associated object
-#   that is the inverse of this #has_many association. Does not work in combination
-#   with <tt>:through</tt> or <tt>:as</tt> options.
-# has_one docs
-# [:inverse_of]
-#   Specifies the name of the #belongs_to association on the associated object
-#   that is the inverse of this #has_one association. Does not work in combination
-#   with <tt>:through</tt> or <tt>:as</tt> options.
-# belongs_to docs
-# [:inverse_of]
-#   Specifies the name of the #has_one or #has_many association on the associated
-#   object that is the inverse of this #belongs_to association. Does not work in
-#   combination with the <tt>:polymorphic</tt> options.
-
-# Inverse of heuristics
-# Attempts to find the inverse association name automatically.
-# If it cannot find a suitable inverse association name, it returns
-# nil.
-  def inverse_name
-  options.fetch(:inverse_of) do
-  if @automatic_inverse_of == false
-  nil
-  else
-  @automatic_inverse_of ||= automatic_inverse_of
-  end
-  end
-  end
-
-# returns either nil or the inverse association name that it finds.
-  def automatic_inverse_of
-if can_find_inverse_of_automatically?(self)
-  inverse_name = ActiveSupport::Inflector.underscore(options[:as] || active_record.name.demodulize).to_sym
-
-  begin
-reflection = klass._reflect_on_association(inverse_name)
-  rescue NameError
-# Give up: we couldn't compute the klass type so we won't be able
-# to find any associations either.
-  reflection = false
-  end
-
-if valid_inverse_reflection?(reflection)
-  return inverse_name
-  end
-  end
-
-  false
-  end
-
-# Checks if the inverse reflection that is returned from the
-# +automatic_inverse_of+ method is a valid reflection. We must
-# make sure that the reflection's active_record name matches up
-# with the current reflection's klass name.
-#
-# Note: klass will always be valid because when there's a NameError
-# from calling +klass+, +reflection+ will already be set to false.
-def valid_inverse_reflection?(reflection)
-  reflection &&
-  klass.name == reflection.active_record.name &&
-can_find_inverse_of_automatically?(reflection)
-  end
-
-# Checks to see if the reflection doesn't have any options that prevent
-# us from being able to guess the inverse automatically. First, the
-# <tt>inverse_of</tt> option cannot be set to false. Second, we must
-# have <tt>has_many</tt>, <tt>has_one</tt>, <tt>belongs_to</tt> associations.
-# Third, we must not have options such as <tt>:polymorphic</tt> or
-# <tt>:foreign_key</tt> which prevent us from correctly guessing the
-# inverse association.
-#
-# Anything with a scope can additionally ruin our attempt at finding an
-# inverse, so we exclude reflections with scopes.
-def can_find_inverse_of_automatically?(reflection)
-  reflection.options[:inverse_of] != false &&
-  VALID_AUTOMATIC_INVERSE_MACROS.include?(reflection.macro) &&
-  !INVALID_AUTOMATIC_INVERSE_OPTIONS.any? { |opt| reflection.options[opt] } &&
-  !reflection.scope
-  end
+Save yourself the trouble and set `:inverse_of` for valid `belongs_to`, `:has_many`, and `:has_one` associations.
