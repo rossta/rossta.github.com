@@ -192,12 +192,12 @@ tweet_1 = author.tweets.first
 tweet_2 = author.tweets.second
 
 tweet_1.author.name # => "Cecily"
-tweet_1.author.name # => "Cecily"
+tweet_2.author.name # => "Cecily"
 
 tweet_1.author.name = "Martha"
 
 tweet_1.author.name # => "Martha"
-tweet_1.author.name # => "Cecily"
+tweet_2.author.name # => "Cecily"
 ```
 
 So passing the `author` instance variable into the block, as an additional argument to method calls, or down to a view template is one workaround. But this can be difficult to maintain, especially if we're dealing with more than one author's posts. Wouldn't it be better not to make those unnecessary queries?
@@ -214,8 +214,8 @@ class Tweet < ActiveRecord::Base
 end
 ```
 
-Now when iterate over the tweets and reference the author, no additional queries
-are needed because each tweet can now assign its author association from the
+Now when iterate over the tweets and reference the author, __no additional queries
+are needed__ because each tweet can now assign its author association from the
 instance that exists already in memory:
 
 ```ruby
@@ -245,7 +245,9 @@ Here's my recommendation:
 
 **Set the `:inverse_of` option wherever you can.**
 
-Yeah, Rails will try hard to do automatic inverses on your behalf, but leaving it up to Rails adds uncertainty. The uncertainty makes me uncomfortable. Here's an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations. I want to make it easier to introduce other changes into my app later.
+Yeah, Rails will try hard to do automatic inverses on your behalf, but **leaving it up to Rails adds uncertainty**. The uncertainty makes me uncomfortable.
+
+Here's an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations. I want to make it easier to introduce other changes into my app later.
 
 **Beware of the gotchas**: `:inverse_of` will only work with `has_many`, `has_one`, and `belong_to` associations which must also not contain `:conditions`, `:through`, `:polymorphic`, and `:foreign_key` options.
 
