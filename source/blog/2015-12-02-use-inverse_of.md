@@ -229,7 +229,7 @@ author.tweets.map { |tw| tw.author.twitter_handle }
 
 Notice that additional queries for the author (`Author Load...`) don't appear in the query log: no more "N+1"!
 
-You might be asking... why doesn't Rails just do this by default all the time? That's a good question. Turns out, it's not so easy. The [Rails guides]() say:
+You might be asking... why doesn't Rails just do this by default all the time? That's a good question. Turns out, it's not so easy. The [Rails guides](http://guides.rubyonrails.org/association_basics.html#bi-directional-associations) say:
 
 > Every association will attempt to automatically find the inverse association and set the `:inverse_of` option heuristically (based on the association name). Most associations with standard names will be supported.
 
