@@ -247,7 +247,7 @@ Here's my recommendation:
 
 Yeah, Rails will try hard to do automatic inverses on your behalf, but **leaving it up to Rails adds uncertainty**. The uncertainty makes me uncomfortable.
 
-Also know that __other ActiveRecord options can interfere with automatic inverses__: using `:conditions`, `:through`, `:polymorphic`, and `:foreign_key` in your association will make it impossible to guess the inverse. In these cases, if you expect to have inverses set properly, using `:inverse_of` is necessary.
+Also know that __other ActiveRecord options can interfere with automatic inverses__: for example, using `:foreign_key` in your association will make it impossible to guess the inverse. In these cases, if you expect to have inverses set properly, using `:inverse_of` is necessary.
 
 Here's an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations. I want to make it easier to introduce other changes into my app later.
 
