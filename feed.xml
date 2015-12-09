@@ -245,7 +245,7 @@ queries for objects that already exist in memory.&lt;/p&gt;
 
 &lt;p&gt;Yeah, Rails will try hard to do automatic inverses on your behalf, but &lt;strong&gt;leaving it up to Rails adds uncertainty&lt;/strong&gt;. The uncertainty makes me uncomfortable.&lt;/p&gt;
 
-&lt;p&gt;Also know that &lt;strong&gt;other ActiveRecord options can interfere with automatic inverses&lt;/strong&gt;: using &lt;code&gt;:conditions&lt;/code&gt;, &lt;code&gt;:through&lt;/code&gt;, &lt;code&gt;:polymorphic&lt;/code&gt;, and &lt;code&gt;:foreign_key&lt;/code&gt; in your association will make it impossible to guess the inverse. In these cases, if you expect to have inverses set properly, using &lt;code&gt;:inverse_of&lt;/code&gt; is necessary.&lt;/p&gt;
+&lt;p&gt;Also know that &lt;strong&gt;other ActiveRecord options can interfere with automatic inverses&lt;/strong&gt;: for example, using &lt;code&gt;:foreign_key&lt;/code&gt; in your association will make it impossible to guess the inverse. In these cases, if you expect to have inverses set properly, using &lt;code&gt;:inverse_of&lt;/code&gt; is necessary.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&amp;rsquo;t really want to write tests to be sure I&amp;rsquo;m not unintentionally generating a &amp;ldquo;N+1&amp;rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.&lt;/p&gt;
 
