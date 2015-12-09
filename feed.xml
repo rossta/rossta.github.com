@@ -225,7 +225,7 @@ author.tweets.map { |tw| tw.author.twitter_handle }
 
 &lt;p&gt;Notice that additional queries for the author (&lt;code&gt;Author Load...&lt;/code&gt;) don&amp;rsquo;t appear in the query log: no more &amp;ldquo;N+1&amp;rdquo;!&lt;/p&gt;
 
-&lt;p&gt;You might be asking&amp;hellip; why doesn&amp;rsquo;t Rails just do this by default all the time? That&amp;rsquo;s a good question. Turns out, it&amp;rsquo;s not so easy. The &lt;a href="#"&gt;Rails guides&lt;/a&gt; say:&lt;/p&gt;
+&lt;p&gt;You might be asking&amp;hellip; why doesn&amp;rsquo;t Rails just do this by default all the time? That&amp;rsquo;s a good question. Turns out, it&amp;rsquo;s not so easy. The &lt;a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations"&gt;Rails guides&lt;/a&gt; say:&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Every association will attempt to automatically find the inverse association and set the &lt;code&gt;:inverse_of&lt;/code&gt; option heuristically (based on the association name). Most associations with standard names will be supported.&lt;/p&gt;
@@ -249,7 +249,7 @@ queries for objects that already exist in memory.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&amp;rsquo;t really want to write tests to be sure I&amp;rsquo;m not unintentionally generating a &amp;ldquo;N+1&amp;rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Beware of the gotchas&lt;/strong&gt;: &lt;code&gt;:inverse_of&lt;/code&gt; will only work with &lt;code&gt;has_many&lt;/code&gt;, &lt;code&gt;has_one&lt;/code&gt;, and &lt;code&gt;belong_to&lt;/code&gt; associations and they will not work with &lt;code&gt;:as&lt;/code&gt;, &lt;code&gt;:polymorphic&lt;/code&gt;, and &lt;code&gt;:as&lt;/code&gt; associations. &lt;a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations"&gt;Check out to the Rails docs on bi-directional associations&lt;/a&gt; for more info.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Beware of the gotchas&lt;/strong&gt;: &lt;code&gt;:inverse_of&lt;/code&gt; will only work with &lt;code&gt;has_many&lt;/code&gt;, &lt;code&gt;has_one&lt;/code&gt;, and &lt;code&gt;belong_to&lt;/code&gt; associations and they will not work with the &lt;code&gt;:as&lt;/code&gt;, &lt;code&gt;:polymorphic&lt;/code&gt;, and &lt;code&gt;:through&lt;/code&gt; options. &lt;a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations"&gt;Check out to the Rails docs on bi-directional associations&lt;/a&gt; for more info.&lt;/p&gt;
 
 &lt;p&gt;Save yourself the trouble and set &lt;code&gt;:inverse_of&lt;/code&gt; for valid &lt;code&gt;belongs_to&lt;/code&gt;, &lt;code&gt;has_many&lt;/code&gt;, and &lt;code&gt;has_one&lt;/code&gt; associations.&lt;/p&gt;
 </content>
@@ -265,16 +265,16 @@ queries for objects that already exist in memory.&lt;/p&gt;
     </author>
     <summary type="html">&lt;p&gt;Pascal’s Triangle is a fun sequence. Here’s what it looks like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1449692191"&gt;&lt;/p&gt;
 
 &lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;“triangular array of the binomial coefficients”&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Pascal&amp;rsquo;s Triangle is a fun sequence. Here&amp;rsquo;s what it looks like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1449692191" /&gt;&lt;/p&gt;
 
 &lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;&amp;ldquo;triangular array of the binomial coefficients&amp;rdquo;&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1448546389" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1449692191" /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can model this in Ruby as an array of arrays. The first array member is &lt;code&gt;[1]&lt;/code&gt;. Each successive array (or &amp;ldquo;row&amp;rdquo;) will increase in size, and each array member will be the sum of the member at the same index &lt;code&gt;n&lt;/code&gt; in the &lt;code&gt;k-1&lt;/code&gt; row, where &lt;code&gt;k&lt;/code&gt; is the current row, and the &lt;code&gt;n-1&lt;/code&gt; member in the &lt;code&gt;k-1&lt;/code&gt; row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:&lt;/p&gt;
 

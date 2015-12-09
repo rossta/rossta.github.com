@@ -19,8 +19,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/all.css?1449664762" rel="stylesheet" />
-    <script src="/assets/javascripts/head.js?1445744814"></script>
+    <link href="/assets/stylesheets/all.css?1449692192" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1449692192"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
   <body id="application" class="typekit">
@@ -259,7 +259,7 @@ author.tweets.map { |tw| tw.author.twitter_handle }
 
 <p>Notice that additional queries for the author (<code>Author Load...</code>) don&rsquo;t appear in the query log: no more &ldquo;N+1&rdquo;!</p>
 
-<p>You might be asking&hellip; why doesn&rsquo;t Rails just do this by default all the time? That&rsquo;s a good question. Turns out, it&rsquo;s not so easy. The <a href="#">Rails guides</a> say:</p>
+<p>You might be asking&hellip; why doesn&rsquo;t Rails just do this by default all the time? That&rsquo;s a good question. Turns out, it&rsquo;s not so easy. The <a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Rails guides</a> say:</p>
 
 <blockquote>
 <p>Every association will attempt to automatically find the inverse association and set the <code>:inverse_of</code> option heuristically (based on the association name). Most associations with standard names will be supported.</p>
@@ -283,7 +283,7 @@ queries for objects that already exist in memory.</p>
 
 <p>Here&rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&rsquo;t really want to write tests to be sure I&rsquo;m not unintentionally generating a &ldquo;N+1&rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.</p>
 
-<p><strong>Beware of the gotchas</strong>: <code>:inverse_of</code> will only work with <code>has_many</code>, <code>has_one</code>, and <code>belong_to</code> associations and they will not work with <code>:as</code>, <code>:polymorphic</code>, and <code>:as</code> associations. <a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Check out to the Rails docs on bi-directional associations</a> for more info.</p>
+<p><strong>Beware of the gotchas</strong>: <code>:inverse_of</code> will only work with <code>has_many</code>, <code>has_one</code>, and <code>belong_to</code> associations and they will not work with the <code>:as</code>, <code>:polymorphic</code>, and <code>:through</code> options. <a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Check out to the Rails docs on bi-directional associations</a> for more info.</p>
 
 <p>Save yourself the trouble and set <code>:inverse_of</code> for valid <code>belongs_to</code>, <code>has_many</code>, and <code>has_one</code> associations.</p>
 
@@ -386,7 +386,7 @@ queries for objects that already exist in memory.</p>
         </section>
       </footer>
     </div>
-    <script src="/assets/javascripts/all.js?1449463304"></script>
+    <script src="/assets/javascripts/all.js?1449692192"></script>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
   <script>
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
