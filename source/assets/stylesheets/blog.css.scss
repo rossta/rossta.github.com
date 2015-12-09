@@ -5,7 +5,7 @@ ul.index {
   margin-left: 0;
   li {
     display:block;
-    padding:0.5em 0;
+    padding:0.5rem 0;
     &:first-child {
       padding-top:0;
     }
@@ -17,22 +17,22 @@ ul.index {
 }
 
 .index-post {
-  padding-bottom: 0em;
-  margin-bottom: 1em;
+  padding-bottom: 0rem;
+  margin-bottom: 1rem;
   border: none;
 
   .comments {
-    margin-top: 1em;
+    margin-top: 1rem;
   }
 }
 article {
   @include base-font;
   header {
     @include base-font;
-    margin-bottom: 2.25em;
+    margin-bottom: 2.25rem;
   }
   h3,h4,h5 {
-    margin-top: 1em;
+    margin-top: 2.5rem;
   }
   p {
     color: $mainColor;
@@ -43,7 +43,7 @@ article {
 }
 
 .profile {
-  padding-bottom: 2em;
+  padding-bottom: 2rem;
   text-align: center;
 
   img { width: 30%; }
