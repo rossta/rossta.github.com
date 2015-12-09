@@ -267,8 +267,8 @@ author.tweets.map { |tw| tw.author.twitter_handle }
 
 <p>So Rails will &ldquo;try hard&rdquo; to make the inverse association work automatically to prevent the extra queries. If no name is found with the <code>:inverse_of</code> key in the association options, ActiveRecord will try to find the inverse association automatically inferring the class name from the association name, i.e. as <code>Post</code> is implied by <code>has_many :posts</code>.</p>
 
-<p>But when the name of the association and the name of the class Rails expects to find in the
-association don&rsquo;t match, setting the inverse won&rsquo;t work automatically. Then you may see extra
+<p>To summarize, when the name of the association and the name of the class Rails expects to find in the
+association don&rsquo;t match, or other certain other options are uses, automatic inverse lookup won&rsquo;t happen. Then you may see extra
 queries for objects that already exist in memory.</p>
 
 <h3>Avoid Uncertainty, Be Explicit</h3>
@@ -279,11 +279,11 @@ queries for objects that already exist in memory.</p>
 
 <p>Yeah, Rails will try hard to do automatic inverses on your behalf, but <strong>leaving it up to Rails adds uncertainty</strong>. The uncertainty makes me uncomfortable.</p>
 
+<p>Also know that <strong>other ActiveRecord options can interfere with automatic inverses</strong>: using <code>:conditions</code>, <code>:through</code>, <code>:polymorphic</code>, and <code>:foreign_key</code> in your association will make it impossible to guess the inverse. In these cases, if you expect to have inverses set properly, using <code>:inverse_of</code> is necessary.</p>
+
 <p>Here&rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&rsquo;t really want to write tests to be sure I&rsquo;m not unintentionally generating a &ldquo;N+1&rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.</p>
 
-<p><strong>Beware of the gotchas</strong>: <code>:inverse_of</code> will only work with <code>has_many</code>, <code>has_one</code>, and <code>belong_to</code> associations which must also not contain <code>:conditions</code>, <code>:through</code>, <code>:polymorphic</code>, and <code>:foreign_key</code> options.</p>
-
-<p><a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Check out to the Rails docs on bi-directional associations</a> for more info.</p>
+<p><strong>Beware of the gotchas</strong>: <code>:inverse_of</code> will only work with <code>has_many</code>, <code>has_one</code>, and <code>belong_to</code> associations and they will not work with <code>:as</code>, <code>:polymorphic</code>, and <code>:as</code> associations. <a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Check out to the Rails docs on bi-directional associations</a> for more info.</p>
 
 <p>Save yourself the trouble and set <code>:inverse_of</code> for valid <code>belongs_to</code>, <code>has_many</code>, and <code>has_one</code> associations.</p>
 

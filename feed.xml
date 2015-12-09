@@ -233,8 +233,8 @@ author.tweets.map { |tw| tw.author.twitter_handle }
 
 &lt;p&gt;So Rails will &amp;ldquo;try hard&amp;rdquo; to make the inverse association work automatically to prevent the extra queries. If no name is found with the &lt;code&gt;:inverse_of&lt;/code&gt; key in the association options, ActiveRecord will try to find the inverse association automatically inferring the class name from the association name, i.e. as &lt;code&gt;Post&lt;/code&gt; is implied by &lt;code&gt;has_many :posts&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;But when the name of the association and the name of the class Rails expects to find in the
-association don&amp;rsquo;t match, setting the inverse won&amp;rsquo;t work automatically. Then you may see extra
+&lt;p&gt;To summarize, when the name of the association and the name of the class Rails expects to find in the
+association don&amp;rsquo;t match, or other certain other options are uses, automatic inverse lookup won&amp;rsquo;t happen. Then you may see extra
 queries for objects that already exist in memory.&lt;/p&gt;
 
 &lt;h3&gt;Avoid Uncertainty, Be Explicit&lt;/h3&gt;
@@ -245,11 +245,11 @@ queries for objects that already exist in memory.&lt;/p&gt;
 
 &lt;p&gt;Yeah, Rails will try hard to do automatic inverses on your behalf, but &lt;strong&gt;leaving it up to Rails adds uncertainty&lt;/strong&gt;. The uncertainty makes me uncomfortable.&lt;/p&gt;
 
+&lt;p&gt;Also know that &lt;strong&gt;other ActiveRecord options can interfere with automatic inverses&lt;/strong&gt;: using &lt;code&gt;:conditions&lt;/code&gt;, &lt;code&gt;:through&lt;/code&gt;, &lt;code&gt;:polymorphic&lt;/code&gt;, and &lt;code&gt;:foreign_key&lt;/code&gt; in your association will make it impossible to guess the inverse. In these cases, if you expect to have inverses set properly, using &lt;code&gt;:inverse_of&lt;/code&gt; is necessary.&lt;/p&gt;
+
 &lt;p&gt;Here&amp;rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&amp;rsquo;t really want to write tests to be sure I&amp;rsquo;m not unintentionally generating a &amp;ldquo;N+1&amp;rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Beware of the gotchas&lt;/strong&gt;: &lt;code&gt;:inverse_of&lt;/code&gt; will only work with &lt;code&gt;has_many&lt;/code&gt;, &lt;code&gt;has_one&lt;/code&gt;, and &lt;code&gt;belong_to&lt;/code&gt; associations which must also not contain &lt;code&gt;:conditions&lt;/code&gt;, &lt;code&gt;:through&lt;/code&gt;, &lt;code&gt;:polymorphic&lt;/code&gt;, and &lt;code&gt;:foreign_key&lt;/code&gt; options.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations"&gt;Check out to the Rails docs on bi-directional associations&lt;/a&gt; for more info.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Beware of the gotchas&lt;/strong&gt;: &lt;code&gt;:inverse_of&lt;/code&gt; will only work with &lt;code&gt;has_many&lt;/code&gt;, &lt;code&gt;has_one&lt;/code&gt;, and &lt;code&gt;belong_to&lt;/code&gt; associations and they will not work with &lt;code&gt;:as&lt;/code&gt;, &lt;code&gt;:polymorphic&lt;/code&gt;, and &lt;code&gt;:as&lt;/code&gt; associations. &lt;a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations"&gt;Check out to the Rails docs on bi-directional associations&lt;/a&gt; for more info.&lt;/p&gt;
 
 &lt;p&gt;Save yourself the trouble and set &lt;code&gt;:inverse_of&lt;/code&gt; for valid &lt;code&gt;belongs_to&lt;/code&gt;, &lt;code&gt;has_many&lt;/code&gt;, and &lt;code&gt;has_one&lt;/code&gt; associations.&lt;/p&gt;
 </content>
