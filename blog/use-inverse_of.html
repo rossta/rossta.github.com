@@ -19,7 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/all.css?1449617571" rel="stylesheet" />
+    <link href="/assets/stylesheets/all.css?1449664762" rel="stylesheet" />
     <script src="/assets/javascripts/head.js?1445744814"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -224,12 +224,12 @@ author.tweets.map { |tw| tw.author.twitter_handle }
 tweet_2 = author.tweets.second
 
 tweet_1.author.name # =&gt; &quot;Cecily&quot;
-tweet_1.author.name # =&gt; &quot;Cecily&quot;
+tweet_2.author.name # =&gt; &quot;Cecily&quot;
 
 tweet_1.author.name = &quot;Martha&quot;
 
 tweet_1.author.name # =&gt; &quot;Martha&quot;
-tweet_1.author.name # =&gt; &quot;Cecily&quot;
+tweet_2.author.name # =&gt; &quot;Cecily&quot;
 </code></pre>
 
 <p>So passing the <code>author</code> instance variable into the block, as an additional argument to method calls, or down to a view template is one workaround. But this can be difficult to maintain, especially if we&rsquo;re dealing with more than one author&rsquo;s posts. Wouldn&rsquo;t it be better not to make those unnecessary queries?</p>
@@ -245,8 +245,8 @@ class Tweet &lt; ActiveRecord::Base
 end
 </code></pre>
 
-<p>Now when iterate over the tweets and reference the author, no additional queries
-are needed because each tweet can now assign its author association from the
+<p>Now when iterate over the tweets and reference the author, <strong>no additional queries
+are needed</strong> because each tweet can now assign its author association from the
 instance that exists already in memory:</p>
 
 <pre><code class="ruby">author = Author.find(1)
@@ -277,7 +277,9 @@ queries for objects that already exist in memory.</p>
 
 <p><strong>Set the <code>:inverse_of</code> option wherever you can.</strong></p>
 
-<p>Yeah, Rails will try hard to do automatic inverses on your behalf, but leaving it up to Rails adds uncertainty. The uncertainty makes me uncomfortable. Here&rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&rsquo;t really want to write tests to be sure I&rsquo;m not unintentionally generating a &ldquo;N+1&rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.</p>
+<p>Yeah, Rails will try hard to do automatic inverses on your behalf, but <strong>leaving it up to Rails adds uncertainty</strong>. The uncertainty makes me uncomfortable.</p>
+
+<p>Here&rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&rsquo;t really want to write tests to be sure I&rsquo;m not unintentionally generating a &ldquo;N+1&rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.</p>
 
 <p><strong>Beware of the gotchas</strong>: <code>:inverse_of</code> will only work with <code>has_many</code>, <code>has_one</code>, and <code>belong_to</code> associations which must also not contain <code>:conditions</code>, <code>:through</code>, <code>:polymorphic</code>, and <code>:foreign_key</code> options.</p>
 
