@@ -251,6 +251,6 @@ Also know that __other ActiveRecord options can interfere with automatic inverse
 
 Here's an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don't really want to write tests to be sure I'm not unintentionally generating a "N+1" queries for my associations. I want to make it easier to introduce other changes into my app later.
 
-**Beware of the gotchas**: `:inverse_of` will only work with `has_many`, `has_one`, and `belong_to` associations and they will not work with `:as`, `:polymorphic`, and `:as` associations. [Check out to the Rails docs on bi-directional associations](http://guides.rubyonrails.org/association_basics.html#bi-directional-associations) for more info.
+**Beware of the gotchas**: `:inverse_of` will only work with `has_many`, `has_one`, and `belong_to` associations and they will not work with the `:as`, `:polymorphic`, and `:through` options. [Check out to the Rails docs on bi-directional associations](http://guides.rubyonrails.org/association_basics.html#bi-directional-associations) for more info.
 
 Save yourself the trouble and set `:inverse_of` for valid `belongs_to`, `has_many`, and `has_one` associations.
