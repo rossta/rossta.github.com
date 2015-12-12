@@ -133,9 +133,9 @@ fibonacci.lazy.with_index.select { |n, i| n.even? }.first(10)
 <pre><code class="clojure">(take 5 (repeatedly #(rand-int 100)))
 </code></pre>
 
-<p>The syntax may look odd, but read in plain English, this expression “takes the first 5 results of repeatedly asking for a random integer of 0 to 100”, returning sequence.</p>
+<p>For those new to Clojure, the syntax may look odd, but this expression &ldquo;takes the first 5 results of repeatedly asking for a random integer of 0 to 100&rdquo; and returns a sequence.</p>
 
-<p>We can use Ruby enumerators to do something similar in Ruby. Let’s create our own version of <code>repeatedly</code>, which takes a will call a given block over and over again. Let’s start with a naive implementation which use a loop:</p>
+<p>We can use Ruby enumerators to do something similar in Ruby. Let’s create our own version of <code>repeatedly</code>, which takes a will call a given block over and over again. Let&rsquo;s start with a naive implementation which use a loop:</p>
 
 <pre><code class="ruby">def repeatedly_foo(&amp;block)
  loop do
@@ -175,12 +175,12 @@ end
 <p>We now have an abstraction that can be chained to other enumerator methods. It also has a similar terse feel to the Clojure inspiration we saw earlier.</p>
 
 <pre><code class="ruby">repeatedly { rand(100) }.take(5)
-=&gt; [48, 48, 72, 41, 70] # your results will vary... they&#39;re random!
+#=&gt; [48, 48, 72, 41, 70] # your results will vary... they&#39;re random!
 </code></pre>
 
 <h3>To Infinity and Beyond</h3>
 
-<p>Of course, sequences of numbers aren’t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.</p>
+<p>Of course, sequences of numbers aren&rsquo;t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.</p>
 
 
     </article>
