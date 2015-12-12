@@ -96,9 +96,9 @@ Clojure also has a number of useful functions that allow us to generate sequence
 (take 5 (repeatedly #(rand-int 100)))
 ```
 
-The syntax may look odd, but read in plain English, this expression “takes the first 5 results of repeatedly asking for a random integer of 0 to 100”, returning sequence.
+For those new to Clojure, the syntax may look odd, but this expression "takes the first 5 results of repeatedly asking for a random integer of 0 to 100" and returns a sequence.
 
-We can use Ruby enumerators to do something similar in Ruby. Let’s create our own version of `repeatedly`, which takes a will call a given block over and over again. Let’s start with a naive implementation which use a loop:
+We can use Ruby enumerators to do something similar in Ruby. Let’s create our own version of `repeatedly`, which takes a will call a given block over and over again. Let's start with a naive implementation which use a loop:
 
 ```ruby
 def repeatedly_foo(&block)
@@ -141,12 +141,12 @@ We now have an abstraction that can be chained to other enumerator methods. It a
 
 ```ruby
 repeatedly { rand(100) }.take(5)
-=> [48, 48, 72, 41, 70] # your results will vary... they're random!
+#=> [48, 48, 72, 41, 70] # your results will vary... they're random!
 ```
 
 ### To Infinity and Beyond
 
-Of course, sequences of numbers aren’t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.
+Of course, sequences of numbers aren't the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.
 
 [1]:  http://clojure.org/sequences
 [2]:  https://rossta.net/blog/what-is-enumerator.html
