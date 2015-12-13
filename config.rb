@@ -33,11 +33,14 @@ activate :blog do |blog|
 end
 
 set :markdown_engine, :redcarpet
-set :markdown, :layout_engine => :erb,
-          :fenced_code_blocks => true,
-          :autolink => true,
-          :smartypants => true,
-          :lax_html_blocks => true
+set :markdown,
+  layout_engine: :erb,
+  no_intra_emphasis: true,
+  fenced_code_blocks: true,
+  autolink: true,
+  disable_indented_code_blocks: true,
+  smartypants: true,
+  lax_spacing: true
 
 set :css_dir, 'assets/stylesheets'
 set :js_dir, 'assets/javascripts'
