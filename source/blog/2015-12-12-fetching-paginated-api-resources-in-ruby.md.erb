@@ -1,0 +1,160 @@
+---
+title: Fetching Resources from an API in Ruby
+author: Ross Kaffenberger
+published: false
+summary: Use Ruby's Kernel#to_enum method to request resources from an API and handle pagination
+author: Ross Kaffenberger
+description: Next time you write a client to an API, consider using the Kernal#to_enum method to wrap your resource collection GET requests
+pull_image: 'https://rossta.net/assets/images/icons/noun_138550.png'
+series: Enumerable
+tags:
+  - Code
+  - Ruby
+---
+
+# Outline
+
+## Why?
+* Trello is cool
+* APIs fetching is a common need
+* Consider the surface (use of Enum)
+* Embrace Ruby's strengths (flexible)
+
+## What/How
+* Trello API setup
+* Code example: Eager
+* Code example: Collection class
+* Code example: Enumerator
+
+----
+
+I love Trello and I love Ruby. Trello has as flexible API that's especially fun to work with in Ruby.
+Since I've used Trello almost every day for work and personal projects for several years, there's a lot
+of interesting data to explore. Though we'll focus on fetching paginated data with Trello as our source, the concepts we explore
+here can be readily applied to any RESTful API of interest.
+
+![Pages](icons/noun_83985.png)
+
+When we need to retrieve lots of data from an API, we typically end up dealing with paginated data.
+This is because there may be limits placed on the amount of data we can retrieve in a single request;
+we can't get it all at once.
+
+The thing with pages is, handling pages in our get __messy__.
+
+You may want know how many Trello cards you marked as completed each month since last January, but you
+don't __want to think about *pages*__.
+
+There are a number of Trello endpoints that return collections of data, such as boards, lists,
+cards, member, and actions like comments, copies, moves, etc. In some cases, Trello will provide a
+default limit, typically 50, on the number of resources returned in a single request. To get more
+data, we would need to provide additional __paginated__ requests. Let's take a look at how we'll do
+this.
+
+<aside>
+
+For academic reasons, we're ignoring available Ruby clients for the Trello API. If you're interested in export with the Trello API further, through some open source wrappers, check out <%= link_to "ruby-trello", "https://github.com/jeremytregunna/ruby-trello" %> a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <%= link_to "tacokit.rb", "https://github.com/rossta/tacokit.rb" %>, a client with different design goals including simplicity and flexibility inspired by the ideas presented in this post and <%= link_to "octokit.rb", "https://github.com/octokit/octokit.rb" %> in aiming to be a "flat API client... that requires little knowledge of REST".
+
+</aside>
+
+### Trello World
+
+First, some plumbing. The [Trello developer docs](https://developers.trello.com/) have some helpful information to get started quickly in javascript - here's the unofficial Ruby version.
+
+While logged into your Trello account (you'll need one first), visit the [App Key page](https://trello.com/app-key) to retrieve your app **key**. We won't need the "secret" for this article.
+
+Next, you'll generate an app **token**. Paste the following URL into your browser with your app **key** subsituted for the placeholder.
+
+o```
+https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20World&key=YOUR_KEY
+```
+
+Now that we have an app key and token, we can make authenticated requests to the Trello API.
+
+As a quick test, let's read your member data
+
+```ruby
+https://api.trello.com/1/members/me?key=YOUR_KEY&token=YOUR_TOKEN
+```
+
+You should see a JSON response with attributes like your Trello id, username, bio, etc:
+
+```json
+{"id":"abcd1234","avatarHash":"5678wxyz", ... }
+```
+
+### Script Mode
+
+Let's fetch some data in Ruby. For the following examples, we'll be using Ruby 2.2. To make HTTP requests, we'll also use the [http.rb](https://github.com/httprb/http), but feel free to subsitute with your HTTP client of choice. Install the gem yourself with `gem install http` or add it to your `Gemfile` and `bundle install`:
+
+```
+# Gemfile
+
+gem "http"
+```
+
+To make things easier for the remainder, add the key and token as environment variables in your shell. For Mac/Linux users, something like this:
+
+```ruby
+export TRELLO_APP_KEY=your-key
+export TRELLO_APP_TOKEN=your-token
+```
+
+Now, let's run Ruby version of our Trello World test.
+
+```ruby
+# trello.rb
+require "http"
+
+def app_key
+  ENV.fetch("TRELLO_APP_KEY")
+end
+
+def app_token
+  ENV.fetch("TRELLO_APP_TOKEN")
+end
+
+url = "https://api.trello.com/1/members/me?key=#{app_key}&token=#{app_token}"
+puts HTTP.get(url).parse
+```
+
+If it worked correctly, you should see the same result we saw in your browser earlier.
+
+Let's extract a helper building the url. We'll use `Addressable::URI`, which is available as a dependency of the http.rb gem as of version `1.0.0.pre1` or otherwise may be installed as `gem install addressable` or `gem "addressable"` in your `Gemfile`:
+
+```ruby
+# trello.rb
+require "http"
+require "addressable/uri"
+
+def app_key
+  ENV.fetch("TRELLO_APP_KEY")
+end
+
+def app_token
+  ENV.fetch("TRELLO_APP_TOKEN")
+end
+
+def trello_url(path, params = {})
+  auth_params = { key: app_key, token: app_token }
+
+  Addressable::URI.new({
+    scheme: "https",
+    host: "api.trello.com",
+    path: File.join("1", path),
+    query_values: auth_params.merge(params)
+  })
+end
+
+puts HTTP.get(trello_url("members/me")).parse
+```
+
+### Let's Paginate
+
+Trello provides endpoints for traversing actions taken on boards, cards, and lists.
+
+We could simply collect a bunch of actions in an array as a first step:
+
+Credits
+
+* [Document by Ayesha Rana](https://thenounproject.com/term/document/83985/)
+* [Arrow by Arthur Shlain](https://thenounproject.com/term/arrow/138550/)
