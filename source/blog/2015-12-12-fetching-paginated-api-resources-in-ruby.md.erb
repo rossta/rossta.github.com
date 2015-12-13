@@ -154,6 +154,50 @@ Trello provides endpoints for traversing actions taken on boards, cards, and lis
 
 We could simply collect a bunch of actions in an array as a first step:
 
+```ruby
+def each_page(path, options = {})
+  return to_enum(:each_page, path, options) unless block_given?
+
+  paginated_get(path, options).each do |page|
+    page.each do |resource|
+      yield resource
+    end
+  end
+end
+
+def paginated_get(path, options = {})
+  Enumerator.new do |y|
+    params = options.dup
+    page = params.delete(:page) || 1
+    max  = params.delete(:max) || 1000
+    total = 0
+
+    loop do
+      data = get(path, { page: page }.merge(params))
+      puts data.inspect
+      y.yield data
+      total += data.length
+      page += 1
+      sleep 0.1
+      break if total >= max || data.empty?
+    end
+  end
+end
+
+def get(path, params = {})
+  HTTP.get(trello_url(path, params)).parse
+end
+
+def actions(options = {})
+  each_page("members/me/actions", options)
+end
+
+actions(filter: "commentCard").lazy.each_with_index do |action, i|
+  puts "Number #{i}....................."
+  puts action.inspect
+end
+```
+
 Credits
 
 * [Document by Ayesha Rana](https://thenounproject.com/term/document/83985/)
