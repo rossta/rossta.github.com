@@ -55,11 +55,11 @@ Let's fetch some data in Ruby. For the following examples, we'll be using Ruby 2
 
 <aside class="callout panel"><p>
 
-We're ignoring available Ruby clients for the Trello API. If you're interested in export with the Trello API further, through some open source wrappers, check out <%= link_to "ruby-trello", "https://github.com/jeremytregunna/ruby-trello" %> a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <%= link_to "tacokit.rb", "https://github.com/rossta/tacokit.rb" %>, a client with different design goals including simplicity and flexibility inspired by the ideas presented in this post and <%= link_to "octokit.rb", "https://github.com/octokit/octokit.rb" %> in aiming to be a "flat API client... that requires little knowledge of REST".
+<strong>Sidebar</strong> - For academic reasons, we're ignoring available Ruby clients for the Trello API like <%= link_to "ruby-trello", "https://github.com/jeremytregunna/ruby-trello" %> a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <%= link_to "tacokit.rb", "https://github.com/rossta/tacokit.rb" %>, a client with different design goals including simplicity and flexibility inspired by the ideas presented in this post and <%= link_to "octokit.rb", "https://github.com/octokit/octokit.rb" %> in aiming to be a "flat API client... that requires little knowledge of REST".
 
 </p></aside>
 
-To make HTTP requests, we'll also use the [http.rb](https://github.com/httprb/http), but feel free to subsitute with your HTTP client of choice. Install the gem yourself with `gem install http` or add it to your `Gemfile` and `bundle install`:
+To make HTTP requests, we'll also use the [http.rb](https://github.com/httprb/http), but feel free to subsitute with your HTTP client of choice. Install the gem yourself with `gem install http` or add it to your `Gemfile`:
 
 ```
 # Gemfile
@@ -69,7 +69,7 @@ gem "http"
 
 To make things easier for the remainder, add the key and token as environment variables in your shell. For Mac/Linux users, something like this will work:
 
-```
+```bash
 # command line
 export TRELLO_APP_KEY=your-key
 export TRELLO_APP_TOKEN=your-token
@@ -128,7 +128,7 @@ end
 
 ### Let's Paginate
 
-Now we'll add an alternative method to `get` that can handle pagination.
+Now we'll add an alternative method to `#get` that can handle pagination.
 
 ```ruby
 def paginated_get(path, options = {})
@@ -202,16 +202,16 @@ First, you'll notice we've wrapped our expression in `Enumerator` which will ser
 
 Using an enumerator may look strange but it offers a huge advantage over our first iteration. Enumerators allow callers to interact with data **as it is generated**. Conceptually, the enumerator represents the algorithm for retrieving or generating data in `Enumerable` form.
 
-An enumerator implements the `Enumerable` module which means we can call familiar methods like `map`, `select`, `take`, and so on.
+An enumerator implements the `Enumerable` module which means we can call familiar methods like `#map`, `#select`, `#take`, and so on.
 
 Instead of building up an internal array of results, enumerators provide a mechanism for yielding each element even though a block may not be given to the method (how mind blowing is that?).
 
 Now we can use enumerator chains to doing something like the following, where we request comment data lazily, transform the API hash to comment text and select the first two addressed to Doris.
 
 ```ruby
-puts comments.lazy.
-   map { |axn| axn["data"]["text"] }.
-   select { |txt| txt.start_with?("@personIWorkWith") }.
+comments.lazy.
+   map { |a| a["data"]["text"] }.
+   select { |t| t.start_with?("@personIWorkWith") }.
    take(2).force
 ```
 We may not need to load all 1000 results to because the enumerators chain is evaluated for each item as it is yielded. This technique provides the caller with a great deal of flexibility. Eager loading can be delayed or avoided altogther - a potential performance gain.
@@ -261,7 +261,7 @@ class Client
 end
 ```
 
-Next, we'll provide a class to represent the paginated collection of results to replace `#paginated_get`.
+Next, we'll provide a class to represent the paginated collection of results to replace our implementation of `#paginated_get`.
 
 The Twitter API uses [cursors](https://dev.twitter.com/overview/api/cursoring) to navigate through pages, a concept similar to "next" and "previous" links on websites. Although Trello doesn't provide explicit cursors in their API, we can still wrap the paginated results in an enumerable class to get similar behavior.
 
@@ -301,7 +301,7 @@ class Cursor
 end
 ```
 
-We'll introduce a dependency on the `Client` to interface with Trello through the private `#client` method. We'll use our client to  `#fetch_next_page`, append the latest results to our cached `@collection` and increment the page number. Now for the key public method:
+We'll introduce a dependency on the `Client` to interface with Trello through the private client method. We'll use our client to fetch the next page, append the latest results to our cached `@collection` and increment the page number. Now for the key public method:
 
 ```ruby
 class Cursor
@@ -325,7 +325,7 @@ class Cursor
 end
 ```
 
-We've chosen to have our `Cursor` expose the Enumerable API by including the `Enumerable` module and implementing `#each`. This will give cursor instances enumerable behavior so we can simply replace our implementation of `paginated_get` to return a new `Cursor`.
+We've chosen to have our `Cursor` expose the Enumerable API by including the `Enumerable` module and implementing `#each`. This will give cursor instances enumerable behavior so we can simply replace our paginated_get definition to return a new `Cursor`.
 
 ```ruby
 def paginated_get(path, params)
@@ -337,15 +337,13 @@ def comments(params = {})
 end
 ```
 
-Let's break down `Cursor#each` a bit further.
-
-The first line let's us retain the `Enumerator` behavior from our previous implementation of `paginated_get`.
+Let's break down `Cursor#each` a bit further. The first line allows us retain the `Enumerator` behavior before.
 
 ```ruby
 return to_enum(:each, start) unless block_given?
 ```
 
-It invokes `Kernel#to_enum` when no block is given to `#each`. This method wraps the implementation of `#each` in an `Enumerator` so we can use the cursor in an enumerator chain as we did before:
+It invokes `Kernel#to_enum` when no block is given to an `each` method call. In this case, the method returns an `Enumerator` that packages the behavior of `#each` for an enumerator chain similar to before:
 
 ```ruby
 puts comments.each.lazy.
@@ -356,7 +354,7 @@ puts comments.each.lazy.
 
 For more info on using `#to_enum`, check out Arkency's [Stop including Enumerable, use Enumerable instead](http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/).
 
-We need to `yield` each element in the `@collection` to pass elements to callers of `#each`
+We also need to `yield` each element in the `@collection` to pass elements to callers of `#each`
 
 ```ruby
 Array(@collection[start..-1]).each do |element|
@@ -387,7 +385,7 @@ unless last?
 end
 ```
 
-Unless we've encountered the `last?` page, we fetch the next page, which appends the latest results to the collection and we recursively invoke `#each` with a starting point. This means `#each` will be invoked again with new results until no new data is encountered. Sweet!
+Unless we've encountered the last page, we fetch the next page, which appends the latest results to the collection and we recursively invoke `#each` with a starting point. This means `#each` will be invoked again with new results until no new data is encountered. Sweet!
 
 A neat trick is how we forward the block given to `#each`. When we `Proc.new` without explicitly passing a block or proc object, it will instantiate with the block given to its surrounding method if there is one. The behavior is similar to the following:
 
@@ -401,7 +399,7 @@ end
 
 The main benefit being we don't needlessly invoke `Proc.new` by omitting `&block` in the arguments. For more on this, read up on [Passing Blocks in Ruby without &block](http://mudge.name/2011/01/26/passing-blocks-in-ruby-without-block.html)
 
-Recursive `#each` is a powerful technique for providing a seamless, enumerable interface to paginated or cursored results. I first encountered [this approach](https://github.com/sferik/twitter/blob/c6c2fe44e4a56c3e3544a3c08492a8b83b549635/lib/twitter/enumerable.rb) in the [sferik's](https://github.com/sferik) [Twitter gem](https://github.com/sferik/twitter) - a great resource for those considering writing an API wrapper in Ruby.
+"Recursive each" is a powerful technique for providing a seamless, enumerable interface to paginated or cursored results. I first encountered [this approach](https://github.com/sferik/twitter/blob/c6c2fe44e4a56c3e3544a3c08492a8b83b549635/lib/twitter/enumerable.rb) in the [sferik's](https://github.com/sferik) [Twitter gem](https://github.com/sferik/twitter) - a great resource for those considering writing an API wrapper in Ruby.
 
 ### On your own
 
