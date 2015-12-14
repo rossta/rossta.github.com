@@ -1,7 +1,7 @@
 site: 'rossta.net'
 title: 'Ross Kaffenberger'
 description: 'Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS'
-keywords: 'Ross Kaffenberger, software, software developer, software engineering, computer programming, , web development, test driven development, Ruby, Javascript, Ruby on Rails, RSpec, Clojure, HTML, CSS'
+keywords: 'Ross Kaffenberger, software, software developer, software engineering, computer programming, web development, test driven development, TDD, Ruby, Javascript, Ruby on Rails, Rails, RSpec, Clojure, HTML, CSS'
 twitter_card: 'summary'
 twitter_author: 'Ross Kaffenberger'
 twitter_description: 'Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS'
