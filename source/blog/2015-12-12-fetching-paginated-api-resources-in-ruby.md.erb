@@ -5,35 +5,12 @@ published: false
 summary: Use Ruby's Kernel#to_enum method to request resources from an API and handle pagination
 author: Ross Kaffenberger
 description: Next time you write a client to an API, consider using the Kernal#to_enum method to wrap your resource collection GET requests
-pull_image: 'https://rossta.net/assets/images/icons/noun_138550.png'
+pull_image: 'https://rossta.net/assets/images/icons/noun_63453.png'
 series: Enumerable
 tags:
   - Code
   - Ruby
 ---
-
-# Outline
-
-## Why?
-* Trello is cool
-* APIs fetching is a common need
-* Consider the surface (use of Enum)
-* Embrace Ruby's strengths (flexible)
-
-## What/How
-* Trello API setup
-* Code example: Eager
-* Code example: Collection class
-* Code example: Enumerator
-
-----
-
-I love Trello and I love Ruby. Trello has as flexible API that's especially fun to work with in Ruby.
-Since I've used Trello almost every day for work and personal projects for several years, there's a lot
-of interesting data to explore. Though we'll focus on fetching paginated data with Trello as our source, the concepts we explore
-here can be readily applied to any RESTful API of interest.
-
-![Pages](icons/noun_83985.png)
 
 When we need to retrieve lots of data from an API, we typically end up dealing with paginated data.
 This is because there may be limits placed on the amount of data we can retrieve in a single request;
@@ -42,19 +19,15 @@ we can't get it all at once.
 The thing with pages is, handling pages in our get __messy__.
 
 You may want know how many Trello cards you marked as completed each month since last January, but you
-don't __want to think about *pages*__.
+don't __want to think about *pages*__. <img src="<%= image_path('icons/noun_63447.png') %>" class="icon-image inline" /> <img src="<%= image_path('icons/noun_63453.png') %>" class="icon-image inline" />
+
 
 There are a number of Trello endpoints that return collections of data, such as boards, lists,
 cards, member, and actions like comments, copies, moves, etc. In some cases, Trello will provide a
 default limit, typically 50, on the number of resources returned in a single request. To get more
-data, we would need to provide additional __paginated__ requests. Let's take a look at how we'll do
-this.
+data, we would need to provide additional __paginated__ requests.
 
-<aside>
-
-For academic reasons, we're ignoring available Ruby clients for the Trello API. If you're interested in export with the Trello API further, through some open source wrappers, check out <%= link_to "ruby-trello", "https://github.com/jeremytregunna/ruby-trello" %> a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <%= link_to "tacokit.rb", "https://github.com/rossta/tacokit.rb" %>, a client with different design goals including simplicity and flexibility inspired by the ideas presented in this post and <%= link_to "octokit.rb", "https://github.com/octokit/octokit.rb" %> in aiming to be a "flat API client... that requires little knowledge of REST".
-
-</aside>
+Let's take a look at how we'll do this.
 
 ### Trello World
 
@@ -64,7 +37,7 @@ While logged into your Trello account (you'll need one first), visit the [App Ke
 
 Next, you'll generate an app **token**. Paste the following URL into your browser with your app **key** subsituted for the placeholder.
 
-o```
+```
 https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20World&key=YOUR_KEY
 ```
 
@@ -82,9 +55,17 @@ You should see a JSON response with attributes like your Trello id, username, bi
 {"id":"abcd1234","avatarHash":"5678wxyz", ... }
 ```
 
-### Script Mode
+### Script mode
 
-Let's fetch some data in Ruby. For the following examples, we'll be using Ruby 2.2. To make HTTP requests, we'll also use the [http.rb](https://github.com/httprb/http), but feel free to subsitute with your HTTP client of choice. Install the gem yourself with `gem install http` or add it to your `Gemfile` and `bundle install`:
+Let's fetch some data in Ruby. For the following examples, we'll be using Ruby 2.2. To make HTTP requests, we'll also use the [http.rb](https://github.com/httprb/http), but feel free to subsitute with your HTTP client of choice.
+
+<aside class="callout panel"><p>
+
+We're ignoring available Ruby clients for the Trello API. If you're interested in export with the Trello API further, through some open source wrappers, check out <%= link_to "ruby-trello", "https://github.com/jeremytregunna/ruby-trello" %> a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <%= link_to "tacokit.rb", "https://github.com/rossta/tacokit.rb" %>, a client with different design goals including simplicity and flexibility inspired by the ideas presented in this post and <%= link_to "octokit.rb", "https://github.com/octokit/octokit.rb" %> in aiming to be a "flat API client... that requires little knowledge of REST".
+
+</p></aside>
+
+Install the gem yourself with `gem install http` or add it to your `Gemfile` and `bundle install`:
 
 ```
 # Gemfile
@@ -189,7 +170,7 @@ comments
 
 The main problem with this approach is that it forces the results to be eager loaded. Unless a max is specified in the method call, we could be waiting for up to 1000 comments to load - 20 requests of 50 - to execute before the results are returned.
 
-### Stop, Enumerate, and Listen
+### Stop, enumerate, and listen
 
 We'll refactor our `paginated_get` method to take advantage of Ruby's `Enumerator`. I previous [described Enumerator](/blog/what-is-enumerator.html) and showed how it can be used to [generate infinite sequences in Ruby](/blog/infinite-sequences-in-ruby.html), including [Pascal's Triangle](/blog/pascals-triangle-with-rubys-enumerator.html). The main advantage will be to give callers flexibility to work with the results including filtering, searching, and lazy enumeration.
 
@@ -246,7 +227,7 @@ end
 
 The `y.yield` is not the keyword `yield`, but the invokation of the `#yield` method of `Enumerator::Yielder`, an object the enumerator uses internally to pass values through to the first block used in the enumerator chain. For a more detailed look at how enumerators work under the hood, read more about how [Ruby works hard so you can be lazy](http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy).
 
-### A Cursor-y Example
+### A cursor-y example
 
 Let's do one more iteration on our `paginated_get` refactoring. Up to this point, we've been using a "functional" approach; we've just been using a bunch of methods defined in the outermost lexical scope.
 
@@ -340,9 +321,92 @@ class Cursor
 end
 ```
 
-We've chosen to have our `Cursor` expose the Enumerable API by including the `Enumerable` module and implementing `#each`.
+We've chosen to have our `Cursor` expose the Enumerable API by including the `Enumerable` module and implementing `#each`. This will give cursor instances enumerable behavior so we can simply replace our implementation of `paginated_get` to return a new `Cursor`.
 
-Credits
+```ruby
+def paginated_get(path, params)
+  Cursor.new(path, param)
+end
 
-* [Document by Ayesha Rana](https://thenounproject.com/term/document/83985/)
-* [Arrow by Arthur Shlain](https://thenounproject.com/term/arrow/138550/)
+def comments(params = {})
+  paginated_get("members/me/actions", filter: "commentCard")
+end
+```
+
+Let's break down `Cursor#each` a bit further.
+
+The first line let's us retain the `Enumerator` behavior from our previous implementation of `paginated_get`.
+
+```ruby
+return to_enum(:each, start) unless block_given?
+```
+
+It invokes `Kernel#to_enum` when no block is given to `#each`. This method wraps the implementation of `#each` in an `Enumerator` so we can use the cursor in an enumerator chain as we did before:
+
+```ruby
+puts comments.each.lazy.
+   map { |axn| axn["data"]["text"] }.
+   select { |txt| txt.start_with?("@mgerrior") }.
+   take(2).force
+```
+
+For more info on using `#to_enum`, check out Arkency's [Stop including Enumerable, use Enumerable instead](http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/).
+
+We need to `yield` each element in the `@collection` to pass elements to callers of `#each`
+
+```ruby
+Array(@collection[start..-1]).each do |element|
+  yield(element)
+end
+```
+
+We iterate from the start of the collection to the end with `Array(@collection[start..-1]).each`... but wait: when we start iterating, the `@collection` is empty. Recall the initialize method:
+
+```ruby
+def initialize
+  # ...
+  @collection = []
+end
+```
+
+Wat?
+
+The key comes in the lines that follow in `#each`:
+
+```ruby
+unless last?
+  start = [@collection.size, start].max
+
+  fetch_next_page
+
+  each(start, &Proc.new)
+end
+```
+
+Unless we've encountered the `last?` page, we fetch the next page, which appends the latest results to the collection and we recursively invoke `#each` with a starting point. This means `#each` will be invoked again with new results until no new data is encountered. Sweet!
+
+A neat trick is how we forward the block given to `#each`. When we `Proc.new` without explicitly passing a block or proc object, it will instantiate with the block given to its surrounding method if there is one. The behavior is similar to the following:
+
+```ruby
+def each(start = 0, &block)
+  # ...
+  each(start, &block)
+  # ...
+end
+```
+
+The main benefit being we don't needlessly invoke `Proc.new` by omitting `&block` in the arguments. For more on this, read up on [Passing Blocks in Ruby without &block](http://mudge.name/2011/01/26/passing-blocks-in-ruby-without-block.html)
+
+Recursive `#each` is a powerful technique for providing a seamless, enumerable interface to paginated or cursored results. I first encountered [this approach](https://github.com/sferik/twitter/blob/c6c2fe44e4a56c3e3544a3c08492a8b83b549635/lib/twitter/enumerable.rb) in the [sferik's](https://github.com/sferik) [Twitter gem](https://github.com/sferik/twitter) - a great resource for those considering writing an API wrapper in Ruby.
+
+### On your own
+
+Give it a shot! Pick out an API you like to use and play with techniques for modeling its collection resources. This is a great way to get more experience with Ruby's [Enumerable](/blog/series/enumerable.html). Consider one of these approaches when you need to traverse paginated or partitioned subsets of data in an external or internal API.
+
+***
+
+### Credits
+
+Icons via the [Noun Project](https://thenounproject.com/):
+
+* [Arrows by Zlatko Najdenovski](https://thenounproject.com/pixelbazaar/)

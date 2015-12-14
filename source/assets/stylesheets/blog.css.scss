@@ -40,6 +40,14 @@ article {
   p:last-child {
     margin-bottom: 0;
   }
+
+  .icon-image {
+    width: 10%;
+
+    &.inline {
+      width: 3%;
+    }
+  }
 }
 
 .profile {
@@ -52,4 +60,3 @@ article {
     text-transform: uppercase;
   }
 }
-
