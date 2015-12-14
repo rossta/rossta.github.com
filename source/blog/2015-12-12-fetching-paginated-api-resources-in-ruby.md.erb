@@ -145,58 +145,106 @@ def trello_url(path, params = {})
   })
 end
 
-puts HTTP.get(trello_url("members/me")).parse
+def get(path)
+  HTTP.get(trello_url(path)).parse
+end
 ```
 
 ### Let's Paginate
 
-Trello provides endpoints for traversing actions taken on boards, cards, and lists.
-
-We could simply collect a bunch of actions in an array as a first step:
+Trello provides endpoints for traversing actions taken on boards, cards, and lists. We'll add an alternative method to `get` that can handle pagination.
 
 ```ruby
-def each_page(path, options = {})
-  return to_enum(:each_page, path, options) unless block_given?
+def paginated_get(path, options = {})
+  params  = options.dup
+  max     = params.delete(:max) { 1000 }
+  page    = params.delete(:page) { 1 }
+  results = []
 
-  paginated_get(path, options).each do |page|
-    page.each do |resource|
-      yield resource
-    end
+  loop do
+    data = get(path, { page: page }.merge(params))
+
+    page += 1
+    results += data
+
+    break if (data.empty? || results.length >= max)
   end
+
+  results
+end
+```
+
+Given a path and hash of parameter options, we'll build up an array of results by fetching the endpoint and incrementing the page number each time. Once either the max is reached or no more results are returned from the API, we'll exit the loop.
+
+As a starting point, this works nicely. We can simply use `paginated_get` to collect up to 1000 results for a given resource without the caller caring about pages. Here's how we can grab the all the comments we've added to Trello cards:
+
+```ruby
+def comments(params = {})
+  paginated_get("members/me/actions", filter: "commentCard")
 end
 
+comments
+#=> [{"id"=>"abcd", "idMemberCreator"=>"wxyz", "data"=> {...} ...}, ...]
+```
+
+The main problem with this approach is that it forces the results to be eager loaded. Unless a max is specified in the method call, we could be waiting for up to 1000 comments to load - 20 requests of 50 - to execute before the results are returned.
+
+### Stop, Enumerate, and Listen
+
+We'll refactor our `paginated_get` method to take advantage of Ruby's `Enumerator`. I previous [described Enumerator](/blog/what-is-enumerator.html) and showed how it can be used to [generate infinite sequences in Ruby](/blog/infinite-sequences-in-ruby.html), including [Pascal's Triangle](/blog/pascals-triangle-with-rubys-enumerator.html). The main advantage will be to give callers flexibility to work with the results including filtering, searching, and lazy enumeration.
+
+```ruby
 def paginated_get(path, options = {})
   Enumerator.new do |y|
-    params = options.dup
-    page = params.delete(:page) || 1
-    max  = params.delete(:max) || 1000
-    total = 0
+    params  = options.dup
+    page    = params.delete(:page) { 1 }
+    max     = params.delete(:max) { 1000 }
+    total  = 0
 
     loop do
       data = get(path, { page: page }.merge(params))
-      puts data.inspect
-      y.yield data
-      total += data.length
+
+      data.each do |element|
+        y.yield element
+      end
+
+      break if (data.empty? || total >= max)
+
       page += 1
-      sleep 0.1
-      break if total >= max || data.empty?
+      total += data.length
     end
   end
 end
+```
 
-def get(path, params = {})
-  HTTP.get(trello_url(path, params)).parse
-end
+We've got a few similarities with our first implementation. We still loop over repeated requests for successive pages until either the max is reach or no data is returned from the API. There are a few big differences though.
 
-def actions(options = {})
-  each_page("members/me/actions", options)
-end
+First, you'll notice we've wrapped our expression in `Enumerator` which will serve as the return value for `paginated_get`.
 
-actions(filter: "commentCard").lazy.each_with_index do |action, i|
-  puts "Number #{i}....................."
-  puts action.inspect
+Using an enumerator may look strange but it offers a huge advantage over our first iteration. Enumerators allow callers to interact with data **as it is generated**. Conceptually, the enumerator represents the algorithm for retrieving or generating data in `Enumerable` form.
+An enumerator implements the `Enumerable` module which means we can call familiar methods like `map`, `select`, `take`, and so on.
+
+Instead of building up an internal array of results, enumerators provide a mechanism for yielding each element even though a block may not be given to the method (how mind blowing is that?).
+
+This allows us to use enumerator chains to doing something like the following, where we request comment data lazily, transform the API hash to comment text and select the first two addressed to Doris.
+
+```ruby
+puts comments.lazy.
+   map { |axn| axn["data"]["text"] }.
+   select { |txt| txt.start_with?("@mgerrior") }.
+   take(2).force
+```
+We may not need to load all 1000 results to because the enumerators chain is evaluated for each item as it is yielded. This technique provides the caller with a great deal of flexibility. Eager loading can be delayed or avoided altogther, offering potential performance gains.
+
+Here are magic lines from `paginated_get`:
+
+```ruby
+data.each do |element|
+  y.yield element
 end
 ```
+
+The `y.yield` is not the keyword `yield`, but the invokation of the `#yield` method of `Enumerator::Yielder`, an object the enumerator uses internally to pass values through to the next block passed to the enumerator chain.
 
 Credits
 
