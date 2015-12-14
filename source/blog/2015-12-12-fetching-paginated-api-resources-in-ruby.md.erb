@@ -12,26 +12,20 @@ tags:
   - Ruby
 ---
 
-When we need to retrieve lots of data from an API, we typically end up dealing with paginated data.
-This is because there may be limits placed on the amount of data we can retrieve in a single request;
-we can't get it all at once.
+The thing with paginated data is we can't get it all at once.
 
-The thing with pages is, handling pages in our get __messy__.
+Let's say you want to use the [Trello API](https://developers.trello.com/). You want know how many Trello cards you marked as completed each month since last January, but you don't __want to think about *pages*__. <img src="<%= image_path('icons/noun_63447.png') %>" class="icon-image inline" /> <img src="<%= image_path('icons/noun_63453.png') %>" class="icon-image inline" />
 
-You may want know how many Trello cards you marked as completed each month since last January, but you
-don't __want to think about *pages*__. <img src="<%= image_path('icons/noun_63447.png') %>" class="icon-image inline" /> <img src="<%= image_path('icons/noun_63453.png') %>" class="icon-image inline" />
-
-
-There are a number of Trello endpoints that return collections of data, such as boards, lists,
-cards, member, and actions like comments, copies, moves, etc. In some cases, Trello will provide a
+There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
+cards, and actions (like comments, copies, moves, etc). In most cases, Trello will provide a
 default limit, typically 50, on the number of resources returned in a single request. To get more
-data, we would need to provide additional __paginated__ requests.
+data, we need to make additional __paginated__ requests.
 
-Let's take a look at how we'll do this.
+In this post, we'll examine ways to handle paginated requests without getting bogged down in __pages__.
 
 ### Trello World
 
-First, some plumbing. The [Trello developer docs](https://developers.trello.com/) have some helpful information to get started quickly in javascript - here's the unofficial Ruby version.
+First, some plumbing. The [Trello developer docs](https://developers.trello.com/) provide a quickstart in javascript - here's the unofficial Ruby version.
 
 While logged into your Trello account (you'll need one first), visit the [App Key page](https://trello.com/app-key) to retrieve your app **key**. We won't need the "secret" for this article.
 
@@ -57,7 +51,7 @@ You should see a JSON response with attributes like your Trello id, username, bi
 
 ### Script mode
 
-Let's fetch some data in Ruby. For the following examples, we'll be using Ruby 2.2. To make HTTP requests, we'll also use the [http.rb](https://github.com/httprb/http), but feel free to subsitute with your HTTP client of choice.
+Let's fetch some data in Ruby. For the following examples, we'll be using Ruby 2.2.
 
 <aside class="callout panel"><p>
 
@@ -65,7 +59,7 @@ We're ignoring available Ruby clients for the Trello API. If you're interested i
 
 </p></aside>
 
-Install the gem yourself with `gem install http` or add it to your `Gemfile` and `bundle install`:
+To make HTTP requests, we'll also use the [http.rb](https://github.com/httprb/http), but feel free to subsitute with your HTTP client of choice. Install the gem yourself with `gem install http` or add it to your `Gemfile` and `bundle install`:
 
 ```
 # Gemfile
@@ -73,9 +67,10 @@ Install the gem yourself with `gem install http` or add it to your `Gemfile` and
 gem "http"
 ```
 
-To make things easier for the remainder, add the key and token as environment variables in your shell. For Mac/Linux users, something like this:
+To make things easier for the remainder, add the key and token as environment variables in your shell. For Mac/Linux users, something like this will work:
 
-```ruby
+```
+# command line
 export TRELLO_APP_KEY=your-key
 export TRELLO_APP_TOKEN=your-token
 ```
@@ -133,13 +128,14 @@ end
 
 ### Let's Paginate
 
-Trello provides endpoints for traversing actions taken on boards, cards, and lists. We'll add an alternative method to `get` that can handle pagination.
+Now we'll add an alternative method to `get` that can handle pagination.
 
 ```ruby
 def paginated_get(path, options = {})
   params  = options.dup
   max     = params.delete(:max) { 1000 }
   page    = params.delete(:page) { 1 }
+  limit   = params.fetch(:limit) { 50 }
   results = []
 
   loop do
@@ -148,7 +144,7 @@ def paginated_get(path, options = {})
     page += 1
     results += data
 
-    break if (data.empty? || results.length >= max)
+    break if (data.empty? || page * limit >= max)
   end
 
   results
@@ -168,19 +164,22 @@ comments
 #=> [{"id"=>"abcd", "idMemberCreator"=>"wxyz", "data"=> {...} ...}, ...]
 ```
 
-The main problem with this approach is that it forces the results to be eager loaded. Unless a max is specified in the method call, we could be waiting for up to 1000 comments to load - 20 requests of 50 - to execute before the results are returned.
+The main problem with this approach is that it forces the results to be eager loaded. Unless a max is specified in the method call, we could be waiting for up to 1000 comments to load - 20 requests of 50 comments each - to execute before the results are returned.
 
 ### Stop, enumerate, and listen
 
-We'll refactor our `paginated_get` method to take advantage of Ruby's `Enumerator`. I previous [described Enumerator](/blog/what-is-enumerator.html) and showed how it can be used to [generate infinite sequences in Ruby](/blog/infinite-sequences-in-ruby.html), including [Pascal's Triangle](/blog/pascals-triangle-with-rubys-enumerator.html). The main advantage will be to give callers flexibility to work with the results including filtering, searching, and lazy enumeration.
+Next step is to refactor our `paginated_get` method to take advantage of Ruby's `Enumerator`. I previously [described Enumerator](/blog/what-is-enumerator.html) and showed how it can be used to [generate infinite sequences in Ruby](/blog/infinite-sequences-in-ruby.html), including [Pascal's Triangle](/blog/pascals-triangle-with-rubys-enumerator.html).
+
+The main advantage of using `Enumerator` will be to give callers flexibility to work with the results including filtering, searching, and lazy enumeration.
 
 ```ruby
+MAX = 1000
+
 def paginated_get(path, options = {})
   Enumerator.new do |y|
     params  = options.dup
     page    = params.delete(:page) { 1 }
-    max     = params.delete(:max) { 1000 }
-    total  = 0
+    limit   = params.fetch(:limit) { 50 }
 
     loop do
       data = get(path, { page: page }.merge(params))
@@ -189,10 +188,9 @@ def paginated_get(path, options = {})
         y.yield element
       end
 
-      break if (data.empty? || total >= max)
+      break if (data.empty? || page * limit >= MAX)
 
       page += 1
-      total += data.length
     end
   end
 end
@@ -200,9 +198,10 @@ end
 
 We've got a few similarities with our first implementation. We still loop over repeated requests for successive pages until either the max is reach or no data is returned from the API. There are a few big differences though.
 
-First, you'll notice we've wrapped our expression in `Enumerator` which will serve as the return value for `paginated_get`.
+First, you'll notice we've wrapped our expression in `Enumerator` which will serve as the return value for `#paginated_get`.
 
 Using an enumerator may look strange but it offers a huge advantage over our first iteration. Enumerators allow callers to interact with data **as it is generated**. Conceptually, the enumerator represents the algorithm for retrieving or generating data in `Enumerable` form.
+
 An enumerator implements the `Enumerable` module which means we can call familiar methods like `map`, `select`, `take`, and so on.
 
 Instead of building up an internal array of results, enumerators provide a mechanism for yielding each element even though a block may not be given to the method (how mind blowing is that?).
@@ -212,12 +211,12 @@ Now we can use enumerator chains to doing something like the following, where we
 ```ruby
 puts comments.lazy.
    map { |axn| axn["data"]["text"] }.
-   select { |txt| txt.start_with?("@mgerrior") }.
+   select { |txt| txt.start_with?("@personIWorkWith") }.
    take(2).force
 ```
-We may not need to load all 1000 results to because the enumerators chain is evaluated for each item as it is yielded. This technique provides the caller with a great deal of flexibility. Eager loading can be delayed or avoided altogther, offering potential performance gains.
+We may not need to load all 1000 results to because the enumerators chain is evaluated for each item as it is yielded. This technique provides the caller with a great deal of flexibility. Eager loading can be delayed or avoided altogther - a potential performance gain.
 
-Here are magic lines from `paginated_get`:
+Here are magic lines from `#paginated_get`:
 
 ```ruby
 data.each do |element|
@@ -229,7 +228,7 @@ The `y.yield` is not the keyword `yield`, but the invokation of the `#yield` met
 
 ### A cursor-y example
 
-Let's do one more iteration on our `paginated_get` refactoring. Up to this point, we've been using a "functional" approach; we've just been using a bunch of methods defined in the outermost lexical scope.
+Let's do one more iteration on our `#paginated_get` refactoring. Up to this point, we've been using a "functional" approach; we've just been using a bunch of methods defined in the outermost lexical scope.
 
 First, we'll extract a `Client` responsible for sending requests to the Trello API and parsing the responses as JSON.
 
@@ -262,15 +261,15 @@ class Client
 end
 ```
 
-Next, we'll provide a class to represent the paginated collection of results to replace `paginated_get`.
+Next, we'll provide a class to represent the paginated collection of results to replace `#paginated_get`.
 
-The Twitter API provides a concept called [cursors](https://dev.twitter.com/overview/api/cursoring) to navigate through pages, a concept similar to "next" and "previous" links websites. Although Trello doesn't provide explicit cursors in their API, we can still wrap the paginated results in an enumerable class to get similar behavior.
+The Twitter API uses [cursors](https://dev.twitter.com/overview/api/cursoring) to navigate through pages, a concept similar to "next" and "previous" links on websites. Although Trello doesn't provide explicit cursors in their API, we can still wrap the paginated results in an enumerable class to get similar behavior.
 
 ```ruby
 class Cursor
-  def initialize(path, params = {})
+  def initialize(path, options = {})
     @path       = path
-    @params     = params
+    @params     = options.dup
 
     @collection = []
     @page       = params.fetch(:page, 1)
@@ -289,10 +288,15 @@ class Cursor
   end
 
   def fetch_next_page
-    response              = client.get(@path, @params)
+    response              = client.get(@path, @params.merge(page: @page))
     @last_response_empty  = response.empty?
     @collection          += response
     @page                += 1
+  end
+
+  MAX = 1000
+  def last?
+    @last_response_empty || @page * @limit >= MAX
   end
 end
 ```
@@ -360,7 +364,7 @@ Array(@collection[start..-1]).each do |element|
 end
 ```
 
-We iterate from the start of the collection to the end with `Array(@collection[start..-1]).each`... but wait: when we start iterating, the `@collection` is empty. Recall the initialize method:
+We iterate from the start of the collection to the end with `Array(@collection[start..-1]).each`... but wait! when we start iterating, the `@collection` is empty:
 
 ```ruby
 def initialize
