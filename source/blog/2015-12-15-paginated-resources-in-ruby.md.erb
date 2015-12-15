@@ -30,13 +30,13 @@ While logged into your Trello account (you'll need one first), **[retrieve your 
 
 Next, you'll generate an **app token**. Paste the following URL into your browser with your app **key** subsituted for the placeholder.
 
-```
+```bash
 https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20World&key=YOUR_KEY
 ```
 
 Now that we have an app key and token, we can make authenticated requests to the Trello API. As a quick test, paste the following url  with your own key and token as pararameters into your web browser (or use `curl`) to read your member data.
 
-```ruby
+```bash
 https://api.trello.com/1/members/me?key=YOUR_KEY&token=YOUR_TOKEN
 ```
 
@@ -71,6 +71,7 @@ export TRELLO_APP_TOKEN=your-token
 Now, let's run Ruby version of our Trello World test.
 
 ```ruby
+# trello_eager.rb
 require "http"
 
 def app_key
@@ -122,9 +123,10 @@ end
 Now we'll add an alternative method to `#get` that can handle pagination.
 
 ```ruby
+MAX = 1000
+
 def paginated_get(path, options = {})
   params  = options.dup
-  max     = params.delete(:max) { 1000 }
   page    = params.delete(:page) { 1 }
   limit   = params.fetch(:limit) { 50 }
   results = []
@@ -135,7 +137,7 @@ def paginated_get(path, options = {})
     page += 1
     results += data
 
-    break if (data.empty? || page * limit >= max)
+    break if (data.empty? || page * limit >= MAX)
   end
 
   results
@@ -164,7 +166,7 @@ Next step is to refactor our `paginated_get` method to take advantage of Ruby's 
 The main advantage of using `Enumerator` will be to give callers flexibility to work with the results including filtering, searching, and lazy enumeration.
 
 ```ruby
-MAX = 1000
+# trello_enumerator.rb
 
 def paginated_get(path, options = {})
   Enumerator.new do |y|
@@ -224,6 +226,8 @@ Let's do one more iteration on our `#paginated_get` refactoring. Up to this poin
 First, we'll extract a `Client` responsible for sending requests to the Trello API and parsing the responses as JSON.
 
 ```ruby
+# trello_cursor.rb
+
 require "http"
 require "addressable/uri"
 
