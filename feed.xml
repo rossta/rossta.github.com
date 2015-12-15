@@ -201,7 +201,7 @@ end
 
 &lt;p&gt;Instead of building up an internal array of results, enumerators provide a mechanism for yielding each element even though a block may not be given to the method (how mind blowing is that?).&lt;/p&gt;
 
-&lt;p&gt;Now we can use enumerator chains to doing something like the following, where we request comment data lazily, transform the API hash to comment text and select the first two addressed to Doris.&lt;/p&gt;
+&lt;p&gt;Now we can use enumerator chains to doing something like the following, where we request comment data lazily, transform the API hash to comment text and select the first two addressed to a colleague.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;comments.lazy.
    map { |a| a[&amp;quot;data&amp;quot;][&amp;quot;text&amp;quot;] }.
