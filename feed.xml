@@ -20,18 +20,16 @@
     </author>
     <summary type="html">&lt;p&gt;The thing with paginated data is we can’t get it all at once.&lt;/p&gt;
 
-&lt;p&gt;Let’s say you want to use the &lt;a href="https://developers.trello.com/"&gt;Trello API&lt;/a&gt;. You want know how many Trello cards you marked as completed each month since last January, but you don’t &lt;strong&gt;want to think about &lt;em&gt;pages&lt;/em&gt;&lt;/strong&gt;. &lt;img src="/assets/images/icons/noun_63447.png?1450157944" class="icon-image inline"&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450157944" class="icon-image inline"&gt;&lt;/p&gt;
-
-&lt;p&gt;There are...&lt;/p&gt;</summary>
+&lt;p&gt;Let’s say we’re using the &lt;a href="https://developers.trello.com/"&gt;Trello API&lt;/a&gt;. There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
+cards, and actions (like comments, copies, moves, etc...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;The thing with paginated data is we can&amp;rsquo;t get it all at once.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s say you want to use the &lt;a href="https://developers.trello.com/"&gt;Trello API&lt;/a&gt;. You want know how many Trello cards you marked as completed each month since last January, but you don&amp;rsquo;t &lt;strong&gt;want to think about &lt;em&gt;pages&lt;/em&gt;&lt;/strong&gt;. &lt;img src="/assets/images/icons/noun_63447.png?1450157944" class="icon-image inline" /&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450157944" class="icon-image inline" /&gt;&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s say we&amp;rsquo;re using the &lt;a href="https://developers.trello.com/"&gt;Trello API&lt;/a&gt;. There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
+cards, and actions (like comments, copies, moves, etc).&lt;/p&gt;
 
-&lt;p&gt;There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
-cards, and actions (like comments, copies, moves, etc). In most cases, Trello will provide a
-default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that?&lt;/p&gt;
+&lt;p&gt;If we&amp;rsquo;re querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of &amp;ldquo;cards&amp;rdquo; &lt;img src="/assets/images/icons/noun_63447.png?1450157944" class="icon-image inline" /&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450157944" class="icon-image inline" /&gt;&lt;/p&gt;
 
-&lt;p&gt;In this post, we&amp;rsquo;ll examine a few ways to collect paginated results in Ruby.&lt;/p&gt;
+&lt;p&gt;In most cases, Trello will provide a default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that? In this post, we&amp;rsquo;ll examine a few ways to collect paginated results in Ruby.&lt;/p&gt;
 
 &lt;h3&gt;Trello World&lt;/h3&gt;
 
@@ -53,7 +51,7 @@ default limit, typically 50, on the number of resources returned in a single req
 
 &lt;h3&gt;Script mode&lt;/h3&gt;
 
-&lt;p&gt;Let&amp;rsquo;s fetch some data in Ruby. For the following examples, we&amp;rsquo;ll be using Ruby 2.2.&lt;/p&gt;
+&lt;p&gt;Now let&amp;rsquo;s fetch some paginated data in Ruby. For the following examples, we&amp;rsquo;ll be using Ruby 2.2.&lt;/p&gt;
 
 &lt;aside class="callout panel"&gt;&lt;p&gt;
 
@@ -81,11 +79,11 @@ export TRELLO_APP_TOKEN=your-token
 require &amp;quot;http&amp;quot;
 
 def app_key
-  ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;)
+ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;)
 end
 
 def app_token
-  ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;)
+ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;)
 end
 
 url = &amp;quot;https://api.trello.com/1/members/me?key=#{app_key}&amp;amp;token=#{app_token}&amp;quot;
@@ -100,26 +98,26 @@ puts HTTP.get(url).parse
 require &amp;quot;addressable/uri&amp;quot;
 
 def app_key
-  ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;)
+ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;)
 end
 
 def app_token
-  ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;)
+ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;)
 end
 
 def trello_url(path, params = {})
-  auth_params = { key: app_key, token: app_token }
+auth_params = { key: app_key, token: app_token }
 
-  Addressable::URI.new({
-    scheme: &amp;quot;https&amp;quot;,
-    host: &amp;quot;api.trello.com&amp;quot;,
-    path: File.join(&amp;quot;1&amp;quot;, path),
-    query_values: auth_params.merge(params)
-  })
+Addressable::URI.new({
+scheme: &amp;quot;https&amp;quot;,
+host: &amp;quot;api.trello.com&amp;quot;,
+path: File.join(&amp;quot;1&amp;quot;, path),
+query_values: auth_params.merge(params)
+})
 end
 
 def get(path)
-  HTTP.get(trello_url(path)).parse
+HTTP.get(trello_url(path)).parse
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -130,21 +128,21 @@ end
 &lt;pre&gt;&lt;code class="ruby"&gt;MAX = 1000
 
 def paginated_get(path, options = {})
-  params  = options.dup
-  page    = params.delete(:page) { 1 }
-  limit   = params.fetch(:limit) { 50 }
-  results = []
+params  = options.dup
+page    = params.delete(:page) { 1 }
+limit   = params.fetch(:limit) { 50 }
+results = []
 
-  loop do
-    data = get(path, { page: page }.merge(params))
+loop do
+data = get(path, { page: page }.merge(params))
 
-    page += 1
-    results += data
+page += 1
+results += data
 
-    break if (data.empty? || page * limit &amp;gt;= MAX)
-  end
+break if (data.empty? || page * limit &amp;gt;= MAX)
+end
 
-  results
+results
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -153,7 +151,7 @@ end
 &lt;p&gt;As a starting point, this works nicely. We can simply use &lt;code&gt;paginated_get&lt;/code&gt; to collect up to 1000 results for a given resource without the caller caring about pages. Here&amp;rsquo;s how we can grab the all the comments we&amp;rsquo;ve added to Trello cards:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;def comments(params = {})
-  paginated_get(&amp;quot;members/me/actions&amp;quot;, filter: &amp;quot;commentCard&amp;quot;)
+paginated_get(&amp;quot;members/me/actions&amp;quot;, filter: &amp;quot;commentCard&amp;quot;)
 end
 
 comments
@@ -171,23 +169,23 @@ comments
 &lt;pre&gt;&lt;code class="ruby"&gt;# trello_enumerator.rb
 
 def paginated_get(path, options = {})
-  Enumerator.new do |y|
-    params  = options.dup
-    page    = params.delete(:page) { 1 }
-    limit   = params.fetch(:limit) { 50 }
+Enumerator.new do |y|
+params  = options.dup
+page    = params.delete(:page) { 1 }
+limit   = params.fetch(:limit) { 50 }
 
-    loop do
-      data = get(path, { page: page }.merge(params))
+loop do
+data = get(path, { page: page }.merge(params))
 
-      data.each do |element|
-        y.yield element
-      end
+data.each do |element|
+y.yield element
+end
 
-      break if (data.empty? || page * limit &amp;gt;= MAX)
+break if (data.empty? || page * limit &amp;gt;= MAX)
 
-      page += 1
-    end
-  end
+page += 1
+end
+end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -204,9 +202,9 @@ end
 &lt;p&gt;Now we can use enumerator chains to doing something like the following, where we request comment data lazily, transform the API hash to comment text and select the first two addressed to a colleague.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;comments.lazy.
-   map { |a| a[&amp;quot;data&amp;quot;][&amp;quot;text&amp;quot;] }.
-   select { |t| t.start_with?(&amp;quot;@personIWorkWith&amp;quot;) }.
-   take(2).force
+map { |a| a[&amp;quot;data&amp;quot;][&amp;quot;text&amp;quot;] }.
+select { |t| t.start_with?(&amp;quot;@personIWorkWith&amp;quot;) }.
+take(2).force
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We may not need to load all 1000 results to because the enumerators chain is evaluated for each item as it is yielded. This technique provides the caller with a great deal of flexibility. Eager loading can be delayed or avoided altogther - a potential performance gain.&lt;/p&gt;
@@ -214,7 +212,7 @@ end
 &lt;p&gt;Here are magic lines from &lt;code&gt;#paginated_get&lt;/code&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;data.each do |element|
-  y.yield element
+y.yield element
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -232,27 +230,27 @@ require &amp;quot;http&amp;quot;
 require &amp;quot;addressable/uri&amp;quot;
 
 class Client
-  def initialize(opts = {})
-    @app_key   = opts.fetch(:app_key, ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;))
-    @app_token = opts.fetch(:app_token, ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;))
-  end
+def initialize(opts = {})
+@app_key   = opts.fetch(:app_key, ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;))
+@app_token = opts.fetch(:app_token, ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;))
+end
 
-  def get(path, params = {})
-    HTTP.get(trello_url(path, params)).parse
-  end
+def get(path, params = {})
+HTTP.get(trello_url(path, params)).parse
+end
 
-  private
+private
 
-  def trello_url(path, params = {})
-    auth_params = { key: @app_key, token: @app_token }
+def trello_url(path, params = {})
+auth_params = { key: @app_key, token: @app_token }
 
-    Addressable::URI.new({
-      scheme: &amp;quot;https&amp;quot;,
-      host: &amp;quot;api.trello.com&amp;quot;,
-      path: File.join(&amp;quot;1&amp;quot;, path),
-      query_values: auth_params.merge(params)
-    })
-  end
+Addressable::URI.new({
+scheme: &amp;quot;https&amp;quot;,
+host: &amp;quot;api.trello.com&amp;quot;,
+path: File.join(&amp;quot;1&amp;quot;, path),
+query_values: auth_params.merge(params)
+})
+end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -261,72 +259,72 @@ end
 &lt;p&gt;The Twitter API uses &lt;a href="https://dev.twitter.com/overview/api/cursoring"&gt;cursors&lt;/a&gt; to navigate through pages, a concept similar to &amp;ldquo;next&amp;rdquo; and &amp;ldquo;previous&amp;rdquo; links on websites. Although Trello doesn&amp;rsquo;t provide explicit cursors in their API, we can still wrap the paginated results in an enumerable class to get similar behavior.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;class Cursor
-  def initialize(path, options = {})
-    @path       = path
-    @params     = options.dup
+def initialize(path, options = {})
+@path       = path
+@params     = options.dup
 
-    @collection = []
-    @page       = params.fetch(:page, 1)
-    @limit      = params.fetch(:limit, 50)
-  end
+@collection = []
+@page       = params.fetch(:page, 1)
+@limit      = params.fetch(:limit, 50)
+end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The &lt;code&gt;Cursor&lt;/code&gt; will be initialized with a path and params, like our &lt;code&gt;paginated_get&lt;/code&gt;. We&amp;rsquo;ll also maintain an internal &lt;code&gt;@collection&lt;/code&gt; array to cache elements as they are returned from Trello.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;class Cursor
-  private
+private
 
-  def client
-    @client ||= Client.new
-  end
+def client
+@client ||= Client.new
+end
 
-  def fetch_next_page
-    response              = client.get(@path, @params.merge(page: @page))
-    @last_response_empty  = response.empty?
-    @collection          += response
-    @page                += 1
-  end
+def fetch_next_page
+response              = client.get(@path, @params.merge(page: @page))
+@last_response_empty  = response.empty?
+@collection          += response
+@page                += 1
+end
 
-  MAX = 1000
+MAX = 1000
 
-  def last?
-    @last_response_empty || @page * @limit &amp;gt;= MAX
-  end
+def last?
+@last_response_empty || @page * @limit &amp;gt;= MAX
+end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We&amp;rsquo;ll introduce a dependency on the &lt;code&gt;Client&lt;/code&gt; to interface with Trello through the private client method. We&amp;rsquo;ll use our client to fetch the next page, append the latest results to our cached &lt;code&gt;@collection&lt;/code&gt; and increment the page number. Now for the key public method:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;class Cursor
-  include Enumerable
+include Enumerable
 
-  def each(start = 0)
-    return to_enum(:each, start) unless block_given?
+def each(start = 0)
+return to_enum(:each, start) unless block_given?
 
-    Array(@collection[start..-1]).each do |element|
-      yield(element)
-    end
+Array(@collection[start..-1]).each do |element|
+yield(element)
+end
 
-    unless last?
-      start = [@collection.size, start].max
+unless last?
+start = [@collection.size, start].max
 
-      fetch_next_page
+fetch_next_page
 
-      each(start, &amp;amp;Proc.new)
-    end
-  end
+each(start, &amp;amp;Proc.new)
+end
+end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We&amp;rsquo;ve chosen to have our &lt;code&gt;Cursor&lt;/code&gt; expose the Enumerable API by including the &lt;code&gt;Enumerable&lt;/code&gt; module and implementing &lt;code&gt;#each&lt;/code&gt;. This will give cursor instances enumerable behavior so we can simply replace our paginated_get definition to return a new &lt;code&gt;Cursor&lt;/code&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;def paginated_get(path, params)
-  Cursor.new(path, param)
+Cursor.new(path, param)
 end
 
 def comments(params = {})
-  paginated_get(&amp;quot;members/me/actions&amp;quot;, filter: &amp;quot;commentCard&amp;quot;)
+paginated_get(&amp;quot;members/me/actions&amp;quot;, filter: &amp;quot;commentCard&amp;quot;)
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -338,9 +336,9 @@ end
 &lt;p&gt;It invokes &lt;code&gt;Kernel#to_enum&lt;/code&gt; when no block is given to an &lt;code&gt;each&lt;/code&gt; method call. In this case, the method returns an &lt;code&gt;Enumerator&lt;/code&gt; that packages the behavior of &lt;code&gt;#each&lt;/code&gt; for an enumerator chain similar to before:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;puts comments.each.lazy.
-   map { |axn| axn[&amp;quot;data&amp;quot;][&amp;quot;text&amp;quot;] }.
-   select { |txt| txt.start_with?(&amp;quot;@mgerrior&amp;quot;) }.
-   take(2).force
+map { |axn| axn[&amp;quot;data&amp;quot;][&amp;quot;text&amp;quot;] }.
+select { |txt| txt.start_with?(&amp;quot;@mgerrior&amp;quot;) }.
+take(2).force
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;For more info on using &lt;code&gt;#to_enum&lt;/code&gt;, check out Arkency&amp;rsquo;s &lt;a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/"&gt;Stop including Enumerable, use Enumerable instead&lt;/a&gt;.&lt;/p&gt;
@@ -348,15 +346,15 @@ end
 &lt;p&gt;We also need to &lt;code&gt;yield&lt;/code&gt; each element in the &lt;code&gt;@collection&lt;/code&gt; to pass elements to callers of &lt;code&gt;#each&lt;/code&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;Array(@collection[start..-1]).each do |element|
-  yield(element)
+yield(element)
 end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We iterate from the start of the collection to the end with &lt;code&gt;Array(@collection[start..-1]).each&lt;/code&gt;&amp;hellip; but wait! when we start iterating, the &lt;code&gt;@collection&lt;/code&gt; is empty:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;def initialize
-  # ...
-  @collection = []
+# ...
+@collection = []
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -365,11 +363,11 @@ end
 &lt;p&gt;The key comes in the lines that follow in &lt;code&gt;#each&lt;/code&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;unless last?
-  start = [@collection.size, start].max
+start = [@collection.size, start].max
 
-  fetch_next_page
+fetch_next_page
 
-  each(start, &amp;amp;Proc.new)
+each(start, &amp;amp;Proc.new)
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -378,9 +376,9 @@ end
 &lt;p&gt;A neat trick is how we forward the block given to &lt;code&gt;#each&lt;/code&gt;. When we &lt;code&gt;Proc.new&lt;/code&gt; without explicitly passing a block or proc object, it will instantiate with the block given to its surrounding method if there is one. The behavior is similar to the following:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;def each(start = 0, &amp;amp;block)
-  # ...
-  each(start, &amp;amp;block)
-  # ...
+# ...
+each(start, &amp;amp;block)
+# ...
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -391,6 +389,8 @@ end
 &lt;h3&gt;On your own&lt;/h3&gt;
 
 &lt;p&gt;Give it a shot! Pick out an API you like to use and play with techniques for modeling its collection resources. This is a great way to get more experience with Ruby&amp;rsquo;s &lt;a href="/blog/series/enumerable.html"&gt;Enumerable&lt;/a&gt;. Consider one of these approaches when you need to traverse paginated or partitioned subsets of data in an external or internal API.&lt;/p&gt;
+
+&lt;p&gt;Think less about &lt;strong&gt;pages&lt;/strong&gt; and more about &lt;strong&gt;data&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;hr&gt;
 
