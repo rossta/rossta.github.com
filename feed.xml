@@ -5,10 +5,400 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2015-12-01T19:00:00-05:00</updated>
+  <updated>2015-12-14T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Handling Paginated Resources in Ruby</title>
+    <link rel="alternate" href="/blog/paginated-resources-in-ruby.html"/>
+    <id>/blog/paginated-resources-in-ruby.html</id>
+    <published>2015-12-14T19:00:00-05:00</published>
+    <updated>2015-12-14T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;The thing with paginated data is we can’t get it all at once.&lt;/p&gt;
+
+&lt;p&gt;Let’s say you want to use the &lt;a href="https://developers.trello.com/"&gt;Trello API&lt;/a&gt;. You want know how many Trello cards you marked as completed each month since last January, but you don’t &lt;strong&gt;want to think about &lt;em&gt;pages&lt;/em&gt;&lt;/strong&gt;. &lt;img src="/assets/images/icons/noun_63447.png?1450157944" class="icon-image inline"&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450157944" class="icon-image inline"&gt;&lt;/p&gt;
+
+&lt;p&gt;There are...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;The thing with paginated data is we can&amp;rsquo;t get it all at once.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say you want to use the &lt;a href="https://developers.trello.com/"&gt;Trello API&lt;/a&gt;. You want know how many Trello cards you marked as completed each month since last January, but you don&amp;rsquo;t &lt;strong&gt;want to think about &lt;em&gt;pages&lt;/em&gt;&lt;/strong&gt;. &lt;img src="/assets/images/icons/noun_63447.png?1450157944" class="icon-image inline" /&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450157944" class="icon-image inline" /&gt;&lt;/p&gt;
+
+&lt;p&gt;There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
+cards, and actions (like comments, copies, moves, etc). In most cases, Trello will provide a
+default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that?&lt;/p&gt;
+
+&lt;p&gt;In this post, we&amp;rsquo;ll examine a few ways to collect paginated results in Ruby.&lt;/p&gt;
+
+&lt;h3&gt;Trello World&lt;/h3&gt;
+
+&lt;p&gt;The &lt;a href="https://developers.trello.com/"&gt;Trello developer docs&lt;/a&gt; provide a quickstart in javascript - here&amp;rsquo;s the unofficial Ruby version.&lt;/p&gt;
+
+&lt;p&gt;While logged into your Trello account (you&amp;rsquo;ll need one first), &lt;strong&gt;&lt;a href="https://trello.com/app-key"&gt;retrieve your app key&lt;/a&gt;&lt;/strong&gt;. We won&amp;rsquo;t need the &amp;ldquo;secret&amp;rdquo; for this article.&lt;/p&gt;
+
+&lt;p&gt;Next, you&amp;rsquo;ll generate an &lt;strong&gt;app token&lt;/strong&gt;. Paste the following URL into your browser with your app &lt;strong&gt;key&lt;/strong&gt; subsituted for the placeholder.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;https://trello.com/1/authorize?expiration=never&amp;amp;scope=read,write,account&amp;amp;response_type=token&amp;amp;name=Trello%20World&amp;amp;key=YOUR_KEY
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now that we have an app key and token, we can make authenticated requests to the Trello API. As a quick test, paste the following url  with your own key and token as pararameters into your web browser (or use &lt;code&gt;curl&lt;/code&gt;) to read your member data.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;https://api.trello.com/1/members/me?key=YOUR_KEY&amp;amp;token=YOUR_TOKEN
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You should see a JSON response with attributes like your Trello id, username, bio, etc.&lt;/p&gt;
+
+&lt;h3&gt;Script mode&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s fetch some data in Ruby. For the following examples, we&amp;rsquo;ll be using Ruby 2.2.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;&lt;p&gt;
+
+For academic reasons, we&amp;rsquo;re ignoring available Ruby clients for the Trello API like &lt;strong&gt;&lt;a href="https://github.com/jeremytregunna/ruby-trello"&gt;ruby-trello&lt;/a&gt;&lt;/strong&gt;, a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and &lt;strong&gt;&lt;a href="https://github.com/rossta/tacokit.rb"&gt;tacokit.rb&lt;/a&gt;&lt;/strong&gt;, a client with different design goals including simplicity and flexibility, inspired by the ideas presented in this post and the GitHub API Ruby wrapper, &lt;a href="https://github.com/octokit/octokit.rb"&gt;octokit.rb&lt;/a&gt;, in aiming to be a &amp;ldquo;flat API client&amp;hellip; that requires little knowledge of REST&amp;rdquo;.
+
+&lt;/p&gt;&lt;/aside&gt;
+
+&lt;p&gt;To make HTTP requests, we&amp;rsquo;ll also use the &lt;a href="https://github.com/httprb/http"&gt;http.rb&lt;/a&gt;, but feel free to subsitute with your HTTP client of choice. Install the gem yourself with &lt;code&gt;gem install http&lt;/code&gt; or add it to your &lt;code&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Gemfile
+
+gem &amp;quot;http&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To make things easier for the remainder, add the key and token as environment variables in your shell. For Mac/Linux users, something like this will work:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;# command line
+export TRELLO_APP_KEY=your-key
+export TRELLO_APP_TOKEN=your-token
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, let&amp;rsquo;s run Ruby version of our Trello World test.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;http&amp;quot;
+
+def app_key
+  ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;)
+end
+
+def app_token
+  ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;)
+end
+
+url = &amp;quot;https://api.trello.com/1/members/me?key=#{app_key}&amp;amp;token=#{app_token}&amp;quot;
+puts HTTP.get(url).parse
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If it worked correctly, you should see the same result we saw in your browser earlier.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s extract a few helpers to build the url. We&amp;rsquo;ll use &lt;code&gt;Addressable::URI&lt;/code&gt;, which is available as a dependency of the http.rb gem as of version &lt;code&gt;1.0.0.pre1&lt;/code&gt; or otherwise may be installed as &lt;code&gt;gem install addressable&lt;/code&gt; or &lt;code&gt;gem &amp;quot;addressable&amp;quot;&lt;/code&gt; in your &lt;code&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;http&amp;quot;
+require &amp;quot;addressable/uri&amp;quot;
+
+def app_key
+  ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;)
+end
+
+def app_token
+  ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;)
+end
+
+def trello_url(path, params = {})
+  auth_params = { key: app_key, token: app_token }
+
+  Addressable::URI.new({
+    scheme: &amp;quot;https&amp;quot;,
+    host: &amp;quot;api.trello.com&amp;quot;,
+    path: File.join(&amp;quot;1&amp;quot;, path),
+    query_values: auth_params.merge(params)
+  })
+end
+
+def get(path)
+  HTTP.get(trello_url(path)).parse
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;Let&amp;rsquo;s Paginate&lt;/h3&gt;
+
+&lt;p&gt;Now we&amp;rsquo;ll add an alternative method to &lt;code&gt;#get&lt;/code&gt; that can handle pagination.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def paginated_get(path, options = {})
+  params  = options.dup
+  max     = params.delete(:max) { 1000 }
+  page    = params.delete(:page) { 1 }
+  limit   = params.fetch(:limit) { 50 }
+  results = []
+
+  loop do
+    data = get(path, { page: page }.merge(params))
+
+    page += 1
+    results += data
+
+    break if (data.empty? || page * limit &amp;gt;= max)
+  end
+
+  results
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Given a path and hash of parameter options, we&amp;rsquo;ll build up an array of results by fetching the endpoint and incrementing the page number each time. Once either the max is reached or no more results are returned from the API, we&amp;rsquo;ll exit the loop.&lt;/p&gt;
+
+&lt;p&gt;As a starting point, this works nicely. We can simply use &lt;code&gt;paginated_get&lt;/code&gt; to collect up to 1000 results for a given resource without the caller caring about pages. Here&amp;rsquo;s how we can grab the all the comments we&amp;rsquo;ve added to Trello cards:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def comments(params = {})
+  paginated_get(&amp;quot;members/me/actions&amp;quot;, filter: &amp;quot;commentCard&amp;quot;)
+end
+
+comments
+#=&amp;gt; [{&amp;quot;id&amp;quot;=&amp;gt;&amp;quot;abcd&amp;quot;, &amp;quot;idMemberCreator&amp;quot;=&amp;gt;&amp;quot;wxyz&amp;quot;, &amp;quot;data&amp;quot;=&amp;gt; {...} ...}, ...]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The main problem with this approach is that it forces the results to be eager loaded. Unless a max is specified in the method call, we could be waiting for up to 1000 comments to load - 20 requests of 50 comments each - to execute before the results are returned.&lt;/p&gt;
+
+&lt;h3&gt;Stop, enumerate, and listen&lt;/h3&gt;
+
+&lt;p&gt;Next step is to refactor our &lt;code&gt;paginated_get&lt;/code&gt; method to take advantage of Ruby&amp;rsquo;s &lt;code&gt;Enumerator&lt;/code&gt;. I previously &lt;a href="/blog/what-is-enumerator.html"&gt;described Enumerator&lt;/a&gt; and showed how it can be used to &lt;a href="/blog/infinite-sequences-in-ruby.html"&gt;generate infinite sequences in Ruby&lt;/a&gt;, including &lt;a href="/blog/pascals-triangle-with-rubys-enumerator.html"&gt;Pascal&amp;rsquo;s Triangle&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The main advantage of using &lt;code&gt;Enumerator&lt;/code&gt; will be to give callers flexibility to work with the results including filtering, searching, and lazy enumeration.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;MAX = 1000
+
+def paginated_get(path, options = {})
+  Enumerator.new do |y|
+    params  = options.dup
+    page    = params.delete(:page) { 1 }
+    limit   = params.fetch(:limit) { 50 }
+
+    loop do
+      data = get(path, { page: page }.merge(params))
+
+      data.each do |element|
+        y.yield element
+      end
+
+      break if (data.empty? || page * limit &amp;gt;= MAX)
+
+      page += 1
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ve got a few similarities with our first implementation. We still loop over repeated requests for successive pages until either the max is reach or no data is returned from the API. There are a few big differences though.&lt;/p&gt;
+
+&lt;p&gt;First, you&amp;rsquo;ll notice we&amp;rsquo;ve wrapped our expression in &lt;code&gt;Enumerator&lt;/code&gt; which will serve as the return value for &lt;code&gt;#paginated_get&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Using an enumerator may look strange but it offers a huge advantage over our first iteration. Enumerators allow callers to interact with data &lt;strong&gt;as it is generated&lt;/strong&gt;. Conceptually, the enumerator represents the algorithm for retrieving or generating data in &lt;code&gt;Enumerable&lt;/code&gt; form.&lt;/p&gt;
+
+&lt;p&gt;An enumerator implements the &lt;code&gt;Enumerable&lt;/code&gt; module which means we can call familiar methods like &lt;code&gt;#map&lt;/code&gt;, &lt;code&gt;#select&lt;/code&gt;, &lt;code&gt;#take&lt;/code&gt;, and so on.&lt;/p&gt;
+
+&lt;p&gt;Instead of building up an internal array of results, enumerators provide a mechanism for yielding each element even though a block may not be given to the method (how mind blowing is that?).&lt;/p&gt;
+
+&lt;p&gt;Now we can use enumerator chains to doing something like the following, where we request comment data lazily, transform the API hash to comment text and select the first two addressed to Doris.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;comments.lazy.
+   map { |a| a[&amp;quot;data&amp;quot;][&amp;quot;text&amp;quot;] }.
+   select { |t| t.start_with?(&amp;quot;@personIWorkWith&amp;quot;) }.
+   take(2).force
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We may not need to load all 1000 results to because the enumerators chain is evaluated for each item as it is yielded. This technique provides the caller with a great deal of flexibility. Eager loading can be delayed or avoided altogther - a potential performance gain.&lt;/p&gt;
+
+&lt;p&gt;Here are magic lines from &lt;code&gt;#paginated_get&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;data.each do |element|
+  y.yield element
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;y.yield&lt;/code&gt; is not the keyword &lt;code&gt;yield&lt;/code&gt;, but the invokation of the &lt;code&gt;#yield&lt;/code&gt; method of &lt;code&gt;Enumerator::Yielder&lt;/code&gt;, an object the enumerator uses internally to pass values through to the first block used in the enumerator chain. For a more detailed look at how enumerators work under the hood, read more about how &lt;a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy"&gt;Ruby works hard so you can be lazy&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3&gt;A cursor-y example&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s do one more iteration on our &lt;code&gt;#paginated_get&lt;/code&gt; refactoring. Up to this point, we&amp;rsquo;ve been using a &amp;ldquo;functional&amp;rdquo; approach; we&amp;rsquo;ve just been using a bunch of methods defined in the outermost lexical scope.&lt;/p&gt;
+
+&lt;p&gt;First, we&amp;rsquo;ll extract a &lt;code&gt;Client&lt;/code&gt; responsible for sending requests to the Trello API and parsing the responses as JSON.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;http&amp;quot;
+require &amp;quot;addressable/uri&amp;quot;
+
+class Client
+  def initialize(opts = {})
+    @app_key   = opts.fetch(:app_key, ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;))
+    @app_token = opts.fetch(:app_token, ENV.fetch(&amp;quot;TRELLO_APP_TOKEN&amp;quot;))
+  end
+
+  def get(path, params = {})
+    HTTP.get(trello_url(path, params)).parse
+  end
+
+  private
+
+  def trello_url(path, params = {})
+    auth_params = { key: @app_key, token: @app_token }
+
+    Addressable::URI.new({
+      scheme: &amp;quot;https&amp;quot;,
+      host: &amp;quot;api.trello.com&amp;quot;,
+      path: File.join(&amp;quot;1&amp;quot;, path),
+      query_values: auth_params.merge(params)
+    })
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next, we&amp;rsquo;ll provide a class to represent the paginated collection of results to replace our implementation of &lt;code&gt;#paginated_get&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The Twitter API uses &lt;a href="https://dev.twitter.com/overview/api/cursoring"&gt;cursors&lt;/a&gt; to navigate through pages, a concept similar to &amp;ldquo;next&amp;rdquo; and &amp;ldquo;previous&amp;rdquo; links on websites. Although Trello doesn&amp;rsquo;t provide explicit cursors in their API, we can still wrap the paginated results in an enumerable class to get similar behavior.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Cursor
+  def initialize(path, options = {})
+    @path       = path
+    @params     = options.dup
+
+    @collection = []
+    @page       = params.fetch(:page, 1)
+    @limit      = params.fetch(:limit, 50)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;Cursor&lt;/code&gt; will be initialized with a path and params, like our &lt;code&gt;paginated_get&lt;/code&gt;. We&amp;rsquo;ll also maintain an internal &lt;code&gt;@collection&lt;/code&gt; array to cache elements as they are returned from Trello.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Cursor
+  private
+
+  def client
+    @client ||= Client.new
+  end
+
+  def fetch_next_page
+    response              = client.get(@path, @params.merge(page: @page))
+    @last_response_empty  = response.empty?
+    @collection          += response
+    @page                += 1
+  end
+
+  MAX = 1000
+
+  def last?
+    @last_response_empty || @page * @limit &amp;gt;= MAX
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ll introduce a dependency on the &lt;code&gt;Client&lt;/code&gt; to interface with Trello through the private client method. We&amp;rsquo;ll use our client to fetch the next page, append the latest results to our cached &lt;code&gt;@collection&lt;/code&gt; and increment the page number. Now for the key public method:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Cursor
+  include Enumerable
+
+  def each(start = 0)
+    return to_enum(:each, start) unless block_given?
+
+    Array(@collection[start..-1]).each do |element|
+      yield(element)
+    end
+
+    unless last?
+      start = [@collection.size, start].max
+
+      fetch_next_page
+
+      each(start, &amp;amp;Proc.new)
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ve chosen to have our &lt;code&gt;Cursor&lt;/code&gt; expose the Enumerable API by including the &lt;code&gt;Enumerable&lt;/code&gt; module and implementing &lt;code&gt;#each&lt;/code&gt;. This will give cursor instances enumerable behavior so we can simply replace our paginated_get definition to return a new &lt;code&gt;Cursor&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def paginated_get(path, params)
+  Cursor.new(path, param)
+end
+
+def comments(params = {})
+  paginated_get(&amp;quot;members/me/actions&amp;quot;, filter: &amp;quot;commentCard&amp;quot;)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s break down &lt;code&gt;Cursor#each&lt;/code&gt; a bit further. The first line allows us retain the &lt;code&gt;Enumerator&lt;/code&gt; behavior before.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;return to_enum(:each, start) unless block_given?
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It invokes &lt;code&gt;Kernel#to_enum&lt;/code&gt; when no block is given to an &lt;code&gt;each&lt;/code&gt; method call. In this case, the method returns an &lt;code&gt;Enumerator&lt;/code&gt; that packages the behavior of &lt;code&gt;#each&lt;/code&gt; for an enumerator chain similar to before:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;puts comments.each.lazy.
+   map { |axn| axn[&amp;quot;data&amp;quot;][&amp;quot;text&amp;quot;] }.
+   select { |txt| txt.start_with?(&amp;quot;@mgerrior&amp;quot;) }.
+   take(2).force
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For more info on using &lt;code&gt;#to_enum&lt;/code&gt;, check out Arkency&amp;rsquo;s &lt;a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/"&gt;Stop including Enumerable, use Enumerable instead&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We also need to &lt;code&gt;yield&lt;/code&gt; each element in the &lt;code&gt;@collection&lt;/code&gt; to pass elements to callers of &lt;code&gt;#each&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;Array(@collection[start..-1]).each do |element|
+  yield(element)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We iterate from the start of the collection to the end with &lt;code&gt;Array(@collection[start..-1]).each&lt;/code&gt;&amp;hellip; but wait! when we start iterating, the &lt;code&gt;@collection&lt;/code&gt; is empty:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def initialize
+  # ...
+  @collection = []
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Wat?&lt;/p&gt;
+
+&lt;p&gt;The key comes in the lines that follow in &lt;code&gt;#each&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;unless last?
+  start = [@collection.size, start].max
+
+  fetch_next_page
+
+  each(start, &amp;amp;Proc.new)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Unless we&amp;rsquo;ve encountered the last page, we fetch the next page, which appends the latest results to the collection and we recursively invoke &lt;code&gt;#each&lt;/code&gt; with a starting point. This means &lt;code&gt;#each&lt;/code&gt; will be invoked again with new results until no new data is encountered. Sweet!&lt;/p&gt;
+
+&lt;p&gt;A neat trick is how we forward the block given to &lt;code&gt;#each&lt;/code&gt;. When we &lt;code&gt;Proc.new&lt;/code&gt; without explicitly passing a block or proc object, it will instantiate with the block given to its surrounding method if there is one. The behavior is similar to the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def each(start = 0, &amp;amp;block)
+  # ...
+  each(start, &amp;amp;block)
+  # ...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The main benefit being we don&amp;rsquo;t needlessly invoke &lt;code&gt;Proc.new&lt;/code&gt; by omitting &lt;code&gt;&amp;amp;block&lt;/code&gt; in the arguments. For more on this, read up on &lt;a href="http://mudge.name/2011/01/26/passing-blocks-in-ruby-without-block.html"&gt;Passing Blocks in Ruby without &amp;amp;block&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;Recursive each&amp;rdquo; is a powerful technique for providing a seamless, enumerable interface to paginated or cursored results. I first encountered &lt;a href="https://github.com/sferik/twitter/blob/c6c2fe44e4a56c3e3544a3c08492a8b83b549635/lib/twitter/enumerable.rb"&gt;this approach&lt;/a&gt; in the &lt;a href="https://github.com/sferik"&gt;sferik&amp;rsquo;s&lt;/a&gt; &lt;a href="https://github.com/sferik/twitter"&gt;Twitter gem&lt;/a&gt; - a great resource for those considering writing an API wrapper in Ruby.&lt;/p&gt;
+
+&lt;h3&gt;On your own&lt;/h3&gt;
+
+&lt;p&gt;Give it a shot! Pick out an API you like to use and play with techniques for modeling its collection resources. This is a great way to get more experience with Ruby&amp;rsquo;s &lt;a href="/blog/series/enumerable.html"&gt;Enumerable&lt;/a&gt;. Consider one of these approaches when you need to traverse paginated or partitioned subsets of data in an external or internal API.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;Credits&lt;/h3&gt;
+
+&lt;p&gt;Icons via the &lt;a href="https://thenounproject.com/"&gt;Noun Project&lt;/a&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://thenounproject.com/pixelbazaar/"&gt;Arrows by Zlatko Najdenovski&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
   <entry>
     <title>Use inverse_of</title>
     <link rel="alternate" href="/blog/use-inverse_of.html"/>
@@ -265,16 +655,16 @@ queries for objects that already exist in memory.&lt;/p&gt;
     </author>
     <summary type="html">&lt;p&gt;Pascal’s Triangle is a fun sequence. Here’s what it looks like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1449692191"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389"&gt;&lt;/p&gt;
 
 &lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;“triangular array of the binomial coefficients”&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Pascal&amp;rsquo;s Triangle is a fun sequence. Here&amp;rsquo;s what it looks like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1449692191" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389" /&gt;&lt;/p&gt;
 
 &lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;&amp;ldquo;triangular array of the binomial coefficients&amp;rdquo;&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1449692191" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1448546389" /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can model this in Ruby as an array of arrays. The first array member is &lt;code&gt;[1]&lt;/code&gt;. Each successive array (or &amp;ldquo;row&amp;rdquo;) will increase in size, and each array member will be the sum of the member at the same index &lt;code&gt;n&lt;/code&gt; in the &lt;code&gt;k-1&lt;/code&gt; row, where &lt;code&gt;k&lt;/code&gt; is the current row, and the &lt;code&gt;n-1&lt;/code&gt; member in the &lt;code&gt;k-1&lt;/code&gt; row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:&lt;/p&gt;
 
@@ -938,60 +1328,6 @@ $ bundle install
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You&amp;rsquo;ll get the most out of this repo by inspecting the source along with following the presentation.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Three Steps to Effective Code Reviews</title>
-    <link rel="alternate" href="/blog/three-steps-to-effective-code-reviews.html"/>
-    <id>/blog/three-steps-to-effective-code-reviews.html</id>
-    <published>2014-02-24T19:00:00-05:00</published>
-    <updated>2014-02-24T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;These days, software developers are living in a &lt;a href="http://scottchacon.com/2011/08/31/github-flow.html"&gt;GitHub Workflow&lt;/a&gt; world. They develop new code on version-controlled &lt;a href="http://git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging"&gt;branches&lt;/a&gt; and gather feedback prior to inclusion in the primary release, or “master” branch, through &lt;a href="https://help.github.com/articles/using-pull-requests"&gt;pull requests&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Our development team...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;These days, software developers are living in a &lt;a href="http://scottchacon.com/2011/08/31/github-flow.html"&gt;GitHub Workflow&lt;/a&gt;&lt;/a&gt; world. They develop new code on version-controlled &lt;a href="http://git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging"&gt;branches&lt;/a&gt; and gather feedback prior to inclusion in the primary release, or “master” branch, through &lt;a href="https://help.github.com/articles/using-pull-requests"&gt;pull requests&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Our development team at ChallengePost has been using this workflow for almost two years with great success, although we&amp;#8217;ve had our share of pain points. For better or worse, feedback typically happens asynchronously and is in written form. Convenient, yes, although this approach is not free of the wrinkles, especially when we use poor word choice, hyperbole, sarcasm, and other forms of counterproductive commentary.&lt;/p&gt;
-
-&lt;p&gt;This has led to resentment and injured relationships on occasion. In response, I’m working to improve how we give and receive criticism.&lt;/p&gt;
-
-&lt;h3&gt;Building trust&lt;/h3&gt;
-
-&lt;p&gt;Let&amp;#8217;s assume that, when done well, code reviews are a good thing. That is to say, the practice of giving and receiving feedback in a consistent, continual manner has true benefits. These may include improving code quality over time and driving convergence of ideas and practices within your team. In my experience, for feedback to be effective, trust amongst team members is a key requirement.&lt;/p&gt;
-
-&lt;p&gt;This may not be an issue for teams that have been together for a long time or share common values, but for others, trust has to be earned. In the absence of trust, there&amp;#8217;s more opportunity for personal differences to get intertwined with feedback. While there are no quick fixes, what follows are code review practices that we have adopted to foster our shared sense of trust.&lt;/p&gt;
-
-&lt;h3&gt;1. Adopt a style guide&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Spoiler alert&lt;/strong&gt;: code syntax and formatting are trivial choices. What&amp;#8217;s most important is your team agrees on and adheres to a set of guidelines.&lt;/p&gt;
-
-&lt;p&gt;Take a few hours as a team to hammer out a style guide for each of the languages you use. Better yet, use a public example like &lt;a href="https://github.com/styleguide"&gt;GitHub&amp;#8217;s style guide&lt;/a&gt; as a starting point. Besides the obvious benefits of consistency and maintainability, style guides reduce the likelihood of flared tempers during reviews; when you’re pushing to get a new feature out the door, it&amp;#8217;s unhealthy to argue over whitespace. This works when your team respectfully follows and comments on style issues respectfully, saving concerns about existing guidelines for separate discussions.&lt;/p&gt;
-
-&lt;h3&gt;2. Start with the end in mind&lt;/h3&gt;
-
-&lt;p&gt;Imagine a developer who emerges, after hours or days off in the “zone,” with a sparkly new feature and asks for a review. All is good, right? Except that the rest of the team has issues with the implementation. Words are exchanged, the developer takes the feedback personally, and suddenly the entire team is distracted from shipping code.&lt;/p&gt;
-
-&lt;p&gt;Personally, I believe code review should begin well before the final commit. It can happen early on; in short discussions with teammates once the ideas start to take shape. Get buy-in on your approach before you’re ready to merge your branch. Opening a pull request and asking for feedback while work is still in progress is a great way to build trust between teammates, and reduce the likelihood that criticism may be interpreted as a personal attack.&lt;/p&gt;
-
-&lt;h3&gt;3. Use the Rubber Duck&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Rubber_duck_debugging"&gt;Rubber duck&lt;/a&gt; debugging is a method of finding solutions simply by explaining code line-by-line to an inanimate object. We&amp;#8217;ve found it helps to do the same with our writing, especially when our first instinct is to respond to code or another comment with sarcasm or anger. Take a moment to read your response aloud and question the wording, timing, and appropriateness. This includes taking into account the personality of the team members you’re addressing. &lt;a href="http://thoughtbot.com"&gt;Thoughtbot&lt;/a&gt; has compiled a useful set of &lt;a href="https://github.com/thoughtbot/guides/tree/master/code-review"&gt;code review guidelines&lt;/a&gt; to help both readers and writers respond thoughtfully. I also suggest that teammates share meta-feedback to ensure that everyone is hitting the right notes of tone and instruction.&lt;/p&gt;
-
-&lt;p&gt;The next time you feel pain in a code review, take a step back to consider what’s missing. It could be that your team needs to adopt some guidelines to reduce friction and ensure feedback is exchanged in as a constructive and positive manner as possible. After all, you have both code and relationships to maintain.&lt;/p&gt;
-
-&lt;h3&gt;Resources&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/bbatsov/ruby-style-guide"&gt;Community ruby style guide&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/styleguide"&gt;GitHub style guide&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://mdswanson.com/blog/2012/11/04/code-reviews-good-idea-bad-idea.html"&gt;Code reviews: Good idea / bad idea?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://code.dblock.org/why-i-love-code-reviews"&gt;Why I Love Code Reviews&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="http://whilefalse.blogspot.com/2012/06/code-reviews-code-stories.html"&gt;Code Review, Code Stories&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/blog/1124-how-we-use-pull-requests-to-build-github"&gt;How we use pull requests to build GitHub&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </content>
   </entry>
 </feed>

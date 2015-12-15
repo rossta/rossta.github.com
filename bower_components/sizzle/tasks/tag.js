@@ -1,0 +1,1 @@
+"use strict";var exec=require("child_process").exec;module.exports=function(e){e.registerTask("tag","Tag the specified version",function(e){exec("git tag "+e,this.async())})};
