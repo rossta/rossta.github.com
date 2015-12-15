@@ -18,36 +18,29 @@ Let's say you want to use the [Trello API](https://developers.trello.com/). You 
 
 There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
 cards, and actions (like comments, copies, moves, etc). In most cases, Trello will provide a
-default limit, typically 50, on the number of resources returned in a single request. To get more
-data, we need to make additional __paginated__ requests.
+default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that?
 
-In this post, we'll examine ways to handle paginated requests without getting bogged down in __pages__.
+In this post, we'll examine a few ways to collect paginated results in Ruby.
 
 ### Trello World
 
-First, some plumbing. The [Trello developer docs](https://developers.trello.com/) provide a quickstart in javascript - here's the unofficial Ruby version.
+The [Trello developer docs](https://developers.trello.com/) provide a quickstart in javascript - here's the unofficial Ruby version.
 
-While logged into your Trello account (you'll need one first), visit the [App Key page](https://trello.com/app-key) to retrieve your app **key**. We won't need the "secret" for this article.
+While logged into your Trello account (you'll need one first), **[retrieve your app key](https://trello.com/app-key)**. We won't need the "secret" for this article.
 
-Next, you'll generate an app **token**. Paste the following URL into your browser with your app **key** subsituted for the placeholder.
+Next, you'll generate an **app token**. Paste the following URL into your browser with your app **key** subsituted for the placeholder.
 
 ```
 https://trello.com/1/authorize?expiration=never&scope=read,write,account&response_type=token&name=Trello%20World&key=YOUR_KEY
 ```
 
-Now that we have an app key and token, we can make authenticated requests to the Trello API.
-
-As a quick test, let's read your member data
+Now that we have an app key and token, we can make authenticated requests to the Trello API. As a quick test, paste the following url  with your own key and token as pararameters into your web browser (or use `curl`) to read your member data.
 
 ```ruby
 https://api.trello.com/1/members/me?key=YOUR_KEY&token=YOUR_TOKEN
 ```
 
-You should see a JSON response with attributes like your Trello id, username, bio, etc:
-
-```json
-{"id":"abcd1234","avatarHash":"5678wxyz", ... }
-```
+You should see a JSON response with attributes like your Trello id, username, bio, etc.
 
 ### Script mode
 
@@ -55,7 +48,7 @@ Let's fetch some data in Ruby. For the following examples, we'll be using Ruby 2
 
 <aside class="callout panel"><p>
 
-<strong>Sidebar</strong> - For academic reasons, we're ignoring available Ruby clients for the Trello API like <%= link_to "ruby-trello", "https://github.com/jeremytregunna/ruby-trello" %> a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <%= link_to "tacokit.rb", "https://github.com/rossta/tacokit.rb" %>, a client with different design goals including simplicity and flexibility inspired by the ideas presented in this post and <%= link_to "octokit.rb", "https://github.com/octokit/octokit.rb" %> in aiming to be a "flat API client... that requires little knowledge of REST".
+For academic reasons, we're ignoring available Ruby clients for the Trello API like <strong><%= link_to "ruby-trello", "https://github.com/jeremytregunna/ruby-trello" %></strong>, a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <strong><%= link_to "tacokit.rb", "https://github.com/rossta/tacokit.rb" %></strong>, a client with different design goals including simplicity and flexibility, inspired by the ideas presented in this post and the GitHub API Ruby wrapper, <%= link_to "octokit.rb", "https://github.com/octokit/octokit.rb" %>, in aiming to be a "flat API client... that requires little knowledge of REST".
 
 </p></aside>
 
@@ -78,7 +71,6 @@ export TRELLO_APP_TOKEN=your-token
 Now, let's run Ruby version of our Trello World test.
 
 ```ruby
-# trello.rb
 require "http"
 
 def app_key
@@ -95,10 +87,9 @@ puts HTTP.get(url).parse
 
 If it worked correctly, you should see the same result we saw in your browser earlier.
 
-Let's extract a helper building the url. We'll use `Addressable::URI`, which is available as a dependency of the http.rb gem as of version `1.0.0.pre1` or otherwise may be installed as `gem install addressable` or `gem "addressable"` in your `Gemfile`:
+Let's extract a few helpers to build the url. We'll use `Addressable::URI`, which is available as a dependency of the http.rb gem as of version `1.0.0.pre1` or otherwise may be installed as `gem install addressable` or `gem "addressable"` in your `Gemfile`:
 
 ```ruby
-# trello.rb
 require "http"
 require "addressable/uri"
 
@@ -249,7 +240,7 @@ class Client
   private
 
   def trello_url(path, params = {})
-    auth_params = { key: app_key, token: app_token }
+    auth_params = { key: @app_key, token: @app_token }
 
     Addressable::URI.new({
       scheme: "https",
@@ -295,6 +286,7 @@ class Cursor
   end
 
   MAX = 1000
+
   def last?
     @last_response_empty || @page * @limit >= MAX
   end
