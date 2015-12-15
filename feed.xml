@@ -41,12 +41,12 @@ default limit, typically 50, on the number of resources returned in a single req
 
 &lt;p&gt;Next, you&amp;rsquo;ll generate an &lt;strong&gt;app token&lt;/strong&gt;. Paste the following URL into your browser with your app &lt;strong&gt;key&lt;/strong&gt; subsituted for the placeholder.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;https://trello.com/1/authorize?expiration=never&amp;amp;scope=read,write,account&amp;amp;response_type=token&amp;amp;name=Trello%20World&amp;amp;key=YOUR_KEY
+&lt;pre&gt;&lt;code class="bash"&gt;https://trello.com/1/authorize?expiration=never&amp;amp;scope=read,write,account&amp;amp;response_type=token&amp;amp;name=Trello%20World&amp;amp;key=YOUR_KEY
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now that we have an app key and token, we can make authenticated requests to the Trello API. As a quick test, paste the following url  with your own key and token as pararameters into your web browser (or use &lt;code&gt;curl&lt;/code&gt;) to read your member data.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="ruby"&gt;https://api.trello.com/1/members/me?key=YOUR_KEY&amp;amp;token=YOUR_TOKEN
+&lt;pre&gt;&lt;code class="bash"&gt;https://api.trello.com/1/members/me?key=YOUR_KEY&amp;amp;token=YOUR_TOKEN
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You should see a JSON response with attributes like your Trello id, username, bio, etc.&lt;/p&gt;
@@ -77,7 +77,8 @@ export TRELLO_APP_TOKEN=your-token
 
 &lt;p&gt;Now, let&amp;rsquo;s run Ruby version of our Trello World test.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;http&amp;quot;
+&lt;pre&gt;&lt;code class="ruby"&gt;# trello_eager.rb
+require &amp;quot;http&amp;quot;
 
 def app_key
   ENV.fetch(&amp;quot;TRELLO_APP_KEY&amp;quot;)
@@ -126,9 +127,10 @@ end
 
 &lt;p&gt;Now we&amp;rsquo;ll add an alternative method to &lt;code&gt;#get&lt;/code&gt; that can handle pagination.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="ruby"&gt;def paginated_get(path, options = {})
+&lt;pre&gt;&lt;code class="ruby"&gt;MAX = 1000
+
+def paginated_get(path, options = {})
   params  = options.dup
-  max     = params.delete(:max) { 1000 }
   page    = params.delete(:page) { 1 }
   limit   = params.fetch(:limit) { 50 }
   results = []
@@ -139,7 +141,7 @@ end
     page += 1
     results += data
 
-    break if (data.empty? || page * limit &amp;gt;= max)
+    break if (data.empty? || page * limit &amp;gt;= MAX)
   end
 
   results
@@ -166,7 +168,7 @@ comments
 
 &lt;p&gt;The main advantage of using &lt;code&gt;Enumerator&lt;/code&gt; will be to give callers flexibility to work with the results including filtering, searching, and lazy enumeration.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="ruby"&gt;MAX = 1000
+&lt;pre&gt;&lt;code class="ruby"&gt;# trello_enumerator.rb
 
 def paginated_get(path, options = {})
   Enumerator.new do |y|
@@ -224,7 +226,9 @@ end
 
 &lt;p&gt;First, we&amp;rsquo;ll extract a &lt;code&gt;Client&lt;/code&gt; responsible for sending requests to the Trello API and parsing the responses as JSON.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;http&amp;quot;
+&lt;pre&gt;&lt;code class="ruby"&gt;# trello_cursor.rb
+
+require &amp;quot;http&amp;quot;
 require &amp;quot;addressable/uri&amp;quot;
 
 class Client
