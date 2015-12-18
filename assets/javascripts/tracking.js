@@ -1,0 +1,1 @@
+!function(t){var e=function(){this.traits={},this.events={}};return e.prototype.identify=function(e){return this.traits=t.extend(this.traits,{},e),this.traits},e.prototype.track=function(e,n){return this.events[e]=t.extend(this.events[e],{},n),this.events[e]},t.extend({tracking:new e}),e}(jQuery);

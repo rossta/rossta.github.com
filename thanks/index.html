@@ -19,8 +19,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/all.css?1450198419" rel="stylesheet" />
-    <script src="/assets/javascripts/head.js?1449692192"></script>
+    <link href="/assets/stylesheets/all.css?1450157951" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1445744814"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
   <body id="application" class="typekit">
@@ -51,7 +51,7 @@
   </header>
   <section>
     <p>Your subscription to my newsletter has been confirmed. I'm looking forward to helping you on your journey as a web developer.</p>
-    <p>I'd love to hear from you, so <a href="mailto:ross@rossta.net">send me an email</a> or <a href="#">follow me on twitter</a>. While you're here, read on!</p>
+    <p>I'd love to hear from you, so <a href="mailto:ross@rossta.net">send me an email</a> or <a href="https://twitter.com/rossta">follow me on twitter</a>. While you're here, read on!</p>
     <a href="/" class="button">Read the latest post</a>
   </section>
 </section>
@@ -79,8 +79,12 @@
         </section>
       </footer>
     </div>
-    <script src="/assets/javascripts/all.js?1449692192"></script>
-        <script type="text/javascript">
+    <script src="/assets/javascripts/all.js?1450447615"></script>
+      <script type="text/javascript">
+    $.tracking.identify({ newsletter: true });
+    $.tracking.track("Newsletter sign up");
+  </script>
+    <script type="text/javascript">
       $(function() {
          $.zen(function(toBe) { $('#zen').find('.enlightenment').text(toBe); });
       });
@@ -91,6 +95,23 @@
 analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
 analytics.page()
 }}();
+</script>
+
+<script>
+  $(function() {
+    if ($ && $.tracking) {
+      var traits = $.tracking.traits;
+      var events = $.tracking.events;
+
+      analytics.identify(traits);
+      Object.keys(events).forEach(function(name, i) {
+        analytics.track(name, events[name]);
+      });
+
+    } else {
+      analytics.identify();
+    }
+  });
 </script>
 
   </body>
