@@ -18,7 +18,5 @@
 //= require highlightjs/highlight.pack
 
 //= require zen
-
-hljs.initHighlightingOnLoad();
-$(document).foundation();
-
+//= require tracking
+//= require onload
