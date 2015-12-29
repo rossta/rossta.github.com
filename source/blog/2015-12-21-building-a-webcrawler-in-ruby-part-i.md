@@ -29,12 +29,6 @@ Writing the crawler
 * Capturing URLs with "infinite" enumerator
 * Cliff hanger
 
-## Part II
-
-Recap
-* Problem
-* Solution design
-
 Enumerating URLs
 * Capturing URLs with "infinite" enumerator
 
