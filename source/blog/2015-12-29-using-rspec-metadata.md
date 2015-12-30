@@ -263,7 +263,7 @@ end
 We can now filter our test run to a subset at the command line:
 
 ```bash
-$ rspec --tag @focus
+$ rspec --tag focus
 ```
 
 We can also add some global configuration so this will be the default behavior
@@ -289,7 +289,7 @@ end
 Using either a command line option
 
 ```ruby
-$ rspec ~flaky
+$ rspec --tag ~flaky
 ```
 
 or a configuration option, we can filter out specs we wish to ignore.
@@ -346,6 +346,11 @@ Now, all specs in the directory will run with the `:truncation_mode` metadata
 and the database strategy will be set to `:truncation` as long as it is declared ahead of the additional DatabaseCleaner configuration we referenced earlier.
 
 Note, this is the [same method](https://github.com/rspec/rspec-rails/blob/a09a6231ceecefa177ec08b27c3066d5947e5899/lib/rspec/rails/configuration.rb#L85) used in `rspec-rails` to add custom behavior to specs in the specific directories, e.g. `spec/controllers', `spec/requests, etc.
+
+<aside class="callout panel">
+<p>The example above is borrowed from <a href="http://stackoverflow.com/questions/29651981/before-and-after-hooks-for-a-spec-directory-in-rspec">an answer I recently gave on Stackoverflow</a>.
+</p>
+</aside>
 
 ### Using and Abusing
 
