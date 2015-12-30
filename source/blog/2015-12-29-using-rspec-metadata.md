@@ -2,12 +2,13 @@
 title: Using RSpec Metadata
 author: Ross Kaffenberger
 published: true
-summary: Leveraging RSpec metadata to control how specs are run
-description: Leveraging RSpec metadata to control how specs are run with
-examples for altering database mode and toggling behavior based on spec directory
+summary: Control spec behavior with declarative tags... just don't overdo it
+description: Leveraging RSpec metadata to control how specs are run with examples for altering database mode and toggling behavior based on spec directory
 pull_image: 'https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg'
 tags:
   - Code
+  - Ruby
+  - Rails
   - RSpec
 ---
 
@@ -349,16 +350,16 @@ Note, this is the [same method](https://github.com/rspec/rspec-rails/blob/a09a62
 ### Using and Abusing
 
 While using RSpec metadata can be a powerful technique for altering test
-behavior and application settings in specs, it can also be taken too f ar. As
-@avdgaag notes in [his blog post on the topic](http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html), make sure to distinguish between *how* spec is run from *what* the spec should test. We should probably not use metadata to create records specific to certain testests, or authenticate users for a given context.
+behavior and application settings in specs, it can also be taken too far.
 
-One rule of thumb for adding metadata is decide whether it would be generally useful
-to any Rails app (good) or it is specific to the business logic of your current
-application (bad). The latter is best set up more explicitly within or alongside
-your tests.
+As @avdgaag notes in [his blog post on the topic](http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html), make sure to distinguish between *how* spec is run from *what* the spec should test. We should probably not use metadata to create records specific to certain testests, or authenticate users for a given context.
 
-While metadata can nicely separate the boilerplate required to
-setup and teardown test behavior, it also adds a layer of indirection that can
-cause readability issues when stretched too far.
+One rule of thumb for adding metadata is decide whether it would be generally useful to any Rails app (good) or it is specific to the business logic of your current application (bad). The latter is best set up more explicitly within or alongside your tests.
+
+Before considering a new metadata tag, I ask the rubber duck "Could I extract
+this configuration into a gem?" To answer yes, the behavior would have to be
+non-specific to my application. If so, the behavior *might* be useful as metadata.
+
+While metadata can nicely separate the boilerplate required to setup and teardown test behavior, it also adds a layer of indirection that can cause readability issues when stretched too far. Understand that there is a big increase in mental overhead to permuting test behavior with each new tag option and consider the tradeoffs with the rest of the team.
 
 Use wisely!
