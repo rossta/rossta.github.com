@@ -1,17 +1,19 @@
 ---
 title: Using RSpec Metadata
 author: Ross Kaffenberger
-published: false
-summary: Leveraging RSpec 3 metadata to control how specs are run
-description: RSpec Metadata
+published: true
+summary: Leveraging RSpec metadata to control how specs are run
+description: Leveraging RSpec metadata to control how specs are run with
+examples for altering database mode and toggling behavior based on spec directory
 pull_image: 'https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg'
 tags:
   - Code
+  - RSpec
 ---
 
 A useful feature of RSpec is the ability to pass metadata to tests and suites.
 
-You may already be familiar with examples in [Capybara][1], such as passing `:js` to enable the javascript driver for a given spec.
+You may already be familiar with how [Capybara](https://github.com/jnicklas/capybara) uses the `:js` option to enable the javascript driver.
 
 ```ruby
 describe "a javascript feature", :js do
@@ -19,9 +21,7 @@ describe "a javascript feature", :js do
 end
 ```
 
-Metadata can be accessed in RSpec hooks to change behavior.
-
-Capybara [provides an RSpec configuration hook](https://github.com/jnicklas/capybara/blob/957c35f580b68e8a140b5bbe7818fdcf06bc4521/lib/capybara/rspec.rb#L27) that changes the web driver for any example where `:js` metadata is present. Here it is oversimplified:
+Capybara [provides an RSpec configuration hook](https://github.com/jnicklas/capybara/blob/957c35f580b68e8a140b5bbe7818fdcf06bc4521/lib/capybara/rspec.rb#L27) that changes the web driver for any example where `:js` metadata is present. Here it is, oversimplified:
 
 ```ruby
 # capybara/rspec.rb
@@ -32,17 +32,13 @@ RSpec.configure do |config|
 end
 ```
 
-You may reach a point in the maturity of our test suite when it makes sense add our own configuration options.
+We may reach a point in the maturity of our test suite when it makes sense add our own configuration options.
 
-*The examples in the post are based on rspec version <code>~> 3</code> with the
-configuration set to treat symbols in metadata as true values:*
-
-```ruby
-# spec/spec_helper.rb
-RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
-end
-```
+<aside class="callout panel">
+<p>
+The examples in the post are based on rspec version <code>~> 3</code>.
+</p>
+</aside>
 
 ### Changing Test Runner Behavior
 
@@ -52,7 +48,7 @@ reasons, it may be beneficial to run each of our specs in a database
 transaction so test data can be easily rolled back at the start of each spec.
 
 Here's a common base configuration for using the popular [DatabaseCleaner](https://github.com/DatabaseCleaner/database_cleaner) gem to
-set up transactionall database behavior for RSpec:
+set up transactional database behavior for RSpec:
 
 ```ruby
 RSpec.configure do |config|
@@ -99,8 +95,8 @@ config.before(:each, type: :feature) do
 end
 ```
 
-The same issues exists for ActiveRecord `after_commit` callbacks - when running
-tests in transaction mode, these callbacks will never fire. It may be useful to
+We also run into problems with ActiveRecord `after_commit` callbacks - when running
+tests in transaction mode, these callbacks will never fire. We can also
 add an option for enabling truncation mode outside of acceptance specs when
 isolated specs are needed for these callbacks:
 
@@ -120,6 +116,7 @@ Here's a consolidated configuration for providing hooks for the issues related
 to database truncation mentioned above:
 
 ```ruby
+# spec/spec_helper.rb
 RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
@@ -264,7 +261,7 @@ end
 
 We can now filter our test run to a subset at the command line:
 
-```
+```bash
 $ rspec --tag @focus
 ```
 
@@ -294,11 +291,11 @@ Using either a command line option
 $ rspec ~flaky
 ```
 
-Or a configuration option:
+or a configuration option, we can filter out specs we wish to ignore.
 
 ```ruby
 RSpec.configure do |c|
-  c.filter_run_excluding :flaky => true
+  c.filter_run_excluding flaky: true
 end
 ```
 
