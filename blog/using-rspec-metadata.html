@@ -1,0 +1,536 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ross Kaffenberger - rossta.net</title>
+<meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/icon-ruby.png" />
+<meta name="twitter:title" content="Ross Kaffenberger" />
+<meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
+<meta property="og:image" content="https://rossta.net/assets/images/icon-ruby.png" />
+<meta property="og:title" content="Ross Kaffenberger" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/all.css?1451435458" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1445744814"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta.net</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header>
+  <h2>
+    
+  </h2>
+</header>
+
+
+      <hr>
+
+<p>title: Using RSpec Metadata
+author: Ross Kaffenberger
+published: true
+summary: Leveraging RSpec metadata to control how specs are run
+description: Leveraging RSpec metadata to control how specs are run with
+examples for altering database mode and toggling behavior based on spec directory
+pull_image: &rsquo;<a href="https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg">https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg</a>&rsquo;
+tags:</p>
+
+<ul>
+<li>Code</li>
+</ul>
+
+<h2>  - RSpec</h2>
+
+<p>A useful feature of RSpec is the ability to pass metadata to tests and suites.</p>
+
+<p>You may already be familiar with how <a href="https://github.com/jnicklas/capybara">Capybara</a> uses the <code>:js</code> option to enable the javascript driver.</p>
+
+<pre><code class="ruby">describe &quot;a javascript feature&quot;, :js do
+  # tests run against the Capyabara.javascript_driver
+end
+</code></pre>
+
+<p>Capybara <a href="https://github.com/jnicklas/capybara/blob/957c35f580b68e8a140b5bbe7818fdcf06bc4521/lib/capybara/rspec.rb#L27">provides an RSpec configuration hook</a> that changes the web driver for any example where <code>:js</code> metadata is present. Here it is, oversimplified:</p>
+
+<pre><code class="ruby"># capybara/rspec.rb
+RSpec.configure do |config|
+  config.before do
+    Capybara.current_driver = Capybara.javascript_driver if example.metadata[:js]
+  end
+end
+</code></pre>
+
+<p>We may reach a point in the maturity of our test suite when it makes sense add our own configuration options.</p>
+
+<aside class="callout panel">
+<p>
+The examples in the post are based on rspec version <code>~> 3</code>.
+</p>
+</aside>
+
+<h3>Changing Test Runner Behavior</h3>
+
+<p>Testing libraries like RSpec and Capybara do some heavy lifting to set up the
+Rails environment and make it suitable for running in test mode. For performance
+reasons, it may be beneficial to run each of our specs in a database
+transaction so test data can be easily rolled back at the start of each spec.</p>
+
+<p>Here&rsquo;s a common base configuration for using the popular <a href="https://github.com/DatabaseCleaner/database_cleaner">DatabaseCleaner</a> gem to
+set up transactional database behavior for RSpec:</p>
+
+<pre><code class="ruby">RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+end
+</code></pre>
+
+<p>Not all specs can be run this way - once we add a javascript acceptance specs, for
+example, the javascript driver will likely need its own connection to the
+database so it won&rsquo;t have access to data setup in the tests. We need to run
+javascript acceptance specs in <em>truncation</em> mode to ensure database changes are
+committed to the database so multiple database connections will have access to the same data.</p>
+
+<p>Let&rsquo;s use RSpec metadata to toggle database behavior automatically when using
+the javascript driver (i.e., not the default <code>:rack_test</code> driver). We&rsquo;ll add the
+following hooks, borrowed from the DatabaseCleaner <a href="https://github.com/DatabaseCleaner/database_cleaner/tree/f32abebc4f28faa6ff944c4d1d4fee3f21ceb0bb#rspec-example">README</a>:</p>
+
+<pre><code class="ruby"># spec/spec_helper.rb
+config.before(:each, type: :feature) do
+  # :rack_test driver&#39;s Rack app under test shares database connection
+  # with the specs, so continue to use transaction strategy for speed.
+  driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
+
+  if !driver_shares_db_connection_with_specs
+    # Driver is probably for an external browser with an app
+    # under test that does *not* share a database connection with the
+    # specs, so use truncation strategy.
+    DatabaseCleaner.strategy = :truncation
+  end
+end
+</code></pre>
+
+<p>We also run into problems with ActiveRecord <code>after_commit</code> callbacks - when running
+tests in transaction mode, these callbacks will never fire. We can also
+add an option for enabling truncation mode outside of acceptance specs when
+isolated specs are needed for these callbacks:</p>
+
+<pre><code class="ruby"># spec/model/user_spec.rb
+it &quot;triggers background job after creating new user&quot;, :truncation_mode do
+  # test after_commit callback
+end
+
+# spec/spec_helper.rb
+config.before(:each, :truncation_mode) do
+  DatabaseCleaner.strategy = :truncation
+end
+</code></pre>
+
+<p>Here&rsquo;s a consolidated configuration for providing hooks for the issues related
+to database truncation mentioned above:</p>
+
+<pre><code class="ruby"># spec/spec_helper.rb
+RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, type: :feature) do
+    driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
+
+    if !driver_shares_db_connection_with_specs
+      DatabaseCleaner.strategy = :truncation
+    end
+  end
+
+  config.before(:each, :truncation_mode) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+end
+</code></pre>
+
+<h3>Changing Application Settings</h3>
+
+<p>Rails provides a number of settings that can be easily configured based on the
+environment, so we don&rsquo;t do undesired work in development or test environments,
+such as sending emails. For any mature Rails application, we&rsquo;ll likely have
+our own custom settings layered on top of the Rails defaults.</p>
+
+<p>There are many cases where we&rsquo;ll still want to test the &ldquo;production&rdquo; settings in
+our test environments.  For example, by default, controller caching is disabled in tests:</p>
+
+<pre><code class="ruby"># config/initializers/test.rb
+Rails.application.configure do
+  # ...
+  config.action_controller.perform_caching = false
+
+end
+</code></pre>
+
+<p>For selected acceptances specs, we may still want to test behavior of caching at
+the view layer, say that users can see new info when a model attribute changes. We don&rsquo;t need this caching behavior is all test, so it may be useful to toggle specs on/off during the test run.</p>
+
+<h4>First attempt</h4>
+
+<p>We could try to &ldquo;stub&rdquo; the setting in the context of a single spec run with the &ldquo;enabled&rdquo; state.</p>
+
+<pre><code class="ruby"># spec/spec_helper.rb
+RSpec.configure do |config|
+  config.before(:each, :caching) do
+    allow_any_instance_of(ActionController::Base).to receive(:perform_caching).and_return true
+  end
+
+  config.after(:each, :caching) do
+    Rails.cache.clear
+  end
+end
+</code></pre>
+
+<p>This may require changing behavior of instances which is <a href="https://relishapp.com/rspec/rspec-mocks/docs/working-with-legacy-code/any-instance">typically discouraged</a>. We may also need to clean up other global state, like clearing the Rails cache after the test run.</p>
+
+<h4>Better attempt</h4>
+
+<p>Alternatively, we can set the actual values on while settings are derived.
+Here&rsquo;s how it might look for enabling controller caching with an <code>around</code> block:</p>
+
+<pre><code class="ruby"># spec/spec_helper.rb
+RSpec.configure do |config|
+  config.around(:each, :caching) do |example|
+    caching = ActionController::Base.perform_caching
+    ActionController::Base.perform_caching = example.metadata[:caching]
+
+    example.run
+
+    Rails.cache.clear
+    ActionController::Base.perform_caching = caching
+  end
+end
+</code></pre>
+
+<p>The <code>around</code> block takes the RSpec example object as an argument. When running specs, the given block is triggered when <code>:caching</code> is detected as a key in an example’s metadata. The example object provides a number of methods for test introspection, allowing us to make changes before and after calling run to execute the spec.</p>
+
+<p>As a result, we now have a simple, explicit mechanism for introducing caching to individual specs and suites:</p>
+
+<pre><code class="ruby"># spec/features/homepage_spec.rb
+describe &quot;visit the homepage&quot;, :caching do
+  it &quot;expires cache&quot; do
+    # test cached stuff
+  end
+end
+</code></pre>
+
+<p>The main concern with this approach is that modifying a global state can affect
+other tests unintentionally - a big no-no.</p>
+
+<p>To avoid this, <strong>we need to reset the original value when the example completes</strong>.</p>
+
+<p>Here, we are storing the previously set value of <code>ActionContoller::Base.perform_caching</code>, setting it for the local suite, and resetting it back to the original value after it completes.</p>
+
+<p>This technique may come into play when integrating with certain gems like
+<a href="https://github.com/airblade/paper_trail">PaperTrail</a> which may generate expensive logic or queries not need in most
+situations. PaperTrail even <a href="https://github.com/airblade/paper_trail/blob/eef918bca42bab85c4467541037897f0788b6062/lib/paper_trail/frameworks/rspec.rb">provides a helper</a> to take advantage of RSpec. It may be worth considering whether to provide an interface to toggle behavior and RSpec helpers next time we write a gem.
+metadata to toggle behavior in specs.</p>
+
+<h3>Filtering Specs</h3>
+
+<p>One useful technique while developing is to run a selected set of specs. We may
+be editing acceptances specs, model validations, and other disparate tests while test driving a
+feature from <a href="http://everydayrails.com/2014/01/15/outside-in-example-ruby-tapas.html">outside to in</a>.</p>
+
+<h4>Manual tagging</h4>
+
+<p>Adding arbitrary metadata like <code>:focus</code> to set of specs is one way to approach
+this.</p>
+
+<pre><code># spec/models/user_spec.rb
+it &quot;validates a user&quot;, :focus do
+  # unit test
+end
+
+# spec/features/sign_up_spec.rb
+it &quot;displays error message&quot;, :focus do
+  # acceptance spec
+end
+</code></pre>
+
+<p>We can now filter our test run to a subset at the command line:</p>
+
+<pre><code class="bash">$ rspec --tag @focus
+</code></pre>
+
+<p>We can also add some global configuration so this will be the default behavior
+when using <code>:focus</code> specs, as long as we don&rsquo;t make the mistake of filtering on the build server unintentionally.</p>
+
+<pre><code class="rspec">RSpec.configure do |config|
+  # enable auto-focus only when running locally
+  config.filter_run_including focus: ENV[&#39;CI_SERVER_SETTING&#39;].blank?
+
+  config.run_all_when_everything_filtered = true
+end
+</code></pre>
+
+<p>Alternatively, avoid running broken or flaky specs when tagged accordingly:</p>
+
+<pre><code class="ruby">it &quot;test that fails intermittently&quot;, :flaky do
+  # probably a javascript test
+end
+</code></pre>
+
+<p>Using either a command line option</p>
+
+<pre><code class="ruby">$ rspec ~flaky
+</code></pre>
+
+<p>or a configuration option, we can filter out specs we wish to ignore.</p>
+
+<pre><code class="ruby">RSpec.configure do |c|
+  c.filter_run_excluding flaky: true
+end
+</code></pre>
+
+<h4>Auto Tagging</h4>
+
+<p>A less-known feature of RSpec 3 is an API for telling RSpec to derive additional metadata
+automatically based on <em>other</em> metadata.</p>
+
+<p>For example, each spec example has metadata that includes its file path. This,
+along with the <code>RSpec::Core::Configuration#define_derived_metadata</code> method,
+allows us to alter spec behavior based on the spec directories, for example.</p>
+
+<p><em>Why is this useful and how do we use it?</em> Glad you asked.</p>
+
+<p>Let&rsquo;s say we want to isolate model specs that require database truncation since
+they are more like functional specs than unit specs. We may set up our spec
+directory like so:</p>
+
+<pre><code>spec/
+  truncation/
+    example1_spec.rb
+    example2_spec.rb
+    ...
+  transaction/
+    example1_spec.rb
+    example2_spec.rb
+    ...
+</code></pre>
+
+<p>Instead of manually tagging each file with our <code>:truncation_mode</code> metadata we
+used earlier to toggle DatabaseCleaner&rsquo;s truncation strategy, we can configure
+all the specs in <code>spec/truncation</code> as follows:</p>
+
+<pre><code class="rspec"># spec/spec_helper.rb
+RSpec.configure do |config|
+  config.define_derived_metadata(file_path: %r{spec/truncation}) do |metadata|
+    metadata[:truncation_mode] = true
+  end
+
+  # rest of DatabaseCleaner config below
+end
+</code></pre>
+
+<p>Now, all specs in the directory will run with the <code>:truncation_mode</code> metadata
+and the database strategy will be set to <code>:truncation</code> as long as it is declared ahead of the additional DatabaseCleaner configuration we referenced earlier.</p>
+
+<p>Note, this is the <a href="https://github.com/rspec/rspec-rails/blob/a09a6231ceecefa177ec08b27c3066d5947e5899/lib/rspec/rails/configuration.rb#L85">same method</a> used in <code>rspec-rails</code> to add custom behavior to specs in the specific directories, e.g. <code>spec/controllers&#39;,</code>spec/requests, etc.</p>
+
+<h3>Using and Abusing</h3>
+
+<p>While using RSpec metadata can be a powerful technique for altering test
+behavior and application settings in specs, it can also be taken too f ar. As
+@avdgaag notes in <a href="http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html">his blog post on the topic</a>, make sure to distinguish between <em>how</em> spec is run from <em>what</em> the spec should test. We should probably not use metadata to create records specific to certain testests, or authenticate users for a given context.</p>
+
+<p>One rule of thumb for adding metadata is decide whether it would be generally useful
+to any Rails app (good) or it is specific to the business logic of your current
+application (bad). The latter is best set up more explicitly within or alongside
+your tests.</p>
+
+<p>While metadata can nicely separate the boilerplate required to
+setup and teardown test behavior, it also adds a layer of indirection that can
+cause readability issues when stretched too far.</p>
+
+<p>Use wisely!</p>
+
+
+    </article>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        Published on Dec 29, 2015
+      </p>
+      <a href="https://twitter.com/share"
+  class="twitter-share-button"{count}
+  data-via="rossta"
+  data-size="large">Tweet</a>
+
+      <a href="https://twitter.com/rossta"
+  class="twitter-follow-button"
+  data-show-count="false"
+  data-size="large"
+  >Follow @rossta</a>
+
+    </section>
+  </section>
+  <section class="share margin-bottom double">
+  </section>
+  <section class="signup-form standalone margin-bottom double">
+    <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Stop Wrangling with Rails</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+    </form>
+  </div>
+
+  <!--End mc_embed_signup-->
+</div>
+
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "using-rspec-metadata";
+    var disqus_title      = "";
+    var disqus_url        = "https://rossta.net/blog/using-rspec-metadata.html";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/pub/ross-kaffenberger/4/675/5b9">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/all.js?1450447615"></script>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  <script>
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+  </script>
+
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+}}();
+</script>
+
+<script>
+  $(function() {
+    if ($ && $.tracking) {
+      var traits = $.tracking.traits;
+      var events = $.tracking.events;
+
+      analytics.identify(traits);
+      Object.keys(events).forEach(function(name, i) {
+        analytics.track(name, events[name]);
+      });
+
+    } else {
+      analytics.identify();
+    }
+  });
+</script>
+
+  </body>
+</html>
