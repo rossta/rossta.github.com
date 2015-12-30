@@ -263,7 +263,7 @@ end
 
 &lt;p&gt;We can now filter our test run to a subset at the command line:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="bash"&gt;$ rspec --tag @focus
+&lt;pre&gt;&lt;code class="bash"&gt;$ rspec --tag focus
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We can also add some global configuration so this will be the default behavior
@@ -286,7 +286,7 @@ end
 
 &lt;p&gt;Using either a command line option&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="ruby"&gt;$ rspec ~flaky
+&lt;pre&gt;&lt;code class="ruby"&gt;$ rspec --tag ~flaky
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;or a configuration option, we can filter out specs we wish to ignore.&lt;/p&gt;
@@ -340,6 +340,11 @@ end
 and the database strategy will be set to &lt;code&gt;:truncation&lt;/code&gt; as long as it is declared ahead of the additional DatabaseCleaner configuration we referenced earlier.&lt;/p&gt;
 
 &lt;p&gt;Note, this is the &lt;a href="https://github.com/rspec/rspec-rails/blob/a09a6231ceecefa177ec08b27c3066d5947e5899/lib/rspec/rails/configuration.rb#L85"&gt;same method&lt;/a&gt; used in &lt;code&gt;rspec-rails&lt;/code&gt; to add custom behavior to specs in the specific directories, e.g. &lt;code&gt;spec/controllers&amp;#39;,&lt;/code&gt;spec/requests, etc.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;
+&lt;p&gt;The example above is borrowed from &lt;a href="http://stackoverflow.com/questions/29651981/before-and-after-hooks-for-a-spec-directory-in-rspec"&gt;an answer I recently gave on Stackoverflow&lt;/a&gt;.
+&lt;/p&gt;
+&lt;/aside&gt;
 
 &lt;h3&gt;Using and Abusing&lt;/h3&gt;
 
