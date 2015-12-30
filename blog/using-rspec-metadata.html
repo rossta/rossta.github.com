@@ -78,7 +78,7 @@ end
 
 <aside class="callout panel">
 <p>
-The examples in the post are based on rspec version <code>~> 3</code>.
+The examples in the post are based on RSpec version <code>~> 3</code>.
 </p>
 </aside>
 
@@ -191,11 +191,11 @@ end
 <h3>Changing Application Settings</h3>
 
 <p>Rails provides a number of settings that can be easily configured based on the
-environment, so we don&rsquo;t do undesired work in development or test environments,
+environment, so we avoid undesired work in development or test environments,
 such as sending emails. For any mature Rails application, we&rsquo;ll likely have
 our own custom settings layered on top of the Rails defaults.</p>
 
-<p>There are many cases where we&rsquo;ll still want to test the &ldquo;production&rdquo; settings in
+<p>There are many cases where we&rsquo;ll still want to test the production settings in
 our test environments.  For example, by default, controller caching is disabled in tests:</p>
 
 <pre><code class="ruby"># config/initializers/test.rb
@@ -211,7 +211,7 @@ the view layer, say that users can see new info when a model attribute changes. 
 
 <h4>First attempt</h4>
 
-<p>We could try to &ldquo;stub&rdquo; the setting in the context of a single spec run with the &ldquo;enabled&rdquo; state.</p>
+<p>We could try to stub the setting in the context of a single spec run with the enabled state.</p>
 
 <pre><code class="ruby"># spec/spec_helper.rb
 RSpec.configure do |config|
