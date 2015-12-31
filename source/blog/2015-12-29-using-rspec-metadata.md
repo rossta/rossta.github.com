@@ -357,7 +357,7 @@ Note, this is the [same method](https://github.com/rspec/rspec-rails/blob/a09a62
 While using RSpec metadata can be a powerful technique for altering test
 behavior and application settings in specs, it can also be taken too far.
 
-As @avdgaag notes in [his blog post on the topic](http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html), make sure to distinguish between *how* spec is run from *what* the spec should test. We should probably not use metadata to create records specific to certain testests, or authenticate users for a given context.
+As @avdgaag notes in [his blog post on the topic](http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html), make sure to distinguish between *how* spec is run from *what* the spec should test. We should probably not use metadata to create records specific to certain tests or authenticate users for a given context, for example.
 
 One rule of thumb for adding metadata is decide whether it would be generally useful to any Rails app (good) or it is specific to the business logic of your current application (bad). The latter is best set up more explicitly within or alongside your tests.
 
