@@ -351,7 +351,7 @@ and the database strategy will be set to &lt;code&gt;:truncation&lt;/code&gt; as
 &lt;p&gt;While using RSpec metadata can be a powerful technique for altering test
 behavior and application settings in specs, it can also be taken too far.&lt;/p&gt;
 
-&lt;p&gt;As @avdgaag notes in &lt;a href="http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html"&gt;his blog post on the topic&lt;/a&gt;, make sure to distinguish between &lt;em&gt;how&lt;/em&gt; spec is run from &lt;em&gt;what&lt;/em&gt; the spec should test. We should probably not use metadata to create records specific to certain testests, or authenticate users for a given context.&lt;/p&gt;
+&lt;p&gt;As @avdgaag notes in &lt;a href="http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html"&gt;his blog post on the topic&lt;/a&gt;, make sure to distinguish between &lt;em&gt;how&lt;/em&gt; spec is run from &lt;em&gt;what&lt;/em&gt; the spec should test. We should probably not use metadata to create records specific to certain tests or authenticate users for a given context, for example.&lt;/p&gt;
 
 &lt;p&gt;One rule of thumb for adding metadata is decide whether it would be generally useful to any Rails app (good) or it is specific to the business logic of your current application (bad). The latter is best set up more explicitly within or alongside your tests.&lt;/p&gt;
 
