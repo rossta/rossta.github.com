@@ -100,9 +100,6 @@ img {
   header {
     text-align: left;
     h1 { margin: 0; line-height:60px; font-size: 2.25em; }
-    @media #{$small} {
-      h1 { line-height:100px;}
-    }
     h1,h2,h3,h4,h5,h6 {
       color: $mainColor;
       @include header-font;
