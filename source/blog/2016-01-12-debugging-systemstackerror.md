@@ -3,8 +3,7 @@ title: Debugging SystemStackError
 author: Ross Kaffenberger
 published: true
 summary: Use Kernel tracing to inspect method Ruby method calls
-description: Prior to Ruby 2.2, debugging stack overflow errors can be painful
-because most of the backtrace is swallowed in the output. Learn a quick workaround with Kernel.set_trace_func.
+description: Prior to Ruby 2.2, debugging stack overflow errors can be painful because most of the backtrace is swallowed in the output. Learn a quick workaround with Kernel.set_trace_func.
 pull_image: 'https://rossta.net/assets/images/blog/stock/logs-pexels-photo.jpg'
 tags:
   - Code
