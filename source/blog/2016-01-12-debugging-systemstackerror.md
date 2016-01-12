@@ -4,9 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Use Kernel tracing to inspect method Ruby method calls
 description: Prior to Ruby 2.2, debugging stack overflow errors can be painful
-because most of the backtrace is swallowed in the output. Learn a quick
-workaround with Kernel.set_trace_func.
-pull_image: 'https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg'
+because most of the backtrace is swallowed in the output. Learn a quick workaround with Kernel.set_trace_func.
+pull_image: 'https://rossta.net/assets/images/blog/stock/logs-pexels-photo.jpg'
 tags:
   - Code
   - Ruby
@@ -190,7 +189,6 @@ repeating pattern of an identical list of method calls.
 
 In my case, the start of each pattern pointed to another line in my source where
 the stack originates:
-
 
 ```
 /Users/ross/dev/rossta/montrose/lib/montrose/stack.rb:38 Montrose::Stack#advance
