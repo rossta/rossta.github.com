@@ -5,10 +5,260 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2015-12-28T19:00:00-05:00</updated>
+  <updated>2016-01-11T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title/>
+    <link rel="alternate" href="/blog/debugging-systemstackerror.html"/>
+    <id>/blog/debugging-systemstackerror.html</id>
+    <published>2016-01-11T19:00:00-05:00</published>
+    <updated>2016-01-11T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;hr&gt;
+
+&lt;p&gt;title: Debugging SystemStackError
+author: Ross Kaffenberger
+published: true
+summary: Use Kernel tracing to inspect method Ruby method calls
+description: Prior to Ruby 2.2, debugging stack overflow errors can be painful
+because most of the backtrace...&lt;/p&gt;</summary>
+    <content type="html">&lt;hr&gt;
+
+&lt;p&gt;title: Debugging SystemStackError
+author: Ross Kaffenberger
+published: true
+summary: Use Kernel tracing to inspect method Ruby method calls
+description: Prior to Ruby 2.2, debugging stack overflow errors can be painful
+because most of the backtrace is swallowed in the output. Learn a quick
+workaround with Kernel.set_trace_func.
+pull_image: &amp;rsquo;&lt;a href="https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg"&gt;https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg&lt;/a&gt;&amp;rsquo;
+tags:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Code&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;  - Ruby&lt;/h2&gt;
+
+&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SystemStackError: stack level too deep
+    /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
+other words, the memory allocated to execute the program exceeded the memory
+available on the stack.&lt;/p&gt;
+
+&lt;p&gt;The most common cause of a stack overflow in application code that
+recursively calls itself without terminating arguments: an infinite loop in your
+code.&lt;/p&gt;
+
+&lt;p&gt;You can reproduce such an error with code like this in a terminal:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;$ pry --noprompt
+def foo
+  foo
+end
+=&amp;gt; :foo
+foo
+SystemStackError: stack level too deep
+from /Users/ross/.gem/ruby/2.1.6/gems/pry-0.10.3/lib/pry/pry_instance.rb:355
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note: for the examples in this post, assume I&amp;rsquo;m using Ruby 2.1 unless otherwise
+indicated.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;$ ruby -v
+ruby 2.1.6p336 (2015-04-13 revision 50298) [x86_64-darwin14.0]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Prior to Ruby 2.2 and &lt;a href="https://bugs.ruby-lang.org/issues/6216"&gt;this issue&lt;/a&gt;, the
+backtrace for &lt;code&gt;SystemStackError&lt;/code&gt; was reduced to one line. That meant, unless
+that one line lead you to an obvious culprit in your source code, it
+would be very difficult to unravel the method calls causing the stack to overflow.&lt;/p&gt;
+
+&lt;p&gt;So, first step in debugging the &lt;code&gt;SystemStackError&lt;/code&gt; is upgrade to Ruby 2.2!&lt;/p&gt;
+
+&lt;p&gt;In case that&amp;rsquo;s not possible, there&amp;rsquo;s still hope. Let&amp;rsquo;s try using information
+from the error first. Here&amp;rsquo;s the method containing &lt;a href="https://github.com/rossta/montrose/blob/e5b7a12f6832b4f971a52b27800cefe144ecd399/lib/montrose/options.rb#L204"&gt;the line in the backtrace&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# lib/montrose/options.rb:204
+
+def map_arg(arg, &amp;amp;block)
+  return nil unless arg
+
+  Array(arg).map(&amp;amp;block)    # line 204
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;No obvious culprit. This method doesn&amp;rsquo;t call itself and there are multiple callers
+of this method in this class.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s try rescuing from the error in a test and printing the execution stack
+using &lt;a href="http://ruby-doc.org/core-2.2.3/Kernel.html#method-i-caller"&gt;&lt;code&gt;Kernel.caller&lt;/code&gt;&lt;/a&gt;. I can isolate the application code that produces the stack overflow in a single test and rescue there.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;it &amp;quot;a test&amp;quot; do
+  # given
+
+  begin
+    # when
+  rescue SystemStackError
+    puts caller
+  end
+
+  # then
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here&amp;rsquo;s what I get:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;$ bin/m spec/rfc_spec.rb:426
+/Users/ross/dev/rossta/montrose/spec/rfc_spec.rb:434:in `block (2 levels) in &amp;lt;top (required)&amp;gt;&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:108:in `block (3 levels) in run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:205:in `capture_exceptions&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:105:in `block (2 levels) in run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:256:in `time_it&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:104:in `block in run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:334:in `on_signal&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:276:in `with_info_handler&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:103:in `run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:781:in `run_one_method&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:308:in `run_one_method&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:296:in `block (2 levels) in run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:295:in `each&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:295:in `block in run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:334:in `on_signal&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:321:in `with_info_handler&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:294:in `run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:155:in `block in __run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:155:in `map&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:155:in `__run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:129:in `run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/lib/m/runners/minitest_5.rb:9:in `run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/lib/m/executor.rb:26:in `execute&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/lib/m/runner.rb:17:in `run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/lib/m.rb:13:in `run&amp;#39;
+/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/bin/m:4:in `&amp;lt;top (required)&amp;gt;&amp;#39;
+bin/m:16:in `load&amp;#39;
+bin/m:16:in `&amp;lt;main&amp;gt;&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The backtrace points to lines in minitest. Since I&amp;rsquo;ve been running tests prior
+to this isssue successfully, it&amp;rsquo;s unlikely minitest is the source of the stack overflow error. So rescuing from &lt;code&gt;SytemStackError&lt;/code&gt; doesn&amp;rsquo;t help us either.&lt;/p&gt;
+
+&lt;p&gt;Luckily, we have &lt;a href="https://gist.github.com/jbgo/4493822"&gt;this gist&lt;/a&gt; from
+&lt;a href="https://github.com/jbgo"&gt;@jbgo&lt;/a&gt; who highlighted a special feature in Ruby for
+tracing function events: &lt;a href="http://ruby-doc.org/core-1.9.3/Kernel.html#method-i-set_trace_func"&gt;&lt;code&gt;Kernel.set_trace_func&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the example from the docs:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Test
+  def test
+    a = 1
+    b = 2
+  end
+end
+
+set_trace_func proc { |event, file, line, id, binding, classname|
+  printf &amp;quot;%8s %s:%-2d %10s %8s\n&amp;quot;, event, file, line, id, classname
+}
+t = Test.new
+t.test
+
+    line prog.rb:11               false
+  c-call prog.rb:11        new    Class
+  c-call prog.rb:11 initialize   Object
+c-return prog.rb:11 initialize   Object
+c-return prog.rb:11        new    Class
+    line prog.rb:12               false
+    call prog.rb:2        test     Test
+    line prog.rb:3        test     Test
+    line prog.rb:4        test     Test
+  return prog.rb:4        test     Test
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The method &lt;code&gt;set_trace_func&lt;/code&gt; sets a global proc to be invoked in response to
+runtime events including the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;c-call&lt;/code&gt; a C-language routine&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;c-return&lt;/code&gt; return from a C-language routine&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;call&lt;/code&gt; a Ruby method&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;class&lt;/code&gt; start a class or module definition&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;end&lt;/code&gt; finish a class or module definition&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;line&lt;/code&gt; execute code on a new line&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;raise&lt;/code&gt; raise an exception&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;return&lt;/code&gt; return from a Ruby method&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since we want to isolate the Ruby method causing the infinite loop in our stack,
+we&amp;rsquo;ll log the line info for &lt;code&gt;call&lt;/code&gt; events:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
+
+$trace_out = open(&amp;quot;trace.txt&amp;quot;)
+
+set_trace_func proc { |event, file, line, id, binding, classname|
+  if event == &amp;#39;call&amp;#39;
+    $trace_out.puts &amp;quot;#{file}:#{line} #{classname}##{id}&amp;quot;
+  end
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Re-running the test produces a &lt;code&gt;trace.txt&lt;/code&gt; file that records all the Ruby method
+calls encountered during execution. Inspecting this log, we hope to find a
+repeating pattern of an identical list of method calls.&lt;/p&gt;
+
+&lt;p&gt;In my case, the start of each pattern pointed to another line in my source where
+the stack originates:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/Users/ross/dev/rossta/montrose/lib/montrose/stack.rb:38 Montrose::Stack#advance
+/Users/ross/dev/rossta/montrose/lib/montrose/frequency/yearly.rb:4 Montrose::Frequency::Yearly#include?
+/Users/ross/dev/rossta/montrose/lib/montrose/frequency.rb:51 Montrose::Frequency#matches_interval?
+...
+/Users/ross/dev/rossta/montrose/lib/montrose/stack.rb:38 Montrose::Stack#advance
+/Users/ross/dev/rossta/montrose/lib/montrose/frequency/yearly.rb:4 Montrose::Frequency::Yearly#include?
+/Users/ross/dev/rossta/montrose/lib/montrose/frequency.rb:51 Montrose::Frequency#matches_interval?
+...
+/Users/ross/dev/rossta/montrose/lib/montrose/stack.rb:38 Montrose::Stack#advance
+/Users/ross/dev/rossta/montrose/lib/montrose/frequency/yearly.rb:4 Montrose::Frequency::Yearly#include?
+/Users/ross/dev/rossta/montrose/lib/montrose/frequency.rb:51 Montrose::Frequency#matches_interval?
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A useful trick is to keep the trace routine in a separate file that you can
+incorporate with an environment variable. You can also leverage &lt;code&gt;Kernel.caller&lt;/code&gt;
+here and only log when the stack exceeds an arbitrarily large size.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# spec/support/trace.rb
+
+if ENV[&amp;quot;TRACE&amp;quot;]
+  $stack_size = ENV[&amp;quot;TRACE&amp;quot;].to_i
+  $trace_out = open(&amp;quot;trace.txt&amp;quot;)
+
+  set_trace_func proc { |event, file, line, id, binding, classname|
+    if event == &amp;#39;call&amp;#39; &amp;amp;&amp;amp; caller.length &amp;gt; $stack_size
+      $trace_out.puts &amp;quot;#{file}:#{line} #{classname}##{id}&amp;quot;
+    end
+  }
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In my &lt;a href="https://github.com/rossta/montrose"&gt;Montrose&lt;/a&gt; gem, &lt;a href="https://github.com/rossta/montrose/blob/9600e0b63bde342011b3b9b1e29ab9f76f5f69c3/spec/support/trace.rb"&gt;this file&lt;/a&gt; gets loaded during every test run but the &lt;code&gt;set_trace_func&lt;/code&gt; hook will
+only be evaluated when the &lt;code&gt;TRACE&lt;/code&gt; environment variable is present:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ TRACE=500 bin/m spec/montrose/recurrence_spec.rb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Again, you&amp;rsquo;ll more info from stack traces when you encounter this error in Ruby
+2.2+ and above, but keep this in mind next time you get stuck &amp;ldquo;in the loop&amp;rdquo;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Using RSpec Metadata</title>
     <link rel="alternate" href="/blog/using-rspec-metadata.html"/>
@@ -1449,210 +1699,6 @@ end
 &lt;h3&gt;To Infinity and Beyond&lt;/h3&gt;
 
 &lt;p&gt;Of course, sequences of numbers aren&amp;rsquo;t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>What the Heck is a Ruby Enumerator?</title>
-    <link rel="alternate" href="/blog/what-is-enumerator.html"/>
-    <id>/blog/what-is-enumerator.html</id>
-    <published>2015-11-17T19:00:00-05:00</published>
-    <updated>2015-11-17T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Let’s pretend we know about Ruby’s &lt;a href="http://ruby-doc.org/core-2.2.3/Enumerable.html"&gt;Enumerable&lt;/a&gt; module - that it’s included in
-Ruby’s core collection classes like Array and Hash and provides a bunch of
-methods for traversal, searching and sorting, and that we can can introduce it
-to plain old ruby...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Let&amp;rsquo;s pretend we know about Ruby&amp;rsquo;s &lt;a href="http://ruby-doc.org/core-2.2.3/Enumerable.html"&gt;Enumerable&lt;/a&gt; module - that it&amp;rsquo;s included in
-Ruby&amp;rsquo;s core collection classes like Array and Hash and provides a bunch of
-methods for traversal, searching and sorting, and that we can can introduce it
-to plain old ruby classes through inclusion and implementing the &lt;code&gt;#each&lt;/code&gt; method.
-Check out this &lt;a href="http://ruby.bastardsbook.com/chapters/enumerables/"&gt;dated - yet reliable - Enumerable primer&lt;/a&gt; if you&amp;rsquo;d like a refresher.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="http://ruby-doc.org/core-2.2.0/Enumerator.html"&gt;Enumerator&lt;/a&gt; is like &lt;code&gt;Enumerable&amp;#39;s&lt;/code&gt; kid sister; while &lt;code&gt;Enumerable&lt;/code&gt; is getting all the attention, &lt;code&gt;Enumerator&lt;/code&gt;, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&amp;rsquo;s time you took notice, Ma.&lt;/p&gt;
-
-&lt;p&gt;So what exactly is &lt;code&gt;Enumerator&lt;/code&gt;?. For one, it&amp;rsquo;s a class. You can instantiate an
-instance of &lt;code&gt;Enumerator&lt;/code&gt; by calling certain &lt;code&gt;Enumerable&lt;/code&gt; instance methods, like &lt;code&gt;Array#each&lt;/code&gt;, without a block:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;[1, 2, 3].each
-=&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:each&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In fact, you can do this for many (but not all) of Array&amp;rsquo;s &lt;code&gt;Enumerable&lt;/code&gt; methods
-that expect a block:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;[1, 2, 3].map
-=&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:map&amp;gt;
-
-[1, 2, 3].select
-=&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:select&amp;gt;
-
-[1, 2, 3].reduce
-LocalJumpError: no block given
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Okay, big deal. What does this get us? Glad you asked.&lt;/p&gt;
-
-&lt;p&gt;Instances of Enumerator are enumerable:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].map
-e.each { |n| p n }
-1
-2
-3
-=&amp;gt; [nil, nil, nil]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;See what happened there? The expression printed out each digit, but returned &lt;code&gt;[nil, nil, nil]&lt;/code&gt; instead of of &lt;code&gt;[1, 2, 3]&lt;/code&gt;. The &lt;code&gt;Enumerator&lt;/code&gt; implemented &lt;code&gt;map&lt;/code&gt; in the context of &lt;code&gt;each&lt;/code&gt;; since &lt;code&gt;p n&lt;/code&gt; returns &lt;code&gt;nil&lt;/code&gt;, we got three entries of &lt;code&gt;nil&lt;/code&gt; in the return value. We chained the behavior of two enumerable methods.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s another example. It&amp;rsquo;s often useful to enumerate collection members along
-with the index. We can use &lt;code&gt;Enumerable#each_with_index&lt;/code&gt;, we don&amp;rsquo;t have
-&lt;code&gt;Enumerable#map_with_index&lt;/code&gt;. Javascript &lt;code&gt;forEach&lt;/code&gt; and &lt;code&gt;map&lt;/code&gt; gets this right, but not Ruby&amp;hellip; or does it?&lt;/p&gt;
-
-&lt;p&gt;Almost - we can chain enumerators together to get effectively the same result:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].map
-e.each_with_index { |n, i| n * i }
-=&amp;gt; [0, 2, 6]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The block receives each member of the original array along with its index
-for each iteration. This usage is common enough, that &lt;code&gt;Enumerator&lt;/code&gt; provides
-&lt;code&gt;with_index&lt;/code&gt; to give:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].map.with_index { |n, i| n * i }
-=&amp;gt; [0, 2, 6]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Reads pretty well, eh? What&amp;rsquo;s really interesting here is that enumerators package
-up knowledge of a collection and a method with which we want to enumerate.&lt;/p&gt;
-
-&lt;p&gt;We can combine several enumerators in different orders to get different
-behaviors. Here&amp;rsquo;s an nice example borrowed from &lt;a href="http://dgiim.github.io/blog/2015/08/24/ruby-enumerators/#the-enumerator-class"&gt;another recent post on the subject&lt;/a&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;letters = %w[a b c d e]
-
-group_1 = letters.reverse_each.group_by.each_with_index do |item, index|
-  index % 3
-end
-
-group_2 = letters.reverse_each.each_with_index.group_by do |item, index|
-  index % 3
-end
-
-p group_1
-=&amp;gt; {0=&amp;gt;[&amp;quot;e&amp;quot;, &amp;quot;b&amp;quot;], 1=&amp;gt;[&amp;quot;d&amp;quot;, &amp;quot;a&amp;quot;], 2=&amp;gt;[&amp;quot;c&amp;quot;]}
-
-p group_2
-=&amp;gt; {0=&amp;gt;[[&amp;quot;e&amp;quot;, 0], [&amp;quot;b&amp;quot;, 3]], 1=&amp;gt;[[&amp;quot;d&amp;quot;, 1], [&amp;quot;a&amp;quot;, 4]], 2=&amp;gt;[[&amp;quot;c&amp;quot;, 2]]}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;Enumerator&lt;/code&gt; provides some additional methods that allow for &amp;ldquo;external&amp;rdquo;
-enumeration as well. With an enumerator instance, we can call &lt;code&gt;next&lt;/code&gt; to get each
-successive member of the collection.&lt;/p&gt;
-
-&lt;p&gt;Consider &lt;code&gt;Enumerable#cycle&lt;/code&gt;. Calling &amp;ldquo;cycle&amp;rdquo; on an enumerable collection (without a limit arg) will enumerate over members of a collection ad nauseum. When implemented as an enumerator of css colors, we can use &lt;code&gt;cycle&lt;/code&gt; to create striped table rows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;Project = Struct.new(:name)
-
-colors = [&amp;#39;aliceblue&amp;#39;, &amp;#39;ghostwhite&amp;#39;].cycle
-projects = [Project.new(&amp;quot;TODO&amp;quot;),
-            Project.new(&amp;quot;Work&amp;quot;),
-            Project.new(&amp;quot;Home&amp;quot;)]
-
-require &amp;#39;erb&amp;#39;
-
-erb = (&amp;lt;&amp;lt;-ERB)
-&amp;lt;table&amp;gt;
-&amp;lt;% projects.each_with_index do |project, index| %&amp;gt;
- &amp;lt;tr style=&amp;quot;background: &amp;lt;%= colors.next %&amp;gt;&amp;quot;&amp;gt;
-   &amp;lt;td&amp;gt;&amp;lt;%= index + 1 %&amp;gt;&amp;lt;/td&amp;gt;
-   &amp;lt;td&amp;gt;&amp;lt;%= project.name %&amp;gt;&amp;lt;/td&amp;gt;
- &amp;lt;/tr&amp;gt;
-&amp;lt;% end %&amp;gt;
-&amp;lt;/table&amp;gt;
-ERB
-
-p ERB.new(erb).result(binding).gsub(/^$\n/, &amp;quot;&amp;quot;)
-
-=&amp;gt; &amp;#39;&amp;lt;table&amp;gt;
- &amp;lt;tr style=&amp;quot;background: aliceblue&amp;quot;&amp;gt;
-   &amp;lt;td&amp;gt;1&amp;lt;/td&amp;gt;
-   &amp;lt;td&amp;gt;TODO&amp;lt;/td&amp;gt;
- &amp;lt;/tr&amp;gt;
- &amp;lt;tr style=&amp;quot;background: ghostwhite&amp;quot;&amp;gt;
-   &amp;lt;td&amp;gt;2&amp;lt;/td&amp;gt;
-   &amp;lt;td&amp;gt;Work&amp;lt;/td&amp;gt;
- &amp;lt;/tr&amp;gt;
- &amp;lt;tr style=&amp;quot;background: aliceblue&amp;quot;&amp;gt;
-   &amp;lt;td&amp;gt;3&amp;lt;/td&amp;gt;
-   &amp;lt;td&amp;gt;Home&amp;lt;/td&amp;gt;
- &amp;lt;/tr&amp;gt;
-&amp;lt;/table&amp;gt;&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Brilliant! Notice how, in each enumeration of &lt;code&gt;project&lt;/code&gt;, we&amp;rsquo;re calling &lt;code&gt;colors.next&lt;/code&gt;. So external enumeration is one technique for enumerating more than one collection at a time.&lt;/p&gt;
-
-&lt;p&gt;Not all enumerators will enumerate forever. Using cycle with a limit will result
-in a &lt;code&gt;StopIteration&lt;/code&gt; error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;numbers = [1,2].cycle(1)
-=&amp;gt; #&amp;lt;Enumerator: [1, 2]:cycle(1)&amp;gt;
-
-numbers.next
-# =&amp;gt; 1
-
-numbers.next
-=&amp;gt; 2
-
-numbers.next
-StopIteration: iteration reached an end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;loop&lt;/code&gt; construct knows how to rescues from this error and treats it as a
-&lt;code&gt;break&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;numbers = [1,2].cycle(1)
-=&amp;gt; #&amp;lt;Enumerator: [1, 2]:cycle(1)&amp;gt;
-
-loop do
-  p numbers.next
-end
-
-puts &amp;quot;Tada!&amp;quot;
-
-1
-2
-=&amp;gt; nil
-
-Tada!
-=&amp;gt; nil
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can rewind enumerators or peek at their next values:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;e = [1, 2, 3].each
-
-e.next
-=&amp;gt; 1
-
-e.peek
-=&amp;gt; 2
-
-e.next
-=&amp;gt; 2
-
-e.rewind
-=&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:each&amp;gt;
-
-e.next
-=&amp;gt; 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So enumerators give us flexible and composable uses for enumerables. Combine them to extend behavior of existing enumerable methods. Use them for external enumeration with methods like &lt;code&gt;#next&lt;/code&gt; and &lt;code&gt;#peek&lt;/code&gt; for iterating over multiple arrays. In a future post, we&amp;rsquo;ll take a look at how to create our own enumerators outside the context of arrays and hashes and some good reasons for doing so.&lt;/p&gt;
-
-&lt;p&gt;In case you missed it, &lt;a href="blog/ruby-enumerable.html"&gt;check out my presentation in the previous post&lt;/a&gt; on the &lt;code&gt;Enumerable&lt;/code&gt; module for more examples on how to get the most out of this terrific Ruby module.&lt;/p&gt;
 </content>
   </entry>
 </feed>
