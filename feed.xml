@@ -10,7 +10,7 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title/>
+    <title>Debugging SystemStackError</title>
     <link rel="alternate" href="/blog/debugging-systemstackerror.html"/>
     <id>/blog/debugging-systemstackerror.html</id>
     <published>2016-01-11T19:00:00-05:00</published>
@@ -18,32 +18,15 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;hr&gt;
+    <summary type="html">&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
-&lt;p&gt;title: Debugging SystemStackError
-author: Ross Kaffenberger
-published: true
-summary: Use Kernel tracing to inspect method Ruby method calls
-description: Prior to Ruby 2.2, debugging stack overflow errors can be painful
-because most of the backtrace...&lt;/p&gt;</summary>
-    <content type="html">&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;SystemStackError: stack level too deep
+    /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;title: Debugging SystemStackError
-author: Ross Kaffenberger
-published: true
-summary: Use Kernel tracing to inspect method Ruby method calls
-description: Prior to Ruby 2.2, debugging stack overflow errors can be painful
-because most of the backtrace is swallowed in the output. Learn a quick workaround with Kernel.set_trace_func.
-pull_image: &amp;rsquo;&lt;a href="https://rossta.net/assets/images/blog/stock/logs-pexels-photo.jpg"&gt;https://rossta.net/assets/images/blog/stock/logs-pexels-photo.jpg&lt;/a&gt;&amp;rsquo;
-tags:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Code&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2&gt;  - Ruby&lt;/h2&gt;
-
-&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
+&lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
+other words, the...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;SystemStackError: stack level too deep
     /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
