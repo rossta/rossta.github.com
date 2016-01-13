@@ -12,7 +12,7 @@ tags:
 
 Arrgggh. Ever come across this in your Ruby app?
 
-```
+```bash
 SystemStackError: stack level too deep
     /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
 ```
@@ -41,7 +41,7 @@ from /Users/ross/.gem/ruby/2.1.6/gems/pry-0.10.3/lib/pry/pry_instance.rb:355
 Note: for the examples in this post, assume I'm using Ruby 2.1 unless otherwise
 indicated.
 
-```bash
+```json
 $ ruby -v
 ruby 2.1.6p336 (2015-04-13 revision 50298) [x86_64-darwin14.0]
 ```
@@ -230,5 +230,5 @@ only be evaluated when the `TRACE` environment variable is present:
 $ TRACE=500 bin/m spec/montrose/recurrence_spec.rb
 ```
 
-Again, you'll more info from stack traces when you encounter this error in Ruby
-2.2+ and above, but keep this in mind next time you get stuck "in the loop".
+Again, you won't need to resort to this workaround for `SystemStackError` in Ruby
+2.2+, but keep this in mind next time you get stuck "in the loop".
