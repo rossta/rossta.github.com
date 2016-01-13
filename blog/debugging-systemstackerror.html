@@ -57,7 +57,7 @@
 
       <p>Arrgggh. Ever come across this in your Ruby app?</p>
 
-<pre><code>SystemStackError: stack level too deep
+<pre><code class="bash">SystemStackError: stack level too deep
     /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
 </code></pre>
 
@@ -84,7 +84,7 @@ from /Users/ross/.gem/ruby/2.1.6/gems/pry-0.10.3/lib/pry/pry_instance.rb:355
 <p>Note: for the examples in this post, assume I&rsquo;m using Ruby 2.1 unless otherwise
 indicated.</p>
 
-<pre><code class="bash">$ ruby -v
+<pre><code class="json">$ ruby -v
 ruby 2.1.6p336 (2015-04-13 revision 50298) [x86_64-darwin14.0]
 </code></pre>
 
@@ -266,8 +266,8 @@ only be evaluated when the <code>TRACE</code> environment variable is present:</
 <pre><code>$ TRACE=500 bin/m spec/montrose/recurrence_spec.rb
 </code></pre>
 
-<p>Again, you&rsquo;ll more info from stack traces when you encounter this error in Ruby
-2.2+ and above, but keep this in mind next time you get stuck &ldquo;in the loop&rdquo;.</p>
+<p>Again, you won&rsquo;t need to resort to this workaround for <code>SystemStackError</code> in Ruby
+2.2+, but keep this in mind next time you get stuck &ldquo;in the loop&rdquo;.</p>
 
 
     </article>

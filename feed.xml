@@ -20,7 +20,7 @@
     </author>
     <summary type="html">&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;SystemStackError: stack level too deep
+&lt;pre&gt;&lt;code class="bash"&gt;SystemStackError: stack level too deep
     /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -28,7 +28,7 @@
 other words, the...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;SystemStackError: stack level too deep
+&lt;pre&gt;&lt;code class="bash"&gt;SystemStackError: stack level too deep
     /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -55,7 +55,7 @@ from /Users/ross/.gem/ruby/2.1.6/gems/pry-0.10.3/lib/pry/pry_instance.rb:355
 &lt;p&gt;Note: for the examples in this post, assume I&amp;rsquo;m using Ruby 2.1 unless otherwise
 indicated.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="bash"&gt;$ ruby -v
+&lt;pre&gt;&lt;code class="json"&gt;$ ruby -v
 ruby 2.1.6p336 (2015-04-13 revision 50298) [x86_64-darwin14.0]
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -237,8 +237,8 @@ only be evaluated when the &lt;code&gt;TRACE&lt;/code&gt; environment variable i
 &lt;pre&gt;&lt;code&gt;$ TRACE=500 bin/m spec/montrose/recurrence_spec.rb
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Again, you&amp;rsquo;ll more info from stack traces when you encounter this error in Ruby
-2.2+ and above, but keep this in mind next time you get stuck &amp;ldquo;in the loop&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Again, you won&amp;rsquo;t need to resort to this workaround for &lt;code&gt;SystemStackError&lt;/code&gt; in Ruby
+2.2+, but keep this in mind next time you get stuck &amp;ldquo;in the loop&amp;rdquo;.&lt;/p&gt;
 </content>
   </entry>
   <entry>
