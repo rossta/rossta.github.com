@@ -19,8 +19,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/all.css?1452638140" rel="stylesheet" />
-    <script src="/assets/javascripts/head.js?1445744814"></script>
+    <link href="/assets/stylesheets/all.css?1453324547" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1449692192"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
   <body id="application" class="typekit">
@@ -227,6 +227,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2016-01-18-whats-new-in-ruby-2-3-enumerable.html</loc>
+    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/index.html</loc>
     <lastmod>2016-01-20T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -246,24 +252,6 @@
   </url>
   <url>
     <loc>https://rossta.net/bower_components/highlightjs/README.html</loc>
-    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/marked/doc/broken.html</loc>
-    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/marked/doc/todo.html</loc>
-    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/marked/README.html</loc>
     <lastmod>2016-01-20T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -324,30 +312,6 @@
   </url>
   <url>
     <loc>https://rossta.net/bower_components/modernizr/test/js/basic.html</loc>
-    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/react-dom/examples/index.html</loc>
-    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/react-dom/README.html</loc>
-    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/sizzle/test/data/mixed_sort.html</loc>
-    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/bower_components/sizzle/test/index.html</loc>
     <lastmod>2016-01-20T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -431,6 +395,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/tags/enumerable.html</loc>
+    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/2016.html</loc>
     <lastmod>2016-01-20T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -438,6 +408,12 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/01.html</loc>
+    <lastmod>2016-01-20T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2016/01/18.html</loc>
     <lastmod>2016-01-20T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -814,7 +790,7 @@
         </section>
       </footer>
     </div>
-    <script src="/assets/javascripts/all.js?1450447615"></script>
+    <script src="/assets/javascripts/all.js?1452272488"></script>
         <script type="text/javascript">
       $(function() {
          $.zen(function(toBe) { $('#zen').find('.enlightenment').text(toBe); });

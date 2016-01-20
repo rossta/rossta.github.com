@@ -5,10 +5,197 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-01-11T19:00:00-05:00</updated>
+  <updated>2016-01-17T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>What's new in Ruby 2.3 Enumerable</title>
+    <link rel="alternate" href="/blog/whats-new-in-ruby-2-3-enumerable.html"/>
+    <id>/blog/whats-new-in-ruby-2-3-enumerable.html</id>
+    <published>2016-01-17T19:00:00-05:00</published>
+    <updated>2016-01-17T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt; and each are variations on enumerable methods we already had. We’ll dissect both here below.&lt;/p&gt;
+
+&lt;h4&gt;Triple Lindey&lt;/h4&gt;
+
+&lt;p&gt;Grep...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt; and each are variations on enumerable methods we already had. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
+
+&lt;h4&gt;Triple Lindey&lt;/h4&gt;
+
+&lt;p&gt;Grep allows you to select members of a collection that match an expression. That expression is &lt;code&gt;some_object === item&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;What does &amp;ldquo;triple equals&amp;rdquo; do? Well, in Ruby, as in most languages, that answer
+is complicated. Since we can define this method however we want in our own
+classes, it can mean anything. But, most commonly:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;if &lt;code&gt;a&lt;/code&gt; === &lt;code&gt;b&lt;/code&gt;, then &lt;code&gt;b&lt;/code&gt; is a subset of &lt;code&gt;a&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;How about a few examples.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;Symbol === :foo     # =&amp;gt; true, :foo is a symbol
+String === &amp;quot;foo&amp;quot;    # =&amp;gt; &amp;quot;foo&amp;quot;, is a string
+Symbol === &amp;quot;foo&amp;quot;    # =&amp;gt; &amp;quot;foo&amp;quot;, is not a symbol
+String === :foo     # =&amp;gt; :foo, is not a string
+
+/foo/ === &amp;quot;foobar&amp;quot;  # =&amp;gt; true, &amp;quot;foobar&amp;quot; matches /foo/
+(1..10) === 2       # =&amp;gt; true, 2 is in the range 1..10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We &lt;strong&gt;could&lt;/strong&gt; use &lt;code&gt;select&lt;/code&gt; to filter out items of a collection with the &lt;code&gt;===&lt;/code&gt; like
+so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;1.upto(20).select { |i| (6..10) === i } # =&amp;gt; [6, 7, 8, 9, 10]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But this is what &lt;code&gt;grep&lt;/code&gt; is for:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;1.upto(10).grep(6..8) # =&amp;gt; [6, 7, 8]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So &lt;code&gt;grep&lt;/code&gt; is like saying &amp;ldquo;gimme all the items in the given set&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;To get all the items &lt;em&gt;not&lt;/em&gt; included, use &lt;code&gt;grep_v&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;1.upto(10).grep_v(6..8)
+=&amp;gt; [1, 2, 3, 4, 5, 9, 10]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Define &lt;code&gt;===&lt;/code&gt; on any class or object to take advantage of filtering with &lt;code&gt;grep&lt;/code&gt; and &lt;code&gt;grep_v&lt;/code&gt; in other contexts.&lt;/p&gt;
+
+&lt;h4&gt;Chunking&lt;/h4&gt;
+
+&lt;p&gt;The &lt;code&gt;Enumerable&lt;/code&gt; module provides several methods for enumerating adjacent
+members of a collection, including &lt;code&gt;slice_when&lt;/code&gt;, &lt;code&gt;slice_before&lt;/code&gt;, &lt;code&gt;slice_after&lt;/code&gt;,
+&lt;code&gt;each_cons&lt;/code&gt;, and, not surprisingly, &lt;code&gt;chunk&lt;/code&gt;. Ruby 2.3 offers yet another
+chunking method, &lt;code&gt;chunk_while&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Before diving into &lt;code&gt;chunk_while&lt;/code&gt;, let&amp;rsquo;s look at its relatives, &lt;code&gt;chunk&lt;/code&gt; and &lt;code&gt;slice_when&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;For the following examples, we&amp;rsquo;ll enumerate over recurring events given by the
+&lt;code&gt;Montrose&lt;/code&gt; gem. Montrose provides an api for create recurrences which we can use
+as enumerators.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a recurrence that will enumerate over every other Tuesday at noon.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;montrose&amp;quot;
+
+r = Montrose.every(2.weeks, on: :tuesday, at: &amp;#39;12pm&amp;#39;)
+
+r.take(10).to_a
+=&amp;gt; [2016-02-02 12:00:00 -0500,
+ 2016-02-16 12:00:00 -0500,
+ 2016-03-01 12:00:00 -0500,
+ 2016-03-15 12:00:00 -0400,
+ 2016-03-29 12:00:00 -0400,
+ 2016-04-12 12:00:00 -0400,
+ 2016-04-26 12:00:00 -0400,
+ 2016-05-10 12:00:00 -0400,
+ 2016-05-24 12:00:00 -0400,
+ 2016-06-07 12:00:00 -0400]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For calendaring, it may be useful to split this array into chunks by month.&lt;/p&gt;
+
+&lt;p&gt;We could use &lt;code&gt;group_by&lt;/code&gt; to return a hash of month numbers to Tuesday time
+instances:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;r.take(10).group_by(&amp;amp;:month)
+=&amp;gt; {2=&amp;gt;[2016-02-02 12:00:00 -0500, 2016-02-16 12:00:00 -0500],
+ 3=&amp;gt;[2016-03-01 12:00:00 -0500, 2016-03-15 12:00:00 -0400, 2016-03-29 12:00:00 -0400],
+ 4=&amp;gt;[2016-04-12 12:00:00 -0400, 2016-04-26 12:00:00 -0400],
+ 5=&amp;gt;[2016-05-10 12:00:00 -0400, 2016-05-24 12:00:00 -0400],
+ 6=&amp;gt;[2016-06-07 12:00:00 -0400]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;chunk&lt;/code&gt; method is similar to &lt;code&gt;group_by&lt;/code&gt; as it will divide the collection
+into groups based on the given block/proc except it returns an enumerator
+instead of a hash:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;r.take(10).chunk(&amp;amp;:month)
+=&amp;gt; #&amp;lt;Enumerator: ...&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I recently &lt;a href="/blog/what-is-enumerator.html"&gt;described some great things you can do with enumerators in Ruby&lt;/a&gt; including transforming the result of chunk into an array of month, time pairs:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;r.take(10).chunk(&amp;amp;:month).to_a
+=&amp;gt; [[2, [2016-02-02 12:00:00 -0500, 2016-02-16 12:00:00 -0500]],
+ [3, [2016-03-01 12:00:00 -0500, 2016-03-15 12:00:00 -0400, 2016-03-29 12:00:00 -0400]],
+ [4, [2016-04-12 12:00:00 -0400, 2016-04-26 12:00:00 -0400]],
+ [5, [2016-05-10 12:00:00 -0400, 2016-05-24 12:00:00 -0400]],
+ [6, [2016-06-07 12:00:00 -0400]]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Interestingly enough, passing the previous result to &lt;code&gt;Hash[]&lt;/code&gt; returns the same
+result we got with &lt;code&gt;group_by&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;Hash[r.take(10).chunk(&amp;amp;:month).to_a]
+=&amp;gt; {2=&amp;gt;[2016-02-02 12:00:00 -0500, 2016-02-16 12:00:00 -0500],
+ 3=&amp;gt;[2016-03-01 12:00:00 -0500, 2016-03-15 12:00:00 -0400, 2016-03-29 12:00:00 -0400],
+ 4=&amp;gt;[2016-04-12 12:00:00 -0400, 2016-04-26 12:00:00 -0400],
+ 5=&amp;gt;[2016-05-10 12:00:00 -0400, 2016-05-24 12:00:00 -0400],
+ 6=&amp;gt;[2016-06-07 12:00:00 -0400]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If we just wanted the groups of times, not the month keys, we could ask for the
+&lt;code&gt;group_by&lt;/code&gt; values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;r.take(10).group_by(&amp;amp;:month).values
+=&amp;gt; [[2016-02-02 12:00:00 -0500, 2016-02-16 12:00:00 -0500],
+ [2016-03-01 12:00:00 -0500, 2016-03-15 12:00:00 -0400, 2016-03-29 12:00:00 -0400],
+ [2016-04-12 12:00:00 -0400, 2016-04-26 12:00:00 -0400],
+ [2016-05-10 12:00:00 -0400, 2016-05-24 12:00:00 -0400],
+ [2016-06-07 12:00:00 -0400]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can replace this computation with &lt;code&gt;slice_when&lt;/code&gt; which will allow us to compare
+adjacent members to determine &amp;ldquo;when&amp;rdquo; to start a new slice (or chunk). That means
+the block we pass to &lt;code&gt;slice_when&lt;/code&gt; accepts two arguments, the current and
+previous collection member, and should return true or false. In this
+case, we want a new slice to start when the month of the previous time does not
+match the month of the current time as we enumerate:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;r.take(10).slice_when { |a, b| a.month != b.month }.to_a
+=&amp;gt; [[2016-02-02 12:00:00 -0500, 2016-02-16 12:00:00 -0500],
+ [2016-03-01 12:00:00 -0500, 2016-03-15 12:00:00 -0400, 2016-03-29 12:00:00 -0400],
+ [2016-04-12 12:00:00 -0400, 2016-04-26 12:00:00 -0400],
+ [2016-05-10 12:00:00 -0400, 2016-05-24 12:00:00 -0400],
+ [2016-06-07 12:00:00 -0400]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note the return value of &lt;code&gt;slice_when&lt;/code&gt; is an enumerator like we saw with &lt;code&gt;chunk&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;It turns out, the most common use cases of &lt;code&gt;slice_when&lt;/code&gt; tend to be negative
+comparisons, i.e., &amp;ldquo;slice when the previous thing is not the same as the current
+thing&amp;rdquo;. Since this is Ruby after all, wouldn&amp;rsquo;t you prefer to stay positive?&lt;/p&gt;
+
+&lt;p&gt;Which brings us to &lt;code&gt;chunk_while&lt;/code&gt;. Ruby 2.3 introduces this positive complement to
+&lt;code&gt;slice_when&lt;/code&gt; so we can say, &amp;ldquo;keep the same chunk if the current thing &lt;em&gt;does&lt;/em&gt;
+match the previous thing&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Back to our Tuesday recurrences. Let&amp;rsquo;s replace &lt;code&gt;slice_when&lt;/code&gt; with &lt;code&gt;chunk_while&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;r.take(10).chunk_while { |a, b| a.month == b.month }.to_a
+=&amp;gt; [[2016-02-02 12:00:00 -0500, 2016-02-16 12:00:00 -0500],
+ [2016-03-01 12:00:00 -0500, 2016-03-15 12:00:00 -0400, 2016-03-29 12:00:00 -0400],
+ [2016-04-12 12:00:00 -0400, 2016-04-26 12:00:00 -0400],
+ [2016-05-10 12:00:00 -0400, 2016-05-24 12:00:00 -0400],
+ [2016-06-07 12:00:00 -0400]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So in short, &lt;code&gt;Enumerable&lt;/code&gt; in Ruby 2.3 gives us both a negative and a positive variation, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_when&lt;/code&gt; respectively, on existing methods.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Looking for a way to handle recurring events in your app? Be sure to check out &lt;a href="https://github.com/rossta/montrose"&gt;Montrose&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Debugging SystemStackError</title>
     <link rel="alternate" href="/blog/debugging-systemstackerror.html"/>
@@ -614,7 +801,7 @@ cards, and actions (like comments, copies, moves, etc...&lt;/p&gt;</summary>
 &lt;p&gt;Let&amp;rsquo;s say we&amp;rsquo;re using the &lt;a href="https://developers.trello.com/"&gt;Trello API&lt;/a&gt;. There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
 cards, and actions (like comments, copies, moves, etc).&lt;/p&gt;
 
-&lt;p&gt;If we&amp;rsquo;re querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of &amp;ldquo;cards&amp;rdquo; &lt;img src="/assets/images/icons/noun_63447.png?1450157944" class="icon-image inline" /&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450157944" class="icon-image inline" /&gt;&lt;/p&gt;
+&lt;p&gt;If we&amp;rsquo;re querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of &amp;ldquo;cards&amp;rdquo; &lt;img src="/assets/images/icons/noun_63447.png?1450134303" class="icon-image inline" /&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450134303" class="icon-image inline" /&gt;&lt;/p&gt;
 
 &lt;p&gt;In most cases, Trello will provide a default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that? In this post, we&amp;rsquo;ll examine a few ways to collect paginated results in Ruby.&lt;/p&gt;
 
@@ -1249,16 +1436,16 @@ queries for objects that already exist in memory.&lt;/p&gt;
     </author>
     <summary type="html">&lt;p&gt;Pascal’s Triangle is a fun sequence. Here’s what it looks like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1449692191"&gt;&lt;/p&gt;
 
 &lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;“triangular array of the binomial coefficients”&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Pascal&amp;rsquo;s Triangle is a fun sequence. Here&amp;rsquo;s what it looks like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1449692191" /&gt;&lt;/p&gt;
 
 &lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;&amp;ldquo;triangular array of the binomial coefficients&amp;rdquo;&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1448546389" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1449692191" /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can model this in Ruby as an array of arrays. The first array member is &lt;code&gt;[1]&lt;/code&gt;. Each successive array (or &amp;ldquo;row&amp;rdquo;) will increase in size, and each array member will be the sum of the member at the same index &lt;code&gt;n&lt;/code&gt; in the &lt;code&gt;k-1&lt;/code&gt; row, where &lt;code&gt;k&lt;/code&gt; is the current row, and the &lt;code&gt;n-1&lt;/code&gt; member in the &lt;code&gt;k-1&lt;/code&gt; row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:&lt;/p&gt;
 
@@ -1543,144 +1730,6 @@ chains can augment the enumerated values.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Enumerators allow us to provide an enumerable interface to generated data in much the same way we do for collections. Try test-driving an enumerable implementation of &lt;a href="https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/"&gt;other sequences&lt;/a&gt; on your own.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Infinite Sequences in Ruby</title>
-    <link rel="alternate" href="/blog/infinite-sequences-in-ruby.html"/>
-    <id>/blog/infinite-sequences-in-ruby.html</id>
-    <published>2015-11-20T19:00:00-05:00</published>
-    <updated>2015-11-20T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Functional languages like Clojure have &lt;a href="http://clojure.org/sequences"&gt;sequences&lt;/a&gt;. Sequences are pretty amazing: they let us treat algorithms as data structures. We can call functions on the data as it is produced, allowing us to interact with the results like a collection even when...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Functional languages like Clojure have &lt;a href="http://clojure.org/sequences"&gt;sequences&lt;/a&gt;. Sequences are pretty amazing: they let us treat algorithms as data structures. We can call functions on the data as it is produced, allowing us to interact with the results like a collection even when the sequence is infinite.&lt;/p&gt;
-
-&lt;p&gt;The Ruby standard library doesn’t have an official sequence class or module, but we can get pretty far with the &lt;code&gt;Enumerable&lt;/code&gt; module. Rubyists are typically introduced to &lt;code&gt;Enumerable&lt;/code&gt; through methods on &lt;code&gt;Array&lt;/code&gt;,  like &lt;code&gt;#map&lt;/code&gt; and &lt;code&gt;#select&lt;/code&gt;. Arrays like &lt;code&gt;[1,2,3,4]&lt;/code&gt; may be thought of as finite, eagerly loaded sequences; they already contains all the members we want to enumerate with methods. We can also extend this API to sequences like “give me multiples of 5” in Ruby.&lt;/p&gt;
-
-&lt;h3&gt;Enumerable Fibonacci&lt;/h3&gt;
-
-&lt;p&gt;Consider an infinite sequence like fibonacci. We could create a method that generates the first &lt;code&gt;n&lt;/code&gt; fibonacci members given &lt;code&gt;n&lt;/code&gt; as a paramter. This implementation could look like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def eager_fibonacci(n)
-  a = b = 1
-  result = []
-
-  loop do
-    break if result.size &amp;gt;= n
-
-    result &amp;lt;&amp;lt; a
-    a, b = b, a + b
-  end
-
-  result
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This works, but we can go one step further. Instead of returning an eagerly-loaded array, we can return an &lt;code&gt;Enumerator&lt;/code&gt;. We&amp;rsquo;ll yield each member to the &lt;code&gt;Enumerator&lt;/code&gt; as it is generated.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def fibonacci
-  Enumerator.new do |y|
-    a = b = 1
-
-    loop do
-      y &amp;lt;&amp;lt; a
-      a, b = b, a + b
-    end
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;What the heck is an &lt;code&gt;Enumerator&lt;/code&gt;? It’s an enumerable object that can be used for either internal or external enumeration of a collection - for more details, check out my &lt;a href="https://rossta.net/blog/what-is-enumerator.html"&gt;previous post&lt;/a&gt;. The &lt;code&gt;Enumerator&lt;/code&gt; initialize method take a block that acts like a template for an enumerable algorithm. The block takes a parameter, &lt;code&gt;y&lt;/code&gt;, which is an instance of an &lt;code&gt;Enumerator::Yielder&lt;/code&gt;, which let&amp;rsquo;s us yield each member of the &lt;code&gt;Enumerator&lt;/code&gt; to blocks passed to &lt;code&gt;Enumerable&lt;/code&gt; method calls. In short, this means we can treat an &lt;code&gt;Enumerator&lt;/code&gt; like an &lt;code&gt;Array&lt;/code&gt;, though we can also do so much more.&lt;/p&gt;
-
-&lt;p&gt;To retrieve the first ten members of our enumerable fibonacci method, we’d instead do something like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;fibonacci.take(10)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can still enumerate over the fibonacci sequence as before:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;fibonacci.take(10).each { |i| puts i }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Using the &lt;code&gt;Enumerator#lazy&lt;/code&gt; method, we can avoid eager enumeration and run queries or calculations as each member is generated. This opens the door to some interesting use cases, like the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;fibonacci.lazy.select(&amp;amp;:even?).first(10)
-#=&amp;gt; [2, 8, 34, 144, 610, 2584, 10946, 46368, 196418, 832040]
-
-fibonacci.lazy.select(&amp;amp;:odd?).first(10)
-#=&amp;gt; [1, 1, 3, 5, 13, 21, 55, 89, 233, 377]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can filter for the first 10 even or odd numbers generated by fibonacci. Inserting the &lt;code&gt;with_index&lt;/code&gt; enumerator method, we can see how many items we need to enumerate to get either the first 10 even or odd numbers:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;fibonacci.lazy.with_index.select { |n, i| n.odd? }.first(10)
-#=&amp;gt; [[1, 0], [1, 1], [3, 3], [5, 4], [13, 6], [21, 7], [55, 9], [89, 10], [233, 12], [377, 13]]
-
-fibonacci.lazy.with_index.select { |n, i| n.even? }.first(10)
-#=&amp;gt; [[2, 2], [8, 5], [34, 8], [144, 11], [610, 14], [2584, 17], [10946, 20], [46368, 23], [196418, 26], [832040, 29]]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Notice we only need to enumerate 13 items to retrieve 10 odd numbers from fibonacci, while 29 are needed to retrieve the first 10 evens. These results wouldn’t be easily achieved with our previous fibonacci implementation in which the number of desired members must be known ahead of time.&lt;/p&gt;
-
-&lt;p&gt;Try creating other numerical sequences with enumerators on your own, like multiples of &lt;code&gt;n&lt;/code&gt;, factorials for the first &lt;code&gt;n&lt;/code&gt; integers or enumerating sums of squares. Also be sure to check out Pat Shaughnessy&amp;rsquo;s &lt;a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy"&gt;great primer on lazy enumerators&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3&gt;Sequence Functions&lt;/h3&gt;
-
-&lt;p&gt;Clojure also has a number of useful functions that allow us to generate sequences from other functions. Let’s look at &lt;code&gt;repeatedly&lt;/code&gt; which simply calls the given function over and over, emitting the results as a sequence. To get a sequence of five random numbers between 0 - 100:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;(take 5 (repeatedly #(rand-int 100)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For those new to Clojure, the syntax may look odd, but this expression &amp;ldquo;takes the first 5 results of repeatedly asking for a random integer of 0 to 100&amp;rdquo; and returns a sequence.&lt;/p&gt;
-
-&lt;p&gt;We can use Ruby enumerators to do something similar in Ruby. Let’s create our own version of &lt;code&gt;repeatedly&lt;/code&gt;, which takes a will call a given block over and over again. Let&amp;rsquo;s start with a naive implementation which use a loop:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def repeatedly_foo(&amp;amp;block)
- loop do
-    block.call
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This method is not useful because the function will never return; it&amp;rsquo;s an infinite loop! You’ll have to issue a kill signal to stop the execution (Ctrl-C!). We could give &lt;code&gt;repeatedly_foo&lt;/code&gt; a limit &lt;code&gt;n&lt;/code&gt; and break out of the loop with a counter.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def repeatedly_foo(n, &amp;amp;block)
-  result = []
-
-  loop do
-    break if result.size &amp;gt;= n
-
-    result &amp;lt;&amp;lt; block.call
-  end
-
-  result
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This is an improvement, but like our fibonacci example earlier, it means we need to load the desired number eagerly in the &lt;code&gt;result&lt;/code&gt; array and have less control over the results.&lt;/p&gt;
-
-&lt;p&gt;Again, we&amp;rsquo;ll wrap the loop in an &lt;code&gt;Enumerator&lt;/code&gt; so we can treat the result as a sequence. We’ll “yield” the result of calling the block to the &lt;code&gt;Enumerator::Yielder&lt;/code&gt; object (the &lt;code&gt;y &amp;lt;&amp;lt; block.call&lt;/code&gt;) expression in our loop:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def repeatedly(&amp;amp;block)
-  Enumerator.new do |y|
-    loop do
-      y &amp;lt;&amp;lt; block.call # &amp;quot;yield&amp;quot; the result to the Enumerator::Yielder
-    end
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We now have an abstraction that can be chained to other enumerator methods. It also has a similar terse feel to the Clojure inspiration we saw earlier.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;repeatedly { rand(100) }.take(5)
-#=&amp;gt; [48, 48, 72, 41, 70] # your results will vary... they&amp;#39;re random!
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;To Infinity and Beyond&lt;/h3&gt;
-
-&lt;p&gt;Of course, sequences of numbers aren&amp;rsquo;t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.&lt;/p&gt;
 </content>
   </entry>
 </feed>
