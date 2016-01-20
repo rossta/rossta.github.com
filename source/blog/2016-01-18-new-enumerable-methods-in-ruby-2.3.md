@@ -64,7 +64,36 @@ Define `===` on any class or object to take advantage of filtering with `grep` a
 
 ### Enumerating in Chunks
 
-The `Enumerable` module provides a `chunk_while`
+The `Enumerable` module provides several methods for enumerating adjacent
+members of a collection, including `slice_when`, `slice_before`, `slice_after`,
+`each_cons`, and, not surprisingly, `chunk`. Ruby 2.3 offers yet another
+chunking method, `chunk_while`. Let's examine some uses of these chunking
+methods.
+
+For the following examples, we'll enumerate over recurring events given by the
+`Montrose` gem. Montrose provides an api for create recurrences which we can use
+as enumerators.
+
+Here's a recurrence that will enumerate over every other Tuesday
+starting today.
+
+```ruby
+require "montrose"
+
+r = Montrose.every(:day, on: :tuesday, interval: 2)
+
+r.take(4).to_a
+=> [2016-01-26 09:15:36 -0500,
+ 2016-02-09 09:15:36 -0500,
+ 2016-02-23 09:15:36 -0500,
+ 2016-03-08 09:15:36 -0500]
+```
+
+We'll use recurrences to illustrate some chunking.
+`slice_when` enumerates adjacent pairs and emits a chunk every time the block
+evaluates to true:
+
+make test-all TESTS=
 
 #### Chunk
 #### Group By
