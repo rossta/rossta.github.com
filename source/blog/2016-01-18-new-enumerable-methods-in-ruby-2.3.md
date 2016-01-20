@@ -62,7 +62,9 @@ To get all the items *not* included, use `grep_v`:
 
 Define `===` on any class or object to take advantage of filtering with `grep` and `grep_v` in other contexts.
 
-### Chunk While
+### Enumerating in Chunks
+
+The `Enumerable` module provides a `chunk_while`
 
 #### Chunk
 #### Group By
