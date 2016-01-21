@@ -19,8 +19,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/all.css?1453324547" rel="stylesheet" />
-    <script src="/assets/javascripts/head.js?1449692192"></script>
+    <link href="/assets/stylesheets/all.css?1452638140" rel="stylesheet" />
+    <script src="/assets/javascripts/head.js?1445744814"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
   <body id="application" class="typekit">
@@ -55,21 +55,19 @@
 </header>
 
 
-      <p>You may have heard <a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/">Ruby 2.3 dropped</a> on Christmas this past year. Two new <code>Enumerable</code> instance methods were added, <code>grep_v</code> and <code>chunk_while</code> and each are variations on enumerable methods we already had. We&rsquo;ll dissect both here below.</p>
+      <p>You may have heard <a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/">Ruby 2.3 dropped</a> on Christmas this past year. Two new <code>Enumerable</code> instance methods were added, <code>grep_v</code> and <code>chunk_while</code>, both of which are variations on other <code>Enumerable</code> methods. We&rsquo;ll dissect both here below.</p>
 
 <h4>Triple Lindey</h4>
 
 <p>Grep allows you to select members of a collection that match an expression. That expression is <code>some_object === item</code>.</p>
 
-<p>What does &ldquo;triple equals&rdquo; do? Well, in Ruby, as in most languages, that answer
-is complicated. Since we can define this method however we want in our own
-classes, it can mean anything. But, most commonly:</p>
+<p>What does &ldquo;triple equals&rdquo; do? Well, in Ruby, as in most languages, that answer is complicated. Since we can define this method however we want in our own classes, it can mean anything. But, most commonly, it is a loose way of asking whether an object belongs to a certain group:</p>
 
 <blockquote>
 <p>if <code>a</code> === <code>b</code>, then <code>b</code> is a subset of <code>a</code></p>
 </blockquote>
 
-<p>How about a few examples.</p>
+<p>A few examples:</p>
 
 <pre><code class="ruby">Symbol === :foo     # =&gt; true, :foo is a symbol
 String === &quot;foo&quot;    # =&gt; &quot;foo&quot;, is a string
@@ -80,8 +78,7 @@ String === :foo     # =&gt; :foo, is not a string
 (1..10) === 2       # =&gt; true, 2 is in the range 1..10
 </code></pre>
 
-<p>We <strong>could</strong> use <code>select</code> to filter out items of a collection with the <code>===</code> like
-so:</p>
+<p>We <em>could</em> use <code>select</code> to filter out items of a collection with the <code>===</code> like so:</p>
 
 <pre><code class="ruby">1.upto(20).select { |i| (6..10) === i } # =&gt; [6, 7, 8, 9, 10]
 </code></pre>
@@ -97,6 +94,13 @@ so:</p>
 
 <pre><code class="ruby">1.upto(10).grep_v(6..8)
 =&gt; [1, 2, 3, 4, 5, 9, 10]
+</code></pre>
+
+<p>It&rsquo;s probably most likely that you&rsquo;d use <code>grep</code> and <code>grep_v</code> with a regular expression, like
+to select all the months that end in &ldquo;er&rdquo;:</p>
+
+<pre><code class="ruby">MONTHS.grep(/er$/)
+=&gt; [&quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;]
 </code></pre>
 
 <p>Define <code>===</code> on any class or object to take advantage of filtering with <code>grep</code> and <code>grep_v</code> in other contexts.</p>
@@ -320,7 +324,7 @@ match the previous thing&rdquo;.</p>
         </section>
       </footer>
     </div>
-    <script src="/assets/javascripts/all.js?1452272488"></script>
+    <script src="/assets/javascripts/all.js?1450447615"></script>
     
     <script type="text/javascript">
 !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";

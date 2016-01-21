@@ -18,26 +18,24 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt; and each are variations on enumerable methods we already had. We’ll dissect both here below.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We’ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
-&lt;p&gt;Grep...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt; and each are variations on enumerable methods we already had. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
+&lt;p&gt;Grep allows...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
 &lt;p&gt;Grep allows you to select members of a collection that match an expression. That expression is &lt;code&gt;some_object === item&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;What does &amp;ldquo;triple equals&amp;rdquo; do? Well, in Ruby, as in most languages, that answer
-is complicated. Since we can define this method however we want in our own
-classes, it can mean anything. But, most commonly:&lt;/p&gt;
+&lt;p&gt;What does &amp;ldquo;triple equals&amp;rdquo; do? Well, in Ruby, as in most languages, that answer is complicated. Since we can define this method however we want in our own classes, it can mean anything. But, most commonly, it is a loose way of asking whether an object belongs to a certain group:&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;if &lt;code&gt;a&lt;/code&gt; === &lt;code&gt;b&lt;/code&gt;, then &lt;code&gt;b&lt;/code&gt; is a subset of &lt;code&gt;a&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;How about a few examples.&lt;/p&gt;
+&lt;p&gt;A few examples:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;Symbol === :foo     # =&amp;gt; true, :foo is a symbol
 String === &amp;quot;foo&amp;quot;    # =&amp;gt; &amp;quot;foo&amp;quot;, is a string
@@ -48,8 +46,7 @@ String === :foo     # =&amp;gt; :foo, is not a string
 (1..10) === 2       # =&amp;gt; true, 2 is in the range 1..10
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;We &lt;strong&gt;could&lt;/strong&gt; use &lt;code&gt;select&lt;/code&gt; to filter out items of a collection with the &lt;code&gt;===&lt;/code&gt; like
-so:&lt;/p&gt;
+&lt;p&gt;We &lt;em&gt;could&lt;/em&gt; use &lt;code&gt;select&lt;/code&gt; to filter out items of a collection with the &lt;code&gt;===&lt;/code&gt; like so:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;1.upto(20).select { |i| (6..10) === i } # =&amp;gt; [6, 7, 8, 9, 10]
 &lt;/code&gt;&lt;/pre&gt;
@@ -65,6 +62,13 @@ so:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;1.upto(10).grep_v(6..8)
 =&amp;gt; [1, 2, 3, 4, 5, 9, 10]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It&amp;rsquo;s probably most likely that you&amp;rsquo;d use &lt;code&gt;grep&lt;/code&gt; and &lt;code&gt;grep_v&lt;/code&gt; with a regular expression, like
+to select all the months that end in &amp;ldquo;er&amp;rdquo;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;MONTHS.grep(/er$/)
+=&amp;gt; [&amp;quot;September&amp;quot;, &amp;quot;October&amp;quot;, &amp;quot;November&amp;quot;, &amp;quot;December&amp;quot;]
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Define &lt;code&gt;===&lt;/code&gt; on any class or object to take advantage of filtering with &lt;code&gt;grep&lt;/code&gt; and &lt;code&gt;grep_v&lt;/code&gt; in other contexts.&lt;/p&gt;
@@ -801,7 +805,7 @@ cards, and actions (like comments, copies, moves, etc...&lt;/p&gt;</summary>
 &lt;p&gt;Let&amp;rsquo;s say we&amp;rsquo;re using the &lt;a href="https://developers.trello.com/"&gt;Trello API&lt;/a&gt;. There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
 cards, and actions (like comments, copies, moves, etc).&lt;/p&gt;
 
-&lt;p&gt;If we&amp;rsquo;re querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of &amp;ldquo;cards&amp;rdquo; &lt;img src="/assets/images/icons/noun_63447.png?1450134303" class="icon-image inline" /&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450134303" class="icon-image inline" /&gt;&lt;/p&gt;
+&lt;p&gt;If we&amp;rsquo;re querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of &amp;ldquo;cards&amp;rdquo; &lt;img src="/assets/images/icons/noun_63447.png?1450157944" class="icon-image inline" /&gt; &lt;img src="/assets/images/icons/noun_63453.png?1450157944" class="icon-image inline" /&gt;&lt;/p&gt;
 
 &lt;p&gt;In most cases, Trello will provide a default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that? In this post, we&amp;rsquo;ll examine a few ways to collect paginated results in Ruby.&lt;/p&gt;
 
@@ -1436,16 +1440,16 @@ queries for objects that already exist in memory.&lt;/p&gt;
     </author>
     <summary type="html">&lt;p&gt;Pascal’s Triangle is a fun sequence. Here’s what it looks like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1449692191"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389"&gt;&lt;/p&gt;
 
 &lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;“triangular array of the binomial coefficients”&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Pascal&amp;rsquo;s Triangle is a fun sequence. Here&amp;rsquo;s what it looks like:&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1449692191" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1448546389" /&gt;&lt;/p&gt;
 
 &lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;&amp;ldquo;triangular array of the binomial coefficients&amp;rdquo;&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.&lt;/p&gt;
 
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1449692191" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1448546389" /&gt;&lt;/p&gt;
 
 &lt;p&gt;We can model this in Ruby as an array of arrays. The first array member is &lt;code&gt;[1]&lt;/code&gt;. Each successive array (or &amp;ldquo;row&amp;rdquo;) will increase in size, and each array member will be the sum of the member at the same index &lt;code&gt;n&lt;/code&gt; in the &lt;code&gt;k-1&lt;/code&gt; row, where &lt;code&gt;k&lt;/code&gt; is the current row, and the &lt;code&gt;n-1&lt;/code&gt; member in the &lt;code&gt;k-1&lt;/code&gt; row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:&lt;/p&gt;
 
