@@ -12,19 +12,17 @@ tags:
   - Enumerable
 ---
 
-You may have heard [Ruby 2.3 dropped](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/) on Christmas this past year. Two new `Enumerable` instance methods were added, `grep_v` and `chunk_while` and each are variations on enumerable methods we already had. We'll dissect both here below.
+You may have heard [Ruby 2.3 dropped](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/) on Christmas this past year. Two new `Enumerable` instance methods were added, `grep_v` and `chunk_while`, both of which are variations on other `Enumerable` methods. We'll dissect both here below.
 
 #### Triple Lindey
 
 Grep allows you to select members of a collection that match an expression. That expression is `some_object === item`.
 
-What does "triple equals" do? Well, in Ruby, as in most languages, that answer
-is complicated. Since we can define this method however we want in our own
-classes, it can mean anything. But, most commonly:
+What does "triple equals" do? Well, in Ruby, as in most languages, that answer is complicated. Since we can define this method however we want in our own classes, it can mean anything. But, most commonly, it is a loose way of asking whether an object belongs to a certain group:
 
 > if `a` === `b`, then `b` is a subset of `a`
 
-How about a few examples.
+A few examples:
 
 ```ruby
 Symbol === :foo     # => true, :foo is a symbol
@@ -36,8 +34,7 @@ String === :foo     # => :foo, is not a string
 (1..10) === 2       # => true, 2 is in the range 1..10
 ```
 
-We **could** use `select` to filter out items of a collection with the `===` like
-so:
+We *could* use `select` to filter out items of a collection with the `===` like so:
 
 ```ruby
 1.upto(20).select { |i| (6..10) === i } # => [6, 7, 8, 9, 10]
@@ -56,6 +53,14 @@ To get all the items *not* included, use `grep_v`:
 ```ruby
 1.upto(10).grep_v(6..8)
 => [1, 2, 3, 4, 5, 9, 10]
+```
+
+It's probably most likely that you'd use `grep` and `grep_v` with a regular expression, like
+to select all the months that end in "er":
+
+```ruby
+MONTHS.grep(/er$/)
+=> ["September", "October", "November", "December"]
 ```
 
 Define `===` on any class or object to take advantage of filtering with `grep` and `grep_v` in other contexts.
