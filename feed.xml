@@ -193,7 +193,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
  [2016-06-07 12:00:00 -0400]]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;So in short, &lt;code&gt;Enumerable&lt;/code&gt; in Ruby 2.3 gives us both a negative and a positive variation, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_when&lt;/code&gt; respectively, on existing methods.&lt;/p&gt;
+&lt;p&gt;So in short, &lt;code&gt;Enumerable&lt;/code&gt; in Ruby 2.3 gives us both a negative and a positive variation, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt; respectively, on existing methods.&lt;/p&gt;
 
 &lt;hr&gt;
 
