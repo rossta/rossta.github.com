@@ -38,9 +38,9 @@
 &lt;p&gt;A few examples:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;Symbol === :foo     # =&amp;gt; true, :foo is a symbol
-String === &amp;quot;foo&amp;quot;    # =&amp;gt; &amp;quot;foo&amp;quot;, is a string
-Symbol === &amp;quot;foo&amp;quot;    # =&amp;gt; &amp;quot;foo&amp;quot;, is not a symbol
-String === :foo     # =&amp;gt; :foo, is not a string
+String === &amp;quot;foo&amp;quot;    # =&amp;gt; true, &amp;quot;foo&amp;quot; is a string
+Symbol === &amp;quot;foo&amp;quot;    # =&amp;gt; false, &amp;quot;foo&amp;quot; is not a symbol
+String === :foo     # =&amp;gt; false, :foo is not a string
 
 /foo/ === &amp;quot;foobar&amp;quot;  # =&amp;gt; true, &amp;quot;foobar&amp;quot; matches /foo/
 (1..10) === 2       # =&amp;gt; true, 2 is in the range 1..10

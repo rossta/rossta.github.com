@@ -70,9 +70,9 @@
 <p>A few examples:</p>
 
 <pre><code class="ruby">Symbol === :foo     # =&gt; true, :foo is a symbol
-String === &quot;foo&quot;    # =&gt; &quot;foo&quot;, is a string
-Symbol === &quot;foo&quot;    # =&gt; &quot;foo&quot;, is not a symbol
-String === :foo     # =&gt; :foo, is not a string
+String === &quot;foo&quot;    # =&gt; true, &quot;foo&quot; is a string
+Symbol === &quot;foo&quot;    # =&gt; false, &quot;foo&quot; is not a symbol
+String === :foo     # =&gt; false, :foo is not a string
 
 /foo/ === &quot;foobar&quot;  # =&gt; true, &quot;foobar&quot; matches /foo/
 (1..10) === 2       # =&gt; true, 2 is in the range 1..10
