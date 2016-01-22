@@ -193,7 +193,7 @@ r.take(10).chunk_while { |a, b| a.month == b.month }.to_a
  [2016-06-07 12:00:00 -0400]]
 ```
 
-So in short, `Enumerable` in Ruby 2.3 gives us both a negative and a positive variation, `grep_v` and `chunk_when` respectively, on existing methods.
+So in short, `Enumerable` in Ruby 2.3 gives us both a negative and a positive variation, `grep_v` and `chunk_while` respectively, on existing methods.
 
 ---
 
