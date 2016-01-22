@@ -26,9 +26,9 @@ A few examples:
 
 ```ruby
 Symbol === :foo     # => true, :foo is a symbol
-String === "foo"    # => "foo", is a string
-Symbol === "foo"    # => "foo", is not a symbol
-String === :foo     # => :foo, is not a string
+String === "foo"    # => true, "foo" is a string
+Symbol === "foo"    # => false, "foo" is not a symbol
+String === :foo     # => false, :foo is not a string
 
 /foo/ === "foobar"  # => true, "foobar" matches /foo/
 (1..10) === 2       # => true, 2 is in the range 1..10
