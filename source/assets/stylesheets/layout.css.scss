@@ -22,12 +22,6 @@ body {
     }
   }
 }
-code {
-  // background-color: rgba(0,0,0,0.04);
-  background-color: $lightGreyColor;
-  font-size: .8em;
-  padding: 0.2em 0.3em;
-}
 
 .clearfix {
   overflow: auto;
@@ -167,10 +161,18 @@ img {
     }
   }
 
+  code {
+    border: none;
+    // background-color: rgba(0,0,0,0.04);
+    background-color: $lightGreyColor;
+    font-size: .8em;
+    padding: 0.2em 0.3em;
+  }
+
   pre {
     code {
       overflow:auto;
-      margin-bottom:1.25em;
+      margin-bottom: $paragraph-margin-bottom;
       font-weight:normal;
       line-height:1.45em;
       font-size:1em;
@@ -188,7 +190,7 @@ img {
 
 @mixin hero($side) {
   background-color: $lightGreyColor;
-  padding-top: 1em;
+  padding-top: 1.75em;
   padding-left: $side;
   padding-right: $side;
   padding-bottom: 1em;
@@ -203,10 +205,6 @@ img {
 
   header {
     margin-bottom: 0em;
-  }
-
-  .signup-form {
-    padding-top: 0.5em;
   }
 }
 
@@ -227,7 +225,7 @@ form {
 }
 
 .signup-form {
-  margin: 1.5em 0;
+  margin: 0.75em 0;
 
   &.standalone {
     @include hero(2.5em);

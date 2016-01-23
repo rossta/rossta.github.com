@@ -25,6 +25,7 @@ ul.index {
     margin-top: 1rem;
   }
 }
+
 article {
   @include base-font;
   header {
@@ -37,6 +38,8 @@ article {
   }
   p {
     color: $mainColor;
+    letter-spacing: 0.15px;
+    line-height: 1.75;
   }
   p:last-child {
     margin-bottom: 0;

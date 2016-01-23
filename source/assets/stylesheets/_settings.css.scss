@@ -153,9 +153,9 @@ $small-font-color: scale-color($header-font-color, $lightness: 55%);
 // $paragraph-font-family: inherit;
 // $paragraph-font-weight: normal;
 // $paragraph-font-size: 1rem;
-$paragraph-font-size: 1.3rem;
-// $paragraph-line-height: 1.6;
-$paragraph-margin-bottom: rem-calc(25);
+$paragraph-font-size: 1.38rem;
+$paragraph-line-height: 1.75;
+$paragraph-margin-bottom: rem-calc(34);
 // $paragraph-aside-font-size: rem-calc(14);
 // $paragraph-aside-line-height: 1.35;
 // $paragraph-aside-font-style: italic;
@@ -1205,12 +1205,15 @@ $topbar-link-font-family: $header-font-family;
 // $include-legacy-visibility-classes: true;
 
 $row-width: 54em;
+$column-gutter: rem-calc(75);
 $signatureFont: $body-font-family;
 $primaryColor: #0B5FA5;
 $mainColor: rgba(0,0,0,0.8);
 $secondaryColor: #41921E !default;
 $greyColor: #777 !default;
-$paragraph-line-height: 1.7;
+$paragraph-font-size: 1.38rem;
+$paragraph-line-height: 1.75;
+$paragraph-margin-bottom: rem-calc(34);
 $lightGreyColor: #f8f8ff;
 $borderColor: #ccc;
 $subtleColor: #777;
@@ -1318,4 +1321,3 @@ $input-font-color: rgba(0,0,0,0.98);
     color: $secondaryColor;
   }
 }
-
