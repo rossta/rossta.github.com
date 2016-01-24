@@ -36,6 +36,11 @@ article {
     margin-top: 3rem;
     margin-bottom: 1.111rem;
   }
+  &.index-post {
+    h3,h4,h5 {
+      margin-top: 1.111rem;
+    }
+  }
   p {
     color: $mainColor;
     letter-spacing: 0.15px;
