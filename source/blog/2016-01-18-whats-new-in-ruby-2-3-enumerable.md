@@ -75,8 +75,7 @@ chunking method, `chunk_while`.
 Before diving into `chunk_while`, let's look at its relatives, `chunk` and `slice_when`.
 
 For the following examples, we'll enumerate over recurring events given by the
-`Montrose` gem. Montrose provides an api for create recurrences which we can use
-as enumerators.
+`Montrose` gem. Montrose provides an api to create recurrences as enumerators.
 
 Here's a recurrence that will enumerate over every other Tuesday at noon.
 
