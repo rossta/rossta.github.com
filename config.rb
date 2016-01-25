@@ -50,12 +50,13 @@ set :images_dir, 'assets/images'
 configure :build do
   activate :minify_css
   activate :minify_javascript
-
-  # Enable cache buster
-  activate :cache_buster
+  activate :asset_hash
+  activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 
   # Use relative URLs
   # activate :relative_assets
+
+  # activate :directory_indexes
 
   # Compress PNGs after build
   # First: gem install middleman-smusher
