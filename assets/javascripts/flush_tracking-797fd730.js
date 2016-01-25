@@ -1,0 +1,1 @@
+if($&&$.tracking){var traits=$.tracking.traits,events=$.tracking.events;analytics.identify(traits),Object.keys(events).forEach(function(t,a){analytics.track(t,events[t])})}else analytics.identify();
