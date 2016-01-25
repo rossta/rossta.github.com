@@ -1,1 +1,0 @@
-define(["./arr"],function(n){return n.indexOf});
