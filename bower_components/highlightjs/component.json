@@ -2,11 +2,11 @@
   "name": "highlightjs",
   "repo": "components/highlightjs",
   "version": "8.9.1",
-  "main": "highlight.pack.min.js",
+  "main": "highlight.pack.min-e11f4a8c.js",
   "scripts": [
-    "highlight.pack.min.js"
+    "highlight.pack.min-e11f4a8c.js"
   ],
   "files": [
-    "styles/default.css"
+    "styles/default-5d8917e6.css"
   ]
 }

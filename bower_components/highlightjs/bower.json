@@ -2,8 +2,8 @@
   "name": "highlightjs",
   "version": "8.9.1",
   "main": [
-    "highlight.pack.js",
-    "styles/default.css"
+    "highlight.pack-4c474283.js",
+    "styles/default-5d8917e6.css"
   ],
   "ignore": [
     "**/.*",

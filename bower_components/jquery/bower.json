@@ -1,7 +1,7 @@
 {
   "name": "jquery",
   "version": "2.1.4",
-  "main": "dist/jquery.js",
+  "main": "dist/jquery-70842d46.js",
   "license": "MIT",
   "ignore": [
     "**/.*",

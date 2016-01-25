@@ -11,7 +11,7 @@
   "bugs": { "url": "https://github.com/EtienneLem/react-dom/issues" },
   "license": "MIT",
   "keywords": ["react", "dom"],
-  "main": "react-dom.js",
+  "main": "react-dom-4a3fc678.js",
   "devDependencies": {
     "jasmine-node": "2.0.0-beta4",
     "react": "0.10.0",

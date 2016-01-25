@@ -1,6 +1,6 @@
 {
   "name": "fastclick",
-  "main": "lib/fastclick.js",
+  "main": "lib/fastclick-47ea2e9a.js",
   "ignore": [
     "**/.*",
     "component.json",

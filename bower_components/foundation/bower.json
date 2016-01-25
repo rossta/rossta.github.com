@@ -2,7 +2,7 @@
   "name": "foundation",
   "main": [
     "scss/foundation.scss",
-    "js/foundation.js"
+    "js/foundation-fb145025.js"
   ],
   "ignore": [
   ],

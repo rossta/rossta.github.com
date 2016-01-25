@@ -1,7 +1,7 @@
 {
   "name": "foundation-sites",
   "version": "5.5.3",
-  "main": "js/foundation/foundation.js",
+  "main": "js/foundation/foundation-33077293.js",
   "scripts": {
     "start": "grunt"
   },

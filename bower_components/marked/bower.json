@@ -11,7 +11,7 @@
     "markup",
     "html"
   ],
-  "main": "lib/marked.js",
+  "main": "lib/marked-c50a87f7.js",
   "license": "MIT",
   "ignore": [
     "**/.*",
