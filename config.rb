@@ -1,3 +1,5 @@
+require "uglifier"
+
 activate :livereload
 activate :directory_indexes
 activate :meta_tags
@@ -191,5 +193,11 @@ helpers do
 
   def nozen!
     @nozen = true
+  end
+
+  ##
+  # Renders a javascript asset inline.
+  def inline_javascript(name)
+    Uglifier.new.compile(sprockets["#{name}.js"].to_s)
   end
 end
