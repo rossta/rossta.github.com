@@ -1,5 +1,5 @@
 ---
-title: How to write a simple web crawler in Ruby revisted
+title: How to Write a Simple Web Crawler in Ruby - Revisited
 author: Ross Kaffenberger
 published: false
 summary: Using Ruby's Enumerable to enumerate website page data
