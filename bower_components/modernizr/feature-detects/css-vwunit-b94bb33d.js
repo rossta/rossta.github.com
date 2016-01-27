@@ -1,1 +1,0 @@
-Modernizr.addTest("cssvwunit",function(){var t;return Modernizr.testStyles("#modernizr { width: 50vw; }",function(e,n){var r=parseInt(window.innerWidth/2,10),d=parseInt((window.getComputedStyle?getComputedStyle(e,null):e.currentStyle).width,10);t=d==r}),t});

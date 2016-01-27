@@ -1,1 +1,0 @@
-Modernizr.addTest("object-fit",!!Modernizr.prefixed("objectFit"));

@@ -1,1 +1,0 @@
-Modernizr.addTest("filereader",function(){return!!(window.File&&window.FileList&&window.FileReader)});

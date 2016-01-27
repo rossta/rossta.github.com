@@ -1,1 +1,0 @@
-Modernizr.addTest("dart",!!Modernizr.prefixed("startDart",navigator));

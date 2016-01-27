@@ -1,1 +1,0 @@
-Modernizr.addTest("scriptdefer","defer"in document.createElement("script"));

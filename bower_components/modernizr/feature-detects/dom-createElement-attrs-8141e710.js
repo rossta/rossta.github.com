@@ -1,1 +1,0 @@
-Modernizr.addTest("createelement-attrs",function(){try{return"test"==document.createElement("<input name='test' />").getAttribute("name")}catch(t){return!1}});

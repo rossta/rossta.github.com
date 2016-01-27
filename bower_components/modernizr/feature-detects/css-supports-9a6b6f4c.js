@@ -1,1 +1,0 @@
-Modernizr.addTest("supports","CSSSupportsRule"in window);

@@ -1,1 +1,0 @@
-Modernizr.addTest("battery",!!Modernizr.prefixed("battery",navigator));

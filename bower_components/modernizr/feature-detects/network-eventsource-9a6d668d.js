@@ -1,1 +1,0 @@
-Modernizr.addTest("eventsource",!!window.EventSource);

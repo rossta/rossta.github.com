@@ -1,1 +1,0 @@
-Modernizr.addTest("gamepads",!!Modernizr.prefixed("getGamepads",navigator));

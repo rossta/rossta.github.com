@@ -1,1 +1,0 @@
-Modernizr.addTest("performance",!!Modernizr.prefixed("performance",window));

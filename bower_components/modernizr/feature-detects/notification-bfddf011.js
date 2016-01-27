@@ -1,1 +1,0 @@
-Modernizr.addTest("notification","Notification"in window&&"permission"in window.Notification&&"requestPermission"in window.Notification);
