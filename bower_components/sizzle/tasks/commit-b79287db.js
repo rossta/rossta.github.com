@@ -1,0 +1,1 @@
+"use strict";var exec=require("child_process").exec;module.exports=function(e){e.registerTask("commit","Add and commit changes",function(e){exec("git add dist && git commit -m "+e,this.async())})};

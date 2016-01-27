@@ -701,6 +701,30 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/bower_components/sizzle/test/index.html</loc>
+    <lastmod>2016-01-26T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/bower_components/sizzle/test/data/mixed_sort.html</loc>
+    <lastmod>2016-01-26T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/bower_components/react-dom/README.html</loc>
+    <lastmod>2016-01-26T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/bower_components/react-dom/examples/index.html</loc>
+    <lastmod>2016-01-26T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/bower_components/modernizr/test/js/basic.html</loc>
     <lastmod>2016-01-26T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -719,7 +743,25 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/bower_components/marked/doc/broken.html</loc>
+    <lastmod>2016-01-26T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/bower_components/marked/doc/todo.html</loc>
+    <lastmod>2016-01-26T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/bower_components/modernizr/test/caniuse_files/pushstate.html</loc>
+    <lastmod>2016-01-26T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/bower_components/marked/README.html</loc>
     <lastmod>2016-01-26T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
