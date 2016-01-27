@@ -13,5 +13,5 @@
 # Ignore Sass' cache
 /.sass-cache
 
-/source/bower_components
+/bower_components
 source/blog/.Ulysses-Group.plist
