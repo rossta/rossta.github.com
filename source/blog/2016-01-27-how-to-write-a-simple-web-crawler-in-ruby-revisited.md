@@ -245,9 +245,10 @@ define a root url and initial handler method, for which defaults are provided, a
 class ProgrammableWeb
   attr_reader :root, :handler
 
-  def initialize(root: "https://www.programmableweb.com/apis/directory", handler: :process_index)
+  def initialize(root: "https://www.programmableweb.com/apis/directory", handler: :process_index, **options)
     @root = root
     @handler = handler
+    @options = options
   end
 
   def results(&block)
@@ -257,7 +258,7 @@ class ProgrammableWeb
   private
 
   def spider
-    @spider ||= Spider.new(self)
+    @spider ||= Spider.new(self, @options)
   end
 end
 ```
