@@ -5,10 +5,339 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-01-17T19:00:00-05:00</updated>
+  <updated>2016-01-26T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>How to write a simple web crawler in Ruby - revisited</title>
+    <link rel="alternate" href="/blog/how-to-write-a-simple-web-crawler-in-ruby-revisited.html"/>
+    <id>/blog/how-to-write-a-simple-web-crawler-in-ruby-revisited.html</id>
+    <published>2016-01-26T19:00:00-05:00</published>
+    <updated>2016-01-26T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-f77303e5.jpg"&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s build a simple web crawler in Ruby. As a point of inspiration, I’d like to
+to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin’s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
+
+&lt;p&gt;We’ll adapt Skork’s original...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-f77303e5.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s build a simple web crawler in Ruby. As a point of inspiration, I&amp;rsquo;d like to
+to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin&amp;rsquo;s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll adapt Skork&amp;rsquo;s original goals and provide a few of our own:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;must be able to crawl just a single domain&lt;/li&gt;
+&lt;li&gt;must be able to limit number of pages to crawl&lt;/li&gt;
+&lt;li&gt;the results should be represented as structured data so we don&amp;rsquo;t have an incomprehensible soup of content&lt;/li&gt;
+&lt;li&gt;the results should be enumerable so we can have flexibility in how they&amp;rsquo;re handled&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;aside class="callout panel"&gt;
+&lt;p&gt;
+  Caveats! Please keep in mind that there are, of course, &lt;a href="http://webscraper.io/"&gt;many&lt;/a&gt; &lt;a href="http://scrapy.org/"&gt;resources&lt;/a&gt; for
+  using resilient, well-tested &lt;a href="https://www.import.io/"&gt;crawlers&lt;/a&gt; in a variety of languages. We have mere academic intentions
+  here so we choose to ignore many important concerns, such as client-side rendering, parallelism, and handling failure, as a matter of convenience.
+&lt;/p&gt;
+&lt;/aside&gt;
+
+&lt;h3&gt;Breaking it down&lt;/h3&gt;
+
+&lt;p&gt;For this exercise, we&amp;rsquo;re going to crawl &lt;a href="http://www.programmableweb.com/"&gt;Programmable Web&lt;/a&gt; to extract data from their &lt;a href="http://www.programmableweb.com/apis/directory"&gt;API directory&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Rather than take the naive approach of grabbing all content from any page, we&amp;rsquo;re going to build a webcrawler that emits
+structured data. Traversing from the first page of the api directory, our
+crawler will visit web pages like a nodes of a tree, collecting data and
+additional urls along the way.&lt;/p&gt;
+
+&lt;p&gt;Imagine that the results of our web crawl as a nested collection of
+hashes with meaningful key-value pairs.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# results
+[
+  {
+    name: &amp;quot;Google Maps&amp;quot;,
+    api_provider: &amp;quot;https://google.com&amp;quot;
+    api_homepage: &amp;quot;https://developers.google.com/maps/&amp;quot;
+    categories: [&amp;quot;Mapping&amp;quot;, &amp;quot;Viewer&amp;quot;],
+    provider_formats: [&amp;quot;JSON&amp;quot;, &amp;quot;KML&amp;quot;, &amp;quot;XML&amp;quot;]
+    ...
+  },
+  {
+    name: &amp;quot;Twitter&amp;quot;,
+    api_provider: &amp;quot;https://twitter.com&amp;quot;
+    api_homepage: &amp;quot;https://dev.twitter.com/rest/public&amp;quot;
+    categories: [&amp;quot;Social&amp;quot;, &amp;quot;Blogging&amp;quot;],
+    provider_formats: [&amp;quot;Atom&amp;quot;, &amp;quot;JSON&amp;quot;, &amp;quot;REST&amp;quot;, &amp;quot;RSS&amp;quot;, &amp;quot;XML&amp;quot;]
+    ...
+  },
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;aside class="callout panel"&gt;
+&lt;p&gt;
+  When using a web crawler, be aware of the limitations described in the website&amp;rsquo;s &lt;a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard"&gt;robots.txt&lt;/a&gt; file. We&amp;rsquo;re skipping automated parsing and detection of &lt;a href="http://www.programmableweb.com/robots.txt"&gt;Programmable Web&amp;rsquo;s robots.txt&lt;/a&gt; in this post. We skip the opportunity to use robots.txt to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
+&lt;/p&gt;
+&lt;/aside&gt;
+
+&lt;h3&gt;Designing the surface&lt;/h3&gt;
+
+&lt;p&gt;If you&amp;rsquo;ve been following my posts lately, you know that &lt;a href="https://rossta.net/blog/ruby-enumerable.html"&gt;I love Enumerable&lt;/a&gt; and you may not be surprised that I&amp;rsquo;d like to model our structured, website data with an &lt;a href="/blog/what-is-enumerator.html"&gt;Enumerator&lt;/a&gt;. This will provide a familiar, flexible interface that can be adapted for logging, storage, transformation, and a wide range of use cases.&lt;/p&gt;
+
+&lt;p&gt;I want to simply ask a &lt;code&gt;spider&lt;/code&gt; object for its results and get back an enumerator:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;spider.results
+=&amp;gt; #&amp;lt;Enumerator: ...&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ll be able to do some interesting things, like stream the
+results lazily into a flexible storage engine, like &lt;a href="https://www.mongodb.org/"&gt;mongodb&lt;/a&gt; or &lt;code&gt;PStore&lt;/code&gt;,
+available from the &lt;a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/pstore/rdoc/PStore.html"&gt;Ruby standard library&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;pstore&amp;quot;
+store  = PStore.new(&amp;quot;api_directory.pstore&amp;quot;)
+
+# create `spider`, then ...
+
+spider.results.lazy.take(50).each_with_index do |result, i|
+  store.transaction do
+    store[result[:name]] = result
+    store.commit
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;Writing the crawler&lt;/h3&gt;
+
+&lt;p&gt;We&amp;rsquo;re going to write a &lt;code&gt;Spider&lt;/code&gt; class with a single public method, &lt;code&gt;#results&lt;/code&gt;. Our spider implementation borrows heavily from &lt;a href="https://github.com/joeyAghion/spidey"&gt;joeyAghion&amp;rsquo;s spidey&lt;/a&gt; gem, described as a &amp;ldquo;loose framework for crawling and scraping websites&amp;rdquo; and Python&amp;rsquo;s venerable &lt;a href="http://scrapy.org/"&gt;Scrapy&lt;/a&gt; project, which allows you to scrape website &amp;ldquo;in a fast, simple, yet extensible way.&amp;rdquo; I like those goals of being simple and extensible.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;d like to skip ahead and preview the full source for this modest example, check out it &lt;a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb"&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Our &lt;code&gt;Spider&lt;/code&gt; will maintain a set of urls, the results, and the &amp;ldquo;handlers&amp;rdquo; -
+these will be method names invoked to process each url. We&amp;rsquo;ll take advantage of one external dependency, &lt;code&gt;mechanize&lt;/code&gt;, to handle interaction with the pages we visit, extract data, resolve urls, follow redirects, etc. Below is the &lt;code&gt;#enqueue&lt;/code&gt; method which will be used to add urls and their &amp;ldquo;handlers&amp;rdquo; - how the url will be processed - to a running list in our spider.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;mechanize&amp;quot; # as of this writing, the latest release is 2.7.4
+
+class Spider
+  def enqueue(url, method)
+    url = agent.resolve(url).to_s
+    return if @handlers[url]
+    @urls &amp;lt;&amp;lt; url
+    @handlers[url] ||= { method: method, data: {} }
+  end
+
+  private
+
+  def agent
+    @agent ||= Mechanize.new
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As we process each page we&amp;rsquo;ll need a way to record the structured data we extract from various pages. We&amp;rsquo;ll expose a &lt;code&gt;#record&lt;/code&gt; method append a hash of data to the &lt;code&gt;@results&lt;/code&gt; array.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Spider
+  def record(data = {})
+    @results &amp;lt;&amp;lt; data
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since our &lt;code&gt;Spider&lt;/code&gt; will only know how to enumerate urls and record data, we&amp;rsquo;ll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we&amp;rsquo;ll call this object a &amp;ldquo;processor&amp;rdquo;. The processor will respond to the messages &lt;code&gt;#root&lt;/code&gt; and &lt;code&gt;#handler&lt;/code&gt;: be the first url and processing method to enqueue for the spider, respectively. We&amp;rsquo;ll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Spider
+  REQUEST_INTERVAL = 5
+  MAX_URLS = 1000
+
+  def initialize(processor, attrs = {})
+    @processor = processor
+
+    @urls     = []
+    @results  = []
+    @handlers = {}
+
+    @interval = attrs.fetch(:interval, REQUEST_INTERVAL)
+    @max_urls = attrs.fetch(:max_urls, MAX_URLS)
+
+    enqueue(processor.root, processor.handler)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;Enumerator Two Ways&lt;/h3&gt;
+
+&lt;p&gt;Now for the real meat of our young &lt;code&gt;Spider&lt;/code&gt;. The &lt;code&gt;#results&lt;/code&gt; method is the key public interface: it enumerates the enqueued urls and yields members of the &lt;code&gt;@results&lt;/code&gt; collection.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Spider
+  def results
+    return enum_for(:results) unless block_given?
+
+    index = @results.length
+    enqueued_urls.each do |url, handler|
+
+      # process url
+      @processor.send(handler[:method], agent.get(url), handler[:data])
+
+      if block_given? &amp;amp;&amp;amp; @results.length &amp;gt; index
+        yield @results.last
+        index += 1
+      end
+
+      # crawl delay
+      sleep @interval if @interval &amp;gt; 0
+    end
+  end
+
+  private
+
+  def enqueued_urls
+    Enumerator.new do |y|
+      index = 0
+      while index &amp;lt; @urls.count &amp;amp;&amp;amp; index &amp;lt;= @max_urls
+        url = @urls[index]
+        index += 1
+        next unless url
+        y.yield url, @handlers[url]
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;An interesting thing to note is that the size of our url queue and the collected results may be growing as we crawl more pages. For the &lt;code&gt;#enqueued_urls&lt;/code&gt; private method, we&amp;rsquo;re using an &lt;code&gt;Enumerator&lt;/code&gt; to wrap the logic for iterating over the list of &lt;code&gt;@urls&lt;/code&gt; and maintaining state, like the &lt;code&gt;index&lt;/code&gt;. The &lt;code&gt;Enumerator&lt;/code&gt; class is well-suited to represent a lazily generated collection.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def enqueued_urls
+  Enumerator.new do |y|
+    # ...
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I find it to be a more expressive way to indicate we&amp;rsquo;re enumerating values &amp;ldquo;on demand&amp;rdquo; as opposed to &amp;ldquo;eagerly&amp;rdquo;, like a typical collection.&lt;/p&gt;
+
+&lt;p&gt;Notice we&amp;rsquo;re also returning an enumerator from &lt;code&gt;#results&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def results
+  return enum_for(:results) unless block_given?
+  # ...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This technique provides the method caller to more flexibility when determining
+how to handler the results. While you could pass a block to consume the
+results, e.g., &lt;code&gt;spider.results { |r| puts r.inspect }&lt;/code&gt;, this is an eager
+operation. We&amp;rsquo;d have to wait for all the pages to be processed before continuing
+with the block. Returning an enumerator offers the potential to stream results
+to something like a data store.&lt;/p&gt;
+
+&lt;p&gt;Why not include &lt;code&gt;Enumerable&lt;/code&gt; in our &lt;code&gt;Spider&lt;/code&gt; and implement &lt;code&gt;#each&lt;/code&gt; instead? As pointed out in &lt;a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/"&gt;Arkency&amp;rsquo;s Stop including Enumerable, return Enumerator
+instead&lt;/a&gt;, our
+&lt;code&gt;Spider&lt;/code&gt; class doesn&amp;rsquo;t itself represent a collection, so exposing the &lt;code&gt;#results&lt;/code&gt;
+method as an enumerator is more appropriate.&lt;/p&gt;
+
+&lt;h3&gt;From Soup to Net Results&lt;/h3&gt;
+
+&lt;p&gt;Our &lt;code&gt;Spider&lt;/code&gt; is now functional so we can move onto the details of extracting data from an actual website.&lt;/p&gt;
+
+&lt;p&gt;Our processor, &lt;code&gt;ProgrammableWeb&lt;/code&gt; will be responsible for wrappin a &lt;code&gt;Spider&lt;/code&gt; instance and extracting data from
+the pages it visits. As mentioned previously, our processor will need to
+define a root url and initial handler method, for which defaults are provided, and delegate the &lt;code&gt;#results&lt;/code&gt; method to a &lt;code&gt;Spider&lt;/code&gt; instance:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class ProgrammableWeb
+  attr_reader :root, :handler
+
+  def initialize(root: &amp;quot;https://www.programmableweb.com/apis/directory&amp;quot;, handler: :process_index)
+    @root = root
+    @handler = handler
+  end
+
+  def results(&amp;amp;block)
+    spider.results(&amp;amp;block)
+  end
+
+  private
+
+  def spider
+    @spider ||= Spider.new(self)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;ProgrammableWeb&lt;/code&gt; will define handler methods that deserialize a web page into additional urls and data to add to our collection of results.
+Our spider will invoke the handlers (as seen above with &lt;code&gt;@processor.send(method, agent.get(url), data)&lt;/code&gt;). Each handler method will have the following signature&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def handler_method(page, data = {})
+  # enqueue urls and/or record data
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;hellip; where &lt;code&gt;page&lt;/code&gt; is an instance of &lt;code&gt;Mechanize::Page&lt;/code&gt; (&lt;a href="http://docs.seattlerb.org/mechanize/Mechanize/Page.html"&gt;docs&lt;/a&gt;) providing a number of methods for interacting with html content:&lt;/p&gt;
+
+&lt;p&gt;The root handler method, &lt;code&gt;ProgrammableWeb#process_index&lt;/code&gt;, will extract api names in the
+index list, enqueue api detail pages and additional, paginated indexes. As data
+is collected, it may be passed on to handlers further down the tree via
+&lt;code&gt;Spider#enqueue&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def process_index(page, data = {})
+  page.links_with(href: %r{\?page=\d+}).each do |link|
+    spider.enqueue(link.href, :process_index)
+  end
+
+  page.links_with(href: %r{/api/\w+$}).each do |link|
+    spider.enqueue(link.href, :process_api, name: link.text)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To process api detail pages, we&amp;rsquo;ll define a separate handler. Since these pages
+will represent &amp;ldquo;leaves&amp;rdquo; in this exercise, we&amp;rsquo;ll merge the data passed in with
+that extracted from the page and pass it along to &lt;code&gt;Spider#record&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def process_api(page, data = {})
+  fields = page.search(&amp;quot;#tabs-content .field&amp;quot;).each_with_object({}) do |tag, o|
+    key = tag.search(&amp;quot;label&amp;quot;).text.strip.downcase.gsub(%r{[^\w]+}, &amp;#39; &amp;#39;).gsub(%r{\s+}, &amp;quot;_&amp;quot;).to_sym
+    val = tag.search(&amp;quot;span&amp;quot;).text
+    o[key] = val
+  end
+
+  categories = page.search(&amp;quot;article.node-api .tags&amp;quot;).first.text.strip.split(/\s+/)
+
+  spider.record data.merge(fields).merge(categories: categories)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As we saw earlier, recorded data is emitted in the &lt;code&gt;Spider#results&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;p&gt;Now we can make use of our &lt;code&gt;ProgrammableWeb&lt;/code&gt; crawler as intended with simple
+instantiation and the ability to enumerate results as a stream of data:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;spider = ProgrammableWeb.new
+
+spider.results.lazy.take(5).each_with_index do |result, i|
+  puts &amp;quot;%-3s: %s&amp;quot; % [i, result.inspect]
+end
+
+# 0 : {:name=&amp;gt;&amp;quot;Facebook&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://facebook.com&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://api.facebook.com/restserver.php&amp;quot;, :api_homepage=&amp;gt;&amp;quot;https://developers.facebook.com/&amp;quot;, :primary_category=&amp;gt;&amp;quot;Social&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Webhooks&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;JSON, REST&amp;quot;, :ssl_support=&amp;gt;&amp;quot;Yes&amp;quot;, :api_kits=&amp;gt;&amp;quot;http://developers.facebook.com/documentation.php?doc=clients&amp;quot;, :api_forum=&amp;gt;&amp;quot;http://forum.developers.facebook.com/&amp;quot;, :twitter_url=&amp;gt;&amp;quot;http://twitter.com/fbplatform&amp;quot;, :developer_support=&amp;gt;&amp;quot;http://developers.facebook.com/group.php?gid=2205007948&amp;quot;, :console_url=&amp;gt;&amp;quot;http://developers.facebook.com/tools/explorer&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;API Key, OAuth 2, Username/password&amp;quot;, :categories=&amp;gt;[&amp;quot;Social&amp;quot;, &amp;quot;Webhooks&amp;quot;]}
+# 1 : {:name=&amp;gt;&amp;quot;LinkedIn&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://www.linkedin.com/&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://api.linkedin.com/v1/&amp;quot;, :api_homepage=&amp;gt;&amp;quot;https://developer.linkedin.com/docs&amp;quot;, :primary_category=&amp;gt;&amp;quot;Social&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Enterprise&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;JSON, JSONP, REST, XML&amp;quot;, :other_options=&amp;gt;&amp;quot;JavaScript&amp;quot;, :ssl_support=&amp;gt;&amp;quot;Yes&amp;quot;, :api_forum=&amp;gt;&amp;quot;https://developer.linkedin.com/forum&amp;quot;, :twitter_url=&amp;gt;&amp;quot;https://twitter.com/linkedindev&amp;quot;, :console_url=&amp;gt;&amp;quot;http://developer.linkedinlabs.com/jsapi-console/#examples/login/simple.html&amp;amp;{&amp;amp;quot;framework&amp;amp;quot;:&amp;amp;quot;platform.linkedin.com/in.js&amp;amp;quot;,&amp;amp;quot;frameworkurl&amp;amp;quot;:&amp;amp;quot;&amp;amp;quot;,&amp;amp;quot;apikey&amp;amp;quot;:&amp;amp;quo&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;OAuth 2&amp;quot;, :categories=&amp;gt;[&amp;quot;Social&amp;quot;, &amp;quot;Enterprise&amp;quot;]}
+# 2 : {:name=&amp;gt;&amp;quot;Skype&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://skype.com&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://skype.com&amp;quot;, :api_homepage=&amp;gt;&amp;quot;http://www.skype.com/en/developer/&amp;quot;, :primary_category=&amp;gt;&amp;quot;Telephony&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Chat, Messaging, Video, Voice&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;Unspecified&amp;quot;, :other_options=&amp;gt;&amp;quot;Skype proprietary&amp;quot;, :ssl_support=&amp;gt;&amp;quot;Yes&amp;quot;, :api_kits=&amp;gt;&amp;quot;https://developer.skype.com/Docs/Web https://developer.skype.com/wiki/Java_API&amp;quot;, :api_forum=&amp;gt;&amp;quot;http://forum.skype.com/index.php?showforum=16&amp;quot;, :developer_support=&amp;gt;&amp;quot;http://forum.skype.com/index.php?showforum=16&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;Unspecified&amp;quot;, :categories=&amp;gt;[&amp;quot;Telephony&amp;quot;, &amp;quot;Chat,&amp;quot;, &amp;quot;Messaging,&amp;quot;, &amp;quot;Video,&amp;quot;, &amp;quot;Voice&amp;quot;]}
+# 3 : {:name=&amp;gt;&amp;quot;Twitter&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://twitter.com&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://twitter.com/statuses/&amp;quot;, :api_homepage=&amp;gt;&amp;quot;https://dev.twitter.com/rest/public&amp;quot;, :primary_category=&amp;gt;&amp;quot;Social&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Blogging&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;Atom, JSON, REST, RSS, XML&amp;quot;, :ssl_support=&amp;gt;&amp;quot;No&amp;quot;, :api_kits=&amp;gt;&amp;quot;ActionScript&amp;quot;, :api_forum=&amp;gt;&amp;quot;http://groups.google.com/group/twitter-development-talk&amp;quot;, :twitter_url=&amp;gt;&amp;quot;http://twitter.com/twitterapi&amp;quot;, :contact_email=&amp;gt;&amp;quot;api@twitter.com&amp;quot;, :console_url=&amp;gt;&amp;quot;https://dev.twitter.com/console&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;OAuth 2, HTTP Basic Auth, OAuth&amp;quot;, :categories=&amp;gt;[&amp;quot;Social&amp;quot;, &amp;quot;Blogging&amp;quot;]}
+# 4 : {:name=&amp;gt;&amp;quot;YouTube&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://www.google.com&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://gdata.youtube.com/feeds/&amp;quot;, :api_homepage=&amp;gt;&amp;quot;https://developers.google.com/youtube/&amp;quot;, :primary_category=&amp;gt;&amp;quot;Video&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Media&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;Atom, RSS, JSON, XML, GData&amp;quot;, :other_options=&amp;gt;&amp;quot;Atom Publishing Protocol (Atom/RSS)&amp;quot;, :ssl_support=&amp;gt;&amp;quot;No&amp;quot;, :api_kits=&amp;gt;&amp;quot;Java, PHP Python, Ruby, ActionScript&amp;quot;, :api_forum=&amp;gt;&amp;quot;http://groups.google.com/group/youtube-api/&amp;quot;, :twitter_url=&amp;gt;&amp;quot;https://twitter.com/YouTubeDev/&amp;quot;, :developer_support=&amp;gt;&amp;quot;http://code.google.com/support/bin/topic.py?topic=12357&amp;quot;, :console_url=&amp;gt;&amp;quot;http://code.google.com/apis/ajax/playground/?exp=youtube#simple_embed&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;OAuth2&amp;quot;, :categories=&amp;gt;[&amp;quot;Video&amp;quot;, &amp;quot;Media&amp;quot;]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I admit, it&amp;rsquo;s arguable that this implementation is &amp;ldquo;simple&amp;rdquo;. However, we were able to construct an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.&lt;/p&gt;
+
+&lt;p&gt;Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction for collecting data. It would now be trivial to take our &lt;code&gt;Spider&lt;/code&gt; class and implement a new processor for a site like &lt;a href="https://rubygems.org"&gt;rubygems.org&lt;/a&gt; or &lt;a href="https://craigslist.org"&gt;craigslist&lt;/a&gt; and stream the results to a database like &lt;a href="http://redis.io"&gt;Redis&lt;/a&gt; or &lt;a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"&gt;&lt;code&gt;YAML::Store&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Try it yourself and let me know what you think of this approach (&lt;a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb"&gt;full source&lt;/a&gt;).&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>What's new in Ruby 2.3 Enumerable</title>
     <link rel="alternate" href="/blog/whats-new-in-ruby-2-3-enumerable.html"/>
@@ -18,12 +347,16 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We’ll dissect both here below.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo-a158f6e5.jpg"&gt;&lt;/p&gt;
+
+&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We’ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
-&lt;p&gt;Grep allows...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
+&lt;p&gt;Grep...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo-a158f6e5.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
@@ -208,15 +541,19 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo-e275cbe5.jpg"&gt;&lt;/p&gt;
+
+&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="bash"&gt;SystemStackError: stack level too deep
     /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
-other words, the...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
+other words,...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo-e275cbe5.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="bash"&gt;SystemStackError: stack level too deep
     /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
@@ -440,13 +777,17 @@ only be evaluated when the &lt;code&gt;TRACE&lt;/code&gt; environment variable i
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo-3210b976.jpg"&gt;&lt;/p&gt;
+
+&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
 
 &lt;p&gt;You may already be familiar with how &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt; uses the &lt;code&gt;:js&lt;/code&gt; option to enable the javascript driver.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;describe "a javascript feature", :js do
-  # tests run against the Capyabara...&lt;/code&gt;&lt;/pre&gt;</summary>
-    <content type="html">&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
+  # tests run against the...&lt;/code&gt;&lt;/pre&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo-3210b976.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
 
 &lt;p&gt;You may already be familiar with how &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt; uses the &lt;code&gt;:js&lt;/code&gt; option to enable the javascript driver.&lt;/p&gt;
 
@@ -1426,313 +1767,6 @@ queries for objects that already exist in memory.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Beware of the gotchas&lt;/strong&gt;: &lt;code&gt;:inverse_of&lt;/code&gt; will only work with &lt;code&gt;has_many&lt;/code&gt;, &lt;code&gt;has_one&lt;/code&gt;, and &lt;code&gt;belong_to&lt;/code&gt; associations and they will not work with the &lt;code&gt;:as&lt;/code&gt;, &lt;code&gt;:polymorphic&lt;/code&gt;, and &lt;code&gt;:through&lt;/code&gt; options. &lt;a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations"&gt;Check out to the Rails docs on bi-directional associations&lt;/a&gt; for more info.&lt;/p&gt;
 
 &lt;p&gt;Save yourself the trouble and set &lt;code&gt;:inverse_of&lt;/code&gt; for valid &lt;code&gt;belongs_to&lt;/code&gt;, &lt;code&gt;has_many&lt;/code&gt;, and &lt;code&gt;has_one&lt;/code&gt; associations.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Pascal's Triangle with Ruby's Enumerator</title>
-    <link rel="alternate" href="/blog/pascals-triangle-with-rubys-enumerator.html"/>
-    <id>/blog/pascals-triangle-with-rubys-enumerator.html</id>
-    <published>2015-11-29T19:00:00-05:00</published>
-    <updated>2015-11-29T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Pascal’s Triangle is a fun sequence. Here’s what it looks like:&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color-a0dd53d5.jpg"&gt;&lt;/p&gt;
-
-&lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;“triangular array of the binomial coefficients”&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Pascal&amp;rsquo;s Triangle is a fun sequence. Here&amp;rsquo;s what it looks like:&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color-a0dd53d5.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;It represents a &lt;a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle"&gt;&amp;ldquo;triangular array of the binomial coefficients&amp;rdquo;&lt;/a&gt;. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated-854e9197.gif" /&gt;&lt;/p&gt;
-
-&lt;p&gt;We can model this in Ruby as an array of arrays. The first array member is &lt;code&gt;[1]&lt;/code&gt;. Each successive array (or &amp;ldquo;row&amp;rdquo;) will increase in size, and each array member will be the sum of the member at the same index &lt;code&gt;n&lt;/code&gt; in the &lt;code&gt;k-1&lt;/code&gt; row, where &lt;code&gt;k&lt;/code&gt; is the current row, and the &lt;code&gt;n-1&lt;/code&gt; member in the &lt;code&gt;k-1&lt;/code&gt; row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;[
-  [1],
-  [1, 1],
-  [1, 2, 1],
-  [1, 3, 3, 1],
-  [1, 4, 6, 4, 1]
-]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s solve this with Ruby. While there are a number of approaches to generating Pascal&amp;rsquo;s Triangle, including both recursive and iterative solutions, we&amp;rsquo;ll explore an approach to treating this as &lt;a href="/blog/infinite-sequences-in-ruby.html"&gt;an enumerable&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Starting with the first row, &lt;code&gt;[1]&lt;/code&gt;, we can write a Ruby method that will generate the next row &lt;code&gt;[1, 1]&lt;/code&gt;. Let&amp;rsquo;s write this in a way so it will be possible to generate any row &lt;code&gt;k&lt;/code&gt; from row &lt;code&gt;k-1&lt;/code&gt;. Here&amp;rsquo;s what the usage of this method will look like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;pascal_row([1])
-=&amp;gt; [1, 1]
-pascal_row([1, 3, 3, 1])
-=&amp;gt; [1, 4, 6, 4, 1]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;ll use Test-Driven Development to validate our implementation starting with a few assertions to ensure the first several rows are returned as expected.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
-
-def pascals_row(row)
-  # yo no se
-end
-
-class TestPascalsTriangle &amp;lt; Minitest::Test
-  def test_pascals_row
-    assert_equal [1, 1], pascals_row([1])
-    assert_equal [1, 2, 1], pascals_row([1, 1])
-    assert_equal [1, 3, 3, 1], pascals_row([1, 2, 1])
-    assert_equal [1, 4, 6, 4, 1], pascals_row([1, 3, 3, 1])
-    assert_equal [1, 5, 10, 10, 5, 1], pascals_row([1, 4, 6, 4, 1])
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Our failing test run will look something like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;$ ruby pascals_triangle_test.rb
-Run options: --seed 45117
-
-# Running:
-
-F
-
-Finished in 0.001035s, 966.0380 runs/s, 966.0380 assertions/s.
-
-  1) Failure:
-TestPascalsTriangle#test_pascals_row [code/pascals_row_test.rb:8]:
-Expected: [1, 1]
-  Actual: nil
-
-1 runs, 1 assertions, 1 failures, 0 errors, 0 skips
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To extract a general method, let&amp;rsquo;s deconstruct a single row, the fifth: &lt;code&gt;[1, 4, 6, 4, 1]&lt;/code&gt;. Each member is the sum of &lt;code&gt;n&lt;/code&gt; and &lt;code&gt;n-1&lt;/code&gt; from the previous row, &lt;code&gt;[1, 3, 3, 1]&lt;/code&gt;. We substitute zero when &lt;code&gt;n&lt;/code&gt; or &lt;code&gt;n-1&lt;/code&gt; is missing. Therefore, we can rewrite the fifth row as&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby_"&gt;[(0 + 1), (1 + 3), (3 + 3), (3 + 1), (1 + 0)]
-=&amp;gt; [1, 4, 6, 4, 1]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can also represent this as a nested array of number pairs then collect the sum of each pair like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]].collect { |a, b| a + b }
-=&amp;gt; [1, 4, 6, 4, 1]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Looking closely at the pairs, taking just first members of each pair form the array we get &lt;code&gt;[0, 1, 3, 3, 1]&lt;/code&gt;. The second members of each pair are &lt;code&gt;[1, 3, 3, 1, 0]&lt;/code&gt;. Written differently, the groups are &lt;code&gt;([0] + [1, 3, 3, 1])&lt;/code&gt; and &lt;code&gt;([1, 3, 3, 1] + [0])&lt;/code&gt;. In each we see the members of row four, &lt;code&gt;[1, 3, 3, 1]&lt;/code&gt; augmented by prepending zero or appending zero respectively.&lt;/p&gt;
-
-&lt;p&gt;Getting the nested array pairs from these groups is perfect for the &lt;code&gt;Enumerable#zip&lt;/code&gt; method: &lt;code&gt;zip&lt;/code&gt; groups members of given arrays by position. Therefore, we can &amp;ldquo;zip&amp;rdquo; &lt;code&gt;[0, 1, 3, 3, 1]&lt;/code&gt; with &lt;code&gt;[1, 3, 3, 1, 0]&lt;/code&gt; to produce &lt;code&gt;[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]&lt;/code&gt;:&lt;/p&gt;
-
-&lt;p&gt;[0, 1, 3, 3, 1].zip([1, 3, 3, 1, 0])
-=&amp;gt; [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s extract a variable to represent row four:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;row = [1, 3, 3, 1]
-([0] + row).zip(row + [0])
-=&amp;gt; [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Putting it altogether, we can now produce the fifth row from the fourth:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;row = [1, 3, 3, 1]
-([0] + row).zip(row + [0]).collect { |a, b| a + b }
-=&amp;gt; [1, 4, 6, 4, 1]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s confirm this expression works with for other row conversions:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;row = [1]
-([0] + row).zip(row + [0]).collect { |a, b| a + b }
-=&amp;gt; [1, 1]
-
-row = [1, 1]
-([0] + row).zip(row + [0]).collect { |a, b| a + b }
-=&amp;gt; [1, 2, 1]
-
-row = [1, 2, 1]
-([0] + row).zip(row + [0]).collect { |a, b| a + b }
-=&amp;gt; [1, 3, 3, 1]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Yes! We now have the implementation for our method to produce any row for Pascal&amp;rsquo;s Triangle given the preceding row:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def pascal_row(row)
-  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Plugging in this implementation&amp;hellip;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
-
-def pascals_row(row)
-  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
-end
-
-class TestPascalsTriangle &amp;lt; Minitest::Test
-  def test_pascals_row
-    assert_equal [1, 1], pascals_row([1])
-    assert_equal [1, 2, 1], pascals_row([1, 1])
-    assert_equal [1, 3, 3, 1], pascals_row([1, 2, 1])
-    assert_equal [1, 4, 6, 4, 1], pascals_row([1, 3, 3, 1])
-    assert_equal [1, 5, 10, 10, 5, 1], pascals_row([1, 4, 6, 4, 1])
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&amp;hellip; we get passing tests&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;$ ruby code/pascals_row_test.rb
-Run options: --seed 61039
-
-# Running:
-
-.
-
-Finished in 0.001020s, 980.6882 runs/s, 4903.4412 assertions/s.
-
-1 runs, 5 assertions, 0 failures, 0 errors, 0 skips
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;In Sequence&lt;/h3&gt;
-
-&lt;p&gt;Now that we have a method to convert one row to its successor, we have a nice building block for an infinite sequence. We can call &lt;code&gt;pascals_row&lt;/code&gt; repeatedly to generate the triangle rows infinitely. I previously wrote about creating &lt;a href="/blog/infinite-sequences-in-ruby.html"&gt;infinite sequences in Ruby&lt;/a&gt; with Enumerator and we&amp;rsquo;ll apply this approach here.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;d like to be able to call a method and enumerate the rows representing Pascal&amp;rsquo;s Triangle as we would for an array. Since we&amp;rsquo;ll be using &lt;code&gt;Enumerator&lt;/code&gt;, which exposes the &lt;code&gt;Enumerable&lt;/code&gt; api, we can use external enumeration with &lt;code&gt;Enumerator#next&lt;/code&gt; to extract rows in succession. Let&amp;rsquo;s rewrite our previous test to demonstrate:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;require &amp;#39;minitest/autorun&amp;#39;
-
-def pascals_triangle
-  # Enumerator, please
-end
-
-def pascals_row(row)
-  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
-end
-
-class TestPascalsTriangle &amp;lt; Minitest::Test
-  def test_pascals_triangle
-    rows = pascals_triangle
-    assert_equal [1], rows.next
-    assert_equal [1, 1], rows.next
-    assert_equal [1, 2, 1], rows.next
-    assert_equal [1, 3, 3, 1], rows.next
-    assert_equal [1, 4, 6, 4, 1], rows.next
-    assert_equal [1, 5, 10, 10, 5, 1], rows.next
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With no implementation, the test fails on calling &lt;code&gt;next&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;$ ruby pascals_triangle_test.rb
-Run options: --seed 62081
-
-# Running:
-
-E
-
-Finished in 0.000949s, 1053.4832 runs/s, 0.0000 assertions/s.
-
-  1) Error:
-TestPascalsTriangle#test_pascals_rows:
-NoMethodError: undefined method `next&amp;#39; for nil:NilClass
-    code/pascals_row_test.rb:14:in `test_pascals_rows&amp;#39;
-
-1 runs, 0 assertions, 0 failures, 1 errors, 0 skips
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Our enumerator needs to call the &lt;code&gt;pascals_row&lt;/code&gt; method repeatedly with the
-previous result. We&amp;rsquo;ll maintain the current row as &lt;code&gt;current&lt;/code&gt;, pass this as the
-arg to &lt;code&gt;pascals_row&lt;/code&gt;, replace it with the result and repeat in a loop. Returning the
-&lt;code&gt;Enumerator&lt;/code&gt; from the method will allow the caller to control how it&amp;rsquo;s
-enumerated.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s what the implementation could look like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;current = [1]
-Enumerator.new do |y|
-  loop do
-    y &amp;lt;&amp;lt; current
-    current = pascals_row(current)
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s plug this into our method and rerun:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
-
-def pascals_triangle(row = [1])
-  current = row
-  Enumerator.new do |y|
-    loop do
-      y &amp;lt;&amp;lt; current
-      current = pascals_row(current)
-    end
-  end
-end
-
-def pascals_row(row)
-  ([0] + row).zip(row + [0]).collect { |a, b| a + b }
-end
-
-class TestPascalsTriangle &amp;lt; Minitest::Test
-  def test_pascals_rows
-    rows = pascals_triangle
-    assert_equal [1], rows.next
-    assert_equal [1, 1], rows.next
-    assert_equal [1, 2, 1], rows.next
-    assert_equal [1, 3, 3, 1], rows.next
-    assert_equal [1, 4, 6, 4, 1], rows.next
-    assert_equal [1, 5, 10, 10, 5, 1], rows.next
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The exciting thing about this implementation is we can treat our sequence like a collection and call enumerable methods. We can also chain enumerable methods like &lt;code&gt;Enumerator#with_index&lt;/code&gt; and &lt;code&gt;Enumerator#each&lt;/code&gt; to print a &amp;ldquo;pretty&amp;rdquo; triangle of each row with its row number.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;pascals_triangle.with_index(1).take(10).each do |row, i|
-  puts &amp;quot;%d:%#{20+(row.inspect.length/2)}s&amp;quot; % [i, row.inspect]
-end
-
-1:                  [1]
-2:                 [1, 1]
-3:               [1, 2, 1]
-4:              [1, 3, 3, 1]
-5:            [1, 4, 6, 4, 1]
-6:          [1, 5, 10, 10, 5, 1]
-7:        [1, 6, 15, 20, 15, 6, 1]
-8:      [1, 7, 21, 35, 35, 21, 7, 1]
-9:    [1, 8, 28, 56, 70, 56, 28, 8, 1]
-10: [1, 9, 36, 84, 126, 126, 84, 36, 9, 1]
-
-=&amp;gt;
-[[[1], 1],
- [[1, 1], 2],
- [[1, 2, 1], 3],
- [[1, 3, 3, 1], 4],
- [[1, 4, 6, 4, 1], 5],
- [[1, 5, 10, 10, 5, 1], 6],
- [[1, 6, 15, 20, 15, 6, 1], 7],
- [[1, 7, 21, 35, 35, 21, 7, 1], 8],
- [[1, 8, 28, 56, 70, 56, 28, 8, 1], 9],
- [[1, 9, 36, 84, 126, 126, 84, 36, 9, 1], 10]]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Notice the return value combines the each row with its index, an interesting outcome of how enumerator
-chains can augment the enumerated values.&lt;/p&gt;
-
-&lt;p&gt;We can also take advantage of &lt;code&gt;Enumerator#lazy&lt;/code&gt; to operate on rows without relying on eager evaluation. Here we use a lazy enumerator chain to demonstrate that the sum of numbers in each row is 2^n:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;pascals_triangle.lazy.map { |row| Math.log(row.reduce(:+), 2) }.take_while { |n| n &amp;lt; 9 }.force
-=&amp;gt; [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Enumerators allow us to provide an enumerable interface to generated data in much the same way we do for collections. Try test-driving an enumerable implementation of &lt;a href="https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/"&gt;other sequences&lt;/a&gt; on your own.&lt;/p&gt;
 </content>
   </entry>
 </feed>
