@@ -1,42 +1,46 @@
 ---
-title: How to Write a Simple Web Crawler in Ruby - Revisited
+title: How to write a simple web crawler in Ruby - revisited
 author: Ross Kaffenberger
-published: false
-summary: Using Ruby's Enumerable to enumerate website page data
-description: Using Ruby's Enumerable to enumerate website page data
-pull_image: 'https://rossta.net/assets/images/blog/stock/aerial-highway-nightime-bangkok.jpg'
+published: true
+summary: Crawling websites and streaming structured data with Ruby's Enumerator
+description: Bringing a fresh perspective and Ruby's Enumerator to revisit an old post on using Ruby to write a simple web crawler
+pull_image: 'https://rossta.net/assets/images/blog/stock/spider-web-pexels-photo.jpg'
 series: Enumerable
 tags:
 - Code
 - Ruby
 ---
 
-Let's build a simple web crawler in Ruby. As a point of inspiration, I wanted
-to revisit [Alan Skorkin's How to Write a Simple Web Crawler in Ruby](http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/). As Skorks points out, a nice use case for a web crawler may be to collect data to import into another web application as the basis for a basic search engine. I'll be borrowing the goals he presented in that post and share how I might approach the same problem today.
+![Web Crawl](blog/stock/spider-web-pexels-photo.jpg)
+
+Let's build a simple web crawler in Ruby. As a point of inspiration, I'd like to
+to revisit [Alan Skorkin's How to Write a Simple Web Crawler in Ruby](http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/) and attempt to achieve something similar with a fresh perspective.
 
 We'll adapt Skork's original goals and provide a few of our own:
 
 > * must be able to crawl just a single domain
-> * must be able to limit number of pages to crawl (even with a depth limited crawl, might still have too many pages to get through depending on the starting set of domains)
-> * the results should be structured (key,value pairs) so we don't have an incomprehensible soup of content
+> * must be able to limit number of pages to crawl
+> * the results should be represented as structured data so we don't have an incomprehensible soup of content
 > * the results should be enumerable so we can have flexibility in how they're handled
 
-Caveats! Please keep in mind that there are, of course, many resources for
-using resilient, well-tested crawlers in a variety of languages. Our intentions
-here are educational so we choose to ignore a few important concerns, such as
-client side rendering and parallelism, as a matter of convenience.
+<aside class="callout panel">
+<p>
+  Caveats! Please keep in mind that there are, of course, <a href="http://webscraper.io/">many</a> <a href="http://scrapy.org/">resources</a> for
+  using resilient, well-tested <a href="https://www.import.io/">crawlers</a> in a variety of languages. We have mere academic intentions
+  here so we choose to ignore many important concerns, such as client-side rendering, parallelism, and handling failure, as a matter of convenience.
+</p>
+</aside>
 
 ### Breaking it down
 
-For this exercise, we're going to crawl the [Programmable Web](http://www.programmableweb.com/) to extract data from their API directory.
+For this exercise, we're going to crawl [Programmable Web](http://www.programmableweb.com/) to extract data from their [API directory](http://www.programmableweb.com/apis/directory).
 
-Rather than take a naive approach by grabbing all the content from various pages
-under the given domain, we're going to build a webcrawler that emits
-structured data. Traversing from the site's root, http://programmable.com, our
-crawler will visit web pages like a nodes of a tree and collect both data and
-additional links to crawl.
+Rather than take the naive approach of grabbing all content from any page, we're going to build a webcrawler that emits
+structured data. Traversing from the first page of the api directory, our
+crawler will visit web pages like a nodes of a tree, collecting data and
+additional urls along the way.
 
-Imagine results of our web crawl as a nested collection of
+Imagine that the results of our web crawl as a nested collection of
 hashes with meaningful key-value pairs.
 
 ```ruby
@@ -61,24 +65,25 @@ hashes with meaningful key-value pairs.
 ]
 ```
 
-<aside>
-When using a web crawler, be aware of the limitations described in the website's <a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a> file. We're skipping automated parsing and detection of <a href="http://www.programmableweb.com/robots.txt">Programmable Web's robot.txt</a> in this post. We could do to filter out urls to crawl and set a delay to avoid overwhelming the target site. If you choose to run this code on your own, please crawl responsibly.
+<aside class="callout panel">
+<p>
+  When using a web crawler, be aware of the limitations described in the website's <a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a> file. We're skipping automated parsing and detection of <a href="http://www.programmableweb.com/robots.txt">Programmable Web's robots.txt</a> in this post. We skip the opportunity to use robots.txt to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
+</p>
 </aside>
-
 
 ### Designing the surface
 
-If you've been following my posts lately, you know that [I love Enumerable](https://rossta.net/blog/ruby-enumerable.html) and [Enumerator](/blog/what-is-enumerator.html). Because we've specified we'd like to generate results as a collection, it should be possible to model the data with an enumerator. This will provide a familiar, flexible interface that can be adapted for logging, storage, transformation, and a wide range of use cases.
+If you've been following my posts lately, you know that [I love Enumerable](https://rossta.net/blog/ruby-enumerable.html) and you may not be surprised that I'd like to model our structured, website data with an [Enumerator](/blog/what-is-enumerator.html). This will provide a familiar, flexible interface that can be adapted for logging, storage, transformation, and a wide range of use cases.
 
-In short, I want to simply ask a `spider` object for its results and get back an enumerator:
+I want to simply ask a `spider` object for its results and get back an enumerator:
 
 ```ruby
 spider.results
 => #<Enumerator: ...>
 ```
 
-With an enumerator, we'll be able to do some interesting things, like stream the
-results lazily into a flexible storage engine, like MongoDB or `PStore`,
+We'll be able to do some interesting things, like stream the
+results lazily into a flexible storage engine, like [mongodb](https://www.mongodb.org/) or `PStore`,
 available from the [Ruby standard library](http://ruby-doc.org/stdlib-2.3.0/libdoc/pstore/rdoc/PStore.html):
 
 ```ruby
@@ -97,12 +102,12 @@ end
 
 ### Writing the crawler
 
-We're going to write a `Spider` class with a single public method, `#results`. Our spider implementation borrows heavily from [joeyAghion's spidey](https://github.com/joeyAghion/spidey) gem, described as a "loose framework for crawling and scraping websites". If you'd like to preview the full source of this example, check out the [spider][spider] in my enumerable examples repo.
+We're going to write a `Spider` class with a single public method, `#results`. Our spider implementation borrows heavily from [joeyAghion's spidey](https://github.com/joeyAghion/spidey) gem, described as a "loose framework for crawling and scraping websites" and Python's venerable [Scrapy](http://scrapy.org/) project, which allows you to scrape website "in a fast, simple, yet extensible way." I like those goals of being simple and extensible.
+
+If you'd like to skip ahead and preview the full source for this modest example, check out it [on GitHub][spider].
 
 Our `Spider` will maintain a set of urls, the results, and the "handlers" -
-these will be method names invoked to process each url. We'll provide an
-`#enqueue` method to put urls and their handlers onto the list
-invoke (described in more detail later in this post). We'll take advantage of one external dependency, `mechanize`, to handle interaction with the pages we visit, extract data, resolve urls, follow redirects, etc.
+these will be method names invoked to process each url. We'll take advantage of one external dependency, `mechanize`, to handle interaction with the pages we visit, extract data, resolve urls, follow redirects, etc. Below is the `#enqueue` method which will be used to add urls and their "handlers" - how the url will be processed - to a running list in our spider.
 
 ```ruby
 require "mechanize" # as of this writing, the latest release is 2.7.4
@@ -133,7 +138,7 @@ class Spider
 end
 ```
 
-Since our `Spider` will only know how to enumerate urls and record data, we'll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we'll call this object a "processor" and it will respond to `#root` and `#handler` to be the first url and processing method to enqueue for the spider. We'll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.
+Since our `Spider` will only know how to enumerate urls and record data, we'll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we'll call this object a "processor". The processor will respond to the messages `#root` and `#handler`: be the first url and processing method to enqueue for the spider, respectively. We'll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.
 
 ```ruby
 class Spider
@@ -157,7 +162,7 @@ end
 
 ### Enumerator Two Ways
 
-Now for the real meat of our young `Spider`. The `#results` method is responsible for enumerating over the enqueued urls and yields members of the `@results` collection as data is extracted from various webpages as they are "processed" by the processor.
+Now for the real meat of our young `Spider`. The `#results` method is the key public interface: it enumerates the enqueued urls and yields members of the `@results` collection.
 
 ```ruby
 class Spider
@@ -166,12 +171,16 @@ class Spider
 
     index = @results.length
     enqueued_urls.each do |url, handler|
-      # process page
+
+      # process url
       @processor.send(handler[:method], agent.get(url), handler[:data])
+
       if block_given? && @results.length > index
         yield @results.last
         index += 1
       end
+
+      # crawl delay
       sleep @interval if @interval > 0
     end
   end
@@ -202,7 +211,9 @@ def enqueued_urls
 end
 ```
 
-I find it to be a more expressive way to enumerate an "eager" collection, like an array, that is changing in size.  Notice we're also returning an enumerator from `#results`:
+I find it to be a more expressive way to indicate we're enumerating values "on demand" as opposed to "eagerly", like a typical collection.
+
+Notice we're also returning an enumerator from `#results`:
 
 ```ruby
 def results
@@ -212,27 +223,30 @@ end
 ```
 
 This technique provides the method caller to more flexibility when determining
-how to handler the results. While you could pass a block to consumer the
-results, e.g., `spider.results { |r| puts r.inspect }`, this is an "eager"
+how to handler the results. While you could pass a block to consume the
+results, e.g., `spider.results { |r| puts r.inspect }`, this is an eager
 operation. We'd have to wait for all the pages to be processed before continuing
-with the block. With a hat tip to [Stop including Enumerable, return Enumerator
+with the block. Returning an enumerator offers the potential to stream results
+to something like a data store.
+
+Why not include `Enumerable` in our `Spider` and implement `#each` instead? As pointed out in [Arkency's Stop including Enumerable, return Enumerator
 instead](http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/), our
-`Spider` class doesn't itself represent a collection so the use of an enum here
-is better than including `Enumerable` and implementing `#each`.
+`Spider` class doesn't itself represent a collection, so exposing the `#results`
+method as an enumerator is more appropriate.
 
-### Processing
+### From Soup to Net Results
 
-Our `Spider` is now functional, we can move onto the processor for `ProgrammableWeb` that will be
-responsible for interacting with the spider instance and extracting data from
+Our `Spider` is now functional so we can move onto the details of extracting data from an actual website.
+
+Our processor, `ProgrammableWeb` will be responsible for wrappin a `Spider` instance and extracting data from
 the pages it visits. As mentioned previously, our processor will need to
-define a root url and initial handler method, for which defaults are provided. Our `ProgrammableWeb` will also be able to
-instantiate a new spider with itself and expose the spiders `#results` method:
+define a root url and initial handler method, for which defaults are provided, and delegate the `#results` method to a `Spider` instance:
 
 ```ruby
 class ProgrammableWeb
   attr_reader :root, :handler
 
-  def initialize(root: "https://programmableweb.com/apis/directory", handler: :process_index)
+  def initialize(root: "https://www.programmableweb.com/apis/directory", handler: :process_index)
     @root = root
     @handler = handler
   end
@@ -249,9 +263,8 @@ class ProgrammableWeb
 end
 ```
 
-The rest of our `ProgrammableWeb` processor are handler methods that deserialize
-a web page into additional urls and data to add to our collection of results.
-Our spider will invoke the handlers as `@processor.send(method, agent.get(url), data)`, so each handler method will have the following signature, where `page` is an instance of `Mechanize::Page` ([docs](http://docs.seattlerb.org/mechanize/Mechanize/Page.html)) that provides a number of methods for interacting with html content:
+`ProgrammableWeb` will define handler methods that deserialize a web page into additional urls and data to add to our collection of results.
+Our spider will invoke the handlers (as seen above with `@processor.send(method, agent.get(url), data)`). Each handler method will have the following signature
 
 ```ruby
 def handler_method(page, data = {})
@@ -259,15 +272,16 @@ def handler_method(page, data = {})
 end
 ```
 
-So for example, `ProgrammableWeb#process_index` will extract api names in the
+... where `page` is an instance of `Mechanize::Page` ([docs](http://docs.seattlerb.org/mechanize/Mechanize/Page.html)) providing a number of methods for interacting with html content:
+
+The root handler method, `ProgrammableWeb#process_index`, will extract api names in the
 index list, enqueue api detail pages and additional, paginated indexes. As data
 is collected, it may be passed on to handlers further down the tree via
 `Spider#enqueue`.
 
-
 ```ruby
 def process_index(page, data = {})
-  page.links_with(href: /\?page=\d+/).each do |link|
+  page.links_with(href: %r{\?page=\d+}).each do |link|
     spider.enqueue(link.href, :process_index)
   end
 
@@ -283,12 +297,13 @@ that extracted from the page and pass it along to `Spider#record`.
 
 ```ruby
 def process_api(page, data = {})
-  categories = page.search("article.node-api .tags").first.text.strip.split(/\s+/)
-  fields = page.search("#tabs-content .field").each_with_object({}) do |tag, results|
-    key = tag.search("label").text.strip.downcase.gsub(/[^\w]+/, ' ').gsub(/\s+/, "_").to_sym
+  fields = page.search("#tabs-content .field").each_with_object({}) do |tag, o|
+    key = tag.search("label").text.strip.downcase.gsub(%r{[^\w]+}, ' ').gsub(%r{\s+}, "_").to_sym
     val = tag.search("span").text
-    results[key] = val
+    o[key] = val
   end
+
+  categories = page.search("article.node-api .tags").first.text.strip.split(/\s+/)
 
   spider.record data.merge(fields).merge(categories: categories)
 end
@@ -313,10 +328,10 @@ end
 # 4 : {:name=>"YouTube", :api_provider=>"http://www.google.com", :api_endpoint=>"http://gdata.youtube.com/feeds/", :api_homepage=>"https://developers.google.com/youtube/", :primary_category=>"Video", :secondary_categories=>"Media", :protocol_formats=>"Atom, RSS, JSON, XML, GData", :other_options=>"Atom Publishing Protocol (Atom/RSS)", :ssl_support=>"No", :api_kits=>"Java, PHP Python, Ruby, ActionScript", :api_forum=>"http://groups.google.com/group/youtube-api/", :twitter_url=>"https://twitter.com/YouTubeDev/", :developer_support=>"http://code.google.com/support/bin/topic.py?topic=12357", :console_url=>"http://code.google.com/apis/ajax/playground/?exp=youtube#simple_embed", :authentication_mode=>"OAuth2", :categories=>["Video", "Media"]}
 ```
 
-Modeling results from a multi-level page crawl as a collection may not work for every use case; for this exercise, it serves as a nice abstraction for enumerating data. It's arguable that this implementation is "simple", but there is great simplicity and flexibility in its usage.
+I admit, it's arguable that this implementation is "simple". However, we were able to construct an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.
 
-To see the source of the full example:
+Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction for collecting data. It would now be trivial to take our `Spider` class and implement a new processor for a site like [rubygems.org](https://rubygems.org) or [craigslist](https://craigslist.org) and stream the results to a database like [Redis](http://redis.io) or [`YAML::Store`](http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html).
 
-What do you think of this approach ([full source][spider])?
+Try it yourself and let me know what you think of this approach ([full source][spider]).
 
 [spider]: https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb
