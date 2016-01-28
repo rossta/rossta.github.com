@@ -57,7 +57,7 @@
 
       <p><img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-f77303e5.jpg" /></p>
 
-<p>Let&rsquo;s build a simple web crawler in Ruby. As a point of inspiration, I&rsquo;d like to
+<p>Let&rsquo;s build a simple web crawler in Ruby. For inspiration, I&rsquo;d like to
 to revisit <a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/">Alan Skorkin&rsquo;s How to Write a Simple Web Crawler in Ruby</a> and attempt to achieve something similar with a fresh perspective.</p>
 
 <p>We&rsquo;ll adapt Skork&rsquo;s original goals and provide a few of our own:</p>
@@ -114,7 +114,7 @@ hashes with meaningful key-value pairs.</p>
 
 <aside class="callout panel">
 <p>
-  When using a web crawler, be aware of the limitations described in the website&rsquo;s <a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a> file. We&rsquo;re skipping automated parsing and detection of <a href="http://www.programmableweb.com/robots.txt">Programmable Web&rsquo;s robots.txt</a> in this post. We skip the opportunity to use robots.txt to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
+  When using a web crawler, be aware of the limitations described in the website&rsquo;s <a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a> file. In this post, we skip automated parsing and detection of <a href="http://www.programmableweb.com/robots.txt">Programmable Web&rsquo;s robots.txt</a> to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
 </p>
 </aside>
 
@@ -129,7 +129,7 @@ hashes with meaningful key-value pairs.</p>
 </code></pre>
 
 <p>We&rsquo;ll be able to do some interesting things, like stream the
-results lazily into a flexible storage engine, like <a href="https://www.mongodb.org/">mongodb</a> or <code>PStore</code>,
+results lazily into a flexible storage engine, e.g. <a href="https://www.mongodb.org/">mongodb</a> or <code>PStore</code>,
 available from the <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/pstore/rdoc/PStore.html">Ruby standard library</a>:</p>
 
 <pre><code class="ruby">require &quot;pstore&quot;
@@ -147,12 +147,11 @@ end
 
 <h3>Writing the crawler</h3>
 
-<p>We&rsquo;re going to write a <code>Spider</code> class with a single public method, <code>#results</code>. Our spider implementation borrows heavily from <a href="https://github.com/joeyAghion/spidey">joeyAghion&rsquo;s spidey</a> gem, described as a &ldquo;loose framework for crawling and scraping websites&rdquo; and Python&rsquo;s venerable <a href="http://scrapy.org/">Scrapy</a> project, which allows you to scrape website &ldquo;in a fast, simple, yet extensible way.&rdquo; I like those goals of being simple and extensible.</p>
+<p>We&rsquo;re going to write a <code>Spider</code> class to enumerate website data. Our spider implementation borrows heavily from <a href="https://github.com/joeyAghion/spidey">joeyAghion&rsquo;s spidey</a> gem, described as a &ldquo;loose framework for crawling and scraping websites&rdquo; and Python&rsquo;s venerable <a href="http://scrapy.org/">Scrapy</a> project, which allows you to scrape websites &ldquo;in a fast, simple, yet extensible way.&rdquo; Both resources achieve the goals of being easy-to-use and extensible.</p>
 
-<p>If you&rsquo;d like to skip ahead and preview the full source for this modest example, check out it <a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb">on GitHub</a>.</p>
+<p>We&rsquo;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it <a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb">on GitHub</a>.</p>
 
-<p>Our <code>Spider</code> will maintain a set of urls, the results, and the &ldquo;handlers&rdquo; -
-these will be method names invoked to process each url. We&rsquo;ll take advantage of one external dependency, <code>mechanize</code>, to handle interaction with the pages we visit, extract data, resolve urls, follow redirects, etc. Below is the <code>#enqueue</code> method which will be used to add urls and their &ldquo;handlers&rdquo; - how the url will be processed - to a running list in our spider.</p>
+<p>Our <code>Spider</code> will maintain a set of urls to visit, data is collects, and a set of url &ldquo;handlers&rdquo; that will describe how each page should be processed. We&rsquo;ll take advantage of one external dependency, <code>mechanize</code>, to handle interaction with the pages we visit - to extract data, resolve urls, follow redirects, etc. Below is the <code>#enqueue</code> method to add urls and their handlers to a running list in our spider.</p>
 
 <pre><code class="ruby">require &quot;mechanize&quot; # as of this writing, the latest release is 2.7.4
 
@@ -181,7 +180,7 @@ end
 end
 </code></pre>
 
-<p>Since our <code>Spider</code> will only know how to enumerate urls and record data, we&rsquo;ll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we&rsquo;ll call this object a &ldquo;processor&rdquo;. The processor will respond to the messages <code>#root</code> and <code>#handler</code>: be the first url and processing method to enqueue for the spider, respectively. We&rsquo;ll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.</p>
+<p>Since our <code>Spider</code> will only know how to enumerate urls and record data, we&rsquo;ll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we&rsquo;ll call this object a &ldquo;processor&rdquo;. The processor will respond to the messages <code>#root</code> and <code>#handler</code> - the first url and handler method to enqueue for the spider, respectively. We&rsquo;ll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.</p>
 
 <pre><code class="ruby">class Spider
   REQUEST_INTERVAL = 5
@@ -284,9 +283,10 @@ define a root url and initial handler method, for which defaults are provided, a
 <pre><code class="ruby">class ProgrammableWeb
   attr_reader :root, :handler
 
-  def initialize(root: &quot;https://www.programmableweb.com/apis/directory&quot;, handler: :process_index)
+  def initialize(root: &quot;https://www.programmableweb.com/apis/directory&quot;, handler: :process_index, **options)
     @root = root
     @handler = handler
+    @options = options
   end
 
   def results(&amp;block)
@@ -296,7 +296,7 @@ define a root url and initial handler method, for which defaults are provided, a
   private
 
   def spider
-    @spider ||= Spider.new(self)
+    @spider ||= Spider.new(self, @options)
   end
 end
 </code></pre>
