@@ -10,6 +10,8 @@ tags:
   - Ruby
 ---
 
+![Get it? Stack? Logs?](blog/stock/logs-pexels-photo.jpg)
+
 Arrgggh. Ever come across this in your Ruby app?
 
 ```bash

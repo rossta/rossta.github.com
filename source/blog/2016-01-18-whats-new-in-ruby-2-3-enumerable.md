@@ -12,6 +12,8 @@ tags:
   - Enumerable
 ---
 
+![Goodies](blog/stock/dark-brown-milk-candy-pexels-photo.jpg)
+
 You may have heard [Ruby 2.3 dropped](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/) on Christmas this past year. Two new `Enumerable` instance methods were added, `grep_v` and `chunk_while`, both of which are variations on other `Enumerable` methods. We'll dissect both here below.
 
 #### Triple Lindey

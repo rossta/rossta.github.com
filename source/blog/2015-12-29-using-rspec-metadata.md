@@ -12,6 +12,8 @@ tags:
   - RSpec
 ---
 
+![Fall](blog/stock/fall-leaves-pexels-photo.jpg)
+
 A useful feature of RSpec is the ability to pass metadata to tests and suites.
 
 You may already be familiar with how [Capybara](https://github.com/jnicklas/capybara) uses the `:js` option to enable the javascript driver.
