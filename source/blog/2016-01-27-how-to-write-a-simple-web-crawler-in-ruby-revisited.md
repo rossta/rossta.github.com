@@ -332,7 +332,7 @@ end
 
 I admit, it's arguable that this implementation is "simple". Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work up front to define which links to consume and how to process them with "handlers". However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.
 
-Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction for collecting data. It would now be trivial to take our `Spider` class and implement a new processor for a site like [rubygems.org](https://rubygems.org) or [craigslist](https://craigslist.org) and stream the results to a database like [Redis](http://redis.io) or [`YAML::Store`](http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html).
+Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction. It would now be trivial to take our `Spider` class and implement a new processor for a site like [rubygems.org](https://rubygems.org) or [craigslist](https://craigslist.org) and stream the results to a database like [Redis](http://redis.io) or [`YAML::Store`](http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html).
 
 Try it yourself and let me know what you think of this approach ([full source][spider]).
 
