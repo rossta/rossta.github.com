@@ -13,7 +13,7 @@ tags:
 
 ![Web Crawl](blog/stock/spider-web-pexels-photo.jpg)
 
-Let's build a simple web crawler in Ruby. As a point of inspiration, I'd like to
+Let's build a simple web crawler in Ruby. For inspiration, I'd like to
 to revisit [Alan Skorkin's How to Write a Simple Web Crawler in Ruby](http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/) and attempt to achieve something similar with a fresh perspective.
 
 We'll adapt Skork's original goals and provide a few of our own:
@@ -67,7 +67,7 @@ hashes with meaningful key-value pairs.
 
 <aside class="callout panel">
 <p>
-  When using a web crawler, be aware of the limitations described in the website's <a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a> file. We're skipping automated parsing and detection of <a href="http://www.programmableweb.com/robots.txt">Programmable Web's robots.txt</a> in this post. We skip the opportunity to use robots.txt to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
+  When using a web crawler, be aware of the limitations described in the website's <a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a> file. In this post, we skip automated parsing and detection of <a href="http://www.programmableweb.com/robots.txt">Programmable Web's robots.txt</a> to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
 </p>
 </aside>
 
@@ -83,7 +83,7 @@ spider.results
 ```
 
 We'll be able to do some interesting things, like stream the
-results lazily into a flexible storage engine, like [mongodb](https://www.mongodb.org/) or `PStore`,
+results lazily into a flexible storage engine, e.g. [mongodb](https://www.mongodb.org/) or `PStore`,
 available from the [Ruby standard library](http://ruby-doc.org/stdlib-2.3.0/libdoc/pstore/rdoc/PStore.html):
 
 ```ruby
@@ -102,12 +102,11 @@ end
 
 ### Writing the crawler
 
-We're going to write a `Spider` class with a single public method, `#results`. Our spider implementation borrows heavily from [joeyAghion's spidey](https://github.com/joeyAghion/spidey) gem, described as a "loose framework for crawling and scraping websites" and Python's venerable [Scrapy](http://scrapy.org/) project, which allows you to scrape website "in a fast, simple, yet extensible way." I like those goals of being simple and extensible.
+We're going to write a `Spider` class to enumerate website data. Our spider implementation borrows heavily from [joeyAghion's spidey](https://github.com/joeyAghion/spidey) gem, described as a "loose framework for crawling and scraping websites" and Python's venerable [Scrapy](http://scrapy.org/) project, which allows you to scrape websites "in a fast, simple, yet extensible way." Both resources achieve the goals of being easy-to-use and extensible.
 
-If you'd like to skip ahead and preview the full source for this modest example, check out it [on GitHub][spider].
+We'll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it [on GitHub][spider].
 
-Our `Spider` will maintain a set of urls, the results, and the "handlers" -
-these will be method names invoked to process each url. We'll take advantage of one external dependency, `mechanize`, to handle interaction with the pages we visit, extract data, resolve urls, follow redirects, etc. Below is the `#enqueue` method which will be used to add urls and their "handlers" - how the url will be processed - to a running list in our spider.
+Our `Spider` will maintain a set of urls to visit, data is collects, and a set of url "handlers" that will describe how each page should be processed. We'll take advantage of one external dependency, `mechanize`, to handle interaction with the pages we visit - to extract data, resolve urls, follow redirects, etc. Below is the `#enqueue` method to add urls and their handlers to a running list in our spider.
 
 ```ruby
 require "mechanize" # as of this writing, the latest release is 2.7.4
@@ -138,7 +137,7 @@ class Spider
 end
 ```
 
-Since our `Spider` will only know how to enumerate urls and record data, we'll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we'll call this object a "processor". The processor will respond to the messages `#root` and `#handler`: be the first url and processing method to enqueue for the spider, respectively. We'll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.
+Since our `Spider` will only know how to enumerate urls and record data, we'll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we'll call this object a "processor". The processor will respond to the messages `#root` and `#handler` - the first url and handler method to enqueue for the spider, respectively. We'll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.
 
 ```ruby
 class Spider
