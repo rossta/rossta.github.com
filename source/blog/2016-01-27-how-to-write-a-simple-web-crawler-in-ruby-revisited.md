@@ -328,7 +328,9 @@ end
 # 4 : {:name=>"YouTube", :api_provider=>"http://www.google.com", :api_endpoint=>"http://gdata.youtube.com/feeds/", :api_homepage=>"https://developers.google.com/youtube/", :primary_category=>"Video", :secondary_categories=>"Media", :protocol_formats=>"Atom, RSS, JSON, XML, GData", :other_options=>"Atom Publishing Protocol (Atom/RSS)", :ssl_support=>"No", :api_kits=>"Java, PHP Python, Ruby, ActionScript", :api_forum=>"http://groups.google.com/group/youtube-api/", :twitter_url=>"https://twitter.com/YouTubeDev/", :developer_support=>"http://code.google.com/support/bin/topic.py?topic=12357", :console_url=>"http://code.google.com/apis/ajax/playground/?exp=youtube#simple_embed", :authentication_mode=>"OAuth2", :categories=>["Video", "Media"]}
 ```
 
-I admit, it's arguable that this implementation is "simple". However, we were able to construct an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.
+### Wrapping up
+
+I admit, it's arguable that this implementation is "simple". Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work upfront to define which links to consume and how to process them with "handlers". However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.
 
 Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction for collecting data. It would now be trivial to take our `Spider` class and implement a new processor for a site like [rubygems.org](https://rubygems.org) or [craigslist](https://craigslist.org) and stream the results to a database like [Redis](http://redis.io) or [`YAML::Store`](http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html).
 
