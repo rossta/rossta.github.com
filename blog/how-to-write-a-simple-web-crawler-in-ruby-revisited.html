@@ -366,7 +366,7 @@ end
 
 <p>I admit, it&rsquo;s arguable that this implementation is &ldquo;simple&rdquo;. Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work up front to define which links to consume and how to process them with &ldquo;handlers&rdquo;. However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.</p>
 
-<p>Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction for collecting data. It would now be trivial to take our <code>Spider</code> class and implement a new processor for a site like <a href="https://rubygems.org">rubygems.org</a> or <a href="https://craigslist.org">craigslist</a> and stream the results to a database like <a href="http://redis.io">Redis</a> or <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"><code>YAML::Store</code></a>.</p>
+<p>Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction. It would now be trivial to take our <code>Spider</code> class and implement a new processor for a site like <a href="https://rubygems.org">rubygems.org</a> or <a href="https://craigslist.org">craigslist</a> and stream the results to a database like <a href="http://redis.io">Redis</a> or <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"><code>YAML::Store</code></a>.</p>
 
 <p>Try it yourself and let me know what you think of this approach (<a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb">full source</a>).</p>
 
