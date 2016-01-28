@@ -333,7 +333,7 @@ end
 
 &lt;h3&gt;Wrapping up&lt;/h3&gt;
 
-&lt;p&gt;I admit, it&amp;rsquo;s arguable that this implementation is &amp;ldquo;simple&amp;rdquo;. Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work upfront to define which links to consume and how to process them with &amp;ldquo;handlers&amp;rdquo;. However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.&lt;/p&gt;
+&lt;p&gt;I admit, it&amp;rsquo;s arguable that this implementation is &amp;ldquo;simple&amp;rdquo;. Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work up front to define which links to consume and how to process them with &amp;ldquo;handlers&amp;rdquo;. However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.&lt;/p&gt;
 
 &lt;p&gt;Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction for collecting data. It would now be trivial to take our &lt;code&gt;Spider&lt;/code&gt; class and implement a new processor for a site like &lt;a href="https://rubygems.org"&gt;rubygems.org&lt;/a&gt; or &lt;a href="https://craigslist.org"&gt;craigslist&lt;/a&gt; and stream the results to a database like &lt;a href="http://redis.io"&gt;Redis&lt;/a&gt; or &lt;a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"&gt;&lt;code&gt;YAML::Store&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
 
