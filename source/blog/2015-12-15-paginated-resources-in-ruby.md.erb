@@ -126,24 +126,26 @@ MAX = 1000
 
 def paginated_get(path, options = {})
   params  = options.dup
-  page    = params.delete(:page) { 1 }
-  limit   = params.fetch(:limit) { 50 }
+  before  = nil
+  max     = params.delete(:max) { 1000 }
+  limit   = params.delete(:limit) { 50 }
   results = []
 
   loop do
-    data = get(path, { page: page }.merge(params))
+    data = get(path, { before: before, limit: limit }.merge(params))
 
-    page += 1
     results += data
 
-    break if (data.empty? || page * limit >= MAX)
+    break if (data.empty? || results.length >= max)
+
+    before = data.last["id"]
   end
 
   results
 end
 ```
 
-Given a path and hash of parameter options, we'll build up an array of results by fetching the endpoint and incrementing the page number each time. Once either the max is reached or no more results are returned from the API, we'll exit the loop.
+Given a path and hash of parameter options, we'll build up an array of results by fetching the endpoint and requesting the next set of 50 before the last id of the previos set. Once either the max is reached or no more results are returned from the API, we'll exit the loop.
 
 As a starting point, this works nicely. We can simply use `paginated_get` to collect up to 1000 results for a given resource without the caller caring about pages. Here's how we can grab the all the comments we've added to Trello cards:
 
@@ -170,19 +172,21 @@ The main advantage of using `Enumerator` will be to give callers flexibility to 
 def paginated_get(path, options = {})
   Enumerator.new do |y|
     params  = options.dup
-    page    = params.delete(:page) { 1 }
-    limit   = params.fetch(:limit) { 50 }
+    before  = nil
+    total   = 0
+    limit   = params.delete(:limit) { 50 }
 
     loop do
-      data = get(path, { page: page }.merge(params))
+      data = get(path, { before: before, limit: limit }.merge(params))
+      total += data.length
 
       data.each do |element|
         y.yield element
       end
 
-      break if (data.empty? || page * limit >= MAX)
+      break if (data.empty? || total >= MAX)
 
-      page += 1
+      before = data.last["id"]
     end
   end
 end
@@ -266,10 +270,10 @@ require_relative "./trello_client"
 class Cursor
   def initialize(path, options = {})
     @path       = path
-    @params     = options.dup
+    @params     = params
 
     @collection = []
-    @page       = params.fetch(:page, 1)
+    @before     = params.fetch(:before, nil)
     @limit      = params.fetch(:limit, 50)
   end
 end
@@ -285,16 +289,16 @@ class Cursor
   end
 
   def fetch_next_page
-    response              = client.get(@path, @params.merge(page: @page))
+    response              = client.get(@path, @params.merge(before: @before, limit: @limit))
     @last_response_empty  = response.empty?
-    @collection          += response
-    @page                += 1
+    @collection           += response
+    @before               = response.last["id"] unless last?
   end
 
   MAX = 1000
 
   def last?
-    @last_response_empty || @page * @limit >= MAX
+    @last_response_empty || @collection.size >= MAX
   end
 end
 ```
@@ -404,6 +408,13 @@ The main benefit being we don't needlessly invoke `Proc.new` by omitting `&block
 Give it a shot! Pick out an API you like to use and play with techniques for modeling its collection resources. This is a great way to get more experience with Ruby's [Enumerable](/blog/series/enumerable.html). Consider one of these approaches when you need to traverse paginated or partitioned subsets of data in an external or internal API.
 
 Think less about **pages** and more about __data__.
+
+***
+
+Changelog
+
+2016-01-28 - Updated the examples to use the `:before` parameter instead of `:page` for requests for successive "pages"
+           - Posted the [full source of the examples above on GitHub](https://github.com/rossta/loves-enumerable/tree/master/examples/paginated_resources)
 
 ***
 
