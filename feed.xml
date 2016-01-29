@@ -18,13 +18,13 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-f77303e5.jpg"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-eda44250.jpg"&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s build a simple web crawler in Ruby. For inspiration, I’d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin’s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
 
 &lt;p&gt;We’ll adapt Skork’s original goals and...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-f77303e5.jpg" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-eda44250.jpg" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build a simple web crawler in Ruby. For inspiration, I&amp;rsquo;d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin&amp;rsquo;s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
