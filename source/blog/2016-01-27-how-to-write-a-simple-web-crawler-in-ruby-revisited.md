@@ -336,4 +336,4 @@ Modeling results from a multi-level page crawl as a collection may not work for 
 
 Try it yourself and let me know what you think of this approach ([full source][spider]).
 
-[spider]: https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb
+[spider]: https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb
