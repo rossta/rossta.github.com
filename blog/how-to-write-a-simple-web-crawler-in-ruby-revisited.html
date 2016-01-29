@@ -149,7 +149,7 @@ end
 
 <p>We&rsquo;re going to write a <code>Spider</code> class to enumerate website data. Our spider implementation borrows heavily from <a href="https://github.com/joeyAghion/spidey">joeyAghion&rsquo;s spidey</a> gem, described as a &ldquo;loose framework for crawling and scraping websites&rdquo; and Python&rsquo;s venerable <a href="http://scrapy.org/">Scrapy</a> project, which allows you to scrape websites &ldquo;in a fast, simple, yet extensible way.&rdquo; Both resources achieve the goals of being easy-to-use and extensible.</p>
 
-<p>We&rsquo;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it <a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb">on GitHub</a>.</p>
+<p>We&rsquo;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it <a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb">on GitHub</a>.</p>
 
 <p>Our <code>Spider</code> will maintain a set of urls to visit, data is collects, and a set of url &ldquo;handlers&rdquo; that will describe how each page should be processed. We&rsquo;ll take advantage of one external dependency, <code>mechanize</code>, to handle interaction with the pages we visit - to extract data, resolve urls, follow redirects, etc. Below is the <code>#enqueue</code> method to add urls and their handlers to a running list in our spider.</p>
 
@@ -368,7 +368,7 @@ end
 
 <p>Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction. It would now be trivial to take our <code>Spider</code> class and implement a new processor for a site like <a href="https://rubygems.org">rubygems.org</a> or <a href="https://craigslist.org">craigslist</a> and stream the results to a database like <a href="http://redis.io">Redis</a> or <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"><code>YAML::Store</code></a>.</p>
 
-<p>Try it yourself and let me know what you think of this approach (<a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb">full source</a>).</p>
+<p>Try it yourself and let me know what you think of this approach (<a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb">full source</a>).</p>
 
 
     </article>

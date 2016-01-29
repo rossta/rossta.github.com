@@ -118,7 +118,7 @@ end
 
 &lt;p&gt;We&amp;rsquo;re going to write a &lt;code&gt;Spider&lt;/code&gt; class to enumerate website data. Our spider implementation borrows heavily from &lt;a href="https://github.com/joeyAghion/spidey"&gt;joeyAghion&amp;rsquo;s spidey&lt;/a&gt; gem, described as a &amp;ldquo;loose framework for crawling and scraping websites&amp;rdquo; and Python&amp;rsquo;s venerable &lt;a href="http://scrapy.org/"&gt;Scrapy&lt;/a&gt; project, which allows you to scrape websites &amp;ldquo;in a fast, simple, yet extensible way.&amp;rdquo; Both resources achieve the goals of being easy-to-use and extensible.&lt;/p&gt;
 
-&lt;p&gt;We&amp;rsquo;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it &lt;a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb"&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it &lt;a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb"&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Our &lt;code&gt;Spider&lt;/code&gt; will maintain a set of urls to visit, data is collects, and a set of url &amp;ldquo;handlers&amp;rdquo; that will describe how each page should be processed. We&amp;rsquo;ll take advantage of one external dependency, &lt;code&gt;mechanize&lt;/code&gt;, to handle interaction with the pages we visit - to extract data, resolve urls, follow redirects, etc. Below is the &lt;code&gt;#enqueue&lt;/code&gt; method to add urls and their handlers to a running list in our spider.&lt;/p&gt;
 
@@ -337,7 +337,7 @@ end
 
 &lt;p&gt;Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction. It would now be trivial to take our &lt;code&gt;Spider&lt;/code&gt; class and implement a new processor for a site like &lt;a href="https://rubygems.org"&gt;rubygems.org&lt;/a&gt; or &lt;a href="https://craigslist.org"&gt;craigslist&lt;/a&gt; and stream the results to a database like &lt;a href="http://redis.io"&gt;Redis&lt;/a&gt; or &lt;a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"&gt;&lt;code&gt;YAML::Store&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Try it yourself and let me know what you think of this approach (&lt;a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider.rb"&gt;full source&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Try it yourself and let me know what you think of this approach (&lt;a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb"&gt;full source&lt;/a&gt;).&lt;/p&gt;
 </content>
   </entry>
   <entry>
