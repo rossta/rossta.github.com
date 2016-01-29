@@ -1523,8 +1523,12 @@ end
 
 &lt;p&gt;Changelog&lt;/p&gt;
 
-&lt;p&gt;2016-01-28 - Updated the examples to use the &lt;code&gt;:before&lt;/code&gt; parameter instead of &lt;code&gt;:page&lt;/code&gt; for requests for successive &amp;ldquo;pages&amp;rdquo;
-           - Posted the &lt;a href="https://github.com/rossta/loves-enumerable/tree/master/examples/paginated_resources"&gt;full source of the examples above on GitHub&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;2016-01-28&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Updated the examples to use the &lt;code&gt;:before&lt;/code&gt; parameter instead of &lt;code&gt;:page&lt;/code&gt; for requests for successive &amp;ldquo;pages&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;Posted the &lt;a href="https://github.com/rossta/loves-enumerable/tree/master/examples/paginated_resources"&gt;full source of the examples above on GitHub&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;hr&gt;
 
