@@ -52,7 +52,8 @@ set :images_dir, 'assets/images'
 configure :build do
   activate :minify_css
   activate :minify_javascript
-  activate :asset_hash
+  activate :asset_hash, ignore: [/^assets\/images\//]
+  activate :cache_buster
   activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 
   # Use relative URLs
