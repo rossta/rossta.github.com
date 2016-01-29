@@ -2,9 +2,14 @@ require "uglifier"
 
 activate :livereload
 activate :directory_indexes
-activate :meta_tags
+# activate :meta_tags
 
 # Time.zone = "UTC"
+activate :external_pipeline,
+         name: :webpack,
+         command: build? ? "./node_modules/webpack/bin/webpack.js --bail" : "./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
+         source: ".tmp/dist",
+         latency: 1
 
 ###########################
 ## Blog
@@ -119,26 +124,26 @@ end
 #   config.output_style = :compact
 # end
 
-compass_config do |config|
-  # Require any additional compass plugins here.
-  config.add_import_path "../bower_components/foundation/scss"
+# compass_config do |config|
+#   # Require any additional compass plugins here.
+#   config.add_import_path "../bower_components/foundation/scss"
+#
+#   # Set this to the root of your project when deployed:
+#   config.http_path = "/"
+#   config.css_dir = "stylesheets"
+#   config.sass_dir = "stylesheets"
+#   config.images_dir = "images"
+#   config.javascripts_dir = "javascripts"
+# end
 
-  # Set this to the root of your project when deployed:
-  config.http_path = "/"
-  config.css_dir = "stylesheets"
-  config.sass_dir = "stylesheets"
-  config.images_dir = "images"
-  config.javascripts_dir = "javascripts"
-end
-
-after_configuration do
-  @bower_config = JSON.parse(IO.read("#{root}/.bowerrc"))
-  sprockets.append_path File.join(root, @bower_config["directory"])
-
-  sprockets.import_asset "foundation/js/vendor/modernizr.js"
-  sprockets.import_asset "foundation/js/vendor/jquery.js"
-  sprockets.import_asset "foundation/js/vendor/jquery.cookie.js"
-end
+# after_configuration do
+#   @bower_config = JSON.parse(IO.read("#{root}/.bowerrc"))
+#   sprockets.append_path File.join(root, @bower_config["directory"])
+#
+#   sprockets.import_asset "foundation/js/vendor/modernizr.js"
+#   sprockets.import_asset "foundation/js/vendor/jquery.js"
+#   sprockets.import_asset "foundation/js/vendor/jquery.cookie.js"
+# end
 
 ###
 # Page options, layouts, aliases and proxies
@@ -206,7 +211,7 @@ helpers do
   end
 
   def signup_form_url
-    "//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=#{settings.mailchimp_form_id}"
+    "//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=#{config[:mailchimp_form_id]}"
   end
 
   def tweet_link_to(text, params = {})
@@ -226,6 +231,6 @@ helpers do
   ##
   # Renders a javascript asset inline.
   def inline_javascript(name)
-    Uglifier.new.compile(sprockets["#{name}.js"].to_s)
+    # Uglifier.new.compile(sprockets["#{name}.js"].to_s)
   end
 end

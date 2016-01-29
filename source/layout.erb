@@ -1,14 +1,14 @@
 <!doctype html>
 <html>
   <head>
-    <%= auto_display_meta_tags(separator: '-') %>
+    <%#= auto_display_meta_tags(separator: '-') %>
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <%= stylesheet_link_tag "all" %>
-    <%= javascript_include_tag 'head' %>
+    <%= stylesheet_link_tag "application" %>
+    <%#= javascript_include_tag 'head' %>
     <%= favicon_tag 'favicon.ico' %>
   </head>
   <body id="application" class="typekit">
@@ -26,7 +26,7 @@
         </section>
       </footer>
     </div>
-    <%= javascript_include_tag "all" %>
+    <%= javascript_include_tag "index" %>
     <%= yield_content :javascripts %>
     <%= partial "layouts/analytics" %>
   </body>

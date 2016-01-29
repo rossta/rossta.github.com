@@ -1,14 +1,10 @@
 source "https://rubygems.org"
 
-gem "rake"
-gem "middleman", github: "middleman/middleman", branch: "v3-stable"
-gem "middleman-blog", github: "middleman/middleman-blog", branch: "v3-stable"
+gem "middleman", "~> 4"
+gem "middleman-blog"
+gem "middleman-livereload"
+gem "middleman-meta-tags", github: "tiste/middleman-meta-tags"
 gem "redcarpet"
 gem "nokogiri"
-gem "middleman-meta-tags", github: "tiste/middleman-meta-tags"
-
-# For feed.xml.builder
-gem "builder"
-
-gem "middleman-livereload"
-gem "pry-byebug"
+gem "builder" # For feed.xml.builder
+gem "rake"
