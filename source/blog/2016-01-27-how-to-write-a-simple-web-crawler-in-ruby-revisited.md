@@ -7,8 +7,8 @@ description: Bringing a fresh perspective and Ruby's Enumerator to revisit an ol
 pull_image: 'https://rossta.net/assets/images/blog/stock/spider-web-pexels-photo.jpg'
 series: Enumerable
 tags:
-- Code
-- Ruby
+  - Code
+  - Ruby
 ---
 
 ![Web Crawl](blog/stock/spider-web-pexels-photo.jpg)

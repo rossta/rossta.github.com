@@ -9,7 +9,6 @@ series: Enumerable
 tags:
   - Code
   - Ruby
-  - Enumerable
 ---
 
 ![Goodies](blog/stock/dark-brown-milk-candy-pexels-photo.jpg)
