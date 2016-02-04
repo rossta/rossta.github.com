@@ -1,0 +1,328 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Recurring events in Ruby - rossta.net</title>
+<meta name="description" content="Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule de..." />
+<meta name="keywords" content="Code, Ruby" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available in the Recurrence gem." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/clock-pexels-photo.jpg" />
+<meta name="twitter:title" content="Recurring events in Ruby" />
+<meta property="og:description" content="Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available in the Recurrence gem." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/clock-pexels-photo.jpg" />
+<meta property="og:title" content="Recurring events in Ruby" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/all-441b04d6.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head-0145479a.js"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta.net</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header>
+  <h2>
+    Recurring events in Ruby
+      <br />
+      <small>Introducing the Montrose gem</small>
+  </h2>
+</header>
+
+
+      <p><img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1454547556" /></p>
+
+<p>I was considering recently how I&rsquo;d build an <a href="http://meetedgar.com/">Edgar</a> clone to post updates about <a href="/">rossta.net</a> on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.</p>
+
+<p>For scheduling tasks, we have <a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html">cron</a> at the system level and even such options as the <a href="https://github.com/javan/whenever"><code>whenever</code></a> gem to setup cron from Rails and Sinatra applications. Rubyists can also take advantage of fantastic background job schedulers like <a href="https://github.com/jmettraux/rufus-scheduler"><code>rufus-scheduler</code></a> to run recurring tasks from a separate process or even an API for defining repeating <a href="https://github.com/mperham/sidekiq"><code>Sidekiq</code></a> jobs with <a href="https://github.com/tobiassvn/sidetiq"><code>Sidetiq</code></a>.</p>
+
+<p>For an Edgar clone though, we need a layer for users of the application to define their own recurrences. This means finding a way to represent time-based recurrences which are:</p>
+
+<ol>
+<li>serializable, so we can save them to the database, and</li>
+<li>enumerable, so we can determine when the next post(s) should be shared on designated social networks.</li>
+</ol>
+
+<p>It&rsquo;s an interesting problem to model. While we have classes like <code>Time</code>, <code>Date</code>, and event <code>ActiveSupport::Duration</code>, it&rsquo;s more elusive to consider recurrences. I mean, what does it mean to represent the meeting time of my <a href="http://www.meetup.com/NYC-rb/">NYC.rb</a> meetup: &ldquo;every second Tuesday of the month at 7pm&rdquo;.</p>
+
+<p>Solutions for this exist in Ruby, namely <a href="https://github.com/seejohnrun/ice_cube"><code>ice_cube</code></a>. If you&rsquo;re looking for a mature, up-to-date project devoted to modeling recurring events in Ruby, please check it out. I did, and highly recommend it. After playing with it for awhile, I found felt the urge for alternative semantics - like the ability to define a recurrence without a start date - and API similar to the hash-like syntax provided by another less-active recurring events library, <a href="https://github.com/fnando/recurrence"><code>recurrence</code></a>.</p>
+
+<p>I thought of the <a href="https://github.com/httprb/http"><code>HTTP</code></a> gem which bills
+itself as the following:</p>
+
+<blockquote>
+<p>HTTP (The Gem! a.k.a. http.rb) is an easy-to-use client library for making requests from Ruby. It uses a simple method chaining system for building requests, similar to Python&rsquo;s <a href="http://docs.python-requests.org/en/latest/">Requests</a>.</p>
+</blockquote>
+
+<p>Taking a cue from <code>http.rb</code> and the <code>recurrence</code> gem, I set out to create something similar for recurring events.</p>
+
+<p>Introducing <a href="https://github.com/rossta/montrose"><code>Montrose</code></a>.</p>
+
+<p>Montrose allows you to easily create &ldquo;recurrence&rdquo; objects through chaining:</p>
+
+<pre><code class="ruby"># Every Monday at 10:30am
+Montrose.weekly.on(:monday).at(&quot;10:30 am&quot;)
+=&gt; #&lt;Montrose::Recurrence...&gt;
+</code></pre>
+
+<p>Or the constructor hash-syntax:</p>
+
+<pre><code class="ruby">Montrose::Recurrence.new(every: :week, on: :monday, at: &quot;10:30 am&quot;)
+=&gt; #&lt;Montrose::Recurrence...&gt;
+</code></pre>
+
+<p>A Montrose recurrence responds to <code>#events</code>, which returns an <a href="http://localhost:4567/blog/what-is-enumerator.html"><code>Enumerator</code></a> that can generate timestamps:</p>
+
+<pre><code class="ruby">r = Montrose.hourly
+=&gt; #&lt;Montrose::Recurrence...&gt;
+
+r.events
+=&gt; #&lt;Enumerator:...&gt;
+
+r.events.take(10)
+=&gt; [2016-02-03 18:26:08 -0500,
+2016-02-03 19:26:08 -0500,
+2016-02-03 20:26:08 -0500,
+2016-02-03 21:26:08 -0500,
+2016-02-03 22:26:08 -0500,
+2016-02-03 23:26:08 -0500,
+2016-02-04 00:26:08 -0500,
+2016-02-04 01:26:08 -0500,
+2016-02-04 02:26:08 -0500,
+2016-02-04 03:26:08 -0500]
+</code></pre>
+
+<p>Montrose recurrences are themselves enumerable:</p>
+
+<pre><code class="ruby"># Every month starting a year from now on Friday the 13th for 5 occurrences
+r = Montrose.monthly.starting(1.year.from_now).on(friday: 13).repeat(5)
+
+r.map(&amp;:to_date)
+=&gt; [Fri, 13 Oct 2017,
+Fri, 13 Apr 2018,
+Fri, 13 Jul 2018,
+Fri, 13 Sep 2019,
+Fri, 13 Dec 2019]
+</code></pre>
+
+<p>Each chained recurrence returns a new object so they can be composed and
+merged:</p>
+
+<pre><code class="ruby"># Every week
+r1 = Montrose.every(:week)
+r2 = Montrose.on([:tuesday, :thursday])
+r3 = Montrose.at(&quot;12 pm&quot;)
+r4 = Montrose.total(4)
+
+r1.merge(r2).merge(r3).merge(r4).to_a
+=&gt; [2016-02-04 12:00:00 -0500,
+2016-02-09 12:00:00 -0500,
+2016-02-11 12:00:00 -0500,
+2016-02-16 12:00:00 -0500]
+</code></pre>
+
+<p>With a nod to DHH and the <a href="http://rubyonrails.org/doctrine">Rails doctrine</a>, Montrose aims to <a href="http://rubyonrails.org/doctrine/#optimize-for-programmer-happiness">optimize for programmer happiness</a>. Hence, there are several ways to define equivalent recurrences. For example, recurrences intervals can be configured as an explicit option, or inferred by the frequency duration.</p>
+
+<pre><code class="ruby"># Every 3 hours, all equivalent
+Montrose.hourly.interval(3)
+Montrose.every(3.hours)
+Montrose::Recurrence.new(every: :hour, interval: 3)
+Montrose::Recurrence.new(every: 3.hours)
+</code></pre>
+
+<p><code>Montrose</code> aims to provide useful feedback when you run into exceptions:</p>
+
+<pre><code class="ruby">r = Montrose::Recurrence(total: 1)
+r.each { |t| puts t}
+Montrose::ConfigurationError: Please specify the :every option
+</code></pre>
+
+<p>Conceptually, recurrences can represent an infinite sequence. When we say
+simply &ldquo;every day&rdquo;, there is no implied ending. It&rsquo;s therefore possible to
+create a recurrence that can enumerate forever.</p>
+
+<pre><code class="ruby"># Every day starting now
+r = Montrose.daily
+
+# this expression will never complete, Ctrl-c!
+r.map(&amp;:to_date)
+
+# so use your `Enumerable` methods wisely
+r.lazy.map(&amp;:to_date).select { |d| d.mday &gt; 25 }.take(5).to_a
+=&gt; [Fri, 26 Feb 2016,
+Sat, 27 Feb 2016,
+Sun, 28 Feb 2016,
+Mon, 29 Feb 2016,
+Sat, 26 Mar 2016]
+</code></pre>
+
+<p>It&rsquo;s straightforward to convert recurrence options back to a hash.</p>
+
+<pre><code class="ruby"># Every 10 minutes starting now
+opts = Montrose::Recurrence.new(every: 10.minutes).to_h
+=&gt; {:every=&gt;:minute, :interval=&gt;10}
+
+Montrose::Recurrence.new(opts).take(3)
+=&gt; [2016-02-03 19:06:07 -0500,
+2016-02-03 19:16:07 -0500,
+2016-02-03 19:26:07 -0500]
+</code></pre>
+
+<p>Accordingly, <code>Montrose::Recurrence</code> implements <code>.dump</code> and <code>.load</code> so that you can use it with the <code>serialize</code> feature of <code>ActiveRecord</code> to back a recurrence by a database column in your Rails apps:</p>
+
+<pre><code class="ruby">class EventSeries &lt; ActiveRecord::Base
+  serialize :recurrence, Montrose::Recurrence
+end
+
+es = EventSeries.new(recurrence: Montrose.daily.at(&quot;12pm&quot;))
+es.save
+
+es = EventSeries.last
+es.recurrence
+# =&gt; #&lt;Montrose::Recurrence:...&gt;
+</code></pre>
+
+<p>This library is still in its early stages (version <code>0.2.1</code> as of this writing) and aspects of the API are still in flux, such as the ability to configure default start and end times or combines multiple, distinct recurrences in a <code>Montrose::Schedule</code>. <code>Montrose</code> has one dependency - <code>ActiveSupport</code> - for time calculations.</p>
+
+<p>There are <a href="https://github.com/rossta/montrose/issues">plenty of missing features</a>, including iCal serialization though Montrose already <a href="https://github.com/rossta/montrose/blob/master/spec/rfc_spec.rb">supports most of the examples</a> given by the iCal spec, <a href="https://www.ietf.org/rfc/rfc2445.txt">rfc2445</a>.</p>
+
+<p>I still haven&rsquo;t built that Edgar clone, but feel this is a good place from which to grow. As I said earlier, the <code>ice_cube</code> gem is a mature library and already does much of what I&rsquo;ve described here. Writing my own solution allowed me to think more deeply about the internal mechanisms for calculating recurrences and ultimately, once my curiosity was piqued, I couldn&rsquo;t stop. If, you like what <code>Montrose</code> has to offer and you&rsquo;re feeling adventurous, try it out in your own application and send some feedback. Don&rsquo;t hesitate to <a href="https://github.com/rossta/montrose">fork the project</a> and contribute.</p>
+
+<p>NYC.rb?</p>
+
+<pre><code class="ruby"># Second Tuesday of every month
+r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
+</code></pre>
+
+<p>See you there.</p>
+
+
+    </article>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Recurring%20events%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Frecurring-events-in-ruby.html">share it on Twitter</a>
+        and <a href="https://twitter.com/rossta">follow me</a>.
+      </p>
+      <p>
+          This post is part of the <a href="/blog/series/enumrable.html">Enumrable</a> series.
+        Published on Feb  3, 2016
+      </p>
+    </section>
+  </section>
+  <section class="share margin-bottom double">
+  </section>
+  <section class="signup-form standalone margin-bottom double">
+    <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Stop Wrangling with Rails</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+    </form>
+  </div>
+
+  <!--End mc_embed_signup-->
+</div>
+
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "recurring-events-in-ruby";
+    var disqus_title      = "Recurring events in Ruby";
+    var disqus_url        = "https://rossta.net/blog/recurring-events-in-ruby.html";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/all-fcc9857c.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+}}();
+if($&&$.tracking){var traits=$.tracking.traits,events=$.tracking.events;analytics.identify(traits),Object.keys(events).forEach(function(t,a){analytics.track(t,events[t])})}else analytics.identify();
+</script>
+
+  </body>
+</html>

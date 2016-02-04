@@ -19,6 +19,18 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/series/enumrable.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/page/7/index.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/page/6/index.html</loc>
     <lastmod>2016-02-03T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -56,18 +68,6 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/01/04.html</loc>
-    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010/01.html</loc>
-    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010/02/17.html</loc>
     <lastmod>2016-02-03T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -253,6 +253,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2016-02-03-recurring-events-in-ruby.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/index.html</loc>
     <lastmod>2016-02-03T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -295,19 +301,19 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2010/01.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010/02/17.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/2010/02.html</loc>
-    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010/05/17.html</loc>
-    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010/05.html</loc>
     <lastmod>2016-02-03T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -362,6 +368,18 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2016.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2016/02.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2016/02/03.html</loc>
     <lastmod>2016-02-03T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -451,7 +469,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/2010/07/20.html</loc>
+    <loc>https://rossta.net/blog/2010/05/17.html</loc>
     <lastmod>2016-02-03T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -644,6 +662,18 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/07.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010/07/20.html</loc>
+    <lastmod>2016-02-03T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010/05.html</loc>
     <lastmod>2016-02-03T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
