@@ -26,7 +26,6 @@ It's an interesting problem to model. While we have classes like `Time`, `Date`,
 
 Solutions for this exist in Ruby, namely [`ice_cube`](https://github.com/seejohnrun/ice_cube). If you're looking for a mature, up-to-date project devoted to modeling recurring events in Ruby, please check it out. I did, and highly recommend it. After playing with it for awhile, I found felt the urge for alternative semantics - like the ability to define a recurrence without a start date - and API similar to the hash-like syntax provided by another less-active recurring events library, [`recurrence`](https://github.com/fnando/recurrence).
 
-
 I thought of the [`HTTP`](https://github.com/httprb/http) gem which bills
 itself as the following:
 
@@ -117,7 +116,7 @@ Montrose::Recurrence.new(every: 3.hours)
 `Montrose` aims to provide useful feedback when you run into exceptions:
 
 ```ruby
-r = Montrose::Recurrence(total: 1)
+r = Montrose.total(1)
 r.each { |t| puts t}
 Montrose::ConfigurationError: Please specify the :every option
 ```
@@ -175,7 +174,6 @@ This library is still in its early stages (version `0.2.1` as of this writing) a
 There are [plenty of missing features](https://github.com/rossta/montrose/issues), including iCal serialization though Montrose already [supports most of the examples](https://github.com/rossta/montrose/blob/master/spec/rfc_spec.rb) given by the iCal spec, [rfc2445](https://www.ietf.org/rfc/rfc2445.txt).
 
 I still haven't built that Edgar clone, but feel this is a good place from which to grow. As I said earlier, the `ice_cube` gem is a mature library and already does much of what I've described here. Writing my own solution allowed me to think more deeply about the internal mechanisms for calculating recurrences and ultimately, once my curiosity was piqued, I couldn't stop. If, you like what `Montrose` has to offer and you're feeling adventurous, try it out in your own application and send some feedback. Don't hesitate to [fork the project](https://github.com/rossta/montrose) and contribute.
-
 
 NYC.rb?
 
