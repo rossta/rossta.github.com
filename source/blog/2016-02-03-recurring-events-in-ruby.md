@@ -50,7 +50,7 @@ Montrose::Recurrence.new(every: :week, on: :monday, at: "10:30 am")
 => #<Montrose::Recurrence...>
 ```
 
-A Montrose recurrence responds to `#events`, which returns an [`Enumerator`](http://localhost:4567/blog/what-is-enumerator.html) that can generate timestamps:
+A Montrose recurrence responds to `#events`, which returns an [`Enumerator`](/blog/what-is-enumerator.html) that can generate timestamps:
 
 ```ruby
 r = Montrose.hourly
