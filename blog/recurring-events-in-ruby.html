@@ -157,7 +157,7 @@ Montrose::Recurrence.new(every: 3.hours)
 
 <p><code>Montrose</code> aims to provide useful feedback when you run into exceptions:</p>
 
-<pre><code class="ruby">r = Montrose::Recurrence(total: 1)
+<pre><code class="ruby">r = Montrose.total(1)
 r.each { |t| puts t}
 Montrose::ConfigurationError: Please specify the :every option
 </code></pre>
