@@ -64,7 +64,7 @@ Montrose.weekly.on(:monday).at(&amp;quot;10:30 am&amp;quot;)
 =&amp;gt; #&amp;lt;Montrose::Recurrence...&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;A Montrose recurrence responds to &lt;code&gt;#events&lt;/code&gt;, which returns an &lt;a href="http://localhost:4567/blog/what-is-enumerator.html"&gt;&lt;code&gt;Enumerator&lt;/code&gt;&lt;/a&gt; that can generate timestamps:&lt;/p&gt;
+&lt;p&gt;A Montrose recurrence responds to &lt;code&gt;#events&lt;/code&gt;, which returns an &lt;a href="/blog/what-is-enumerator.html"&gt;&lt;code&gt;Enumerator&lt;/code&gt;&lt;/a&gt; that can generate timestamps:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;r = Montrose.hourly
 =&amp;gt; #&amp;lt;Montrose::Recurrence...&amp;gt;
