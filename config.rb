@@ -34,8 +34,9 @@ end
 activate :blog do |blog|
   blog.name = "talks"
   blog.prefix = "talks"
-  blog.permalink = "{year}/{title}"
+  blog.permalink = "/:title.html"
   blog.taglink = "tags/{tag}"
+  blog.sources = ":year-:month-:day-:title.html"
   blog.default_extension = ".md"
   blog.layout   = "talk"
   blog.paginate = true

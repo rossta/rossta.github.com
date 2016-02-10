@@ -22,7 +22,6 @@ def origin_url
 end
 
 def git_initialize
-  binding.pry
   # local git initialized?
   return if File.exist?(".git")
   system "git init"
