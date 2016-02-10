@@ -6,32 +6,40 @@ activate :meta_tags
 
 # Time.zone = "UTC"
 
+###########################
+## Blog
+###########################
 activate :blog do |blog|
+  blog.name = "blog"
   blog.prefix = "blog"
   blog.permalink = "/:title.html"
   blog.sources = ":year-:month-:day-:title.html"
-  # blog.taglink = "tags/:tag.html"
   blog.layout = "post"
-  # blog.summary_separator = /(READMORE)/
-  # blog.summary_length = 250
-  # blog.year_link = ":year.html"
-  # blog.month_link = ":year/:month.html"
-  # blog.day_link = ":year/:month/:day.html"
-  # blog.default_extension = ".markdown"
-
   blog.tag_template = "tag.html"
   blog.calendar_template = "calendar.html"
-
   blog.paginate = true
-  # blog.per_page = 10
-  # blog.page_link = "page/:num"
-
+  blog.per_page = 25
+  blog.default_extension = ".md"
   blog.custom_collections = {
     series: {
       link: '/series/{series}.html',
       template: '/series.html'
     }
   }
+end
+
+###########################
+## Speakers
+###########################
+activate :blog do |blog|
+  blog.name = "talks"
+  blog.prefix = "talks"
+  blog.permalink = "{year}/{title}"
+  blog.taglink = "tags/{tag}"
+  blog.default_extension = ".md"
+  blog.layout   = "talk"
+  blog.paginate = true
+  blog.per_page = 25
 end
 
 set :markdown_engine, :redcarpet
