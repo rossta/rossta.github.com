@@ -11,3 +11,4 @@ gem "middleman-meta-tags", github: "tiste/middleman-meta-tags"
 gem "builder"
 
 gem "middleman-livereload"
+gem "pry-byebug"
