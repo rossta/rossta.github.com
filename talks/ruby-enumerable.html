@@ -1,19 +1,19 @@
 <!doctype html>
 <html>
   <head>
-    <title>About - rossta.net</title>
-<meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta name="keywords" content="Ross Kaffenberger, software, software developer, software engineering, computer programming, web development, test driven development, TDD, Ruby, Javascript, Ruby on Rails, Rails, RSpec, Clojure, HTML, CSS" />
+    <title>Enumerable - Why I Fell in Love with Ruby - rossta.net</title>
+<meta name="description" content="You may not be using enough of the Enumerable API or doing enough with Enumerator." />
+<meta name="keywords" content="Code, Ruby" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
-<meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta name="twitter:image:src" content="https://rossta.net/assets/images/icon-ruby.png" />
-<meta name="twitter:title" content="About" />
-<meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta property="og:image" content="https://rossta.net/assets/images/icon-ruby.png" />
-<meta property="og:title" content="About" />
+<meta name="twitter:description" content="You may not be using enough of the Enumerable API or doing enough with Enumerator." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/enumerator-1-2-3.jpg" />
+<meta name="twitter:title" content="Enumerable - Why I Fell in Love with Ruby" />
+<meta property="og:description" content="You may not be using enough of the Enumerable API or doing enough with Enumerator." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/enumerator-1-2-3.jpg" />
+<meta property="og:title" content="Enumerable - Why I Fell in Love with Ruby" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -45,45 +45,53 @@
 
     <div class="row">
       <section id="main" role="main" class="large-12 small-12 columns">
-          <section id="page">
-    <header>
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header>
   <h2>
-    All Things Web
+    Enumerable - Why I Fell in Love with Ruby
       <br />
-      <small>This is an &ldquo;About&rdquo; page</small>
+      <small>Using Ruby's Enumerable module and Enumerator class</small>
   </h2>
 </header>
 
-<p><br></p>
 
-<p>I didn&rsquo;t grow up coding like a lot of my colleagues. Like many of you, I discovered the joy of programming later in life. I know how challenging it can be to learn this completely new way of thinking while dealing with LIFE. But hey, you&rsquo;ve got it good - there were no coding bootcamps or StackOverflow when I was starting out. If I could do it then, you can definitely do it now. Even better, you can learn from my mistakes.</p>
+      <p>I recently gave a talk at both <a title="NYC.rb" href="http://www.meetup.com/NYC-rb/events/223864932/">NYC.rb</a> and <a title="DC Ruby User's Group" href="http://www.meetup.com/dcruby/events/225338026/">DCRUG</a> about some great features of <a href="http://ruby-doc.org/core-2.2.3/Enumerable.html"><code>Enumerable</code></a> that deserve more attention. I touch on interesting use cases for using <code>Enumerable</code> and <code>Enumerator</code> including API client libraries, streaming HTTP, web crawlers, CSV parsing, and infinite sequences.</p>
 
-<p>Now I&rsquo;m the Head of Engineering at <a title="Devpost is the home for hackers" href="http://devpost.com">Devpost</a>, the public hackaton platform where I am in charge of the team building the leading hackthon platform while improving our development and deployment practices, expanding our architecture, optimizing performance, and creating new features.</p>
+<script async class="speakerdeck-embed" data-id="df623bc08aa642328c303a619c92fab0" data-ratio="1.55386949924127" src="//speakerdeck.com/assets/embed.js"></script>
 
-<p><a href="http://devpost.com"><img src="/assets/images/screenshots/screenshot-devpost.png?1455155999" /></a></p>
+<p>I put together a bunch of code samples for the talk and assembled them in a repository on GitHub:</p>
 
-<p>Prior to Devpost, I was an early hire at <a href="http://weplay.com">Weplay</a>, an online youth sports team platform and social community. Before its acquisition by TeamSnap in 2013, Weplay grew to over 400,000 users on 25,000 teams across the country. We built messaging, scheduling, recurring events, drill library, local sports news, activity distrubution, and group privacy controls. Some other notable features included team map visualization, media uploading and gallery, league management tools, color customization, user signup validation, inline-editing interfaces, team polling, and avataring.</p>
+<p><a href="https://github.com/rossta/loves-enumerable">https://github.com/rossta/loves-enumerable</a></p>
 
-<p>I’ve played large roles in defining the product vision, providing customer support, evangelizing best practices for Javascript coding and testing, and improving front-end performance.</p>
+<p>To run a sample, clone the repo and install the gems:</p>
 
-<p><a href="http://weplay.com"><img src="/assets/images/screenshots/screenshot-weplay.png?1455155999" /></a></p>
+<pre><code class="bash">$ git clone https://github.com/rossta/loves-enumerable.git
+$ cd loves-enumerable
+$ bundle install
+</code></pre>
 
-<p>Before I got into web development, I was a member of the <a href="tfa">Teach for America</a> program, teaching science in Houston, TX at Jackson Middle School in the <a href="hisd">Houston Independent School District</a> and at the amazing <a href="yesp">YES College Prep</a>. At YES, I coached a robotics club that twice won the state <a href="ball">Botball</a> championships.</p>
+<p>Then simply run the code with the ruby executable.</p>
 
-<p>For more on my professional experience and background, please refer to my <a href="/resume.pdf">résumé</a>.</p>
+<pre><code class="bash">$ ruby code/pascals_triangle.rb
+</code></pre>
 
-<p>You can checkout my projects and open source contributions on <a href="https://github.com/rossta">github.com/rossta</a>.</p>
+<p>You&rsquo;ll get the most out of this repo by inspecting the source along with following the presentation.</p>
 
-<p>You can follow me <a href="https://twitter.com/rossta">@rossta on twitter.com/rossta</a>.</p>
 
-<p><br/></p>
-
-<hr>
-
-<p><br/></p>
-
-<!-- Begin MailChimp Signup Form -->
-
+    </article>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        If you liked this presentation, <a target="_blank" href="https://twitter.com/intent/tweet?text=Enumerable%20-%20Why%20I%20Fell%20in%20Love%20with%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Ftalks%2Fruby-enumerable.html">share it on Twitter</a>
+        and <a href="https://twitter.com/rossta">follow me</a>.
+      </p>
+    </section>
+  </section>
+  <section class="share margin-bottom double">
+  </section>
+  <section class="signup-form standalone margin-bottom double">
+    <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
   <h3>Stop Wrangling with Rails</h3>
   <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
@@ -117,31 +125,34 @@
   <!--End mc_embed_signup-->
 </div>
 
-<p><br/></p>
-
-<section class="profile">
-  <img class="th center margin-bottom" src="/assets/images/rossta.jpg?1455155999" />
-
-  <h5 class="profile-name">Ross Kaffenberger</h5>
-  <h6 class="subtle">New York, New York</h6>
-  <a href="https://twitter.com/rossta"
-  class="twitter-follow-button"
-  data-show-count="false"
-  data-size="large"
-  >Follow @rossta</a>
-
-</section>
-
   </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "ruby-enumerable";
+    var disqus_title      = "Enumerable - Why I Fell in Love with Ruby";
+    var disqus_url        = "https://rossta.net/talks/ruby-enumerable.html";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
 
       </section>
     </div>
-      <div id="zen">
-    <div class="row">
-      <div class="enlightenment large-12 columns"></div>
-    </div>
-  </div>
-
+    
     <div class="row">
       <footer>
         <section class="large-12 columns center-inline-list">
@@ -157,15 +168,7 @@
       </footer>
     </div>
     <script src="/assets/javascripts/all-fcc9857c.js"></script>
-      <script>
-    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-  </script>
-    <script type="text/javascript">
-      $(function() {
-         $.zen(function(toBe) { $('#zen').find('.enlightenment').text(toBe); });
-      });
-    </script>
-
+    
     <script type="text/javascript">
 !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
 analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
