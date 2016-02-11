@@ -1,0 +1,39 @@
+---
+layout: page
+pageable: true
+per_page: 25
+---
+
+<% content_for(:title) { "Projects" } %>
+
+<%= page_header "Projects", "Selected projects and free open source software" %>
+
+<br/>
+<section id="projects" class="index-posts">
+  <% blog("projects").articles.each.with_index do |article, i| %>
+    <article class="index-post">
+      <header>
+        <h3>
+          <%= link_to article.title, article %>
+        </h3>
+        <% if article.data.summary %>
+          <p class="alt-title subtle"><%= article.data.summary %></p>
+        <% end %>
+      </header>
+      <%= article.body %>
+      <% if article.data.links %>
+        <p>
+          <% article.data.links.each.with_index do |(name, url), j| %>
+            <%= link_to name, url %>
+            <% unless j == article.data.links.length - 1 %>
+              &middot;
+            <% end %>
+          <% end %>
+        </p>
+      <% end %>
+    </article>
+    <% unless i == blog("projects").articles.length %>
+      <br /><hr /><br />
+    <% end %>
+  <% end %>
+</section>

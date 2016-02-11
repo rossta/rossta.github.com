@@ -29,7 +29,7 @@ activate :blog do |blog|
 end
 
 ###########################
-## Speakers
+## Talks
 ###########################
 activate :blog do |blog|
   blog.name = "talks"
@@ -39,6 +39,21 @@ activate :blog do |blog|
   blog.sources = ":year-:month-:day-:title.html"
   blog.default_extension = ".md"
   blog.layout   = "talk"
+  blog.paginate = true
+  blog.per_page = 25
+end
+
+###########################
+## Projects
+###########################
+activate :blog do |blog|
+  blog.name = "projects"
+  blog.prefix = "projects"
+  blog.permalink = "/:title.html"
+  blog.taglink = "tags/{tag}"
+  blog.sources = ":year-:month-:day-:title.html"
+  blog.default_extension = ".md"
+  blog.layout   = "project"
   blog.paginate = true
   blog.per_page = 25
 end

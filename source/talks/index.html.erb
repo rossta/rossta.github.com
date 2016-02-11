@@ -7,13 +7,13 @@ per_page: 25
 <%= page_header "Talks on rossta.net", "Programming for the web" %>
 
 <br/>
-<section id="blog" class="index-posts">
+<section id="talks" class="index-posts">
   <% blog("talks").articles.each do |article| %>
     <article class="index-post">
       <header>
-        <h4>
+        <h3>
           <%= link_to article.title, article %>
-        </h4>
+        </h3>
         <% if article.data.summary %>
           <p class="alt-title subtle"><%= article.data.summary %></p>
         <% end %>
