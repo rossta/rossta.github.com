@@ -3,9 +3,9 @@ title: Pathfinder
 author: Ross Kaffenberger
 summary: Graph search demo on React.js, Redux, and Immutable.js
 description: Graph search demo on React.js, Redux, and Immutable.js
-pull_image: 'https://rossta.net/assets/images/taco.png'
+pull_image: 'https://rossta.net/assets/screenshots/screenshot-pathfinder.png'
 published: true
-homepage: 'https://rossta.net/tacokit.rb'
+homepage: 'https://rossta.net/pathfinder'
 links:
   'Demo': 'https://rossta.net/pathfinder'
   'Source code on GitHub': 'https://github.com/rossta/pathfinder'
