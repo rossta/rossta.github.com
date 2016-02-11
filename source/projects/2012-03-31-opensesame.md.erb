@@ -1,0 +1,24 @@
+---
+title: OpenSesame
+author: Ross Kaffenberger
+summary: Rails engine for authenticating internal applications
+description: Rails engine for authenticating internal applications
+pull_image: 'https://rossta.net/assets/screenshots/screenshot-opensesame.png'
+published: true
+homepage: 'https://rossta.net/opensesame/'
+links:
+  'Source Code on GitHub': 'https://github.com/rossta/opensesame'
+  'Documentation': 'https://rossta.net/opensesame/'
+tags:
+  - Code
+  - Ruby
+---
+
+[OpenSesame][sesg] is a [Warden][ward] strategy for providing "walled garden" authentication for access to Rack-based applications via Omniauth. For example, your company has internal apps and/or staging enviroments for multiple projects and you want something better than HTTP basic auth. The intent is protect the visibility of your app from the out
+
+`$ gem install opensesame`
+
+<%= link_to image_tag("screenshots/screenshot-opensesame.png"), "https://rossta.net/opensesame" %>
+
+[sesg]: https://rossta.net/opensesame/
+[ward]: https://github.com/hassox/warden

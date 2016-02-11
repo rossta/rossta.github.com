@@ -14,7 +14,7 @@ per_page: 25
     <article class="index-post">
       <header>
         <h3>
-          <%= link_to article.title, article %>
+          <%= link_to article.title, (article.data.homepage || article) %>
         </h3>
         <% if article.data.summary %>
           <p class="alt-title subtle"><%= article.data.summary %></p>
