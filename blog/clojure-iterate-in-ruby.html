@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Clojure iterate in Ruby - rossta.net</title>
+<meta name="description" content="Implementing the Clojure sequence functions, iterate, in Ruby" />
+<meta name="keywords" content="Code, Ruby, Clojure" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Implementing the Clojure sequence functions, iterate, in Ruby" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/umbrella-pexels-photo.jpg" />
+<meta name="twitter:title" content="Clojure iterate in Ruby" />
+<meta property="og:description" content="Implementing the Clojure sequence functions, iterate, in Ruby" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/umbrella-pexels-photo.jpg" />
+<meta property="og:title" content="Clojure iterate in Ruby" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/all-f7b17499.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head-0145479a.js"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta.net</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header>
+  <h2>
+    Clojure iterate in Ruby
+      <br />
+      <small>Implementing Clojure's iterate in Ruby</small>
+  </h2>
+</header>
+
+
+      <p>In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, <a href="http://clojure.org/sequences">sequences</a>, not featured in the Ruby standard library. A Clojure sequence in Clojure is an immutable collection that represents the output of an algorithm. Previously, I described how to generate Clojure-like <a href="https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html">infinite sequences</a> (without the immutability anyways), including <a href="https://rossta.net/blog/infinite-sequences-in-ruby.html">Pascal&rsquo;s Triangle as a sequence</a> using Ruby&rsquo;s <code>Enumerator</code>. The key traits of a sequence are found in <code>Enumerator</code>: we can package up an algorithm as an object that can emit values as any &ldquo;eager&rdquo; collection can, like <code>Array</code> and <code>Hash</code>.</p>
+
+<p>Clojure provides a few functions that can be used to generate sequences,
+including <code>iterate</code>. According to the <a href="https://clojuredocs.org/clojure.core/iterate">docs</a>,</p>
+
+<blockquote>
+<p><code>Returns a lazy sequence of x, (f x), (f (f x)) etc. f must be free of side-effects</code></p>
+</blockquote>
+
+<p>In other words, <code>iterate</code> will emit values starting with the first and repeatedly call the given function with the return value of the previous call.</p>
+
+<p>The signature in Clojure looks this:</p>
+
+<pre><code class="clojure">(iterate f x)
+</code></pre>
+
+<p>So, we can generate a simple sequence of numbers increasing by one using the <code>inc</code> function and some start value:</p>
+
+<pre><code class="clojure">=&gt; (iterate inc 1)
+(1 2 3 4 5 ...)
+</code></pre>
+
+<p>Of course, we have a terse was of generating a sequence like this in Ruby:</p>
+
+<pre><code class="ruby">irb(main)&gt; (1..5).to_a
+=&gt; [1, 2, 3, 4, 5]
+</code></pre>
+
+<p>But this doesn&rsquo;t generalize to other types of sequences like, for instance,
+generating a sequence of the powers of 2. In the example below, <code>(partial * 2)</code>
+returns a function that multiplies a single argument by 2.</p>
+
+<pre><code class="clojure">=&gt; (iterate (partial * 2) 1)
+(1 2 4 8 16 32 64 128 ...)
+</code></pre>
+
+<p>To get this result in Ruby, we might try something like:</p>
+
+<pre><code class="ruby">irb&gt; (1..7).each_with_object([]) { |n, seq| seq &lt;&lt; (seq.last.nil? ? n : seq.last * 2) }
+=&gt; [1, 2, 4, 8, 16, 32, 64]
+</code></pre>
+
+<p>Not very pretty (ok, I admit that&rsquo;s a strawman). But this also is an &ldquo;eagerly&rdquo;
+generated collection whereas we want something that can be lazily generated to
+get closer to Clojure.</p>
+
+<p>While there may be a number of ways to generate these sequences in Ruby, for this
+exercise, we also want something that has a similar signature to Clojure&rsquo;s <code>iterate</code>,
+like this:</p>
+
+<pre><code class="ruby">iterate(x, &amp;block)
+</code></pre>
+
+<p>We&rsquo;ll leverage Ruby&rsquo;s method block convention in place of the function, <code>f</code>.
+Usage would look like this:</p>
+
+<pre><code class="ruby">irb&gt; iterate(1) { |n| n + 1 }
+=&gt; [1, 2, 3, 4, 5, ...]
+irb&gt; iterate(1) { |n| n * 2 }
+=&gt; [1, 2, 4, 8, 16, 32, 64, ...]
+</code></pre>
+
+<p>With a much cleaner surface area this approach has a lot more in common with the Clojure
+equivalents. So how would we implement this?</p>
+
+<p>First a test. By the way, all the code found in the following examples is <a href="https://github.com/rossta/loves-enumerable/tree/master/examples/sequence">on Github</a>.</p>
+
+<pre><code class="ruby">require &#39;minitest/autorun&#39;
+require_relative &#39;./sequence&#39;
+
+class TestSequence &lt; Minitest::Test
+  include Sequence
+
+  def test_iterate_increment
+    sequence = iterate(1) { |x| x + 1 }
+
+    assert_equal sequence.first(5), [1, 2, 3, 4, 5]
+  end
+end
+</code></pre>
+
+<p>We&rsquo;re going to implement <code>iterate</code> in a Ruby module called <code>Sequence</code>. Our test
+for <code>iterate</code> will return an instance of <code>Enumerator</code> (the <code>sequence</code> variable).
+The enumerator allows use to generate the sequence on demand with the call to
+<code>#first</code>.</p>
+
+<p>Let&rsquo;s make the tests pass:</p>
+
+<pre><code class="ruby">module Sequence
+  def iterate(arg)
+    Enumerator.new do |yielder|
+      current = arg
+      loop do
+        yielder &lt;&lt; current
+        current = yield(current)
+      end
+    end
+  end
+end
+</code></pre>
+
+<p>To implementation of <code>iterate</code> returns an <code>Enumerator</code> that will first yield
+the given <code>arg</code> and repeatedly call the given block with the result of the
+previous call. The <code>loop</code> construct means this enumeration can potentially
+continue forever which does capture the spirit of a Clojure sequence. That means
+we need to use terminating functions like <code>#first</code> or <code>#take</code> to limit the
+results, just like we would in Clojure:</p>
+
+<pre><code class="clojure">=&gt; (take 5 (iterate (partial * 2) 1))
+(1 2 4 8 16)
+</code></pre>
+
+<p>The Ruby equivalent:</p>
+
+<pre><code class="ruby">iterate(1) { |n| n * 2 }
+=&gt; [1, 2, 4, 8, 16]
+</code></pre>
+
+<p>We could go one step further an make this method work as a mixin. Below is a
+test for using <code>iterate</code> as an instance method of a class using in our tests
+that will simply delegate missing methods to the object passed in on
+instantiation.</p>
+
+<pre><code class="ruby">class TestSequence &lt; Minitest::Test
+  include Sequence
+
+  class Sequenced &lt; SimpleDelegator
+    include Sequence
+  end
+
+  def test_iterate_include
+    num = Sequenced.new(0)
+
+    sequence = num.iterate { |x| x - 1 }
+    assert_equal sequence.first(5), [0, -1, -2, -3, -4]
+  end
+end
+</code></pre>
+
+<p>To make this pass, we need only set the default arg to <code>self</code>:</p>
+
+<pre><code class="ruby">module Sequence
+  def iterate(arg = self)
+    # ...
+  end
+end
+</code></pre>
+
+<p>So what? Ok, well, you may be hard pressed to use <code>iterate</code> in your daily work,
+but there is certainly more room to think about data processing as functional
+operations (free of side effects) on sequences (values that can be generated on demand). Something like <code>iterate</code> need not apply to only numbers; you can imagine sequences of letters, time objects, or POROs also being generated. At times, Rubyist are too quick to wrap collections in other classes when simpler, more generalizable &ldquo;functional&rdquo; transforms could suffice.</p>
+
+<p>When I started <a href="http://devpost.com/software/learning-clojure">learning Clojure</a> last year, I got really excited about the functional aspects of Ruby. &ldquo;Wait, I thought everything in Ruby is an object.&rdquo; Yes, but a great thing about Ruby is its <a href="http://yehudakatz.com/2009/07/11/python-decorators-in-ruby/">ability to adopt aspects of other languages</a>. As Piotr Solnica illustrates in <a href="https://speakerdeck.com/solnic/blending-functional-and-oo-programming-in-ruby">his recent talk</a>, blending functional techniques with our OO code can have a lot of benefits including avoidance of side effects and favoring composability. Introducing sequence-generating methods, like we saw here, is just one small idea to help sprinkle a little functional flavor into your Ruby code.</p>
+
+
+    </article>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Clojure%20iterate%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fclojure-iterate-in-ruby.html">share it on Twitter</a>
+        and <a href="https://twitter.com/rossta">follow me</a>.
+      </p>
+      <p>
+          This post is part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Feb 17, 2016
+      </p>
+    </section>
+  </section>
+  <section class="share margin-bottom double">
+  </section>
+  <section class="signup-form standalone margin-bottom double">
+    <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Stop Wrangling with Rails</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+    </form>
+  </div>
+
+  <!--End mc_embed_signup-->
+</div>
+
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "clojure-iterate-in-ruby";
+    var disqus_title      = "Clojure iterate in Ruby";
+    var disqus_url        = "https://rossta.net/blog/clojure-iterate-in-ruby.html";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/all-fcc9857c.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+}}();
+if($&&$.tracking){var traits=$.tracking.traits,events=$.tracking.events;analytics.identify(traits),Object.keys(events).forEach(function(t,a){analytics.track(t,events[t])})}else analytics.identify();
+</script>
+
+  </body>
+</html>

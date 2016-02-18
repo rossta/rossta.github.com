@@ -58,11 +58,11 @@
 
       <p>Pascal&rsquo;s Triangle is a fun sequence. Here&rsquo;s what it looks like:</p>
 
-<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1455466766" /></p>
+<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1455760456" /></p>
 
 <p>It represents a <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">&ldquo;triangular array of the binomial coefficients&rdquo;</a>. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.</p>
 
-<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1455466766" /></p>
+<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1455760456" /></p>
 
 <p>We can model this in Ruby as an array of arrays. The first array member is <code>[1]</code>. Each successive array (or &ldquo;row&rdquo;) will increase in size, and each array member will be the sum of the member at the same index <code>n</code> in the <code>k-1</code> row, where <code>k</code> is the current row, and the <code>n-1</code> member in the <code>k-1</code> row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:</p>
 
