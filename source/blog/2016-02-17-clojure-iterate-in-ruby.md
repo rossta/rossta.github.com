@@ -80,7 +80,7 @@ irb> iterate(1) { |n| n * 2 }
 ```
 
 The two examples now have the same "surface area" and have a lot in common with the Clojure
-equivalents. So how would we implement this?
+companions. So how would we implement this?
 
 First a test. By the way, all the code found in the following examples is [on Github](https://github.com/rossta/loves-enumerable/tree/master/examples/sequence).
 
@@ -135,7 +135,7 @@ results, just like we would in Clojure:
 The Ruby equivalent:
 
 ```ruby
-iterate(1) { |n| n * 2 }
+iterate(1) { |n| n * 2 }.take(5)
 => [1, 2, 4, 8, 16]
 ```
 
