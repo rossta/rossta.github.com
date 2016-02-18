@@ -1,5 +1,5 @@
 ---
-title: Clojure iterate in Ruby
+title: Clojure's iterate in Ruby
 author: Ross Kaffenberger
 published: true
 summary: Implementing Clojure's iterate in Ruby
@@ -12,7 +12,7 @@ tags:
   - Clojure
 ---
 
-In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, [sequences][1], not featured in the Ruby standard library. A Clojure sequence in Clojure is an immutable collection that represents the output of an algorithm. Previously, I described how to generate Clojure-like [infinite sequences](https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html) (without the immutability anyways), including [Pascal's Triangle as a sequence](https://rossta.net/blog/infinite-sequences-in-ruby.html) using Ruby's `Enumerator`. The key traits of a sequence are found in `Enumerator`: we can package up an algorithm as an object that can emit values as any "eager" collection can, like `Array` and `Hash`.
+In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, [sequences][1], not featured in the Ruby standard library. A Clojure sequence is an immutable collection that representing the result of an algorithm. Previously, I described how to generate Clojure-like [sequences in Ruby](https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html) (without the immutability anyways), including [Pascal's Triangle](https://rossta.net/blog/infinite-sequences-in-ruby.html) using `Enumerator`, which allows us to package up an algorithm as an object that can emit values as any "eager" collection can, like `Array` and `Hash`.
 
 Clojure provides a few functions that can be used to generate sequences,
 including `iterate`. According to the [docs](https://clojuredocs.org/clojure.core/iterate),
@@ -27,7 +27,7 @@ The signature in Clojure looks this:
 (iterate f x)
 ```
 
-So, we can generate a simple sequence of numbers increasing by one using the `inc` function and some start value:
+So, we can generate a simple sequence of numbers using the `inc` function and some start value:
 
 ```clojure
 => (iterate inc 1)
@@ -41,7 +41,7 @@ irb(main)> (1..5).to_a
 => [1, 2, 3, 4, 5]
 ```
 
-But this doesn't generalize to other types of sequences like, for instance,
+But this solution doesn't generalize to other types of sequences like, for instance,
 generating a sequence of the powers of 2. In the example below, `(partial * 2)`
 returns a function that multiplies a single argument by 2.
 
@@ -79,7 +79,7 @@ irb> iterate(1) { |n| n * 2 }
 => [1, 2, 4, 8, 16, 32, 64, ...]
 ```
 
-With a much cleaner surface area this approach has a lot more in common with the Clojure
+The two examples now have the same "surface area" and have a lot in common with the Clojure
 equivalents. So how would we implement this?
 
 First a test. By the way, all the code found in the following examples is [on Github](https://github.com/rossta/loves-enumerable/tree/master/examples/sequence).
@@ -104,7 +104,7 @@ for `iterate` will return an instance of `Enumerator` (the `sequence` variable).
 The enumerator allows use to generate the sequence on demand with the call to
 `#first`.
 
-Let's make the tests pass:
+Here's the implementation:
 
 ```ruby
 module Sequence
