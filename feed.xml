@@ -10,9 +10,9 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>Clojure iterate in Ruby</title>
-    <link rel="alternate" href="/blog/clojure-sequence-functions-in-ruby.html"/>
-    <id>/blog/clojure-sequence-functions-in-ruby.html</id>
+    <title>Clojure's iterate in Ruby</title>
+    <link rel="alternate" href="/blog/clojure-iterate-in-ruby.html"/>
+    <id>/blog/clojure-iterate-in-ruby.html</id>
     <published>2016-02-16T19:00:00-05:00</published>
     <updated>2016-02-16T19:00:00-05:00</updated>
     <author>
@@ -175,171 +175,6 @@ operations (free of side effects) on sequences (values that can be generated on 
 </content>
   </entry>
   <entry>
-    <title>Clojure iterate in Ruby</title>
-    <link rel="alternate" href="/blog/clojure-iterate-in-ruby.html"/>
-    <id>/blog/clojure-iterate-in-ruby.html</id>
-    <published>2016-02-16T19:00:00-05:00</published>
-    <updated>2016-02-16T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, &lt;a href="http://clojure.org/sequences"&gt;sequences&lt;/a&gt;, not featured in the Ruby standard library. A Clojure sequence in Clojure is an immutable collection that represents...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, &lt;a href="http://clojure.org/sequences"&gt;sequences&lt;/a&gt;, not featured in the Ruby standard library. A Clojure sequence in Clojure is an immutable collection that represents the output of an algorithm. Previously, I described how to generate Clojure-like &lt;a href="https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html"&gt;infinite sequences&lt;/a&gt; (without the immutability anyways), including &lt;a href="https://rossta.net/blog/infinite-sequences-in-ruby.html"&gt;Pascal&amp;rsquo;s Triangle as a sequence&lt;/a&gt; using Ruby&amp;rsquo;s &lt;code&gt;Enumerator&lt;/code&gt;. The key traits of a sequence are found in &lt;code&gt;Enumerator&lt;/code&gt;: we can package up an algorithm as an object that can emit values as any &amp;ldquo;eager&amp;rdquo; collection can, like &lt;code&gt;Array&lt;/code&gt; and &lt;code&gt;Hash&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Clojure provides a few functions that can be used to generate sequences,
-including &lt;code&gt;iterate&lt;/code&gt;. According to the &lt;a href="https://clojuredocs.org/clojure.core/iterate"&gt;docs&lt;/a&gt;,&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;Returns a lazy sequence of x, (f x), (f (f x)) etc. f must be free of side-effects&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;In other words, &lt;code&gt;iterate&lt;/code&gt; will emit values starting with the first and repeatedly call the given function with the return value of the previous call.&lt;/p&gt;
-
-&lt;p&gt;The signature in Clojure looks this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;(iterate f x)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So, we can generate a simple sequence of numbers increasing by one using the &lt;code&gt;inc&lt;/code&gt; function and some start value:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;=&amp;gt; (iterate inc 1)
-(1 2 3 4 5 ...)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Of course, we have a terse was of generating a sequence like this in Ruby:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;irb(main)&amp;gt; (1..5).to_a
-=&amp;gt; [1, 2, 3, 4, 5]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;But this doesn&amp;rsquo;t generalize to other types of sequences like, for instance,
-generating a sequence of the powers of 2. In the example below, &lt;code&gt;(partial * 2)&lt;/code&gt;
-returns a function that multiplies a single argument by 2.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;=&amp;gt; (iterate (partial * 2) 1)
-(1 2 4 8 16 32 64 128 ...)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To get this result in Ruby, we might try something like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;irb&amp;gt; (1..7).each_with_object([]) { |n, seq| seq &amp;lt;&amp;lt; (seq.last.nil? ? n : seq.last * 2) }
-=&amp;gt; [1, 2, 4, 8, 16, 32, 64]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Not very pretty (ok, I admit that&amp;rsquo;s a strawman). But this also is an &amp;ldquo;eagerly&amp;rdquo;
-generated collection whereas we want something that can be lazily generated to
-get closer to Clojure.&lt;/p&gt;
-
-&lt;p&gt;While there may be a number of ways to generate these sequences in Ruby, for this
-exercise, we also want something that has a similar signature to Clojure&amp;rsquo;s &lt;code&gt;iterate&lt;/code&gt;,
-like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;iterate(x, &amp;amp;block)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;ll leverage Ruby&amp;rsquo;s method block convention in place of the function, &lt;code&gt;f&lt;/code&gt;.
-Usage would look like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;irb&amp;gt; iterate(1) { |n| n + 1 }
-=&amp;gt; [1, 2, 3, 4, 5, ...]
-irb&amp;gt; iterate(1) { |n| n * 2 }
-=&amp;gt; [1, 2, 4, 8, 16, 32, 64, ...]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With a much cleaner surface area this approach has a lot more in common with the Clojure
-equivalents. So how would we implement this?&lt;/p&gt;
-
-&lt;p&gt;First a test. By the way, all the code found in the following examples is &lt;a href="https://github.com/rossta/loves-enumerable/tree/master/examples/sequence"&gt;on Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
-require_relative &amp;#39;./sequence&amp;#39;
-
-class TestSequence &amp;lt; Minitest::Test
-  include Sequence
-
-  def test_iterate_increment
-    sequence = iterate(1) { |x| x + 1 }
-
-    assert_equal sequence.first(5), [1, 2, 3, 4, 5]
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;re going to implement &lt;code&gt;iterate&lt;/code&gt; in a Ruby module called &lt;code&gt;Sequence&lt;/code&gt;. Our test
-for &lt;code&gt;iterate&lt;/code&gt; will return an instance of &lt;code&gt;Enumerator&lt;/code&gt; (the &lt;code&gt;sequence&lt;/code&gt; variable).
-The enumerator allows use to generate the sequence on demand with the call to
-&lt;code&gt;#first&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s make the tests pass:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;module Sequence
-  def iterate(arg)
-    Enumerator.new do |yielder|
-      current = arg
-      loop do
-        yielder &amp;lt;&amp;lt; current
-        current = yield(current)
-      end
-    end
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To implementation of &lt;code&gt;iterate&lt;/code&gt; returns an &lt;code&gt;Enumerator&lt;/code&gt; that will first yield
-the given &lt;code&gt;arg&lt;/code&gt; and repeatedly call the given block with the result of the
-previous call. The &lt;code&gt;loop&lt;/code&gt; construct means this enumeration can potentially
-continue forever which does capture the spirit of a Clojure sequence. That means
-we need to use terminating functions like &lt;code&gt;#first&lt;/code&gt; or &lt;code&gt;#take&lt;/code&gt; to limit the
-results, just like we would in Clojure:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;=&amp;gt; (take 5 (iterate (partial * 2) 1))
-(1 2 4 8 16)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The Ruby equivalent:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;iterate(1) { |n| n * 2 }
-=&amp;gt; [1, 2, 4, 8, 16]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We could go one step further an make this method work as a mixin. Below is a
-test for using &lt;code&gt;iterate&lt;/code&gt; as an instance method of a class using in our tests
-that will simply delegate missing methods to the object passed in on
-instantiation.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class TestSequence &amp;lt; Minitest::Test
-  include Sequence
-
-  class Sequenced &amp;lt; SimpleDelegator
-    include Sequence
-  end
-
-  def test_iterate_include
-    num = Sequenced.new(0)
-
-    sequence = num.iterate { |x| x - 1 }
-    assert_equal sequence.first(5), [0, -1, -2, -3, -4]
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To make this pass, we need only set the default arg to &lt;code&gt;self&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;module Sequence
-  def iterate(arg = self)
-    # ...
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So what? Ok, well, you may be hard pressed to use &lt;code&gt;iterate&lt;/code&gt; in your daily work,
-but there is certainly more room to think about data processing as functional
-operations (free of side effects) on sequences (values that can be generated on demand). Something like &lt;code&gt;iterate&lt;/code&gt; need not apply to only numbers; you can imagine sequences of letters, time objects, or POROs also being generated. At times, Rubyist are too quick to wrap collections in other classes when simpler, more generalizable &amp;ldquo;functional&amp;rdquo; transforms could suffice.&lt;/p&gt;
-
-&lt;p&gt;When I started &lt;a href="http://devpost.com/software/learning-clojure"&gt;learning Clojure&lt;/a&gt; last year, I got really excited about the functional aspects of Ruby. &amp;ldquo;Wait, I thought everything in Ruby is an object.&amp;rdquo; Yes, but a great thing about Ruby is its &lt;a href="http://yehudakatz.com/2009/07/11/python-decorators-in-ruby/"&gt;ability to adopt aspects of other languages&lt;/a&gt;. As Piotr Solnica illustrates in &lt;a href="https://speakerdeck.com/solnic/blending-functional-and-oo-programming-in-ruby"&gt;his recent talk&lt;/a&gt;, blending functional techniques with our OO code can have a lot of benefits including avoidance of side effects and favoring composability. Introducing sequence-generating methods, like we saw here, is just one small idea to help sprinkle a little functional flavor into your Ruby code.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
     <title>Recurring events in Ruby</title>
     <link rel="alternate" href="/blog/recurring-events-in-ruby.html"/>
     <id>/blog/recurring-events-in-ruby.html</id>
@@ -348,12 +183,12 @@ operations (free of side effects) on sequences (values that can be generated on 
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455760456"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455760735"&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I’d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
 &lt;p&gt;For scheduling tasks, we have &lt;a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html"&gt;cron&lt;/a&gt; at the system level and even such...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455760456" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455760735" /&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I&amp;rsquo;d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
@@ -529,13 +364,13 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &amp;quot;7pm&amp;quot;)
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455760456"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455760735"&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s build a simple web crawler in Ruby. For inspiration, I’d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin’s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
 
 &lt;p&gt;We’ll adapt Skork’s original goals and...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455760456" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455760735" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build a simple web crawler in Ruby. For inspiration, I&amp;rsquo;d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin&amp;rsquo;s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
@@ -860,14 +695,14 @@ end
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455760456"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455760735"&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We’ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
 &lt;p&gt;Grep...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455760456" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455760735" /&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
 
@@ -1054,7 +889,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455760456"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455760735"&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
@@ -1064,7 +899,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
 
 &lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
 other words,...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455760456" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455760735" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
@@ -1279,6 +1114,365 @@ only be evaluated when the &lt;code&gt;TRACE&lt;/code&gt; environment variable i
 
 &lt;p&gt;Again, you won&amp;rsquo;t need to resort to this workaround for &lt;code&gt;SystemStackError&lt;/code&gt; in Ruby
 2.2+, but keep this in mind next time you get stuck &amp;ldquo;in the loop&amp;rdquo;.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Using RSpec Metadata</title>
+    <link rel="alternate" href="/blog/using-rspec-metadata.html"/>
+    <id>/blog/using-rspec-metadata.html</id>
+    <published>2015-12-28T19:00:00-05:00</published>
+    <updated>2015-12-28T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg?1455760735"&gt;&lt;/p&gt;
+
+&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
+
+&lt;p&gt;You may already be familiar with how &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt; uses the &lt;code&gt;:js&lt;/code&gt; option to enable the javascript driver.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;describe "a javascript feature", :js do
+  # tests run against the...&lt;/code&gt;&lt;/pre&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg?1455760735" /&gt;&lt;/p&gt;
+
+&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
+
+&lt;p&gt;You may already be familiar with how &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt; uses the &lt;code&gt;:js&lt;/code&gt; option to enable the javascript driver.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;describe &amp;quot;a javascript feature&amp;quot;, :js do
+  # tests run against the Capyabara.javascript_driver
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Capybara &lt;a href="https://github.com/jnicklas/capybara/blob/957c35f580b68e8a140b5bbe7818fdcf06bc4521/lib/capybara/rspec.rb#L27"&gt;provides an RSpec configuration hook&lt;/a&gt; that changes the web driver for any example where &lt;code&gt;:js&lt;/code&gt; metadata is present. Here it is, oversimplified:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# capybara/rspec.rb
+RSpec.configure do |config|
+  config.before do
+    Capybara.current_driver = Capybara.javascript_driver if example.metadata[:js]
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We may reach a point in the maturity of our test suite when it makes sense add our own configuration options.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;
+&lt;p&gt;
+The examples in the post are based on RSpec version &lt;code&gt;~&gt; 3&lt;/code&gt;.
+&lt;/p&gt;
+&lt;/aside&gt;
+
+&lt;h3&gt;Changing Test Runner Behavior&lt;/h3&gt;
+
+&lt;p&gt;Testing libraries like RSpec and Capybara do some heavy lifting to set up the
+Rails environment and make it suitable for running in test mode. For performance
+reasons, it may be beneficial to run each of our specs in a database
+transaction so test data can be easily rolled back at the start of each spec.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a common base configuration for using the popular &lt;a href="https://github.com/DatabaseCleaner/database_cleaner"&gt;DatabaseCleaner&lt;/a&gt; gem to
+set up transactional database behavior for RSpec:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not all specs can be run this way - once we add a javascript acceptance specs, for
+example, the javascript driver will likely need its own connection to the
+database so it won&amp;rsquo;t have access to data setup in the tests. We need to run
+javascript acceptance specs in &lt;em&gt;truncation&lt;/em&gt; mode to ensure database changes are
+committed to the database so multiple database connections will have access to the same data.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s use RSpec metadata to toggle database behavior automatically when using
+the javascript driver (i.e., not the default &lt;code&gt;:rack_test&lt;/code&gt; driver). We&amp;rsquo;ll add the
+following hooks, borrowed from the DatabaseCleaner &lt;a href="https://github.com/DatabaseCleaner/database_cleaner/tree/f32abebc4f28faa6ff944c4d1d4fee3f21ceb0bb#rspec-example"&gt;README&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
+config.before(:each, type: :feature) do
+  # :rack_test driver&amp;#39;s Rack app under test shares database connection
+  # with the specs, so continue to use transaction strategy for speed.
+  driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
+
+  if !driver_shares_db_connection_with_specs
+    # Driver is probably for an external browser with an app
+    # under test that does *not* share a database connection with the
+    # specs, so use truncation strategy.
+    DatabaseCleaner.strategy = :truncation
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We also run into problems with ActiveRecord &lt;code&gt;after_commit&lt;/code&gt; callbacks - when running
+tests in transaction mode, these callbacks will never fire. We can also
+add an option for enabling truncation mode outside of acceptance specs when
+isolated specs are needed for these callbacks:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# spec/model/user_spec.rb
+it &amp;quot;triggers background job after creating new user&amp;quot;, :truncation_mode do
+  # test after_commit callback
+end
+
+# spec/spec_helper.rb
+config.before(:each, :truncation_mode) do
+  DatabaseCleaner.strategy = :truncation
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a consolidated configuration for providing hooks for the issues related
+to database truncation mentioned above:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
+RSpec.configure do |config|
+  config.use_transactional_fixtures = false
+
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  config.before(:each, type: :feature) do
+    driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
+
+    if !driver_shares_db_connection_with_specs
+      DatabaseCleaner.strategy = :truncation
+    end
+  end
+
+  config.before(:each, :truncation_mode) do
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;Changing Application Settings&lt;/h3&gt;
+
+&lt;p&gt;Rails provides a number of settings that can be easily configured based on the
+environment, so we avoid undesired work in development or test environments,
+such as sending emails. For any mature Rails application, we&amp;rsquo;ll likely have
+our own custom settings layered on top of the Rails defaults.&lt;/p&gt;
+
+&lt;p&gt;There are many cases where we&amp;rsquo;ll still want to test the production settings in
+our test environments.  For example, by default, controller caching is disabled in tests:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/test.rb
+Rails.application.configure do
+  # ...
+  config.action_controller.perform_caching = false
+
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For selected acceptances specs, we may still want to test behavior of caching at
+the view layer, say that users can see new info when a model attribute changes. We don&amp;rsquo;t need this caching behavior is all test, so it may be useful to toggle specs on/off during the test run.&lt;/p&gt;
+
+&lt;h4&gt;First attempt&lt;/h4&gt;
+
+&lt;p&gt;We could try to stub the setting in the context of a single spec run with the enabled state.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
+RSpec.configure do |config|
+  config.before(:each, :caching) do
+    allow_any_instance_of(ActionController::Base).to receive(:perform_caching).and_return true
+  end
+
+  config.after(:each, :caching) do
+    Rails.cache.clear
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This may require changing behavior of instances which is &lt;a href="https://relishapp.com/rspec/rspec-mocks/docs/working-with-legacy-code/any-instance"&gt;typically discouraged&lt;/a&gt;. We may also need to clean up other global state, like clearing the Rails cache after the test run.&lt;/p&gt;
+
+&lt;h4&gt;Better attempt&lt;/h4&gt;
+
+&lt;p&gt;Alternatively, we can set the actual values on while settings are derived.
+Here&amp;rsquo;s how it might look for enabling controller caching with an &lt;code&gt;around&lt;/code&gt; block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
+RSpec.configure do |config|
+  config.around(:each, :caching) do |example|
+    caching = ActionController::Base.perform_caching
+    ActionController::Base.perform_caching = example.metadata[:caching]
+
+    example.run
+
+    Rails.cache.clear
+    ActionController::Base.perform_caching = caching
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;around&lt;/code&gt; block takes the RSpec example object as an argument. When running specs, the given block is triggered when &lt;code&gt;:caching&lt;/code&gt; is detected as a key in an example’s metadata. The example object provides a number of methods for test introspection, allowing us to make changes before and after calling run to execute the spec.&lt;/p&gt;
+
+&lt;p&gt;As a result, we now have a simple, explicit mechanism for introducing caching to individual specs and suites:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# spec/features/homepage_spec.rb
+describe &amp;quot;visit the homepage&amp;quot;, :caching do
+  it &amp;quot;expires cache&amp;quot; do
+    # test cached stuff
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The main concern with this approach is that modifying a global state can affect
+other tests unintentionally - a big no-no.&lt;/p&gt;
+
+&lt;p&gt;To avoid this, &lt;strong&gt;we need to reset the original value when the example completes&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here, we are storing the previously set value of &lt;code&gt;ActionContoller::Base.perform_caching&lt;/code&gt;, setting it for the local suite, and resetting it back to the original value after it completes.&lt;/p&gt;
+
+&lt;p&gt;This technique may come into play when integrating with certain gems like
+&lt;a href="https://github.com/airblade/paper_trail"&gt;PaperTrail&lt;/a&gt; which may generate expensive logic or queries not need in most
+situations. PaperTrail even &lt;a href="https://github.com/airblade/paper_trail/blob/eef918bca42bab85c4467541037897f0788b6062/lib/paper_trail/frameworks/rspec.rb"&gt;provides a helper&lt;/a&gt; to take advantage of RSpec. It may be worth considering whether to provide an interface to toggle behavior and RSpec helpers next time we write a gem.
+metadata to toggle behavior in specs.&lt;/p&gt;
+
+&lt;h3&gt;Filtering Specs&lt;/h3&gt;
+
+&lt;p&gt;One useful technique while developing is to run a selected set of specs. We may
+be editing acceptances specs, model validations, and other disparate tests while test driving a
+feature from &lt;a href="http://everydayrails.com/2014/01/15/outside-in-example-ruby-tapas.html"&gt;outside to in&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4&gt;Manual tagging&lt;/h4&gt;
+
+&lt;p&gt;Adding arbitrary metadata like &lt;code&gt;:focus&lt;/code&gt; to set of specs is one way to approach
+this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# spec/models/user_spec.rb
+it &amp;quot;validates a user&amp;quot;, :focus do
+  # unit test
+end
+
+# spec/features/sign_up_spec.rb
+it &amp;quot;displays error message&amp;quot;, :focus do
+  # acceptance spec
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can now filter our test run to a subset at the command line:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;$ rspec --tag focus
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can also add some global configuration so this will be the default behavior
+when using &lt;code&gt;:focus&lt;/code&gt; specs, as long as we don&amp;rsquo;t make the mistake of filtering on the build server unintentionally.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="rspec"&gt;RSpec.configure do |config|
+  # enable auto-focus only when running locally
+  config.filter_run_including focus: ENV[&amp;#39;CI_SERVER_SETTING&amp;#39;].blank?
+
+  config.run_all_when_everything_filtered = true
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Alternatively, avoid running broken or flaky specs when tagged accordingly:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;it &amp;quot;test that fails intermittently&amp;quot;, :flaky do
+  # probably a javascript test
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Using either a command line option&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;$ rspec --tag ~flaky
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or a configuration option, we can filter out specs we wish to ignore.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;RSpec.configure do |c|
+  c.filter_run_excluding flaky: true
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4&gt;Auto Tagging&lt;/h4&gt;
+
+&lt;p&gt;A less-known feature of RSpec 3 is an API for telling RSpec to derive additional metadata
+automatically based on &lt;em&gt;other&lt;/em&gt; metadata.&lt;/p&gt;
+
+&lt;p&gt;For example, each spec example has metadata that includes its file path. This,
+along with the &lt;code&gt;RSpec::Core::Configuration#define_derived_metadata&lt;/code&gt; method,
+allows us to alter spec behavior based on the spec directories, for example.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Why is this useful and how do we use it?&lt;/em&gt; Glad you asked.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say we want to isolate model specs that require database truncation since
+they are more like functional specs than unit specs. We may set up our spec
+directory like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;spec/
+  truncation/
+    example1_spec.rb
+    example2_spec.rb
+    ...
+  transaction/
+    example1_spec.rb
+    example2_spec.rb
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Instead of manually tagging each file with our &lt;code&gt;:truncation_mode&lt;/code&gt; metadata we
+used earlier to toggle DatabaseCleaner&amp;rsquo;s truncation strategy, we can configure
+all the specs in &lt;code&gt;spec/truncation&lt;/code&gt; as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="rspec"&gt;# spec/spec_helper.rb
+RSpec.configure do |config|
+  config.define_derived_metadata(file_path: %r{spec/truncation}) do |metadata|
+    metadata[:truncation_mode] = true
+  end
+
+  # rest of DatabaseCleaner config below
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, all specs in the directory will run with the &lt;code&gt;:truncation_mode&lt;/code&gt; metadata
+and the database strategy will be set to &lt;code&gt;:truncation&lt;/code&gt; as long as it is declared ahead of the additional DatabaseCleaner configuration we referenced earlier.&lt;/p&gt;
+
+&lt;p&gt;Note, this is the &lt;a href="https://github.com/rspec/rspec-rails/blob/a09a6231ceecefa177ec08b27c3066d5947e5899/lib/rspec/rails/configuration.rb#L85"&gt;same method&lt;/a&gt; used in &lt;code&gt;rspec-rails&lt;/code&gt; to add custom behavior to specs in the specific directories, e.g. &lt;code&gt;spec/controllers&amp;#39;,&lt;/code&gt;spec/requests, etc.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;
+&lt;p&gt;The example above is borrowed from &lt;a href="http://stackoverflow.com/questions/29651981/before-and-after-hooks-for-a-spec-directory-in-rspec"&gt;an answer I recently gave on Stackoverflow&lt;/a&gt;.
+&lt;/p&gt;
+&lt;/aside&gt;
+
+&lt;h3&gt;Using and Abusing&lt;/h3&gt;
+
+&lt;p&gt;While using RSpec metadata can be a powerful technique for altering test
+behavior and application settings in specs, it can also be taken too far.&lt;/p&gt;
+
+&lt;p&gt;As @avdgaag notes in &lt;a href="http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html"&gt;his blog post on the topic&lt;/a&gt;, make sure to distinguish between &lt;em&gt;how&lt;/em&gt; spec is run from &lt;em&gt;what&lt;/em&gt; the spec should test. We should probably not use metadata to create records specific to certain tests or authenticate users for a given context, for example.&lt;/p&gt;
+
+&lt;p&gt;One rule of thumb for adding metadata is decide whether it would be generally useful to any Rails app (good) or it is specific to the business logic of your current application (bad). The latter is best set up more explicitly within or alongside your tests.&lt;/p&gt;
+
+&lt;p&gt;Before considering a new metadata tag, I ask the rubber duck &amp;ldquo;Could I extract
+this configuration into a gem?&amp;rdquo; To answer yes, the behavior would have to be
+non-specific to my application. If so, the behavior &lt;em&gt;might&lt;/em&gt; be useful as metadata.&lt;/p&gt;
+
+&lt;p&gt;While metadata can nicely separate the boilerplate required to setup and teardown test behavior, it also adds a layer of indirection that can cause readability issues when stretched too far. Understand that there is a big increase in mental overhead to permuting test behavior with each new tag option and consider the tradeoffs with the rest of the team.&lt;/p&gt;
+
+&lt;p&gt;Use wisely!&lt;/p&gt;
 </content>
   </entry>
 </feed>
