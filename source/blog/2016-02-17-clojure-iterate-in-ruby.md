@@ -2,7 +2,7 @@
 title: Clojure's iterate in Ruby
 author: Ross Kaffenberger
 published: true
-summary: To build sequences, use Enumerator
+summary: Using Ruby Enumerator to emulate sequences
 description: Implementing the Clojure sequence functions, iterate, with Ruby's Enumerator to emulate sequences
 pull_image: 'https://rossta.net/assets/images/blog/stock/umbrella-pexels-photo.jpg'
 series: Enumerable
