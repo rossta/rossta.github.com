@@ -96,6 +96,12 @@ class TestSequence < Minitest::Test
 
     assert_equal sequence.first(5), [1, 2, 3, 4, 5]
   end
+
+  def test_iterate_power_of_2
+    sequence = iterate(1) { |x| x * 2 }
+
+    assert_equal sequence.first(5), [1, 2, 4, 8, 16]
+  end
 end
 ```
 
