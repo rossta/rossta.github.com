@@ -126,11 +126,11 @@ module Sequence
 end
 ```
 
-To implementation of `iterate` returns an `Enumerator` that will first yield
+Our implementation of `iterate` returns an `Enumerator` that will first yield
 the given `arg` and repeatedly call the given block with the result of the
 previous call. The `loop` construct means this enumeration can potentially
-continue forever which does capture the spirit of a Clojure sequence. That means
-we need to use terminating functions like `#first` or `#take` to limit the
+continue forever - capturing the spirit of a Clojure sequence. That means
+we need to use a terminating functions like `#first` or `#take` to limit the
 results, just like we would in Clojure:
 
 ```clojure
