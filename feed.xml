@@ -189,12 +189,12 @@ operations (free of side effects) on sequences (values that can be generated on 
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455835444"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I’d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
 &lt;p&gt;For scheduling tasks, we have &lt;a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html"&gt;cron&lt;/a&gt; at the system level and even such...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455835444" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I&amp;rsquo;d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
@@ -370,13 +370,13 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &amp;quot;7pm&amp;quot;)
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455835444"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s build a simple web crawler in Ruby. For inspiration, I’d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin’s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
 
 &lt;p&gt;We’ll adapt Skork’s original goals and...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455835444" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build a simple web crawler in Ruby. For inspiration, I&amp;rsquo;d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin&amp;rsquo;s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
@@ -701,14 +701,14 @@ end
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455835444"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We’ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
 &lt;p&gt;Grep...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455835444" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
 
@@ -895,7 +895,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455835444"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
@@ -905,7 +905,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
 
 &lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
 other words,...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455835444" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
@@ -1131,7 +1131,7 @@ only be evaluated when the &lt;code&gt;TRACE&lt;/code&gt; environment variable i
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg?1455835444"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
 
 &lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
 
@@ -1139,7 +1139,7 @@ only be evaluated when the &lt;code&gt;TRACE&lt;/code&gt; environment variable i
 
 &lt;pre&gt;&lt;code class="ruby"&gt;describe "a javascript feature", :js do
   # tests run against the...&lt;/code&gt;&lt;/pre&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg?1455835444" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
 
 &lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
 
