@@ -70,7 +70,7 @@ iterate(x, &block)
 ```
 
 We'll leverage Ruby's method block convention in place of the function, `f`.
-Usage would look like this:
+Usage:
 
 ```ruby
 irb> iterate(1) { |n| n + 1 }
