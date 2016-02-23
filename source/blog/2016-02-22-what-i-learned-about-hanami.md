@@ -20,26 +20,36 @@ Hanami opinions are not Rails opinions
   - layout
   - architecture
   - code reloading
+  - Migrations via [Sequel](http://sequel.jeremyevans.net/rdoc/files/doc/schema_modification_rdoc.html)
+  - Generators
 * [Monolith first](http://hanamirb.org/guides/architectures/container/)
+* Learning these conventions may be hard: [without change, there is no challenge](http://hanamirb.org/guides/getting-started/)
 
 Hanami MVC is not Rails MVC
-* Controllers, Views, Templates
+* Controllers are actions, Rails method is now a Rack-compatible class -
+  implements `#call`, [feature-full](https://github.com/hanami/controller)
+* Mount middleware directly in Actions
+* Views, Templates
 * Repositories and Entities instead of ActiveRecord
-* No associations or scopes
 
-The Project is still young
+Expect to write more code
+* [Repositories and data](https://github.com/hanami/model/issues/291)
 * Pining for missing features
 * Assets
-* Associations
+* [Associations](https://github.com/hanami/model/pull/244) and [here](https://github.com/hanami/model/issues/35)
 
 The Community is still young
 * Authentication
 * Pagination
 * Errors - view tests, sucker punch
-* Community [chat](https://gitter.im/hanami/chat) and
+* Community [chat](https://gitter.im/hanami/chat) and [Discourse forum](https://discuss.hanamirb.org/)
+  [StackOverflow](https://stackoverflow.com/questions/tagged/hanami)
+
+Expect Gotchas
+* [Shotgun](https://github.com/rtomayko/shotgun)
 
 Reasons for choosing Hanami
-* Lightweight
+* Lightweight (55 gems to 31 gems in fresh install)
 * Architecture
 * Thread-safe
 
