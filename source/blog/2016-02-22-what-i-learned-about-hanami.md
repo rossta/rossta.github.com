@@ -255,6 +255,6 @@ The lightweight approach in Hanami means there is less to wrap your head around
 if you're coming from Rails, but there is still a learning curve nonetheless. I'd say it's a worthwhile endeavor to build something small like I did at first to push the boundaries and answer the questions you have about Hanami for yourself.
 
 Hanami treads the same ground as Rails and aims to do a lot of the low level
-work for you so can focus on what's important - the business. Personally, I found a lot of advantages in the "Hanami-way" and enjoyed the experience of the new paradigms. My "Rails muscle memory" tripped me up on occasion and left me pining for features that don't exist or are not as well-developed in Hanami yet. I see a lot of potential in the Hanami framework and see it growing into a viable alternative to Rails in the near future.
+work for you so can focus on what's important - your business logic. Personally, I found a lot of advantages in the "Hanami way" and enjoyed the experience of the new paradigm. My "Rails muscle memory" tripped me up on occasion and left me pining for features that don't exist or are not as well-developed in Hanami yet. I see a lot of potential in the Hanami framework and see it growing into a viable alternative to Rails in the near future.
 
 Check out the [GitHub-Groove source](https://github.com/rossta/github_groove) and [demo app](https://github-groove.herokuapp.com/) and let me know what I could have done differently.
