@@ -281,14 +281,15 @@ simply hasn&rsquo;t been enough traction to reach <a href="https://stackoverflow
 <p>That said, you can expect to run into edge cases and bugs occasionally that may
 not yet have a solution, including this <a href="https://github.com/pry/pry/issues/1471#issuecomment-187420164">incredibly irksome</a> issue that prevents you from accessing the pry console when using <code>binding.pry</code> in Hanami controllers and the problem I mentioned earlier that prevents you from using SuckerPunch in development with Shotgun enabled.</p>
 
-<p>Another challenge is that all those Rails-specific plugins
-you love have no place here. Yes, you can build authentication without Devise.
+<p>Another challenge is that all those Rails-specific plugins and engines
+you&rsquo;ve come to rely on won&rsquo;t work in Hanami: Yikes, you have build authentication without Devise!
 Using <a href="https://github.com/hassox/warden"><code>Warden</code></a>, the general Rack-based
 authentication middleware on which Devise is based, is very feasible and you can always
 rely on <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/application.rb#L86">OmniAuth like I did</a>.</p>
 
 <p>The lesson here is that with Hanami, you&rsquo;re much more likely to have to &ldquo;roll up
-your sleeves&rdquo; to get to the bottom of issues or</p>
+your sleeves&rdquo; to get to the bottom of issues, figure how to do things that
+aren&rsquo;t covered by the guides, or otherwise, get from a Rails-specific gem.</p>
 
 <h3>Hanami is and is not Rails</h3>
 
