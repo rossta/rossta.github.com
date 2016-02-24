@@ -64,6 +64,8 @@ venerable &lt;a href="http://sequel.jeremyevans.net/rdoc/files/doc/schema_modifi
 
 &lt;p&gt;I&amp;rsquo;d be interested to see Hanami go in a different direction here, like taking advantage of the &amp;ldquo;frontend explosion&amp;rdquo; by providing integration with external pipelines like the static-site generator &lt;a href="https://middlemanapp.com/advanced/external-pipeline/"&gt;middleman&lt;/a&gt; or what Shakacode has done with &lt;a href="https://webpack.github.io/"&gt;webpack&lt;/a&gt; in &lt;a href="https://github.com/shakacode/react_on_rails"&gt;&lt;code&gt;react_on_rails&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
 
+&lt;p&gt;It&amp;rsquo;s worth noting that Hanami comes with security features baked in for as one would expect, including &lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)"&gt;CSRF protection&lt;/a&gt; and app-level secure-by-default options for items like &lt;a href="https://developer.mozilla.org/en-US/docs/Web/Security/CSP"&gt;Content Security Policy&lt;/a&gt; and &lt;code&gt;X-Frame-Options&lt;/code&gt;.&lt;/p&gt;
+
 &lt;p&gt;One gotcha is that Hanami &lt;a href="https://github.com/hanami/hanami/issues/249"&gt;does not itself provide any mechanism for code
 reloading&lt;/a&gt; (at the moment). This
 was not obvious to me starting off since the development server does &amp;ldquo;appear&amp;rdquo; to reload code. It turns out that the dev server launches with &lt;a href="https://github.com/rtomayko/shotgun"&gt;Shotgun&lt;/a&gt; (commonly used in Sinatra projects), to serve each development request in a new process with &lt;code&gt;fork(2)&lt;/code&gt;. I didn&amp;rsquo;t pick up on this until several iterations in when I added the &lt;a href="https://github.com/brandonhilkert/sucker_punch"&gt;SuckerPunch gem&lt;/a&gt; and couldn&amp;rsquo;t figure out why my background jobs wouldn&amp;rsquo;t run in development. I added a &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/controllers/tickets/sync.rb#L11"&gt;sync action&lt;/a&gt; that allows users to trigger a &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/jobs/sync_tickets_job.rb"&gt;background job to import ticket data&lt;/a&gt; from Groove into the application. Long story short, kicking off background jobs in threads in the request process, as is possible with SuckerPunch, won&amp;rsquo;t work without disabling Shotgun.&lt;/p&gt;
@@ -447,12 +449,12 @@ operations (free of side effects) on sequences (values that can be generated on 
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456347438"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456348670"&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I’d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
 &lt;p&gt;For scheduling tasks, we have &lt;a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html"&gt;cron&lt;/a&gt; at the system level and even such...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456347438" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456348670" /&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I&amp;rsquo;d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
@@ -628,13 +630,13 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &amp;quot;7pm&amp;quot;)
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456347438"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456348670"&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s build a simple web crawler in Ruby. For inspiration, I’d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin’s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
 
 &lt;p&gt;We’ll adapt Skork’s original goals and...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456347438" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456348670" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build a simple web crawler in Ruby. For inspiration, I&amp;rsquo;d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin&amp;rsquo;s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
@@ -959,14 +961,14 @@ end
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456347438"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456348670"&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We’ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
 &lt;p&gt;Grep...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456347438" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456348670" /&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
 
@@ -1153,7 +1155,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456347438"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456348670"&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
@@ -1163,7 +1165,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
 
 &lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
 other words,...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456347438" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456348670" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
