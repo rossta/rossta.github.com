@@ -5,10 +5,267 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-02-16T19:00:00-05:00</updated>
+  <updated>2016-02-21T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>What I learned building an app in Hanami</title>
+    <link rel="alternate" href="/blog/what-i-learned-about-hanami.html"/>
+    <id>/blog/what-i-learned-about-hanami.html</id>
+    <published>2016-02-21T19:00:00-05:00</published>
+    <updated>2016-02-21T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;For the past year, I’ve been loosely following the progress on &lt;a href="http://hanamirb.org"&gt;Hanami&lt;/a&gt; (formerly Lotus), a new web framework
+for Ruby created by &lt;a href="https://github.com/jodosha"&gt;Luca Guidi (@jodosha)&lt;/a&gt;. I recently decided to build a small app in Hanami to get a feel for its design and to understand...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;For the past year, I&amp;rsquo;ve been loosely following the progress on &lt;a href="http://hanamirb.org"&gt;Hanami&lt;/a&gt; (formerly Lotus), a new web framework
+for Ruby created by &lt;a href="https://github.com/jodosha"&gt;Luca Guidi (@jodosha)&lt;/a&gt;. I recently decided to build a small app in Hanami to get a feel for its design and to understand better its fresh perspective on web development in Ruby. In other words, to answer for myself, &amp;ldquo;Is Hanami better than Rails?&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/rossta/github_groove"&gt;The app&lt;/a&gt; is a simple integration between GitHub issues and the helpdesk platform, &lt;a href="https://www.groovehq.com"&gt;Groove&lt;/a&gt;.
+Visitors can login via OAuth through their GitHub accounts, connect to a Groove
+account with an API key, import their Groove tickets, and create GitHub issues
+from these tickets through the app. You can see the &lt;a href="https://github.com/rossta/github_groove"&gt;source on Github&lt;/a&gt; and play with the &lt;a href="https://github-groove.herokuapp.com/"&gt;app hosted on Heroku&lt;/a&gt;, where it would help to have accounts on both GitHub and Groove to see how it works.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve made note of what I learned and some of the challenges I faced while going beyond the &lt;a href="http://hanamirb.org/guides/"&gt;getting
+started guides&lt;/a&gt; to build and deploy the app. This post is not an introduction
+to Hanami - the &lt;a href="http://hanamirb.org/guides/"&gt;guides&lt;/a&gt; serve as an excellent overview.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;
+  &lt;p&gt;The Github-Groove app is built on &lt;code&gt;hanami-0.7.0&lt;/code&gt;. As the framework is under
+heavy development (as of this writing the latest version is
+&lt;code&gt;v0.7.2&lt;/code&gt;), your experience getting started with Hanami may differ.
+  &lt;/p&gt;
+&lt;/aside&gt;
+
+&lt;h3&gt;Hanami opinions are not Rails opinions&lt;/h3&gt;
+
+&lt;p&gt;Hanami has a lot in common with Rails. Both are web frameworks built on Ruby
+that employ some version of the Model-View-Controller pattern and, among other
+things, value &lt;a href="http://rubyonrails.org/doctrine/#convention-over-configuration"&gt;convention over configuration&lt;/a&gt;.
+Both frameworks are &lt;em&gt;opinionated&lt;/em&gt; about how web apps should be built. In a
+nutshell, Hanami takes what it likes from Rails and draws the line on certain
+principles including avoidance of monkey-patching, enforcing modularity, and encouraging
+the use of &amp;ldquo;plain old Ruby objects&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re coming from Rails, you can expect to learn some new conventions in Hanami.
+&lt;a href="http://hanamirb.org/guides/getting-started/"&gt;As the guides warn&lt;/a&gt;,&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;learning these conventions may be hard: without change, there is no challenge&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The framework pushes you toward &amp;ldquo;monolith first&amp;rdquo; while emphasizing &amp;ldquo;separation of concerns&amp;rdquo;. There are suggestions in the generated directory structure like how the &lt;code&gt;app/&lt;/code&gt; folder is named &lt;code&gt;apps/&lt;/code&gt; in Hanami encouraging you from the start to define sub-applications boundaries under one umbrella, or &amp;ldquo;container&amp;rdquo; in Hanami parlance. So while in Rails has engines as an opt-in feature, you build everything as an engine in Hanami. Each &amp;ldquo;app&amp;rdquo; gets its own set of views, controllers, assets, configuration, etc. Shared resources, like models, tend to go in &lt;code&gt;lib/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You also get useful development tools like generators, migrations, and asset
+pipelines in Hanami, but expect less ceremony here. Migrations handed off to the
+venerable &lt;a href="http://sequel.jeremyevans.net/rdoc/files/doc/schema_modification_rdoc.html"&gt;Sequel&lt;/a&gt; project and the asset story is still young but passable; you won&amp;rsquo;t be able to take advantage of the multitude of Rails-asset gems.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d be interested to see Hanami go in a different direction here, like taking advantage of the &amp;ldquo;frontend explosion&amp;rdquo; by providing integration with external pipelines like the static-site generator &lt;a href="https://middlemanapp.com/advanced/external-pipeline/"&gt;middleman&lt;/a&gt; or what Shakacode has done with &lt;a href="https://webpack.github.io/"&gt;webpack&lt;/a&gt; in &lt;a href="https://github.com/shakacode/react_on_rails"&gt;&lt;code&gt;react_on_rails&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;One gotcha is that Hanami &lt;a href="https://github.com/hanami/hanami/issues/249"&gt;does not itself provide any mechanism for code
+reloading&lt;/a&gt; (at the moment). This
+was not obvious to me starting off since the development server does &amp;ldquo;appear&amp;rdquo; to reload code. It turns out that the dev server launches with &lt;a href="https://github.com/rtomayko/shotgun"&gt;Shotgun&lt;/a&gt; (commonly used in Sinatra projects), to serve each development request in a new process with &lt;code&gt;fork(2)&lt;/code&gt;. I didn&amp;rsquo;t pick up on this until several iterations in when I added the &lt;a href="https://github.com/brandonhilkert/sucker_punch"&gt;SuckerPunch gem&lt;/a&gt; and couldn&amp;rsquo;t figure out why my background jobs wouldn&amp;rsquo;t run in development. Long story short, kicking off background jobs in threads in the request process, as is possible with SuckerPunch, won&amp;rsquo;t work without disabling Shotgun.&lt;/p&gt;
+
+&lt;h3&gt;Hanami MVC is not Rails MVC&lt;/h3&gt;
+
+&lt;p&gt;With the Model-View-Controller paradigm, you&amp;rsquo;ll see some big departures from
+Rails. First, controllers are not classes with &amp;ldquo;RESTful&amp;rdquo; methods, but
+&lt;em&gt;directories&lt;/em&gt; of related action classes. In other words, instead of defining
+&lt;code&gt;#index&lt;/code&gt;, &lt;code&gt;#show&lt;/code&gt;, &lt;code&gt;#create&lt;/code&gt;, etc. in a &lt;code&gt;PostsController&lt;/code&gt;, you create a separate
+class for each action using a mixin that live in a directory that would
+represent a single controller in Rails.&lt;/p&gt;
+
+&lt;p&gt;In my Github-Groove app, here&amp;rsquo;s how I organize the tickets controller:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;app/
+  web/
+    assets/
+    config/
+    controllers/
+      tickets/
+        index.rb
+        show.rb
+        sync.rb
+    templates/
+    views/
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Each &amp;ldquo;action&amp;rdquo; is a Rack-inspired class whose contract is only that it responds to &lt;code&gt;#call&lt;/code&gt;. You still get
+familiar macros like &lt;code&gt;before&lt;/code&gt; filters, but there are new idea too, like declaring what instance variables are available to the view with &lt;code&gt;expose&lt;/code&gt;, inserting action-specific middleware, and whitelisting &lt;code&gt;params&lt;/code&gt; at the class level, all of which I find to be huge improvements over the Rails controller design.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;module Web::Controllers::Project
+  class Create
+    include Web::Action
+
+    expose :project
+    before :authenticate!
+
+    params do
+      param :project do
+        param :groove_access_token, presence: true
+        param :github_repository, presence: true
+      end
+    end
+
+    def call(params)
+      if params.valid?
+        @project = ProjectRepository.find_or_create_by_params(params[:project])
+        UserRepository.update_user_project(current_user, @project)
+
+        flash[:notice] = &amp;quot;Your project has been saved!&amp;quot;
+
+        redirect_to &amp;quot;/project&amp;quot;
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Arguably, the biggest efforts in Hanami appear to be at this action layer and it
+shows in the &lt;a href="http://hanamirb.org/guides/actions/overview/"&gt;guides&lt;/a&gt; and the
+&lt;a href="https://github.com/hanami/controller/blob/master/README.md"&gt;README&lt;/a&gt; where you
+can find a ton of great information customizing these classes.&lt;/p&gt;
+
+&lt;p&gt;Another big benefit in the controller design, and for most of the Hanami
+framework, is that unit-testing has a much lower barrier to entry. To get
+controller tests to work in Rails requires a ton of setup behind the scenes to
+the point where you essentially have integration tests. Controllers tests in
+Hanami are much simpler by the simple fact that getting a testable object is as
+easy as &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/spec/web/controllers/project/create_spec.rb#L5"&gt;instantiating a Hanami action&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In Hanami, &amp;ldquo;views&amp;rdquo; are classes that act more like presenter to represent a model
+or collection of models for the &amp;ldquo;templates&amp;rdquo;, which the place of the
+&lt;code&gt;views/&lt;/code&gt; folder in Rails. Like Rails, file-naming conventions link an action,
+view, and template. The helper method story is still developing, but you can
+expect to find some surprises in the docs, like the criticism of Rails
+monkey-patching of ERB to achieve block-style helpers for things like forms.
+Expect to get tripped up by these differences in helper syntax which ironically are
+valid ERB. Hanami does support all the other popular templating engines through
+&lt;a href="https://github.com/rtomayko/tilt"&gt;Tilt&lt;/a&gt; for your preference.&lt;/p&gt;
+
+&lt;p&gt;Hanami also provides &lt;code&gt;hanami-model&lt;/code&gt; for the model layer as a soft-dependency so
+you can bring your own ORM if desired. If you choose to use &lt;code&gt;hanami-model&lt;/code&gt; as I
+did, you can expect to leave your ActiveRecord convenience (and baggage) behind.
+Hanami&amp;rsquo;s model layer emulates the &lt;a href="http://martinfowler.com/eaaCatalog/repository.html"&gt;repository pattern&lt;/a&gt; where database queries, table mapping, and entities are all separate concerns.&lt;/p&gt;
+
+&lt;p&gt;Repositories become a collection of query methods:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class ProjectRepository
+  include Hanami::Repository
+
+  def self.find_or_create_by_params(params)
+    found = find_by_groove_access_token(params[:groove_access_token])
+
+    if found
+      found.update(params)
+      update found
+    else
+      create(Project.new(params))
+    end
+  end
+
+  def self.find_by_groove_access_token(groove_access_token)
+    query do
+      where(groove_access_token: groove_access_token)
+    end.first
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Entities feel basically like POROS that provide a thin layer over attributes.
+Don&amp;rsquo;t expect to find any database access, validations (by default anyhow), or callbacks here.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Project
+  include Hanami::Entity
+
+  attributes :groove_access_token, :github_repository, :syncing
+
+  def ready?
+    groove_access_token.present? &amp;amp;&amp;amp; github_repository.present?
+  end
+
+  # ...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Validations do exist in Hanami &lt;a href="https://github.com/hanami/validations"&gt;as a separate mixin&lt;/a&gt; but these are more typically done in the params macro at the action-layer.&lt;/p&gt;
+
+&lt;h2&gt;Expect to write code&lt;/h2&gt;
+
+&lt;p&gt;While Hanami has its own variety of &amp;ldquo;magic&amp;rdquo; of the kind that developers have come to
+either love or hate in Rails, you can expect to write code you might not
+otherwise have to in Rails. The framework is still young, so there are missing
+features. What&amp;rsquo;s not always clear is whether these features have been left out
+by priority or choice. To figure that out takes some digging on GitHub issues, the Hanami &lt;a href="https://gitter.im/hanami/chat"&gt;chat&lt;/a&gt; and &lt;a href="https://discuss.hanamirb.org/"&gt;Discourse forum&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Though its database layer has the &lt;a href="https://github.com/jeremyevans/sequel"&gt;Sequel&lt;/a&gt; library as a foundation, I didn&amp;rsquo;t find the repository and entity functionality as fully-developed. I found myself writing a lot of boilerplate code in the entities and repositories with a lot of co-dependence between the classes. With some more thoughtful design and refactoring, I could probably address this issue, but at this stage, the separation of concerns is less apparent: entities and repositories appear to be tightly bound. &lt;a href="https://github.com/hanami/model/issues/291"&gt;Convenience methods&lt;/a&gt; are still in the works.&lt;/p&gt;
+
+&lt;p&gt;For one, &lt;a href="https://github.com/hanami/model/pull/244"&gt;associations&lt;/a&gt; are still in development at the time of this writing (see open issue &lt;a href="https://github.com/hanami/model/issues/35"&gt;here&lt;/a&gt;). Much of my entity code was to fill this gap - to load objects linked by foreign keys via repositories like below.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Project
+  include Hanami::Entity
+
+  def tickets(params = {})
+    TicketRepository.all_by_project(self, params)
+  end
+end
+
+class TicketRepository
+  include Hanami::Repository
+
+  def self.all_by_project(project, _params = {})
+    query do
+      where(project_id: project.id).desc(:number)
+    end.all
+  end
+
+  # ...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;m not sure if this is the &amp;ldquo;Hanami-way&amp;rdquo;, but I found myself doing this kind of
+thing a lot.&lt;/p&gt;
+
+&lt;p&gt;I also ran into some unexpected issues while deploying the application to Heroku
+where its &lt;code&gt;HANAMI_ENV&lt;/code&gt; is set to &lt;code&gt;&amp;#39;production&amp;#39;&lt;/code&gt;. In many cases, custom classes I
+extracted, like one for sharing &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/repositories/pagination.rb"&gt;a pagination query&lt;/a&gt; and another for &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/vendor/groove.rb"&gt;wrapping the &lt;code&gt;Groove API Ruby Client&lt;/code&gt;&lt;/a&gt; weren&amp;rsquo;t &amp;ldquo;autoloaded&amp;rdquo; when booting the Hanami application. To resolve this, I added explicit requires like &lt;code&gt;require_relative &amp;#39;./pagination&amp;#39;&lt;/code&gt;. Again, I didn&amp;rsquo;t have time to dig into whether this issue would be expected or not; I could have been missing something important here.&lt;/p&gt;
+
+&lt;h3&gt;The Community is still young&lt;/h3&gt;
+
+&lt;p&gt;That brings me to the community - it&amp;rsquo;s extremely supportive, but still very
+small. I encountered a lot of helpful folks on
+&lt;a href="https://gitter.im/hanami/chat"&gt;chat&lt;/a&gt; including &lt;code&gt;@jodosha&lt;/code&gt; himself, but there
+simply hasn&amp;rsquo;t been enough traction to reach &lt;a href="https://stackoverflow.com/questions/tagged/hanami"&gt;StackOverflow&lt;/a&gt; critical mass where just about any question you can think of in Rails already has an answer.&lt;/p&gt;
+
+&lt;p&gt;This means a lot more code-spelunking in the &lt;a href="https://github.com/hanami"&gt;hanami&lt;/a&gt; repositories. To that end, I found the code extremely clean, well-documented, and approachable whereas, even today, I need to brace myself before diving into Rails source.&lt;/p&gt;
+
+&lt;p&gt;That said, you can expect to run into edge cases and bugs occasionally that may
+not yet have a solution, including this &lt;a href="https://github.com/pry/pry/issues/1471#issuecomment-187420164"&gt;incredibly irksome&lt;/a&gt; issue that prevents you from accessing the pry console when using &lt;code&gt;binding.pry&lt;/code&gt; in Hanami controllers and the problem I mentioned earlier that prevents you from using SuckerPunch in development with Shotgun enabled.&lt;/p&gt;
+
+&lt;p&gt;Another challenge is that all those Rails-specific plugins
+you love have no place here. Yes, you can build authentication without Devise.
+Using &lt;a href="https://github.com/hassox/warden"&gt;&lt;code&gt;Warden&lt;/code&gt;&lt;/a&gt;, the general Rack-based
+authentication middleware on which Devise is based, is very feasible and you can always
+rely on &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/application.rb#L86"&gt;OmniAuth like I did&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The lesson here is that with Hanami, you&amp;rsquo;re much more likely to have to &amp;ldquo;roll up
+your sleeves&amp;rdquo; to get to the bottom of issues or&lt;/p&gt;
+
+&lt;h3&gt;Hanami is and is not Rails&lt;/h3&gt;
+
+&lt;p&gt;So should you build your next app in Hanami? Only you can answer that of course.
+The lightweight approach in Hanami means there is less to wrap your head around
+if you&amp;rsquo;re coming from Rails, but there is still a learning curve nonetheless. I&amp;rsquo;d say it&amp;rsquo;s a worthwhile endeavor to build something small like I did at first to push the boundaries and answer the questions you have about Hanami for yourself.&lt;/p&gt;
+
+&lt;p&gt;Hanami treads the same ground as Rails and aims to do a lot of the low level
+work for you so can focus on what&amp;rsquo;s important - the business. Personally, I found a lot of advantages in the &amp;ldquo;Hanami-way&amp;rdquo; and enjoyed the experience of the new paradigms. My &amp;ldquo;Rails muscle memory&amp;rdquo; tripped me up on occasion and left me pining for features that don&amp;rsquo;t exist or are not as well-developed in Hanami yet. I see a lot of potential in the Hanami framework and see it growing into a viable alternative to Rails in the near future.&lt;/p&gt;
+
+&lt;p&gt;Check out the &lt;a href="https://github.com/rossta/github_groove"&gt;GitHub-Groove source&lt;/a&gt; and &lt;a href="https://github-groove.herokuapp.com/"&gt;demo app&lt;/a&gt; and let me know what I could have done differently.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Clojure's iterate in Ruby</title>
     <link rel="alternate" href="/blog/clojure-iterate-in-ruby.html"/>
@@ -189,12 +446,12 @@ operations (free of side effects) on sequences (values that can be generated on 
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456325182"&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I’d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
 &lt;p&gt;For scheduling tasks, we have &lt;a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html"&gt;cron&lt;/a&gt; at the system level and even such...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456325182" /&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I&amp;rsquo;d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
@@ -370,13 +627,13 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &amp;quot;7pm&amp;quot;)
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456325182"&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s build a simple web crawler in Ruby. For inspiration, I’d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin’s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
 
 &lt;p&gt;We’ll adapt Skork’s original goals and...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456325182" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build a simple web crawler in Ruby. For inspiration, I&amp;rsquo;d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin&amp;rsquo;s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
@@ -701,14 +958,14 @@ end
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456325182"&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We’ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
 &lt;p&gt;Grep...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456325182" /&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
 
@@ -895,7 +1152,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456325182"&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
@@ -905,7 +1162,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
 
 &lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
 other words,...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456325182" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
@@ -1120,365 +1377,6 @@ only be evaluated when the &lt;code&gt;TRACE&lt;/code&gt; environment variable i
 
 &lt;p&gt;Again, you won&amp;rsquo;t need to resort to this workaround for &lt;code&gt;SystemStackError&lt;/code&gt; in Ruby
 2.2+, but keep this in mind next time you get stuck &amp;ldquo;in the loop&amp;rdquo;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Using RSpec Metadata</title>
-    <link rel="alternate" href="/blog/using-rspec-metadata.html"/>
-    <id>/blog/using-rspec-metadata.html</id>
-    <published>2015-12-28T19:00:00-05:00</published>
-    <updated>2015-12-28T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg?1455835896"&gt;&lt;/p&gt;
-
-&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
-
-&lt;p&gt;You may already be familiar with how &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt; uses the &lt;code&gt;:js&lt;/code&gt; option to enable the javascript driver.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;describe "a javascript feature", :js do
-  # tests run against the...&lt;/code&gt;&lt;/pre&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Fall" src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg?1455835896" /&gt;&lt;/p&gt;
-
-&lt;p&gt;A useful feature of RSpec is the ability to pass metadata to tests and suites.&lt;/p&gt;
-
-&lt;p&gt;You may already be familiar with how &lt;a href="https://github.com/jnicklas/capybara"&gt;Capybara&lt;/a&gt; uses the &lt;code&gt;:js&lt;/code&gt; option to enable the javascript driver.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;describe &amp;quot;a javascript feature&amp;quot;, :js do
-  # tests run against the Capyabara.javascript_driver
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Capybara &lt;a href="https://github.com/jnicklas/capybara/blob/957c35f580b68e8a140b5bbe7818fdcf06bc4521/lib/capybara/rspec.rb#L27"&gt;provides an RSpec configuration hook&lt;/a&gt; that changes the web driver for any example where &lt;code&gt;:js&lt;/code&gt; metadata is present. Here it is, oversimplified:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# capybara/rspec.rb
-RSpec.configure do |config|
-  config.before do
-    Capybara.current_driver = Capybara.javascript_driver if example.metadata[:js]
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We may reach a point in the maturity of our test suite when it makes sense add our own configuration options.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;
-&lt;p&gt;
-The examples in the post are based on RSpec version &lt;code&gt;~&gt; 3&lt;/code&gt;.
-&lt;/p&gt;
-&lt;/aside&gt;
-
-&lt;h3&gt;Changing Test Runner Behavior&lt;/h3&gt;
-
-&lt;p&gt;Testing libraries like RSpec and Capybara do some heavy lifting to set up the
-Rails environment and make it suitable for running in test mode. For performance
-reasons, it may be beneficial to run each of our specs in a database
-transaction so test data can be easily rolled back at the start of each spec.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s a common base configuration for using the popular &lt;a href="https://github.com/DatabaseCleaner/database_cleaner"&gt;DatabaseCleaner&lt;/a&gt; gem to
-set up transactional database behavior for RSpec:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;RSpec.configure do |config|
-  config.use_transactional_fixtures = false
-
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Not all specs can be run this way - once we add a javascript acceptance specs, for
-example, the javascript driver will likely need its own connection to the
-database so it won&amp;rsquo;t have access to data setup in the tests. We need to run
-javascript acceptance specs in &lt;em&gt;truncation&lt;/em&gt; mode to ensure database changes are
-committed to the database so multiple database connections will have access to the same data.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s use RSpec metadata to toggle database behavior automatically when using
-the javascript driver (i.e., not the default &lt;code&gt;:rack_test&lt;/code&gt; driver). We&amp;rsquo;ll add the
-following hooks, borrowed from the DatabaseCleaner &lt;a href="https://github.com/DatabaseCleaner/database_cleaner/tree/f32abebc4f28faa6ff944c4d1d4fee3f21ceb0bb#rspec-example"&gt;README&lt;/a&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
-config.before(:each, type: :feature) do
-  # :rack_test driver&amp;#39;s Rack app under test shares database connection
-  # with the specs, so continue to use transaction strategy for speed.
-  driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
-
-  if !driver_shares_db_connection_with_specs
-    # Driver is probably for an external browser with an app
-    # under test that does *not* share a database connection with the
-    # specs, so use truncation strategy.
-    DatabaseCleaner.strategy = :truncation
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We also run into problems with ActiveRecord &lt;code&gt;after_commit&lt;/code&gt; callbacks - when running
-tests in transaction mode, these callbacks will never fire. We can also
-add an option for enabling truncation mode outside of acceptance specs when
-isolated specs are needed for these callbacks:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# spec/model/user_spec.rb
-it &amp;quot;triggers background job after creating new user&amp;quot;, :truncation_mode do
-  # test after_commit callback
-end
-
-# spec/spec_helper.rb
-config.before(:each, :truncation_mode) do
-  DatabaseCleaner.strategy = :truncation
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here&amp;rsquo;s a consolidated configuration for providing hooks for the issues related
-to database truncation mentioned above:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
-RSpec.configure do |config|
-  config.use_transactional_fixtures = false
-
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.before(:each, type: :feature) do
-    driver_shares_db_connection_with_specs = Capybara.current_driver == :rack_test
-
-    if !driver_shares_db_connection_with_specs
-      DatabaseCleaner.strategy = :truncation
-    end
-  end
-
-  config.before(:each, :truncation_mode) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;Changing Application Settings&lt;/h3&gt;
-
-&lt;p&gt;Rails provides a number of settings that can be easily configured based on the
-environment, so we avoid undesired work in development or test environments,
-such as sending emails. For any mature Rails application, we&amp;rsquo;ll likely have
-our own custom settings layered on top of the Rails defaults.&lt;/p&gt;
-
-&lt;p&gt;There are many cases where we&amp;rsquo;ll still want to test the production settings in
-our test environments.  For example, by default, controller caching is disabled in tests:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/test.rb
-Rails.application.configure do
-  # ...
-  config.action_controller.perform_caching = false
-
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For selected acceptances specs, we may still want to test behavior of caching at
-the view layer, say that users can see new info when a model attribute changes. We don&amp;rsquo;t need this caching behavior is all test, so it may be useful to toggle specs on/off during the test run.&lt;/p&gt;
-
-&lt;h4&gt;First attempt&lt;/h4&gt;
-
-&lt;p&gt;We could try to stub the setting in the context of a single spec run with the enabled state.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
-RSpec.configure do |config|
-  config.before(:each, :caching) do
-    allow_any_instance_of(ActionController::Base).to receive(:perform_caching).and_return true
-  end
-
-  config.after(:each, :caching) do
-    Rails.cache.clear
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This may require changing behavior of instances which is &lt;a href="https://relishapp.com/rspec/rspec-mocks/docs/working-with-legacy-code/any-instance"&gt;typically discouraged&lt;/a&gt;. We may also need to clean up other global state, like clearing the Rails cache after the test run.&lt;/p&gt;
-
-&lt;h4&gt;Better attempt&lt;/h4&gt;
-
-&lt;p&gt;Alternatively, we can set the actual values on while settings are derived.
-Here&amp;rsquo;s how it might look for enabling controller caching with an &lt;code&gt;around&lt;/code&gt; block:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
-RSpec.configure do |config|
-  config.around(:each, :caching) do |example|
-    caching = ActionController::Base.perform_caching
-    ActionController::Base.perform_caching = example.metadata[:caching]
-
-    example.run
-
-    Rails.cache.clear
-    ActionController::Base.perform_caching = caching
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;around&lt;/code&gt; block takes the RSpec example object as an argument. When running specs, the given block is triggered when &lt;code&gt;:caching&lt;/code&gt; is detected as a key in an example’s metadata. The example object provides a number of methods for test introspection, allowing us to make changes before and after calling run to execute the spec.&lt;/p&gt;
-
-&lt;p&gt;As a result, we now have a simple, explicit mechanism for introducing caching to individual specs and suites:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# spec/features/homepage_spec.rb
-describe &amp;quot;visit the homepage&amp;quot;, :caching do
-  it &amp;quot;expires cache&amp;quot; do
-    # test cached stuff
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The main concern with this approach is that modifying a global state can affect
-other tests unintentionally - a big no-no.&lt;/p&gt;
-
-&lt;p&gt;To avoid this, &lt;strong&gt;we need to reset the original value when the example completes&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here, we are storing the previously set value of &lt;code&gt;ActionContoller::Base.perform_caching&lt;/code&gt;, setting it for the local suite, and resetting it back to the original value after it completes.&lt;/p&gt;
-
-&lt;p&gt;This technique may come into play when integrating with certain gems like
-&lt;a href="https://github.com/airblade/paper_trail"&gt;PaperTrail&lt;/a&gt; which may generate expensive logic or queries not need in most
-situations. PaperTrail even &lt;a href="https://github.com/airblade/paper_trail/blob/eef918bca42bab85c4467541037897f0788b6062/lib/paper_trail/frameworks/rspec.rb"&gt;provides a helper&lt;/a&gt; to take advantage of RSpec. It may be worth considering whether to provide an interface to toggle behavior and RSpec helpers next time we write a gem.
-metadata to toggle behavior in specs.&lt;/p&gt;
-
-&lt;h3&gt;Filtering Specs&lt;/h3&gt;
-
-&lt;p&gt;One useful technique while developing is to run a selected set of specs. We may
-be editing acceptances specs, model validations, and other disparate tests while test driving a
-feature from &lt;a href="http://everydayrails.com/2014/01/15/outside-in-example-ruby-tapas.html"&gt;outside to in&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h4&gt;Manual tagging&lt;/h4&gt;
-
-&lt;p&gt;Adding arbitrary metadata like &lt;code&gt;:focus&lt;/code&gt; to set of specs is one way to approach
-this.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# spec/models/user_spec.rb
-it &amp;quot;validates a user&amp;quot;, :focus do
-  # unit test
-end
-
-# spec/features/sign_up_spec.rb
-it &amp;quot;displays error message&amp;quot;, :focus do
-  # acceptance spec
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can now filter our test run to a subset at the command line:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;$ rspec --tag focus
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can also add some global configuration so this will be the default behavior
-when using &lt;code&gt;:focus&lt;/code&gt; specs, as long as we don&amp;rsquo;t make the mistake of filtering on the build server unintentionally.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="rspec"&gt;RSpec.configure do |config|
-  # enable auto-focus only when running locally
-  config.filter_run_including focus: ENV[&amp;#39;CI_SERVER_SETTING&amp;#39;].blank?
-
-  config.run_all_when_everything_filtered = true
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Alternatively, avoid running broken or flaky specs when tagged accordingly:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;it &amp;quot;test that fails intermittently&amp;quot;, :flaky do
-  # probably a javascript test
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Using either a command line option&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;$ rspec --tag ~flaky
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;or a configuration option, we can filter out specs we wish to ignore.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;RSpec.configure do |c|
-  c.filter_run_excluding flaky: true
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4&gt;Auto Tagging&lt;/h4&gt;
-
-&lt;p&gt;A less-known feature of RSpec 3 is an API for telling RSpec to derive additional metadata
-automatically based on &lt;em&gt;other&lt;/em&gt; metadata.&lt;/p&gt;
-
-&lt;p&gt;For example, each spec example has metadata that includes its file path. This,
-along with the &lt;code&gt;RSpec::Core::Configuration#define_derived_metadata&lt;/code&gt; method,
-allows us to alter spec behavior based on the spec directories, for example.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Why is this useful and how do we use it?&lt;/em&gt; Glad you asked.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s say we want to isolate model specs that require database truncation since
-they are more like functional specs than unit specs. We may set up our spec
-directory like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;spec/
-  truncation/
-    example1_spec.rb
-    example2_spec.rb
-    ...
-  transaction/
-    example1_spec.rb
-    example2_spec.rb
-    ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Instead of manually tagging each file with our &lt;code&gt;:truncation_mode&lt;/code&gt; metadata we
-used earlier to toggle DatabaseCleaner&amp;rsquo;s truncation strategy, we can configure
-all the specs in &lt;code&gt;spec/truncation&lt;/code&gt; as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="rspec"&gt;# spec/spec_helper.rb
-RSpec.configure do |config|
-  config.define_derived_metadata(file_path: %r{spec/truncation}) do |metadata|
-    metadata[:truncation_mode] = true
-  end
-
-  # rest of DatabaseCleaner config below
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, all specs in the directory will run with the &lt;code&gt;:truncation_mode&lt;/code&gt; metadata
-and the database strategy will be set to &lt;code&gt;:truncation&lt;/code&gt; as long as it is declared ahead of the additional DatabaseCleaner configuration we referenced earlier.&lt;/p&gt;
-
-&lt;p&gt;Note, this is the &lt;a href="https://github.com/rspec/rspec-rails/blob/a09a6231ceecefa177ec08b27c3066d5947e5899/lib/rspec/rails/configuration.rb#L85"&gt;same method&lt;/a&gt; used in &lt;code&gt;rspec-rails&lt;/code&gt; to add custom behavior to specs in the specific directories, e.g. &lt;code&gt;spec/controllers&amp;#39;,&lt;/code&gt;spec/requests, etc.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;
-&lt;p&gt;The example above is borrowed from &lt;a href="http://stackoverflow.com/questions/29651981/before-and-after-hooks-for-a-spec-directory-in-rspec"&gt;an answer I recently gave on Stackoverflow&lt;/a&gt;.
-&lt;/p&gt;
-&lt;/aside&gt;
-
-&lt;h3&gt;Using and Abusing&lt;/h3&gt;
-
-&lt;p&gt;While using RSpec metadata can be a powerful technique for altering test
-behavior and application settings in specs, it can also be taken too far.&lt;/p&gt;
-
-&lt;p&gt;As @avdgaag notes in &lt;a href="http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html"&gt;his blog post on the topic&lt;/a&gt;, make sure to distinguish between &lt;em&gt;how&lt;/em&gt; spec is run from &lt;em&gt;what&lt;/em&gt; the spec should test. We should probably not use metadata to create records specific to certain tests or authenticate users for a given context, for example.&lt;/p&gt;
-
-&lt;p&gt;One rule of thumb for adding metadata is decide whether it would be generally useful to any Rails app (good) or it is specific to the business logic of your current application (bad). The latter is best set up more explicitly within or alongside your tests.&lt;/p&gt;
-
-&lt;p&gt;Before considering a new metadata tag, I ask the rubber duck &amp;ldquo;Could I extract
-this configuration into a gem?&amp;rdquo; To answer yes, the behavior would have to be
-non-specific to my application. If so, the behavior &lt;em&gt;might&lt;/em&gt; be useful as metadata.&lt;/p&gt;
-
-&lt;p&gt;While metadata can nicely separate the boilerplate required to setup and teardown test behavior, it also adds a layer of indirection that can cause readability issues when stretched too far. Understand that there is a big increase in mental overhead to permuting test behavior with each new tag option and consider the tradeoffs with the rest of the team.&lt;/p&gt;
-
-&lt;p&gt;Use wisely!&lt;/p&gt;
 </content>
   </entry>
 </feed>
