@@ -54,7 +54,7 @@ I'd be interested to see Hanami go in a different direction here, like taking ad
 
 One gotcha is that Hanami [does not itself provide any mechanism for code
 reloading](https://github.com/hanami/hanami/issues/249) (at the moment). This
-was not obvious to me starting off since the development server does "appear" to reload code. It turns out that the dev server launches with [Shotgun](https://github.com/rtomayko/shotgun) (commonly used in Sinatra projects), to serve each development request in a new process with `fork(2)`. I didn't pick up on this until several iterations in when I added the [SuckerPunch gem](https://github.com/brandonhilkert/sucker_punch) and couldn't figure out why my background jobs wouldn't run in development. Long story short, kicking off background jobs in threads in the request process, as is possible with SuckerPunch, won't work without disabling Shotgun.
+was not obvious to me starting off since the development server does "appear" to reload code. It turns out that the dev server launches with [Shotgun](https://github.com/rtomayko/shotgun) (commonly used in Sinatra projects), to serve each development request in a new process with `fork(2)`. I didn't pick up on this until several iterations in when I added the [SuckerPunch gem](https://github.com/brandonhilkert/sucker_punch) and couldn't figure out why my background jobs wouldn't run in development. I added a [sync action](https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/controllers/tickets/sync.rb#L11) that allows users to trigger a [background job to import ticket data](https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/jobs/sync_tickets_job.rb) from Groove into the application. Long story short, kicking off background jobs in threads in the request process, as is possible with SuckerPunch, won't work without disabling Shotgun.
 
 ### Hanami MVC is not Rails MVC
 
@@ -224,7 +224,7 @@ thing a lot.
 
 I also ran into some unexpected issues while deploying the application to Heroku
 where its `HANAMI_ENV` is set to `'production'`. In many cases, custom classes I
-extracted, like one for sharing [a pagination query](https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/repositories/pagination.rb) and another for [wrapping the `Groove API Ruby Client`](https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/vendor/groove.rb) weren't "autoloaded" when booting the Hanami application. To resolve this, I added explicit requires like `require_relative './pagination'`. Again, I didn't have time to dig into whether this issue would be expected or not; I could have been missing something important here.
+extracted, like one for sharing [a pagination query](https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/repositories/pagination.rb) and another for [wrapping the `Groove API Ruby Client`](https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/vendor/groove.rb) (my [fork with paginated enumeration](https://github.com/Fodoj/groovehq/pull/16)) weren't "autoloaded" when booting the Hanami application. To resolve this, I added explicit requires like `require_relative './pagination'`. Again, I didn't have time to dig into whether this issue would be expected or not; I could have been missing something important here.
 
 ### The Community is still young
 
