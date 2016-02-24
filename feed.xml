@@ -262,7 +262,7 @@ The lightweight approach in Hanami means there is less to wrap your head around
 if you&amp;rsquo;re coming from Rails, but there is still a learning curve nonetheless. I&amp;rsquo;d say it&amp;rsquo;s a worthwhile endeavor to build something small like I did at first to push the boundaries and answer the questions you have about Hanami for yourself.&lt;/p&gt;
 
 &lt;p&gt;Hanami treads the same ground as Rails and aims to do a lot of the low level
-work for you so can focus on what&amp;rsquo;s important - the business. Personally, I found a lot of advantages in the &amp;ldquo;Hanami-way&amp;rdquo; and enjoyed the experience of the new paradigms. My &amp;ldquo;Rails muscle memory&amp;rdquo; tripped me up on occasion and left me pining for features that don&amp;rsquo;t exist or are not as well-developed in Hanami yet. I see a lot of potential in the Hanami framework and see it growing into a viable alternative to Rails in the near future.&lt;/p&gt;
+work for you so can focus on what&amp;rsquo;s important - your business logic. Personally, I found a lot of advantages in the &amp;ldquo;Hanami way&amp;rdquo; and enjoyed the experience of the new paradigm. My &amp;ldquo;Rails muscle memory&amp;rdquo; tripped me up on occasion and left me pining for features that don&amp;rsquo;t exist or are not as well-developed in Hanami yet. I see a lot of potential in the Hanami framework and see it growing into a viable alternative to Rails in the near future.&lt;/p&gt;
 
 &lt;p&gt;Check out the &lt;a href="https://github.com/rossta/github_groove"&gt;GitHub-Groove source&lt;/a&gt; and &lt;a href="https://github-groove.herokuapp.com/"&gt;demo app&lt;/a&gt; and let me know what I could have done differently.&lt;/p&gt;
 </content>
@@ -447,12 +447,12 @@ operations (free of side effects) on sequences (values that can be generated on 
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456339262"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456339392"&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I’d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
 &lt;p&gt;For scheduling tasks, we have &lt;a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html"&gt;cron&lt;/a&gt; at the system level and even such...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456339262" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="How many more times?" src="/assets/images/blog/stock/clock-pexels-photo.jpg?1456339392" /&gt;&lt;/p&gt;
 
 &lt;p&gt;I was considering recently how I&amp;rsquo;d build an &lt;a href="http://meetedgar.com/"&gt;Edgar&lt;/a&gt; clone to post updates about &lt;a href="/"&gt;rossta.net&lt;/a&gt; on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.&lt;/p&gt;
 
@@ -628,13 +628,13 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &amp;quot;7pm&amp;quot;)
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456339262"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456339392"&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s build a simple web crawler in Ruby. For inspiration, I’d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin’s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
 
 &lt;p&gt;We’ll adapt Skork’s original goals and...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456339262" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo.jpg?1456339392" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build a simple web crawler in Ruby. For inspiration, I&amp;rsquo;d like to
 to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin&amp;rsquo;s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
@@ -959,14 +959,14 @@ end
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456339262"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456339392"&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We’ll dissect both here below.&lt;/p&gt;
 
 &lt;h4&gt;Triple Lindey&lt;/h4&gt;
 
 &lt;p&gt;Grep...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456339262" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Goodies" src="/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg?1456339392" /&gt;&lt;/p&gt;
 
 &lt;p&gt;You may have heard &lt;a href="https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/"&gt;Ruby 2.3 dropped&lt;/a&gt; on Christmas this past year. Two new &lt;code&gt;Enumerable&lt;/code&gt; instance methods were added, &lt;code&gt;grep_v&lt;/code&gt; and &lt;code&gt;chunk_while&lt;/code&gt;, both of which are variations on other &lt;code&gt;Enumerable&lt;/code&gt; methods. We&amp;rsquo;ll dissect both here below.&lt;/p&gt;
 
@@ -1153,7 +1153,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456339262"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456339392"&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
@@ -1163,7 +1163,7 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
 
 &lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
 other words,...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456339262" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo.jpg?1456339392" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
 
