@@ -18,8 +18,7 @@ require "uglifier"
 
 activate :livereload
 activate :directory_indexes
-activate :autoprefixer
-# activate :meta_tags
+activate :meta_tags
 
 # Time.zone = "UTC"
 activate :external_pipeline,
@@ -34,8 +33,8 @@ activate :external_pipeline,
 activate :blog do |blog|
   blog.name = "blog"
   blog.prefix = "blog"
-  blog.permalink = "/:title.html"
-  blog.sources = ":year-:month-:day-:title.html"
+  blog.permalink = "/{title}.html"
+  blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.layout = "post"
   blog.tag_template = "tag.html"
   blog.calendar_template = "calendar.html"
@@ -56,9 +55,9 @@ end
 activate :blog do |blog|
   blog.name = "talks"
   blog.prefix = "talks"
-  blog.permalink = "/:title.html"
+  blog.permalink = "/{title}.html"
   blog.taglink = "tags/{tag}"
-  blog.sources = ":year-:month-:day-:title.html"
+  blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.default_extension = ".md"
   blog.layout   = "talk"
   blog.paginate = true
