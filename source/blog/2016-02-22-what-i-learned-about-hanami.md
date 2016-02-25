@@ -50,7 +50,7 @@ You also get useful development tools like generators, migrations, and asset
 pipelines in Hanami, but expect less ceremony here. Migrations handed off to the
 venerable [Sequel](http://sequel.jeremyevans.net/rdoc/files/doc/schema_modification_rdoc.html) project and the asset story is still young but passable; you won't be able to take advantage of the multitude of Rails-asset gems.
 
-I'd be interested to see Hanami go in a different direction here, like taking advantage of the "frontend explosion" by providing integration with external pipelines as the static-site generator [middleman](https://middlemanapp.com/advanced/external-pipeline/) as done or what Shakacode is trying with [webpack](https://webpack.github.io/) in [`react_on_rails`](https://github.com/shakacode/react_on_rails).
+I'd be interested to see Hanami go in a different direction here, like taking advantage of the "frontend explosion" by providing integration with external pipelines as the static-site generator [middleman has done](https://middlemanapp.com/advanced/external-pipeline/) or what [Shakacode](http://www.shakacode.com/) is trying with [webpack](https://webpack.github.io/) in [`react_on_rails`](https://github.com/shakacode/react_on_rails).
 
 It's worth noting that Hanami comes with security features baked in for as one would expect, including [CSRF protection](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)) and app-level secure-by-default options for items like [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/Security/CSP) and `X-Frame-Options`.
 
