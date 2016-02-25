@@ -119,7 +119,7 @@ end
 Arguably, the biggest efforts in Hanami appear to be at this action layer and it
 shows in the [guides](http://hanamirb.org/guides/actions/overview/) and the
 [README](https://github.com/hanami/controller/blob/master/README.md) where you
-can find a ton of great information customizing these classes.
+can find a ton of great information for customizing these classes.
 
 Another big benefit in the controller design, and for most of the Hanami
 framework, is that unit-testing has a much lower barrier to entry. To get
