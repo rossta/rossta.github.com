@@ -4,11 +4,4 @@
       <div class="enlightenment large-12 columns"><%= section %></div>
     </div>
   </div>
-  <% content_for :javascripts do %>
-    <script type="text/javascript">
-      $(function() {
-         $.zen(function(toBe) { $('#zen').find('.enlightenment').text(toBe); });
-      });
-    </script>
-  <% end %>
 <% end %>

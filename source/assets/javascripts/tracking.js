@@ -1,22 +1,22 @@
-(function($) {
-  var Tracking = function() {
-    this.traits = {};
-    this.events = {};
-  }
+import $ from 'jquery';
 
-  Tracking.prototype.identify = function (props) {
-    this.traits = $.extend(this.traits, {}, props);
-    return this.traits;
-  };
+var Tracking = function() {
+  this.traits = {};
+  this.events = {};
+}
 
-  Tracking.prototype.track = function(name, props) {
-    this.events[name] = $.extend(this.events[name], {}, props);
-    return this.events[name];
-  };
+Tracking.prototype.identify = function (props) {
+  this.traits = $.extend(this.traits, {}, props);
+  return this.traits;
+};
 
-  $.extend({
-    tracking: new Tracking()
-  });
+Tracking.prototype.track = function(name, props) {
+  this.events[name] = $.extend(this.events[name], {}, props);
+  return this.events[name];
+};
 
-  return Tracking;
-})(jQuery);
+$.extend({
+  tracking: new Tracking()
+});
+
+export default Tracking;

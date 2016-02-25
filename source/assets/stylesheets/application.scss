@@ -1,3 +1,7 @@
-body {
-  background: alicewhite;
-}
+@import "settings";
+@import "foundation-sites/scss/normalize";
+@import "foundation-sites/scss/foundation";
+
+@import "layout";
+@import "blog";
+@import "highlight.js/styles/docco";
