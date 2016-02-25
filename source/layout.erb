@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <%= stylesheet_link_tag "application" %>
-    <%#= javascript_include_tag 'head' %>
+    <%= stylesheet_link_tag "index.bundle" %>
+    <%= javascript_include_tag "head.bundle" %>
     <%= favicon_tag 'favicon.ico' %>
   </head>
   <body id="application" class="typekit">
@@ -26,8 +26,8 @@
         </section>
       </footer>
     </div>
-    <%= javascript_include_tag "index" %>
     <%= yield_content :javascripts %>
+    <%= javascript_include_tag "index.bundle" %>
     <%= partial "layouts/analytics" %>
   </body>
 </html>

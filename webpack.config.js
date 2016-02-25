@@ -5,9 +5,10 @@ var Clean = require('clean-webpack-plugin');
 module.exports = {
   entry: {
     index: [
-      './source/assets/stylesheets/application.scss',
+      './source/assets/stylesheets/index.scss',
       './source/assets/javascripts/index.js'
     ],
+    head: './source/assets/javascripts/head.js'
   },
 
   resolve: {
@@ -16,7 +17,7 @@ module.exports = {
 
   output: {
     path: __dirname + '/.tmp/dist',
-    filename: 'assets/javascripts/[name].js',
+    filename: 'assets/javascripts/[name].bundle.js',
   },
 
   module: {
@@ -31,10 +32,16 @@ module.exports = {
         },
       },
 
+      { test: require.resolve("jquery"), loader: "expose?$" },
+
+      {
+        test: /[\\\/]vendor[\\\/]modernizr\.js$/,
+        loader: "imports?this=>window!exports?window.Modernizr"
+      },
+
       // Load SCSS
       {
         test: /.*\.scss$/,
-        // loaders: ['style', 'css', 'sass']
         loader: ExtractTextPlugin.extract(
           "style",
           "css!sass?sourceMap&includePaths[]=" + __dirname + "/node_modules"
@@ -44,19 +51,20 @@ module.exports = {
       // Load plain-ol' vanilla CSS
       { test: /\.css$/, loader: "style!css" },
     ],
-      },
+  },
 
-      node: {
-        console: true
-      },
+  node: {
+    console: true
+  },
 
-      plugins: [
-        new Clean(['.tmp']),
-        new ExtractTextPlugin("assets/stylesheets/application.css"),
-        new webpack.ProvidePlugin({
-          $: "jquery",
-          jQuery: "jquery",
-          "window.jQuery": "jquery"
-        }),
-      ],
-  };
+  plugins: [
+    new Clean(['.tmp']),
+    new ExtractTextPlugin("assets/stylesheets/index.bundle.css"),
+    new webpack.optimize.CommonsChunkPlugin("head", "assets/javascripts/head.bundle.js"),
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    }),
+  ],
+};
