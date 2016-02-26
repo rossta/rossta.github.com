@@ -1,21 +1,3 @@
-# require "bundler"
-# Bundler.require
-# require "less"
-# require "csv"
-# require "markaby"
-# require "liquid"
-# require "radius"
-# require "redcloth"
-# require "rdoc"
-# require "rdoc/markup"
-# require "rdoc/markup/to_html"
-# require "wikicloth"
-# require "creole"
-# require "wikicloth"
-# require "yajl"
-# require "asciidoctor"
-require "uglifier"
-
 activate :livereload
 activate :meta_tags
 
@@ -27,6 +9,12 @@ activate :external_pipeline,
          "./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
          source: ".tmp/dist",
          latency: 1
+
+{
+  "/about/index.html" => "/about.html",
+}.each do |old_path, new_path|
+  redirect old_path, to: new_path
+end
 
 ###########################
 ## Blog
