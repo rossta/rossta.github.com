@@ -96,7 +96,7 @@ configure :build do
   # activate :asset_hash, ignore: [/^assets\/images\//]
   activate :asset_hash
 
-  activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
+  # activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 
   # Use relative URLs
   # activate :relative_assets

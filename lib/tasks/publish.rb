@@ -1,4 +1,6 @@
 require "fileutils"
+require "rubygems"
+require "pry"
 
 PROJECT_ROOT = `git rev-parse --show-toplevel`.strip
 ORIGIN_URL = `git config --get remote.origin.url`.strip
@@ -61,6 +63,7 @@ task :publish do |t, args|
       exit 1
     end
 
+    binding.pry
     cp_r "build/.", "dist"
     rm_r "build"
   end
