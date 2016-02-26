@@ -10,11 +10,11 @@ activate :external_pipeline,
          source: ".tmp/dist",
          latency: 1
 
-{
-  "/about/index.html" => "/about.html",
-}.each do |old_path, new_path|
-  redirect old_path, to: new_path
-end
+# {
+#   "/about/index.html" => "/about.html",
+# }.each do |old_path, new_path|
+#   redirect old_path, to: new_path
+# end
 
 ###########################
 ## Blog
@@ -93,7 +93,8 @@ configure :build do
   # activate :minify_javascript
 
   # activate :cache_buster
-  activate :asset_hash, ignore: [/^assets\/images\//]
+  # activate :asset_hash, ignore: [/^assets\/images\//]
+  activate :asset_hash
 
   activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 
