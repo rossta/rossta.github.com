@@ -1,4 +1,3 @@
-require "bundler/setup"
 require "fileutils"
 require "pry"
 
@@ -7,10 +6,6 @@ ORIGIN_URL = `git config --get remote.origin.url`.strip
 
 def account
   "rossta"
-end
-
-def cname
-  "rossta.net"
 end
 
 def branch
