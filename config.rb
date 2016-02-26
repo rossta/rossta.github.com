@@ -59,9 +59,9 @@ end
 activate :blog do |blog|
   blog.name = "projects"
   blog.prefix = "projects"
-  blog.permalink = "/:title.html"
+  blog.permalink = "/{title}.html"
   blog.taglink = "tags/{tag}"
-  blog.sources = ":year-:month-:day-:title.html"
+  blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.default_extension = ".md"
   blog.layout   = "project"
   blog.paginate = true
@@ -170,7 +170,7 @@ helpers do
   end
 
   def page_header(title, summary = nil)
-    partial 'layouts/page_header', locals: { title: title, summary: summary }
+    partial "partials/page_header", locals: { title: title, summary: summary }
   end
 
   def section
