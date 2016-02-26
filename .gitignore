@@ -18,3 +18,4 @@ source/blog/.Ulysses-Group.plist
 /node_modules
 /tmp
 /dist
+/.tmp
