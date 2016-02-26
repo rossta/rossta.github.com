@@ -17,7 +17,6 @@
 require "uglifier"
 
 activate :livereload
-activate :directory_indexes
 activate :meta_tags
 
 # Time.zone = "UTC"
