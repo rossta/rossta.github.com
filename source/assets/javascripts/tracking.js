@@ -23,8 +23,6 @@ Tracking.prototype.flush = function(analytics) {
   });
 }
 
-$.extend({
-  tracking: new Tracking()
-});
-
 export default Tracking;
+
+$.extend({ tracking: new Tracking() });

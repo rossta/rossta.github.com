@@ -43,12 +43,10 @@ Zen.prototype.cookie = function(key, value, opts) {
   return $.cookie('zen-' + key, value, opts);
 };
 
-$.extend({
-  zen: Zen
-});
-
 isFunction = function(obj) {
   return typeof obj === 'function';
 }
 
 export default Zen;
+
+$.extend({ zen: Zen });

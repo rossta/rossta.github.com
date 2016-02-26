@@ -22,7 +22,9 @@ activate :meta_tags
 # Time.zone = "UTC"
 activate :external_pipeline,
          name: :webpack,
-         command: build? ? "./node_modules/webpack/bin/webpack.js --bail" : "./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
+         command: build? ?
+         "./node_modules/webpack/bin/webpack.js --bail -p" :
+         "./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
          source: ".tmp/dist",
          latency: 1
 
@@ -94,10 +96,14 @@ set :images_dir, 'assets/images'
 
 # Build-specific configuration
 configure :build do
-  activate :minify_css
-  activate :minify_javascript
+  # activate :minify_css
+  #
+  # ignore { |path| path =~ /\/(.*)\.js$/ && $1 != 'all' }
+  # activate :minify_javascript
+
+  # activate :cache_buster
   activate :asset_hash, ignore: [/^assets\/images\//]
-  activate :cache_buster
+
   activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 
   # Use relative URLs
@@ -125,40 +131,6 @@ configure :development do
   set :mailchimp_form_id,   'a57e354058'
   set :segmentio_id, '7KlQZWWPWr2MDj4pWepIF7O95JPZ9wfp'
 end
-
-###
-# Compass
-###
-
-# Susy grids in Compass
-# First: gem install susy
-# require 'susy'
-
-# Change Compass configuration
-# compass_config do |config|
-#   config.output_style = :compact
-# end
-
-# compass_config do |config|
-#   # Require any additional compass plugins here.
-#   config.add_import_path "../bower_components/foundation/scss"
-#
-#   # Set this to the root of your project when deployed:
-#   config.http_path = "/"
-#   config.css_dir = "stylesheets"
-#   config.sass_dir = "stylesheets"
-#   config.images_dir = "images"
-#   config.javascripts_dir = "javascripts"
-# end
-
-# after_configuration do
-#   @bower_config = JSON.parse(IO.read("#{root}/.bowerrc"))
-#   sprockets.append_path File.join(root, @bower_config["directory"])
-#
-#   sprockets.import_asset "foundation/js/vendor/modernizr.js"
-#   sprockets.import_asset "foundation/js/vendor/jquery.js"
-#   sprockets.import_asset "foundation/js/vendor/jquery.cookie.js"
-# end
 
 ###
 # Page options, layouts, aliases and proxies
