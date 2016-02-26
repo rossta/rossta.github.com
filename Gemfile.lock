@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/rossta/middleman-meta-tags.git
-  revision: 70dfcec675adc1b6ca62bba365f98620f19e355a
+  revision: ac02e8b31d1dc6b25de7835dc51fe218a3ba1655
   branch: master
   specs:
     middleman-meta-tags (0.1.3)
