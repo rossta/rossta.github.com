@@ -84,6 +84,9 @@ set :images_dir, 'assets/images'
 
 # Build-specific configuration
 configure :build do
+  set :protocol, "https://"
+  set :host, "rossta.net"
+
   # activate :minify_css
   #
   # ignore { |path| path =~ /\/(.*)\.js$/ && $1 != 'all' }
@@ -115,6 +118,10 @@ configure :build do
 end
 
 configure :development do
+  set :protocol, "http://"
+  set :host, "localhost"
+  set :port, "4567"
+
   set :google_analytics_id, 'UA-xxxxxxxx-x'
   set :mailchimp_form_id,   'a57e354058'
   set :segmentio_id, '7KlQZWWPWr2MDj4pWepIF7O95JPZ9wfp'
@@ -161,10 +168,6 @@ page "/sitemap.xml", layout: false
 # end
 
 helpers do
-  def title_tag
-    "Ross Kaffenberger"
-  end
-
   def page_title
     yield_content(:title)
   end
@@ -178,7 +181,15 @@ helpers do
   end
 
   def url_with_host(path)
-    "https://rossta.net" + path
+    host_with_port + path
+  end
+
+  def host_with_port
+    [config[:host], config[:port]].compact.join(':')
+  end
+
+  def image_url(source)
+    protocol + host_with_port + image_path(source)
   end
 
   def email_url
