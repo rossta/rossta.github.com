@@ -8,3 +8,4 @@ gem "redcarpet"
 gem "nokogiri"
 gem "builder" # For feed.xml.builder
 gem "rake"
+gem "pry-byebug"
