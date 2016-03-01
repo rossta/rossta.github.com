@@ -1,37 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://rossta.net/blog/series/enumerable.html</loc>
-    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/about.html</loc>
-    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010/01.html</loc>
-    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010/01/04.html</loc>
-    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/page/2/index.html</loc>
-    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/page/2/index.html</loc>
+    <loc>https://rossta.net/blog/tags/code/page/2.html</loc>
     <lastmod>2016-03-01T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -79,13 +49,13 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/tags/code/page/2.html</loc>
+    <loc>https://rossta.net/404.html</loc>
     <lastmod>2016-03-01T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/404.html</loc>
+    <loc>https://rossta.net/about/index.html</loc>
     <lastmod>2016-03-01T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -241,7 +211,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/2015-12-15-paginated-resources-in-ruby.html</loc>
+    <loc>https://rossta.net/blog/2015-12-15-paginated-resources-in-ruby.md.erb.html</loc>
     <lastmod>2016-03-01T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -379,12 +349,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/README.html</loc>
-    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://rossta.net/sitemap.html</loc>
     <lastmod>2016-03-01T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -409,7 +373,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/thanks.html</loc>
+    <loc>https://rossta.net/thanks/index.html</loc>
     <lastmod>2016-03-01T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -800,6 +764,36 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/02/17.html</loc>
+    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010/01.html</loc>
+    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010/01/04.html</loc>
+    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/series/enumerable.html</loc>
+    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/page/2/index.html</loc>
+    <lastmod>2016-03-01T00:00:00-05:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/page/2/index.html</loc>
     <lastmod>2016-03-01T00:00:00-05:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

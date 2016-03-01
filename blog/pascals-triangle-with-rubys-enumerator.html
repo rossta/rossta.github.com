@@ -19,8 +19,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/all-f7b17499.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head-0145479a.js"></script>
+    <link href="/assets/stylesheets/index.bundle-a55bbd40.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-0fd3e76e.js"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
   <body id="application" class="typekit">
@@ -58,11 +58,11 @@
 
       <p>Pascal&rsquo;s Triangle is a fun sequence. Here&rsquo;s what it looks like:</p>
 
-<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color.jpg?1456838868" /></p>
+<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color-a0dd53d5.jpg" /></p>
 
 <p>It represents a <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">&ldquo;triangular array of the binomial coefficients&rdquo;</a>. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.</p>
 
-<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated.gif?1456838868" /></p>
+<p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated-854e9197.gif" /></p>
 
 <p>We can model this in Ruby as an array of arrays. The first array member is <code>[1]</code>. Each successive array (or &ldquo;row&rdquo;) will increase in size, and each array member will be the sum of the member at the same index <code>n</code> in the <code>k-1</code> row, where <code>k</code> is the current row, and the <code>n-1</code> member in the <code>k-1</code> row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:</p>
 
@@ -353,7 +353,7 @@ chains can augment the enumerated values.</p>
     <hr />
     <section class="margin-bottom double">
       <p>
-        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Pascal%27s%20Triangle%20with%20Ruby%27s%20Enumerator%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fpascals-triangle-with-rubys-enumerator.html">share it on Twitter</a>
+        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Pascal%27s%20Triangle%20with%20Ruby%27s%20Enumerator%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fpascals-triangle-with-rubys-enumerator.html">share it on Twitter</a>
         and <a href="https://twitter.com/rossta">follow me</a>.
       </p>
       <p>
@@ -441,14 +441,14 @@ chains can augment the enumerated values.</p>
         </section>
       </footer>
     </div>
-    <script src="/assets/javascripts/all-fcc9857c.js"></script>
+    <script src="/assets/javascripts/index.bundle-c0160c5b.js"></script>
     
     <script type="text/javascript">
 !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
 analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
 analytics.page()
+window.$.tracking.flush(analytics);
 }}();
-if($&&$.tracking){var traits=$.tracking.traits,events=$.tracking.events;analytics.identify(traits),Object.keys(events).forEach(function(t,a){analytics.track(t,events[t])})}else analytics.identify();
 </script>
 
   </body>
