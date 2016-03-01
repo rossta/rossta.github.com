@@ -1,1 +1,1 @@
-//= require foundation/js/vendor/modernizr
+require('foundation-sites/js/vendor/modernizr');

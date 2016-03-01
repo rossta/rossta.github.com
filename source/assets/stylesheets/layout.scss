@@ -1,6 +1,7 @@
 @import 'settings';
 
 body {
+  background: alicewhite;
   padding: 0 0 2em;
 
   @include base-font;

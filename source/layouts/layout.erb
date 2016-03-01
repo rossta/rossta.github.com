@@ -7,27 +7,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <%= stylesheet_link_tag "all" %>
-    <%= javascript_include_tag 'head' %>
+    <%= stylesheet_link_tag "index.bundle" %>
+    <%= javascript_include_tag "head.bundle" %>
     <%= favicon_tag 'favicon.ico' %>
   </head>
   <body id="application" class="typekit">
-    <%= partial 'layouts/topbar' %>
+    <%= partial "partials/topbar" %>
     <div class="row">
       <section id="main" role="main" class="large-12 small-12 columns">
         <%= yield %>
       </section>
     </div>
-    <%= partial 'layouts/zen' %>
+    <%= partial "partials/zen" %>
     <div class="row">
       <footer>
         <section class="large-12 columns center-inline-list">
-          <%= partial 'layouts/contact' %>
+          <%= partial "partials/contact" %>
         </section>
       </footer>
     </div>
-    <%= javascript_include_tag "all" %>
+    <%= javascript_include_tag "index.bundle" %>
     <%= yield_content :javascripts %>
-    <%= partial "layouts/analytics" %>
+    <%= partial "partials/analytics" %>
   </body>
 </html>

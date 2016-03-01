@@ -8,7 +8,7 @@ per_page: 25
 <br>
 <section class="index-posts margin-top">
   <% page_articles.each_with_index do |article, i| %>
-    <%= partial 'layouts/post_item', locals: { title: article.title, path: article, summary: article.data.summary} %>
+    <%= partial "partials/post_item", locals: { title: article.title, path: article, summary: article.data.summary} %>
   <% end %>
 </section>
 
@@ -19,10 +19,10 @@ per_page: 25
   <% if prev_page || next_page %>
     <p>
       <% if prev_page %>
-        <%= link_to 'Previous', prev_page %></p>
+        <%= link_to "Previous", prev_page %></p>
       <% end %>
       <% if next_page %>
-        <%= link_to 'Next page', next_page %>
+        <%= link_to "Next page", next_page %>
       <% end %>
     </p>
   <% end %>

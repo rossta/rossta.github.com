@@ -1,10 +1,21 @@
-require "uglifier"
-
 activate :livereload
-activate :directory_indexes
 activate :meta_tags
+# activate :directory_indexes
 
 # Time.zone = "UTC"
+activate :external_pipeline,
+         name: :webpack,
+         command: build? ?
+         "./node_modules/webpack/bin/webpack.js --bail -p" :
+         "./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
+         source: ".tmp/dist",
+         latency: 1
+
+# {
+#   "/about/index.html" => "/about.html",
+# }.each do |old_path, new_path|
+#   redirect old_path, to: new_path
+# end
 
 ###########################
 ## Blog
@@ -12,8 +23,8 @@ activate :meta_tags
 activate :blog do |blog|
   blog.name = "blog"
   blog.prefix = "blog"
-  blog.permalink = "/:title.html"
-  blog.sources = ":year-:month-:day-:title.html"
+  blog.permalink = "/{title}.html"
+  blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.layout = "post"
   blog.tag_template = "tag.html"
   blog.calendar_template = "calendar.html"
@@ -34,9 +45,9 @@ end
 activate :blog do |blog|
   blog.name = "talks"
   blog.prefix = "talks"
-  blog.permalink = "/:title.html"
+  blog.permalink = "/{title}.html"
   blog.taglink = "tags/{tag}"
-  blog.sources = ":year-:month-:day-:title.html"
+  blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.default_extension = ".md"
   blog.layout   = "talk"
   blog.paginate = true
@@ -49,9 +60,9 @@ end
 activate :blog do |blog|
   blog.name = "projects"
   blog.prefix = "projects"
-  blog.permalink = "/:title.html"
+  blog.permalink = "/{title}.html"
   blog.taglink = "tags/{tag}"
-  blog.sources = ":year-:month-:day-:title.html"
+  blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.default_extension = ".md"
   blog.layout   = "project"
   blog.paginate = true
@@ -74,70 +85,26 @@ set :images_dir, 'assets/images'
 
 # Build-specific configuration
 configure :build do
-  activate :minify_css
-  activate :minify_javascript
-  activate :asset_hash, ignore: [/^assets\/images\//]
-  activate :cache_buster
-  activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
-
-  # Use relative URLs
-  # activate :relative_assets
-
-  # activate :directory_indexes
-
-  # Compress PNGs after build
-  # First: gem install middleman-smusher
-  # require "middleman-smusher"
-  # activate :smusher
-
-  # Or use a different image path
-  # set :http_path, "/Content/images/"
-
   set :trailing_slash, false
 
+  set :protocol, "https://"
+  set :host, "rossta.net"
   set :google_analytics_id, 'UA-16458563-2'
   set :mailchimp_form_id,   '96030b0bda'
   set :segmentio_id, 'NdBtrprkAGAjQryMShljRdVf90saElAU'
+
+  activate :asset_hash
+  activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 end
 
 configure :development do
+  set :protocol, "http://"
+  set :host, "localhost"
+  set :port, "4567"
+
   set :google_analytics_id, 'UA-xxxxxxxx-x'
   set :mailchimp_form_id,   'a57e354058'
   set :segmentio_id, '7KlQZWWPWr2MDj4pWepIF7O95JPZ9wfp'
-end
-
-###
-# Compass
-###
-
-# Susy grids in Compass
-# First: gem install susy
-# require 'susy'
-
-# Change Compass configuration
-# compass_config do |config|
-#   config.output_style = :compact
-# end
-
-compass_config do |config|
-  # Require any additional compass plugins here.
-  config.add_import_path "../bower_components/foundation/scss"
-
-  # Set this to the root of your project when deployed:
-  config.http_path = "/"
-  config.css_dir = "stylesheets"
-  config.sass_dir = "stylesheets"
-  config.images_dir = "images"
-  config.javascripts_dir = "javascripts"
-end
-
-after_configuration do
-  @bower_config = JSON.parse(IO.read("#{root}/.bowerrc"))
-  sprockets.append_path File.join(root, @bower_config["directory"])
-
-  sprockets.import_asset "foundation/js/vendor/modernizr.js"
-  sprockets.import_asset "foundation/js/vendor/jquery.js"
-  sprockets.import_asset "foundation/js/vendor/jquery.cookie.js"
 end
 
 ###
@@ -181,16 +148,12 @@ page "/sitemap.xml", layout: false
 # end
 
 helpers do
-  def title_tag
-    "Ross Kaffenberger"
-  end
-
   def page_title
     yield_content(:title)
   end
 
   def page_header(title, summary = nil)
-    partial 'layouts/page_header', locals: { title: title, summary: summary }
+    partial "partials/page_header", locals: { title: title, summary: summary }
   end
 
   def section
@@ -198,7 +161,15 @@ helpers do
   end
 
   def url_with_host(path)
-    "https://rossta.net" + path
+    host_with_port + path
+  end
+
+  def host_with_port
+    [config[:host], config[:port]].compact.join(':')
+  end
+
+  def image_url(source)
+    protocol + host_with_port + image_path(source)
   end
 
   def email_url
@@ -206,7 +177,7 @@ helpers do
   end
 
   def signup_form_url
-    "//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=#{settings.mailchimp_form_id}"
+    "//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=#{config[:mailchimp_form_id]}"
   end
 
   def tweet_link_to(text, params = {})
@@ -221,11 +192,5 @@ helpers do
 
   def nozen!
     @nozen = true
-  end
-
-  ##
-  # Renders a javascript asset inline.
-  def inline_javascript(name)
-    Uglifier.new.compile(sprockets["#{name}.js"].to_s)
   end
 end
