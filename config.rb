@@ -85,40 +85,16 @@ set :images_dir, 'assets/images'
 
 # Build-specific configuration
 configure :build do
-  set :protocol, "https://"
-  set :host, "rossta.net"
-
-  # activate :minify_css
-  #
-  # ignore { |path| path =~ /\/(.*)\.js$/ && $1 != 'all' }
-  # activate :minify_javascript
-
-  # activate :cache_buster
-  # activate :asset_hash, ignore: [/^assets\/images\//]
-  activate :asset_hash
-
-  # activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
-
-  # Use relative URLs
-  # activate :relative_assets
-
-  # activate :directory_indexes
-
-  # Compress PNGs after build
-  # First: gem install middleman-smusher
-  # require "middleman-smusher"
-  # activate :smusher
-
-  # Or use a different image path
-  # set :http_path, "/Content/images/"
-
   set :trailing_slash, false
 
+  set :protocol, "https://"
+  set :host, "rossta.net"
   set :google_analytics_id, 'UA-16458563-2'
   set :mailchimp_form_id,   '96030b0bda'
   set :segmentio_id, 'NdBtrprkAGAjQryMShljRdVf90saElAU'
 
-  set :trailing_slash, false
+  activate :asset_hash
+  activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 end
 
 configure :development do
