@@ -1,6 +1,6 @@
 activate :livereload
 activate :meta_tags
-activate :directory_indexes
+# activate :directory_indexes
 
 # Time.zone = "UTC"
 activate :external_pipeline,
