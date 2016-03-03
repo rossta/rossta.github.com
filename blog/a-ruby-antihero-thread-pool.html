@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>A Ruby Antihero - Thread Pool - rossta.net</title>
+    <title>Thread Pool - A Ruby Antihero - rossta.net</title>
 <meta name="description" content="A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources" />
 <meta name="keywords" content="Code, Ruby" />
 <meta name="site" content="rossta.net" />
@@ -10,10 +10,10 @@
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources" />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/deadpool-b5499244.jpg" />
-<meta name="twitter:title" content="A Ruby Antihero - Thread Pool" />
+<meta name="twitter:title" content="Thread Pool - A Ruby Antihero" />
 <meta property="og:description" content="A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources" />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/deadpool-b5499244.jpg" />
-<meta property="og:title" content="A Ruby Antihero - Thread Pool" />
+<meta property="og:title" content="Thread Pool - A Ruby Antihero" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -49,7 +49,7 @@
     <article class="post margin-bottom double">
       <header>
   <h2>
-    A Ruby Antihero - Thread Pool
+    Thread Pool - A Ruby Antihero
       <br />
       <small>Understanding a fundamental Ruby abstraction for concurrency</small>
   </h2>
@@ -447,6 +447,8 @@ end
 
 <p>Consider the <a href="http://ruby-concurrency.github.io/concurrent-ruby/file.thread_pools.html">Thread Pool</a> overview provided in the <code>Concurrent</code> docs required reading.</p>
 
+<p>And, of course, the ultimate thread pool for Rails developers is <a href="https://github.com/mperham/sidekiq">Sidekiq</a>. Unlike the examples we&rsquo;ve discussed so far, the components of the Sidekiq thread pool model are distributed: the caller, the job queue, and the threaded workers all running in separate processes, often on separate machines in a production environment.</p>
+
 <h3>Credits</h3>
 
 <p>In preparing for this post, I read through the source of several thread pool
@@ -487,7 +489,7 @@ connections.</p>
     <hr />
     <section class="margin-bottom double">
       <p>
-        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=A%20Ruby%20Antihero%20-%20Thread%20Pool%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fa-ruby-antihero-thread-pool.html">share it on Twitter</a>
+        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Thread%20Pool%20-%20A%20Ruby%20Antihero%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fa-ruby-antihero-thread-pool.html">share it on Twitter</a>
         and <a href="https://twitter.com/rossta">follow me</a>.
       </p>
       <p>
@@ -540,7 +542,7 @@ connections.</p>
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = "rosskaff";
     var disqus_identifier = "a-ruby-antihero-thread-pool";
-    var disqus_title      = "A Ruby Antihero - Thread Pool";
+    var disqus_title      = "Thread Pool - A Ruby Antihero";
     var disqus_url        = "https://rossta.net/blog/a-ruby-antihero-thread-pool.html";
 
     /* * * DON'T EDIT BELOW THIS LINE * * */

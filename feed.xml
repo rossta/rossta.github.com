@@ -10,7 +10,7 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>A Ruby Antihero - Thread Pool</title>
+    <title>Thread Pool - A Ruby Antihero</title>
     <link rel="alternate" href="/blog/a-ruby-antihero-thread-pool.html"/>
     <id>/blog/a-ruby-antihero-thread-pool.html</id>
     <published>2016-03-01T19:00:00-05:00</published>
@@ -422,6 +422,8 @@ end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Consider the &lt;a href="http://ruby-concurrency.github.io/concurrent-ruby/file.thread_pools.html"&gt;Thread Pool&lt;/a&gt; overview provided in the &lt;code&gt;Concurrent&lt;/code&gt; docs required reading.&lt;/p&gt;
+
+&lt;p&gt;And, of course, the ultimate thread pool for Rails developers is &lt;a href="https://github.com/mperham/sidekiq"&gt;Sidekiq&lt;/a&gt;. Unlike the examples we&amp;rsquo;ve discussed so far, the components of the Sidekiq thread pool model are distributed: the caller, the job queue, and the threaded workers all running in separate processes, often on separate machines in a production environment.&lt;/p&gt;
 
 &lt;h3&gt;Credits&lt;/h3&gt;
 
