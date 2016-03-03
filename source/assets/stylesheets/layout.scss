@@ -136,8 +136,9 @@ img {
 #main {
   @include base-font;
   padding-bottom:1em;
-  margin-top:4em;
+  margin-top:2em;
   margin-bottom:1em;
+
   h1,h2,h3,h4,h5,h6 {
     font-weight: bold;
     color: $mainColor;
