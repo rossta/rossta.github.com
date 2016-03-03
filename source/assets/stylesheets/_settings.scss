@@ -1321,3 +1321,48 @@ $input-font-color: rgba(0,0,0,0.98);
     color: $secondaryColor;
   }
 }
+$breakpoints: (mobile: 400px,
+               phablet: 550px,
+               tablet: 750px,
+               desktop: 1000px,
+               hd: 1200px) !default;
+
+// /* Larger than mobile */
+// @media (min-width: 400px) {}
+@mixin mobile {
+  @media (min-width: #{map-get($breakpoints, mobile)}) {
+    @content;
+  }
+}
+
+// /* Larger than phablet (also point when grid becomes active) */
+// @media (min-width: 550px) {}
+@mixin phablet {
+  @media (min-width: #{map-get($breakpoints, phablet)}) {
+    @content;
+  }
+}
+
+// /* Larger than tablet */
+// @media (min-width: 750px) {}
+@mixin tablet {
+  @media (min-width: #{map-get($breakpoints, tablet)}) {
+    @content;
+  }
+}
+
+// /* Larger than desktop */
+// @media (min-width: 1000px) {}
+@mixin desktop {
+  @media (min-width: #{map-get($breakpoints, desktop)}) {
+    @content;
+  }
+}
+
+// /* Larger than Desktop HD */
+// @media (min-width: 1200px) {}
+@mixin hd {
+  @media (min-width: #{map-get($breakpoints, hd)}) {
+    @content;
+  }
+}
