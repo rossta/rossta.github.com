@@ -159,7 +159,7 @@ You can see the source for [this changeset on Github](https://github.com/rossta/
 Our next test will demonstrate that we're actually taking advantage of concurrency by
 (crudely) measuring the time taken to process multiple jobs.
 
-We'll wrap our pool scheduling in a simple method that will measure the number of
+We'll use a small test helper method to measure the number of
 seconds elapsed during execution:
 
 ```ruby
@@ -170,9 +170,9 @@ def time_taken
 end
 ```
 
-Our test will schedule a bunch of jobs that will sleep for 1 second.
+Our test will schedule a 5 jobs that will each sleep for 1 second.
 If the jobs executed serially, the total execution time would be at least 5
-seconds. Running this test on Rubinius, we'd expect threaded-execution of 5 jobs
+seconds. Running in parallel on Rubinius, we'd expect threaded-execution of 5 jobs
 across 5 threads to take less time.
 
 ```ruby
@@ -210,7 +210,7 @@ end
 ```
 
 We push each of these threads onto an array, `@pool`, which we can use to join
-the threads during the `#shutdown` method.
+the threads during the `#shutdown` method. The tests pass again.
 
 [Source for this changeset](https://github.com/rossta/loves-enumerable/commit/1d1cbc808a536a449b8f6dab5b9d4e0cb037f99c)
 
@@ -259,13 +259,11 @@ ThreadError: can't create Thread: Resource temporarily unavailable
 
 This is now the whole point of our `ThreadPool`, to limit the number of threads
 in use. To implement this behavior, instead of executing the scheduled job in a
-new thread, we'll add them to a `Queue` instead. We'll separately create a
-limited number of threads whose responsibility will be to pop new "jobs" of the
+new thread, we'll add them to a `Queue`. We'll separately create a
+limited number of threads whose responsibility will be to pop new "jobs" off the
 queue and execute them when available.
 
-The beauty of `Queue` is that it is implemented to be thread-safe. It is a
-resource that multiple threads in the thread pool will need to access; because
-it is thread-safe we can do so without corrupting its contents.
+The beauty of `Queue` is that it is thread-safe; multiple threads in the thread pool an access this resource without corrupting its contents.
 
 Here's the revised implementation:
 
@@ -358,9 +356,10 @@ the subject](http://www.burgestrand.se/articles/quick-and-simple-ruby-thread-poo
 ### In the Wild
 
 Of course, if you're planning on using a thread pool in production code, you'll
-may be better off leveraging the hard work of others. Our implementation leaves
-some key considerations on the table, like reflection, handing timeouts, how to deal with
-exceptions, and better thread safety.
+may be better off leveraging the hard work of others. Our implementation omits
+some key considerations, like providing reflection, handing timeouts, dealing with
+exceptions, and better thread safety. Let's look at some alternatives in the
+community.
 
 The [ruby-thread](https://github.com/meh/ruby-thread) project provides a few extensions to the standard library `Thread` class, including `Thread::Pool`. Usage of `Thread::Pool` is very similar to what we came up with on the surface.
 
@@ -406,7 +405,7 @@ MyWorker.pool
 pool.future(:add_one, 5).value
 ```
 
-In my opinion, the new hotness for working with concurrency is the toolkit provided by [concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby). While `Celluloid` is easy to get started with, `Concurrent` is the "Swiss Army Knife", providing a large array of abstractions and classes, including futures, promises, thread-safe collections, maybes, and so on. `Concurrent` provides several different thread pool implementations for different purposes, each supporting a number of configurations, including min and max pool sizes, advanced shutdown behaviors, max queue size (along with a fallback policy when the job queue size is exceeded) to name a few.
+The new hotness for working with concurrency is the toolkit provided by [concurrent-ruby](https://github.com/ruby-concurrency/concurrent-ruby). While `Celluloid` is easy to get started with, `Concurrent` is the "Swiss Army Knife", providing a large array of abstractions and classes, including futures, promises, thread-safe collections, maybes, and so on. `Concurrent` provides several different thread pool implementations for different purposes, each supporting a number of configurations, including min and max pool sizes, advanced shutdown behaviors, max queue size (along with a fallback policy when the job queue size is exceeded) to name a few.
 
 ```ruby
 pool = Concurrent::FixedThreadPool.new(5) # 5 threads
