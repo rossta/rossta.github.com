@@ -1,5 +1,5 @@
 ---
-title: A Ruby Antihero - Thread Pool
+title: Thread Pool - A Ruby Antihero
 author: Ross Kaffenberger
 published: true
 summary: Understanding a fundamental Ruby abstraction for concurrency
