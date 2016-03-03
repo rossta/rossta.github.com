@@ -416,6 +416,8 @@ end
 
 Consider the [Thread Pool](http://ruby-concurrency.github.io/concurrent-ruby/file.thread_pools.html) overview provided in the `Concurrent` docs required reading.
 
+And, of course, the ultimate thread pool for Rails developers is [Sidekiq](https://github.com/mperham/sidekiq). Unlike the examples we've discussed so far, the components of the Sidekiq thread pool model are distributed: the caller, the job queue, and the threaded workers all running in separate processes, often on separate machines in a production environment.
+
 ### Credits
 
 In preparing for this post, I read through the source of several thread pool
