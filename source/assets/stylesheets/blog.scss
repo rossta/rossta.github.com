@@ -34,7 +34,7 @@ article {
   }
   h3,h4,h5 {
     margin-top: 3rem;
-    margin-bottom: 1.111rem;
+    margin-bottom: 2rem;
   }
   &.index-post {
     h3,h4,h5 {
@@ -45,6 +45,7 @@ article {
     color: $mainColor;
     letter-spacing: 0.15px;
     line-height: 1.75;
+    margin-bottom: 1.5rem;
   }
   p:last-child {
     margin-bottom: 0;
