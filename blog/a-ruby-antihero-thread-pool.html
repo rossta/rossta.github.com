@@ -19,7 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-b37a0e98.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-62eb171c.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-0fd3e76e.js"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -202,7 +202,7 @@ additional behavior isn&rsquo;t needed to get the tests to pass.</p>
 <p>Our next test will demonstrate that we&rsquo;re actually taking advantage of concurrency by
 (crudely) measuring the time taken to process multiple jobs.</p>
 
-<p>We&rsquo;ll wrap our pool scheduling in a simple method that will measure the number of
+<p>We&rsquo;ll use a small test helper method to measure the number of
 seconds elapsed during execution:</p>
 
 <pre><code class="ruby">def time_taken
@@ -212,9 +212,9 @@ seconds elapsed during execution:</p>
 end
 </code></pre>
 
-<p>Our test will schedule a bunch of jobs that will sleep for 1 second.
+<p>Our test will schedule a 5 jobs that will each sleep for 1 second.
 If the jobs executed serially, the total execution time would be at least 5
-seconds. Running this test on Rubinius, we&rsquo;d expect threaded-execution of 5 jobs
+seconds. Running in parallel on Rubinius, we&rsquo;d expect threaded-execution of 5 jobs
 across 5 threads to take less time.</p>
 
 <pre><code class="ruby">def test_time_taken
@@ -250,7 +250,7 @@ end
 </code></pre>
 
 <p>We push each of these threads onto an array, <code>@pool</code>, which we can use to join
-the threads during the <code>#shutdown</code> method.</p>
+the threads during the <code>#shutdown</code> method. The tests pass again.</p>
 
 <p><a href="https://github.com/rossta/loves-enumerable/commit/1d1cbc808a536a449b8f6dab5b9d4e0cb037f99c">Source for this changeset</a></p>
 
@@ -297,13 +297,11 @@ ThreadError: can&#39;t create Thread: Resource temporarily unavailable
 
 <p>This is now the whole point of our <code>ThreadPool</code>, to limit the number of threads
 in use. To implement this behavior, instead of executing the scheduled job in a
-new thread, we&rsquo;ll add them to a <code>Queue</code> instead. We&rsquo;ll separately create a
-limited number of threads whose responsibility will be to pop new &ldquo;jobs&rdquo; of the
+new thread, we&rsquo;ll add them to a <code>Queue</code>. We&rsquo;ll separately create a
+limited number of threads whose responsibility will be to pop new &ldquo;jobs&rdquo; off the
 queue and execute them when available.</p>
 
-<p>The beauty of <code>Queue</code> is that it is implemented to be thread-safe. It is a
-resource that multiple threads in the thread pool will need to access; because
-it is thread-safe we can do so without corrupting its contents.</p>
+<p>The beauty of <code>Queue</code> is that it is thread-safe; multiple threads in the thread pool an access this resource without corrupting its contents.</p>
 
 <p>Here&rsquo;s the revised implementation:</p>
 
@@ -392,9 +390,10 @@ the subject</a>.</p>
 <h3>In the Wild</h3>
 
 <p>Of course, if you&rsquo;re planning on using a thread pool in production code, you&rsquo;ll
-may be better off leveraging the hard work of others. Our implementation leaves
-some key considerations on the table, like reflection, handing timeouts, how to deal with
-exceptions, and better thread safety.</p>
+may be better off leveraging the hard work of others. Our implementation omits
+some key considerations, like providing reflection, handing timeouts, dealing with
+exceptions, and better thread safety. Let&rsquo;s look at some alternatives in the
+community.</p>
 
 <p>The <a href="https://github.com/meh/ruby-thread">ruby-thread</a> project provides a few extensions to the standard library <code>Thread</code> class, including <code>Thread::Pool</code>. Usage of <code>Thread::Pool</code> is very similar to what we came up with on the surface.</p>
 
@@ -438,7 +437,7 @@ MyWorker.pool
 pool.future(:add_one, 5).value
 </code></pre>
 
-<p>In my opinion, the new hotness for working with concurrency is the toolkit provided by <a href="https://github.com/ruby-concurrency/concurrent-ruby">concurrent-ruby</a>. While <code>Celluloid</code> is easy to get started with, <code>Concurrent</code> is the &ldquo;Swiss Army Knife&rdquo;, providing a large array of abstractions and classes, including futures, promises, thread-safe collections, maybes, and so on. <code>Concurrent</code> provides several different thread pool implementations for different purposes, each supporting a number of configurations, including min and max pool sizes, advanced shutdown behaviors, max queue size (along with a fallback policy when the job queue size is exceeded) to name a few.</p>
+<p>The new hotness for working with concurrency is the toolkit provided by <a href="https://github.com/ruby-concurrency/concurrent-ruby">concurrent-ruby</a>. While <code>Celluloid</code> is easy to get started with, <code>Concurrent</code> is the &ldquo;Swiss Army Knife&rdquo;, providing a large array of abstractions and classes, including futures, promises, thread-safe collections, maybes, and so on. <code>Concurrent</code> provides several different thread pool implementations for different purposes, each supporting a number of configurations, including min and max pool sizes, advanced shutdown behaviors, max queue size (along with a fallback policy when the job queue size is exceeded) to name a few.</p>
 
 <pre><code class="ruby">pool = Concurrent::FixedThreadPool.new(5) # 5 threads
 pool.post do
