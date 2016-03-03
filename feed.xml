@@ -5,10 +5,461 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-02-21T19:00:00-05:00</updated>
+  <updated>2016-03-01T19:00:00-05:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>A Ruby Antihero - Thread Pool</title>
+    <link rel="alternate" href="/blog/a-ruby-antihero-thread-pool.html"/>
+    <id>/blog/a-ruby-antihero-thread-pool.html</id>
+    <published>2016-03-01T19:00:00-05:00</published>
+    <updated>2016-03-01T19:00:00-05:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;&lt;img alt="Deadpool" src="/assets/images/blog/deadpool-b5499244.jpg"&gt;&lt;/p&gt;
+
+&lt;p&gt;One of the fundamental concepts in key Ruby libraries that embrace
+concurrency is the &lt;a href="https://en.wikipedia.org/wiki/Thread_pool"&gt;thread pool&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can find examples of thread pool implementations in gems like
+&lt;a href="https://github.com/puma/puma"&gt;puma&lt;/a&gt;,
+&lt;a href="https://github.com/ruby-concurrency/concurrent-ruby"&gt;concurrent-ruby&lt;/a&gt;,
+&lt;a href="https://github.com/celluloid/celluloid"&gt;celluloid&lt;/a&gt;,
+&lt;a href="https://github.com/bruceadams/pmap"&gt;pmap&lt;/a&gt;,
+&lt;a href="https://github.com/grosser/parallel/blob/6ebee4ff5c0933da241a182e366eee9227b49764/lib/parallel.rb#L66"&gt;parallel&lt;/a&gt;,
+and &lt;a href="https://github.com/meh/ruby-thread"&gt;ruby-thread&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A thread pool...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;img alt="Deadpool" src="/assets/images/blog/deadpool-b5499244.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;One of the fundamental concepts in key Ruby libraries that embrace
+concurrency is the &lt;a href="https://en.wikipedia.org/wiki/Thread_pool"&gt;thread pool&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You can find examples of thread pool implementations in gems like
+&lt;a href="https://github.com/puma/puma"&gt;puma&lt;/a&gt;,
+&lt;a href="https://github.com/ruby-concurrency/concurrent-ruby"&gt;concurrent-ruby&lt;/a&gt;,
+&lt;a href="https://github.com/celluloid/celluloid"&gt;celluloid&lt;/a&gt;,
+&lt;a href="https://github.com/bruceadams/pmap"&gt;pmap&lt;/a&gt;,
+&lt;a href="https://github.com/grosser/parallel/blob/6ebee4ff5c0933da241a182e366eee9227b49764/lib/parallel.rb#L66"&gt;parallel&lt;/a&gt;,
+and &lt;a href="https://github.com/meh/ruby-thread"&gt;ruby-thread&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A thread pool is an abstraction for re-using a limited number of threads to
+performing concurrent work.&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Thread pool - no relation" src="/assets/images/blog/threadpool-428287d8.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;General usage of a thread pool might look something like the following, where the &lt;code&gt;:size&lt;/code&gt;
+represents the maximum number of threads open at any given time.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;pool = ThreadPool.new(size: 5)
+
+10_000.times do
+  pool.schedule { do_work }
+end
+
+pool.shutdown
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The calculation would be performed 10,000 times across five separate threads.&lt;/p&gt;
+
+&lt;p&gt;To get a better understanding of how thread pools work, let&amp;rsquo;s implement a thread
+pool in test-driven fashion.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;
+&lt;p&gt;
+  The code samples in this post are run on &lt;code&gt;rubinius-3.14&lt;/code&gt; to take advantage of
+  parallel processing.
+&lt;/p&gt;
+&lt;/aside&gt;
+
+&lt;h3&gt;Don&amp;rsquo;t be afraid&lt;/h3&gt;
+
+&lt;p&gt;Before we dive in, let&amp;rsquo;s acknowledge that Rubyists, and most OO programmers in general,
+are taught to fear multi-threaded concurrency.&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;first rule&lt;/em&gt; of concurrency on the JRuby wiki, a Ruby implementation
+designed to take advantage of native operating systems threads, is this:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Don&amp;rsquo;t do it, if you can avoid it.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For the purpose of this post, I&amp;rsquo;m going to assume the author means &amp;ldquo;in
+production&amp;rdquo;. In the safety of your development environment, playing with
+concurrency in Ruby can be a tremendous learning opportunity.&lt;/p&gt;
+
+&lt;h3&gt;A simple thread pool&lt;/h3&gt;
+
+&lt;p&gt;So we&amp;rsquo;ll implement a simple thread pool guided by tests. Our thread pool will use the
+interface we described earlier while limiting the number of threads
+used to carry out a set of concurrent &amp;ldquo;jobs&amp;rdquo;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;pool = ThreadPool.new(size: 5)
+
+pool.schedule { do_work }
+
+pool.shutdown
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;Basic usage&lt;/h3&gt;
+
+&lt;p&gt;We&amp;rsquo;ll start with a thread pool that doesn&amp;rsquo;t do any concurrent processing.
+It will execute the block given to its &lt;code&gt;#schedule&lt;/code&gt; method
+directly. Though we&amp;rsquo;ll add other tests later to exercise concurrency in the
+implementation, this first test will assume the concurrency is already
+implemented.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s our first test.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
+require &amp;#39;minitest/pride&amp;#39;
+require_relative &amp;#39;./thread_pool&amp;#39;
+
+class TestThreadPool &amp;lt; Minitest::Test
+  def test_basic_usage
+    pool_size = 5
+    pool = ThreadPool.new(size: pool_size)
+
+    mutex = Mutex.new
+
+    iterations = pool_size * 3
+    results = Array.new(iterations)
+
+    iterations.times do |i|
+      pool.schedule do
+        mutex.synchronize do
+          results[i] = i + 1
+        end
+      end
+    end
+    pool.shutdown
+
+    assert_equal((1.upto(pool_size * 3)).to_a, results)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s break it down. To test the basic usage of a thread pool scheduler, we&amp;rsquo;ll pass in an array and
+augment it with in the scheduled blocks. Because &lt;a href="http://www.jstorimer.com/pages/ruby-core-classes-arent-thread-safe"&gt;&lt;code&gt;Array&lt;/code&gt; is not thread safe&lt;/a&gt;, we need to use a &lt;code&gt;Mutex&lt;/code&gt; object to lock the pooled threads while adding items to the array. The key snippet is here:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;pool.schedule do
+  mutex.synchronize do
+    results[i] = i + 1
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The test asserts that the results match &lt;code&gt;1.upto(15)&lt;/code&gt; as an array.&lt;/p&gt;
+
+&lt;p&gt;To make the tests pass:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class ThreadPool
+  def initialize(size:)
+  end
+
+  def schedule(*args, &amp;amp;block)
+    block.call(args)
+  end
+
+  def shutdown
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ve just stubbed out the &lt;code&gt;#initialize&lt;/code&gt; and &lt;code&gt;#shutdown&lt;/code&gt; methods since
+additional behavior isn&amp;rsquo;t needed to get the tests to pass.&lt;/p&gt;
+
+&lt;p&gt;You can see the source for &lt;a href="https://github.com/rossta/loves-enumerable/commit/fcd81ec86ae3525d8f0a3acf914507e2962fb962"&gt;this changeset on Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3&gt;Saving time&lt;/h3&gt;
+
+&lt;p&gt;Our next test will demonstrate that we&amp;rsquo;re actually taking advantage of concurrency by
+(crudely) measuring the time taken to process multiple jobs.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll wrap our pool scheduling in a simple method that will measure the number of
+seconds elapsed during execution:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def time_taken
+  now = Time.now.to_f
+  yield
+  Time.now.to_f - now
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Our test will schedule a bunch of jobs that will sleep for 1 second.
+If the jobs executed serially, the total execution time would be at least 5
+seconds. Running this test on Rubinius, we&amp;rsquo;d expect threaded-execution of 5 jobs
+across 5 threads to take less time.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def test_time_taken
+  pool_size = 5
+  pool = ThreadPool.new(size: pool_size)
+  elapsed = time_taken do
+    pool_size.times do
+      pool.schedule { sleep 1 }
+    end
+    pool.shutdown
+  end
+  assert_operator 4.5, :&amp;gt;, elapsed,
+    &amp;#39;Elapsed time was too long: %.1f seconds&amp;#39; % elapsed
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This test fails with our first pass-through implementation of &lt;code&gt;ThreadPool&lt;/code&gt;. We
+can make this test pass by wrapping each scheduled job in its own thread.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class ThreadPool
+  def initialize(size:)
+    @pool = []
+  end
+
+  def schedule(*args, &amp;amp;block)
+    @pool &amp;lt;&amp;lt; Thread.new { block.call(args) }
+  end
+
+  def shutdown
+    @pool.map(&amp;amp;:join)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We push each of these threads onto an array, &lt;code&gt;@pool&lt;/code&gt;, which we can use to join
+the threads during the &lt;code&gt;#shutdown&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/rossta/loves-enumerable/commit/1d1cbc808a536a449b8f6dab5b9d4e0cb037f99c"&gt;Source for this changeset&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;Adding Pooling&lt;/h3&gt;
+
+&lt;p&gt;While we&amp;rsquo;ve achieved concurrency, you may notice there&amp;rsquo;s (at least) one problem.&lt;/p&gt;
+
+&lt;p&gt;Our current implementation will naively create a new thread for each scheduled
+job. This may not be an issue for small, trivial use cases, but it can be easily
+abused. Thread creation does not come for free; every OS has its limit.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll prove it with our next test in which we&amp;rsquo;ll schedule a large number of
+jobs.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def test_pool_size_limit
+  pool_size = 5
+  pool = ThreadPool.new(size: pool_size)
+  mutex = Mutex.new
+  threads = Set.new
+
+  100_000.times do
+    pool.schedule do
+      mutex.synchronize do
+        threads &amp;lt;&amp;lt; Thread.current
+      end
+    end
+  end
+  pool.shutdown
+
+  assert_equal(pool_size, threads.size)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Running these tests on my mid-2014 MacBook Pro, I hit the resource limit:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;TestThreadPool#test_pool_size_limit:
+ThreadError: can&amp;#39;t create Thread: Resource temporarily unavailable
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `initialize&amp;#39;
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `new&amp;#39;
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `block in test_pool_size_limit&amp;#39;
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:52:in `times&amp;#39;
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:52:in `test_pool_size_limit&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is now the whole point of our &lt;code&gt;ThreadPool&lt;/code&gt;, to limit the number of threads
+in use. To implement this behavior, instead of executing the scheduled job in a
+new thread, we&amp;rsquo;ll add them to a &lt;code&gt;Queue&lt;/code&gt; instead. We&amp;rsquo;ll separately create a
+limited number of threads whose responsibility will be to pop new &amp;ldquo;jobs&amp;rdquo; of the
+queue and execute them when available.&lt;/p&gt;
+
+&lt;p&gt;The beauty of &lt;code&gt;Queue&lt;/code&gt; is that it is implemented to be thread-safe. It is a
+resource that multiple threads in the thread pool will need to access; because
+it is thread-safe we can do so without corrupting its contents.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the revised implementation:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class ThreadPool
+  def initialize(size:)
+    @size = size
+    @jobs = Queue.new
+    @pool = Array.new(size) do
+      Thread.new do
+        catch(:exit) do
+          loop do
+            job, args = @jobs.pop
+            job.call(*args)
+          end
+        end
+      end
+    end
+  end
+
+  def schedule(*args, &amp;amp;block)
+    @jobs &amp;lt;&amp;lt; [block, args]
+  end
+
+  def shutdown
+    @size.times do
+      schedule { throw :exit }
+    end
+
+    @pool.map(&amp;amp;:join)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start with the &lt;code&gt;#schedule&lt;/code&gt; method. Where before we immediately creating a
+new thread to call the block, we instead push the block and arguments onto the
+new &lt;code&gt;@jobs&lt;/code&gt; queue instance variable.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def schedule(*args, &amp;amp;block)
+  @jobs &amp;lt;&amp;lt; [block, args]
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This instance variable is setup in the &lt;code&gt;#initialize&lt;/code&gt; method where we also
+eagerly create the maximum number of threads that will become our worker &lt;code&gt;@pool&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def initialize(size:)
+  @size = size
+  @jobs = Queue.new
+  @pool = Array.new(size) do
+    Thread.new do
+      catch(:exit) do
+        loop do
+          job, args = @jobs.pop
+          job.call(*args)
+        end
+      end
+    end
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Each thread runs an infinite loop that repeatedly pops jobs of the queue with
+&lt;code&gt;@jobs.pop&lt;/code&gt;. The &lt;code&gt;Queue#pop&lt;/code&gt; method here is blocking so the thread will happily
+wait for new jobs to be scheduled at this point.&lt;/p&gt;
+
+&lt;p&gt;Notice also to &lt;code&gt;catch(:exit) do&lt;/code&gt; block. We break out of the thread loops by
+pushing &lt;code&gt;throw :exit&lt;/code&gt; on to the job queue, once for each thread in the
+&lt;code&gt;#shutdown&lt;/code&gt; method. This means that jobs currently executing when the shutdown
+method is called will be able to complete before the threads can be joined.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;def shutdown
+  @size.times do
+    schedule { throw :exit }
+  end
+
+  @pool.map(&amp;amp;:join)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we have a simple abstraction for handing concurrent work across a limited
+number of threads. For more on this implementation, check out the original author&amp;rsquo;s &lt;a href="http://www.burgestrand.se/articles/quick-and-simple-ruby-thread-pool.html"&gt;blog post on
+the subject&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/rossta/loves-enumerable/commit/eabf97e2e5b856eb2c12e68e36233940aec02030"&gt;Source for this changeset&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;In the Wild&lt;/h3&gt;
+
+&lt;p&gt;Of course, if you&amp;rsquo;re planning on using a thread pool in production code, you&amp;rsquo;ll
+may be better off leveraging the hard work of others. Our implementation leaves
+some key considerations on the table, like reflection, handing timeouts, how to deal with
+exceptions, and better thread safety.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href="https://github.com/meh/ruby-thread"&gt;ruby-thread&lt;/a&gt; project provides a few extensions to the standard library &lt;code&gt;Thread&lt;/code&gt; class, including &lt;code&gt;Thread::Pool&lt;/code&gt;. Usage of &lt;code&gt;Thread::Pool&lt;/code&gt; is very similar to what we came up with on the surface.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;thread/pool&amp;#39;
+
+pool = Thread.pool(4)
+
+10.times {
+  pool.process {
+    sleep 2
+
+    puts &amp;#39;lol&amp;#39;
+  }
+}
+
+pool.shutdown
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This implementation goes farther to ensure standard locking functions to work
+properly across multiple Ruby implementations. Among other things, it has
+support for handling timeouts, methods for introspecting pool objects, like
+&lt;code&gt;#running?&lt;/code&gt; and &lt;code&gt;#terminated?&lt;/code&gt;, and optimizations for dealing with unused
+threads. On reading the source, my impression is the implementation was heavily inspired by &lt;a href="https://github.com/puma/puma/blob/32b1fb3742e5918e0e79ee705b48c912a1f0742d/lib/puma/thread_pool.rb"&gt;Puma::ThreadPool&lt;/a&gt;, a class used internally by the puma web server. You be the judge.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/celluloid/celluloid"&gt;Celluloid&lt;/a&gt;, the most famous
+collection of concurrency abstractions, provides a thread pool class,
+most commonly accessed via a class method provided by the
+&lt;code&gt;Celluloid&lt;/code&gt; mixin.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class MyWorker
+  include Celluloid
+
+  def add_one(number)
+    # roflscale computation goes here
+    number + 1
+  end
+end
+
+MyWorker.pool
+
+pool.future(:add_one, 5).value
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In my opinion, the new hotness for working with concurrency is the toolkit provided by &lt;a href="https://github.com/ruby-concurrency/concurrent-ruby"&gt;concurrent-ruby&lt;/a&gt;. While &lt;code&gt;Celluloid&lt;/code&gt; is easy to get started with, &lt;code&gt;Concurrent&lt;/code&gt; is the &amp;ldquo;Swiss Army Knife&amp;rdquo;, providing a large array of abstractions and classes, including futures, promises, thread-safe collections, maybes, and so on. &lt;code&gt;Concurrent&lt;/code&gt; provides several different thread pool implementations for different purposes, each supporting a number of configurations, including min and max pool sizes, advanced shutdown behaviors, max queue size (along with a fallback policy when the job queue size is exceeded) to name a few.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;pool = Concurrent::FixedThreadPool.new(5) # 5 threads
+pool.post do
+  # some parallel work
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Consider the &lt;a href="http://ruby-concurrency.github.io/concurrent-ruby/file.thread_pools.html"&gt;Thread Pool&lt;/a&gt; overview provided in the &lt;code&gt;Concurrent&lt;/code&gt; docs required reading.&lt;/p&gt;
+
+&lt;h3&gt;Credits&lt;/h3&gt;
+
+&lt;p&gt;In preparing for this post, I read through the source of several thread pool
+implementations from various sources, ranging from simple examples, to internal
+interfaces, to public-facing libraries.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.burgestrand.se/code/ruby-thread-pool/"&gt;A simple, annotated thread pool&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/meh/ruby-thread/blob/f25dd1184f4f4bee7cde0d54ad5ce5e32dc15279/lib/thread/pool.rb"&gt;Thread::Pool&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/celluloid/celluloid/blob/c54bbde76e6a71b44c3ca6d1abf71197c64d7614/lib/celluloid/group/pool.rb"&gt;Celluloid::Group::Pool&lt;/a&gt; implementation.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/ruby-concurrency/concurrent-ruby/blob/536478817a3d0440f00ac09098f3ba71f0d8ce7c/lib/concurrent/executor/ruby_thread_pool_executor.rb"&gt;Concurrent::RubyThreadPoolExecutor&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/puma/puma/blob/32b1fb3742e5918e0e79ee705b48c912a1f0742d/lib/puma/thread_pool.rb"&gt;Puma::ThreadPool&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Though it&amp;rsquo;s well documented how much &lt;a href="http://adam.herokuapp.com/past/2009/8/13/threads_suck/"&gt;threads suck&lt;/a&gt;, that shouldn&amp;rsquo;t discourage Rubyists from trying to get some first-hand experience with working with threads, supporting classes from the standard library like &lt;code&gt;Queue&lt;/code&gt;, &lt;code&gt;Mutex&lt;/code&gt;, and &lt;code&gt;ConditionVariable&lt;/code&gt; and generic abstractions like &lt;code&gt;ThreadPool&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3&gt;Connection Pool, the Sequel&lt;/h3&gt;
+
+&lt;p&gt;Related, though not necessarily thread-based, is the concept of a connection
+pool, which limits the number of network connections to a particular service.
+You&amp;rsquo;ll find connection pools in &lt;a href="https://github.com/rails/rails/blob/107f4282bbfabc011d5ad3bcf3fb3c6fb812ad30/activerecord/lib/active_record/connection_adapters/abstract/connection_pool.rb"&gt;activerecord&lt;/a&gt;, &lt;a href="https://github.com/mongodb/mongo-ruby-driver/blob/eece2a769bbf1a302b2f70b23dc6a43490392979/lib/mongo/server/connection_pool.rb"&gt;mongodb&lt;/a&gt;, and, as a standalone
+abstraction in the approrpriately-named,
+&lt;a href="https://github.com/mperham/connection_pool"&gt;connection_pool&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s good to know
+about connection pools for setting a connection to Redis from your Ruby
+applications with the &lt;a href="https://github.com/redis/redis-rb"&gt;redis-rb&lt;/a&gt; gem. As of this writing, this client does not manage a connection pool for you, so &lt;a href="http://www.blrice.net/blog/2015/04/24/take-a-swim-in-the-connection-pool/"&gt;the common gotcha&lt;/a&gt; is a memory-leak that originates from creating a lot of open connections to the Redis server. You can avoid this with &lt;code&gt;ConnectionPool&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;redis = ConnectionPool.new { Redis.new }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Much like &lt;code&gt;ThreadPool&lt;/code&gt;, having at least a cursory understanding of what&amp;rsquo;s happening
+underneath can help you avoid issues with managing resources like network
+connections.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>What I learned building an app in Hanami</title>
     <link rel="alternate" href="/blog/what-i-learned-about-hanami.html"/>
@@ -1144,242 +1595,6 @@ match the previous thing&amp;rdquo;.&lt;/p&gt;
 &lt;hr&gt;
 
 &lt;p&gt;Looking for a way to handle recurring events in your app? Be sure to check out &lt;a href="https://github.com/rossta/montrose"&gt;Montrose&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Debugging SystemStackError</title>
-    <link rel="alternate" href="/blog/debugging-systemstackerror.html"/>
-    <id>/blog/debugging-systemstackerror.html</id>
-    <published>2016-01-11T19:00:00-05:00</published>
-    <updated>2016-01-11T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo-e275cbe5.jpg"&gt;&lt;/p&gt;
-
-&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;SystemStackError: stack level too deep
-    /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
-other words,...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Get it? Stack? Logs?" src="/assets/images/blog/stock/logs-pexels-photo-e275cbe5.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;Arrgggh. Ever come across this in your Ruby app?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;SystemStackError: stack level too deep
-    /Users/ross/dev/rossta/montrose/lib/montrose/options.rb:204
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A &lt;code&gt;SystemStackError&lt;/code&gt; occurs when your Ruby code encounters a stack overflow; in
-other words, the memory allocated to execute the program exceeded the memory
-available on the stack.&lt;/p&gt;
-
-&lt;p&gt;The most common cause of a stack overflow in application code that
-recursively calls itself without terminating arguments: an infinite loop in your
-code.&lt;/p&gt;
-
-&lt;p&gt;You can reproduce such an error with code like this in a terminal:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;$ pry --noprompt
-def foo
-  foo
-end
-=&amp;gt; :foo
-foo
-SystemStackError: stack level too deep
-from /Users/ross/.gem/ruby/2.1.6/gems/pry-0.10.3/lib/pry/pry_instance.rb:355
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note: for the examples in this post, assume I&amp;rsquo;m using Ruby 2.1 unless otherwise
-indicated.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;$ ruby -v
-ruby 2.1.6p336 (2015-04-13 revision 50298) [x86_64-darwin14.0]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Prior to Ruby 2.2 and &lt;a href="https://bugs.ruby-lang.org/issues/6216"&gt;this issue&lt;/a&gt;, the
-backtrace for &lt;code&gt;SystemStackError&lt;/code&gt; was reduced to one line. That meant, unless
-that one line lead you to an obvious culprit in your source code, it
-would be very difficult to unravel the method calls causing the stack to overflow.&lt;/p&gt;
-
-&lt;p&gt;So, first step in debugging the &lt;code&gt;SystemStackError&lt;/code&gt; is upgrade to Ruby 2.2!&lt;/p&gt;
-
-&lt;p&gt;In case that&amp;rsquo;s not possible, there&amp;rsquo;s still hope. Let&amp;rsquo;s try using information
-from the error first. Here&amp;rsquo;s the method containing &lt;a href="https://github.com/rossta/montrose/blob/e5b7a12f6832b4f971a52b27800cefe144ecd399/lib/montrose/options.rb#L204"&gt;the line in the backtrace&lt;/a&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# lib/montrose/options.rb:204
-
-def map_arg(arg, &amp;amp;block)
-  return nil unless arg
-
-  Array(arg).map(&amp;amp;block)    # line 204
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;No obvious culprit. This method doesn&amp;rsquo;t call itself and there are multiple callers
-of this method in this class.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s try rescuing from the error in a test and printing the execution stack
-using &lt;a href="http://ruby-doc.org/core-2.2.3/Kernel.html#method-i-caller"&gt;&lt;code&gt;Kernel.caller&lt;/code&gt;&lt;/a&gt;. I can isolate the application code that produces the stack overflow in a single test and rescue there.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;it &amp;quot;a test&amp;quot; do
-  # given
-
-  begin
-    # when
-  rescue SystemStackError
-    puts caller
-  end
-
-  # then
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here&amp;rsquo;s what I get:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;$ bin/m spec/rfc_spec.rb:426
-/Users/ross/dev/rossta/montrose/spec/rfc_spec.rb:434:in `block (2 levels) in &amp;lt;top (required)&amp;gt;&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:108:in `block (3 levels) in run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:205:in `capture_exceptions&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:105:in `block (2 levels) in run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:256:in `time_it&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:104:in `block in run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:334:in `on_signal&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:276:in `with_info_handler&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest/test.rb:103:in `run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:781:in `run_one_method&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:308:in `run_one_method&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:296:in `block (2 levels) in run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:295:in `each&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:295:in `block in run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:334:in `on_signal&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:321:in `with_info_handler&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:294:in `run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:155:in `block in __run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:155:in `map&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:155:in `__run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/minitest-5.8.3/lib/minitest.rb:129:in `run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/lib/m/runners/minitest_5.rb:9:in `run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/lib/m/executor.rb:26:in `execute&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/lib/m/runner.rb:17:in `run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/lib/m.rb:13:in `run&amp;#39;
-/Users/ross/.gem/ruby/2.1.6/gems/m-1.4.2/bin/m:4:in `&amp;lt;top (required)&amp;gt;&amp;#39;
-bin/m:16:in `load&amp;#39;
-bin/m:16:in `&amp;lt;main&amp;gt;&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The backtrace points to lines in minitest. Since I&amp;rsquo;ve been running tests prior
-to this isssue successfully, it&amp;rsquo;s unlikely minitest is the source of the stack overflow error. So rescuing from &lt;code&gt;SytemStackError&lt;/code&gt; doesn&amp;rsquo;t help us either.&lt;/p&gt;
-
-&lt;p&gt;Luckily, we have &lt;a href="https://gist.github.com/jbgo/4493822"&gt;this gist&lt;/a&gt; from
-&lt;a href="https://github.com/jbgo"&gt;@jbgo&lt;/a&gt; who highlighted a special feature in Ruby for
-tracing function events: &lt;a href="http://ruby-doc.org/core-1.9.3/Kernel.html#method-i-set_trace_func"&gt;&lt;code&gt;Kernel.set_trace_func&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s the example from the docs:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class Test
-  def test
-    a = 1
-    b = 2
-  end
-end
-
-set_trace_func proc { |event, file, line, id, binding, classname|
-  printf &amp;quot;%8s %s:%-2d %10s %8s\n&amp;quot;, event, file, line, id, classname
-}
-t = Test.new
-t.test
-
-    line prog.rb:11               false
-  c-call prog.rb:11        new    Class
-  c-call prog.rb:11 initialize   Object
-c-return prog.rb:11 initialize   Object
-c-return prog.rb:11        new    Class
-    line prog.rb:12               false
-    call prog.rb:2        test     Test
-    line prog.rb:3        test     Test
-    line prog.rb:4        test     Test
-  return prog.rb:4        test     Test
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The method &lt;code&gt;set_trace_func&lt;/code&gt; sets a global proc to be invoked in response to
-runtime events including the following:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;c-call&lt;/code&gt; a C-language routine&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;c-return&lt;/code&gt; return from a C-language routine&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;call&lt;/code&gt; a Ruby method&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;class&lt;/code&gt; start a class or module definition&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;end&lt;/code&gt; finish a class or module definition&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;line&lt;/code&gt; execute code on a new line&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;raise&lt;/code&gt; raise an exception&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;return&lt;/code&gt; return from a Ruby method&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Since we want to isolate the Ruby method causing the infinite loop in our stack,
-we&amp;rsquo;ll log the line info for &lt;code&gt;call&lt;/code&gt; events:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# spec/spec_helper.rb
-
-$trace_out = open(&amp;quot;trace.txt&amp;quot;)
-
-set_trace_func proc { |event, file, line, id, binding, classname|
-  if event == &amp;#39;call&amp;#39;
-    $trace_out.puts &amp;quot;#{file}:#{line} #{classname}##{id}&amp;quot;
-  end
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Re-running the test produces a &lt;code&gt;trace.txt&lt;/code&gt; file that records all the Ruby method
-calls encountered during execution. Inspecting this log, we hope to find a
-repeating pattern of an identical list of method calls.&lt;/p&gt;
-
-&lt;p&gt;In my case, the start of each pattern pointed to another line in my source where
-the stack originates:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/Users/ross/dev/rossta/montrose/lib/montrose/stack.rb:38 Montrose::Stack#advance
-/Users/ross/dev/rossta/montrose/lib/montrose/frequency/yearly.rb:4 Montrose::Frequency::Yearly#include?
-/Users/ross/dev/rossta/montrose/lib/montrose/frequency.rb:51 Montrose::Frequency#matches_interval?
-...
-/Users/ross/dev/rossta/montrose/lib/montrose/stack.rb:38 Montrose::Stack#advance
-/Users/ross/dev/rossta/montrose/lib/montrose/frequency/yearly.rb:4 Montrose::Frequency::Yearly#include?
-/Users/ross/dev/rossta/montrose/lib/montrose/frequency.rb:51 Montrose::Frequency#matches_interval?
-...
-/Users/ross/dev/rossta/montrose/lib/montrose/stack.rb:38 Montrose::Stack#advance
-/Users/ross/dev/rossta/montrose/lib/montrose/frequency/yearly.rb:4 Montrose::Frequency::Yearly#include?
-/Users/ross/dev/rossta/montrose/lib/montrose/frequency.rb:51 Montrose::Frequency#matches_interval?
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A useful trick is to keep the trace routine in a separate file that you can
-incorporate with an environment variable. You can also leverage &lt;code&gt;Kernel.caller&lt;/code&gt;
-here and only log when the stack exceeds an arbitrarily large size.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# spec/support/trace.rb
-
-if ENV[&amp;quot;TRACE&amp;quot;]
-  $stack_size = ENV[&amp;quot;TRACE&amp;quot;].to_i
-  $trace_out = open(&amp;quot;trace.txt&amp;quot;)
-
-  set_trace_func proc { |event, file, line, id, binding, classname|
-    if event == &amp;#39;call&amp;#39; &amp;amp;&amp;amp; caller.length &amp;gt; $stack_size
-      $trace_out.puts &amp;quot;#{file}:#{line} #{classname}##{id}&amp;quot;
-    end
-  }
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In my &lt;a href="https://github.com/rossta/montrose"&gt;Montrose&lt;/a&gt; gem, &lt;a href="https://github.com/rossta/montrose/blob/9600e0b63bde342011b3b9b1e29ab9f76f5f69c3/spec/support/trace.rb"&gt;this file&lt;/a&gt; gets loaded during every test run but the &lt;code&gt;set_trace_func&lt;/code&gt; hook will
-only be evaluated when the &lt;code&gt;TRACE&lt;/code&gt; environment variable is present:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ TRACE=500 bin/m spec/montrose/recurrence_spec.rb
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Again, you won&amp;rsquo;t need to resort to this workaround for &lt;code&gt;SystemStackError&lt;/code&gt; in Ruby
-2.2+, but keep this in mind next time you get stuck &amp;ldquo;in the loop&amp;rdquo;.&lt;/p&gt;
 </content>
   </entry>
 </feed>
