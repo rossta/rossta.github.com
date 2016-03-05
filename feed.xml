@@ -188,7 +188,7 @@ seconds elapsed during execution:&lt;/p&gt;
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Our test will schedule a 5 jobs that will each sleep for 1 second.
+&lt;p&gt;Our test will schedule 5 jobs that will each sleep for 1 second.
 If the jobs executed serially, the total execution time would be at least 5
 seconds. Running in parallel on Rubinius, we&amp;rsquo;d expect threaded-execution of 5 jobs
 across 5 threads to take less time.&lt;/p&gt;
