@@ -117,7 +117,7 @@ class TestThreadPool < Minitest::Test
     end
     pool.shutdown
 
-    assert_equal((1.upto(pool_size * 3)).to_a, results)
+    assert_equal(1.upto(pool_size * 3).to_a, results)
   end
 end
 ```
