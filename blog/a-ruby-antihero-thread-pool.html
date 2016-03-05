@@ -94,7 +94,9 @@ pool in test-driven fashion.</p>
 <aside class="callout panel">
 <p>
   The code samples in this post are run on <code>rubinius-3.14</code> to take advantage of
-  parallel processing.
+  parallel processing. As you may know, MRI&rsquo;s
+<a href="http://www.jstorimer.com/blogs/workingwithcode/8085491-nobody-understands-the-gil">global interpreter lock</a>
+ensures only one code can execute Ruby code at any one time.
 </p>
 </aside>
 
@@ -166,7 +168,10 @@ end
 </code></pre>
 
 <p>Let&rsquo;s break it down. To test the basic usage of a thread pool scheduler, we&rsquo;ll pass in an array and
-augment it with in the scheduled blocks. Because <a href="http://www.jstorimer.com/pages/ruby-core-classes-arent-thread-safe"><code>Array</code> is not thread safe</a>, we need to use a <code>Mutex</code> object to lock the pooled threads while adding items to the array. The key snippet is here:</p>
+augment it with in the scheduled blocks. Because <a href="http://www.jstorimer.com/pages/ruby-core-classes-arent-thread-safe"><code>Array</code> is not thread safe</a>,
+we need to use a <a href="http://ruby-doc.org/core-2.2.0/Mutex.html"><code>Mutex</code></a> object to lock the pooled threads while adding items to the array.</p>
+
+<p>The key snippet is here:</p>
 
 <pre><code class="ruby">pool.schedule do
   mutex.synchronize do
@@ -364,10 +369,9 @@ end
 </code></pre>
 
 <p>Each thread runs an infinite loop that repeatedly pops jobs of the queue with
-<code>@jobs.pop</code>. The <code>Queue#pop</code> method here is blocking so the thread will happily
-wait for new jobs to be scheduled at this point.</p>
+<code>@jobs.pop</code>. The <a href="http://ruby-doc.org/stdlib-2.0.0/libdoc/thread/rdoc/Queue.html#method-i-pop"><code>Queue#pop</code></a> method here will block when the queue is empty so the thread will happily wait for new jobs to be scheduled at this point.</p>
 
-<p>Notice also to <code>catch(:exit) do</code> block. We break out of the thread loops by
+<p>Notice also to <a href="http://ruby-doc.org/core-2.3.0/Kernel.html#method-i-catch"><code>catch</code></a> block. We break out of the thread loops by
 pushing <code>throw :exit</code> on to the job queue, once for each thread in the
 <code>#shutdown</code> method. This means that jobs currently executing when the shutdown
 method is called will be able to complete before the threads can be joined.</p>
@@ -385,7 +389,7 @@ end
 number of threads. For more on this implementation, check out the original author&rsquo;s <a href="http://www.burgestrand.se/articles/quick-and-simple-ruby-thread-pool.html">blog post on
 the subject</a>.</p>
 
-<p><a href="https://github.com/rossta/loves-enumerable/commit/eabf97e2e5b856eb2c12e68e36233940aec02030">Source for this changeset</a></p>
+<p><a href="https://github.com/rossta/loves-enumerable/commit/cd6e89328948b9fd7e902764947163e4dd16b73d">Source for this changeset</a></p>
 
 <h3>In the Wild</h3>
 
@@ -447,7 +451,7 @@ end
 
 <p>Consider the <a href="http://ruby-concurrency.github.io/concurrent-ruby/file.thread_pools.html">Thread Pool</a> overview provided in the <code>Concurrent</code> docs required reading.</p>
 
-<p>And, of course, the ultimate thread pool for Rails developers is <a href="https://github.com/mperham/sidekiq">Sidekiq</a>. Unlike the examples we&rsquo;ve discussed so far, the components of the Sidekiq thread pool model are distributed: the caller, the job queue, and the threaded workers all running in separate processes, often on separate machines in a production environment.</p>
+<p>And, of course, the ultimate thread pool for Rails developers is <a href="https://github.com/mperham/sidekiq">Sidekiq</a>. Unlike the examples we&rsquo;ve discussed so far, the components of the Sidekiq thread pool model are distributed: the caller, the job queue, and the threaded workers all run in separate processes, often on separate machines, in a production environment.</p>
 
 <h3>Credits</h3>
 
@@ -457,10 +461,10 @@ interfaces, to public-facing libraries.</p>
 
 <ul>
 <li><a href="http://www.burgestrand.se/code/ruby-thread-pool/">A simple, annotated thread pool</a></li>
-<li><a href="https://github.com/meh/ruby-thread/blob/f25dd1184f4f4bee7cde0d54ad5ce5e32dc15279/lib/thread/pool.rb">Thread::Pool</a></li>
-<li><a href="https://github.com/celluloid/celluloid/blob/c54bbde76e6a71b44c3ca6d1abf71197c64d7614/lib/celluloid/group/pool.rb">Celluloid::Group::Pool</a> implementation.</li>
-<li><a href="https://github.com/ruby-concurrency/concurrent-ruby/blob/536478817a3d0440f00ac09098f3ba71f0d8ce7c/lib/concurrent/executor/ruby_thread_pool_executor.rb">Concurrent::RubyThreadPoolExecutor</a></li>
-<li><a href="https://github.com/puma/puma/blob/32b1fb3742e5918e0e79ee705b48c912a1f0742d/lib/puma/thread_pool.rb">Puma::ThreadPool</a></li>
+<li><a href="https://github.com/meh/ruby-thread/blob/f25dd1184f4f4bee7cde0d54ad5ce5e32dc15279/lib/thread/pool.rb"><code>Thread::Pool</code></a></li>
+<li><a href="https://github.com/celluloid/celluloid/blob/c54bbde76e6a71b44c3ca6d1abf71197c64d7614/lib/celluloid/group/pool.rb"><code>Celluloid::Group::Pool</code></a></li>
+<li><a href="https://github.com/ruby-concurrency/concurrent-ruby/blob/536478817a3d0440f00ac09098f3ba71f0d8ce7c/lib/concurrent/executor/ruby_thread_pool_executor.rb"><code>Concurrent::RubyThreadPoolExecutor</code></a></li>
+<li><a href="https://github.com/puma/puma/blob/32b1fb3742e5918e0e79ee705b48c912a1f0742d/lib/puma/thread_pool.rb"><code>Puma::ThreadPool</code></a></li>
 </ul>
 
 <p>Though it&rsquo;s well documented how much <a href="http://adam.herokuapp.com/past/2009/8/13/threads_suck/">threads suck</a>, that shouldn&rsquo;t discourage Rubyists from trying to get some first-hand experience with working with threads, supporting classes from the standard library like <code>Queue</code>, <code>Mutex</code>, and <code>ConditionVariable</code> and generic abstractions like <code>ThreadPool</code>.</p>
