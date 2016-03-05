@@ -170,7 +170,7 @@ def time_taken
 end
 ```
 
-Our test will schedule a 5 jobs that will each sleep for 1 second.
+Our test will schedule 5 jobs that will each sleep for 1 second.
 If the jobs executed serially, the total execution time would be at least 5
 seconds. Running in parallel on Rubinius, we'd expect threaded-execution of 5 jobs
 across 5 threads to take less time.
