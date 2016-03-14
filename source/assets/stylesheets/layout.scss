@@ -3,234 +3,80 @@
 body {
   background: alicewhite;
   padding: 0 0 2em;
-
   @include base-font;
-  h1,h2,h3,h4,h5,h6 {
-    @include header-font;
-    a {
-      @include header-link-colors;
-    }
-  }
-  a {
-    @include link-colors;
-  }
-  .logo {
-    font-family: "courier-prime",monospace;
-    color: $mainColor !important;
-    font-size:rem-calc(25);
-    &:hover {
-      color: $secondaryColor;
-    }
-  }
 }
-
-.clearfix {
-  overflow: auto;
-}
-.share { margin-top: 1em; }
-
-.margin-top {
-  margin-top: 1em;
-  &.double {
-    margin-top: 2em;
-  }
-}
-.margin-bottom {
-  margin-bottom: 1em;
-  &.double {
-    margin-bottom: 2em;
-  }
-}
-
-.font-light { color:$greyColor; }
-
-.text-center { text-align: center; }
-
-.subtle { color: $subtleColor; }
-
-.alt-title {
-  @include header-font;
-  font-size: 1.2rem;
-  color: $subtleColor;
-}
-
 img {
   &.th.center {
     display:block;
     margin: 0 auto 1em;
   }
 }
-.center-inline-list {
-  float:left;
-  width:100%;
-  background:#fff;
-  overflow:hidden;
-  position:relative;
-
-  .inline-list {
-    clear:left;
-    float:left;
-    list-style:none;
-    margin:0;
-    padding:0;
-    position:relative;
-    left:50%;
-    text-align:center;
-    overflow: visible;
-
-    > li {
-      display:block;
-      float:left;
-      list-style:none;
-      position:relative;
-      right:50%;
-    }
-  }
-}
-#application {
-  @include base-font;
-  @media #{$small-up} {
-    .top-bar .name h1 a { padding: 0 15px; }
-  }
-  header {
-    text-align: left;
-    h1 { margin: 0; line-height:60px; font-size: 2.25em; }
-    h1,h2,h3,h4,h5,h6 {
-      color: $mainColor;
-      @include header-font;
-      a {
-        @include header-font;
-        @include header-link-colors;
-      }
-
-    }
-    p { margin: 0;}
-  }
-
-  footer {
-    @include clearfix;
-    // border-width: 1px 0 0;
-    // border-color: #CCC;
-    // border-style: solid;
-    padding: 2em 0;
-  }
-
-  .pagination {
-    .columns {
-      margin-bottom: 1rem;
-    }
-  }
-
-  .button {
-    @include header-font;
-  }
-}
-
-#zen {
+h1,h2,h3,h4,h5,h6 {
   @include header-font;
-  line-height: 80px;
-  background-color: $lightGreyColor;
-  text-align: center;
+  a {
+    @include header-link-colors;
+  }
+}
+a {
+  @include link-colors;
 }
 
-#main {
-  @include base-font;
-  padding-bottom:1em;
-  margin-top:2em;
-  margin-bottom:1em;
+header {
+  text-align: left;
+  h1 { margin: 0; line-height:60px; font-size: 2.25em; }
 
   h1,h2,h3,h4,h5,h6 {
-    font-weight: bold;
     color: $mainColor;
     @include header-font;
     a {
       @include header-font;
-    }
-    &.subtle {
-      font-weight:normal;
-      color: $subtleColor;
+      @include header-link-colors;
     }
   }
-  h2 {
-    color: black;
-    font-weight: bold;
-    margin-top:0;
-    small {
-      font-weight: normal;
-    }
-    a {
-      color: black;
-    }
-  }
+  p { margin: 0;}
+}
 
+footer {
+  @include clearfix;
+  padding: 2em 0;
+}
+
+code {
+  border: none;
+  // background-color: rgba(0,0,0,0.04);
+  background-color: $lightGreyColor;
+  font-size: .9em;
+  padding: 0.2em 0.3em;
+}
+
+pre {
   code {
-    border: none;
-    // background-color: rgba(0,0,0,0.04);
-    background-color: $lightGreyColor;
-    font-size: .9em;
-    padding: 0.2em 0.3em;
+    overflow:auto;
+    margin-bottom: $paragraph-margin-bottom;
+    font-weight:normal;
+    line-height:1.45em;
+    font-size:1.15em;
+    padding: 1.25em;
   }
+}
 
+@media #{$small-up} {
+  .top-bar .name h1 a { padding: 0 15px; }
+}
+@media #{$small-only} {
+  p {
+    font-size: 0.94rem;
+    margin-bottom: 0.9rem;
+  }
   pre {
     code {
-      overflow:auto;
-      margin-bottom: $paragraph-margin-bottom;
-      font-weight:normal;
-      line-height:1.45em;
-      font-size:1.15em;
-      padding: 1.25em;
-    }
-  }
-}
-
-#sidebar {
-  ul {
-    list-style-type: none;
-    margin-left: 0;
-  }
-}
-
-@mixin hero($side) {
-  background-color: $lightGreyColor;
-  padding-top: 1.75em;
-  padding-left: $side;
-  padding-right: $side;
-  padding-bottom: 1em;
-}
-
-#hero {
-  $side: 2.5em;
-
-  @include hero($side);
-
-  margin: -2em (-$side) 8em (-$side);
-
-  header {
-    margin-bottom: 0em;
-  }
-}
-
-form {
-  .row .row.collapse input {
-    height: rem-calc(60);
-    font-size: 1em;
-    padding: 0.5em 1em;
-
-    &[type=submit] {
-      @include header-font;
-      background-color: $secondaryColor;
-      &:hover {
-        opacity:0.95;
+      &.hljs {
+        margin-bottom: 0.9rem;
+        line-height:1.4em;
+        font-size:0.90rem;
+        padding: 1rem;
       }
     }
   }
 }
 
-.signup-form {
-  margin: 0.75em 0;
-
-  &.standalone {
-    @include hero(2.5em);
-    border: solid 1px #dfdfdf;
-  }
-}

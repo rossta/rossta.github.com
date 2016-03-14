@@ -1,10 +1,17 @@
-<% summary ||= nil %>
-<header>
+<%
+  summary ||= nil
+  classes ||= ["page-header"]
+  if summary
+    classes << "with-summary"
+  end
+%>
+<header class="<%= classes.join(" ") %>">
   <h2>
     <%= title %>
-    <% if summary %>
-      <br />
-      <small><%= summary %></small>
-    <% end %>
   </h2>
+  <% if summary %>
+    <h3>
+      <%= summary %>
+    </h3>
+  <% end %>
 </header>
