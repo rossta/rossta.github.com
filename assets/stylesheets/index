@@ -8,8 +8,8 @@ Error: File to import not found or unreadable: foundation-sites/scss/foundation/
 3: @import "foundation-sites/scss/foundation";
 4: 
 5: @import "layout";
-6: @import "blog";
-7: @import "highlight.js/styles/docco";
+6: @import "objects";
+7: @import "sections";
 
 Backtrace:
 /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss:2
@@ -140,4 +140,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: foundation-sites/scss/foundation/components/global.\A         on line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss\A         from line 1 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/index.scss\A \A 1: @import \"settings\";\A 2: @import \"foundation-sites/scss/normalize\";\A 3: @import \"foundation-sites/scss/foundation\";\A 4: \A 5: @import \"layout\";\A 6: @import \"blog\";\A 7: @import \"highlight.js/styles/docco\";"; }
+  content: "Error: File to import not found or unreadable: foundation-sites/scss/foundation/components/global.\A         on line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss\A         from line 1 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/index.scss\A \A 1: @import \"settings\";\A 2: @import \"foundation-sites/scss/normalize\";\A 3: @import \"foundation-sites/scss/foundation\";\A 4: \A 5: @import \"layout\";\A 6: @import \"objects\";\A 7: @import \"sections\";"; }
