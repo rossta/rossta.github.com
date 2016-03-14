@@ -354,7 +354,7 @@ puts comments.each.lazy.
   take(2).force
 ```
 
-For more info on using `#to_enum`, check out Arkency's [Stop including Enumerable, use Enumerable instead](http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/).
+For more info on using `#to_enum`, check out Arkency's [Stop including Enumerable, return Enumerator instead](http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/).
 
 We also need to `yield` each element in the `@collection` to pass elements to callers of `#each`
 
