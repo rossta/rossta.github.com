@@ -64,19 +64,25 @@ pre {
   .top-bar .name h1 a { padding: 0 15px; }
 }
 @media #{$small-only} {
+  ul {
+    font-size: $rem-base;
+  }
   p {
-    font-size: 0.94rem;
+    font-size: $rem-base;
     margin-bottom: 0.9rem;
+    line-height: 1.5rem;
   }
   pre {
     code {
       &.hljs {
         margin-bottom: 0.9rem;
-        line-height:1.4em;
-        font-size:0.90rem;
+        line-height: 1.4em;
+        font-size: 14px;
         padding: 1rem;
       }
     }
   }
+  footer {
+    margin: 1em 0;
+  }
 }
-
