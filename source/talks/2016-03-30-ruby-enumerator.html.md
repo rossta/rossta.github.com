@@ -18,3 +18,17 @@ practical takeaways for your daily work.
 <script async class="speakerdeck-embed" data-id="d55b25d9fdf24e768dc5d01df1c5a58f" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
 
 This talk was given at the [Arlington Ruby meetup](http://www.meetup.com/Arlington-Ruby/events/227707241/).
+
+### Credits
+
+Icons in this talk were created by the following talented folks:
+
+* Abacus by anbileru adaleru from the Noun Project
+* Gears by Dominik Minet from the Noun Project
+* Loop by useiconic.com from the Noun Project
+* cancel by ermankutlu from the Noun Project
+* clock by Christian Shannon from the Noun Project
+* documents by Simon Mettler from the Noun Project
+* electric generator by lastspark from the Noun Project
+* question-mark by Cris Dobbins from the Noun Project
+* wave by mohit arora from the Noun Project
