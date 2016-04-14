@@ -58,9 +58,16 @@ def path_count(x, y)
 end
 ```
 
+The expected result for a 10x10 grid is `184756`.
+
+```ruby
+path_count(10, 10)
+# => 184756
+```
+
 This works!  Let's consider some alternative approaches.
 
-## Binary and Binomial
+### Binary and Binomial
 
 [Ray Hightower](http://rayhightower.com/), who also [spoke at ACR](), recently published a nice writeup of a ["brute force" solution in Ruby, C, and Go](http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/). Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.
 
