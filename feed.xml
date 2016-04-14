@@ -68,9 +68,15 @@ def path_count(x, y)
 end
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;The expected result for a 10x10 grid is &lt;code&gt;184756&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;path_count(10, 10)
+# =&amp;gt; 184756
+&lt;/code&gt;&lt;/pre&gt;
+
 &lt;p&gt;This works!  Let&amp;rsquo;s consider some alternative approaches.&lt;/p&gt;
 
-&lt;h2&gt;Binary and Binomial&lt;/h2&gt;
+&lt;h3&gt;Binary and Binomial&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href="http://rayhightower.com/"&gt;Ray Hightower&lt;/a&gt;, who also &lt;a href="#"&gt;spoke at ACR&lt;/a&gt;, recently published a nice writeup of a &lt;a href="http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/"&gt;&amp;ldquo;brute force&amp;rdquo; solution in Ruby, C, and Go&lt;/a&gt;. Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.&lt;/p&gt;
 
