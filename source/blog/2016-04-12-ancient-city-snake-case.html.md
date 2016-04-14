@@ -159,7 +159,7 @@ The `reduce` expression generates a row from the previous one and the values of
 each previous member of the current row. The function returns the last member of
 the last row.
 
-Since [I gave a talk about Enumerator at Ancient City] I decided it would only
+Since [I gave a talk about Enumerator at Ancient City](/talks/ruby-enumerator.html) I decided it would only
 be appropriate if I solved the Snake Case challenge using an `Enumerator`. We
 can extract an Enumerator from the iterative solution to represent a function that generates each row of the grid:
 
