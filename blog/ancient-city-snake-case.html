@@ -282,8 +282,6 @@ grid. Running on my mid-2014 MacBook Pro with MRI ruby-2.3:</p>
 <pre><code class="ruby">require &quot;benchmark/ips&quot;
 
 Benchmark.ips do |x|
-  x.config(:suite =&gt; suite)
-
   x.report(&quot;snake case factorial&quot;) do
     SnakeCase::Factorial.path_count(10, 10)
   end
