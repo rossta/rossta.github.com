@@ -36,25 +36,25 @@ any valid path: 10 moves south and 10 moves east.
 
 ### Recursion
 
-How about a recursive solution? Consider that for any location `x, y` on the grid, there are either one or two incoming paths oriented in the south or west direction, one coming from neighbor `x-1, y` and the other coming from neighbor `x, y-1`.
+How about a recursive solution? Consider that for any location `h, w` on the grid, there are either one or two incoming paths oriented in the south or west direction, one coming from neighbor `h-1, w` and the other coming from neighbor `h, w-1`.
 
-This means that the solution for the given location is the sum of two subproblems: the number of paths arriving at location `x-1, y` plus the number of paths arriving at location `x, y-1`. In pseudocode:
+This means that the solution for the given location is the sum of two subproblems: the number of paths arriving at location `h-1, w` plus the number of paths arriving at location `h, w-1`. In pseudocode:
 
 ```ruby
-path_count(x, y) = path_count(x-1, y) + path_count(x, y-1)
+path_count(h, w) = path_count(h-1, w) + path_count(h, w-1)
 ```
 
-The exception to this rule is if either x or y are on the "edges", meaning the
+The exception to this rule is if either `h` or `w` are on the "edges", meaning the
 value is 0. In this case, there's only 1 path that can reach these locations.
 
 Now we have enough information to construct a recursive solution to the problem:
 
 ```ruby
 # recursive
-def path_count(x, y)
-  return 1 if x == 0 || y == 0
+def path_count(h, w)
+  return 1 if h == 0 || w == 0
 
-  path_count(x-1, y) + path_count(x, y-1)
+  path_count(h-1, w) + path_count(h, w-1)
 end
 ```
 
@@ -147,7 +147,7 @@ the last node in the last row. Let's implement this in Ruby:
 def path_count(h, w)
   row = [1] * (w+1) # first row of "1s"
 
-  m.times do
+  h.times do
     row = row.reduce([]) { |acc, p| acc << (p + acc.last.to_i)  }
   end
 
@@ -211,8 +211,8 @@ For our revised `path_count` method, we simply want to retrieve the last member 
 
 ```ruby
 # enumeartive
-def path_count(m, n)
-  grid(m, n).drop(m-1).last.last
+def path_count(h, w)
+  grid(h, w).drop(w-1).last.last
 end
 ```
 
