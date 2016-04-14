@@ -211,7 +211,7 @@ challenge.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;# enumeartive
 def path_count(h, w)
-  grid(h, w).drop(w-1).last.last
+  grid(h, w).drop(h-1).last.last
 end
 &lt;/code&gt;&lt;/pre&gt;
 
