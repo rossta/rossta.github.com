@@ -69,7 +69,7 @@ This works!  Let's consider some alternative approaches.
 
 ### Binary and Binomial
 
-[Ray Hightower](http://rayhightower.com/), who also [spoke at ACR](), recently published a nice writeup of a ["brute force" solution in Ruby, C, and Go](http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/). Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.
+[Ray Hightower](http://rayhightower.com/), who also [spoke at ACR](http://rayhightower.com/blog/2016/04/08/ancient-city-ruby-2016/), recently published a nice writeup of a ["brute force" solution in Ruby, C, and Go](http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/). Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.
 
 The mathematics approach is a factorial: given a 10x10 grid, we want to
 construct 20 moves where 10 moves are "south" and 10 moves are "east". We could
