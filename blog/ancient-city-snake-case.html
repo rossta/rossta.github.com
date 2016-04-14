@@ -84,23 +84,23 @@ any valid path: 10 moves south and 10 moves east.</p>
 
 <h3>Recursion</h3>
 
-<p>How about a recursive solution? Consider that for any location <code>x, y</code> on the grid, there are either one or two incoming paths oriented in the south or west direction, one coming from neighbor <code>x-1, y</code> and the other coming from neighbor <code>x, y-1</code>.</p>
+<p>How about a recursive solution? Consider that for any location <code>h, w</code> on the grid, there are either one or two incoming paths oriented in the south or west direction, one coming from neighbor <code>h-1, w</code> and the other coming from neighbor <code>h, w-1</code>.</p>
 
-<p>This means that the solution for the given location is the sum of two subproblems: the number of paths arriving at location <code>x-1, y</code> plus the number of paths arriving at location <code>x, y-1</code>. In pseudocode:</p>
+<p>This means that the solution for the given location is the sum of two subproblems: the number of paths arriving at location <code>h-1, w</code> plus the number of paths arriving at location <code>h, w-1</code>. In pseudocode:</p>
 
-<pre><code class="ruby">path_count(x, y) = path_count(x-1, y) + path_count(x, y-1)
+<pre><code class="ruby">path_count(h, w) = path_count(h-1, w) + path_count(h, w-1)
 </code></pre>
 
-<p>The exception to this rule is if either x or y are on the &ldquo;edges&rdquo;, meaning the
+<p>The exception to this rule is if either <code>h</code> or <code>w</code> are on the &ldquo;edges&rdquo;, meaning the
 value is 0. In this case, there&rsquo;s only 1 path that can reach these locations.</p>
 
 <p>Now we have enough information to construct a recursive solution to the problem:</p>
 
 <pre><code class="ruby"># recursive
-def path_count(x, y)
-  return 1 if x == 0 || y == 0
+def path_count(h, w)
+  return 1 if h == 0 || w == 0
 
-  path_count(x-1, y) + path_count(x, y-1)
+  path_count(h-1, w) + path_count(h, w-1)
 end
 </code></pre>
 
@@ -186,7 +186,7 @@ the last node in the last row. Let&rsquo;s implement this in Ruby:</p>
 def path_count(h, w)
   row = [1] * (w+1) # first row of &quot;1s&quot;
 
-  m.times do
+  h.times do
     row = row.reduce([]) { |acc, p| acc &lt;&lt; (p + acc.last.to_i)  }
   end
 
@@ -246,8 +246,8 @@ challenge.</p>
 <p>For our revised <code>path_count</code> method, we simply want to retrieve the last member of the last row:</p>
 
 <pre><code class="ruby"># enumeartive
-def path_count(m, n)
-  grid(m, n).drop(m-1).last.last
+def path_count(h, w)
+  grid(h, w).drop(w-1).last.last
 end
 </code></pre>
 

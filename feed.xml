@@ -48,23 +48,23 @@ any valid path: 10 moves south and 10 moves east.&lt;/p&gt;
 
 &lt;h3&gt;Recursion&lt;/h3&gt;
 
-&lt;p&gt;How about a recursive solution? Consider that for any location &lt;code&gt;x, y&lt;/code&gt; on the grid, there are either one or two incoming paths oriented in the south or west direction, one coming from neighbor &lt;code&gt;x-1, y&lt;/code&gt; and the other coming from neighbor &lt;code&gt;x, y-1&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;How about a recursive solution? Consider that for any location &lt;code&gt;h, w&lt;/code&gt; on the grid, there are either one or two incoming paths oriented in the south or west direction, one coming from neighbor &lt;code&gt;h-1, w&lt;/code&gt; and the other coming from neighbor &lt;code&gt;h, w-1&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;This means that the solution for the given location is the sum of two subproblems: the number of paths arriving at location &lt;code&gt;x-1, y&lt;/code&gt; plus the number of paths arriving at location &lt;code&gt;x, y-1&lt;/code&gt;. In pseudocode:&lt;/p&gt;
+&lt;p&gt;This means that the solution for the given location is the sum of two subproblems: the number of paths arriving at location &lt;code&gt;h-1, w&lt;/code&gt; plus the number of paths arriving at location &lt;code&gt;h, w-1&lt;/code&gt;. In pseudocode:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="ruby"&gt;path_count(x, y) = path_count(x-1, y) + path_count(x, y-1)
+&lt;pre&gt;&lt;code class="ruby"&gt;path_count(h, w) = path_count(h-1, w) + path_count(h, w-1)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The exception to this rule is if either x or y are on the &amp;ldquo;edges&amp;rdquo;, meaning the
+&lt;p&gt;The exception to this rule is if either &lt;code&gt;h&lt;/code&gt; or &lt;code&gt;w&lt;/code&gt; are on the &amp;ldquo;edges&amp;rdquo;, meaning the
 value is 0. In this case, there&amp;rsquo;s only 1 path that can reach these locations.&lt;/p&gt;
 
 &lt;p&gt;Now we have enough information to construct a recursive solution to the problem:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;# recursive
-def path_count(x, y)
-  return 1 if x == 0 || y == 0
+def path_count(h, w)
+  return 1 if h == 0 || w == 0
 
-  path_count(x-1, y) + path_count(x, y-1)
+  path_count(h-1, w) + path_count(h, w-1)
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -150,7 +150,7 @@ the last node in the last row. Let&amp;rsquo;s implement this in Ruby:&lt;/p&gt;
 def path_count(h, w)
   row = [1] * (w+1) # first row of &amp;quot;1s&amp;quot;
 
-  m.times do
+  h.times do
     row = row.reduce([]) { |acc, p| acc &amp;lt;&amp;lt; (p + acc.last.to_i)  }
   end
 
@@ -210,8 +210,8 @@ challenge.&lt;/p&gt;
 &lt;p&gt;For our revised &lt;code&gt;path_count&lt;/code&gt; method, we simply want to retrieve the last member of the last row:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;# enumeartive
-def path_count(m, n)
-  grid(m, n).drop(m-1).last.last
+def path_count(h, w)
+  grid(h, w).drop(w-1).last.last
 end
 &lt;/code&gt;&lt;/pre&gt;
 
