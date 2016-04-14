@@ -1,0 +1,452 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Ancient City Ruby Snake Case - rossta.net</title>
+<meta name="description" content="Comparing mathematical, iterative, and recursive solutions to the Snake Case challenge posed during the Ancient City Ruby Conference" />
+<meta name="keywords" content="Code, Ruby" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Comparing mathematical, iterative, and recursive solutions to the Snake Case challenge posed during the Ancient City Ruby Conference" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/snake-pexels-photo.jpg" />
+<meta name="twitter:title" content="Ancient City Ruby Snake Case" />
+<meta property="og:description" content="Comparing mathematical, iterative, and recursive solutions to the Snake Case challenge posed during the Ancient City Ruby Conference" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/snake-pexels-photo.jpg" />
+<meta property="og:title" content="Ancient City Ruby Snake Case" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/index.bundle-51522b85.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-0fd3e76e.js"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta.net</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h2>
+    Ancient City Ruby Snake Case
+  </h2>
+    <h3>
+      Comparing mathematical, iterative, and recursive solutions
+    </h3>
+</header>
+
+
+      <p><img src="/assets/images/blog/stock/snakes-pexels-photo-7f1ed7d8.jpg" /></p>
+
+<p>Last week <a href="#">I spoke</a> at <a href="#">Ancient City Ruby Conference</a> where the organizers encouraged people to participate in a Ruby programming challenge called <a href="http://www.ancientcityruby.com/snake_case/">Snake Case</a>. I benchmarked a number of different ways to solve the challenge in Ruby and present the results here.</p>
+
+<p>Here&rsquo;s the challenge:</p>
+
+<blockquote>
+<p>THE ANCIENT CITY RUBY 2016 PROGRAMMING CHALLENGE</p>
+
+<p>You&rsquo;ve just arrived in sunny St. Augustine, and find yourself amazed by the visionary civic planning that would result in the area in which you now stand: a street grid exactly 10 blocks square.</p>
+
+<p>You&rsquo;re in the northwest corner of this 10 by 10 block area, and would like to take a scenic walk to the southeast corner, while only ever moving south or east.</p>
+
+<p>As you begin walking, you wonder to yourself, &ldquo;how many different paths could I take from this northwest corner to the southeast corner?&rdquo;</p>
+
+<p>You quickly note that if the downtown area were only a 2 block by 2 block grid, there would be 6 distinct paths from one corner to the other:</p>
+</blockquote>
+
+<p><img src="/assets/images/blog/snake-case-blocks-20fdedd0.png" /></p>
+
+<p>It&rsquo;s worth nothing that the intent of the problem was to calculate the correct
+number of &ldquo;optimal&rdquo; paths along the blocks, so a meandering path does not count.
+Starting at the northwest corner of a 10x10 grid, there will be 20 moves in
+any valid path: 10 moves south and 10 moves east.</p>
+
+<h3>Recursion</h3>
+
+<p>How about a recursive solution? Consider that for any location <code>x, y</code> on the grid, there are either one or two incoming paths oriented in the south or west direction, one coming from neighbor <code>x-1, y</code> and the other coming from neighbor <code>x, y-1</code>.</p>
+
+<p>This means that the solution for the given location is the sum of two subproblems: the number of paths arriving at location <code>x-1, y</code> plus the number of paths arriving at location <code>x, y-1</code>. In pseudocode:</p>
+
+<pre><code class="ruby">path_count(x, y) = path_count(x-1, y) + path_count(x, y-1)
+</code></pre>
+
+<p>The exception to this rule is if either x or y are on the &ldquo;edges&rdquo;, meaning the
+value is 0. In this case, there&rsquo;s only 1 path that can reach these locations.</p>
+
+<p>Now we have enough information to construct a recursive solution to the problem:</p>
+
+<pre><code class="ruby"># recursive
+def path_count(x, y)
+  return 1 if x == 0 || y == 0
+
+  path_count(x-1, y) + path_count(x, y-1)
+end
+</code></pre>
+
+<p>This works!  Let&rsquo;s consider some alternative approaches.</p>
+
+<h2>Binary and Binomial</h2>
+
+<p><a href="http://rayhightower.com/">Ray Hightower</a>, who also <a href="#">spoke at ACR</a>, recently published a nice writeup of a <a href="http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/">&ldquo;brute force&rdquo; solution in Ruby, C, and Go</a>. Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.</p>
+
+<p>The mathematics approach is a factorial: given a 10x10 grid, we want to
+construct 20 moves where 10 moves are &ldquo;south&rdquo; and 10 moves are &ldquo;east&rdquo;. We could
+represent this conceptually as a bit map, where the total number of bits is
+20^2, or <code>(h+w)**2</code> where <code>h</code> is the height and <code>w</code> is the width of the grid. It
+turns out this can be represented as a <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a> often expressed as:</p>
+
+<p><img src="/assets/images/blog/binomial-coefficient-c44f945f.gif" /></p>
+
+<p>Ray provided a nice LaTex-formatted description of the mathematics involved. Translated into a general Ruby function, this can be expressed in factorials.</p>
+
+<pre><code class="ruby"># factorial
+def path_count(h, w)
+  (h+w).downto(h+1).reduce(:*) / w.downto(1).reduce(:*)
+end
+</code></pre>
+
+<p>This function give the correct solution for 10x10: <code>184,756</code>.</p>
+
+<pre><code class="ruby">path_count(10, 10)
+# =&gt; 184756
+</code></pre>
+
+<p>A &ldquo;brute-force&rdquo; solution counts up all the &ldquo;1&rdquo; bits in all possible combination
+of bits from 0 to 2^(h+w), or 2^20 in our case of a 10x10 grid.</p>
+
+<p>Expressed in a general Ruby function:</p>
+
+<pre><code class="ruby"># brute force
+def path_count(h, w)
+  (0..(2**(h+w))).count { |x| x.to_s(2).chars.count(&quot;1&quot;) == n }
+end
+</code></pre>
+
+<p>The total number of bits to explore is equal to <code>2**(h+w)</code>. We count how many of
+those numbers, when expressed as binary with <code>x.to_s(2)</code> have 10 &ldquo;1&rdquo; bits.</p>
+
+<h3>Iteration</h3>
+
+<p>The recursive solution asks us to solve the problem backwards in a way: given
+the destination, figure out the solution by solving the problem for the nearest previous destinations and the ones that came before those and so on. What if we could &ldquo;build up&rdquo; to the solution instead? We can take an iterative approach in stead.</p>
+
+<p>Imagine each corner or &ldquo;node&rdquo; of the grid can be represented as the number of paths leading to it. For a 5x5 grid, there are 6 nodes and each would have a value of <code>1</code>, since there is only one way to get to those nodes.</p>
+
+<pre><code>1--1--1--1--1--1  # first row of a 5x5 grid
+</code></pre>
+
+<p>The second row gets interesting. Each node will be the sum of paths leading to
+the nodes immediately north and west. So, the first node in the second row is
+still just <code>1</code> since no paths lie to the west and the value of the node
+immediately to the north is <code>1</code>. The second node in the second row gets a value
+of <code>2</code> since the node to the west is now <code>1</code> and the node to the north is also <code>1</code>. Continuing on, this gives a second row of <code>1 2 3 4 5 6</code>:</p>
+
+<pre><code>1--1--1--1--1--1
+1--2--3--4--5--6
+</code></pre>
+
+<p>The third row:</p>
+
+<pre><code>1--1--1--1--1--1
+1--2--3--4--5--6
+1--3--6--10-15-21
+</code></pre>
+
+<p>And so on&hellip; The number of paths for a given grid would simply be the value of
+the last node in the last row. Let&rsquo;s implement this in Ruby:</p>
+
+<pre><code class="ruby"># iterative
+def path_count(h, w)
+  row = [1] * (w+1) # first row of &quot;1s&quot;
+
+  m.times do
+    row = row.reduce([]) { |acc, p| acc &lt;&lt; (p + acc.last.to_i)  }
+  end
+
+  row.last
+end
+</code></pre>
+
+<p>The <code>reduce</code> expression generates a row from the previous one and the values of
+each previous member of the current row. The function returns the last member of
+the last row.</p>
+
+<p>Since [I gave a talk about Enumerator at Ancient City] I decided it would only
+be appropriate if I solved the Snake Case challenge using an <code>Enumerator</code>. We
+can extract an Enumerator from the iterative solution to represent a function that generates each row of the grid:</p>
+
+<pre><code class="ruby">def grid(h, w)
+  return to_enum(:grid, h, w) unless block_given?
+
+  row = [1] * (w+1)
+  yield row
+
+  h.times do
+    row = row.reduce([]) { |acc, p| acc &lt;&lt; (p + acc.last.to_i)  }
+    yield row
+  end
+end
+</code></pre>
+
+<p>Two key changes have been made. We&rsquo;ve inserted <code>yield</code> statements to allow the
+caller to receive each row of the grid as it is generated. We also  &ldquo;enumeratorize&rdquo; our iterative function by converting the behavior of the function into an <code>Enumerator</code> when no block is given in the first line.</p>
+
+<p>Calling <code>grid(10, 10)</code> returns an <code>Enumerator</code>:</p>
+
+<pre><code class="ruby">grid(10, 10)
+# =&gt; #&lt;Enumerator: ...&gt;
+</code></pre>
+
+<p>Calling <code>to_a</code> on our <code>Enumerator</code> creates each &ldquo;node&rdquo; value:</p>
+
+<pre><code class="ruby">grid(10, 10).to_a
+# =&gt; [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+# [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+# [1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66],
+# [1, 4, 10, 20, 35, 56, 84, 120, 165, 220, 286],
+# [1, 5, 15, 35, 70, 126, 210, 330, 495, 715, 1001],
+# [1, 6, 21, 56, 126, 252, 462, 792, 1287, 2002, 3003],
+# [1, 7, 28, 84, 210, 462, 924, 1716, 3003, 5005, 8008],
+# [1, 8, 36, 120, 330, 792, 1716, 3432, 6435, 11440, 19448],
+# [1, 9, 45, 165, 495, 1287, 3003, 6435, 12870, 24310, 43758],
+# [1, 10, 55, 220, 715, 2002, 5005, 11440, 24310, 48620, 92378],
+# [1, 11, 66, 286, 1001, 3003, 8008, 19448, 43758, 92378, 184756]]
+</code></pre>
+
+<p>Notice the last value of the last row is the correct answer to our path count
+challenge.</p>
+
+<p>For our revised <code>path_count</code> method, we simply want to retrieve the last member of the last row:</p>
+
+<pre><code class="ruby"># enumeartive
+def path_count(m, n)
+  grid(m, n).drop(m-1).last.last
+end
+</code></pre>
+
+<p>It&rsquo;s worth noting that the nodes of this grid follow the pattern of Pascal&rsquo;s
+Triangle expanding from the northwest corner. Pascal&rsquo;s Triangle is well suited for an Enumerator function as <a href="/blog/pascals-triangle-with-rubys-enumerator.html">I&rsquo;ve written about previously</a>.</p>
+
+<h3>Tradeoffs</h3>
+
+<p>We&rsquo;ve described a number of ways to solve Snake Case and each comes with
+tradeoffs.</p>
+
+<p>In terms of readability, I would personally place the solutions in the following
+order from most to least readable:</p>
+
+<ol>
+<li>Recursive</li>
+<li>Iterative</li>
+<li>Brute force</li>
+<li>Factorial</li>
+</ol>
+
+<p>At least for me, the recursive solution is the easiest to wrap my
+head around and most readable result. It&rsquo;s easy to see from the recursive implementation how the problem may be divided into smaller sub-problems. The others require some deeper visualization and/or mathematical understanding to &ldquo;grok&rdquo; I feel. The factorial expression seems farthest removed conceptually from the description of the problem. In other words, it&rsquo;s most at odds with my intuition, but I&rsquo;m also not a mathematician so am less inclined to think in those terms.</p>
+
+<p>How do they compare performance-wise? With <code>benchmark-ips</code> we can compare the
+iterations/secon and share the results.</p>
+
+<p>Here&rsquo;s a file that defines each of the approaches we&rsquo;ve described in separate
+modules and benchmarks the performance for calculating the result for a 10x10
+grid. Running on my mid-2014 MacBook Pro with MRI ruby-2.3:</p>
+
+<pre><code class="ruby">require &quot;benchmark/ips&quot;
+
+Benchmark.ips do |x|
+  x.config(:suite =&gt; suite)
+
+  x.report(&quot;snake case factorial&quot;) do
+    SnakeCase::Factorial.path_count(10, 10)
+  end
+
+  x.report(&quot;snake case brute force&quot;) do
+    SnakeCase::Bruteforce.path_count(10, 10)
+  end
+
+  x.report(&quot;snake case recursive&quot;) do
+    SnakeCase::Recursive.path_count(10, 10)
+  end
+
+  x.report(&quot;snake case iterative&quot;) do
+    SnakeCase::Iterative.path_count(10, 10)
+  end
+
+  x.report(&quot;snake case enumerative&quot;) do
+    SnakeCase::Enumerative.path_count(10, 10)
+  end
+
+  x.compare!
+end
+
+# $ SHARE=1 ruby code/snake_case.rb
+# Calculating -------------------------------------
+# snake case factorial    34.658k i/100ms
+# snake case brute force
+#                          1.000  i/100ms
+# snake case recursive     5.000  i/100ms
+# snake case iterative     4.920k i/100ms
+# snake case enumerative
+#                          4.109k i/100ms
+# -------------------------------------------------
+# snake case factorial    456.100k (± 7.8%) i/s -      2.287M
+# snake case brute force
+#                           0.325  (± 0.0%) i/s -      2.000  in   6.161730s
+# snake case recursive     50.084  (±10.0%) i/s -    250.000
+# snake case iterative     52.616k (± 5.3%) i/s -    265.680k
+# snake case enumerative
+#                          42.875k (± 7.1%) i/s -    213.668k
+#
+# Comparison:
+# snake case factorial:   456100.0 i/s
+# snake case iterative:    52615.9 i/s - 8.67x slower
+# snake case enumerative:    42874.6 i/s - 10.64x slower
+# snake case recursive:       50.1 i/s - 9106.72x slower
+# snake case brute force:        0.3 i/s - 1405090.92x slower
+#
+# Shared at: https://benchmark.fyi/f
+</code></pre>
+
+<p>The factorial solution is orders of magnitude faster than the others. The iterative (and relatively similar enumerative) examples are only about ~10x slower than the factorial version while the recursive solution is almost 10,000x slower. The brute force solution is over a million-times slower. Even though the standard deviation in some of the results was fairly large, the differences across strategies appear conclusive.</p>
+
+<p>The maintainer of <code>benchmark-ips</code>, <a href="https://twitter.com/evanphx">Evan Phoenix</a>, added the ability to share benchmark results online. You can see <a href="https://benchmark.fyi/f">the results for this test on benchmark.fyi</a>. The <a href="https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb">full source code is also on GitHub</a>.</p>
+
+<h3>And the winner is&hellip;</h3>
+
+<p>All of the above!</p>
+
+<p>This serves as a good illustration of how there&rsquo;s often no single &ldquo;best&rdquo; way to
+solve a problem with considering the circumstance. In a situation where
+performance matters, the mathematical approach has a clear advantage, but
+sacrifices readability. I might be inclined to choose the iterative or recursive
+approach in situations where performance isn&rsquo;t the key concern.</p>
+
+<p>Given my preference for <a href="https://rossta.net/blog/series/enumerable.html">Enumerable</a>, I personally love the enumerative approach, but, as <a href="https://rossta.net/talks/ruby-enumerator.html">I discussed at Ancient City Ruby</a>, I doubt most would agree.</p>
+
+
+    </article>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Ancient%20City%20Ruby%20Snake%20Case%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fancient-city-snake-case.html">share it on Twitter</a>
+        and <a href="https://twitter.com/rossta">follow me</a>.
+      </p>
+      <p>
+          This post is part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Apr 12, 2016
+      </p>
+    </section>
+  </section>
+  <section class="share margin-bottom double">
+  </section>
+  <section class="signup-form-standalone margin-bottom double">
+    <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Stop Wrangling with Rails</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+    </form>
+  </div>
+
+  <!--End mc_embed_signup-->
+</div>
+
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "ancient-city-snake-case";
+    var disqus_title      = "Ancient City Ruby Snake Case";
+    var disqus_url        = "https://rossta.net/blog/ancient-city-snake-case.html";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/index.bundle-c0160c5b.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>
