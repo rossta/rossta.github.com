@@ -212,7 +212,7 @@ For our revised `path_count` method, we simply want to retrieve the last member 
 ```ruby
 # enumeartive
 def path_count(h, w)
-  grid(h, w).drop(w-1).last.last
+  grid(h, w).drop(h-1).last.last
 end
 ```
 
