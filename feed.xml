@@ -241,7 +241,9 @@ iterations/secon and share the results.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;rsquo;s a file that defines each of the approaches we&amp;rsquo;ve described in separate
 modules and benchmarks the performance for calculating the result for a 10x10
-grid. Running on my mid-2014 MacBook Pro with MRI ruby-2.3:&lt;/p&gt;
+grid. (&lt;a href="https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb"&gt;Full source&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;Running on my mid-2014 MacBook Pro with MRI ruby-2.3:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;benchmark/ips&amp;quot;
 
