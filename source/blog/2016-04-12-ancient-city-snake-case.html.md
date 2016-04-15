@@ -236,7 +236,7 @@ At least for me, the recursive solution is the easiest to wrap my
 head around and most readable result. It's easy to see from the recursive implementation how the problem may be divided into smaller sub-problems. The others require some deeper visualization and/or mathematical understanding to "grok" I feel. The factorial expression seems farthest removed conceptually from the description of the problem. In other words, it's most at odds with my intuition, but I'm also not a mathematician so am less inclined to think in those terms.
 
 How do they compare performance-wise? With `benchmark-ips` we can compare the
-iterations/secon and share the results.
+iterations/second and share the results.
 
 Here's a file that defines each of the approaches we've described in separate
 modules and benchmarks the performance for calculating the result for a 10x10
