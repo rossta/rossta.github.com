@@ -18,10 +18,10 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;img src="/assets/images/blog/stock/snakes-pexels-photo-7f1ed7d8.jpg"&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;img src="/assets/images/blog/stock/snakes-pexels-photo-88dd6b6b.jpg"&gt;&lt;/p&gt;
 
 &lt;p&gt;Last week &lt;a href="#"&gt;I spoke&lt;/a&gt; at &lt;a href="#"&gt;Ancient City Ruby Conference&lt;/a&gt; where the organizers encouraged people to participate in a Ruby programming challenge called &lt;a href="http://www.ancientcityruby.com/snake_case/"&gt;Snake Case&lt;/a&gt;. I benchmarked a number of different ways to solve the challenge in Ruby and present the results...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img src="/assets/images/blog/stock/snakes-pexels-photo-7f1ed7d8.jpg" /&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;&lt;img src="/assets/images/blog/stock/snakes-pexels-photo-88dd6b6b.jpg" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Last week &lt;a href="#"&gt;I spoke&lt;/a&gt; at &lt;a href="#"&gt;Ancient City Ruby Conference&lt;/a&gt; where the organizers encouraged people to participate in a Ruby programming challenge called &lt;a href="http://www.ancientcityruby.com/snake_case/"&gt;Snake Case&lt;/a&gt;. I benchmarked a number of different ways to solve the challenge in Ruby and present the results here.&lt;/p&gt;
 
