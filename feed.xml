@@ -68,7 +68,7 @@ def path_count(h, w)
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The expected result for a 10x10 grid is &lt;code&gt;184756&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The expected result for a 10x10 grid is &lt;code&gt;184,756&lt;/code&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;path_count(10, 10)
 # =&amp;gt; 184756
@@ -96,7 +96,7 @@ def path_count(h, w)
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This function give the correct solution for 10x10: &lt;code&gt;184,756&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This function gives the correct solution for 10x10: &lt;code&gt;184,756&lt;/code&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;path_count(10, 10)
 # =&amp;gt; 184756
