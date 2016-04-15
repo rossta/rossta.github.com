@@ -114,7 +114,6 @@ end
 # Per-page layout changes:
 #
 # With no layout
-page "/404.html", layout: false
 page "/playground.html", layout: false
 page "/feed.xml", layout: false
 page "/sitemap.xml", layout: false
