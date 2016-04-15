@@ -237,7 +237,7 @@ order from most to least readable:&lt;/p&gt;
 head around and most readable result. It&amp;rsquo;s easy to see from the recursive implementation how the problem may be divided into smaller sub-problems. The others require some deeper visualization and/or mathematical understanding to &amp;ldquo;grok&amp;rdquo; I feel. The factorial expression seems farthest removed conceptually from the description of the problem. In other words, it&amp;rsquo;s most at odds with my intuition, but I&amp;rsquo;m also not a mathematician so am less inclined to think in those terms.&lt;/p&gt;
 
 &lt;p&gt;How do they compare performance-wise? With &lt;code&gt;benchmark-ips&lt;/code&gt; we can compare the
-iterations/secon and share the results.&lt;/p&gt;
+iterations/second and share the results.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;rsquo;s a file that defines each of the approaches we&amp;rsquo;ve described in separate
 modules and benchmarks the performance for calculating the result for a 10x10
