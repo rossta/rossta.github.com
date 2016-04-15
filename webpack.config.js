@@ -2,13 +2,13 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var Clean = require('clean-webpack-plugin');
 
-module.exports = {
+var siteConfig = {
   entry: {
     index: [
       './source/assets/stylesheets/index.scss',
       './source/assets/javascripts/index.js'
     ],
-    head: './source/assets/javascripts/head.js'
+    head: './source/assets/javascripts/head.js',
   },
 
   resolve: {
@@ -69,3 +69,41 @@ module.exports = {
     }),
   ],
 };
+
+var swConfig = {
+  entry: {
+    serviceworker: './source/assets/javascripts/serviceworker.js',
+  },
+
+  resolve: {
+    root: __dirname + '/source/assets/javascripts',
+  },
+
+  output: {
+    path: __dirname + '/.tmp/dist',
+    filename: 'serviceworker.js',
+  },
+
+  module: {
+    loaders: [
+      {
+        test: /source\/assets\/javascripts\/.*\.js$/,
+        exclude: /node_modules|\.tmp|vendor/,
+        loader: 'babel-loader',
+        query: {
+          // cacheDirectory: true,
+          // presets: ['es2015', 'stage-0', 'babel-preset-react', 'react']
+          presets: ['es2015', 'stage-0']
+        },
+      },
+    ],
+  },
+
+  node: {
+    console: true
+  },
+
+  plugins: [],
+}
+
+module.exports = [ siteConfig, swConfig ];
