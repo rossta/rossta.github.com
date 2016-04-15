@@ -240,7 +240,9 @@ iterations/secon and share the results.
 
 Here's a file that defines each of the approaches we've described in separate
 modules and benchmarks the performance for calculating the result for a 10x10
-grid. Running on my mid-2014 MacBook Pro with MRI ruby-2.3:
+grid. ([Full source](https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb))
+
+Running on my mid-2014 MacBook Pro with MRI ruby-2.3:
 
 ```ruby
 require "benchmark/ips"
