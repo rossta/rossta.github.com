@@ -6,8 +6,8 @@ activate :meta_tags
 activate :external_pipeline,
          name: :webpack,
          command: build? ?
-         "./node_modules/webpack/bin/webpack.js --bail -p" :
-         "./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
+         "BUILD_PRODUCTION=1 ./node_modules/webpack/bin/webpack.js --bail -p" :
+         "BUILD_DEVELOPMENT=1 ./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
          source: ".tmp/dist",
          latency: 1
 

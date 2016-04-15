@@ -2,6 +2,11 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var Clean = require('clean-webpack-plugin');
 
+var definePlugin = new webpack.DefinePlugin({
+  __DEVELOPMENT__: JSON.stringify(JSON.parse(process.env.BUILD_DEVELOPMENT || false)),
+  __PRODUCTION__: JSON.stringify(JSON.parse(process.env.BUILD_PRODUCTION || false))
+});
+
 var siteConfig = {
   entry: {
     index: [
@@ -59,6 +64,7 @@ var siteConfig = {
   },
 
   plugins: [
+    definePlugin,
     new Clean(['.tmp']),
     new ExtractTextPlugin("assets/stylesheets/index.bundle.css"),
     new webpack.optimize.CommonsChunkPlugin("head", "assets/javascripts/head.bundle.js"),
@@ -103,7 +109,7 @@ var swConfig = {
     console: true
   },
 
-  plugins: [],
+  plugins: [definePlugin],
 }
 
 module.exports = [ siteConfig, swConfig ];
