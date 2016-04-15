@@ -58,7 +58,7 @@ def path_count(h, w)
 end
 ```
 
-The expected result for a 10x10 grid is `184756`.
+The expected result for a 10x10 grid is `184,756`.
 
 ```ruby
 path_count(10, 10)
@@ -88,7 +88,7 @@ def path_count(h, w)
 end
 ```
 
-This function give the correct solution for 10x10: `184,756`.
+This function gives the correct solution for 10x10: `184,756`.
 
 ```ruby
 path_count(10, 10)
