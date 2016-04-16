@@ -6,6 +6,13 @@ const offlineResources = [
   '/offline.html'
 ];
 
+var ignoreFetch = [
+  /https?:\/\/api.mixpanel.com\//,
+  /https?:\/\/api.segment.io\//,
+  /https?:\/\/in.getclicky.com\//,
+  /\/__rack\//,
+]
+
 self.addEventListener('install', (event) => {
   log('install event in progress.');
 
@@ -156,8 +163,7 @@ function unableToResolve(event) {
 }
 
 function ignoreFetchEvent(event) {
-  return event.request.method !== 'GET' ||
-     event.request.url.match(/\/__rack\//);
+  return event.request.method !== 'GET' || ignoreFetch.some(regex => event.request.url.match(regex));
 }
 
 log("Hello from ServiceWorker land!", version);
