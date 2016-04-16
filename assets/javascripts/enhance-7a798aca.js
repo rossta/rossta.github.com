@@ -1,7 +1,7 @@
 // ServiceWorker is a progressive technology. Ignore unsupported browsers
 if('serviceWorker' in navigator) {
   log('service worker registration in progress.');
-  navigator.serviceWorker.register('/serviceworker-63fa7f34.js', {
+  navigator.serviceWorker.register('/serviceworker.js', {
     scope: '/'
   }).then(function() {
     log('service worker registration complete.');
