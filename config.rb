@@ -93,7 +93,7 @@ configure :build do
   set :mailchimp_form_id,   '96030b0bda'
   set :segmentio_id, 'NdBtrprkAGAjQryMShljRdVf90saElAU'
 
-  activate :asset_hash
+  activate :asset_hash, ignore: [/^serviceworker.js/]
   activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 end
 
