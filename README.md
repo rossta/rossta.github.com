@@ -1,4 +1,4 @@
-# rossta.github.com
+# rossta.net
 
 Personal website of [Ross Kaffenberger](https://rossta.net):
 
