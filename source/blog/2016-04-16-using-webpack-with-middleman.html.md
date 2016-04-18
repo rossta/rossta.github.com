@@ -17,7 +17,7 @@ I've [hosted this site on Github Pages](/blog/why-i-ditched-wordpress-for-github
 
 By far the biggest change was the [removal of the Sprockets](https://middlemanapp.com/advanced/asset_pipeline/) dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.
 
-Given the "explosion of front-end language and tooling" that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like [Grunt](http://gruntjs.com/), [Gulp](http://gulpjs.com/), [Webpack](webpack.github.io), [Browserify](http://browserify.org/), [Brunch](http://brunch.io/), [Brocolli](http://broccolijs.com/)--to name a few---frameworks like Middleman can't possibly support custom integrations for everything. Instead, Middleman now employs the `external_pipeline` feature which allows "subprocesses" to run alongside the development server or build process.
+Given the "explosion of front-end language and tooling" that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like [Grunt](http://gruntjs.com/), [Gulp](http://gulpjs.com/), [Webpack](webpack.github.io), [Browserify](http://browserify.org/), [Brunch](http://brunch.io/), [Brocolli](http://broccolijs.com/)---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the `external_pipeline` feature which allows "subprocesses" to run alongside the development server or build process.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated Webpack inside Middleman. Dev &amp; build modes</p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/580115759768059904">March 23, 2015</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -90,7 +90,7 @@ I also deleted my Bower configuration and dependencies in favor of switching to
 
 ```sh
 $ npm init
-$ npm install --save-dev wepback
+$ npm install --save-dev webpack
 ```
 
 The external pipeline feature in Middleman provides a mechanism for the
@@ -136,7 +136,7 @@ An optional `:latency` can be used to set the seconds of delay between changes a
 Webpack as a dizzying array of plugins and configuration options. The bare minimum to get JavaScript working with Webpack and Middleman is to set an `entry` option to declare the primary source file(s) entry point and where it should compile to as the `output`:
 
 ```javascript
-# webpack.config.js
+// webpack.config.js
 var webpack = require('webpack');
 
 module.exports = {
@@ -164,7 +164,7 @@ $ npm install --save-dev babel babel-loader babel-preset-es2015 babel-preset-sta
 ```
 
 ```javascript
-# webpack.config.js
+// webpack.config.js
 module.exports = {
   // ...
 
@@ -192,7 +192,7 @@ available in each of my JavaScript source files without declaring a separate
 `import` everywhere. This is done with the `webpack.ProvidePlugin`:
 
 ```javascript
-# webpack.config.js
+// webpack.config.js
 module.exports = {
   // ...
 
@@ -217,7 +217,7 @@ $ npm install --save-dev node-sass sass-loader extract-text-webpack-plugin
 ```
 
 ```javascript
-# webpack.config.js
+// webpack.config.js
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
@@ -249,7 +249,7 @@ module.exports = {
 __Enable feature flags__. [I love puts debugging](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html) so I've got quite a few log statements in my JavaScript code. I don't really want these log statements in the production build of the website, so I can use Webpack to allow me to enable logging only in development:
 
 ```javascript
-# webpack.config.js
+// webpack.config.js
 var definePlugin = new webpack.DefinePlugin({
   __DEVELOPMENT__: JSON.stringify(JSON.parse(process.env.BUILD_DEVELOPMENT || false)),
   __PRODUCTION__: JSON.stringify(JSON.parse(process.env.BUILD_PRODUCTION || false))
