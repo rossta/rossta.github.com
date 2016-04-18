@@ -5,10 +5,294 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-04-11T20:00:00-04:00</updated>
+  <updated>2016-04-15T20:00:00-04:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Using Webpack with Middleman</title>
+    <link rel="alternate" href="/blog/using-webpack-with-middleman.html"/>
+    <id>/blog/using-webpack-with-middleman.html</id>
+    <published>2016-04-15T20:00:00-04:00</published>
+    <updated>2016-04-15T20:00:00-04:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;&lt;img src="/assets/images/blog/stock/tundra-hike-pexels-photo-9b187747.jpg"&gt;&lt;/p&gt;
+
+&lt;p&gt;I’ve &lt;a href="/blog/why-i-ditched-wordpress-for-github.html"&gt;hosted this site on Github Pages&lt;/a&gt; with the &lt;a href="https://middlemanapp.com/"&gt;Middleman static site framework&lt;/a&gt; for several years now. To keep up with the most recent release of the framework, I decided to &lt;a href="https://middlemanapp.com/basics/upgrade-v4/"&gt;upgrade the site to Middleman version 4&lt;/a&gt;. There were some significant changes...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;img src="/assets/images/blog/stock/tundra-hike-pexels-photo-9b187747.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve &lt;a href="/blog/why-i-ditched-wordpress-for-github.html"&gt;hosted this site on Github Pages&lt;/a&gt; with the &lt;a href="https://middlemanapp.com/"&gt;Middleman static site framework&lt;/a&gt; for several years now. To keep up with the most recent release of the framework, I decided to &lt;a href="https://middlemanapp.com/basics/upgrade-v4/"&gt;upgrade the site to Middleman version 4&lt;/a&gt;. There were some significant changes to the configuration options and helper methods, which are &lt;a href="https://middlemanapp.com/basics/upgrade-v4/"&gt;well documented&lt;/a&gt; on the Middleman blog.&lt;/p&gt;
+
+&lt;p&gt;By far the biggest change was the &lt;a href="https://middlemanapp.com/advanced/asset_pipeline/"&gt;removal of the Sprockets&lt;/a&gt; dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.&lt;/p&gt;
+
+&lt;p&gt;Given the &amp;ldquo;explosion of front-end language and tooling&amp;rdquo; that has happened over the past few years, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like Grunt, Gulp, Webpack, Browserify, Brunch, Brocolli&amp;emdash;name a few&amp;emdash;frameworks like Middleman can&amp;rsquo;t possibly support custom integrations for everything. Instead the Sprockets asset pipeline has been replaced with the &lt;code&gt;external_pipeline&lt;/code&gt; feature which allows Middleman to run &amp;ldquo;subprocesses&amp;rdquo; alongside the development server and build phase.&lt;/p&gt;
+
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated Webpack inside Middleman. Dev &amp;amp; build modes&lt;/p&gt;&amp;mdash; Thomas Reynolds (@tdreyno) &lt;a href="https://twitter.com/tdreyno/status/580115759768059904"&gt;March 23, 2015&lt;/a&gt;&lt;/blockquote&gt;
+
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+&lt;p&gt;Exciting stuff.&lt;/p&gt;
+
+&lt;h3&gt;Before the upgrade&lt;/h3&gt;
+
+&lt;p&gt;Before I upgrading the Middleman version 4, I had been using built-in Sprockets integration to configure, import, and transpile assets in the rossta.net static build. This required some custom imports in my Middleman &lt;a href="https://github.com/rossta/rossta.github.com/blob/96444337b05e6a996b8a6f2b63f353194bc9eb4b/config.rb#L122"&gt;&lt;code&gt;config.rb&lt;/code&gt;&lt;/a&gt; to make &lt;a href="http://foundation.zurb.com/"&gt;Foundation&lt;/a&gt; CSS and JavaScript available to the Sprockets runtime.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# config.rb
+compass_config do |config|
+  # Require any additional compass plugins here.
+  config.add_import_path &amp;quot;../bower_components/foundation/scss&amp;quot;
+
+  # Set this to the root of your project when deployed:
+  config.http_path = &amp;quot;/&amp;quot;
+  config.css_dir = &amp;quot;stylesheets&amp;quot;
+  config.sass_dir = &amp;quot;stylesheets&amp;quot;
+  config.images_dir = &amp;quot;images&amp;quot;
+  config.javascripts_dir = &amp;quot;javascripts&amp;quot;
+end
+
+after_configuration do
+  @bower_config = JSON.parse(IO.read(&amp;quot;#{root}/.bowerrc&amp;quot;))
+  sprockets.append_path File.join(root, @bower_config[&amp;quot;directory&amp;quot;])
+
+  sprockets.import_asset &amp;quot;foundation/js/vendor/modernizr.js&amp;quot;
+  sprockets.import_asset &amp;quot;foundation/js/vendor/jquery.js&amp;quot;
+  sprockets.import_asset &amp;quot;foundation/js/vendor/jquery.cookie.js&amp;quot;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This configuration made it possible to require assets in JavaScript with the
+&amp;ldquo;magic&amp;rdquo; Sprocket require comments, like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// 3rd party javascript
+//= require foundation/js/vendor/jquery
+//= require foundation/js/vendor/jquery.cookie
+//= require foundation
+
+// My custom javascript
+//= require zen
+//= require tracking
+//= require onload
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;With Sprockets dropped in Middleman version 4, this approach would no longer be
+possible so I had to rethink the build pipeline. I preferred to support multiple
+bundles and also wanted to upgrade my custom JavaScript to ES2015 syntax. For
+this, &lt;a href="#"&gt;Webpack&lt;/a&gt; appeared to offer some nice advantages, though, many of the
+build tools and systems mentioned earlier would also make good choices and fit
+right into the new Middleman external pipeline feature.&lt;/p&gt;
+
+&lt;h3&gt;Enabling the External Pipeline&lt;/h3&gt;
+
+&lt;p&gt;First step was to upgrade Middleman and remove Sprockets-based gems and
+configuration from &lt;code&gt;config.rb&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;middleman&amp;quot;, &amp;quot;~&amp;gt; 4&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ bundle update middleman
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I also deleted my Bower configuration and dependencies in favor of switching to
+&lt;code&gt;npm&lt;/code&gt; to manage third-party assets. To setup my npm assets:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ npm init
+$ npm install --save-dev wepback
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The external pipeline feature in Middleman provides a mechanism for the
+middleman development server to manage processes that live outside the Ruby
+runtime. For Webpack, this means telling Middleman how to trigger the &lt;a href="https://webpack.github.io/docs/tutorials/getting-started/#setup-compilation"&gt;Webpack
+compilation command&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code&gt;config.rb&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;activate :external_pipeline,
+         name: :webpack,
+         command: build? ?
+         &amp;quot;./node_modules/webpack/bin/webpack.js --bail -p&amp;quot; :
+         &amp;quot;./node_modules/webpack/bin/webpack.js --watch -d --progress --color&amp;quot;,
+         source: &amp;quot;.tmp/dist&amp;quot;,
+         latency: 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I copied this configuration directly from the &lt;a href="middleman/middleman-core/lib/middleman-core/extensions/external_pipeline.rb"&gt;Middleman guides source&lt;/a&gt; which I learned made the same change recently.&lt;/p&gt;
+
+&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;Commit upgrading Middleman Guides from Asset Pipeline to Webpack: &lt;a href="https://t.co/uP4LH19SfJ"&gt;https://t.co/uP4LH19SfJ&lt;/a&gt;&lt;/p&gt;&amp;mdash; Thomas Reynolds (@tdreyno) &lt;a href="https://twitter.com/tdreyno/status/678711274516033536"&gt;December 20, 2015&lt;/a&gt;&lt;/blockquote&gt;
+
+&lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+
+&lt;p&gt;Specifying &lt;code&gt;activate :external_pipeline&lt;/code&gt; enables Middleman&amp;rsquo;s external pipeline
+extension (&lt;a href="https://github.com/middleman/middleman/blob/6872e07d34ab037897e8466db634efb9b49b4af5/middleman-core/lib/middleman-core/extensions/external_pipeline.rb"&gt;source&lt;/a&gt;). The three required options are worth noting:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# middleman/middleman-core/lib/middleman-core/extensions/external_pipeline.rb
+option :name, nil, &amp;#39;The name of the pipeline&amp;#39;, required: true
+option :command, nil, &amp;#39;The command to initialize&amp;#39;, required: true
+option :source, nil, &amp;#39;Path to merge into sitemap&amp;#39;, required: true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The key point to understand here is Middleman will expect the external pipeline to output the compiled files to a directory which you specify here as &lt;code&gt;:source&lt;/code&gt;. We arbitrarily chose &lt;code&gt;.tmp/dist&lt;/code&gt; but it doesn&amp;rsquo;t matter so long as you use a dedicated destination. We&amp;rsquo;ll need to configure webpack separately to send its output here.&lt;/p&gt;
+
+&lt;p&gt;Middleman will trigger the &lt;code&gt;:command&lt;/code&gt; in a thread and buffer its output to the Middleman logger so you can see what&amp;rsquo;s going on all in a single output stream. We use the &lt;code&gt;build?&lt;/code&gt; flag to modify the &lt;code&gt;webpack&lt;/code&gt; command for builds (which will fail fast) and development, where we want to watch for file changes and reload automatically.&lt;/p&gt;
+
+&lt;p&gt;An optional &lt;code&gt;:latency&lt;/code&gt; can be used to set the seconds of delay between changes and refreshes.&lt;/p&gt;
+
+&lt;h3&gt;Setting up Webpack&lt;/h3&gt;
+
+&lt;p&gt;Webpack as a dizzying array of plugins and configuration options. The bare minimum to get JavaScript working with Webpack and Middleman is to set an &lt;code&gt;entry&lt;/code&gt; option to declare the primary source file(s) entry point and where it should compile to as the &lt;code&gt;output&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+var webpack = require(&amp;#39;webpack&amp;#39;);
+
+module.exports = {
+  entry: {
+    site: &amp;#39;./source/javascripts/site.js&amp;#39;
+  },
+
+  resolve: {
+    root: __dirname + &amp;#39;/source/javascripts&amp;#39;,
+  },
+
+  output: {
+    path: __dirname + &amp;#39;/.tmp/dist&amp;#39;,
+    filename: &amp;#39;javascripts/[name].js&amp;#39;,
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is not a full Webpack tutorial, but it worth noting we can use Webpack to do:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Transpile from ES2015 syntax&lt;/strong&gt;. We can pull in Babel dependencies and desired presets from &lt;code&gt;npm&lt;/code&gt; and declare &lt;code&gt;loaders&lt;/code&gt; in Webpack config to customize the compilation stages. This meant I was able to rewrite much of my custom JavaScript from ES5 to ES2015.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ npm install --save-dev babel babel-loader babel-preset-es2015 babel-preset-stage-0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+module.exports = {
+  // ...
+
+  module: {
+    loaders: [
+      {
+        test: /source\/assets\/javascripts\/.*\.js$/,
+        exclude: /node_modules|\.tmp|vendor/,
+        loader: &amp;#39;babel-loader&amp;#39;,
+        query: {
+          presets: [&amp;#39;es2015&amp;#39;, &amp;#39;stage-0&amp;#39;]
+        },
+      },
+      // ...
+    ],
+  }
+
+  // ...
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Declare global variables&lt;/strong&gt;. I rely on the jQuery &lt;code&gt;$&lt;/code&gt; sign in enough places that
+I decided to configure Webpack to treat it as a global variable so it would be
+available in each of my JavaScript source files without declaring a separate
+&lt;code&gt;import&lt;/code&gt; everywhere. This is done with the &lt;code&gt;webpack.ProvidePlugin&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+module.exports = {
+  // ...
+
+  plugins: [
+    // ...
+    new webpack.ProvidePlugin({
+      $: &amp;quot;jquery&amp;quot;,
+      jQuery: &amp;quot;jquery&amp;quot;,
+      &amp;quot;window.jQuery&amp;quot;: &amp;quot;jquery&amp;quot;
+    }),
+  ],
+
+  // ...
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Transpile SCSS to CSS&lt;/strong&gt;. Though Middleman still provides an integration with
+Compass, &lt;a href="https://benfrain.com/lightning-fast-sass-compiling-with-libsass-node-sass-and-grunt-sass/"&gt;word on the street&lt;/a&gt; is that Node tools like &lt;code&gt;node-sass&lt;/code&gt; out-perform the Ruby Compass implementation. With the node-sass and some additional Webpack dependencies, we can transpile SCSS with Webpack to a separate css bundle:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ npm install --save-dev node-sass sass-loader extract-text-webpack-plugin
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+var ExtractTextPlugin = require(&amp;#39;extract-text-webpack-plugin&amp;#39;);
+
+module.exports = {
+  // ...
+
+  entry: {
+    styles: &amp;#39;./source/assets/stylesheets/styles.scss&amp;#39;,
+    // ...
+  },
+
+  module: {
+    loaders: [
+      // ...
+      {
+        test: /.*\.scss$/,
+        loader: ExtractTextPlugin.extract(
+          &amp;quot;style&amp;quot;,
+          &amp;quot;css!sass?sourceMap&amp;amp;includePaths[]=&amp;quot; + __dirname + &amp;quot;/node_modules&amp;quot;
+        )
+      },
+      // Load plain-ol&amp;#39; vanilla CSS
+      { test: /\.css$/, loader: &amp;quot;style!css&amp;quot; },
+    ],
+  }
+  // ...
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Enable feature flags&lt;/strong&gt;. &lt;a href="https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html"&gt;I love puts debugging&lt;/a&gt; so I&amp;rsquo;ve got quite a few log statements in my JavaScript code. I don&amp;rsquo;t really want these log statements in the production build of the website, so I can use Webpack to allow me to enable logging only in development:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+var definePlugin = new webpack.DefinePlugin({
+  __DEVELOPMENT__: JSON.stringify(JSON.parse(process.env.BUILD_DEVELOPMENT || false)),
+  __PRODUCTION__: JSON.stringify(JSON.parse(process.env.BUILD_PRODUCTION || false))
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I tell Webpack to makde the &lt;code&gt;__DEVELOPMENT__&lt;/code&gt; and &lt;code&gt;__PRODUCTION__&lt;/code&gt; variables
+available based on the presence on the &lt;code&gt;BUILD_DEVELOPMENT&lt;/code&gt; and
+&lt;code&gt;BUILD_DEVELOPMENT&lt;/code&gt; environment variables. I pass these variables to the webpack
+commands I&amp;rsquo;m using in &lt;code&gt;config.rb&lt;/code&gt; for the build and development Middleman
+contexts respectively:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;activate :external_pipeline,
+         name: :webpack,
+         command: build? ?
+         &amp;quot;BUILD_PRODUCTION=1 ./node_modules/webpack/bin/webpack.js --bail -p&amp;quot; :
+         &amp;quot;BUILD_DEVELOPMENT=1 ./node_modules/webpack/bin/webpack.js --watch -d --progress --color&amp;quot;,
+         source: &amp;quot;.tmp/dist&amp;quot;,
+         latency: 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I can then take advantage of feature flags in my JavaScript:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;function log() {
+  if (__DEVELOPMENT__) {
+    console.log(...arguments);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;My development experience is greatly enhanced with the auto-recompile feature of
+webpack along with the &lt;code&gt;middleman-livereload&lt;/code&gt; extension. Though I haven&amp;rsquo;t tried
+the &lt;code&gt;webpack-dev-server&lt;/code&gt; and &lt;a href="https://webpack.github.io/docs/hot-module-replacement-with-webpack.html"&gt;hot-reloading of Webpack modules&lt;/a&gt;, it seems possible to set this up to work with Middleman.&lt;/p&gt;
+
+&lt;p&gt;You can go much further with Webpack of course. For more info, check out the &lt;a href="https://webpack.github.io/"&gt;Webpack guides&lt;/a&gt; and Pete Hunt&amp;rsquo;s &lt;a href="https://github.com/petehunt/webpack-howto"&gt;Webpack How-to&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3&gt;Moving away from Sprockets&lt;/h3&gt;
+
+&lt;p&gt;The Middleman team has taken a big risk in dropping support for the primary asset management solution for Rails developers, likely the primary maintainers of Middleman apps. I believe it was the right choice. As someone who has been through the upgrade process, I can confirm it was challenging, but I have seen how great the payoff can be.&lt;/p&gt;
+
+&lt;p&gt;In my opinion, if the Rails community wishes to stay relevant in the coming years, it would be wise to adopt a similar strategy: to &amp;ldquo;future proof&amp;rdquo; the rapidly changing front-end environment, Rails should drop Sprockets and embrace the external pipeline like Middleman.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Ancient City Ruby Snake Case</title>
     <link rel="alternate" href="/blog/ancient-city-snake-case.html"/>
@@ -1382,337 +1666,6 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &amp;quot;7pm&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;See you there.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>How to write a simple web crawler in Ruby - revisited</title>
-    <link rel="alternate" href="/blog/how-to-write-a-simple-web-crawler-in-ruby-revisited.html"/>
-    <id>/blog/how-to-write-a-simple-web-crawler-in-ruby-revisited.html</id>
-    <published>2016-01-26T19:00:00-05:00</published>
-    <updated>2016-01-26T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-eda44250.jpg"&gt;&lt;/p&gt;
-
-&lt;p&gt;Let’s build a simple web crawler in Ruby. For inspiration, I’d like to
-to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin’s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
-
-&lt;p&gt;We’ll adapt Skork’s original goals and...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;img alt="Web Crawl" src="/assets/images/blog/stock/spider-web-pexels-photo-eda44250.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s build a simple web crawler in Ruby. For inspiration, I&amp;rsquo;d like to
-to revisit &lt;a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/"&gt;Alan Skorkin&amp;rsquo;s How to Write a Simple Web Crawler in Ruby&lt;/a&gt; and attempt to achieve something similar with a fresh perspective.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ll adapt Skork&amp;rsquo;s original goals and provide a few of our own:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;must be able to crawl just a single domain&lt;/li&gt;
-&lt;li&gt;must be able to limit number of pages to crawl&lt;/li&gt;
-&lt;li&gt;the results should be represented as structured data so we don&amp;rsquo;t have an incomprehensible soup of content&lt;/li&gt;
-&lt;li&gt;the results should be enumerable so we can have flexibility in how they&amp;rsquo;re handled&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;aside class="callout panel"&gt;
-&lt;p&gt;
-  Caveats! Please keep in mind that there are, of course, &lt;a href="http://webscraper.io/"&gt;many&lt;/a&gt; &lt;a href="http://scrapy.org/"&gt;resources&lt;/a&gt; for
-  using resilient, well-tested &lt;a href="https://www.import.io/"&gt;crawlers&lt;/a&gt; in a variety of languages. We have mere academic intentions
-  here so we choose to ignore many important concerns, such as client-side rendering, parallelism, and handling failure, as a matter of convenience.
-&lt;/p&gt;
-&lt;/aside&gt;
-
-&lt;h3&gt;Breaking it down&lt;/h3&gt;
-
-&lt;p&gt;For this exercise, we&amp;rsquo;re going to crawl &lt;a href="http://www.programmableweb.com/"&gt;Programmable Web&lt;/a&gt; to extract data from their &lt;a href="http://www.programmableweb.com/apis/directory"&gt;API directory&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Rather than take the naive approach of grabbing all content from any page, we&amp;rsquo;re going to build a webcrawler that emits
-structured data. Traversing from the first page of the api directory, our
-crawler will visit web pages like a nodes of a tree, collecting data and
-additional urls along the way.&lt;/p&gt;
-
-&lt;p&gt;Imagine that the results of our web crawl as a nested collection of
-hashes with meaningful key-value pairs.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# results
-[
-  {
-    name: &amp;quot;Google Maps&amp;quot;,
-    api_provider: &amp;quot;https://google.com&amp;quot;
-    api_homepage: &amp;quot;https://developers.google.com/maps/&amp;quot;
-    categories: [&amp;quot;Mapping&amp;quot;, &amp;quot;Viewer&amp;quot;],
-    provider_formats: [&amp;quot;JSON&amp;quot;, &amp;quot;KML&amp;quot;, &amp;quot;XML&amp;quot;]
-    ...
-  },
-  {
-    name: &amp;quot;Twitter&amp;quot;,
-    api_provider: &amp;quot;https://twitter.com&amp;quot;
-    api_homepage: &amp;quot;https://dev.twitter.com/rest/public&amp;quot;
-    categories: [&amp;quot;Social&amp;quot;, &amp;quot;Blogging&amp;quot;],
-    provider_formats: [&amp;quot;Atom&amp;quot;, &amp;quot;JSON&amp;quot;, &amp;quot;REST&amp;quot;, &amp;quot;RSS&amp;quot;, &amp;quot;XML&amp;quot;]
-    ...
-  },
-]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;aside class="callout panel"&gt;
-&lt;p&gt;
-  When using a web crawler, be aware of the limitations described in the website&amp;rsquo;s &lt;a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard"&gt;robots.txt&lt;/a&gt; file. In this post, we skip automated parsing and detection of &lt;a href="http://www.programmableweb.com/robots.txt"&gt;Programmable Web&amp;rsquo;s robots.txt&lt;/a&gt; to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
-&lt;/p&gt;
-&lt;/aside&gt;
-
-&lt;h3&gt;Designing the surface&lt;/h3&gt;
-
-&lt;p&gt;If you&amp;rsquo;ve been following my posts lately, you know that &lt;a href="https://rossta.net/blog/ruby-enumerable.html"&gt;I love Enumerable&lt;/a&gt; and you may not be surprised that I&amp;rsquo;d like to model our structured, website data with an &lt;a href="/blog/what-is-enumerator.html"&gt;Enumerator&lt;/a&gt;. This will provide a familiar, flexible interface that can be adapted for logging, storage, transformation, and a wide range of use cases.&lt;/p&gt;
-
-&lt;p&gt;I want to simply ask a &lt;code&gt;spider&lt;/code&gt; object for its results and get back an enumerator:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;spider.results
-=&amp;gt; #&amp;lt;Enumerator: ...&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;ll be able to do some interesting things, like stream the
-results lazily into a flexible storage engine, e.g. &lt;a href="https://www.mongodb.org/"&gt;mongodb&lt;/a&gt; or &lt;code&gt;PStore&lt;/code&gt;,
-available from the &lt;a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/pstore/rdoc/PStore.html"&gt;Ruby standard library&lt;/a&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;pstore&amp;quot;
-store  = PStore.new(&amp;quot;api_directory.pstore&amp;quot;)
-
-# create `spider`, then ...
-
-spider.results.lazy.take(50).each_with_index do |result, i|
-  store.transaction do
-    store[result[:name]] = result
-    store.commit
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;Writing the crawler&lt;/h3&gt;
-
-&lt;p&gt;We&amp;rsquo;re going to write a &lt;code&gt;Spider&lt;/code&gt; class to enumerate website data. Our spider implementation borrows heavily from &lt;a href="https://github.com/joeyAghion/spidey"&gt;joeyAghion&amp;rsquo;s spidey&lt;/a&gt; gem, described as a &amp;ldquo;loose framework for crawling and scraping websites&amp;rdquo; and Python&amp;rsquo;s venerable &lt;a href="http://scrapy.org/"&gt;Scrapy&lt;/a&gt; project, which allows you to scrape websites &amp;ldquo;in a fast, simple, yet extensible way.&amp;rdquo; Both resources achieve the goals of being easy-to-use and extensible.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it &lt;a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb"&gt;on GitHub&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Our &lt;code&gt;Spider&lt;/code&gt; will maintain a set of urls to visit, data is collects, and a set of url &amp;ldquo;handlers&amp;rdquo; that will describe how each page should be processed. We&amp;rsquo;ll take advantage of one external dependency, &lt;code&gt;mechanize&lt;/code&gt;, to handle interaction with the pages we visit - to extract data, resolve urls, follow redirects, etc. Below is the &lt;code&gt;#enqueue&lt;/code&gt; method to add urls and their handlers to a running list in our spider.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;quot;mechanize&amp;quot; # as of this writing, the latest release is 2.7.4
-
-class Spider
-  def enqueue(url, method)
-    url = agent.resolve(url).to_s
-    return if @handlers[url]
-    @urls &amp;lt;&amp;lt; url
-    @handlers[url] ||= { method: method, data: {} }
-  end
-
-  private
-
-  def agent
-    @agent ||= Mechanize.new
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As we process each page we&amp;rsquo;ll need a way to record the structured data we extract from various pages. We&amp;rsquo;ll expose a &lt;code&gt;#record&lt;/code&gt; method append a hash of data to the &lt;code&gt;@results&lt;/code&gt; array.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class Spider
-  def record(data = {})
-    @results &amp;lt;&amp;lt; data
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Since our &lt;code&gt;Spider&lt;/code&gt; will only know how to enumerate urls and record data, we&amp;rsquo;ll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we&amp;rsquo;ll call this object a &amp;ldquo;processor&amp;rdquo;. The processor will respond to the messages &lt;code&gt;#root&lt;/code&gt; and &lt;code&gt;#handler&lt;/code&gt; - the first url and handler method to enqueue for the spider, respectively. We&amp;rsquo;ll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class Spider
-  REQUEST_INTERVAL = 5
-  MAX_URLS = 1000
-
-  def initialize(processor, attrs = {})
-    @processor = processor
-
-    @urls     = []
-    @results  = []
-    @handlers = {}
-
-    @interval = attrs.fetch(:interval, REQUEST_INTERVAL)
-    @max_urls = attrs.fetch(:max_urls, MAX_URLS)
-
-    enqueue(processor.root, processor.handler)
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;Enumerator Two Ways&lt;/h3&gt;
-
-&lt;p&gt;Now for the real meat of our young &lt;code&gt;Spider&lt;/code&gt;. The &lt;code&gt;#results&lt;/code&gt; method is the key public interface: it enumerates the enqueued urls and yields members of the &lt;code&gt;@results&lt;/code&gt; collection.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class Spider
-  def results
-    return enum_for(:results) unless block_given?
-
-    index = @results.length
-    enqueued_urls.each do |url, handler|
-
-      # process url
-      @processor.send(handler[:method], agent.get(url), handler[:data])
-
-      if block_given? &amp;amp;&amp;amp; @results.length &amp;gt; index
-        yield @results.last
-        index += 1
-      end
-
-      # crawl delay
-      sleep @interval if @interval &amp;gt; 0
-    end
-  end
-
-  private
-
-  def enqueued_urls
-    Enumerator.new do |y|
-      index = 0
-      while index &amp;lt; @urls.count &amp;amp;&amp;amp; index &amp;lt;= @max_urls
-        url = @urls[index]
-        index += 1
-        next unless url
-        y.yield url, @handlers[url]
-      end
-    end
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;An interesting thing to note is that the size of our url queue and the collected results may be growing as we crawl more pages. For the &lt;code&gt;#enqueued_urls&lt;/code&gt; private method, we&amp;rsquo;re using an &lt;code&gt;Enumerator&lt;/code&gt; to wrap the logic for iterating over the list of &lt;code&gt;@urls&lt;/code&gt; and maintaining state, like the &lt;code&gt;index&lt;/code&gt;. The &lt;code&gt;Enumerator&lt;/code&gt; class is well-suited to represent a lazily generated collection.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def enqueued_urls
-  Enumerator.new do |y|
-    # ...
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I find it to be a more expressive way to indicate we&amp;rsquo;re enumerating values &amp;ldquo;on demand&amp;rdquo; as opposed to &amp;ldquo;eagerly&amp;rdquo;, like a typical collection.&lt;/p&gt;
-
-&lt;p&gt;Notice we&amp;rsquo;re also returning an enumerator from &lt;code&gt;#results&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def results
-  return enum_for(:results) unless block_given?
-  # ...
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This technique provides the method caller to more flexibility when determining
-how to handler the results. While you could pass a block to consume the
-results, e.g., &lt;code&gt;spider.results { |r| puts r.inspect }&lt;/code&gt;, this is an eager
-operation. We&amp;rsquo;d have to wait for all the pages to be processed before continuing
-with the block. Returning an enumerator offers the potential to stream results
-to something like a data store.&lt;/p&gt;
-
-&lt;p&gt;Why not include &lt;code&gt;Enumerable&lt;/code&gt; in our &lt;code&gt;Spider&lt;/code&gt; and implement &lt;code&gt;#each&lt;/code&gt; instead? As pointed out in &lt;a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/"&gt;Arkency&amp;rsquo;s Stop including Enumerable, return Enumerator
-instead&lt;/a&gt;, our
-&lt;code&gt;Spider&lt;/code&gt; class doesn&amp;rsquo;t itself represent a collection, so exposing the &lt;code&gt;#results&lt;/code&gt;
-method as an enumerator is more appropriate.&lt;/p&gt;
-
-&lt;h3&gt;From Soup to Net Results&lt;/h3&gt;
-
-&lt;p&gt;Our &lt;code&gt;Spider&lt;/code&gt; is now functional so we can move onto the details of extracting data from an actual website.&lt;/p&gt;
-
-&lt;p&gt;Our processor, &lt;code&gt;ProgrammableWeb&lt;/code&gt; will be responsible for wrappin a &lt;code&gt;Spider&lt;/code&gt; instance and extracting data from
-the pages it visits. As mentioned previously, our processor will need to
-define a root url and initial handler method, for which defaults are provided, and delegate the &lt;code&gt;#results&lt;/code&gt; method to a &lt;code&gt;Spider&lt;/code&gt; instance:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class ProgrammableWeb
-  attr_reader :root, :handler
-
-  def initialize(root: &amp;quot;https://www.programmableweb.com/apis/directory&amp;quot;, handler: :process_index, **options)
-    @root = root
-    @handler = handler
-    @options = options
-  end
-
-  def results(&amp;amp;block)
-    spider.results(&amp;amp;block)
-  end
-
-  private
-
-  def spider
-    @spider ||= Spider.new(self, @options)
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;ProgrammableWeb&lt;/code&gt; will define handler methods that deserialize a web page into additional urls and data to add to our collection of results.
-Our spider will invoke the handlers (as seen above with &lt;code&gt;@processor.send(method, agent.get(url), data)&lt;/code&gt;). Each handler method will have the following signature&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def handler_method(page, data = {})
-  # enqueue urls and/or record data
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&amp;hellip; where &lt;code&gt;page&lt;/code&gt; is an instance of &lt;code&gt;Mechanize::Page&lt;/code&gt; (&lt;a href="http://docs.seattlerb.org/mechanize/Mechanize/Page.html"&gt;docs&lt;/a&gt;) providing a number of methods for interacting with html content:&lt;/p&gt;
-
-&lt;p&gt;The root handler method, &lt;code&gt;ProgrammableWeb#process_index&lt;/code&gt;, will extract api names in the
-index list, enqueue api detail pages and additional, paginated indexes. As data
-is collected, it may be passed on to handlers further down the tree via
-&lt;code&gt;Spider#enqueue&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def process_index(page, data = {})
-  page.links_with(href: %r{\?page=\d+}).each do |link|
-    spider.enqueue(link.href, :process_index)
-  end
-
-  page.links_with(href: %r{/api/\w+$}).each do |link|
-    spider.enqueue(link.href, :process_api, name: link.text)
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To process api detail pages, we&amp;rsquo;ll define a separate handler. Since these pages
-will represent &amp;ldquo;leaves&amp;rdquo; in this exercise, we&amp;rsquo;ll merge the data passed in with
-that extracted from the page and pass it along to &lt;code&gt;Spider#record&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def process_api(page, data = {})
-  fields = page.search(&amp;quot;#tabs-content .field&amp;quot;).each_with_object({}) do |tag, o|
-    key = tag.search(&amp;quot;label&amp;quot;).text.strip.downcase.gsub(%r{[^\w]+}, &amp;#39; &amp;#39;).gsub(%r{\s+}, &amp;quot;_&amp;quot;).to_sym
-    val = tag.search(&amp;quot;span&amp;quot;).text
-    o[key] = val
-  end
-
-  categories = page.search(&amp;quot;article.node-api .tags&amp;quot;).first.text.strip.split(/\s+/)
-
-  spider.record data.merge(fields).merge(categories: categories)
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As we saw earlier, recorded data is emitted in the &lt;code&gt;Spider#results&lt;/code&gt; method.&lt;/p&gt;
-
-&lt;p&gt;Now we can make use of our &lt;code&gt;ProgrammableWeb&lt;/code&gt; crawler as intended with simple
-instantiation and the ability to enumerate results as a stream of data:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;spider = ProgrammableWeb.new
-
-spider.results.lazy.take(5).each_with_index do |result, i|
-  puts &amp;quot;%-3s: %s&amp;quot; % [i, result.inspect]
-end
-
-# 0 : {:name=&amp;gt;&amp;quot;Facebook&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://facebook.com&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://api.facebook.com/restserver.php&amp;quot;, :api_homepage=&amp;gt;&amp;quot;https://developers.facebook.com/&amp;quot;, :primary_category=&amp;gt;&amp;quot;Social&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Webhooks&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;JSON, REST&amp;quot;, :ssl_support=&amp;gt;&amp;quot;Yes&amp;quot;, :api_kits=&amp;gt;&amp;quot;http://developers.facebook.com/documentation.php?doc=clients&amp;quot;, :api_forum=&amp;gt;&amp;quot;http://forum.developers.facebook.com/&amp;quot;, :twitter_url=&amp;gt;&amp;quot;http://twitter.com/fbplatform&amp;quot;, :developer_support=&amp;gt;&amp;quot;http://developers.facebook.com/group.php?gid=2205007948&amp;quot;, :console_url=&amp;gt;&amp;quot;http://developers.facebook.com/tools/explorer&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;API Key, OAuth 2, Username/password&amp;quot;, :categories=&amp;gt;[&amp;quot;Social&amp;quot;, &amp;quot;Webhooks&amp;quot;]}
-# 1 : {:name=&amp;gt;&amp;quot;LinkedIn&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://www.linkedin.com/&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://api.linkedin.com/v1/&amp;quot;, :api_homepage=&amp;gt;&amp;quot;https://developer.linkedin.com/docs&amp;quot;, :primary_category=&amp;gt;&amp;quot;Social&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Enterprise&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;JSON, JSONP, REST, XML&amp;quot;, :other_options=&amp;gt;&amp;quot;JavaScript&amp;quot;, :ssl_support=&amp;gt;&amp;quot;Yes&amp;quot;, :api_forum=&amp;gt;&amp;quot;https://developer.linkedin.com/forum&amp;quot;, :twitter_url=&amp;gt;&amp;quot;https://twitter.com/linkedindev&amp;quot;, :console_url=&amp;gt;&amp;quot;http://developer.linkedinlabs.com/jsapi-console/#examples/login/simple.html&amp;amp;{&amp;amp;quot;framework&amp;amp;quot;:&amp;amp;quot;platform.linkedin.com/in.js&amp;amp;quot;,&amp;amp;quot;frameworkurl&amp;amp;quot;:&amp;amp;quot;&amp;amp;quot;,&amp;amp;quot;apikey&amp;amp;quot;:&amp;amp;quo&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;OAuth 2&amp;quot;, :categories=&amp;gt;[&amp;quot;Social&amp;quot;, &amp;quot;Enterprise&amp;quot;]}
-# 2 : {:name=&amp;gt;&amp;quot;Skype&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://skype.com&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://skype.com&amp;quot;, :api_homepage=&amp;gt;&amp;quot;http://www.skype.com/en/developer/&amp;quot;, :primary_category=&amp;gt;&amp;quot;Telephony&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Chat, Messaging, Video, Voice&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;Unspecified&amp;quot;, :other_options=&amp;gt;&amp;quot;Skype proprietary&amp;quot;, :ssl_support=&amp;gt;&amp;quot;Yes&amp;quot;, :api_kits=&amp;gt;&amp;quot;https://developer.skype.com/Docs/Web https://developer.skype.com/wiki/Java_API&amp;quot;, :api_forum=&amp;gt;&amp;quot;http://forum.skype.com/index.php?showforum=16&amp;quot;, :developer_support=&amp;gt;&amp;quot;http://forum.skype.com/index.php?showforum=16&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;Unspecified&amp;quot;, :categories=&amp;gt;[&amp;quot;Telephony&amp;quot;, &amp;quot;Chat,&amp;quot;, &amp;quot;Messaging,&amp;quot;, &amp;quot;Video,&amp;quot;, &amp;quot;Voice&amp;quot;]}
-# 3 : {:name=&amp;gt;&amp;quot;Twitter&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://twitter.com&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://twitter.com/statuses/&amp;quot;, :api_homepage=&amp;gt;&amp;quot;https://dev.twitter.com/rest/public&amp;quot;, :primary_category=&amp;gt;&amp;quot;Social&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Blogging&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;Atom, JSON, REST, RSS, XML&amp;quot;, :ssl_support=&amp;gt;&amp;quot;No&amp;quot;, :api_kits=&amp;gt;&amp;quot;ActionScript&amp;quot;, :api_forum=&amp;gt;&amp;quot;http://groups.google.com/group/twitter-development-talk&amp;quot;, :twitter_url=&amp;gt;&amp;quot;http://twitter.com/twitterapi&amp;quot;, :contact_email=&amp;gt;&amp;quot;api@twitter.com&amp;quot;, :console_url=&amp;gt;&amp;quot;https://dev.twitter.com/console&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;OAuth 2, HTTP Basic Auth, OAuth&amp;quot;, :categories=&amp;gt;[&amp;quot;Social&amp;quot;, &amp;quot;Blogging&amp;quot;]}
-# 4 : {:name=&amp;gt;&amp;quot;YouTube&amp;quot;, :api_provider=&amp;gt;&amp;quot;http://www.google.com&amp;quot;, :api_endpoint=&amp;gt;&amp;quot;http://gdata.youtube.com/feeds/&amp;quot;, :api_homepage=&amp;gt;&amp;quot;https://developers.google.com/youtube/&amp;quot;, :primary_category=&amp;gt;&amp;quot;Video&amp;quot;, :secondary_categories=&amp;gt;&amp;quot;Media&amp;quot;, :protocol_formats=&amp;gt;&amp;quot;Atom, RSS, JSON, XML, GData&amp;quot;, :other_options=&amp;gt;&amp;quot;Atom Publishing Protocol (Atom/RSS)&amp;quot;, :ssl_support=&amp;gt;&amp;quot;No&amp;quot;, :api_kits=&amp;gt;&amp;quot;Java, PHP Python, Ruby, ActionScript&amp;quot;, :api_forum=&amp;gt;&amp;quot;http://groups.google.com/group/youtube-api/&amp;quot;, :twitter_url=&amp;gt;&amp;quot;https://twitter.com/YouTubeDev/&amp;quot;, :developer_support=&amp;gt;&amp;quot;http://code.google.com/support/bin/topic.py?topic=12357&amp;quot;, :console_url=&amp;gt;&amp;quot;http://code.google.com/apis/ajax/playground/?exp=youtube#simple_embed&amp;quot;, :authentication_mode=&amp;gt;&amp;quot;OAuth2&amp;quot;, :categories=&amp;gt;[&amp;quot;Video&amp;quot;, &amp;quot;Media&amp;quot;]}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;Wrapping up&lt;/h3&gt;
-
-&lt;p&gt;I admit, it&amp;rsquo;s arguable that this implementation is &amp;ldquo;simple&amp;rdquo;. Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work up front to define which links to consume and how to process them with &amp;ldquo;handlers&amp;rdquo;. However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.&lt;/p&gt;
-
-&lt;p&gt;Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction. It would now be trivial to take our &lt;code&gt;Spider&lt;/code&gt; class and implement a new processor for a site like &lt;a href="https://rubygems.org"&gt;rubygems.org&lt;/a&gt; or &lt;a href="https://craigslist.org"&gt;craigslist&lt;/a&gt; and stream the results to a database like &lt;a href="http://redis.io"&gt;Redis&lt;/a&gt; or &lt;a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"&gt;&lt;code&gt;YAML::Store&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Try it yourself and let me know what you think of this approach (&lt;a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb"&gt;full source&lt;/a&gt;).&lt;/p&gt;
 </content>
   </entry>
 </feed>
