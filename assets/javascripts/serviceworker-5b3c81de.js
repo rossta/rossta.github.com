@@ -1,6 +1,6 @@
 'use strict';
 
-const version = 'v20160418';
+const version = 'v20160418.1';
 const offlineResources = [
   '/',
   '/offline.html'
@@ -76,7 +76,7 @@ function networkedAndCache(request) {
       return caches
         .match(request)
         .then((response) => {
-          response || caches.match('/offline.html');
+          return response || caches.match('/offline.html');
         });
     });
 }
