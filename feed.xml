@@ -27,7 +27,7 @@
 
 &lt;p&gt;By far the biggest change was the &lt;a href="https://middlemanapp.com/advanced/asset_pipeline/"&gt;removal of the Sprockets&lt;/a&gt; dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.&lt;/p&gt;
 
-&lt;p&gt;Given the &amp;ldquo;explosion of front-end language and tooling&amp;rdquo; that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like &lt;a href="http://gruntjs.com/"&gt;Grunt&lt;/a&gt;, &lt;a href="http://gulpjs.com/"&gt;Gulp&lt;/a&gt;, &lt;a href="webpack.github.io"&gt;Webpack&lt;/a&gt;, &lt;a href="http://browserify.org/"&gt;Browserify&lt;/a&gt;, &lt;a href="http://brunch.io/"&gt;Brunch&lt;/a&gt;, &lt;a href="http://broccolijs.com/"&gt;Brocolli&lt;/a&gt;&amp;ndash;to name a few&amp;mdash;frameworks like Middleman can&amp;rsquo;t possibly support custom integrations for everything. Instead, Middleman now employs the &lt;code&gt;external_pipeline&lt;/code&gt; feature which allows &amp;ldquo;subprocesses&amp;rdquo; to run alongside the development server or build process.&lt;/p&gt;
+&lt;p&gt;Given the &amp;ldquo;explosion of front-end language and tooling&amp;rdquo; that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like &lt;a href="http://gruntjs.com/"&gt;Grunt&lt;/a&gt;, &lt;a href="http://gulpjs.com/"&gt;Gulp&lt;/a&gt;, &lt;a href="webpack.github.io"&gt;Webpack&lt;/a&gt;, &lt;a href="http://browserify.org/"&gt;Browserify&lt;/a&gt;, &lt;a href="http://brunch.io/"&gt;Brunch&lt;/a&gt;, &lt;a href="http://broccolijs.com/"&gt;Brocolli&lt;/a&gt;&amp;mdash;to name a few&amp;mdash;it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the &lt;code&gt;external_pipeline&lt;/code&gt; feature which allows &amp;ldquo;subprocesses&amp;rdquo; to run alongside the development server or build process.&lt;/p&gt;
 
 &lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated Webpack inside Middleman. Dev &amp;amp; build modes&lt;/p&gt;&amp;mdash; Thomas Reynolds (@tdreyno) &lt;a href="https://twitter.com/tdreyno/status/580115759768059904"&gt;March 23, 2015&lt;/a&gt;&lt;/blockquote&gt;
 
@@ -96,7 +96,7 @@ configuration from &lt;code&gt;config.rb&lt;/code&gt;.&lt;/p&gt;
 &lt;code&gt;npm&lt;/code&gt; to manage third-party assets. To setup my npm assets:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="sh"&gt;$ npm init
-$ npm install --save-dev wepback
+$ npm install --save-dev webpack
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The external pipeline feature in Middleman provides a mechanism for the
@@ -140,7 +140,7 @@ option :source, nil, &amp;#39;Path to merge into sitemap&amp;#39;, required: tru
 
 &lt;p&gt;Webpack as a dizzying array of plugins and configuration options. The bare minimum to get JavaScript working with Webpack and Middleman is to set an &lt;code&gt;entry&lt;/code&gt; option to declare the primary source file(s) entry point and where it should compile to as the &lt;code&gt;output&lt;/code&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+&lt;pre&gt;&lt;code class="javascript"&gt;// webpack.config.js
 var webpack = require(&amp;#39;webpack&amp;#39;);
 
 module.exports = {
@@ -166,7 +166,7 @@ module.exports = {
 &lt;pre&gt;&lt;code class="sh"&gt;$ npm install --save-dev babel babel-loader babel-preset-es2015 babel-preset-stage-0
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+&lt;pre&gt;&lt;code class="javascript"&gt;// webpack.config.js
 module.exports = {
   // ...
 
@@ -193,7 +193,7 @@ I decided to configure Webpack to treat it as a global variable so it would be
 available in each of my JavaScript source files without declaring a separate
 &lt;code&gt;import&lt;/code&gt; everywhere. This is done with the &lt;code&gt;webpack.ProvidePlugin&lt;/code&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+&lt;pre&gt;&lt;code class="javascript"&gt;// webpack.config.js
 module.exports = {
   // ...
 
@@ -216,7 +216,7 @@ Compass, &lt;a href="https://benfrain.com/lightning-fast-sass-compiling-with-lib
 &lt;pre&gt;&lt;code class="sh"&gt;$ npm install --save-dev node-sass sass-loader extract-text-webpack-plugin
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+&lt;pre&gt;&lt;code class="javascript"&gt;// webpack.config.js
 var ExtractTextPlugin = require(&amp;#39;extract-text-webpack-plugin&amp;#39;);
 
 module.exports = {
@@ -247,7 +247,7 @@ module.exports = {
 
 &lt;p&gt;&lt;strong&gt;Enable feature flags&lt;/strong&gt;. &lt;a href="https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html"&gt;I love puts debugging&lt;/a&gt; so I&amp;rsquo;ve got quite a few log statements in my JavaScript code. I don&amp;rsquo;t really want these log statements in the production build of the website, so I can use Webpack to allow me to enable logging only in development:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;# webpack.config.js
+&lt;pre&gt;&lt;code class="javascript"&gt;// webpack.config.js
 var definePlugin = new webpack.DefinePlugin({
   __DEVELOPMENT__: JSON.stringify(JSON.parse(process.env.BUILD_DEVELOPMENT || false)),
   __PRODUCTION__: JSON.stringify(JSON.parse(process.env.BUILD_PRODUCTION || false))
