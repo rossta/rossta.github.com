@@ -60,16 +60,17 @@ function networkedOrOffline(request) {
   });
 }
 
-function networkedAndCached(request) {
+function networkedAndCache(request) {
   return fetch(request)
     .then((response) => {
       // Stash the copy in the page cache
       let copy = response.clone();
-      return caches
+      caches
         .open(cacheKey('pages'))
         .then((cache) => {
           cache.put(request, copy);
         });
+      return response;
     })
     .catch(() => {
       return caches
@@ -99,7 +100,7 @@ self.addEventListener('fetch', (event) => {
   /* For HTML requests, try network first, then fallback to cache, then offline
     */
   if (~request.headers.get('Accept').indexOf('text/html')) {
-    event.respondWith(networkedAndCached(request));
+    event.respondWith(networkedAndCache(request));
     return;
   }
 
