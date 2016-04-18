@@ -59,17 +59,17 @@
 
       <p><img src="/assets/images/blog/stock/tundra-hike-pexels-photo-9b187747.jpg" /></p>
 
-<p>I&rsquo;ve <a href="/blog/why-i-ditched-wordpress-for-github.html">hosted this site on Github Pages</a> with the <a href="https://middlemanapp.com/">Middleman static site framework</a> for several years now. To keep up with the most recent release of the framework, I decided to <a href="https://middlemanapp.com/basics/upgrade-v4/">upgrade the site to Middleman version 4</a>. There were some significant changes to the configuration options and helper methods, which are <a href="https://middlemanapp.com/basics/upgrade-v4/">well documented</a> on the Middleman blog.</p>
+<p>I&rsquo;ve <a href="/blog/why-i-ditched-wordpress-for-github.html">hosted this site on Github Pages</a> with the <a href="https://middlemanapp.com/">Middleman static site framework</a> for several years now. To keep up with the most recent release of the framework, I decided to upgrade the site to <a href="https://middlemanapp.com/basics/upgrade-v4/">Middleman version 4</a>. There were some significant changes to the configuration options and helper methods, which are <a href="https://middlemanapp.com/basics/upgrade-v4/">well documented</a> on the Middleman blog.</p>
 
 <p>By far the biggest change was the <a href="https://middlemanapp.com/advanced/asset_pipeline/">removal of the Sprockets</a> dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.</p>
 
-<p>Given the &ldquo;explosion of front-end language and tooling&rdquo; that has happened over the past few years, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like Grunt, Gulp, Webpack, Browserify, Brunch, Brocolli&emdash;name a few&emdash;frameworks like Middleman can&rsquo;t possibly support custom integrations for everything. Instead the Sprockets asset pipeline has been replaced with the <code>external_pipeline</code> feature which allows Middleman to run &ldquo;subprocesses&rdquo; alongside the development server and build phase.</p>
+<p>Given the &ldquo;explosion of front-end language and tooling&rdquo; that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like <a href="http://gruntjs.com/">Grunt</a>, <a href="http://gulpjs.com/">Gulp</a>, <a href="webpack.github.io">Webpack</a>, <a href="http://browserify.org/">Browserify</a>, <a href="http://brunch.io/">Brunch</a>, <a href="http://broccolijs.com/">Brocolli</a>&ndash;to name a few&mdash;frameworks like Middleman can&rsquo;t possibly support custom integrations for everything. Instead, Middleman now employs the <code>external_pipeline</code> feature which allows &ldquo;subprocesses&rdquo; to run alongside the development server or build process.</p>
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated Webpack inside Middleman. Dev &amp; build modes</p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/580115759768059904">March 23, 2015</a></blockquote>
 
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-<p>Exciting stuff.</p>
+<p>In this post, I&rsquo;ll describe how I set up the external pipeline for Webpack. I&rsquo;ll be showing some Webpack configuration snippets to illustrate a few points but you can see the <a href="https://github.com/rossta/rossta.github.com/blob/cc94b759ed742d571b2470777a0164ac43db9c73/webpack.config.js">full Webpack config file</a> for this site as of this writing as well.</p>
 
 <h3>Before the upgrade</h3>
 
@@ -92,8 +92,6 @@ after_configuration do
   @bower_config = JSON.parse(IO.read(&quot;#{root}/.bowerrc&quot;))
   sprockets.append_path File.join(root, @bower_config[&quot;directory&quot;])
 
-  sprockets.import_asset &quot;foundation/js/vendor/modernizr.js&quot;
-  sprockets.import_asset &quot;foundation/js/vendor/jquery.js&quot;
   sprockets.import_asset &quot;foundation/js/vendor/jquery.cookie.js&quot;
 end
 </code></pre>
@@ -199,7 +197,7 @@ module.exports = {
 
 <p>This is not a full Webpack tutorial, but it worth noting we can use Webpack to do:</p>
 
-<p><strong>Transpile from ES2015 syntax</strong>. We can pull in Babel dependencies and desired presets from <code>npm</code> and declare <code>loaders</code> in Webpack config to customize the compilation stages. This meant I was able to rewrite much of my custom JavaScript from ES5 to ES2015.</p>
+<p><strong>Transpile from ES2015 syntax</strong>. We can pull in Babel dependencies and desired presets from <code>npm</code> and declare <code>loaders</code> in Webpack config to customize the compilation stages. This meant I was able to rewrite much of my custom JavaScript from ES5 to ES2015 and replace Sprocket-style require comments with executable <code>import</code> statements.</p>
 
 <pre><code class="sh">$ npm install --save-dev babel babel-loader babel-preset-es2015 babel-preset-stage-0
 </code></pre>
@@ -292,7 +290,7 @@ var definePlugin = new webpack.DefinePlugin({
 });
 </code></pre>
 
-<p>I tell Webpack to makde the <code>__DEVELOPMENT__</code> and <code>__PRODUCTION__</code> variables
+<p>I tell Webpack to make the <code>__DEVELOPMENT__</code> and <code>__PRODUCTION__</code> variables
 available based on the presence on the <code>BUILD_DEVELOPMENT</code> and
 <code>BUILD_DEVELOPMENT</code> environment variables. I pass these variables to the webpack
 commands I&rsquo;m using in <code>config.rb</code> for the build and development Middleman
