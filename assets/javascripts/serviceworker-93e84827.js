@@ -29,49 +29,48 @@ self.addEventListener('install', (event) => {
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  log('fetch event', event);
-
-  /* We should only cache GET requests, and deal with the rest of method in the
-     client-side, by handling failed POST,PUT,PATCH,etc. requests.
-     */
-  if (ignoreFetchEvent(event)) {
-    /* If we don't block the event as shown below, then the request will go to
-       the network as usual.
-       */
-    log('fetch event ignored.', event.request.method, event.request.url);
-    return;
-  }
-
-  /* Similar to event.waitUntil in that it blocks the fetch event on a promise.
-     Fulfillment result will be used as the response, and rejection will end in a
-     HTTP response indicating failure.
-     */
-  event.respondWith(
-    caches
-    .match(event.request)
-    .then((cached) => {
-      /* Even if the response is in our cache, we go to the network as well.
-         This pattern is known for producing "eventually fresh" responses,
-         where we return cached responses immediately, and meanwhile pull
-         a network response and store that in the cache.
-         Read more:
-https://ponyfoo.com/articles/progressive-networking-serviceworker
-*/
-      let networked = fetch(event.request).then(fetchedFromNetwork(event));
-      // .then(fetchedFromNetwork(event), unableToResolve(event))
-      // .catch(unableToResolve);
-
-      /* We return the cached response immediately if there is one, and fall
-         back to waiting on the network as usual.
-         */
-      log('fetch event', cached ? '(cached)' : '(network)', event.request.url);
-
-      return cached || networked;
-    })
-  );
-});
-
+// self.addEventListener('fetch', (event) => {
+//   log('fetch event', event);
+//
+//   #<{(| We should only cache GET requests, and deal with the rest of method in the
+//      client-side, by handling failed POST,PUT,PATCH,etc. requests.
+//      |)}>#
+//   if (ignoreFetchEvent(event)) {
+//     #<{(| If we don't block the event as shown below, then the request will go to
+//        the network as usual.
+//        |)}>#
+//     log('fetch event ignored.', event.request.method, event.request.url);
+//     return;
+//   }
+//
+//   #<{(| Similar to event.waitUntil in that it blocks the fetch event on a promise.
+//      Fulfillment result will be used as the response, and rejection will end in a
+//      HTTP response indicating failure.
+//      |)}>#
+//   event.respondWith(
+//     caches
+//     .match(event.request)
+//     .then((cached) => {
+//       #<{(| Even if the response is in our cache, we go to the network as well.
+//          This pattern is known for producing "eventually fresh" responses,
+//          where we return cached responses immediately, and meanwhile pull
+//          a network response and store that in the cache.
+//          Read more:
+//          https://ponyfoo.com/articles/progressive-networking-serviceworker |)}>#
+//       let networked = fetch(event.request).then(fetchedFromNetwork(event));
+//       // .then(fetchedFromNetwork(event), unableToResolve(event))
+//       // .catch(unableToResolve);
+//
+//       #<{(| We return the cached response immediately if there is one, and fall
+//          back to waiting on the network as usual.
+//          |)}>#
+//       log('fetch event', cached ? '(cached)' : '(network)', event.request.url);
+//
+//       return cached || networked;
+//     })
+//   );
+// });
+//
 self.addEventListener("activate", (event) => {
   /* Just like with the install event, event.waitUntil blocks activate on a promise.
      Activation will fail unless the promise is fulfilled.
