@@ -147,9 +147,9 @@ function cachekey() {
 }
 
 function log() {
-  // if (developmentMode()) {
+  if (developmentMode()) {
     console.log("SW:", ...arguments);
-  // }
+  }
 }
 
 function fetchedFromNetwork(event) {
