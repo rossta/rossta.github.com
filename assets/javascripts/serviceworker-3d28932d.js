@@ -99,7 +99,7 @@ self.addEventListener('fetch', (event) => {
   /* For HTML requests, try network first, then fallback to cache, then offline
     */
   if (~request.headers.get('Accept').indexOf('text/html')) {
-    event.respondWith(networkedAndCache(request));
+    event.respondWith(networkedAndCached(request));
     return;
   }
 
