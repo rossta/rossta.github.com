@@ -27,14 +27,13 @@ function onInstall(event) {
 
 function updateStaticCache() {
   return caches
-  .open(cacheKey('offline'))
-  .then((cache) => {
-    return cache.addAll(offlineResources);
-  })
-  .then(() => {
-    // self.skipWaiting();
-    log('installation complete!');
-  });
+    .open(cacheKey('offline'))
+    .then((cache) => {
+      return cache.addAll(offlineResources);
+    })
+    .then(() => {
+      log('installation complete!');
+    });
 }
 
 ////////
@@ -43,13 +42,7 @@ function updateStaticCache() {
 function onFetch(event) {
   const request = event.request;
 
-  /* We should only cache GET requests, and deal with the rest of method in the
-     client-side, by handling failed POST,PUT,PATCH,etc. requests.
-     */
   if (shouldAlwaysFetch(request)) {
-    /* If we don't block the event as shown below, then the request will go to
-       the network as usual.
-       */
     log('(network)', request.method, request.url);
     event.respondWith(networkedOrOffline(request));
     return;
@@ -59,8 +52,7 @@ function onFetch(event) {
   */
   if (shouldFetchAndCache(request)) {
     event.respondWith(
-      networkedAndCache(request)
-        .catch(cachedOrOfflineHTML(request))
+      networkedAndCache(request).catch(cachedOrOffline(request))
     );
     return;
   }
@@ -68,14 +60,14 @@ function onFetch(event) {
   event.respondWith(cachedOrNetworked(request));
 }
 
+// Stash response in cache as side-effect of network request
 function networkedAndCache(request) {
   return fetch(request)
-    .then(function (response) {
-      // Stash a copy of this page in the cache
+    .then((response) => {
       log("(network: cache write)", request.method, request.url);
       var copy = response.clone();
       caches.open(cacheKey('resources'))
-        .then(function (cache) {
+        .then((cache) => {
           cache.put(request, copy);
         });
 
@@ -85,31 +77,36 @@ function networkedAndCache(request) {
 
 function cachedOrNetworked(request) {
   return caches.match(request)
-    .then(function (response) {
+    .then((response) => {
       log(response ? '(cached)' : '(network: cache miss)', request.url);
-      return response || networkedAndCache(request)
-        .catch(function () {
-          if (~request.headers.get('Accept').indexOf('image')) {
-            return new Response(offlineImage, { headers: { 'Content-Type': 'image/svg+xml' }});
-          }
-        });
-    })
+      return response ||
+        networkedAndCache(request)
+          .catch(() => { return offlineResponse(request) });
+    });
 }
 
 function networkedOrOffline(request) {
   return fetch(request)
-  .catch(() => {
-    return caches.match('/offline.html');
-  });
+    .catch(() => {
+      return offlineResponse(request);
+    });
 }
 
-function cachedOrOfflineHTML(request) {
+function cachedOrOffline(request) {
   return function() {
     return caches
       .match(request)
       .then((response) => {
-        return response || caches.match('/offline.html');
+        return response || offlineResponse(request);
       });
+  }
+}
+
+function offlineResponse(request) {
+  if (~request.headers.get('Accept').indexOf('image')) {
+    return new Response(offlineImage, { headers: { 'Content-Type': 'image/svg+xml' }});
+  } else {
+    return caches.match('/offline.html');
   }
 }
 
