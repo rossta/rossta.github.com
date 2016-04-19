@@ -10,6 +10,7 @@ const ignoreFetch = [
   /https?:\/\/api.mixpanel.com\//,
   /https?:\/\/api.segment.io\//,
   /https?:\/\/in.getclicky.com\//,
+  /https?:\/\/zenkaffe.herokuapp.com\//,
   /\/__rack\//,
 ];
 
@@ -57,13 +58,10 @@ function onFetch(event) {
   /* For HTML requests, try network first, then fallback to cache, then offline
   */
   if (shouldFetchAndCache(request)) {
-    log("(network: cache write)", request.method, request.url);
-
     event.respondWith(
       networkedAndCache(request)
         .catch(cachedOrOfflineHTML(request))
     );
-
     return;
   }
 
@@ -74,13 +72,11 @@ function networkedAndCache(request) {
   return fetch(request)
     .then(function (response) {
       // Stash a copy of this page in the cache
+      log("(network: cache write)", request.method, request.url);
       var copy = response.clone();
       caches.open(cacheKey('resources'))
         .then(function (cache) {
           cache.put(request, copy);
-        })
-        .then(() => {
-          log('added to cache', request.url);
         });
 
       return response;
@@ -91,7 +87,7 @@ function cachedOrNetworked(request) {
   return caches.match(request)
     .then(function (response) {
       log(response ? '(cached)' : '(network: cache miss)', request.url);
-      return response || fetch(request)
+      return response || networkedAndCache(request)
         .catch(function () {
           if (~request.headers.get('Accept').indexOf('image')) {
             return new Response(offlineImage, { headers: { 'Content-Type': 'image/svg+xml' }});
@@ -106,25 +102,6 @@ function networkedOrOffline(request) {
     return caches.match('/offline.html');
   });
 }
-
-// function networkedAndCache(request) {
-//   return fetch(request)
-//     .then((response) => {
-//       const copy = response.clone();
-//       caches
-//       .open(cacheKey('resources'))
-//       .then((cache) => {
-//         cache.put(request, copy);
-//       })
-//       .then(() => {
-//         log('added to cache', request.url);
-//       });
-//
-//       return response;
-//     });
-// }
-
-// .catch(() => { unableToResolve(request) });
 
 function cachedOrOfflineHTML(request) {
   return function() {
@@ -180,7 +157,7 @@ function shouldAlwaysFetch(request) {
 }
 
 function shouldFetchAndCache(request) {
-  return !(~request.headers.get('Accept').indexOf('text/html'));
+  return ~request.headers.get('Accept').indexOf('text/html');
 }
 
 function developmentMode() {
