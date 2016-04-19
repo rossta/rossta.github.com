@@ -11,7 +11,7 @@ const ignoreFetch = [
   /https?:\/\/api.segment.io\//,
   /https?:\/\/in.getclicky.com\//,
   /https?:\/\/zenkaffe.herokuapp.com\//,
-  /https?://p.typekit.net\//,
+  /https?:\/\/p.typekit.net\//,
   /\/__rack\//,
 ];
 
@@ -44,35 +44,34 @@ function onFetch(event) {
   const request = event.request;
 
   if (shouldAlwaysFetch(request)) {
-    log('(network)', request.method, request.url);
     event.respondWith(networkedOrOffline(request));
     return;
   }
 
-  /* For HTML requests, try network first, then fallback to cache, then offline
-  */
   if (shouldFetchAndCache(request)) {
-    event.respondWith(
-      networkedAndCache(request)
-        .catch(() => { return cachedOrOffline(request) });
-    );
+    event.respondWith(networkedOrCached(request));
     return;
   }
 
   event.respondWith(cachedOrNetworked(request));
 }
 
+function networkedOrCached(request) {
+  return networkedAndCache(request)
+    .catch(() => { return cachedOrOffline(request) });
+}
+
 // Stash response in cache as side-effect of network request
 function networkedAndCache(request) {
   return fetch(request)
     .then((response) => {
-      log("(network: cache write)", request.method, request.url);
       var copy = response.clone();
       caches.open(cacheKey('resources'))
         .then((cache) => {
           cache.put(request, copy);
         });
 
+      log("(network: cache write)", request.method, request.url);
       return response;
     });
 }
@@ -80,7 +79,7 @@ function networkedAndCache(request) {
 function cachedOrNetworked(request) {
   return caches.match(request)
     .then((response) => {
-      log(response ? '(cached)' : '(network: cache miss)', request.url);
+      log(response ? '(cached)' : '(network: cache miss)', request.method, request.url);
       return response ||
         networkedAndCache(request)
           .catch(() => { return offlineResponse(request) });
@@ -89,6 +88,10 @@ function cachedOrNetworked(request) {
 
 function networkedOrOffline(request) {
   return fetch(request)
+    .then((response) => {
+      log('(network)', request.method, request.url);
+      return response;
+    })
     .catch(() => {
       return offlineResponse(request);
     });
@@ -103,6 +106,7 @@ function cachedOrOffline(request) {
 }
 
 function offlineResponse(request) {
+  log('(offline)', request.method, request.url);
   if (~request.headers.get('Accept').indexOf('image')) {
     return new Response(offlineImage, { headers: { 'Content-Type': 'image/svg+xml' }});
   } else {
@@ -120,21 +124,21 @@ function onActivate(event) {
 
 function removeOldCache() {
   return caches
-  .keys()
-  .then((keys) => {
-    return Promise.all( // We return a promise that settles when all outdated caches are deleted.
-                       keys
-                       .filter((key) => {
-                         return !key.startsWith(version); // Filter by keys that don't start with the latest version prefix.
-                       })
-                       .map((key) => {
-                         return caches.delete(key); // Return a promise that's fulfilled when each outdated cache is deleted.
-                       })
-                      );
-  })
-  .then(() => {
-    log('removeOldCache completed.');
-  });
+    .keys()
+    .then((keys) => {
+      return Promise.all( // We return a promise that settles when all outdated caches are deleted.
+                         keys
+                         .filter((key) => {
+                           return !key.startsWith(version); // Filter by keys that don't start with the latest version prefix.
+                         })
+                         .map((key) => {
+                           return caches.delete(key); // Return a promise that's fulfilled when each outdated cache is deleted.
+                         })
+                        );
+    })
+    .then(() => {
+      log('removeOldCache completed.');
+    });
 }
 
 function cacheKey() {
