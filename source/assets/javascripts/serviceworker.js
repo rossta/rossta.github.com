@@ -11,6 +11,7 @@ const ignoreFetch = [
   /https?:\/\/api.segment.io\//,
   /https?:\/\/in.getclicky.com\//,
   /https?:\/\/zenkaffe.herokuapp.com\//,
+  /https?://p.typekit.net\//,
   /\/__rack\//,
 ];
 
