@@ -45,7 +45,7 @@ function onFetch(event) {
   /* We should only cache GET requests, and deal with the rest of method in the
      client-side, by handling failed POST,PUT,PATCH,etc. requests.
      */
-  if (alwaysFetch(request)) {
+  if (shouldAlwaysFetch(request)) {
     /* If we don't block the event as shown below, then the request will go to
        the network as usual.
        */
@@ -56,7 +56,7 @@ function onFetch(event) {
 
   /* For HTML requests, try network first, then fallback to cache, then offline
   */
-  if (~request.headers.get('Accept').indexOf('text/html')) {
+  if (shouldFetchAndCache(request)) {
     log("(network: cache write)", request.method, request.url);
     // event.respondWith(networkedAndCache(request));
     event.respondWith(
@@ -194,10 +194,14 @@ function log() {
   }
 }
 
-function alwaysFetch(request) {
+function shouldAlwaysFetch(request) {
   return __DEVELOPMENT__ ||
     request.method !== 'GET' ||
       ignoreFetch.some(regex => request.url.match(regex));
+}
+
+function shouldFetchAndCache(request) {
+  return ~request.headers.get('Accept').indexOf('text/html');
 }
 
 function developmentMode() {
