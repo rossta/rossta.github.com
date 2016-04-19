@@ -45,7 +45,7 @@ function onFetch(event) {
   /* We should only cache GET requests, and deal with the rest of method in the
      client-side, by handling failed POST,PUT,PATCH,etc. requests.
      */
-  if (alwaysFetch(event)) {
+  if (alwaysFetch(request)) {
     /* If we don't block the event as shown below, then the request will go to
        the network as usual.
        */
@@ -194,10 +194,10 @@ function log() {
   }
 }
 
-function alwaysFetch(event) {
+function alwaysFetch(request) {
   return __DEVELOPMENT__ ||
-    event.request.method !== 'GET' ||
-      ignoreFetch.some(regex => event.request.url.match(regex));
+    request.method !== 'GET' ||
+      ignoreFetch.some(regex => request.url.match(regex));
 }
 
 function developmentMode() {
