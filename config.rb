@@ -2,7 +2,7 @@ activate :livereload
 activate :meta_tags
 # activate :directory_indexes
 
-ENV['WEBPACK_ENV'] ||= build? ? 'build' : 'development'
+ENV['WEBPACK_ENV'] ||= (build? ? 'build' : 'development')
 
 # Time.zone = "UTC"
 activate :external_pipeline,

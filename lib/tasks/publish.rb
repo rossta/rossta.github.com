@@ -43,7 +43,7 @@ def git_update
 end
 
 def build
-  system "bundle exec middleman build"
+  system "WEBPACK_ENV=production bundle exec middleman build"
 end
 
 desc "Deploy the website to github pages"
