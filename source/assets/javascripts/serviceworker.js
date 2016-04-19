@@ -88,41 +88,41 @@ function onFetch(event) {
      For non-HTML requests, look in cache, then fallback to network.
      */
 
-  // event.respondWith(cachedOrNetworked(event));
-
-  event.respondWith(
-    caches.match(request)
-      .then(function (response) {
-        log(response ? '(cached)' : '(network: cache miss)', request.url);
-        return response || fetch(request)
-          .catch(function () {
-            if (~request.headers.get('Accept').indexOf('image')) {
-              return new Response(offlineImage, { headers: { 'Content-Type': 'image/svg+xml' }});
-            }
-          });
-      })
-  )
+  event.respondWith(cachedOrNetworked(request));
 }
 
-function cachedOrNetworked(event) {
-  const request = event.request;
-
-  return caches
-  .match(request)
-  .then((cached) => {
-    /* Even if the response is in our cache, we go to the network as well.
-       This pattern is known for producing "eventually fresh" responses,
-       where we return cached responses immediately, and meanwhile pull
-       a network response and store that in the cache.
-       Read more: https://ponyfoo.com/articles/progressive-networking-serviceworker
-       We return the cached response immediately if there is one, and fall
-       back to waiting on the network as usual.
-       */
-    let networked = networkedAndCache(request);
-    log('cachedOrNetwork', cached ? '(cached)' : '(network)', request.url);
-    return cached || networked;
-  });
+function cachedOrNetworked(request) {
+  return caches.match(request)
+    .then(function (response) {
+      log(response ? '(cached)' : '(network: cache miss)', request.url);
+      return response || fetch(request)
+        .catch(function () {
+          if (~request.headers.get('Accept').indexOf('image')) {
+            return new Response(offlineImage, { headers: { 'Content-Type': 'image/svg+xml' }});
+          }
+        });
+    })
 }
+
+// function cachedOrNetworked(event) {
+//   const request = event.request;
+//
+//   return caches
+//   .match(request)
+//   .then((cached) => {
+//     #<{(| Even if the response is in our cache, we go to the network as well.
+//        This pattern is known for producing "eventually fresh" responses,
+//        where we return cached responses immediately, and meanwhile pull
+//        a network response and store that in the cache.
+//        Read more: https://ponyfoo.com/articles/progressive-networking-serviceworker
+//        We return the cached response immediately if there is one, and fall
+//        back to waiting on the network as usual.
+//        |)}>#
+//     let networked = networkedAndCache(request);
+//     log('cachedOrNetwork', cached ? '(cached)' : '(network)', request.url);
+//     return cached || networked;
+//   });
+// }
 
 function networkedOrOffline(request) {
   return fetch(request)
