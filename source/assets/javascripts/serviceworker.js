@@ -53,7 +53,8 @@ function onFetch(event) {
   */
   if (shouldFetchAndCache(request)) {
     event.respondWith(
-      networkedAndCache(request).catch(cachedOrOffline(request))
+      networkedAndCache(request)
+        .catch(() => { return cachedOrOffline(request) });
     );
     return;
   }
@@ -94,13 +95,11 @@ function networkedOrOffline(request) {
 }
 
 function cachedOrOffline(request) {
-  return function() {
-    return caches
-      .match(request)
-      .then((response) => {
-        return response || offlineResponse(request);
-      });
-  }
+  return caches
+    .match(request)
+    .then((response) => {
+      return response || offlineResponse(request);
+    });
 }
 
 function offlineResponse(request) {
