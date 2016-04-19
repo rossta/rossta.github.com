@@ -127,14 +127,14 @@ function removeOldCache() {
     .keys()
     .then((keys) => {
       return Promise.all( // We return a promise that settles when all outdated caches are deleted.
-                         keys
-                         .filter((key) => {
-                           return !key.startsWith(version); // Filter by keys that don't start with the latest version prefix.
-                         })
-                         .map((key) => {
-                           return caches.delete(key); // Return a promise that's fulfilled when each outdated cache is deleted.
-                         })
-                        );
+        keys
+         .filter((key) => {
+           return !key.startsWith(version); // Filter by keys that don't start with the latest version prefix.
+         })
+         .map((key) => {
+           return caches.delete(key); // Return a promise that's fulfilled when each outdated cache is deleted.
+         })
+      );
     })
     .then(() => {
       log('removeOldCache completed.');
