@@ -58,37 +58,33 @@ function onFetch(event) {
   */
   if (shouldFetchAndCache(request)) {
     log("(network: cache write)", request.method, request.url);
-    // event.respondWith(networkedAndCache(request));
-    event.respondWith(
-      fetch(request)
-      .then(function (response) {
-        // Stash a copy of this page in the cache
-        var copy = response.clone();
-        caches.open(cacheKey('resources'))
-          .then(function (cache) {
-            cache.put(request, copy);
-          });
 
-        return response;
-      })
-      .catch(function (arg) {
-        log("error on fetch", arg);
-        return caches.match(request)
-          .then(function (response) {
-            return response || caches.match('/offline.html');
-          })
-      })
+    event.respondWith(
+      networkedAndCache(request)
+        .catch(cachedOrOfflineHTML(request))
     );
+
     return;
   }
 
-  /* Similar to event.waitUntil in that it blocks the fetch event on a promise.
-     Fulfillment result will be used as the response, and rejection will end in a
-     HTTP response indicating failure.
-     For non-HTML requests, look in cache, then fallback to network.
-     */
-
   event.respondWith(cachedOrNetworked(request));
+}
+
+function networkedAndCache(request) {
+  return fetch(request)
+    .then(function (response) {
+      // Stash a copy of this page in the cache
+      var copy = response.clone();
+      caches.open(cacheKey('resources'))
+        .then(function (cache) {
+          cache.put(request, copy);
+        })
+        .then(() => {
+          log('added to cache', request.url);
+        });
+
+      return response;
+    });
 }
 
 function cachedOrNetworked(request) {
@@ -104,26 +100,6 @@ function cachedOrNetworked(request) {
     })
 }
 
-// function cachedOrNetworked(event) {
-//   const request = event.request;
-//
-//   return caches
-//   .match(request)
-//   .then((cached) => {
-//     #<{(| Even if the response is in our cache, we go to the network as well.
-//        This pattern is known for producing "eventually fresh" responses,
-//        where we return cached responses immediately, and meanwhile pull
-//        a network response and store that in the cache.
-//        Read more: https://ponyfoo.com/articles/progressive-networking-serviceworker
-//        We return the cached response immediately if there is one, and fall
-//        back to waiting on the network as usual.
-//        |)}>#
-//     let networked = networkedAndCache(request);
-//     log('cachedOrNetwork', cached ? '(cached)' : '(network)', request.url);
-//     return cached || networked;
-//   });
-// }
-
 function networkedOrOffline(request) {
   return fetch(request)
   .catch(() => {
@@ -131,30 +107,33 @@ function networkedOrOffline(request) {
   });
 }
 
-function networkedAndCache(request) {
-  return fetch(request)
-  .then((response) => {
-    const copy = response.clone();
-    caches
-    .open(cacheKey('resources'))
-    .then((cache) => {
-      cache.put(request, copy);
-    })
-    .then(() => {
-      log('added to cache', request.url);
-    });
+// function networkedAndCache(request) {
+//   return fetch(request)
+//     .then((response) => {
+//       const copy = response.clone();
+//       caches
+//       .open(cacheKey('resources'))
+//       .then((cache) => {
+//         cache.put(request, copy);
+//       })
+//       .then(() => {
+//         log('added to cache', request.url);
+//       });
+//
+//       return response;
+//     });
+// }
 
-    return response;
-  })
-  .catch(() => { unableToResolve(request) });
-}
+// .catch(() => { unableToResolve(request) });
 
-function unableToResolve(request) {
-  return caches
-  .match(request)
-  .then((response) => {
-    return response || caches.match('/offline.html');
-  });
+function cachedOrOfflineHTML(request) {
+  return function() {
+    return caches
+      .match(request)
+      .then((response) => {
+        return response || caches.match('/offline.html');
+      });
+  }
 }
 
 ///////////
@@ -201,7 +180,7 @@ function shouldAlwaysFetch(request) {
 }
 
 function shouldFetchAndCache(request) {
-  return ~request.headers.get('Accept').indexOf('text/html');
+  return !(~request.headers.get('Accept').indexOf('text/html'));
 }
 
 function developmentMode() {
