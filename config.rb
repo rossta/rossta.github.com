@@ -2,12 +2,14 @@ activate :livereload
 activate :meta_tags
 # activate :directory_indexes
 
+ENV['WEBPACK_ENV'] ||= build? ? 'build' : 'development'
+
 # Time.zone = "UTC"
 activate :external_pipeline,
          name: :webpack,
          command: build? ?
-         "BUILD_PRODUCTION=1 ./node_modules/webpack/bin/webpack.js --bail -p" :
-         "BUILD_DEVELOPMENT=1 ./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
+         "WEBPACK_ENV=#{ENV.fetch('WEBPACK_ENV')} ./node_modules/webpack/bin/webpack.js --bail -p" :
+         "WEBPACK_ENV=#{ENV.fetch('WEBPACK_ENV')} ./node_modules/webpack/bin/webpack.js --watch -d --progress --color",
          source: ".tmp/dist",
          latency: 1
 

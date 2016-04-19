@@ -18,6 +18,10 @@ if (__DEVELOPMENT__) {
   console.log("Running in development mode!");
 }
 
-if (__PRODUCTION__) {
-  console.log("Welcome to rossta.net!", __PRODUCTION__, __DEVELOPMENT__);
+if (__DEBUG__) {
+  console.log("Running in debug mode!");
+}
+
+if (__BUILD__) {
+  console.log("Welcome to rossta.net!");
 }

@@ -1,168 +1,170 @@
 'use strict';
 
-const version = 'v1';
+const version = 'v20160419';
 const offlineResources = [
   '/',
   '/offline.html'
 ];
 
-var ignoreFetch = [
+const ignoreFetch = [
   /https?:\/\/api.mixpanel.com\//,
   /https?:\/\/api.segment.io\//,
   /https?:\/\/in.getclicky.com\//,
+  /https?:\/\/zenkaffe.herokuapp.com\//,
+  /https?://p.typekit.net\//,
   /\/__rack\//,
-]
+];
 
-self.addEventListener('install', (event) => {
+const offlineImage = '<svg width="400" height="300" role="img" aria-labelledby="offline-title" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"><title id="offline-title">Offline</title><g fill="none" fill-rule="evenodd"><path fill="#D8D8D8" d="M0 0h400v300H0z"/><text fill="#9B9B9B" font-family="Helvetica Neue,Arial,Helvetica,sans-serif" font-size="72" font-weight="bold"><tspan x="93" y="172">offline</tspan></text></g></svg>';
+
+//////////
+// Install
+//////////
+function onInstall(event) {
   log('install event in progress.');
 
-  event.waitUntil(
-    caches
-    .open(cachekey('offline'))
+  event.waitUntil(updateStaticCache());
+}
+
+function updateStaticCache() {
+  return caches
+    .open(cacheKey('offline'))
     .then((cache) => {
       return cache.addAll(offlineResources);
     })
     .then(() => {
-      self.skipWaiting();
       log('installation complete!');
-    })
-  );
-});
+    });
+}
 
-// self.addEventListener('fetch', (event) => {
-//   log('fetch event', event);
-//
-//   #<{(| We should only cache GET requests, and deal with the rest of method in the
-//      client-side, by handling failed POST,PUT,PATCH,etc. requests.
-//      |)}>#
-//   if (ignoreFetchEvent(event)) {
-//     #<{(| If we don't block the event as shown below, then the request will go to
-//        the network as usual.
-//        |)}>#
-//     log('fetch event ignored.', event.request.method, event.request.url);
-//     return;
-//   }
-//
-//   #<{(| Similar to event.waitUntil in that it blocks the fetch event on a promise.
-//      Fulfillment result will be used as the response, and rejection will end in a
-//      HTTP response indicating failure.
-//      |)}>#
-//   event.respondWith(
-//     caches
-//     .match(event.request)
-//     .then((cached) => {
-//       #<{(| Even if the response is in our cache, we go to the network as well.
-//          This pattern is known for producing "eventually fresh" responses,
-//          where we return cached responses immediately, and meanwhile pull
-//          a network response and store that in the cache.
-//          Read more:
-//          https://ponyfoo.com/articles/progressive-networking-serviceworker |)}>#
-//       let networked = fetch(event.request).then(fetchedFromNetwork(event));
-//       // .then(fetchedFromNetwork(event), unableToResolve(event))
-//       // .catch(unableToResolve);
-//
-//       #<{(| We return the cached response immediately if there is one, and fall
-//          back to waiting on the network as usual.
-//          |)}>#
-//       log('fetch event', cached ? '(cached)' : '(network)', event.request.url);
-//
-//       return cached || networked;
-//     })
-//   );
-// });
-//
-self.addEventListener("activate", (event) => {
-  /* Just like with the install event, event.waitUntil blocks activate on a promise.
-     Activation will fail unless the promise is fulfilled.
-     */
+////////
+// Fetch
+////////
+function onFetch(event) {
+  const request = event.request;
+
+  if (shouldAlwaysFetch(request)) {
+    log('(network)', request.method, request.url);
+    event.respondWith(networkedOrOffline(request));
+    return;
+  }
+
+  /* For HTML requests, try network first, then fallback to cache, then offline
+  */
+  if (shouldFetchAndCache(request)) {
+    event.respondWith(
+      networkedAndCache(request)
+        .catch(() => { return cachedOrOffline(request) });
+    );
+    return;
+  }
+
+  event.respondWith(cachedOrNetworked(request));
+}
+
+// Stash response in cache as side-effect of network request
+function networkedAndCache(request) {
+  return fetch(request)
+    .then((response) => {
+      log("(network: cache write)", request.method, request.url);
+      var copy = response.clone();
+      caches.open(cacheKey('resources'))
+        .then((cache) => {
+          cache.put(request, copy);
+        });
+
+      return response;
+    });
+}
+
+function cachedOrNetworked(request) {
+  return caches.match(request)
+    .then((response) => {
+      log(response ? '(cached)' : '(network: cache miss)', request.url);
+      return response ||
+        networkedAndCache(request)
+          .catch(() => { return offlineResponse(request) });
+    });
+}
+
+function networkedOrOffline(request) {
+  return fetch(request)
+    .catch(() => {
+      return offlineResponse(request);
+    });
+}
+
+function cachedOrOffline(request) {
+  return caches
+    .match(request)
+    .then((response) => {
+      return response || offlineResponse(request);
+    });
+}
+
+function offlineResponse(request) {
+  if (~request.headers.get('Accept').indexOf('image')) {
+    return new Response(offlineImage, { headers: { 'Content-Type': 'image/svg+xml' }});
+  } else {
+    return caches.match('/offline.html');
+  }
+}
+
+///////////
+// Activate
+///////////
+function onActivate(event) {
   log('activate event in progress.');
+  event.waitUntil(removeOldCache());
+}
 
-  event.waitUntil(
-    caches
-    // This method returns a promise which will resolve to an array of available cache keys.
-    .keys()
-    .then((keys) => {
-      // We return a promise that settles when all outdated caches are deleted.
-      return Promise.all(
-        keys
-        .filter((key) => {
-          return !key.startsWith(version); // Filter by keys that don't start with the latest version prefix.
-        })
-        .map((key) => {
-          return caches.delete(key); // Return a promise that's fulfilled when each outdated cache is deleted.
-        })
-      );
-    })
-    .then(() => {
-      log('activate completed.');
-    })
-  );
-});
+function removeOldCache() {
+  return caches
+  .keys()
+  .then((keys) => {
+    return Promise.all( // We return a promise that settles when all outdated caches are deleted.
+                       keys
+                       .filter((key) => {
+                         return !key.startsWith(version); // Filter by keys that don't start with the latest version prefix.
+                       })
+                       .map((key) => {
+                         return caches.delete(key); // Return a promise that's fulfilled when each outdated cache is deleted.
+                       })
+                      );
+  })
+  .then(() => {
+    log('removeOldCache completed.');
+  });
+}
 
-function cachekey() {
+function cacheKey() {
   return [version, ...arguments].join(':');
 }
 
 function log() {
-  if (__DEVELOPMENT__) {
+  if (developmentMode()) {
     console.log("SW:", ...arguments);
   }
 }
 
-function fetchedFromNetwork(event) {
-  return function cacheAndRespond(response) {
-    /* We copy the response before replying to the network request.
-       This is the response that will be stored on the ServiceWorker cache.
-       */
-    let cacheCopy = response.clone();
-    log('fetch response from network', event.request.url);
-
-    // We open a cache to store the response for this request
-    caches
-    .open(cachekey('pages'))
-    .then((cache) => {
-      /* We store the response for this request. It'll later become
-         available to caches.match(event.request) calls, when looking
-         for cached responses.
-         */
-      cache.put(event.request, cacheCopy);
-    })
-    .then(() => {
-      log('fetch response stored in cache.', event.request.url);
-    });
-
-    return response;
-  }
+function shouldAlwaysFetch(request) {
+  return __DEVELOPMENT__ ||
+    request.method !== 'GET' ||
+      ignoreFetch.some(regex => request.url.match(regex));
 }
 
-function unableToResolve(event) {
-  return function handleRequestFailure(response) {
-    /* When this method is called, it means we were unable to produce a response
-       from either the cache or the network. This is our opportunity to produce
-       a meaningful response even when all else fails. It's the last chance, so
-       you probably want to display a "Service Unavailable" view or a generic
-       error response.
-       There's a couple of things we can do here.
-       - Test the Accept header and then return one of the `offlineFundamentals`
-       e.g: `return caches.match('/some/cached/image.png')`
-       - You should also consider the origin. It's easier to decide what
-       "unavailable" means for requests against your origins than for requests
-       against a third party, such as an ad provider
-       - Generate a Response programmaticaly, as shown below, and return that
-          return new Response('<h1>Service Unavailable</h1>', {
-            status: 503,
-            statusText: 'Service Unavailable',
-            headers: new Headers({
-              'Content-Type': 'text/html'
-            })
-          });
-       */
-    log('fetch request failed in both cache and network', event);
-  }
+function shouldFetchAndCache(request) {
+  return ~request.headers.get('Accept').indexOf('text/html');
 }
 
-function ignoreFetchEvent(event) {
-  return event.request.method !== 'GET' || ignoreFetch.some(regex => event.request.url.match(regex));
+function developmentMode() {
+  return __DEVELOPMENT__ || __DEBUG__;
 }
 
 log("Hello from ServiceWorker land!", version);
+
+self.addEventListener('install', onInstall);
+
+self.addEventListener('fetch', onFetch);
+
+self.addEventListener("activate", onActivate);
