@@ -10,8 +10,6 @@ tags:
   - Ruby
 ---
 
-![Deadpool](blog/deadpool.jpg)
-
 One of the fundamental concepts in key Ruby libraries that embrace
 concurrency is the [thread pool](https://en.wikipedia.org/wiki/Thread_pool).
 

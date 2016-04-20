@@ -4,15 +4,13 @@ author: Ross Kaffenberger
 published: true
 summary: Control spec behavior with declarative tags... just don't overdo it
 description: Leveraging RSpec metadata to control how specs are run with examples for altering database mode and toggling behavior based on spec directory
-pull_image: 'https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg'
+pull_image: 'blog/stock/fall-leaves-pexels-photo.jpg'
 tags:
   - Code
   - Ruby
   - Rails
   - RSpec
 ---
-
-![Fall](blog/stock/fall-leaves-pexels-photo.jpg)
 
 A useful feature of RSpec is the ability to pass metadata to tests and suites.
 

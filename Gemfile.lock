@@ -1,4 +1,13 @@
 GIT
+  remote: git://github.com/middleman/middleman-blog.git
+  revision: c1205be58323d1e9161716ec103fb85eaa6b9ea3
+  specs:
+    middleman-blog (4.0.1)
+      addressable (~> 2.3)
+      middleman-core (>= 4.0.0)
+      tzinfo (>= 0.3.0)
+
+GIT
   remote: git://github.com/rossta/middleman-meta-tags.git
   revision: 061cf8753abac1c62c7c99ddc70f66c1824d4922
   branch: master
@@ -65,10 +74,6 @@ GEM
       middleman-cli (= 4.1.7)
       middleman-core (= 4.1.7)
       sass (>= 3.4.0, < 4.0)
-    middleman-blog (4.0.1)
-      addressable (~> 2.3)
-      middleman-core (>= 4.0.0)
-      tzinfo (>= 0.3.0)
     middleman-cli (4.1.7)
       thor (>= 0.17.0, < 2.0)
     middleman-core (4.1.7)
@@ -147,7 +152,7 @@ PLATFORMS
 DEPENDENCIES
   builder
   middleman
-  middleman-blog
+  middleman-blog!
   middleman-livereload
   middleman-meta-tags!
   nokogiri

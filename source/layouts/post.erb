@@ -8,6 +8,9 @@
   <section id="blog" class="margin-bottom double">
     <article class="post margin-bottom double">
       <%= page_header current_article.title, current_page.data.summary %>
+      <% if current_page.data.pull_image %>
+        <p><%= image_tag current_page.data.pull_image if current_page.data.pull_image %></p>
+      <% end %>
 
       <%= yield %>
 

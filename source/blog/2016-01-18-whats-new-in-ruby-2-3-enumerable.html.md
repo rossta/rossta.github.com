@@ -4,14 +4,12 @@ author: Ross Kaffenberger
 published: true
 summary: A closer look at Enumerable's grep_v and chunk_when
 description: Ruby 2.3 introduced a couple new additions to the Enumerable API that provide some nice variations on existing methods
-pull_image: 'https://rossta.net/assets/images/blog/stock/dark-brown-milk-candy-pexels-photo.jpg'
+pull_image: 'blog/stock/dark-brown-milk-candy-pexels-photo.jpg'
 series: Enumerable
 tags:
   - Code
   - Ruby
 ---
-
-![Goodies](blog/stock/dark-brown-milk-candy-pexels-photo.jpg)
 
 You may have heard [Ruby 2.3 dropped](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/) on Christmas this past year. Two new `Enumerable` instance methods were added, `grep_v` and `chunk_while`, both of which are variations on other `Enumerable` methods. We'll dissect both here below.
 

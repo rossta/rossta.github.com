@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: false
 summary: Pascals' Triangle as an Enumerable Sequence with Ruby Enumerator
 description: Generating Pascal's Triangle as an Enumerable sequence with Ruby's Enumerator.
-pull_image: 'https://rossta.net/assets/images/blog/pascals_triangle_color.jpg'
+pull_image: 'blog/stock/louvre-pexels-photo.jpg'
 published: true
 series: Enumerable
 tags:

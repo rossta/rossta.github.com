@@ -11,8 +11,6 @@ tags:
   - JavaScript
 ---
 
-![](blog/stock/tundra-hike-pexels-photo.jpg)
-
 I've [hosted this site on Github Pages](/blog/why-i-ditched-wordpress-for-github.html) with the [Middleman static site framework](https://middlemanapp.com/) for several years now. To keep up with the most recent release of the framework, I decided to upgrade the site to [Middleman version 4](https://middlemanapp.com/basics/upgrade-v4/). There were some significant changes to the configuration options and helper methods, which are [well documented](https://middlemanapp.com/basics/upgrade-v4/) on the Middleman blog.
 
 By far the biggest change was the [removal of the Sprockets](https://middlemanapp.com/advanced/asset_pipeline/) dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.

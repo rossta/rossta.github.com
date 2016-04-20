@@ -11,8 +11,6 @@ tags:
   - Ruby
 ---
 
-![](blog/stock/snakes-pexels-photo.jpg)
-
 Last week [I spoke]() at [Ancient City Ruby Conference]() where the organizers encouraged people to participate in a Ruby programming challenge called [Snake Case](http://www.ancientcityruby.com/snake_case/). I benchmarked a number of different ways to solve the challenge in Ruby and present the results here.
 
 Here's the challenge:
