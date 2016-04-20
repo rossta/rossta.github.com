@@ -15,7 +15,7 @@ I've [hosted this site on Github Pages](/blog/why-i-ditched-wordpress-for-github
 
 By far the biggest change was the [removal of the Sprockets](https://middlemanapp.com/advanced/asset_pipeline/) dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.
 
-Given the "explosion of front-end language and tooling" that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like [Grunt](http://gruntjs.com/), [Gulp](http://gulpjs.com/), [Webpack](http://webpack.github.io), [Browserify](http://browserify.org/), [Brunch](http://brunch.io/), [Brocolli](http://broccolijs.com/)---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the `external_pipeline` feature which allows "subprocesses" to run alongside the development server or build process.
+Given the "explosion of front-end language and tooling" that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like [Grunt](http://gruntjs.com/), [Gulp](http://gulpjs.com/), [Webpack](https://webpack.github.io), [Browserify](http://browserify.org/), [Brunch](http://brunch.io/), [Brocolli](http://broccolijs.com/)---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the `external_pipeline` feature which allows "subprocesses" to run alongside the development server or build process.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated Webpack inside Middleman. Dev &amp; build modes</p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/580115759768059904">March 23, 2015</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -66,7 +66,7 @@ This configuration made it possible to require assets in JavaScript with the
 With Sprockets dropped in Middleman version 4, this approach would no longer be
 possible so I had to rethink the build pipeline. I preferred to support multiple
 bundles and also wanted to upgrade my custom JavaScript to ES2015 syntax. For
-this, [Webpack]() appeared to offer some nice advantages, though, many of the
+this, [Webpack](https://webpack.github.io/) appeared to offer some nice advantages, though, many of the
 build tools and systems mentioned earlier would also make good choices and fit
 right into the new Middleman external pipeline feature.
 
