@@ -74,4 +74,13 @@
     color: $secondaryColor;
   }
 }
+blockquote {
+  font-family: $header-font-family;
+  font-style: italic;
+  color: #444;
+  font-size: 90%;
+  ul {
+    font-size: inherit;
+  }
+}
 
