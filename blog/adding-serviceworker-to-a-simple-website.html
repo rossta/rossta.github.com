@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Adding Service Worker to a simple website - rossta.net</title>
+<meta name="description" content="Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment" />
+<meta name="keywords" content="Code, JavaScript" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/cyclists-unsplash-photo-cdd2bd0f.jpg" />
+<meta name="twitter:title" content="Adding Service Worker to a simple website" />
+<meta property="og:description" content="Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/cyclists-unsplash-photo-cdd2bd0f.jpg" />
+<meta property="og:title" content="Adding Service Worker to a simple website" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/index.bundle-ec73b984.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-ae1a9d85.js"></script>
+    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/">rossta.net</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h2>
+    Adding Service Worker to a simple website
+  </h2>
+    <h3>
+      Where "simple" is a static website hosted on Github pages and Cloudflare
+    </h3>
+</header>
+
+        <p><img src="/assets/images/blog/stock/cyclists-unsplash-photo-cdd2bd0f.jpg" /></p>
+
+      <p>Service Worker is well-suited to enhance a simple website like this blog. The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">Service Worker API</a> has been designed in such as a way that developers can pick and choose the features they want without completing reworking their sites or committing to a (or another) JavaScript framework.</p>
+
+<p>I recently added Service Worker enhancement to <a href="https://rossta.net">https://rossta.net</a>. You can read
+the <a href="https://github.com/rossta/rossta.github.com/blob/efbb4d41697a64543f5d4870c9915e633dda962d/source/assets/javascripts/serviceworker.js">full source of my serviceworker.js implementation</a> at the time of this writing. I&rsquo;ll describe how I&rsquo;m using Service Worker to:</p>
+
+<h3>Requirements</h3>
+
+<p>To get my first service worker running, I did the following:</p>
+
+<p><strong>HTTPS everywhere</strong> I moved rossta.net to <a href="https://en.wikipedia.org/wiki/HTTPS_Everywhere">&ldquo;HTTPS everywhere&rdquo;</a> with <a href="https://www.cloudflare.com/">Cloudflare</a>. Service workers will only run on sites served over HTTPS (or <code>localhost</code> for development). If you&rsquo;re considering Cloudflare for SSL, <a href="https://scotthelme.co.uk/tls-conundrum-and-leaving-cloudflare/">be aware of the drawbacks</a>.</p>
+
+<p><strong>Registration</strong> Though the Service Worker runs in its own thread outside the context of a webpage, we need to initiate its use from the webpage we&rsquo;re on. So when you hit a page on <a href="https://rossta.net">https://rossta.net</a>, there&rsquo;s a snippet of JavaScript that checks for browser support and registers a service worker script for the root scope of the website.</p>
+
+<pre><code class="javascript">// index.js
+if(&#39;serviceWorker&#39; in navigator) {
+  navigator.serviceWorker.register(&#39;/serviceworker.js&#39;, {
+    scope: &#39;/&#39;
+  });
+}
+</code></pre>
+
+<p><strong>Service Worker Script</strong> The service worker script gets deployed to <a href="https://rossta.net/serviceworker.js">https://rossta.net/serviceworker.js</a> separately from
+the concatenated, versioned JavaScript bundles used on the main site.</p>
+
+<h3>The script</h3>
+
+<p>For the code in my first service worker script, I followed the strategy outlined by Jeremy Keith&rsquo;s excellent
+<a href="https://adactio.com/journal/9775">My first Service Worker</a>. He also provided a
+generalized version of his script in a <a href="https://gist.github.com/adactio/fbaa3a5952774553f5e7">service worker gist</a> that&rsquo;s definitely worth a look.</p>
+
+<p>Here&rsquo;s a general summary of the Service Worker&rsquo;s responsibilities at various stages in its life cycle:</p>
+
+<p>On <code>install</code>:</p>
+
+<ul>
+<li>&ldquo;Pre-cache&rdquo; any desired resource, primarily for rendering in an offline context</li>
+</ul>
+
+<p>On <code>activate</code>:</p>
+
+<ul>
+<li>Clean up old cache when activating an update to the Service Worker</li>
+</ul>
+
+<p>On <code>fetch</code> of any resource:</p>
+
+<ul>
+<li>Render HTML from the network while adding it to the local cache for use when offline</li>
+<li>Render JavaScript and CSS assets immediately from cache while updating the cache from the network when possible</li>
+<li>Render an offline page when a visitor can&rsquo;t connect to rossta.net</li>
+<li>Allow normal pass-through network request of non-GET and white-listed resources like Twitter embeds and analytics tracking</li>
+</ul>
+
+<h3>Deployment my service worker</h3>
+
+<p>Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. <a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html">As I&rsquo;ve said before</a>, this is a static site hosted on Github pages. The <a href="/blog/using-webpack-with-middleman.html">site is built with Webpack and Middleman</a> so there are modifications to my setup specific to those tools but for generally applicable concerns.</p>
+
+<p>Setting up Github pages to use Cloudflare was relatively straightforward and has been <a href="https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/">well-documented</a>. I also wanted to make sure <code>serviceworker.js</code> is always served over HTTPS and that it would not be cached. However, since I don&rsquo;t have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules to mitigate this issue.</p>
+
+<p>To ensure content on rossta.net is always loaded over HTTPS, I added a redirect page rule:</p>
+
+<p><img src="/assets/images/blog/cloud-flare-page-rules-https-7d097ad2.jpg" /></p>
+
+<p>I&rsquo;m using Webpack to create <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12">separate bundles</a> and Middleman&rsquo;s <a href="https://middlemanapp.com/advanced/improving_cacheability/"><code>:asset_hash</code> extension</a> to add a digest to each file, similar to the <a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production">Rails asset pipeline production behavior</a> to improve the cacheability of CSS and JavaScript assets on rossta.net.</p>
+
+<p>However, I don&rsquo;t want either for serviceworker.js: it must be served separately from the main asset bundles and the general recommendation is to avoid caching.</p>
+
+<p>Webpack supports <a href="https://webpack.github.io/docs/configuration.html#multiple-configurations">multiple configurations</a>, so I set up my <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80"><code>webpack.config.js</code></a> to use ES2015 transpilation for <code>serviceworker.js</code> but bundle separately from the primary concatenated script files.</p>
+
+<p>To make sure Cloudflare does not cache <code>serviceworker.js</code>, as it would by default for the CDN, I instructed Cloudflare to bypass the cache.</p>
+
+<p><img src="/assets/images/blog/cloud-flare-page-rules-serviceworker-9f251642.jpg" /></p>
+
+<p>Github pages currently adds 10-minute <code>Expires</code> and <code>Cache-Control</code> headers to resource requests meaning browsers and proxies may choose to cache <code>serviceworker.js</code> past an update I&rsquo;ve just deployed. This is a tradeoff I&rsquo;ll have to live with until I move rossta.net to another host.</p>
+
+<h3>Caching considerations</h3>
+
+<p>There are some key considerations regarding the browser cache when setting up your first service worker with
+an approach like the one <a href="https://adactio.com/journal/9775">Jeremy Keith</a> outlines and that I&rsquo;ve used here in
+rossta.net. Jeff Posnick, maintainer of Google Chrome&rsquo;s <a href="https://github.com/GoogleChrome/sw-precache">sw-precache</a>, highlights some of these points <a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker">in a recent comment</a>.</p>
+
+<blockquote>
+<p>Any of the following would be safe, though they each have certain drawbacks:</p>
+
+<ol>
+<li>Serving all of the local assets with browser caching disabled.</li>
+<li>Cache-busting the requests that are used to populate the SW cache, using the non-cache-busted URL as the SW cache key.</li>
+<li>Explicitly versioning all of your local assets using something like gulp-rev, and then using long-lived browser caching headers.</li>
+</ol>
+
+<p>Some drawbacks of each:</p>
+
+<p>Approach 1. Means that all requests, even those coming from browsers without SW support, will bypass the browser cache, and that&rsquo;s can be a lot of wasteful traffic.</p>
+
+<p>Approach 2. Can mean some extra code that makes the simple copy and paste example look a bit more complicated.</p>
+
+<p>Approach 3. Is a good practice to follow in general, but there&rsquo;s an extra build-time step that you need to introduce, and it only applies to subresources, not URLs used as navigation targets (you&rsquo;d likely just have to serve those bypassing the browser cache completely).</p>
+</blockquote>
+
+<p>Realize that the browser cache is separate from the local cache used by the
+service worker. So, when caching resources in your service worker, you may need
+to consider the &ldquo;cache busting&rdquo; strategy for both your service worker and the
+browser and how <a href="https://github.com/GoogleChrome/css-triggers/issues/14">users may be affected when pushing updates to the site</a>.</p>
+
+<p>If browser cache is disabled, then you can happily use your service worker to
+cache resources without conflict, albeit, without the obvious benefits of a browser cache.</p>
+
+<p>In other words, take a moment to consider how your assets may (or may not) be cached by
+browsers before <a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker">copying and pasting your first service worker</a>.</p>
+
+<h3>Onward</h3>
+
+<p>There&rsquo;s a lot more that can be done with the Service Worker API, but this was a
+good start to see some impressive perceived performance improvements, especially when
+reloading pages with images and special fonts.</p>
+
+
+    </article>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Adding%20Service%20Worker%20to%20a%20simple%20website%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fadding-serviceworker-to-a-simple-website.html">share it on Twitter</a>
+        and <a href="https://twitter.com/rossta">follow me</a>.
+      </p>
+      <p>
+          This post is part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
+        Published on Apr 20, 2016
+      </p>
+    </section>
+  </section>
+  <section class="share margin-bottom double">
+  </section>
+  <section class="signup-form-standalone margin-bottom double">
+    <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Stop Wrangling with Rails</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+    </form>
+  </div>
+
+  <!--End mc_embed_signup-->
+</div>
+
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "adding-serviceworker-to-a-simple-website";
+    var disqus_title      = "Adding Service Worker to a simple website";
+    var disqus_url        = "https://rossta.net/blog/adding-serviceworker-to-a-simple-website.html";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <div class="row">
+      <footer>
+        <section class="large-12 columns center-inline-list">
+          <ul class="inline-list">
+  <li><a href="mailto:ross@rossta.net">email</a></li>
+  <li><a href="https://twitter.com/rossta">twitter</a></li>
+  <li><a href="https://github.com/rossta">github</a></li>
+  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+  <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+</ul>
+
+        </section>
+      </footer>
+    </div>
+    <script src="/assets/javascripts/index.bundle-000158ba.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>

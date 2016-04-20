@@ -307,6 +307,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2016-04-20-adding-serviceworker-to-a-simple-website.html</loc>
+    <lastmod>2016-04-20T00:00:00-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/index.html</loc>
     <lastmod>2016-04-20T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -500,6 +506,12 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/04.html</loc>
+    <lastmod>2016-04-20T00:00:00-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2016/04/20.html</loc>
     <lastmod>2016-04-20T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -872,6 +884,12 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/01/04.html</loc>
+    <lastmod>2016-04-20T00:00:00-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/series/service-worker.html</loc>
     <lastmod>2016-04-20T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
