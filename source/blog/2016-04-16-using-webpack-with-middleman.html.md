@@ -256,7 +256,7 @@ var definePlugin = new webpack.DefinePlugin({
 
 I tell Webpack to make the `__DEVELOPMENT__` and `__PRODUCTION__` variables
 available based on the presence on the `BUILD_DEVELOPMENT` and
-`BUILD_DEVELOPMENT` environment variables. I pass these variables to the webpack
+`BUILD_PRODUCTION` environment variables. I pass these variables to the webpack
 commands I'm using in `config.rb` for the build and development Middleman
 contexts respectively:
 
