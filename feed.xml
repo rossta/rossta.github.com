@@ -252,7 +252,7 @@ var definePlugin = new webpack.DefinePlugin({
 
 &lt;p&gt;I tell Webpack to make the &lt;code&gt;__DEVELOPMENT__&lt;/code&gt; and &lt;code&gt;__PRODUCTION__&lt;/code&gt; variables
 available based on the presence on the &lt;code&gt;BUILD_DEVELOPMENT&lt;/code&gt; and
-&lt;code&gt;BUILD_DEVELOPMENT&lt;/code&gt; environment variables. I pass these variables to the webpack
+&lt;code&gt;BUILD_PRODUCTION&lt;/code&gt; environment variables. I pass these variables to the webpack
 commands I&amp;rsquo;m using in &lt;code&gt;config.rb&lt;/code&gt; for the build and development Middleman
 contexts respectively:&lt;/p&gt;
 
