@@ -22,10 +22,10 @@ const ignoreFetch = [
 function onInstall(event) {
   log('install event in progress.');
 
-  event.waitUntil(updateStaticCache());
+  event.waitUntil(cacheOfflineResources());
 }
 
-function updateStaticCache() {
+function cacheOfflineResources() {
   return caches
     .open(cacheKey('offline'))
     .then((cache) => {
