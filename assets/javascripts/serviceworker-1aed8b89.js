@@ -3,7 +3,8 @@
 const version = 'v20160419';
 const offlineResources = [
   '/',
-  '/offline.html'
+  '/offline.html',
+  '/offline-c5946202.svg'
 ];
 
 const ignoreFetch = [
@@ -107,8 +108,8 @@ function cachedOrOffline(request) {
 
 function offlineResponse(request) {
   log('(offline)', request.method, request.url);
-  if (~request.headers.get('Accept').indexOf('image')) {
-    return new Response(offlineImage, { headers: { 'Content-Type': 'image/svg+xml' }});
+  if (request.url.match(/\.(jpg|png|gif|svg|jpeg)(\?.*)?$/)) {
+    return caches.match('/offline-c5946202.svg');
   } else {
     return caches.match('/offline.html');
   }
