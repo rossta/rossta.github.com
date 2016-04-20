@@ -16,7 +16,7 @@ tags:
 Service Worker is well-suited to enhance a simple website like this blog. The [Service Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) has been designed in such as a way that developers can pick and choose the features they want without completing reworking their sites or committing to a (or another) JavaScript framework.
 
 I recently added Service Worker enhancement to https://rossta.net. You can read
-the [full source of my serviceworker.js implementation](https://github.com/rossta/rossta.github.com/blob/efbb4d41697a64543f5d4870c9915e633dda962d/source/assets/javascripts/serviceworker.js) at the time of this writing. I'll describe how I'm using Service Worker to:
+the [full source of my serviceworker.js implementation](https://github.com/rossta/rossta.github.com/blob/efbb4d41697a64543f5d4870c9915e633dda962d/source/assets/javascripts/serviceworker.js) at the time of this writing.
 
 ### Requirements
 
