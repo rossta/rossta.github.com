@@ -21,8 +21,8 @@
     <summary type="html">&lt;p&gt;Service Worker is well-suited to enhance a simple website like this blog. The &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker API&lt;/a&gt; has been designed in such as a way that developers can pick and choose the features they want without reworking their sites or committing to a (or another...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Service Worker is well-suited to enhance a simple website like this blog. The &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker API&lt;/a&gt; has been designed in such as a way that developers can pick and choose the features they want without reworking their sites or committing to a (or another) JavaScript framework.&lt;/p&gt;
 
-&lt;p&gt;I recently added Service Worker enhancement to &lt;a href="https://rossta.net"&gt;https://rossta.net&lt;/a&gt;. You can read
-the &lt;a href="https://github.com/rossta/rossta.github.com/blob/efbb4d41697a64543f5d4870c9915e633dda962d/source/assets/javascripts/serviceworker.js"&gt;full source of my serviceworker.js implementation&lt;/a&gt; at the time of this writing.&lt;/p&gt;
+&lt;p&gt;I recently added a service worker to rossta.net. You can read
+the &lt;a href="https://github.com/rossta/rossta.github.com/blob/efbb4d41697a64543f5d4870c9915e633dda962d/source/assets/javascripts/serviceworker.js"&gt;full source of my serviceworker.js implementation&lt;/a&gt; here.&lt;/p&gt;
 
 &lt;h3&gt;Requirements&lt;/h3&gt;
 
@@ -30,7 +30,7 @@ the &lt;a href="https://github.com/rossta/rossta.github.com/blob/efbb4d41697a645
 
 &lt;p&gt;&lt;strong&gt;HTTPS everywhere&lt;/strong&gt; I moved rossta.net to &lt;a href="https://en.wikipedia.org/wiki/HTTPS_Everywhere"&gt;&amp;ldquo;HTTPS everywhere&amp;rdquo;&lt;/a&gt; with &lt;a href="https://www.cloudflare.com/"&gt;Cloudflare&lt;/a&gt;. Service workers will only run on sites served over HTTPS (or &lt;code&gt;localhost&lt;/code&gt; for development). If you&amp;rsquo;re considering Cloudflare for SSL, &lt;a href="https://scotthelme.co.uk/tls-conundrum-and-leaving-cloudflare/"&gt;be aware of the drawbacks&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Registration&lt;/strong&gt; Though the Service Worker runs in its own thread outside the context of a webpage, we need to initiate its use from the webpage we&amp;rsquo;re on. So when you hit a page on &lt;a href="https://rossta.net"&gt;https://rossta.net&lt;/a&gt;, there&amp;rsquo;s a snippet of JavaScript that checks for browser support and registers a service worker script for the root scope of the website.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Registration&lt;/strong&gt; Though the Service Worker runs in its own thread outside the context of a webpage, we need to initiate its use from the webpage we&amp;rsquo;re on. So when you hit a page on rossta.net, there&amp;rsquo;s a snippet of JavaScript that checks for browser support and registers a service worker script for the root scope of the website.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// index.js
 if(&amp;#39;serviceWorker&amp;#39; in navigator) {
@@ -63,7 +63,7 @@ generalized version of his script in a &lt;a href="https://gist.github.com/adact
 &lt;li&gt;Clean up old cache when activating an update to the Service Worker&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;On &lt;code&gt;fetch&lt;/code&gt; of any resource:&lt;/p&gt;
+&lt;p&gt;On &lt;code&gt;fetch&lt;/code&gt;:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Render HTML from the network while adding it to the local cache for use when offline&lt;/li&gt;
@@ -74,9 +74,9 @@ generalized version of his script in a &lt;a href="https://gist.github.com/adact
 
 &lt;h3&gt;Deployment my service worker&lt;/h3&gt;
 
-&lt;p&gt;Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. &lt;a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html"&gt;As I&amp;rsquo;ve said before&lt;/a&gt;, this is a static site hosted on Github pages. The &lt;a href="/blog/using-webpack-with-middleman.html"&gt;site is built with Webpack and Middleman&lt;/a&gt; so there are modifications to my setup specific to those tools but for generally applicable concerns.&lt;/p&gt;
+&lt;p&gt;Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. &lt;a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html"&gt;As I&amp;rsquo;ve said before&lt;/a&gt;, this is a static site hosted on Github pages, &lt;a href="/blog/using-webpack-with-middleman.html"&gt;built with Webpack and Middleman&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Setting up Github pages to use Cloudflare was relatively straightforward and has been &lt;a href="https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/"&gt;well-documented&lt;/a&gt;. I also wanted to make sure &lt;code&gt;serviceworker.js&lt;/code&gt; is always served over HTTPS and that it would not be cached. However, since I don&amp;rsquo;t have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules to mitigate this issue.&lt;/p&gt;
+&lt;p&gt;Setting up Github pages to use Cloudflare was relatively straightforward and has been &lt;a href="https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/"&gt;well-documented&lt;/a&gt;. I also wanted to make sure &lt;code&gt;serviceworker.js&lt;/code&gt; is always served over HTTPS and that it would not be cached. Since I don&amp;rsquo;t have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules on Cloudflare to mitigate this issue.&lt;/p&gt;
 
 &lt;p&gt;To ensure content on rossta.net is always loaded over HTTPS, I added a redirect page rule:&lt;/p&gt;
 
@@ -84,9 +84,9 @@ generalized version of his script in a &lt;a href="https://gist.github.com/adact
 
 &lt;p&gt;I&amp;rsquo;m using Webpack to create &lt;a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12"&gt;separate bundles&lt;/a&gt; and Middleman&amp;rsquo;s &lt;a href="https://middlemanapp.com/advanced/improving_cacheability/"&gt;&lt;code&gt;:asset_hash&lt;/code&gt; extension&lt;/a&gt; to add a digest to each file, similar to the &lt;a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production"&gt;Rails asset pipeline production behavior&lt;/a&gt; to improve the cacheability of CSS and JavaScript assets on rossta.net.&lt;/p&gt;
 
-&lt;p&gt;However, I don&amp;rsquo;t want either for serviceworker.js: it must be served separately from the main asset bundles and the general recommendation is to avoid caching.&lt;/p&gt;
+&lt;p&gt;I don&amp;rsquo;t want either for serviceworker.js: it must be served separately from the main asset bundles and it should not be cached.&lt;/p&gt;
 
-&lt;p&gt;Webpack supports &lt;a href="https://webpack.github.io/docs/configuration.html#multiple-configurations"&gt;multiple configurations&lt;/a&gt;, so I set up my &lt;a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80"&gt;&lt;code&gt;webpack.config.js&lt;/code&gt;&lt;/a&gt; to use ES2015 transpilation for &lt;code&gt;serviceworker.js&lt;/code&gt; but bundle separately from the primary concatenated script files.&lt;/p&gt;
+&lt;p&gt;Webpack supports &lt;a href="https://webpack.github.io/docs/configuration.html#multiple-configurations"&gt;multiple configurations&lt;/a&gt;, so I set up my &lt;a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80"&gt;&lt;code&gt;webpack.config.js&lt;/code&gt;&lt;/a&gt; to use ES2015 transpilation for &lt;code&gt;serviceworker.js&lt;/code&gt; but output to a different destination from the other concatenated script files.&lt;/p&gt;
 
 &lt;p&gt;To make sure Cloudflare does not cache &lt;code&gt;serviceworker.js&lt;/code&gt;, as it would by default for the CDN, I instructed Cloudflare to bypass the cache.&lt;/p&gt;
 
@@ -121,7 +121,7 @@ rossta.net. Jeff Posnick, maintainer of Google Chrome&amp;rsquo;s &lt;a href="ht
 &lt;p&gt;Realize that the browser cache is separate from the local cache used by the
 service worker. So, when caching resources in your service worker, you may need
 to consider the &amp;ldquo;cache busting&amp;rdquo; strategy for both your service worker and the
-browser and how &lt;a href="https://github.com/GoogleChrome/css-triggers/issues/14"&gt;users may be affected when pushing updates to the site&lt;/a&gt;.&lt;/p&gt;
+browser and &lt;a href="https://github.com/GoogleChrome/css-triggers/issues/14"&gt;how users may be affected when pushing updates to the site&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;If browser cache is disabled, then you can happily use your service worker to
 cache resources without conflict, albeit, without the obvious benefits of a browser cache.&lt;/p&gt;
