@@ -12,7 +12,7 @@ author: Ross Kaffenberger
 published: false
 summary: #{title}
 description: #{title}
-pull_image: 'https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg'
+pull_image: 'blog/stock/fall-leaves-pexels-photo.jpg'
 tags:
   - Code
 ---
