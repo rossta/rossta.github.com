@@ -137,7 +137,7 @@ Set for your local app (/Users/rossta/path/to/app/.bundle/config): &amp;quot;/Us
 
 &lt;p&gt;&lt;code&gt;bundle config --delete local.YOUR_GEM_NAME&lt;/code&gt;&lt;/p&gt;
 
-&lt;h3&gt;Caveats&lt;/h3&gt;
+&lt;h2&gt;Caveats&lt;/h2&gt;
 
 &lt;p&gt;As with the &lt;code&gt;:path&lt;/code&gt; option, we still need to remember to push our
 local gem changes to the remote repository when using &lt;code&gt;bundle config local&lt;/code&gt;.&lt;/p&gt;
@@ -145,6 +145,12 @@ local gem changes to the remote repository when using &lt;code&gt;bundle config 
 &lt;p&gt;I should also mention that a good use case for using &lt;code&gt;:path&lt;/code&gt; instead of &lt;code&gt;bundle
 config local&lt;/code&gt; it when the local gem is in a subdirectory relative to your app.
 I don&amp;rsquo;t often see this in practice, but there are valid reasons for doing so.&lt;/p&gt;
+
+&lt;p&gt;In general, I&amp;rsquo;d encourage using either approach sparingly for gems that your
+team doesn&amp;rsquo;t own as it&amp;rsquo;s typically best to stick the official releases for
+active repositories. In my experience, it&amp;rsquo;s most common to develop against local gems for
+projects that your team &lt;em&gt;does&lt;/em&gt; own, so &lt;code&gt;bundle config local&lt;/code&gt; will ensure your
+co-workers know where to look to verify code dependencies.&lt;/p&gt;
 
 &lt;h2&gt;Don&amp;rsquo;t use :path, use bundle config local instead&lt;/h2&gt;
 

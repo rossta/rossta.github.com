@@ -165,7 +165,7 @@ Set for your local app (/Users/rossta/path/to/app/.bundle/config): &quot;/Users/
 
 <p><code>bundle config --delete local.YOUR_GEM_NAME</code></p>
 
-<h3>Caveats</h3>
+<h2>Caveats</h2>
 
 <p>As with the <code>:path</code> option, we still need to remember to push our
 local gem changes to the remote repository when using <code>bundle config local</code>.</p>
@@ -173,6 +173,12 @@ local gem changes to the remote repository when using <code>bundle config local<
 <p>I should also mention that a good use case for using <code>:path</code> instead of <code>bundle
 config local</code> it when the local gem is in a subdirectory relative to your app.
 I don&rsquo;t often see this in practice, but there are valid reasons for doing so.</p>
+
+<p>In general, I&rsquo;d encourage using either approach sparingly for gems that your
+team doesn&rsquo;t own as it&rsquo;s typically best to stick the official releases for
+active repositories. In my experience, it&rsquo;s most common to develop against local gems for
+projects that your team <em>does</em> own, so <code>bundle config local</code> will ensure your
+co-workers know where to look to verify code dependencies.</p>
 
 <h2>Don&rsquo;t use :path, use bundle config local instead</h2>
 
