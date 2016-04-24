@@ -5,10 +5,152 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-04-19T20:00:00-04:00</updated>
+  <updated>2016-04-22T20:00:00-04:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Developing with local Ruby gems</title>
+    <link rel="alternate" href="/blog/developing-with-local-ruby-gems.html"/>
+    <id>/blog/developing-with-local-ruby-gems.html</id>
+    <published>2016-04-22T20:00:00-04:00</published>
+    <updated>2016-04-22T20:00:00-04:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Let’s say you’re building a Ruby app and your team has extracted one or more
+gems referenced in your Gemfile, such as your custom Trello API client, &lt;a href="https://github.com/rossta/tacokit.rb"&gt;Tacokit.rb&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
+source "https://rubygems.org"
+
+# lots of gems ...
+
+gem "tacokit"
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Maybe Trello...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Let&amp;rsquo;s say you&amp;rsquo;re building a Ruby app and your team has extracted one or more
+gems referenced in your Gemfile, such as your custom Trello API client, &lt;a href="https://github.com/rossta/tacokit.rb"&gt;Tacokit.rb&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
+source &amp;quot;https://rubygems.org&amp;quot;
+
+# lots of gems ...
+
+gem &amp;quot;tacokit&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Maybe Trello made some recent changes to their API that your current feature depends
+on, so you need to update the &lt;code&gt;Tacokit&lt;/code&gt; gem as part of your work. You have a
+local checkout of the &lt;code&gt;tacokit&lt;/code&gt; gem in another directory in your laptop.&lt;/p&gt;
+
+&lt;p&gt;You add some code to the gem, but now you want to test the changes in your app. How do you do that?&lt;/p&gt;
+
+&lt;p&gt;According to &lt;a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile#answer-4488110"&gt;the most popular answer (and accepted) answer&lt;/a&gt; to the question, &lt;a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile"&gt;&amp;ldquo;How can I specify a local gem in my Gemfile?&amp;rdquo;&lt;/a&gt;, we should do the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;tacokit&amp;quot;, path: &amp;quot;/path/to/tacokit&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run &lt;code&gt;$ bundle update&lt;/code&gt;, restart the app, and - boom! - it works! Our changes in
+the local &lt;code&gt;tacokit&lt;/code&gt; checkout are showing up as expected.&lt;/p&gt;
+
+&lt;p&gt;Then we push our app changes and deploy to the staging server to test them out
+in the shared environment and - wait a minute - the app won&amp;rsquo;t even start.&lt;/p&gt;
+
+&lt;p&gt;Oops! We forgot to remove the &lt;code&gt;:path&lt;/code&gt; reference in the &lt;code&gt;Gemfile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s fix that&amp;hellip; we remove the &lt;code&gt;:path&lt;/code&gt; reference, push, and redeploy. The app
+restarts fine. But while testing the feature, we start getting 500 errors. This wasn&amp;rsquo;t happening locally.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;But it worked on my machine!&amp;rdquo; - &lt;em&gt;every developer ever&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The Rails logs reveal we have a bunch of undefined method errors coming from calls to &lt;code&gt;Tacokit&lt;/code&gt;. That&amp;rsquo;s right, we forgot another key step in this workflow: pushing our local &lt;code&gt;Tacokit&lt;/code&gt; changes to the remote!&lt;/p&gt;
+
+&lt;p&gt;OK, after we&amp;rsquo;ve done that and redeployed the app, we&amp;rsquo;re still getting 500 errors.&lt;/p&gt;
+
+&lt;p&gt;D&amp;#39;oh! We were working on a &lt;em&gt;branch&lt;/em&gt; of &lt;code&gt;tacokit&lt;/code&gt; but we reference it in our app&amp;rsquo;s &lt;code&gt;Gemfile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Good thing we weren&amp;rsquo;t pushing that app feature to production. We would have been wise to run the tests on our CI server first where we would have seen the same errors (assuming we had the right tests&amp;hellip; and a CI server).&lt;/p&gt;
+
+&lt;h3&gt;Here&amp;rsquo;s the thing&lt;/h3&gt;
+
+&lt;p&gt;If you&amp;rsquo;re using &lt;code&gt;:path&lt;/code&gt; in your &lt;code&gt;Gemfile&lt;/code&gt;, you&amp;rsquo;re doing it wrong.&lt;/p&gt;
+
+&lt;p&gt;The problem with &lt;code&gt;:path&lt;/code&gt; is it points to a location that only exists on our local machine.&lt;/p&gt;
+
+&lt;p&gt;Every time we want to develop against the local &lt;code&gt;tacokit&lt;/code&gt; gem, we have to remember to edit the &lt;code&gt;Gemfile&lt;/code&gt; to remove the option so we don&amp;rsquo;t screw up our teammates or break the build. We also have to remember to push those changes to the remote repository before updating our app.&lt;/p&gt;
+
+&lt;p&gt;This workflow is no good because we&amp;rsquo;re human and humans tend to forget to do things.&lt;/p&gt;
+
+&lt;h3&gt;A better way&lt;/h3&gt;
+
+&lt;p&gt;Buried deep in the Bundler docs is a better solution for &lt;a href="http://bundler.io/git.html#local"&gt;working with local git repo&lt;/a&gt;: the &lt;code&gt;bundle config local&lt;/code&gt; command. Instead of specifying the &lt;code&gt;:path&lt;/code&gt; option, we can run the following on command line:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ bundle config local.tacokit /path/to/tacokit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here we instruct Bundler to look in a local resource by modifying our local Bundler configuration. That&amp;rsquo;s the one that lives in
+&lt;code&gt;.bundle/config&lt;/code&gt; outside of version control.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;This means we won&amp;rsquo;t check in an invalid path.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We can confirm the link with &lt;code&gt;bundle config&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ bundle config
+Settings are listed in order of priority. The top value will be used.
+local.tacokit
+Set for your local app (/Users/rossta/.bundle/config): &amp;quot;/Users/rossta/path/to/tacokit&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can scope the configuration to a specific folder with the &lt;code&gt;--local&lt;/code&gt; flag:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ bundle config --local local.tacokit /path/to/tacokit
+$ bundle config
+Settings are listed in order of priority. The top value will be used.
+local.tacokit
+Set for your local app (/Users/rossta/path/to/app/.bundle/config): &amp;quot;/Users/rossta/path/to/tacokit&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To take advantage of this local override in the app, we have to specify the remote repo and branch in the &lt;code&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;tacokit&amp;quot;, github: &amp;quot;rossta/tacokit&amp;quot;, branch: &amp;quot;master&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bundler will abort if the local gem branch doesn&amp;rsquo;t match the one in the &lt;code&gt;Gemfile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Now we won&amp;rsquo;t point to the wrong branch in Gemfile.lock.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Even better, Bundler will also check to be sure the local changes have been
+pushed to the remote repo. Failing fast is a good thing!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;No more forgetting to push our local gem changes.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s also easy to remove the local config after we don&amp;rsquo;t need it:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;bundle config --delete local.YOUR_GEM_NAME&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3&gt;Don&amp;rsquo;t use :path, use bundle config local instead&lt;/h3&gt;
+
+&lt;p&gt;Though convenient, using the &lt;code&gt;:path&lt;/code&gt; option in our &lt;code&gt;Gemfile&lt;/code&gt; to point to a local
+gem sets us up for three potential problems without an automated prevention:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Committing a nonexistent lookup path on other machines&lt;/li&gt;
+&lt;li&gt;Failing to point to the correct repository branch&lt;/li&gt;
+&lt;li&gt;Failing to push local changes to the remote&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Forget the &lt;code&gt;:path&lt;/code&gt; option and you&amp;rsquo;ll never forget ^^this stuff^^ again.&lt;/p&gt;
+
+&lt;p&gt;Just use this command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;bundle config local.YOUR_GEM_NAME`
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+  </entry>
   <entry>
     <title>Adding Service Worker to a simple website</title>
     <link rel="alternate" href="/blog/adding-serviceworker-to-a-simple-website.html"/>
@@ -1427,177 +1569,6 @@ if you&amp;rsquo;re coming from Rails, but there is still a learning curve nonet
 work for you so can focus on what&amp;rsquo;s important - your business logic. Personally, I found a lot of advantages in the &amp;ldquo;Hanami way&amp;rdquo; and enjoyed the experience of the new paradigm. My &amp;ldquo;Rails muscle memory&amp;rdquo; tripped me up on occasion and left me pining for features that don&amp;rsquo;t exist or are not as well-developed in Hanami yet. I see a lot of potential in the Hanami framework and see it growing into a viable alternative to Rails in the near future.&lt;/p&gt;
 
 &lt;p&gt;Check out the &lt;a href="https://github.com/rossta/github_groove"&gt;GitHub-Groove source&lt;/a&gt; and &lt;a href="https://github-groove.herokuapp.com/"&gt;demo app&lt;/a&gt; and let me know what I could have done differently.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Clojure's iterate in Ruby</title>
-    <link rel="alternate" href="/blog/clojure-iterate-in-ruby.html"/>
-    <id>/blog/clojure-iterate-in-ruby.html</id>
-    <published>2016-02-16T19:00:00-05:00</published>
-    <updated>2016-02-16T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, &lt;a href="http://clojure.org/sequences"&gt;sequences&lt;/a&gt;, not featured in the Ruby standard library. A Clojure sequence is an immutable collection that representing the...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, &lt;a href="http://clojure.org/sequences"&gt;sequences&lt;/a&gt;, not featured in the Ruby standard library. A Clojure sequence is an immutable collection that representing the result of an algorithm. Previously, I described how to generate Clojure-like &lt;a href="https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html"&gt;sequences in Ruby&lt;/a&gt; (without the immutability anyways), including &lt;a href="https://rossta.net/blog/infinite-sequences-in-ruby.html"&gt;Pascal&amp;rsquo;s Triangle&lt;/a&gt; using &lt;code&gt;Enumerator&lt;/code&gt;, which allows us to package up an algorithm as an object that can emit values as any &amp;ldquo;eager&amp;rdquo; collection can, like &lt;code&gt;Array&lt;/code&gt; and &lt;code&gt;Hash&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Clojure provides a few functions that can be used to generate sequences,
-including &lt;code&gt;iterate&lt;/code&gt;. According to the &lt;a href="https://clojuredocs.org/clojure.core/iterate"&gt;docs&lt;/a&gt;,&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;Returns a lazy sequence of x, (f x), (f (f x)) etc. f must be free of side-effects&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;In other words, &lt;code&gt;iterate&lt;/code&gt; will emit values starting with the first and repeatedly call the given function with the return value of the previous call.&lt;/p&gt;
-
-&lt;p&gt;The signature in Clojure looks this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;(iterate f x)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So, we can generate a simple sequence of numbers using the &lt;code&gt;inc&lt;/code&gt; function and some start value:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;=&amp;gt; (iterate inc 1)
-(1 2 3 4 5 ...)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Of course, we have a terse was of generating a sequence like this in Ruby:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;irb(main)&amp;gt; (1..5).to_a
-=&amp;gt; [1, 2, 3, 4, 5]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;But this solution doesn&amp;rsquo;t generalize to other types of sequences like, for instance,
-generating a sequence of the powers of 2. In the example below, &lt;code&gt;(partial * 2)&lt;/code&gt;
-returns a function that multiplies a single argument by 2.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;=&amp;gt; (iterate (partial * 2) 1)
-(1 2 4 8 16 32 64 128 ...)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To get this result in Ruby, we might try something like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;irb&amp;gt; (1..7).each_with_object([]) { |n, seq| seq &amp;lt;&amp;lt; (seq.last.nil? ? n : seq.last * 2) }
-=&amp;gt; [1, 2, 4, 8, 16, 32, 64]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Not very pretty (ok, I admit that&amp;rsquo;s a strawman). But this also is an &amp;ldquo;eagerly&amp;rdquo;
-generated collection whereas we want something that can be lazily generated to
-get closer to Clojure.&lt;/p&gt;
-
-&lt;p&gt;While there may be a number of ways to generate these sequences in Ruby, for this
-exercise, we also want something that has a similar signature to Clojure&amp;rsquo;s &lt;code&gt;iterate&lt;/code&gt;,
-like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;iterate(x, &amp;amp;block)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;ll leverage Ruby&amp;rsquo;s method block convention in place of the function, &lt;code&gt;f&lt;/code&gt;.
-Usage:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;irb&amp;gt; iterate(1) { |n| n + 1 }
-=&amp;gt; [1, 2, 3, 4, 5, ...]
-irb&amp;gt; iterate(1) { |n| n * 2 }
-=&amp;gt; [1, 2, 4, 8, 16, 32, 64, ...]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The two examples now have the same &amp;ldquo;surface area&amp;rdquo; and have a lot in common with the Clojure
-companions. So how would we implement this?&lt;/p&gt;
-
-&lt;p&gt;First a test. By the way, all the code found in the following examples is &lt;a href="https://github.com/rossta/loves-enumerable/tree/master/examples/sequence"&gt;on Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
-require_relative &amp;#39;./sequence&amp;#39;
-
-class TestSequence &amp;lt; Minitest::Test
-  include Sequence
-
-  def test_iterate_increment
-    sequence = iterate(1) { |x| x + 1 }
-
-    assert_equal sequence.first(5), [1, 2, 3, 4, 5]
-  end
-
-  def test_iterate_power_of_2
-    sequence = iterate(1) { |x| x * 2 }
-
-    assert_equal sequence.first(5), [1, 2, 4, 8, 16]
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;re going to implement &lt;code&gt;iterate&lt;/code&gt; in a Ruby module called &lt;code&gt;Sequence&lt;/code&gt;. Our test
-for &lt;code&gt;iterate&lt;/code&gt; will return an instance of &lt;code&gt;Enumerator&lt;/code&gt; (the &lt;code&gt;sequence&lt;/code&gt; variable).
-The enumerator allows use to generate the sequence on demand with the call to
-&lt;code&gt;#first&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s the implementation:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;module Sequence
-  def iterate(arg)
-    Enumerator.new do |yielder|
-      current = arg
-      loop do
-        yielder &amp;lt;&amp;lt; current
-        current = yield(current)
-      end
-    end
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Our implementation of &lt;code&gt;iterate&lt;/code&gt; returns an &lt;code&gt;Enumerator&lt;/code&gt; that will first yield
-the given &lt;code&gt;arg&lt;/code&gt; and repeatedly call the given block with the result of the
-previous call. The &lt;code&gt;loop&lt;/code&gt; construct means this enumeration can potentially
-continue forever - capturing the spirit of a Clojure sequence. That means
-we need to use a terminating functions like &lt;code&gt;#first&lt;/code&gt; or &lt;code&gt;#take&lt;/code&gt; to limit the
-results, just like we would in Clojure:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="clojure"&gt;=&amp;gt; (take 5 (iterate (partial * 2) 1))
-(1 2 4 8 16)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The Ruby equivalent:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;iterate(1) { |n| n * 2 }.take(5)
-=&amp;gt; [1, 2, 4, 8, 16]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We could go one step further an make this method work as a mixin. Below is a
-test for using &lt;code&gt;iterate&lt;/code&gt; as an instance method of a class using in our tests
-that will simply delegate missing methods to the object passed in on
-instantiation.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class TestSequence &amp;lt; Minitest::Test
-  include Sequence
-
-  class Sequenced &amp;lt; SimpleDelegator
-    include Sequence
-  end
-
-  def test_iterate_include
-    num = Sequenced.new(0)
-
-    sequence = num.iterate { |x| x - 1 }
-    assert_equal sequence.first(5), [0, -1, -2, -3, -4]
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To make this pass, we need only set the default arg to &lt;code&gt;self&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;module Sequence
-  def iterate(arg = self)
-    # ...
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So what? Ok, well, you may be hard pressed to use &lt;code&gt;iterate&lt;/code&gt; in your daily work,
-but there is certainly more room to think about data processing as functional
-operations (free of side effects) on sequences (values that can be generated on demand). Something like &lt;code&gt;iterate&lt;/code&gt; need not apply to only numbers; you can imagine sequences of letters, time objects, or POROs also being generated. At times, Rubyist are too quick to wrap collections in other classes when simpler, more generalizable &amp;ldquo;functional&amp;rdquo; transforms could suffice.&lt;/p&gt;
-
-&lt;p&gt;When I started &lt;a href="http://devpost.com/software/learning-clojure"&gt;learning Clojure&lt;/a&gt; last year, I got really excited about the functional aspects of Ruby. &amp;ldquo;Wait, I thought everything in Ruby is an object.&amp;rdquo; Yes, but a great thing about Ruby is its &lt;a href="http://yehudakatz.com/2009/07/11/python-decorators-in-ruby/"&gt;ability to adopt aspects of other languages&lt;/a&gt;. As Piotr Solnica illustrates in &lt;a href="https://speakerdeck.com/solnic/blending-functional-and-oo-programming-in-ruby"&gt;his recent talk&lt;/a&gt;, blending functional techniques with our OO code can have a lot of benefits including avoidance of side effects and favoring composability. Introducing sequence-generating methods, like we saw here, is just one small idea to help sprinkle a little functional flavor into your Ruby code.&lt;/p&gt;
 </content>
   </entry>
 </feed>
