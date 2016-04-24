@@ -149,6 +149,8 @@ gem sets us up for three potential problems without an automated prevention:&lt;
 
 &lt;pre&gt;&lt;code class="sh"&gt;bundle config local.YOUR_GEM_NAME`
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And don&amp;rsquo;t believe everything you read on StackOverflow.&lt;/p&gt;
 </content>
   </entry>
   <entry>
