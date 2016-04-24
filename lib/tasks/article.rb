@@ -2,7 +2,7 @@ namespace :article do
   task :new do
     title = ENV['TITLE'] || "New Article"
     slug  = title.downcase.gsub(/\s/, "-")
-    file_name = File.join("source", "blog", Time.now.strftime("%Y-%m-%d-#{slug}.md"))
+    file_name = File.join("source", "blog", Time.now.strftime("%Y-%m-%d-#{slug}.html.md"))
     touch file_name
     File.open(file_name, "w+") do |f|
       f.write <<-META
