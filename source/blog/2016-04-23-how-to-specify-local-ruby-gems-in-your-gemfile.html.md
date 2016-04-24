@@ -123,7 +123,7 @@ It's easy to remove the local config after we don't need it:
 
 `bundle config --delete local.YOUR_GEM_NAME`
 
-### Caveats
+## Caveats
 
 As with the `:path` option, we still need to remember to push our
 local gem changes to the remote repository when using `bundle config local`.
@@ -131,6 +131,12 @@ local gem changes to the remote repository when using `bundle config local`.
 I should also mention that a good use case for using `:path` instead of `bundle
 config local` it when the local gem is in a subdirectory relative to your app.
 I don't often see this in practice, but there are valid reasons for doing so.
+
+In general, I'd encourage using of either approach sparingly for gems that your
+team doesn't own as it's typically best to stick the official releases for
+active repositories. In my experience, it's most common to develop against local gems for
+projects that your team *does* own, so `bundle config local` will ensure your
+co-workers know where to look to verify code dependencies.
 
 ## Don't use :path, use bundle config local instead
 
