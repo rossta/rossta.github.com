@@ -52,7 +52,7 @@ local checkout of the &lt;code&gt;tacokit&lt;/code&gt; gem in another directory 
 &lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;tacokit&amp;quot;, path: &amp;quot;/path/to/tacokit&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Here&amp;rsquo;s my take on this approach: &lt;strong&gt;it&amp;rsquo;s wrong&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s my take: &lt;strong&gt;avoid this recommendation&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&amp;hellip;especially if you work on a team and/or deploy this code to remote servers.&lt;/p&gt;
 
