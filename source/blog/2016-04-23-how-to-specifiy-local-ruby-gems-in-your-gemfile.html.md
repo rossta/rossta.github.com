@@ -117,6 +117,8 @@ Bundler will abort if the local gem branch doesn't match the one in the `Gemfile
 
 **This way we ensure our Gemfile.lock contains a valid reference to our local gem.**
 
+We don't get these assertions when using the `:path` option.
+
 It's easy to remove the local config after we don't need it:
 
 `bundle config --delete local.YOUR_GEM_NAME`
