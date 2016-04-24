@@ -8,14 +8,12 @@ per_page: 25
 
 <%= page_header "Projects", "Selected projects and free open source software" %>
 
-<br/>
+<br /><hr /><br/>
 <section id="projects" class="index-posts">
   <% blog("projects").articles.each.with_index do |article, i| %>
     <article class="index-post">
       <header>
-        <h3>
-          <%= link_to article.title, (article.data.homepage || article) %>
-        </h3>
+        <h3><%= link_to article.title, (article.data.homepage || article) %></h3>
         <% if article.data.summary %>
           <p class="alt-title subtle"><%= article.data.summary %></p>
         <% end %>
