@@ -5,6 +5,7 @@ author: Ross Kaffenberger
 published: true
 tags:
   - Code
+  - Process
 ---
 
 These days, software developers are living in a [GitHub Workflow][gh-workflow]</a> world. They develop new code on version-controlled [branches][branches] and gather feedback prior to inclusion in the primary release, or “master” branch, through [pull requests][pull-requests].
