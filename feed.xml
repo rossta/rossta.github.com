@@ -160,7 +160,7 @@ gem elsewhere on our machine sets us up for three potential problems without aut
 &lt;ul&gt;
 &lt;li&gt;Committing a nonexistent lookup path on other machines&lt;/li&gt;
 &lt;li&gt;Failing to point to the correct repository branch&lt;/li&gt;
-&lt;li&gt;Failing to push local changes to the remote&lt;/li&gt;
+&lt;li&gt;Failing to point to an existing git reference&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Forget the &lt;code&gt;:path&lt;/code&gt; option and you&amp;rsquo;ll never forget ^^this stuff^^ again.&lt;/p&gt;
