@@ -10,9 +10,9 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>Developing with local Ruby gems</title>
-    <link rel="alternate" href="/blog/developing-with-local-ruby-gems.html"/>
-    <id>/blog/developing-with-local-ruby-gems.html</id>
+    <title>How to specify local Ruby gems in your Gemfile</title>
+    <link rel="alternate" href="/blog/how-to-specifiy-local-ruby-gems-in-your-gemfile.html"/>
+    <id>/blog/how-to-specifiy-local-ruby-gems-in-your-gemfile.html</id>
     <published>2016-04-22T20:00:00-04:00</published>
     <updated>2016-04-22T20:00:00-04:00</updated>
     <author>
@@ -47,16 +47,28 @@ local checkout of the &lt;code&gt;tacokit&lt;/code&gt; gem in another directory 
 
 &lt;p&gt;You add some code to the gem, but now you want to test the changes in your app. How do you do that?&lt;/p&gt;
 
-&lt;p&gt;According to &lt;a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile#answer-4488110"&gt;the most popular answer (and accepted) answer&lt;/a&gt; to the question, &lt;a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile"&gt;&amp;ldquo;How can I specify a local gem in my Gemfile?&amp;rdquo;&lt;/a&gt;, we should do the following:&lt;/p&gt;
+&lt;p&gt;According to &lt;em&gt;&lt;a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile#answer-4488110"&gt;the most popular answer (and accepted) answer&lt;/a&gt;&lt;/em&gt; to the question, &lt;a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile"&gt;&amp;ldquo;How can I specify a local gem in my Gemfile?&amp;rdquo;&lt;/a&gt;, we should do the following:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;tacokit&amp;quot;, path: &amp;quot;/path/to/tacokit&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Run &lt;code&gt;$ bundle update&lt;/code&gt;, restart the app, and - boom! - it works! Our changes in
+&lt;p&gt;Here&amp;rsquo;s my take on this approach: &lt;strong&gt;it&amp;rsquo;s wrong&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&amp;hellip;especially if you work on a team and/or deploy this code to remote servers.&lt;/p&gt;
+
+&lt;h2&gt;WAT&lt;/h2&gt;
+
+&lt;p&gt;Technically, it does work. Run &lt;code&gt;$ bundle update&lt;/code&gt;, restart the app, and - boom! - our changes in
 the local &lt;code&gt;tacokit&lt;/code&gt; checkout are showing up as expected.&lt;/p&gt;
 
-&lt;p&gt;Then we push our app changes and deploy to the staging server to test them out
+&lt;p&gt;Then the trouble begins.&lt;/p&gt;
+
+&lt;p&gt;We push our app changes and deploy to the staging server to test them out
 in the shared environment and - wait a minute - the app won&amp;rsquo;t even start.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ bundle
+The path `/Users/ross/does/not/exist` does not exist.
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Oops! We forgot to remove the &lt;code&gt;:path&lt;/code&gt; reference in the &lt;code&gt;Gemfile&lt;/code&gt;.&lt;/p&gt;
 
@@ -73,19 +85,15 @@ restarts fine. But while testing the feature, we start getting 500 errors. This 
 
 &lt;p&gt;D&amp;#39;oh! We were working on a &lt;em&gt;branch&lt;/em&gt; of &lt;code&gt;tacokit&lt;/code&gt; but we reference it in our app&amp;rsquo;s &lt;code&gt;Gemfile&lt;/code&gt;.&lt;/p&gt;
 
+&lt;h2&gt;Taking a step back&lt;/h2&gt;
+
 &lt;p&gt;Good thing we weren&amp;rsquo;t pushing that app feature to production. We would have been wise to run the tests on our CI server first where we would have seen the same errors (assuming we had the right tests&amp;hellip; and a CI server).&lt;/p&gt;
 
-&lt;h3&gt;Here&amp;rsquo;s the thing&lt;/h3&gt;
-
-&lt;p&gt;If you&amp;rsquo;re using &lt;code&gt;:path&lt;/code&gt; in your &lt;code&gt;Gemfile&lt;/code&gt;, you&amp;rsquo;re doing it wrong.&lt;/p&gt;
-
-&lt;p&gt;The problem with &lt;code&gt;:path&lt;/code&gt; is it points to a location that only exists on our local machine.&lt;/p&gt;
-
-&lt;p&gt;Every time we want to develop against the local &lt;code&gt;tacokit&lt;/code&gt; gem, we have to remember to edit the &lt;code&gt;Gemfile&lt;/code&gt; to remove the option so we don&amp;rsquo;t screw up our teammates or break the build. We also have to remember to push those changes to the remote repository before updating our app.&lt;/p&gt;
+&lt;p&gt;Using the &lt;code&gt;:path&lt;/code&gt; often means pointing to a location that only exists on our local machine. Every time we want to develop against the local &lt;code&gt;tacokit&lt;/code&gt; gem, we have to remember to edit the &lt;code&gt;Gemfile&lt;/code&gt; to remove the option so we don&amp;rsquo;t screw up our teammates or break the build. We also can&amp;rsquo;t forget to point to correct branch.&lt;/p&gt;
 
 &lt;p&gt;This workflow is no good because we&amp;rsquo;re human and humans tend to forget to do things.&lt;/p&gt;
 
-&lt;h3&gt;A better way&lt;/h3&gt;
+&lt;h2&gt;&amp;ldquo;bundle config local&amp;rdquo; to the rescue&lt;/h2&gt;
 
 &lt;p&gt;Buried deep in the Bundler docs is a better solution for &lt;a href="http://bundler.io/git.html#local"&gt;working with local git repo&lt;/a&gt;: the &lt;code&gt;bundle config local&lt;/code&gt; command. Instead of specifying the &lt;code&gt;:path&lt;/code&gt; option, we can run the following on command line:&lt;/p&gt;
 
@@ -95,7 +103,7 @@ restarts fine. But while testing the feature, we start getting 500 errors. This 
 &lt;p&gt;Here we instruct Bundler to look in a local resource by modifying our local Bundler configuration. That&amp;rsquo;s the one that lives in
 &lt;code&gt;.bundle/config&lt;/code&gt; outside of version control.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;This means we won&amp;rsquo;t check in an invalid path.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;No more editing shared code for local development settings.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;We can confirm the link with &lt;code&gt;bundle config&lt;/code&gt;:&lt;/p&gt;
 
@@ -119,23 +127,27 @@ Set for your local app (/Users/rossta/path/to/app/.bundle/config): &amp;quot;/Us
 &lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;tacokit&amp;quot;, github: &amp;quot;rossta/tacokit&amp;quot;, branch: &amp;quot;master&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Bundler will abort if the local gem branch doesn&amp;rsquo;t match the one in the &lt;code&gt;Gemfile&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Bundler will abort if the local gem branch doesn&amp;rsquo;t match the one in the &lt;code&gt;Gemfile&lt;/code&gt; and checks that the sha in Gemfile.lock exists in the local repository.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Now we won&amp;rsquo;t point to the wrong branch in Gemfile.lock.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;This way we ensure our Gemfile.lock contains a valid reference to our local gem.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Even better, Bundler will also check to be sure the local changes have been
-pushed to the remote repo. Failing fast is a good thing!&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;No more forgetting to push our local gem changes.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s also easy to remove the local config after we don&amp;rsquo;t need it:&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s easy to remove the local config after we don&amp;rsquo;t need it:&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;bundle config --delete local.YOUR_GEM_NAME&lt;/code&gt;&lt;/p&gt;
 
-&lt;h3&gt;Don&amp;rsquo;t use :path, use bundle config local instead&lt;/h3&gt;
+&lt;h3&gt;Caveats&lt;/h3&gt;
+
+&lt;p&gt;As with the &lt;code&gt;:path&lt;/code&gt; option, we still need to remember to push our
+local gem changes to the remote repository when using &lt;code&gt;bundle config local&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I should also mention that a good use case for using &lt;code&gt;:path&lt;/code&gt; instead of &lt;code&gt;bundle
+config local&lt;/code&gt; it when the local gem is in a subdirectory relative to your app.
+I don&amp;rsquo;t often see this in practice, but there are valid reasons for doing so.&lt;/p&gt;
+
+&lt;h2&gt;Don&amp;rsquo;t use :path, use bundle config local instead&lt;/h2&gt;
 
 &lt;p&gt;Though convenient, using the &lt;code&gt;:path&lt;/code&gt; option in our &lt;code&gt;Gemfile&lt;/code&gt; to point to a local
-gem sets us up for three potential problems without an automated prevention:&lt;/p&gt;
+gem elsewhere on our machine sets us up for three potential problems without automated prevention:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Committing a nonexistent lookup path on other machines&lt;/li&gt;

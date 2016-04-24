@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Developing with local Ruby gems - rossta.net</title>
+    <title>How to specify local Ruby gems in your Gemfile - rossta.net</title>
 <meta name="description" content="Use the &quot;bundle config&quot; command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile." />
 <meta name="keywords" content="Code, Ruby, Process" />
 <meta name="site" content="rossta.net" />
@@ -10,16 +10,16 @@
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Use the &quot;bundle config&quot; command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile." />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/jellyfish-pexels-photo-15935942.jpeg" />
-<meta name="twitter:title" content="Developing with local Ruby gems" />
+<meta name="twitter:title" content="How to specify local Ruby gems in your Gemfile" />
 <meta property="og:description" content="Use the &quot;bundle config&quot; command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile." />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/stock/jellyfish-pexels-photo-15935942.jpeg" />
-<meta property="og:title" content="Developing with local Ruby gems" />
+<meta property="og:title" content="How to specify local Ruby gems in your Gemfile" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-ec73b984.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-6ed94a3f.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-ae1a9d85.js"></script>
     <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -48,9 +48,9 @@
           <section id="blog" class="margin-bottom double">
     <article class="post margin-bottom double">
       <header class="page-header with-summary">
-  <h2>
-    Developing with local Ruby gems
-  </h2>
+  <h1>
+    How to specify local Ruby gems in your Gemfile
+  </h1>
     <h3>
       Stop adding :path in your Gemfile and use bundle config instead
     </h3>
@@ -75,16 +75,28 @@ local checkout of the <code>tacokit</code> gem in another directory in your lapt
 
 <p>You add some code to the gem, but now you want to test the changes in your app. How do you do that?</p>
 
-<p>According to <a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile#answer-4488110">the most popular answer (and accepted) answer</a> to the question, <a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile">&ldquo;How can I specify a local gem in my Gemfile?&rdquo;</a>, we should do the following:</p>
+<p>According to <em><a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile#answer-4488110">the most popular answer (and accepted) answer</a></em> to the question, <a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile">&ldquo;How can I specify a local gem in my Gemfile?&rdquo;</a>, we should do the following:</p>
 
 <pre><code class="ruby">gem &quot;tacokit&quot;, path: &quot;/path/to/tacokit&quot;
 </code></pre>
 
-<p>Run <code>$ bundle update</code>, restart the app, and - boom! - it works! Our changes in
+<p>Here&rsquo;s my take on this approach: <strong>it&rsquo;s wrong</strong>.</p>
+
+<p>&hellip;especially if you work on a team and/or deploy this code to remote servers.</p>
+
+<h2>WAT</h2>
+
+<p>Technically, it does work. Run <code>$ bundle update</code>, restart the app, and - boom! - our changes in
 the local <code>tacokit</code> checkout are showing up as expected.</p>
 
-<p>Then we push our app changes and deploy to the staging server to test them out
+<p>Then the trouble begins.</p>
+
+<p>We push our app changes and deploy to the staging server to test them out
 in the shared environment and - wait a minute - the app won&rsquo;t even start.</p>
+
+<pre><code class="sh">$ bundle
+The path `/Users/ross/does/not/exist` does not exist.
+</code></pre>
 
 <p>Oops! We forgot to remove the <code>:path</code> reference in the <code>Gemfile</code>.</p>
 
@@ -101,19 +113,15 @@ restarts fine. But while testing the feature, we start getting 500 errors. This 
 
 <p>D&#39;oh! We were working on a <em>branch</em> of <code>tacokit</code> but we reference it in our app&rsquo;s <code>Gemfile</code>.</p>
 
+<h2>Taking a step back</h2>
+
 <p>Good thing we weren&rsquo;t pushing that app feature to production. We would have been wise to run the tests on our CI server first where we would have seen the same errors (assuming we had the right tests&hellip; and a CI server).</p>
 
-<h3>Here&rsquo;s the thing</h3>
-
-<p>If you&rsquo;re using <code>:path</code> in your <code>Gemfile</code>, you&rsquo;re doing it wrong.</p>
-
-<p>The problem with <code>:path</code> is it points to a location that only exists on our local machine.</p>
-
-<p>Every time we want to develop against the local <code>tacokit</code> gem, we have to remember to edit the <code>Gemfile</code> to remove the option so we don&rsquo;t screw up our teammates or break the build. We also have to remember to push those changes to the remote repository before updating our app.</p>
+<p>Using the <code>:path</code> often means pointing to a location that only exists on our local machine. Every time we want to develop against the local <code>tacokit</code> gem, we have to remember to edit the <code>Gemfile</code> to remove the option so we don&rsquo;t screw up our teammates or break the build. We also can&rsquo;t forget to point to correct branch.</p>
 
 <p>This workflow is no good because we&rsquo;re human and humans tend to forget to do things.</p>
 
-<h3>A better way</h3>
+<h2>&ldquo;bundle config local&rdquo; to the rescue</h2>
 
 <p>Buried deep in the Bundler docs is a better solution for <a href="http://bundler.io/git.html#local">working with local git repo</a>: the <code>bundle config local</code> command. Instead of specifying the <code>:path</code> option, we can run the following on command line:</p>
 
@@ -123,7 +131,7 @@ restarts fine. But while testing the feature, we start getting 500 errors. This 
 <p>Here we instruct Bundler to look in a local resource by modifying our local Bundler configuration. That&rsquo;s the one that lives in
 <code>.bundle/config</code> outside of version control.</p>
 
-<p><strong>This means we won&rsquo;t check in an invalid path.</strong></p>
+<p><strong>No more editing shared code for local development settings.</strong></p>
 
 <p>We can confirm the link with <code>bundle config</code>:</p>
 
@@ -147,23 +155,27 @@ Set for your local app (/Users/rossta/path/to/app/.bundle/config): &quot;/Users/
 <pre><code class="ruby">gem &quot;tacokit&quot;, github: &quot;rossta/tacokit&quot;, branch: &quot;master&quot;
 </code></pre>
 
-<p>Bundler will abort if the local gem branch doesn&rsquo;t match the one in the <code>Gemfile</code>.</p>
+<p>Bundler will abort if the local gem branch doesn&rsquo;t match the one in the <code>Gemfile</code> and checks that the sha in Gemfile.lock exists in the local repository.</p>
 
-<p><strong>Now we won&rsquo;t point to the wrong branch in Gemfile.lock.</strong></p>
+<p><strong>This way we ensure our Gemfile.lock contains a valid reference to our local gem.</strong></p>
 
-<p>Even better, Bundler will also check to be sure the local changes have been
-pushed to the remote repo. Failing fast is a good thing!</p>
-
-<p><strong>No more forgetting to push our local gem changes.</strong></p>
-
-<p>It&rsquo;s also easy to remove the local config after we don&rsquo;t need it:</p>
+<p>It&rsquo;s easy to remove the local config after we don&rsquo;t need it:</p>
 
 <p><code>bundle config --delete local.YOUR_GEM_NAME</code></p>
 
-<h3>Don&rsquo;t use :path, use bundle config local instead</h3>
+<h3>Caveats</h3>
+
+<p>As with the <code>:path</code> option, we still need to remember to push our
+local gem changes to the remote repository when using <code>bundle config local</code>.</p>
+
+<p>I should also mention that a good use case for using <code>:path</code> instead of <code>bundle
+config local</code> it when the local gem is in a subdirectory relative to your app.
+I don&rsquo;t often see this in practice, but there are valid reasons for doing so.</p>
+
+<h2>Don&rsquo;t use :path, use bundle config local instead</h2>
 
 <p>Though convenient, using the <code>:path</code> option in our <code>Gemfile</code> to point to a local
-gem sets us up for three potential problems without an automated prevention:</p>
+gem elsewhere on our machine sets us up for three potential problems without automated prevention:</p>
 
 <ul>
 <li>Committing a nonexistent lookup path on other machines</li>
@@ -185,7 +197,7 @@ gem sets us up for three potential problems without an automated prevention:</p>
     <hr />
     <section class="margin-bottom double">
       <p>
-        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Developing%20with%20local%20Ruby%20gems%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fdeveloping-with-local-ruby-gems.html">share it on Twitter</a>
+        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=How%20to%20specify%20local%20Ruby%20gems%20in%20your%20Gemfile%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fhow-to-specifiy-local-ruby-gems-in-your-gemfile.html">share it on Twitter</a>
         and <a href="https://twitter.com/rossta">follow me</a>.
       </p>
       <p>
@@ -237,9 +249,9 @@ gem sets us up for three potential problems without an automated prevention:</p>
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = "rosskaff";
-    var disqus_identifier = "developing-with-local-ruby-gems";
-    var disqus_title      = "Developing with local Ruby gems";
-    var disqus_url        = "https://rossta.net/blog/developing-with-local-ruby-gems.html";
+    var disqus_identifier = "how-to-specifiy-local-ruby-gems-in-your-gemfile";
+    var disqus_title      = "How to specify local Ruby gems in your Gemfile";
+    var disqus_url        = "https://rossta.net/blog/how-to-specifiy-local-ruby-gems-in-your-gemfile.html";
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {
