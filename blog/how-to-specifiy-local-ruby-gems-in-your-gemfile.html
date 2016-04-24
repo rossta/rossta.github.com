@@ -159,6 +159,8 @@ Set for your local app (/Users/rossta/path/to/app/.bundle/config): &quot;/Users/
 
 <p><strong>This way we ensure our Gemfile.lock contains a valid reference to our local gem.</strong></p>
 
+<p>We don&rsquo;t get these assertions when using the <code>:path</code> option.</p>
+
 <p>It&rsquo;s easy to remove the local config after we don&rsquo;t need it:</p>
 
 <p><code>bundle config --delete local.YOUR_GEM_NAME</code></p>
