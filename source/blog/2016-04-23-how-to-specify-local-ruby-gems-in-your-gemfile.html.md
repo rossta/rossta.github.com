@@ -35,7 +35,7 @@ According to *[the most popular answer (and accepted) answer](http://stackoverfl
 gem "tacokit", path: "/path/to/tacokit"
 ```
 
-Here's my take on this approach: **it's wrong**.
+Here's my take: **avoid this recommendation**
 
 ...especially if you work on a team and/or deploy this code to remote servers.
 
