@@ -145,7 +145,7 @@ gem elsewhere on our machine sets us up for three potential problems without aut
 
 * Committing a nonexistent lookup path on other machines
 * Failing to point to the correct repository branch
-* Failing to push local changes to the remote
+* Failing to point to an existing git reference
 
 Forget the `:path` option and you'll never forget ^^this stuff^^ again.
 
