@@ -3,7 +3,7 @@ title: Enumerator - Enumerable's Ugly Cousin
 author: Ross Kaffenberger
 summary: Learn about the fundamental concepts of Ruby's Enumerator class
 description:
-pull_image: 'https://rossta.net/assets/images/blog/enumerator-1-2-3.jpg'
+pull_image: 'blog/enumerator-1-2-3.jpg'
 published: true
 tags:
   - Code

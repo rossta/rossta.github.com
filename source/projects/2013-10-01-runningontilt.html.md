@@ -3,7 +3,7 @@ title: Running on Tilt
 author: Ross Kaffenberger
 summary: Podcast for the amateur endurance athlete
 description: Podcast for the amateur endurance athlete
-pull_image: 'https://rossta.net/assets/screenshots/screenshot-runningontilt.png'
+pull_image: 'screenshots/screenshot-runningontilt.png'
 published: true
 homepage: 'https://github.com/rossta/runningontilt'
 links:

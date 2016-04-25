@@ -3,7 +3,7 @@ title: Terraling
 author: Ross Kaffenberger
 summary: Searchable database of the World's Languages
 description: Searchable database of the World's Languages
-pull_image: 'https://rossta.net/assets/screenshots/screenshot-terraling.png'
+pull_image: 'screenshots/screenshot-terraling.png'
 published: true
 homepage: 'http://terraling.com'
 links:
