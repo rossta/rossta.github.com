@@ -8,16 +8,7 @@ per_page: 25
 
 <br /><hr /><br/>
 <section id="blog" class="index-posts">
-  <% blog("blog").articles.each do |article| %>
-    <article class="index-post">
-      <header>
-        <h3><%= link_to article.title, article %></h3>
-        <% if article.data.summary %>
-          <p class="alt-title subtle"><%= article.data.summary %></p>
-        <% end %>
-      </header>
-    </article>
-  <% end %>
+  <%= partial "partials/article_index", locals: { articles: blog("blog").articles } %>
   <br /><hr /><br />
 </section>
 <section class="signup-form-standalone margin-bottom double">
