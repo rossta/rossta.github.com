@@ -2,9 +2,10 @@
 title: Configuring Rack Test Driver in Capybara 2
 author: Ross Kaffenberger
 summary: Helpful hint for dealing with a common Capybara limit
+category: Code
 tags:
-  - Code
   - Ruby
+  - Rails
 ---
 
 Though I don't recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for [Capybara][1]. When you exceed this limit, you get a dreaded `Capybara::InfiniteRedirectError`.

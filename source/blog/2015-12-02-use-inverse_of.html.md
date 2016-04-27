@@ -5,11 +5,10 @@ author: Ross Kaffenberger
 description: ActiveRecord will try hard to infer the inverse relation for your associations, but you may benefit from setting the inverse_of option wherever possible
 pull_image: 'blog/stock/fall-leaves-pexels-photo.jpg'
 published: true
-# series: ActiveRecord
+category: Code
 tags:
-  - Rails
-  - Code
   - Ruby
+  - Rails
 ---
 
 Let's talk about `:inverse_of`.

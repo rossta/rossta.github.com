@@ -3,8 +3,8 @@ title: Ruby, You Autocomplete Me
 author: Ross Kaffenberger
 summary: Hacking on a smarter ruby console
 published: true
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 

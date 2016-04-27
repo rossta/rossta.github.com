@@ -3,9 +3,9 @@ title: Mott Hall III School Career Day
 author: Ross Kaffenberger
 summary: Helping out at Career Day at Bronx middle school
 permalink: /2010/05/mott-hall-iii-school-career-day/
+category: Life
 tags:
-  - Code
-  - Life
+  - JavaScript
 ---
 As Calvin was leaving the classroom, he turned back toward me with a smile and a glint in his eye. That was all I needed to see to know: the lesson had made an impression. As a teacher, nothing beats that feeling. I could sense he wanted to say something; he was looking for the right words. He then told me about a website he knew of where he wanted to try more on his own.
 
@@ -17,7 +17,7 @@ I was one of about twenty speakers to speak with four groups of students for 30 
 
 Having left myself only a day to put something together, I decided it would be easiest for students to access a web page with a javascript console where we could walk through a few commands. Visual feedback would be key. There are some great in browser javascript consoles that came to mind: [jconsole][2] comes to mind. But the console needed a visual aspect&emdash;something to manipulate and see results. As I had done for many lessons as a teacher for years, I decided to roll my own.
 
-The [Javascript Playground][3] was born. Dirt simple, but effective for a short lesson, it is intended to be a lightweight introduction to using javascript. For career day, my aim was simply to have the students dip their toes in the process. Maybe experience a setback and (hopefully) find success. They would enter middle school students and leave computer programmers.
+The [JavaScript Playground][3] was born. Dirt simple, but effective for a short lesson, it is intended to be a lightweight introduction to using javascript. For career day, my aim was simply to have the students dip their toes in the process. Maybe experience a setback and (hopefully) find success. They would enter middle school students and leave computer programmers.
 
 I put together a Keynote presentation to introduce the lesson and help students see why software engineers and computer programmers were relevant as builders of software for familiar technology like iPhone Apps, Facebook and Twitter. A segment I called “Computers are Dumb”, (common responses: Wha’? and Huh?) was inspired by my colleague [Noah Davis][4], who had done something similar for his own career day talk. I pretended to be a walking, listening computer who needed instructions to get around desks from one side of the room to the next. I let students shout out instructions which initially led to some comical results. “Turn right” resulted in my spinning in an endless loop and “Walk straight” usually ended with me walking into a wall or chair. The point: computers will do exactly what we tell them to do, not always what we *think* we’re telling them to do. This was important prelude to the playground.
 

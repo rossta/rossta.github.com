@@ -3,6 +3,7 @@ title: When Your Fat Models Need to Go on a Diet
 author: Ross Kaffenberger
 summary: Thoughts on refactoring large model classes in Rails
 permalink: /2011/09/when-your-fat-models-need-to-go-on-a-diet/
+category: Code
 tags:
   - Ruby
   - Rails

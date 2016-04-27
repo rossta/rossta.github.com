@@ -6,8 +6,8 @@ summary: Using Ruby Enumerator to emulate sequences
 description: Implementing the Clojure sequence functions, iterate, with Ruby's Enumerator to emulate sequences
 pull_image: 'blog/stock/umbrellas-pexels-photo.jpg'
 series: Enumerable
+category: Code
 tags:
-  - Code
   - Ruby
   - Clojure
 ---

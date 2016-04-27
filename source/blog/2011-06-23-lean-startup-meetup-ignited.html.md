@@ -3,8 +3,7 @@ title: Lean Startup Meetup Ignited
 author: Ross Kaffenberger
 summary: Notes on a recent Lean Startup meetup in NYC
 permalink: /2011/06/lean-startup-meetup-ignited/
-tags:
-  - Code
+category: Code
 ---
 The [NYC Lean Startup Meetup][1] sponsored their first Ignite event last night at Pivotal Labs in Union Square. Fourteen speakers were given five minutes to share their thoughts and lessons learned relating to [the lean startup][2] methodology. The catch with Ignite: the slides are fixed in number (20) and auto-advance every 15 seconds. Combine that with a packed house and open bar and the results are fast-paced, high-energy and fun.
 

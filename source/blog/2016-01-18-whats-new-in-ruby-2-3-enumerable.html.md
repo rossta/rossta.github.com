@@ -6,8 +6,9 @@ summary: A closer look at Enumerable's grep_v and chunk_when
 description: Ruby 2.3 introduced a couple new additions to the Enumerable API that provide some nice variations on existing methods
 pull_image: 'blog/stock/dark-brown-milk-candy-pexels-photo.jpg'
 series: Enumerable
+popular: 1
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 

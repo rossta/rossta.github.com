@@ -7,8 +7,8 @@ description: Generating Pascal's Triangle as an Enumerable sequence with Ruby's 
 pull_image: 'blog/stock/louvre-pexels-photo.jpg'
 published: true
 series: Enumerable
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 

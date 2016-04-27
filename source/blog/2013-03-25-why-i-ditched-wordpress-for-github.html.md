@@ -1,9 +1,10 @@
 ---
-title: Why I Ditched Wordpress for Github
+title: Why I Ditched Wordpress for GitHub
 author: Ross Kaffenberger
-summary: Moving my blog to a static website tool hosted on Github
+summary: Moving my blog to a static website tool hosted on GitHub
+category: Life
 tags:
-  - Life
+  - GitHub
 ---
 
 By statistics alone, Wordpress is a winner. According to the [stats on Wikipedia][1], it is a clear favorite amongst the top and new websites worldwide. The sheer volume of options for plugins, themes and customizations are enough to make it worthwhile as a content platform; the admin tools make editing and publishing a breeze.

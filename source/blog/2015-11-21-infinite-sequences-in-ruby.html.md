@@ -6,8 +6,8 @@ description: Wrap algorithms in Enumerable or Enumerator to have them behave lik
 pull_image: 'blog/enumerator-1-2-3.jpg'
 published: true
 series: Enumerable
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 

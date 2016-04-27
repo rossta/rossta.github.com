@@ -5,10 +5,11 @@ summary: An RSpec helper for using Rails caching in acceptance tests
 description: Learn how to use RSpec metadata to add declarative ways to toggle features like Rails caching during test runs
 pull_image: 'blog/noun_6185_cc.png'
 published: true
+category: Code
 tags:
-  - Code
   - Ruby
   - Rails
+  - RSpec
 ---
 Once you introduce caching in your view layer, it can be easy for bugs to crop up around expiry logic. Since the Rails test environment ships with controller caching disabled, it may be useful to be able to toggle it on/off during the test run.
 

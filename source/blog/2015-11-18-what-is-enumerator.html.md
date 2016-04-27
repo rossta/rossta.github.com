@@ -6,8 +6,8 @@ description: You may not be using enough of the Enumerable API or doing enough w
 pull_image: 'blog/enumerator-1-2-3.jpg'
 published: true
 series: Enumerable
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 
@@ -58,7 +58,7 @@ See what happened there? The expression printed out each digit, but returned `[n
 
 Here's another example. It's often useful to enumerate collection members along
 with the index. We can use `Enumerable#each_with_index`, we don't have
-`Enumerable#map_with_index`. Javascript `forEach` and `map` gets this right, but not Ruby... or does it?
+`Enumerable#map_with_index`. JavaScript `forEach` and `map` gets this right, but not Ruby... or does it?
 
 Almost - we can chain enumerators together to get effectively the same result:
 

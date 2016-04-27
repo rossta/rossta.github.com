@@ -6,8 +6,9 @@ summary: Crawling websites and streaming structured data with Ruby's Enumerator
 description: Bringing a fresh perspective and Ruby's Enumerator to revisit an old post on using Ruby to write a simple web crawler
 pull_image: 'blog/stock/spider-web-pexels-photo.jpg'
 series: Enumerable
+popular: 3
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 

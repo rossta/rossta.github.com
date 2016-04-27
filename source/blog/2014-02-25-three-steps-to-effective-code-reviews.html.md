@@ -3,8 +3,8 @@ title: Three Steps to Effective Code Reviews
 summary: Exchanging feedback doesn&#8217;t have to be painful
 author: Ross Kaffenberger
 published: true
+category: Code
 tags:
-  - Code
   - Process
 ---
 

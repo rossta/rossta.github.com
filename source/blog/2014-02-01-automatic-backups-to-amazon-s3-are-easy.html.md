@@ -3,8 +3,9 @@ title: Automatic Backups to Amazon S3 are Easy
 summary: Push important files to the cloud with s3cmd and cron
 author: Ross Kaffenberger
 published: true
+category: Code
 tags:
-  - Code
+  - Unix
 ---
 
 You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn't take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.

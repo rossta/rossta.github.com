@@ -6,8 +6,8 @@ description: You may not be using enough of the Enumerable API or doing enough w
 pull_image: 'blog/enumerator-1-2-3.jpg'
 published: true
 series: Enumerable
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 

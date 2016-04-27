@@ -2,8 +2,7 @@
 title: Hello World
 author: Ross Kaffenberger
 permalink: /2010/01/hello-world/
-tags:
-  - Life
+category: Life
 ---
 At some point we learned to walk, yet most of us find ourselves taking first steps time and again. Moving to another city. Going to a new school. Choosing a different career.
 
