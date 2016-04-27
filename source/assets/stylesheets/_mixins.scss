@@ -1,0 +1,7 @@
+@mixin block-list {
+  list-style-type:none;
+  margin-left: 0;
+  li {
+    display:block;
+  }
+}

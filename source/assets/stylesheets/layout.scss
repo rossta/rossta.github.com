@@ -1,4 +1,5 @@
 @import 'settings';
+@import 'mixins';
 
 body {
   background: alicewhite;
@@ -38,7 +39,23 @@ header {
 
 footer {
   @include clearfix;
-  padding: 2em 0;
+  padding: 4em 0;
+  background-color: $lightGreyColor;
+
+  h5 { font-weight: bold; }
+  ul {
+    @include block-list;
+    font-size: 90%;
+  }
+  .row {
+    position: relative;
+  }
+  .turtle {
+    position: absolute;
+    width: 30px;
+    top: -38px;
+    left: 30px;
+  }
 }
 
 code {
@@ -60,9 +77,16 @@ pre {
   }
 }
 
-@media #{$small-up} {
-  .top-bar .name h1 a { padding: 0 15px; }
+.top-bar {
+  margin-bottom: 1em;
+
+  @media #{$small-only} { margin-bottom: 0em; }
+
+  @media #{$small-up} {
+    .name h1 a { padding: 0 15px; }
+  }
 }
+
 @media #{$small-only} {
   ul {
     font-size: $rem-base;

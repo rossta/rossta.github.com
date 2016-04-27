@@ -189,6 +189,14 @@ helpers do
     link_to text, uri, target: "_blank"
   end
 
+  def top_tags
+    blog('blog').tags.sort_by { |t, a| -a.count }
+  end
+
+  def top_articles
+    blog('blog').articles.select { |a| a.data[:popular] }.sort_by { |a| a.data[:popular] }
+  end
+
   def nozen?
     @nozen
   end

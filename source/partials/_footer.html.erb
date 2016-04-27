@@ -1,0 +1,31 @@
+<footer>
+  <div class="row">
+    <%= image_tag "turtle-logo.svg", class: "turtle" %>
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+        <% top_articles.take(5).each do |article| %>
+          <li><%= link_to article.title, article %></li>
+        <% end %>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+        <% top_tags.take(5).each do |tag, articles| %>
+          <li><%= link_to tag, tag_path(tag, 'blog') %></li>
+        <% end %>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+</footer>

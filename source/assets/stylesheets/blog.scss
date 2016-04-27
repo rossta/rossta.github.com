@@ -1,10 +1,9 @@
 @import "settings";
+@import "mixins";
 
 ul.index {
-  list-style-type:none;
-  margin-left: 0;
+  @include block-list;
   li {
-    display:block;
     padding:0.5rem 0;
     &:first-child {
       padding-top:0;

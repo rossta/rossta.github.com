@@ -27,10 +27,10 @@
   font-size: 1.2rem;
   color: $subtleColor;
 }
+
 .center-inline-list {
   float:left;
   width:100%;
-  background:#fff;
   overflow:hidden;
   position:relative;
 
@@ -78,7 +78,28 @@
   &:hover {
     color: $secondaryColor;
   }
+
+  img {
+    display: inline-block;
+    width: 33px;
+  }
+  span {
+    display: inline-block;
+  }
 }
+
+.top-bar {
+  .name {
+    .logo {
+      span {
+        font-size: inherit;
+        padding-left: 2px;
+        @media #{$small-only} { display: none; }
+      }
+    }
+  }
+}
+
 blockquote {
   font-family: $header-font-family;
   font-style: italic;
