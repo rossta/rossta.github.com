@@ -1,6 +1,5 @@
-.clearfix {
-  overflow: auto;
-}
+.clearfix { overflow: auto; }
+.hidden { display: none; }
 .share { margin-top: 1em; }
 
 .margin-top {
@@ -9,6 +8,7 @@
     margin-top: 2em;
   }
 }
+
 .margin-bottom {
   margin-bottom: 1em;
   &.double {
@@ -65,7 +65,12 @@
 
 .button {
   @include header-font;
+
+  &.primary {
+    background-color: $secondaryColor;
+  }
 }
+
 .logo {
   font-family: "courier-prime",monospace;
   color: $mainColor !important;
