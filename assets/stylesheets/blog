@@ -4,12 +4,12 @@ Error: File to import not found or unreadable: foundation-sites/scss/foundation/
         from line 1 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/blog.scss
 
 1: @import "settings";
-2: 
-3: ul.index {
-4:   list-style-type:none;
-5:   margin-left: 0;
+2: @import "mixins";
+3: 
+4: ul.index {
+5:   @include block-list;
 6:   li {
-7:     display:block;
+7:     padding:0.5rem 0;
 
 Backtrace:
 /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss:2
@@ -140,4 +140,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: foundation-sites/scss/foundation/components/global.\A         on line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss\A         from line 1 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/blog.scss\A \A 1: @import \"settings\";\A 2: \A 3: ul.index {\A 4:   list-style-type:none;\A 5:   margin-left: 0;\A 6:   li {\A 7:     display:block;"; }
+  content: "Error: File to import not found or unreadable: foundation-sites/scss/foundation/components/global.\A         on line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss\A         from line 1 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/blog.scss\A \A 1: @import \"settings\";\A 2: @import \"mixins\";\A 3: \A 4: ul.index {\A 5:   @include block-list;\A 6:   li {\A 7:     padding:0.5rem 0;"; }

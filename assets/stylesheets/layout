@@ -4,12 +4,12 @@ Error: File to import not found or unreadable: foundation-sites/scss/foundation/
         from line 1 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/layout.scss
 
 1: @import 'settings';
-2: 
-3: body {
-4:   background: alicewhite;
-5:   padding: 0 0 2em;
-6:   @include base-font;
-7: }
+2: @import 'mixins';
+3: 
+4: body {
+5:   background: alicewhite;
+6:   padding: 0 0 2em;
+7:   @include base-font;
 
 Backtrace:
 /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss:2
@@ -140,4 +140,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: foundation-sites/scss/foundation/components/global.\A         on line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss\A         from line 1 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/layout.scss\A \A 1: @import 'settings';\A 2: \A 3: body {\A 4:   background: alicewhite;\A 5:   padding: 0 0 2em;\A 6:   @include base-font;\A 7: }"; }
+  content: "Error: File to import not found or unreadable: foundation-sites/scss/foundation/components/global.\A         on line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/_settings.scss\A         from line 1 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/layout.scss\A \A 1: @import 'settings';\A 2: @import 'mixins';\A 3: \A 4: body {\A 5:   background: alicewhite;\A 6:   padding: 0 0 2em;\A 7:   @include base-font;"; }

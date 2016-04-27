@@ -8,8 +8,8 @@ Error: Undefined mixin 'header-font'.
 3:   line-height: 80px;
 4:   background-color: $lightGreyColor;
 5:   text-align: center;
-6: }
-7: 
+6:   .row {
+7:     border-bottom: 1px solid #e1e1e1;
 
 Backtrace:
 /Users/ross/apps/rossta.net/home/source/assets/stylesheets/sections.scss:2:in `header-font'
@@ -138,4 +138,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined mixin 'header-font'.\A         on line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/sections.scss, in `header-font'\A         from line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/sections.scss\A \A 1: #zen {\A 2:   @include header-font;\A 3:   line-height: 80px;\A 4:   background-color: $lightGreyColor;\A 5:   text-align: center;\A 6: }\A 7: "; }
+  content: "Error: Undefined mixin 'header-font'.\A         on line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/sections.scss, in `header-font'\A         from line 2 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/sections.scss\A \A 1: #zen {\A 2:   @include header-font;\A 3:   line-height: 80px;\A 4:   background-color: $lightGreyColor;\A 5:   text-align: center;\A 6:   .row {\A 7:     border-bottom: 1px solid #e1e1e1;"; }

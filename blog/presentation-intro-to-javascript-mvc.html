@@ -1,27 +1,39 @@
 <!doctype html>
 <html>
   <head>
-    <title>Presentation Intro to Javascript MVC - rossta.net</title>
+    <title>Presentation Intro to JavaScript MVC - rossta.net</title>
 <meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta name="keywords" content="Code, Javascript" />
+<meta name="keywords" content="JavaScript" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/icon-ruby-2f9d22cf.png" />
-<meta name="twitter:title" content="Presentation Intro to Javascript MVC" />
+<meta name="twitter:title" content="Presentation Intro to JavaScript MVC" />
 <meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
 <meta property="og:image" content="https://rossta.net/assets/images/icon-ruby-2f9d22cf.png" />
-<meta property="og:title" content="Presentation Intro to Javascript MVC" />
+<meta property="og:title" content="Presentation Intro to JavaScript MVC" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" sizes="57x57"   href="/assets/images/launcher-icon-57x57-4e0c0b27.png" />
+    <link rel="apple-touch-icon" sizes="72x72"   href="/assets/images/launcher-icon-72x72-36cf2673.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/images/launcher-icon-114x114-3fe2a95b.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/images/launcher-icon-144x144.png" />
+    <link rel="icon"             sizes="192x192" href="/assets/images/launcher-icon-192x192-534442f2.png">
+    <link rel="icon"             sizes="36x36"   href="/assets/images/launcher-icon-36x36.png">
+    <link rel="icon"             sizes="48x48"   href="/assets/images/launcher-icon-48x48.png">
+    <link rel="icon"             sizes="72x72"   href="/assets/images/launcher-icon-72x72-36cf2673.png">
+    <link rel="icon"             sizes="96x96"   href="/assets/images/launcher-icon-96x96.png">
+    <link rel="icon"             sizes="144x144" href="/assets/images/launcher-icon-144x144.png">
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-58375ed9.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-112bee6f.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-ae1a9d85.js"></script>
-    <link href="/assets/images/favicon.ico" rel="icon" type="image/ico" />
+    <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
 
   </head>
@@ -29,7 +41,7 @@
     <nav id="welcome-nav" class="top-bar" data-topbar>
   <ul class="title-area">
     <li class="name">
-      <h1><a class="logo" href="/">rossta.net</a></h1>
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" /><span>rossta.net</span></a></h1>
     </li>
     <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
   </ul>
@@ -51,7 +63,7 @@
     <article class="post margin-bottom double">
       <header class="page-header with-summary">
   <h1>
-    Presentation Intro to Javascript MVC
+    Presentation Intro to JavaScript MVC
   </h1>
     <h3>
       A brief intro to Backbone.js for a team brownbag at ChallengePost
@@ -61,14 +73,14 @@
 
       <p>Today, I made a brown bag case to my colleagues: let’s approach client-side development in a more structured, disciplined and flexible way; in other words, add a model-view-controller javascript layer to our web app. Included is some background for the discussion and a brief introduction to Backbone.js. I use the phrase MV+ to embrace various implementations of MVC-like javascript frameworks, most of which have different takes on what object take on the responsibility for hooking up models and views.</p>
 
-<p><a href="http://daftpunkjs.herokuapp.com/">Brown Bag Presentation: Javascript MV+</a></p>
+<p><a href="http://daftpunkjs.herokuapp.com/">Brown Bag Presentation: JavaScript MV+</a></p>
 
 
     </article>
     <hr />
     <section class="margin-bottom double">
       <p>
-        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Presentation%20Intro%20to%20Javascript%20MVC%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fpresentation-intro-to-javascript-mvc.html">share it on Twitter</a>
+        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Presentation%20Intro%20to%20JavaScript%20MVC%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fpresentation-intro-to-javascript-mvc.html">share it on Twitter</a>
         and <a href="https://twitter.com/rossta">follow me</a>.
       </p>
       <p>
@@ -121,7 +133,7 @@
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = "rosskaff";
     var disqus_identifier = "presentation-intro-to-javascript-mvc";
-    var disqus_title      = "Presentation Intro to Javascript MVC";
+    var disqus_title      = "Presentation Intro to JavaScript MVC";
     var disqus_url        = "https://rossta.net/blog/presentation-intro-to-javascript-mvc.html";
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
@@ -141,20 +153,42 @@
       </section>
     </div>
     
-    <div class="row">
-      <footer>
-        <section class="large-12 columns center-inline-list">
-          <ul class="inline-list">
-  <li><a href="mailto:ross@rossta.net">email</a></li>
-  <li><a href="https://twitter.com/rossta">twitter</a></li>
-  <li><a href="https://github.com/rossta">github</a></li>
-  <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-  <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
-</ul>
+    <footer>
+  <div class="row">
+    <img class="turtle" src="/assets/images/turtle-logo-096698b6.svg" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/whats-new-in-ruby-2-3-enumerable.html">What's new in Ruby 2.3 Enumerable</a></li>
+          <li><a href="/blog/recurring-events-in-ruby.html">Recurring events in Ruby</a></li>
+          <li><a href="/blog/how-to-write-a-simple-web-crawler-in-ruby-revisited.html">How to write a simple web crawler in Ruby - revisited</a></li>
+          <li><a href="/blog/a-ruby-antihero-thread-pool.html">Thread Pool - A Ruby Antihero</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/rspec.html">RSpec</a></li>
+          <li><a href="/blog/tags/process.html">Process</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+</footer>
 
-        </section>
-      </footer>
-    </div>
     <script src="/assets/javascripts/index.bundle-000158ba.js"></script>
     
     <script type="text/javascript">

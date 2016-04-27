@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://rossta.net/blog/tags/code/page/2.html</loc>
+    <loc>https://rossta.net/talks/page/2/index.html</loc>
+    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010/01/04.html</loc>
+    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/series/service-worker.html</loc>
     <lastmod>2016-04-27T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -62,12 +74,6 @@
   </url>
   <url>
     <loc>https://rossta.net/projects/page/2/index.html</loc>
-    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/talks/page/2/index.html</loc>
     <lastmod>2016-04-27T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -451,13 +457,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/tags/life.html</loc>
-    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/tags/code.html</loc>
+    <loc>https://rossta.net/blog/tags/css.html</loc>
     <lastmod>2016-04-27T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -475,12 +475,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/tags/web.html</loc>
-    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://rossta.net/blog/tags/rspec.html</loc>
     <lastmod>2016-04-27T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -493,6 +487,24 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/tags/github.html</loc>
+    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/tags/performance.html</loc>
+    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/tags/unix.html</loc>
+    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/tags/process.html</loc>
     <lastmod>2016-04-27T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -500,12 +512,6 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/clojure.html</loc>
-    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/tags/javascript.html</loc>
     <lastmod>2016-04-27T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -896,18 +902,6 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/01.html</loc>
-    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010/01/04.html</loc>
-    <lastmod>2016-04-27T00:00:00-04:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/series/service-worker.html</loc>
     <lastmod>2016-04-27T00:00:00-04:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
