@@ -6,13 +6,13 @@
   "background_color": "#f8f8ff",
   "icons": [
     {
-      "src": /assets/images/launcher-icon-36x36.png,
+      "src": /assets/images/launcher-icon-36x36-78ff8641.png,
       "sizes": "36x36",
       "type": "image/png",
       "density": 0.75
     },
     {
-      "src": /assets/images/launcher-icon-48x48.png,
+      "src": /assets/images/launcher-icon-48x48-45f930e7.png,
       "sizes": "48x48",
       "type": "image/png",
       "density": 1.0
@@ -24,13 +24,13 @@
       "density": 1.5
     },
     {
-      "src": /assets/images/launcher-icon-96x96.png,
+      "src": /assets/images/launcher-icon-96x96-9f514528.png,
       "sizes": "96x96",
       "type": "image/png",
       "density": 2.0
     },
     {
-      "src": /assets/images/launcher-icon-144x144.png,
+      "src": /assets/images/launcher-icon-144x144-b16cec8b.png,
       "sizes": "144x144",
       "type": "image/png",
       "density": 3.0
