@@ -94,6 +94,7 @@ configure :build do
   set :google_analytics_id, 'UA-16458563-2'
   set :mailchimp_form_id,   '96030b0bda'
   set :segmentio_id, 'NdBtrprkAGAjQryMShljRdVf90saElAU'
+  set :sumome_id, '4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7'
 
   activate :asset_hash, ignore: [/^serviceworker.js/]
   activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
@@ -107,6 +108,7 @@ configure :development do
   set :google_analytics_id, 'UA-xxxxxxxx-x'
   set :mailchimp_form_id,   'a57e354058'
   set :segmentio_id, '7KlQZWWPWr2MDj4pWepIF7O95JPZ9wfp'
+  set :sumome_id, 'c602732e103d33b5ba914636133fed6b9eaddc98dba1dc2bce5495f9e5396305'
 end
 
 ###
