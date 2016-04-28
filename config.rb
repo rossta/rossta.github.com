@@ -197,6 +197,10 @@ helpers do
     blog('blog').articles.select { |a| a.data[:popular] }.sort_by { |a| a.data[:popular] }
   end
 
+  def current_page_tags
+    Array(current_page.data[:tags])
+  end
+
   def nozen?
     @nozen
   end
