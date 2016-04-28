@@ -96,7 +96,7 @@ configure :build do
   set :segmentio_id, 'NdBtrprkAGAjQryMShljRdVf90saElAU'
   set :sumome_id, '4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7'
 
-  activate :asset_hash, ignore: [/^serviceworker.js/]
+  activate :asset_hash, ignore: [/^serviceworker.js/, /^touch-icon.*png$/]
   activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 end
 
