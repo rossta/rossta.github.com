@@ -1,6 +1,6 @@
 'use strict';
 
-const version = 'v20160421';
+const version = 'v20160427';
 const offlineResources = [
   '/',
   '/offline.html',
