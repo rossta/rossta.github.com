@@ -143,8 +143,11 @@ Set for your local app (/Users/rossta/path/to/app/.bundle/config): &amp;quot;/Us
 local gem changes to the remote repository when using &lt;code&gt;bundle config local&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;I should also mention that a good use case for using &lt;code&gt;:path&lt;/code&gt; instead of &lt;code&gt;bundle
-config local&lt;/code&gt; it when the local gem is in a subdirectory relative to your app.
-I don&amp;rsquo;t often see this in practice, but there are valid reasons for doing so.&lt;/p&gt;
+config local&lt;/code&gt; it when the local gem is in a subdirectory relative to your app,
+like when using &lt;a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules"&gt;git submodules&lt;/a&gt;.
+I don&amp;rsquo;t often see this in practice, but there are valid reasons for doing so.
+The main point here is that the Gemfile options work for all systems where the
+repository is bundled.&lt;/p&gt;
 
 &lt;p&gt;In general, I&amp;rsquo;d encourage using either approach sparingly for gems that your
 team doesn&amp;rsquo;t own as it&amp;rsquo;s typically best to stick the official releases for
