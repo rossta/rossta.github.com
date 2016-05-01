@@ -129,8 +129,11 @@ As with the `:path` option, we still need to remember to push our
 local gem changes to the remote repository when using `bundle config local`.
 
 I should also mention that a good use case for using `:path` instead of `bundle
-config local` it when the local gem is in a subdirectory relative to your app.
+config local` it when the local gem is in a subdirectory relative to your app,
+like when using [git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 I don't often see this in practice, but there are valid reasons for doing so.
+The main point here is that the Gemfile options work for all systems where the
+repository is bundled.
 
 In general, I'd encourage using either approach sparingly for gems that your
 team doesn't own as it's typically best to stick the official releases for
