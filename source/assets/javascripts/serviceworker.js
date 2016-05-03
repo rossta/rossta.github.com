@@ -1,6 +1,6 @@
 'use strict';
 
-const version = 'v20160427';
+const version = 'v20160502-1';
 const offlineResources = [
   '/',
   '/offline.html',
@@ -13,6 +13,7 @@ const ignoreFetch = [
   /https?:\/\/in.getclicky.com\//,
   /https?:\/\/zenkaffe.herokuapp.com\//,
   /https?:\/\/p.typekit.net\//,
+  /https?:\/\/load.sumome.com\//,
   /\/__rack\//,
 ];
 
@@ -43,15 +44,18 @@ function onFetch(event) {
   const request = event.request;
 
   if (shouldAlwaysFetch(request)) {
+    console.log('shouldAlwaysFetch', request.url)
     event.respondWith(networkedOrOffline(request));
     return;
   }
 
   if (shouldFetchAndCache(request)) {
+    console.log('shouldFetchAndCache', request.url)
     event.respondWith(networkedOrCached(request));
     return;
   }
 
+  console.log('cachedOrNetworked', request.url)
   event.respondWith(cachedOrNetworked(request));
 }
 
@@ -106,10 +110,14 @@ function cachedOrOffline(request) {
 
 function offlineResponse(request) {
   log('(offline)', request.method, request.url);
-  if (request.url.match(/\.(jpg|png|gif|svg|jpeg)(\?.*)?$/)) {
-    return caches.match('/offline.svg');
-  } else {
+
+  let url = new URL(request.url);
+  let path = url.pathname;
+
+  if (path.endsWith(".html") || path.endsWith("/") || !path.endsWith(".js")) {
     return caches.match('/offline.html');
+  } else {
+    return new Response('', { status: 503, statusText: 'Service Unavailable' });;
   }
 }
 
