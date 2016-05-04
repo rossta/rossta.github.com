@@ -42,7 +42,7 @@ So after using one on a [simple static website](/blog/adding-serviceworker-to-a-
 
 As it turns out, to use Service Workers on Rails, we want some, but not all, of the Rails asset pipeline.
 
-The Rails asset pipeline makes a number of assumptions about what's best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase "cacheability". Rails also assumes a single parent directory, `public/assets`, to make it easier to look up the file path for a given asset.
+The Rails asset pipeline makes a number of assumptions about what's best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase "cacheability". Rails also assumes a single parent directory, `/public/assets`, to make it easier to look up the file path for a given asset.
 
 Service worker assets must play by different rules. Consider these behaviors:
 
@@ -84,9 +84,9 @@ pull in... or put this in a Rack middleware!
 
 ## Using serviceworker-rails
 
-This is what I've done with [`serviceworker-rails`](https://github.com/rossta/serviceworker-rails). It inserts a middleware into the Rails stack that acts as a separate router for service workers. It can be configured to proxy requests to arbitrary endpoints to precompiled Rails assets.
+This is what I've done with [`serviceworker-rails`](https://github.com/rossta/serviceworker-rails). It inserts a middleware into the Rails stack that acts as a separate router for service worker scripts. In development, you can edit and recompile your service workers on the fly as with any other asset in the pipeline. In production, the service worker endpoints map to the precompiled asset in `/public/assets`.
 
-One the gem is added to your `Gemfile`, you can add a Rails initializer to set
+Once the gem is added to your `Gemfile`, you can add a Rails initializer to set
 up the service worker middleware router:
 
 ```ruby
@@ -114,6 +114,10 @@ match "/project/:id/serviceworker.js" => "project/%{id}/serviceworker"
 
 Check out the project [README](https://github.com/rossta/serviceworker-rails#serviceworkerrails) for more info on how to set up and configure the middleware for your Rails app.
 
-Though the project is still young, you can see `serviceworker-rails` in action in the [Service Workers on Rails Sandbox](https://serviceworker-rails.herokuapp.com/). Inspired by Mozilla's [Service Workers Cookbook](https://serviceworke.rs/), it serves as good place to experiment with Service Workers on Rails in a public setting. Try using the site in Chrome Canary with the [advanced service worker debugging tools](https://www.chromium.org/blink/serviceworker/service-worker-faq) to play around. I've added just a few examples so far but am interested to explore further with various caching strategies, push notifications, and eventually background sync to name a few.
+Though the project is still young, you can see `serviceworker-rails` in action in the [Service Workers on Rails Sandbox](https://serviceworker-rails.herokuapp.com/). Inspired by Mozilla's [Service Workers Cookbook](https://serviceworke.rs/), it serves as good place to experiment with Service Workers on Rails in an open source setting. Try using the site in Chrome Canary with the [advanced service worker debugging tools](https://www.chromium.org/blink/serviceworker/service-worker-faq) to play around. I've added just a few examples so far but am interested to explore further with various caching strategies, push notifications, and eventually background sync to name a few.
+
+What do you think of this approach?
+
+----
 
 Interested in contributing? [Fork the serviceworker-rails gem](https://github.com/rossta/serviceworker-rails) or the [Service Workers on Rails Sandbox](https://github.com/rossta/serviceworker-rails-sandbox) to get started.
