@@ -53,7 +53,7 @@ now!&lt;/p&gt;
 
 &lt;p&gt;As it turns out, to use Service Workers on Rails, we want some, but not all, of the Rails asset pipeline.&lt;/p&gt;
 
-&lt;p&gt;The Rails asset pipeline makes a number of assumptions about what&amp;rsquo;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &amp;ldquo;cacheability&amp;rdquo;. Rails also assumes a single parent directory, &lt;code&gt;public/assets&lt;/code&gt;, to make it easier to look up the file path for a given asset.&lt;/p&gt;
+&lt;p&gt;The Rails asset pipeline makes a number of assumptions about what&amp;rsquo;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &amp;ldquo;cacheability&amp;rdquo;. Rails also assumes a single parent directory, &lt;code&gt;/public/assets&lt;/code&gt;, to make it easier to look up the file path for a given asset.&lt;/p&gt;
 
 &lt;p&gt;Service worker assets must play by different rules. Consider these behaviors:&lt;/p&gt;
 
@@ -97,9 +97,9 @@ pull in&amp;hellip; or put this in a Rack middleware!&lt;/p&gt;
 
 &lt;h2&gt;Using serviceworker-rails&lt;/h2&gt;
 
-&lt;p&gt;This is what I&amp;rsquo;ve done with &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt;&lt;/a&gt;. It inserts a middleware into the Rails stack that acts as a separate router for service workers. It can be configured to proxy requests to arbitrary endpoints to precompiled Rails assets.&lt;/p&gt;
+&lt;p&gt;This is what I&amp;rsquo;ve done with &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt;&lt;/a&gt;. It inserts a middleware into the Rails stack that acts as a separate router for service worker scripts. In development, you can edit and recompile your service workers on the fly as with any other asset in the pipeline. In production, the service worker endpoints map to the precompiled asset in &lt;code&gt;/public/assets&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;One the gem is added to your &lt;code&gt;Gemfile&lt;/code&gt;, you can add a Rails initializer to set
+&lt;p&gt;Once the gem is added to your &lt;code&gt;Gemfile&lt;/code&gt;, you can add a Rails initializer to set
 up the service worker middleware router:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/serviceworker.rb
@@ -124,7 +124,11 @@ match &amp;quot;/project/:id/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;proj
 
 &lt;p&gt;Check out the project &lt;a href="https://github.com/rossta/serviceworker-rails#serviceworkerrails"&gt;README&lt;/a&gt; for more info on how to set up and configure the middleware for your Rails app.&lt;/p&gt;
 
-&lt;p&gt;Though the project is still young, you can see &lt;code&gt;serviceworker-rails&lt;/code&gt; in action in the &lt;a href="https://serviceworker-rails.herokuapp.com/"&gt;Service Workers on Rails Sandbox&lt;/a&gt;. Inspired by Mozilla&amp;rsquo;s &lt;a href="https://serviceworke.rs/"&gt;Service Workers Cookbook&lt;/a&gt;, it serves as good place to experiment with Service Workers on Rails in a public setting. Try using the site in Chrome Canary with the &lt;a href="https://www.chromium.org/blink/serviceworker/service-worker-faq"&gt;advanced service worker debugging tools&lt;/a&gt; to play around. I&amp;rsquo;ve added just a few examples so far but am interested to explore further with various caching strategies, push notifications, and eventually background sync to name a few.&lt;/p&gt;
+&lt;p&gt;Though the project is still young, you can see &lt;code&gt;serviceworker-rails&lt;/code&gt; in action in the &lt;a href="https://serviceworker-rails.herokuapp.com/"&gt;Service Workers on Rails Sandbox&lt;/a&gt;. Inspired by Mozilla&amp;rsquo;s &lt;a href="https://serviceworke.rs/"&gt;Service Workers Cookbook&lt;/a&gt;, it serves as good place to experiment with Service Workers on Rails in an open source setting. Try using the site in Chrome Canary with the &lt;a href="https://www.chromium.org/blink/serviceworker/service-worker-faq"&gt;advanced service worker debugging tools&lt;/a&gt; to play around. I&amp;rsquo;ve added just a few examples so far but am interested to explore further with various caching strategies, push notifications, and eventually background sync to name a few.&lt;/p&gt;
+
+&lt;p&gt;What do you think of this approach?&lt;/p&gt;
+
+&lt;hr&gt;
 
 &lt;p&gt;Interested in contributing? &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;Fork the serviceworker-rails gem&lt;/a&gt; or the &lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;Service Workers on Rails Sandbox&lt;/a&gt; to get started.&lt;/p&gt;
 </content>
