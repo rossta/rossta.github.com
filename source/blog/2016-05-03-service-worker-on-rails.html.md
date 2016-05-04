@@ -28,11 +28,11 @@ There's a new Ruby gem, [`serviceworker-rails`](https://github.com/rossta/servic
 
 In its plainest form, service workers are just JavaScript running in a separate thread outside the context of a web page, like any other [web worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API).
 
-Service workers are special because they are **client-side proxies**. This means they can *hook into the request/response cycle* on the user's machine.
+But, service workers are special; they can act as **client-side proxies**. This means they can *hook into the request/response cycle* on the user's machine.
 
-When we have the ability to hook in to the request/response cycle on the client-side, it means we have the ability to improve the user experience. Perhaps we can render html from a local cache while waiting for a response from the network or we could display another friendly page altogether when the network is offline.
+Hooking in to the request/response cycle on the client-side means we can improve the user experience in ways that weren't possible (or much more difficult) previously. We could render HTML from a local cache while waiting for a response from the network or we could display another friendly page altogether when the network is offline. With service workers, we'll be able to pre-fetch and sync data in the background, push activity notifications to users and even let them know when new releases have been deployed.
 
-For example, now that you've visited my site, your browser has cached the data for [my offline page](/offline.html), so if you lost your network connection, you'd at least see a friendly message instead of the dreaded Chrome dinosaur. So instead of the dreaded Chrome dinosaur, you'll see my offline page.
+Now that you've visited my site, your browser has cached the data for [my offline page](/offline.html), so if you lost your network connection, you'd at least see a friendly message instead of the dreaded Chrome dinosaur. So instead of the dreaded Chrome dinosaur, you'll see my offline page.
 
 Go ahead and take a look at the [source code for the rossta.net service worker](https://github.com/rossta/rossta.github.com/blob/45b67d326bb1118c9e0743ae74e1a5ca570a5947/source/assets/javascripts/serviceworker.js) to see how I did it. I'm still learning about Service Worker - is it *really* new after all - so I'm sure there's lots of ways I could improve it!
 
