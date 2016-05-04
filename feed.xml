@@ -5,10 +5,130 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-04-22T20:00:00-04:00</updated>
+  <updated>2016-05-02T20:00:00-04:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Service Worker on Rails</title>
+    <link rel="alternate" href="/blog/service-worker-on-rails.html"/>
+    <id>/blog/service-worker-on-rails.html</id>
+    <published>2016-05-02T20:00:00-04:00</published>
+    <updated>2016-05-02T20:00:00-04:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Have you heard about &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API"&gt;Service
+Worker&lt;/a&gt;? I
+believe this new JavaScript API has the potential to transform the way users
+interact with the web and how web developers construct websites. Though still in
+development, Service Worker is already &lt;a href="https://jakearchibald.github.io/isserviceworkerready/"&gt;landing in modern...&lt;/a&gt;&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Have you heard about &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API"&gt;Service
+Worker&lt;/a&gt;? I
+believe this new JavaScript API has the potential to transform the way users
+interact with the web and how web developers construct websites. Though still in
+development, Service Worker is already &lt;a href="https://jakearchibald.github.io/isserviceworkerready/"&gt;landing in modern
+browsers&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So far, there hasn&amp;rsquo;t been a good story for adding Service Worker to Rails. Until
+now!&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s a new Ruby gem, &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt;&lt;/a&gt;, to make it easier to integrate Service Worker with the Rails asset pipeline. To understand why Rails developers might want to use this, let&amp;rsquo;s take a step back.&lt;/p&gt;
+
+&lt;h2&gt;A brief intro&lt;/h2&gt;
+
+&lt;p&gt;In its plainest form, service workers are just JavaScript running in a separate thread outside the context of a web page, like any other &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API"&gt;web worker&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;But, service workers are special; they can act as &lt;strong&gt;client-side proxies&lt;/strong&gt;. This means they can &lt;em&gt;hook into the request/response cycle&lt;/em&gt; on the user&amp;rsquo;s machine.&lt;/p&gt;
+
+&lt;p&gt;Hooking in to the request/response cycle on the client-side means we can improve the user experience in ways that weren&amp;rsquo;t possible (or much more difficult) previously. We could render HTML from a local cache while waiting for a response from the network or we could display another friendly page altogether when the network is offline. With service workers, we&amp;rsquo;ll be able to pre-fetch and sync data in the background, push activity notifications to users and even let them know when new releases have been deployed.&lt;/p&gt;
+
+&lt;p&gt;Now that you&amp;rsquo;ve visited my site, your browser has cached the data for &lt;a href="/offline.html"&gt;my offline page&lt;/a&gt;, so if you lost your network connection, you&amp;rsquo;d at least see a friendly message instead of the dreaded Chrome dinosaur. So instead of the dreaded Chrome dinosaur, you&amp;rsquo;ll see my offline page.&lt;/p&gt;
+
+&lt;p&gt;Go ahead and take a look at the &lt;a href="https://github.com/rossta/rossta.github.com/blob/45b67d326bb1118c9e0743ae74e1a5ca570a5947/source/assets/javascripts/serviceworker.js"&gt;source code for the rossta.net service worker&lt;/a&gt; to see how I did it. I&amp;rsquo;m still learning about Service Worker - is it &lt;em&gt;really&lt;/em&gt; new after all - so I&amp;rsquo;m sure there&amp;rsquo;s lots of ways I could improve it!&lt;/p&gt;
+
+&lt;h2&gt;Let&amp;rsquo;s talk Rails&lt;/h2&gt;
+
+&lt;p&gt;So after using one on a &lt;a href="/blog/adding-serviceworker-to-a-simple-website.html"&gt;simple static website&lt;/a&gt;, I wanted to figure out how I&amp;rsquo;d add a service worker to a Rails application. I&amp;rsquo;d expect Rails developers would want to be able to develop and deploy their service workers like any other JavaScript assets using the Rails asset pipeline. Not so fast though.&lt;/p&gt;
+
+&lt;p&gt;As it turns out, to use Service Workers on Rails, we want some, but not all, of the Rails asset pipeline.&lt;/p&gt;
+
+&lt;p&gt;The Rails asset pipeline makes a number of assumptions about what&amp;rsquo;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &amp;ldquo;cacheability&amp;rdquo;. Rails also assumes a single parent directory, &lt;code&gt;public/assets&lt;/code&gt;, to make it easier to look up the file path for a given asset.&lt;/p&gt;
+
+&lt;p&gt;Service worker assets must play by different rules. Consider these behaviors:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Service workers may only be active from within the scope from which they are
+served. So if you try to register a service worker from a Rails asset pipeline
+path, like &lt;code&gt;/assets/serviceworker-abcd1234.js&lt;/code&gt;, it will only be able to interact
+with requests and responses within &lt;code&gt;/assets/&lt;/code&gt;&lt;em&gt;**&lt;/em&gt;. This is not what we want.&lt;/li&gt;
+&lt;li&gt;MDN states browsers check for updated service worker scripts in the background
+every 24 hours (possibly less). Rails developers wouldn&amp;rsquo;t be able to take
+advantage of this feature since the fingerprint strategy means assets at a given
+url are immutable. Beside fingerprintings, the &lt;code&gt;Cache-Control&lt;/code&gt; headers used for
+static files served from Rails also work against browser&amp;rsquo;s treatment of service
+workers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;**&lt;/em&gt;&lt;a href="https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-allowed"&gt;There is an early proposal&lt;/a&gt; to use the &lt;code&gt;Service-Worker-Allowed&lt;/code&gt; header to change scopes.&lt;/p&gt;
+
+&lt;h2&gt;What to do?&lt;/h2&gt;
+
+&lt;p&gt;So, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.&lt;/p&gt;
+
+&lt;p&gt;One approach would be to just place service worker scripts in &lt;code&gt;/public&lt;/code&gt;. That
+could work, but it could mean foregoing the asset pipeline altogether. We lose
+bundling, transpilation, testing and other features we do want. You could use
+the pipeline but would then need to add steps to the build process to copy
+precompiled service workers to the correct paths. In this case, you may want toaugment your
+web server configuration to change &lt;code&gt;Cache-Control&lt;/code&gt; headers for those selected service worker scripts - this may not be possible in certain environments.&lt;/p&gt;
+
+&lt;p&gt;Given the constraints around scoping, you could create
+special controller actions to mount service workers at arbitrary routes. Rails
+also gives you the ability to set custom headers on controller actions so that&amp;rsquo;s
+another benefit. From there, you either write your JavaScript in a template where you may lose the advantage of the asset pipeline or
+expose the contents of a precompiled asset from within the controller.&lt;/p&gt;
+
+&lt;p&gt;I like this last option up until the point where a standard Rails controller
+adds a lot of overhead, e.g. parameter parsing, session and cookie management, CSRF
+protection, that isn&amp;rsquo;t needed for serving static files. From there, you can drop
+down to a &lt;code&gt;ActionController::Metal&lt;/code&gt; subclass and figure out which extensions to
+pull in&amp;hellip; or put this in a Rack middleware!&lt;/p&gt;
+
+&lt;h2&gt;Using serviceworker-rails&lt;/h2&gt;
+
+&lt;p&gt;This is what I&amp;rsquo;ve done with &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt;&lt;/a&gt;. It inserts a middleware into the Rails stack that acts as a separate router for service workers. It can be configured to proxy requests to arbitrary endpoints to precompiled Rails assets.&lt;/p&gt;
+
+&lt;p&gt;One the gem is added to your &lt;code&gt;Gemfile&lt;/code&gt;, you can add a Rails initializer to set
+up the service worker middleware router:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/serviceworker.rb
+Rails.application.configure do
+  config.serviceworker.routes.draw do
+    match &amp;quot;/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;path/to/precompiled/serviceworker&amp;quot;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By default, the middleware sets the &lt;code&gt;Cache-Control&lt;/code&gt; header to avoid aggressive caching. It also gives you the ability to customize headers as desired.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;match &amp;quot;/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;app/serviceworker&amp;quot;, headers: { &amp;quot;X-Custom-Header&amp;quot; =&amp;gt; &amp;quot;foobar&amp;quot; }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Use globbing or named parameters in the service worker paths to interpolate
+asset names.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;match &amp;quot;/*segments/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;%{segments}/serviceworker&amp;quot;
+match &amp;quot;/project/:id/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;project/%{id}/serviceworker&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Check out the project &lt;a href="https://github.com/rossta/serviceworker-rails#serviceworkerrails"&gt;README&lt;/a&gt; for more info on how to set up and configure the middleware for your Rails app.&lt;/p&gt;
+
+&lt;p&gt;Though the project is still young, you can see &lt;code&gt;serviceworker-rails&lt;/code&gt; in action in the &lt;a href="https://serviceworker-rails.herokuapp.com/"&gt;Service Workers on Rails Sandbox&lt;/a&gt;. Inspired by Mozilla&amp;rsquo;s &lt;a href="https://serviceworke.rs/"&gt;Service Workers Cookbook&lt;/a&gt;, it serves as good place to experiment with Service Workers on Rails in a public setting. Try using the site in Chrome Canary with the &lt;a href="https://www.chromium.org/blink/serviceworker/service-worker-faq"&gt;advanced service worker debugging tools&lt;/a&gt; to play around. I&amp;rsquo;ve added just a few examples so far but am interested to explore further with various caching strategies, push notifications, and eventually background sync to name a few.&lt;/p&gt;
+
+&lt;p&gt;Interested in contributing? &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;Fork the serviceworker-rails gem&lt;/a&gt; or the &lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;Service Workers on Rails Sandbox&lt;/a&gt; to get started.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>How to specify local Ruby gems in your Gemfile</title>
     <link rel="alternate" href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html"/>
@@ -1334,266 +1454,6 @@ applications with the &lt;a href="https://github.com/redis/redis-rb"&gt;redis-rb
 &lt;p&gt;Much like &lt;code&gt;ThreadPool&lt;/code&gt;, having at least a cursory understanding of what&amp;rsquo;s happening
 underneath can help you avoid issues with managing resources like network
 connections.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>What I learned building an app in Hanami</title>
-    <link rel="alternate" href="/blog/what-i-learned-about-hanami.html"/>
-    <id>/blog/what-i-learned-about-hanami.html</id>
-    <published>2016-02-21T19:00:00-05:00</published>
-    <updated>2016-02-21T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;For the past year, I’ve been loosely following the progress on &lt;a href="http://hanamirb.org"&gt;Hanami&lt;/a&gt; (formerly Lotus), a new web framework
-for Ruby created by &lt;a href="https://github.com/jodosha"&gt;Luca Guidi (@jodosha)&lt;/a&gt;. I recently decided to build a small app in Hanami to get a feel for its design and to understand...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;For the past year, I&amp;rsquo;ve been loosely following the progress on &lt;a href="http://hanamirb.org"&gt;Hanami&lt;/a&gt; (formerly Lotus), a new web framework
-for Ruby created by &lt;a href="https://github.com/jodosha"&gt;Luca Guidi (@jodosha)&lt;/a&gt;. I recently decided to build a small app in Hanami to get a feel for its design and to understand better its fresh perspective on web development in Ruby. In other words, to answer for myself, &amp;ldquo;Is Hanami better than Rails?&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/rossta/github_groove"&gt;The app&lt;/a&gt; is a simple integration between GitHub issues and the helpdesk platform, &lt;a href="https://www.groovehq.com"&gt;Groove&lt;/a&gt;.
-Visitors can login via OAuth through their GitHub accounts, connect to a Groove
-account with an API key, import their Groove tickets, and create GitHub issues
-from these tickets through the app. You can see the &lt;a href="https://github.com/rossta/github_groove"&gt;source on Github&lt;/a&gt; and play with the &lt;a href="https://github-groove.herokuapp.com/"&gt;app hosted on Heroku&lt;/a&gt;, where it would help to have accounts on both GitHub and Groove to see how it works.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve made note of what I learned and some of the challenges I faced while going beyond the &lt;a href="http://hanamirb.org/guides/"&gt;getting
-started guides&lt;/a&gt; to build and deploy the app. This post is not an introduction
-to Hanami - the &lt;a href="http://hanamirb.org/guides/"&gt;guides&lt;/a&gt; serve as an excellent overview.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;
-  &lt;p&gt;The Github-Groove app is built on &lt;code&gt;hanami-0.7.0&lt;/code&gt;. As the framework is under
-heavy development (as of this writing the latest version is
-&lt;code&gt;v0.7.2&lt;/code&gt;), your experience getting started with Hanami may differ.
-  &lt;/p&gt;
-&lt;/aside&gt;
-
-&lt;h3&gt;Hanami opinions are not Rails opinions&lt;/h3&gt;
-
-&lt;p&gt;Hanami has a lot in common with Rails. Both are web frameworks built on Ruby
-that employ some version of the Model-View-Controller pattern and, among other
-things, value &lt;a href="http://rubyonrails.org/doctrine/#convention-over-configuration"&gt;convention over configuration&lt;/a&gt;.
-Both frameworks are &lt;em&gt;opinionated&lt;/em&gt; about how web apps should be built. In a
-nutshell, Hanami takes what it likes from Rails and draws the line on certain
-principles including avoidance of monkey-patching, enforcing modularity, and encouraging
-the use of &amp;ldquo;plain old Ruby objects&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;rsquo;re coming from Rails, you can expect to learn some new conventions in Hanami.
-&lt;a href="http://hanamirb.org/guides/getting-started/"&gt;As the guides warn&lt;/a&gt;,&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;learning these conventions may be hard: without change, there is no challenge&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The framework pushes you toward &amp;ldquo;monolith first&amp;rdquo; while emphasizing &amp;ldquo;separation of concerns&amp;rdquo;. There are suggestions in the generated directory structure like how the &lt;code&gt;app/&lt;/code&gt; folder is named &lt;code&gt;apps/&lt;/code&gt; in Hanami encouraging you from the start to define sub-applications boundaries under one umbrella, or &amp;ldquo;container&amp;rdquo; in Hanami parlance. So while in Rails has engines as an opt-in feature, you build everything as an engine in Hanami. Each &amp;ldquo;app&amp;rdquo; gets its own set of views, controllers, assets, configuration, etc. Shared resources, like models, tend to go in &lt;code&gt;lib/&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;You also get useful development tools like generators, migrations, and asset
-pipelines in Hanami, but expect less ceremony here. Migrations handed off to the
-venerable &lt;a href="http://sequel.jeremyevans.net/rdoc/files/doc/schema_modification_rdoc.html"&gt;Sequel&lt;/a&gt; project and the asset story is still young but passable; you won&amp;rsquo;t be able to take advantage of the multitude of Rails-asset gems.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;d be interested to see Hanami go in a different direction here, like taking advantage of the &amp;ldquo;frontend explosion&amp;rdquo; by providing integration with external pipelines as the static-site generator &lt;a href="https://middlemanapp.com/advanced/external-pipeline/"&gt;middleman has done&lt;/a&gt; or what &lt;a href="http://www.shakacode.com/"&gt;Shakacode&lt;/a&gt; is trying with &lt;a href="https://webpack.github.io/"&gt;webpack&lt;/a&gt; in &lt;a href="https://github.com/shakacode/react_on_rails"&gt;&lt;code&gt;react_on_rails&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s worth noting that Hanami comes with security features baked in for as one would expect, including &lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)"&gt;CSRF protection&lt;/a&gt; and app-level secure-by-default options for items like &lt;a href="https://developer.mozilla.org/en-US/docs/Web/Security/CSP"&gt;Content Security Policy&lt;/a&gt; and &lt;code&gt;X-Frame-Options&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;One gotcha is that Hanami &lt;a href="https://github.com/hanami/hanami/issues/249"&gt;does not itself provide any mechanism for code
-reloading&lt;/a&gt; (at the moment). This
-was not obvious to me starting off since the development server does &amp;ldquo;appear&amp;rdquo; to reload code. It turns out that the dev server launches with &lt;a href="https://github.com/rtomayko/shotgun"&gt;Shotgun&lt;/a&gt; (commonly used in Sinatra projects), to serve each development request in a new process with &lt;code&gt;fork(2)&lt;/code&gt;. I didn&amp;rsquo;t pick up on this until several iterations in when I added the &lt;a href="https://github.com/brandonhilkert/sucker_punch"&gt;SuckerPunch gem&lt;/a&gt; and couldn&amp;rsquo;t figure out why my background jobs wouldn&amp;rsquo;t run in development. I added a &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/controllers/tickets/sync.rb#L11"&gt;sync action&lt;/a&gt; that allows users to trigger a &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/jobs/sync_tickets_job.rb"&gt;background job to import ticket data&lt;/a&gt; from Groove into the application. Long story short, kicking off background jobs in threads in the request process, as is possible with SuckerPunch, won&amp;rsquo;t work without disabling Shotgun.&lt;/p&gt;
-
-&lt;h3&gt;Hanami MVC is not Rails MVC&lt;/h3&gt;
-
-&lt;p&gt;With the Model-View-Controller paradigm, you&amp;rsquo;ll see some big departures from
-Rails. First, controllers are not classes with &amp;ldquo;RESTful&amp;rdquo; methods, but
-&lt;em&gt;directories&lt;/em&gt; of related action classes. In other words, instead of defining
-&lt;code&gt;#index&lt;/code&gt;, &lt;code&gt;#show&lt;/code&gt;, &lt;code&gt;#create&lt;/code&gt;, etc. in a &lt;code&gt;PostsController&lt;/code&gt;, you create a separate
-class for each action using a mixin that live in a directory that would
-represent a single controller in Rails.&lt;/p&gt;
-
-&lt;p&gt;In my Github-Groove app, here&amp;rsquo;s how I organize the tickets controller:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;app/
-  web/
-    assets/
-    config/
-    controllers/
-      tickets/
-        index.rb
-        show.rb
-        sync.rb
-    templates/
-    views/
-    ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Each &amp;ldquo;action&amp;rdquo; is a Rack-inspired class whose contract is only that it responds to &lt;code&gt;#call&lt;/code&gt;. You still get
-familiar macros like &lt;code&gt;before&lt;/code&gt; filters, but there are new ideas too, like declaring what instance variables are available to the view with &lt;code&gt;expose&lt;/code&gt;, inserting action-specific middleware, and whitelisting &lt;code&gt;params&lt;/code&gt; at the class level, all of which I find to be huge improvements over the Rails controller design.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;module Web::Controllers::Project
-  class Create
-    include Web::Action
-
-    expose :project
-    before :authenticate!
-
-    params do
-      param :project do
-        param :groove_access_token, presence: true
-        param :github_repository, presence: true
-      end
-    end
-
-    def call(params)
-      if params.valid?
-        @project = ProjectRepository.find_or_create_by_params(params[:project])
-        UserRepository.update_user_project(current_user, @project)
-
-        flash[:notice] = &amp;quot;Your project has been saved!&amp;quot;
-
-        redirect_to &amp;quot;/project&amp;quot;
-      end
-    end
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Arguably, the biggest efforts in Hanami appear to be at this action layer and it
-shows in the &lt;a href="http://hanamirb.org/guides/actions/overview/"&gt;guides&lt;/a&gt; and the
-&lt;a href="https://github.com/hanami/controller/blob/master/README.md"&gt;README&lt;/a&gt; where you
-can find a ton of great information for customizing these classes.&lt;/p&gt;
-
-&lt;p&gt;Another big benefit in the controller design, and for most of the Hanami
-framework, is that unit-testing has a much lower barrier to entry. To get
-controller tests to work in Rails requires a ton of setup behind the scenes to
-the point where you essentially have integration tests. Controllers tests in
-Hanami are much simpler by the simple fact that getting a testable object is as
-easy as &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/spec/web/controllers/project/create_spec.rb#L5"&gt;instantiating a Hanami action&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In Hanami, &amp;ldquo;views&amp;rdquo; are classes that act more like presenter to represent a model
-or collection of models for the &amp;ldquo;templates&amp;rdquo;, which the place of the
-&lt;code&gt;views/&lt;/code&gt; folder in Rails. Like Rails, file-naming conventions link an action,
-view, and template. The helper method story is still developing, but you can
-expect to find some surprises in the docs, like the criticism of Rails
-monkey-patching of ERB to achieve block-style helpers for things like forms.
-Expect to get tripped up by these differences in helper syntax which ironically are
-valid ERB. Hanami does support all the other popular templating engines through
-&lt;a href="https://github.com/rtomayko/tilt"&gt;Tilt&lt;/a&gt; for your preference.&lt;/p&gt;
-
-&lt;p&gt;Hanami also provides &lt;code&gt;hanami-model&lt;/code&gt; for the model layer as a soft-dependency so
-you can bring your own ORM if desired. If you choose to use &lt;code&gt;hanami-model&lt;/code&gt; as I
-did, you can expect to leave your ActiveRecord convenience (and baggage) behind.
-Hanami&amp;rsquo;s model layer emulates the &lt;a href="http://martinfowler.com/eaaCatalog/repository.html"&gt;repository pattern&lt;/a&gt; where database queries, table mapping, and entities are all separate concerns.&lt;/p&gt;
-
-&lt;p&gt;Repositories become a collection of query methods:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class ProjectRepository
-  include Hanami::Repository
-
-  def self.find_or_create_by_params(params)
-    found = find_by_groove_access_token(params[:groove_access_token])
-
-    if found
-      found.update(params)
-      update found
-    else
-      create(Project.new(params))
-    end
-  end
-
-  def self.find_by_groove_access_token(groove_access_token)
-    query do
-      where(groove_access_token: groove_access_token)
-    end.first
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Entities feel basically like POROS that provide a thin layer over attributes.
-Don&amp;rsquo;t expect to find any database access, validations (by default anyhow), or callbacks here.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class Project
-  include Hanami::Entity
-
-  attributes :groove_access_token, :github_repository, :syncing
-
-  def ready?
-    groove_access_token.present? &amp;amp;&amp;amp; github_repository.present?
-  end
-
-  # ...
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Validations do exist in Hanami &lt;a href="https://github.com/hanami/validations"&gt;as a separate mixin&lt;/a&gt; but these are more typically done in the params macro at the action-layer.&lt;/p&gt;
-
-&lt;h2&gt;Expect to write code&lt;/h2&gt;
-
-&lt;p&gt;While Hanami has its own variety of &amp;ldquo;magic&amp;rdquo; of the kind that developers have come to
-either love or hate in Rails, you can expect to write code you might not
-otherwise have to in Rails. The framework is still young, so there are missing
-features. What&amp;rsquo;s not always clear is whether these features have been left out
-by priority or choice. To figure that out takes some digging on GitHub issues, the Hanami &lt;a href="https://gitter.im/hanami/chat"&gt;chat&lt;/a&gt; and &lt;a href="https://discuss.hanamirb.org/"&gt;Discourse forum&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Though its database layer has the &lt;a href="https://github.com/jeremyevans/sequel"&gt;Sequel&lt;/a&gt; library as a foundation, I didn&amp;rsquo;t find the repository and entity functionality as fully-developed. I found myself writing a lot of boilerplate code in the entities and repositories with a lot of co-dependence between the classes. With some more thoughtful design and refactoring, I could probably address this issue, but at this stage, the separation of concerns is less apparent: entities and repositories appear to be tightly bound. &lt;a href="https://github.com/hanami/model/issues/291"&gt;Convenience methods&lt;/a&gt; are still in the works.&lt;/p&gt;
-
-&lt;p&gt;For one, &lt;a href="https://github.com/hanami/model/pull/244"&gt;associations&lt;/a&gt; are still in development at the time of this writing (see open issue &lt;a href="https://github.com/hanami/model/issues/35"&gt;here&lt;/a&gt;). Much of my entity code was to fill this gap - to load objects linked by foreign keys via repositories like below.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class Project
-  include Hanami::Entity
-
-  def tickets(params = {})
-    TicketRepository.all_by_project(self, params)
-  end
-end
-
-class TicketRepository
-  include Hanami::Repository
-
-  def self.all_by_project(project, _params = {})
-    query do
-      where(project_id: project.id).desc(:number)
-    end.all
-  end
-
-  # ...
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I&amp;rsquo;m not sure if this is the &amp;ldquo;Hanami-way&amp;rdquo;, but I found myself doing this kind of
-thing a lot.&lt;/p&gt;
-
-&lt;p&gt;I also ran into some unexpected issues while deploying the application to Heroku
-where its &lt;code&gt;HANAMI_ENV&lt;/code&gt; is set to &lt;code&gt;&amp;#39;production&amp;#39;&lt;/code&gt;. In many cases, custom classes I
-extracted, like one for sharing &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/repositories/pagination.rb"&gt;a pagination query&lt;/a&gt; and another for &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/vendor/groove.rb"&gt;wrapping the &lt;code&gt;Groove API Ruby Client&lt;/code&gt;&lt;/a&gt; (my &lt;a href="https://github.com/Fodoj/groovehq/pull/16"&gt;fork with paginated enumeration&lt;/a&gt;) weren&amp;rsquo;t &amp;ldquo;autoloaded&amp;rdquo; when booting the Hanami application. To resolve this, I added explicit requires like &lt;code&gt;require_relative &amp;#39;./pagination&amp;#39;&lt;/code&gt;. Again, I didn&amp;rsquo;t have time to dig into whether this issue would be expected or not; I could have been missing something important here.&lt;/p&gt;
-
-&lt;h3&gt;The Community is still young&lt;/h3&gt;
-
-&lt;p&gt;That brings me to the community - it&amp;rsquo;s extremely supportive, but still very
-small. I encountered a lot of helpful folks on
-&lt;a href="https://gitter.im/hanami/chat"&gt;chat&lt;/a&gt; including &lt;code&gt;@jodosha&lt;/code&gt; himself, but there
-simply hasn&amp;rsquo;t been enough traction to reach &lt;a href="https://stackoverflow.com/questions/tagged/hanami"&gt;StackOverflow&lt;/a&gt; critical mass where just about any question you can think of in Rails already has an answer.&lt;/p&gt;
-
-&lt;p&gt;This means a lot more code-spelunking in the &lt;a href="https://github.com/hanami"&gt;hanami&lt;/a&gt; repositories. To that end, I found the code extremely clean, well-documented, and approachable whereas, even today, I need to brace myself before diving into Rails source.&lt;/p&gt;
-
-&lt;p&gt;That said, you can expect to run into edge cases and bugs occasionally that may
-not yet have a solution, including this &lt;a href="https://github.com/pry/pry/issues/1471#issuecomment-187420164"&gt;incredibly irksome&lt;/a&gt; issue that prevents you from accessing the pry console when using &lt;code&gt;binding.pry&lt;/code&gt; in Hanami controllers and the problem I mentioned earlier that prevents you from using SuckerPunch in development with Shotgun enabled.&lt;/p&gt;
-
-&lt;p&gt;Another challenge is that all those Rails-specific plugins and engines
-you&amp;rsquo;ve come to rely on won&amp;rsquo;t work in Hanami: Yikes, you have build authentication without Devise!
-Using &lt;a href="https://github.com/hassox/warden"&gt;&lt;code&gt;Warden&lt;/code&gt;&lt;/a&gt;, the general Rack-based
-authentication middleware on which Devise is based, is very feasible and you can always
-rely on &lt;a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/application.rb#L86"&gt;OmniAuth like I did&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The lesson here is that with Hanami, you&amp;rsquo;re much more likely to have to &amp;ldquo;roll up
-your sleeves&amp;rdquo; to get to the bottom of issues, figure how to do things that
-aren&amp;rsquo;t covered by the guides, or otherwise, get from a Rails-specific gem.&lt;/p&gt;
-
-&lt;h3&gt;Hanami is and is not Rails&lt;/h3&gt;
-
-&lt;p&gt;So should you build your next app in Hanami? Only you can answer that of course.
-The lightweight approach in Hanami means there is less to wrap your head around
-if you&amp;rsquo;re coming from Rails, but there is still a learning curve nonetheless. I&amp;rsquo;d say it&amp;rsquo;s a worthwhile endeavor to build something small like I did at first to push the boundaries and answer the questions you have about Hanami for yourself.&lt;/p&gt;
-
-&lt;p&gt;Hanami treads the same ground as Rails and aims to do a lot of the low level
-work for you so can focus on what&amp;rsquo;s important - your business logic. Personally, I found a lot of advantages in the &amp;ldquo;Hanami way&amp;rdquo; and enjoyed the experience of the new paradigm. My &amp;ldquo;Rails muscle memory&amp;rdquo; tripped me up on occasion and left me pining for features that don&amp;rsquo;t exist or are not as well-developed in Hanami yet. I see a lot of potential in the Hanami framework and see it growing into a viable alternative to Rails in the near future.&lt;/p&gt;
-
-&lt;p&gt;Check out the &lt;a href="https://github.com/rossta/github_groove"&gt;GitHub-Groove source&lt;/a&gt; and &lt;a href="https://github-groove.herokuapp.com/"&gt;demo app&lt;/a&gt; and let me know what I could have done differently.&lt;/p&gt;
 </content>
   </entry>
 </feed>
