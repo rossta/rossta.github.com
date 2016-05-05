@@ -43,13 +43,13 @@ now!&lt;/p&gt;
 
 &lt;p&gt;Hooking in to the request/response cycle on the client-side means we can improve the user experience in ways that weren&amp;rsquo;t possible (or much more difficult) previously. We could render HTML from a local cache while waiting for a response from the network or we could display another friendly page altogether when the network is offline. With service workers, we&amp;rsquo;ll be able to pre-fetch and sync data in the background, push activity notifications to users and even let them know when new releases have been deployed.&lt;/p&gt;
 
-&lt;p&gt;Now that you&amp;rsquo;ve visited my site, your browser has cached the data for &lt;a href="/offline.html"&gt;my offline page&lt;/a&gt;, so if you lost your network connection, you&amp;rsquo;d at least see a friendly message instead of the dreaded Chrome dinosaur. So instead of the dreaded Chrome dinosaur, you&amp;rsquo;ll see my offline page.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve been &lt;a href="/blog/adding-serviceworker-to-a-simple-website.html"&gt;playing with Service Worker&lt;/a&gt; a bit lately. Now that you&amp;rsquo;ve visited my site, your browser has cached the data for &lt;a href="/offline.html"&gt;my offline page&lt;/a&gt;, so if you lost your network connection, you&amp;rsquo;d at least see a friendly message instead of the dreaded Chrome dinosaur.&lt;/p&gt;
 
 &lt;p&gt;Go ahead and take a look at the &lt;a href="https://github.com/rossta/rossta.github.com/blob/45b67d326bb1118c9e0743ae74e1a5ca570a5947/source/assets/javascripts/serviceworker.js"&gt;source code for the rossta.net service worker&lt;/a&gt; to see how I did it. I&amp;rsquo;m still learning about Service Worker - is it &lt;em&gt;really&lt;/em&gt; new after all - so I&amp;rsquo;m sure there&amp;rsquo;s lots of ways I could improve it!&lt;/p&gt;
 
 &lt;h2&gt;Let&amp;rsquo;s talk Rails&lt;/h2&gt;
 
-&lt;p&gt;So after using one on a &lt;a href="/blog/adding-serviceworker-to-a-simple-website.html"&gt;simple static website&lt;/a&gt;, I wanted to figure out how I&amp;rsquo;d add a service worker to a Rails application. I&amp;rsquo;d expect Rails developers would want to be able to develop and deploy their service workers like any other JavaScript assets using the Rails asset pipeline. Not so fast though.&lt;/p&gt;
+&lt;p&gt;Next I wondered how I&amp;rsquo;d add a Service Worker to a Rails application. I&amp;rsquo;d expect Rails developers would want to be able to develop and deploy their service workers like any other JavaScript assets using the Rails asset pipeline. Not so fast though.&lt;/p&gt;
 
 &lt;p&gt;As it turns out, to use Service Workers on Rails, we want some, but not all, of the Rails asset pipeline.&lt;/p&gt;
 
@@ -58,23 +58,18 @@ now!&lt;/p&gt;
 &lt;p&gt;Service worker assets must play by different rules. Consider these behaviors:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Service workers may only be active from within the scope from which they are
+&lt;li&gt;&lt;p&gt;Service workers may only be active from within the scope from which they are
 served. So if you try to register a service worker from a Rails asset pipeline
 path, like &lt;code&gt;/assets/serviceworker-abcd1234.js&lt;/code&gt;, it will only be able to interact
-with requests and responses within &lt;code&gt;/assets/&lt;/code&gt;&lt;em&gt;**&lt;/em&gt;. This is not what we want.&lt;/li&gt;
-&lt;li&gt;MDN states browsers check for updated service worker scripts in the background
-every 24 hours (possibly less). Rails developers wouldn&amp;rsquo;t be able to take
-advantage of this feature since the fingerprint strategy means assets at a given
-url are immutable. Beside fingerprintings, the &lt;code&gt;Cache-Control&lt;/code&gt; headers used for
-static files served from Rails also work against browser&amp;rsquo;s treatment of service
-workers.&lt;/li&gt;
+with requests and responses within &lt;code&gt;/assets/&lt;/code&gt;&lt;em&gt;**&lt;/em&gt;. This is not what we want.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API#Download_install_and_activate"&gt;MDN states&lt;/a&gt; browsers check for updated service worker scripts in the background every 24 hours (possibly less). Rails developers wouldn&amp;rsquo;t be able to take advantage of this feature since the fingerprint strategy means assets at a given url are immutable. Beside fingerprintings, the &lt;code&gt;Cache-Control&lt;/code&gt; headers used for static files served from Rails also work against browser&amp;rsquo;s treatment of service workers.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;em&gt;**&lt;/em&gt;&lt;a href="https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-allowed"&gt;There is an early proposal&lt;/a&gt; to use the &lt;code&gt;Service-Worker-Allowed&lt;/code&gt; header to change scopes.&lt;/p&gt;
 
 &lt;h2&gt;What to do?&lt;/h2&gt;
 
-&lt;p&gt;So, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/rails/sprockets/issues/44"&gt;For now&lt;/a&gt;, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.&lt;/p&gt;
 
 &lt;p&gt;One approach would be to just place service worker scripts in &lt;code&gt;/public&lt;/code&gt;. That
 could work, but it could mean foregoing the asset pipeline altogether. We lose

@@ -19,7 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" sizes="57x57"   href="/touch-icon-57x57.png" />
     <link rel="apple-touch-icon" sizes="72x72"   href="/touch-icon-72x72.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="/touch-icon-120x120.png" />
@@ -98,13 +98,13 @@ now!</p>
 
 <p>Hooking in to the request/response cycle on the client-side means we can improve the user experience in ways that weren&rsquo;t possible (or much more difficult) previously. We could render HTML from a local cache while waiting for a response from the network or we could display another friendly page altogether when the network is offline. With service workers, we&rsquo;ll be able to pre-fetch and sync data in the background, push activity notifications to users and even let them know when new releases have been deployed.</p>
 
-<p>Now that you&rsquo;ve visited my site, your browser has cached the data for <a href="/offline.html">my offline page</a>, so if you lost your network connection, you&rsquo;d at least see a friendly message instead of the dreaded Chrome dinosaur. So instead of the dreaded Chrome dinosaur, you&rsquo;ll see my offline page.</p>
+<p>I&rsquo;ve been <a href="/blog/adding-serviceworker-to-a-simple-website.html">playing with Service Worker</a> a bit lately. Now that you&rsquo;ve visited my site, your browser has cached the data for <a href="/offline.html">my offline page</a>, so if you lost your network connection, you&rsquo;d at least see a friendly message instead of the dreaded Chrome dinosaur.</p>
 
 <p>Go ahead and take a look at the <a href="https://github.com/rossta/rossta.github.com/blob/45b67d326bb1118c9e0743ae74e1a5ca570a5947/source/assets/javascripts/serviceworker.js">source code for the rossta.net service worker</a> to see how I did it. I&rsquo;m still learning about Service Worker - is it <em>really</em> new after all - so I&rsquo;m sure there&rsquo;s lots of ways I could improve it!</p>
 
 <h2>Let&rsquo;s talk Rails</h2>
 
-<p>So after using one on a <a href="/blog/adding-serviceworker-to-a-simple-website.html">simple static website</a>, I wanted to figure out how I&rsquo;d add a service worker to a Rails application. I&rsquo;d expect Rails developers would want to be able to develop and deploy their service workers like any other JavaScript assets using the Rails asset pipeline. Not so fast though.</p>
+<p>Next I wondered how I&rsquo;d add a Service Worker to a Rails application. I&rsquo;d expect Rails developers would want to be able to develop and deploy their service workers like any other JavaScript assets using the Rails asset pipeline. Not so fast though.</p>
 
 <p>As it turns out, to use Service Workers on Rails, we want some, but not all, of the Rails asset pipeline.</p>
 
@@ -113,23 +113,18 @@ now!</p>
 <p>Service worker assets must play by different rules. Consider these behaviors:</p>
 
 <ul>
-<li>Service workers may only be active from within the scope from which they are
+<li><p>Service workers may only be active from within the scope from which they are
 served. So if you try to register a service worker from a Rails asset pipeline
 path, like <code>/assets/serviceworker-abcd1234.js</code>, it will only be able to interact
-with requests and responses within <code>/assets/</code><em>**</em>. This is not what we want.</li>
-<li>MDN states browsers check for updated service worker scripts in the background
-every 24 hours (possibly less). Rails developers wouldn&rsquo;t be able to take
-advantage of this feature since the fingerprint strategy means assets at a given
-url are immutable. Beside fingerprintings, the <code>Cache-Control</code> headers used for
-static files served from Rails also work against browser&rsquo;s treatment of service
-workers.</li>
+with requests and responses within <code>/assets/</code><em>**</em>. This is not what we want.</p></li>
+<li><p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API#Download_install_and_activate">MDN states</a> browsers check for updated service worker scripts in the background every 24 hours (possibly less). Rails developers wouldn&rsquo;t be able to take advantage of this feature since the fingerprint strategy means assets at a given url are immutable. Beside fingerprintings, the <code>Cache-Control</code> headers used for static files served from Rails also work against browser&rsquo;s treatment of service workers.</p></li>
 </ul>
 
 <p><em>**</em><a href="https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-allowed">There is an early proposal</a> to use the <code>Service-Worker-Allowed</code> header to change scopes.</p>
 
 <h2>What to do?</h2>
 
-<p>So, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.</p>
+<p><a href="https://github.com/rails/sprockets/issues/44">For now</a>, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.</p>
 
 <p>One approach would be to just place service worker scripts in <code>/public</code>. That
 could work, but it could mean foregoing the asset pipeline altogether. We lose
@@ -279,7 +274,7 @@ match &quot;/project/:id/serviceworker.js&quot; =&gt; &quot;project/%{id}/servic
           <li><a href="/blog/recurring-events-in-ruby.html">Recurring events in Ruby</a></li>
           <li><a href="/blog/how-to-write-a-simple-web-crawler-in-ruby-revisited.html">How to write a simple web crawler in Ruby - revisited</a></li>
           <li><a href="/blog/a-ruby-antihero-thread-pool.html">Thread Pool - A Ruby Antihero</a></li>
-          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
