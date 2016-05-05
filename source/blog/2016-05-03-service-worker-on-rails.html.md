@@ -32,13 +32,13 @@ But, service workers are special; they can act as **client-side proxies**. This 
 
 Hooking in to the request/response cycle on the client-side means we can improve the user experience in ways that weren't possible (or much more difficult) previously. We could render HTML from a local cache while waiting for a response from the network or we could display another friendly page altogether when the network is offline. With service workers, we'll be able to pre-fetch and sync data in the background, push activity notifications to users and even let them know when new releases have been deployed.
 
-Now that you've visited my site, your browser has cached the data for [my offline page](/offline.html), so if you lost your network connection, you'd at least see a friendly message instead of the dreaded Chrome dinosaur. So instead of the dreaded Chrome dinosaur, you'll see my offline page.
+I've been [playing with Service Worker](/blog/adding-serviceworker-to-a-simple-website.html) a bit lately. Now that you've visited my site, your browser has cached the data for [my offline page](/offline.html), so if you lost your network connection, you'd at least see a friendly message instead of the dreaded Chrome dinosaur.
 
 Go ahead and take a look at the [source code for the rossta.net service worker](https://github.com/rossta/rossta.github.com/blob/45b67d326bb1118c9e0743ae74e1a5ca570a5947/source/assets/javascripts/serviceworker.js) to see how I did it. I'm still learning about Service Worker - is it *really* new after all - so I'm sure there's lots of ways I could improve it!
 
 ## Let's talk Rails
 
-So after using one on a [simple static website](/blog/adding-serviceworker-to-a-simple-website.html), I wanted to figure out how I'd add a service worker to a Rails application. I'd expect Rails developers would want to be able to develop and deploy their service workers like any other JavaScript assets using the Rails asset pipeline. Not so fast though.
+Next I wondered how I'd add a Service Worker to a Rails application. I'd expect Rails developers would want to be able to develop and deploy their service workers like any other JavaScript assets using the Rails asset pipeline. Not so fast though.
 
 As it turns out, to use Service Workers on Rails, we want some, but not all, of the Rails asset pipeline.
 
@@ -50,18 +50,14 @@ Service worker assets must play by different rules. Consider these behaviors:
 served. So if you try to register a service worker from a Rails asset pipeline
 path, like `/assets/serviceworker-abcd1234.js`, it will only be able to interact
 with requests and responses within `/assets/`<em>**</em>. This is not what we want.
-* MDN states browsers check for updated service worker scripts in the background
-every 24 hours (possibly less). Rails developers wouldn't be able to take
-advantage of this feature since the fingerprint strategy means assets at a given
-url are immutable. Beside fingerprintings, the `Cache-Control` headers used for
-static files served from Rails also work against browser's treatment of service
-workers.
+
+* [MDN states](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API#Download_install_and_activate) browsers check for updated service worker scripts in the background every 24 hours (possibly less). Rails developers wouldn't be able to take advantage of this feature since the fingerprint strategy means assets at a given url are immutable. Beside fingerprintings, the `Cache-Control` headers used for static files served from Rails also work against browser's treatment of service workers.
 
 <em>**</em>[There is an early proposal](https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-allowed) to use the `Service-Worker-Allowed` header to change scopes.
 
 ## What to do?
 
-So, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.
+[For now](https://github.com/rails/sprockets/issues/44), Rails developers need to work around best practices in the Rails asset pipeline to use service workers.
 
 One approach would be to just place service worker scripts in `/public`. That
 could work, but it could mean foregoing the asset pipeline altogether. We lose
