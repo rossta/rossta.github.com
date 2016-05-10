@@ -1,19 +1,19 @@
 <!doctype html>
 <html>
   <head>
-    <title>Offline page for your Rails application - rossta.net</title>
-<meta name="description" content="Offline page for your Rails application" />
+    <title>An offline page for your Rails application - rossta.net</title>
+<meta name="description" content="This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to preacache and render an offline page for your Rails application when visitors have no netw..." />
 <meta name="keywords" content="Rails" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
-<meta name="twitter:description" content="Offline page for your Rails application" />
-<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo-e2bd64cb.jpg" />
-<meta name="twitter:title" content="Offline page for your Rails application" />
-<meta property="og:description" content="Offline page for your Rails application" />
-<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo-e2bd64cb.jpg" />
-<meta property="og:title" content="Offline page for your Rails application" />
+<meta name="twitter:description" content="This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to preacache and render an offline page for your Rails application when visitors have no network connection." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/screenshots/screenshot-offline-chrome-1df451b3.jpg" />
+<meta name="twitter:title" content="An offline page for your Rails application" />
+<meta property="og:description" content="This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to preacache and render an offline page for your Rails application when visitors have no network connection." />
+<meta property="og:image" content="https://rossta.net/assets/images/screenshots/screenshot-offline-chrome-1df451b3.jpg" />
+<meta property="og:title" content="An offline page for your Rails application" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -69,48 +69,44 @@
     <article class="post margin-bottom double">
       <header class="page-header with-summary">
   <h1>
-    Offline page for your Rails application
+    An offline page for your Rails application
   </h1>
     <h3>
       Use Service Worker to connect with your users even when they're not
     </h3>
 </header>
 
-        <p><img src="/assets/images/blog/stock/louvre-pexels-photo-e2bd64cb.jpg" /></p>
+        <p><img src="/assets/images/screenshots/screenshot-offline-chrome-1df451b3.jpg" /></p>
 
       <p>When you visit a website without an internet connection in Chrome, you see the
-offline dinosaur:</p>
-
-<p><img alt="Nobody's Home" src="/assets/images/screenshots/screenshot-offline-chrome-1df451b3.jpg" /></p>
+offline dinosaur.</p>
 
 <p>No wonder we tend to think of websites as less reliable than mobile applications - we can&rsquo;t use them without the network.</p>
 
-<p>Let&rsquo;s take a look at how we might render an Offline page to our visitors, even when they&rsquo;ve lost their network connection. Previously, we would have used <a href="http://diveintohtml5.info/offline.html">App Cache</a> and the Cache Manifest. For <a href="http://alistapart.com/article/application-cache-is-a-douchebag">a number of reasons</a>, developers have found App Cache difficult to work with.</p>
+<p>At least, not typically. We could use <a href="http://diveintohtml5.info/offline.html">App Cache</a> and the Cache Manifest to create an offline experience. For <a href="http://alistapart.com/article/application-cache-is-a-douchebag">a number of reasons</a>, developers have found App Cache difficult to work with.</p>
 
-<p>Luckily, there&rsquo;s a new web standard, [Service Worker], that can be used to create
-offline experiences, among other things, using JavaScript instead of manifest
-files.</p>
+<p>Luckily, there&rsquo;s a new web standard, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">Service Worker</a>, that potentially supplants App Cache by providing more granular control over network mechanism is JavaScript, as opposed to manifest files.</p>
 
-<p>For now, we&rsquo;ll just look at rendering a simple error page with our own branding
+<p>For now, let&rsquo;s consider how we might render a simple error page with our own branding
 when a user attempts to come back to our site without a connection. Keep in
-mind, the techniques used here can be taken further to provide additional functionality.</p>
+mind, the techniques used here are building blocks that can be taken further to enhance functionality.</p>
 
-<p>To do this, we&rsquo;re going to use a <a href="#">service worker</a> to precache the offline
+<p>To do this, we&rsquo;re going to use a service worker to precache the offline
 assets on the first visit to the site. Later, during a return visit without a
 network connection, we can use our service worker to render the offline page.</p>
 
-<p>The reason this works is that a service worker acts as a liason between your
+<p>The reason this works is that Service Worker acts as a liason between your
 visitor&rsquo;s browser and your servers <em>outside the lifecycle of a page</em>.</p>
 
-<p>Keep in mind also, will be a <em>progressive enhancement</em>. Since service workers are <a href="https://jakearchibald.github.io/isserviceworkerready/">not available in all browsers</a>, this approach won&rsquo;t work for everyone, but use of service workers won&rsquo;t degrade the experience for those visitors either.</p>
+<p>Keep in mind also, will be a <em>progressive enhancement</em>. Since service workers are <a href="https://jakearchibald.github.io/isserviceworkerready/">not available in all browsers</a>, this approach won&rsquo;t work for everyone, but the experience won&rsquo;t degrade for those visitors either.</p>
 
-<h2>Build an offline page</h2>
+<h3>Produce the assets</h3>
 
-<p>First we need an offline page. Just HTML and embedded styles like the generated Rails 404 and 500 pages.</p>
+<p>First we need an offline page. We could simply use an HTML page in the public directory with embedded styles like the generated Rails 404 and 500 pages.</p>
 
-<script src="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0.js"></script>
+<p><a href="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0">Source: /offline.html</a></p>
 
-<p>You could also set up a route to an offline response as a <a href="https://mattbrictson.com/dynamic-rails-error-pages">dynamic Rails error page</a>.</p>
+<p>Alternatively, set up a route to an offline controller action as a <a href="https://mattbrictson.com/dynamic-rails-error-pages">dynamic Rails error page</a>.</p>
 
 <aside class="callout panel">
   <p>
@@ -118,7 +114,7 @@ As an aside, I&rsquo;ve wondered: should the offline response be associated with
 </p>
 </aside>
 
-<h3>Add a service worker</h3>
+<h3>Add a service worker file</h3>
 
 <p>We&rsquo;re going to cache this offline HTML on the client side during their first
 visit so that it&rsquo;s available when the user returns. We can of course add links
@@ -139,7 +135,7 @@ configuration know to precompile our serviceworker separately:</p>
 Rails.application.config.assets.precompile += %w[serviceworker.js]
 </code></pre>
 
-<h2>Service Worker event: &lsquo;install&rsquo;</h2>
+<h3>Declare an &lsquo;install&rsquo; event</h3>
 
 <p>Since service workers are event driven, we&rsquo;ll need to instruct it what to do in
 callbacks to three key events in the servive worker lifecycle: <code>install</code>,
@@ -154,7 +150,7 @@ self.addEventListener(&#39;install&#39;, function onInstall(event) {
   event.waitUntil(
     caches.open(version + &#39;offline&#39;).then(function prefill(cache) {
       return cache.addAll([
-        &#39;/offline&#39;,
+        &#39;/offline.html&#39;,
         // etc
       ]);
     })
@@ -167,12 +163,12 @@ self.addEventListener(&#39;install&#39;, function onInstall(event) {
 <p>We can also cache precompiled assets by renaming our <code>serviceworker.js</code> to <code>serviceworker.js.erb</code> and embedding helper methods:</p>
 
 <pre><code class="javascript">return cache.addAll([
-  &#39;/offline&#39;,
+  &#39;/offline.html&#39;,
   &#39;&lt;%= asset_path &quot;application.css&quot; %&gt;&#39;,
 ]);
 </code></pre>
 
-<h2>Service Worker event: &#39;fetch&rsquo;</h2>
+<h3>&#39;fetch&rsquo; or fallback</h3>
 
 <p>Our service worker can intercept any external network request from our visitor&rsquo;s
 browser - even to cross-origin hosts - within the fetch event.</p>
@@ -191,7 +187,7 @@ worker power to respond to various requests, for our simple offline page</p>
     fetch(request).                                      // first, the network
       .catch(function fallback() {
         caches.match(request).then(function(response) {  // then, the cache
-          response || caches.match(&quot;/offline&quot;);          // then, /offline cache
+          response || caches.match(&quot;/offline.html&quot;);     // then, /offline cache
         })
       })
   );
@@ -203,7 +199,7 @@ request. If that doesn&rsquo;t resolve, our <code>catch</code> handler will be i
 attempt to match the request in the cache or simply return our cached offline
 page.</p>
 
-<h2>Service Worker event: &#39;activate&rsquo;</h2>
+<h3>Clean up during &#39;activate&rsquo;</h3>
 
 <p>The <code>activate</code> event is useful to clean up old caches, say when the offline page
 or any of the linked static resources changes.</p>
@@ -230,7 +226,7 @@ will be invoked again to re-cache the static resources for the offline page.
 During <code>activate</code>, any cache names that don&rsquo;t match the new version number will
 be removed.</p>
 
-<h2>Registering the service worker</h2>
+<h3>Register that worker</h3>
 
 <p>With our service worker event handling in place, we must register the script
 from the main page. In any file included in <code>application.js</code>:</p>
@@ -247,7 +243,7 @@ the service worker to be active. In other words, registering the service worker
 at its precompiled path <code>/assets/serviceworker.js</code>, won&rsquo;t be helpful since we
 won&rsquo;t be able to intercept requests to the root path.</p>
 
-<h2>Add ServiceWorker::Rails</h2>
+<h3>Sprinkle in some middleware</h3>
 
 <p>To make this work with the Rails asset pipeline, we can use the
 <a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code></a> gem.</p>
@@ -278,13 +274,15 @@ instead:</p>
 
 <p>See the project <a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md">README</a> for more info on how to configure the middleware.</p>
 
-<h2>Moment of truth</h2>
+<h3>Moment of truth</h3>
 
 <p>Your offline page should now be ready for consumption. Try disabling your
 network connection to test it out. You can use the <em>Network</em> tab in Chrome and
 Chrome Canary to take your browser offline while Firefox has the <em>Work Offline</em> mode under the File menu.</p>
 
-<h2>Debugging</h2>
+<p><img src="/assets/images/screenshots/screenshot-offline-custom-4e1f1089.jpg" /></p>
+
+<h3>Debugging</h3>
 
 <p>Chrome also provides some useful debugging tools for service workers under the
 <em>Resources</em>. It&rsquo;s helpful to read up on the Service Worker life cycle since it is treated
@@ -318,19 +316,14 @@ closer to an even playing field with mobile apps.</p>
     <hr />
     <section class="margin-bottom double">
       <p>
-        If you liked this post, <a target="_blank" href="https://twitter.com/intent/tweet?text=Offline%20page%20for%20your%20Rails%20application%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Foffline-page-for-your-rails-application.html">share it on Twitter</a>
-        and <a href="https://twitter.com/rossta">follow me</a>.
-      </p>
-      <p>
-          This post is part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
-        Published on May  9, 2016
-      </p>
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=An%20offline%20page%20for%20your%20Rails%20application%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Foffline-page-for-your-rails-application.html">share it on Twitter</a>,
+          <a href="https://twitter.com/rossta">follow me - @rossta</a>,
+          and sign up for my newsletter. Thanks!
+        </p>
+      </section>
     </section>
-  </section>
-  <section class="share margin-bottom double">
-  </section>
-  <section class="signup-form-standalone margin-bottom double">
-    <!-- Begin MailChimp Signup Form -->
+    <section class="signup-form-standalone margin-bottom double">
+      <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
   <h3>LEVEL UP your web development</h3>
   <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
@@ -367,6 +360,12 @@ closer to an even playing field with mobile apps.</p>
   <!--End mc_embed_signup-->
 </div>
 
+    </section>
+    <section class="margin-bottom double">
+      <p>
+          Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
+        Published on May  9, 2016
+    </p>
   </section>
     <hr />
     <section class="comments">
@@ -375,7 +374,7 @@ closer to an even playing field with mobile apps.</p>
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = "rosskaff";
     var disqus_identifier = "offline-page-for-your-rails-application";
-    var disqus_title      = "Offline page for your Rails application";
+    var disqus_title      = "An offline page for your Rails application";
     var disqus_url        = "https://rossta.net/blog/offline-page-for-your-rails-application.html";
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
