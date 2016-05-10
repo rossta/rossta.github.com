@@ -1,10 +1,10 @@
 ---
-title: Offline page for your Rails application
+title: An offline page for your Rails application
 author: Ross Kaffenberger
 published: true
 summary: Use Service Worker to connect with your users even when they're not
-description: Offline page for your Rails application
-pull_image: 'blog/stock/louvre-pexels-photo.jpg'
+description: This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to preacache and render an offline page for your Rails application when visitors have no network connection.
+pull_image: 'screenshots/screenshot-offline-chrome.jpg'
 series: Service Worker
 category: Code
 tags:
@@ -12,38 +12,34 @@ tags:
 ---
 
 When you visit a website without an internet connection in Chrome, you see the
-offline dinosaur:
-
-![Nobody's Home](screenshots/screenshot-offline-chrome.jpg)
+offline dinosaur.
 
 No wonder we tend to think of websites as less reliable than mobile applications - we can't use them without the network.
 
-Let's take a look at how we might render an Offline page to our visitors, even when they've lost their network connection. Previously, we would have used [App Cache](http://diveintohtml5.info/offline.html) and the Cache Manifest. For [a number of reasons](http://alistapart.com/article/application-cache-is-a-douchebag), developers have found App Cache difficult to work with.
+At least, not typically. We could use [App Cache](http://diveintohtml5.info/offline.html) and the Cache Manifest to create an offline experience. For [a number of reasons](http://alistapart.com/article/application-cache-is-a-douchebag), developers have found App Cache difficult to work with.
 
-Luckily, there's a new web standard, [Service Worker], that can be used to create
-offline experiences, among other things, using JavaScript instead of manifest
-files.
+Luckily, there's a new web standard, [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API), that potentially supplants App Cache by providing more granular control over network mechanism is JavaScript, as opposed to manifest files.
 
-For now, we'll just look at rendering a simple error page with our own branding
+For now, let's consider how we might render a simple error page with our own branding
 when a user attempts to come back to our site without a connection. Keep in
-mind, the techniques used here can be taken further to provide additional functionality.
+mind, the techniques used here are building blocks that can be taken further to enhance functionality.
 
-To do this, we're going to use a [service worker]() to precache the offline
+To do this, we're going to use a service worker to precache the offline
 assets on the first visit to the site. Later, during a return visit without a
 network connection, we can use our service worker to render the offline page.
 
-The reason this works is that a service worker acts as a liason between your
+The reason this works is that Service Worker acts as a liason between your
 visitor's browser and your servers *outside the lifecycle of a page*.
 
-Keep in mind also, will be a *progressive enhancement*. Since service workers are [not available in all browsers](https://jakearchibald.github.io/isserviceworkerready/), this approach won't work for everyone, but use of service workers won't degrade the experience for those visitors either.
+Keep in mind also, will be a *progressive enhancement*. Since service workers are [not available in all browsers](https://jakearchibald.github.io/isserviceworkerready/), this approach won't work for everyone, but the experience won't degrade for those visitors either.
 
-## Build an offline page
+### Produce the assets
 
-First we need an offline page. Just HTML and embedded styles like the generated Rails 404 and 500 pages.
+First we need an offline page. We could simply use an HTML page in the public directory with embedded styles like the generated Rails 404 and 500 pages.
 
-<script src="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0.js"></script>
+[Source: /offline.html](https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0)
 
-You could also set up a route to an offline response as a [dynamic Rails error page](https://mattbrictson.com/dynamic-rails-error-pages).
+Alternatively, set up a route to an offline controller action as a [dynamic Rails error page](https://mattbrictson.com/dynamic-rails-error-pages).
 
 <aside class="callout panel">
   <p>
@@ -51,7 +47,7 @@ As an aside, I've wondered: should the offline response be associated with an HT
 </p>
 </aside>
 
-### Add a service worker
+### Add a service worker file
 
 We're going to cache this offline HTML on the client side during their first
 visit so that it's available when the user returns. We can of course add links
@@ -73,7 +69,7 @@ configuration know to precompile our serviceworker separately:
 Rails.application.config.assets.precompile += %w[serviceworker.js]
 ```
 
-## Service Worker event: 'install'
+### Declare an 'install' event
 
 Since service workers are event driven, we'll need to instruct it what to do in
 callbacks to three key events in the servive worker lifecycle: `install`,
@@ -89,7 +85,7 @@ self.addEventListener('install', function onInstall(event) {
   event.waitUntil(
     caches.open(version + 'offline').then(function prefill(cache) {
       return cache.addAll([
-        '/offline',
+        '/offline.html',
         // etc
       ]);
     })
@@ -103,12 +99,12 @@ We can also cache precompiled assets by renaming our `serviceworker.js` to `serv
 
 ```javascript
 return cache.addAll([
-  '/offline',
+  '/offline.html',
   '<%= asset_path "application.css" %>',
 ]);
 ```
 
-## Service Worker event: 'fetch'
+### 'fetch' or fallback
 
 Our service worker can intercept any external network request from our visitor's
 browser - even to cross-origin hosts - within the fetch event.
@@ -128,7 +124,7 @@ self.addEventListener('fetch', function onFetch(event) {
     fetch(request).                                      // first, the network
       .catch(function fallback() {
         caches.match(request).then(function(response) {  // then, the cache
-          response || caches.match("/offline");          // then, /offline cache
+          response || caches.match("/offline.html");     // then, /offline cache
         })
       })
   );
@@ -140,7 +136,7 @@ request. If that doesn't resolve, our `catch` handler will be invoked and
 attempt to match the request in the cache or simply return our cached offline
 page.
 
-## Service Worker event: 'activate'
+### Clean up during 'activate'
 
 The `activate` event is useful to clean up old caches, say when the offline page
 or any of the linked static resources changes.
@@ -168,7 +164,7 @@ will be invoked again to re-cache the static resources for the offline page.
 During `activate`, any cache names that don't match the new version number will
 be removed.
 
-## Registering the service worker
+### Register that worker
 
 With our service worker event handling in place, we must register the script
 from the main page. In any file included in `application.js`:
@@ -186,7 +182,7 @@ the service worker to be active. In other words, registering the service worker
 at its precompiled path `/assets/serviceworker.js`, won't be helpful since we
 won't be able to intercept requests to the root path.
 
-## Add ServiceWorker::Rails
+### Sprinkle in some middleware
 
 To make this work with the Rails asset pipeline, we can use the
 [`serviceworker-rails`](https://github.com/rossta/serviceworker-rails) gem.
@@ -219,13 +215,15 @@ match "/serviceworker.js" => "nested/directory/serviceworker.js"
 
 See the project [README](https://github.com/rossta/serviceworker-rails/blob/master/README.md) for more info on how to configure the middleware.
 
-## Moment of truth
+### Moment of truth
 
 Your offline page should now be ready for consumption. Try disabling your
 network connection to test it out. You can use the *Network* tab in Chrome and
 Chrome Canary to take your browser offline while Firefox has the *Work Offline* mode under the File menu.
 
-## Debugging
+![](screenshots/screenshot-offline-custom.jpg)
+
+### Debugging
 
 Chrome also provides some useful debugging tools for service workers under the
 *Resources*. It's helpful to read up on the Service Worker life cycle since it is treated
