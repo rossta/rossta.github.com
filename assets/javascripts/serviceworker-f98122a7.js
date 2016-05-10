@@ -45,7 +45,6 @@ function onFetch(event) {
 
   if (shouldAlwaysFetch(request)) {
     console.log('shouldAlwaysFetch', request.url)
-    event.respondWith(networkedOrOffline(request));
     return;
   }
 

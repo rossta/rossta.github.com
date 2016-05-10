@@ -5,10 +5,263 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-05-02T20:00:00-04:00</updated>
+  <updated>2016-05-08T20:00:00-04:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Offline page for your Rails application</title>
+    <link rel="alternate" href="/blog/offline-page-for-your-rails-application.html"/>
+    <id>/blog/offline-page-for-your-rails-application.html</id>
+    <published>2016-05-08T20:00:00-04:00</published>
+    <updated>2016-05-08T20:00:00-04:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;When you visit a website without an internet connection in Chrome, you see the
+offline dinosaur:&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Nobody's Home" src="/assets/images/screenshots/screenshot-offline-chrome-1df451b3.jpg"&gt;&lt;/p&gt;
+
+&lt;p&gt;No wonder we tend to think of websites as less reliable than mobile applications - we can’t use them without the network.&lt;/p&gt;
+
+&lt;p&gt;Let’s take a look at how...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;When you visit a website without an internet connection in Chrome, you see the
+offline dinosaur:&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt="Nobody's Home" src="/assets/images/screenshots/screenshot-offline-chrome-1df451b3.jpg" /&gt;&lt;/p&gt;
+
+&lt;p&gt;No wonder we tend to think of websites as less reliable than mobile applications - we can&amp;rsquo;t use them without the network.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at how we might render an Offline page to our visitors, even when they&amp;rsquo;ve lost their network connection. Previously, we would have used &lt;a href="http://diveintohtml5.info/offline.html"&gt;App Cache&lt;/a&gt; and the Cache Manifest. For &lt;a href="http://alistapart.com/article/application-cache-is-a-douchebag"&gt;a number of reasons&lt;/a&gt;, developers have found App Cache difficult to work with.&lt;/p&gt;
+
+&lt;p&gt;Luckily, there&amp;rsquo;s a new web standard, [Service Worker], that can be used to create
+offline experiences, among other things, using JavaScript instead of manifest
+files.&lt;/p&gt;
+
+&lt;p&gt;For now, we&amp;rsquo;ll just look at rendering a simple error page with our own branding
+when a user attempts to come back to our site without a connection. Keep in
+mind, the techniques used here can be taken further to provide additional functionality.&lt;/p&gt;
+
+&lt;p&gt;To do this, we&amp;rsquo;re going to use a &lt;a href="#"&gt;service worker&lt;/a&gt; to precache the offline
+assets on the first visit to the site. Later, during a return visit without a
+network connection, we can use our service worker to render the offline page.&lt;/p&gt;
+
+&lt;p&gt;The reason this works is that a service worker acts as a liason between your
+visitor&amp;rsquo;s browser and your servers &lt;em&gt;outside the lifecycle of a page&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Keep in mind also, will be a &lt;em&gt;progressive enhancement&lt;/em&gt;. Since service workers are &lt;a href="https://jakearchibald.github.io/isserviceworkerready/"&gt;not available in all browsers&lt;/a&gt;, this approach won&amp;rsquo;t work for everyone, but use of service workers won&amp;rsquo;t degrade the experience for those visitors either.&lt;/p&gt;
+
+&lt;h2&gt;Build an offline page&lt;/h2&gt;
+
+&lt;p&gt;First we need an offline page. Just HTML and embedded styles like the generated Rails 404 and 500 pages.&lt;/p&gt;
+
+&lt;script src="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;You could also set up a route to an offline response as a &lt;a href="https://mattbrictson.com/dynamic-rails-error-pages"&gt;dynamic Rails error page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;
+  &lt;p&gt;
+As an aside, I&amp;rsquo;ve wondered: should the offline response be associated with an HTTP status code? I don&amp;rsquo;t believe one exists for &amp;ldquo;No network connection&amp;rdquo;. If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won&amp;rsquo;t be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like &amp;ldquo;Not found&amp;rdquo;, &amp;ldquo;Moved permanently&amp;rdquo;, and &amp;ldquo;Site offline for maintenance&amp;rdquo;. Philosophically, is a request that never reaches the server a request at all?
+&lt;/p&gt;
+&lt;/aside&gt;
+
+&lt;h3&gt;Add a service worker&lt;/h3&gt;
+
+&lt;p&gt;We&amp;rsquo;re going to cache this offline HTML on the client side during their first
+visit so that it&amp;rsquo;s available when the user returns. We can of course add links
+to external CSS, JavaScript, and images in our offline pages - we just need to
+remember to cache those resources as well.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll also assume we&amp;rsquo;re using Sprockets, so if using something else, we&amp;rsquo;ll need to adjust accordingly where the asset pipeline is concerned.&lt;/p&gt;
+
+&lt;p&gt;The service worker script file must live outside our &lt;code&gt;application.js&lt;/code&gt; or other
+bundled assets. It can live in any path from which Sprockets can load assets,
+but for now, we&amp;rsquo;ll add a new JavaScript file in &lt;code&gt;app/assets/javascripts/serviceworker.js&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Since it won&amp;rsquo;t be bundled with &lt;code&gt;application.js&lt;/code&gt;, we&amp;rsquo;ll need to let our Rails
+configuration know to precompile our serviceworker separately:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/assets.rb
+
+Rails.application.config.assets.precompile += %w[serviceworker.js]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Service Worker event: &amp;lsquo;install&amp;rsquo;&lt;/h2&gt;
+
+&lt;p&gt;Since service workers are event driven, we&amp;rsquo;ll need to instruct it what to do in
+callbacks to three key events in the servive worker lifecycle: &lt;code&gt;install&lt;/code&gt;,
+&lt;code&gt;activate&lt;/code&gt;, and &lt;code&gt;fetch&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;install&lt;/code&gt; event will be invoked just the first time the service worker is
+requested or any time it is updated and redeployed. Here, we&amp;rsquo;ll precache our offline assets:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;var version = &amp;#39;v1::&amp;#39;;
+
+self.addEventListener(&amp;#39;install&amp;#39;, function onInstall(event) {
+  event.waitUntil(
+    caches.open(version + &amp;#39;offline&amp;#39;).then(function prefill(cache) {
+      return cache.addAll([
+        &amp;#39;/offline&amp;#39;,
+        // etc
+      ]);
+    })
+  );
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;event.waitUntil&lt;/code&gt; accepts &lt;a href="http://www.html5rocks.com/en/tutorials/es6/promises/"&gt;a promise&lt;/a&gt; which must succeed for the &lt;code&gt;install&lt;/code&gt; event to install the service worker successfully. We use &lt;code&gt;caches.open&lt;/code&gt; to return a promise that adds our static offline assets to a named cache associated with our site and the user&amp;rsquo;s browser. The &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache"&gt;Cache API&lt;/a&gt; provides client-side storage for request/response pairs, a lot like a built in HTTP cache.&lt;/p&gt;
+
+&lt;p&gt;We can also cache precompiled assets by renaming our &lt;code&gt;serviceworker.js&lt;/code&gt; to &lt;code&gt;serviceworker.js.erb&lt;/code&gt; and embedding helper methods:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;return cache.addAll([
+  &amp;#39;/offline&amp;#39;,
+  &amp;#39;&amp;lt;%= asset_path &amp;quot;application.css&amp;quot; %&amp;gt;&amp;#39;,
+]);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Service Worker event: &amp;#39;fetch&amp;rsquo;&lt;/h2&gt;
+
+&lt;p&gt;Our service worker can intercept any external network request from our visitor&amp;rsquo;s
+browser - even to cross-origin hosts - within the fetch event.&lt;/p&gt;
+
+&lt;p&gt;There are &lt;a href="https://jakearchibald.com/2014/offline-cookbook/"&gt;a ton of strategies we can
+employ&lt;/a&gt; to give the service
+worker power to respond to various requests, for our simple offline page&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;self.addEventListener(&amp;#39;fetch&amp;#39;, function onFetch(event) {
+  var request = event.request;
+
+  if (!request.url.match(/^https?:\/\/example.com/) ) { return; }
+  if (request.method !== &amp;#39;GET&amp;#39;) { return; }
+
+  event.respondWith(
+    fetch(request).                                      // first, the network
+      .catch(function fallback() {
+        caches.match(request).then(function(response) {  // then, the cache
+          response || caches.match(&amp;quot;/offline&amp;quot;);          // then, /offline cache
+        })
+      })
+  );
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This code will filter for GET requests to our host. Ignored &lt;code&gt;fetch&lt;/code&gt; events will simply proceed to the network. When we may want to provide the offline fallback, we&amp;rsquo;ll then ask then network to &lt;code&gt;fetch&lt;/code&gt; the
+request. If that doesn&amp;rsquo;t resolve, our &lt;code&gt;catch&lt;/code&gt; handler will be invoked and
+attempt to match the request in the cache or simply return our cached offline
+page.&lt;/p&gt;
+
+&lt;h2&gt;Service Worker event: &amp;#39;activate&amp;rsquo;&lt;/h2&gt;
+
+&lt;p&gt;The &lt;code&gt;activate&lt;/code&gt; event is useful to clean up old caches, say when the offline page
+or any of the linked static resources changes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// var version = &amp;quot;v2::&amp;quot;;
+
+self.addEventListener(&amp;#39;activate&amp;#39;, function onActivate(event) {
+  event.waitUntil(
+    caches.keys().then(function deleteOldCache(cacheNames) {
+      return Promise.all(
+        cacheNames.filter(function(cacheName) {
+          return key.indexOf(version) !== 0;
+        }).map(function(cacheName) {
+          return caches.delete(cacheName);
+        })
+      );
+    })
+  );
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If we deploy a service worker with a new version number, the &lt;code&gt;install&lt;/code&gt; event
+will be invoked again to re-cache the static resources for the offline page.
+During &lt;code&gt;activate&lt;/code&gt;, any cache names that don&amp;rsquo;t match the new version number will
+be removed.&lt;/p&gt;
+
+&lt;h2&gt;Registering the service worker&lt;/h2&gt;
+
+&lt;p&gt;With our service worker event handling in place, we must register the script
+from the main page. In any file included in &lt;code&gt;application.js&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/assets/application.js
+
+if (&amp;#39;serviceWorker&amp;#39; in navigator) {
+  navigator.serviceWorker.register(&amp;#39;/serviceworker.js&amp;#39;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It&amp;rsquo;s important for this script to be available at the scope for which we want
+the service worker to be active. In other words, registering the service worker
+at its precompiled path &lt;code&gt;/assets/serviceworker.js&lt;/code&gt;, won&amp;rsquo;t be helpful since we
+won&amp;rsquo;t be able to intercept requests to the root path.&lt;/p&gt;
+
+&lt;h2&gt;Add ServiceWorker::Rails&lt;/h2&gt;
+
+&lt;p&gt;To make this work with the Rails asset pipeline, we can use the
+&lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt;&lt;/a&gt; gem.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
+
+gem &amp;quot;serviceworker-rails&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;ServiceWorker::Rails&lt;/code&gt; will insert middleware into the Rails stack that we can
+configure to route requests to bundled assets.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/serviceworker.rb
+
+Rails.application.configure do
+  config.serviceworker.routes.draw do
+    match &amp;quot;/serviceworker.js&amp;quot;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, any request to the path &lt;code&gt;/serviceworker.js&lt;/code&gt; will match an asset of that
+name. If your service worker script is in a nested directory, you&amp;rsquo;d use this
+instead:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;match &amp;quot;/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;nested/directory/serviceworker.js&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;See the project &lt;a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md"&gt;README&lt;/a&gt; for more info on how to configure the middleware.&lt;/p&gt;
+
+&lt;h2&gt;Moment of truth&lt;/h2&gt;
+
+&lt;p&gt;Your offline page should now be ready for consumption. Try disabling your
+network connection to test it out. You can use the &lt;em&gt;Network&lt;/em&gt; tab in Chrome and
+Chrome Canary to take your browser offline while Firefox has the &lt;em&gt;Work Offline&lt;/em&gt; mode under the File menu.&lt;/p&gt;
+
+&lt;h2&gt;Debugging&lt;/h2&gt;
+
+&lt;p&gt;Chrome also provides some useful debugging tools for service workers under the
+&lt;em&gt;Resources&lt;/em&gt;. It&amp;rsquo;s helpful to read up on the Service Worker life cycle since it is treated
+differently than other JavaScript resources. For example, a hard refresh isn&amp;rsquo;t
+enough to get your browser to install an updated service worker &amp;ndash; the browser
+will keep the current worker active while any tab to your browser is currently
+open. So while the &lt;code&gt;install&lt;/code&gt; event will be triggered right away when a new service worker
+is detected by the browser, the worker won&amp;rsquo;t be able to respond to &lt;code&gt;activate&lt;/code&gt;
+and &lt;code&gt;fetch&lt;/code&gt; until is has control of the page.&lt;/p&gt;
+
+&lt;p&gt;You can navigate to a different host and back or close and reopen
+the tab(s). The &lt;code&gt;self.skipWaiting&lt;/code&gt; function will also instruct the browser to
+let a new service worker take control immediately when used during &lt;code&gt;install&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;self.addEventListener(&amp;#39;install&amp;#39;, function(event) {
+  event.waitUntil(self.skipWaiting());
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3&gt;Final word&lt;/h3&gt;
+
+&lt;p&gt;I believe it&amp;rsquo;s important for web developers to start thinking about ways to make
+our application more reliable in the eyes of consumers. While rendering an
+offline page isn&amp;rsquo;t a game changer by itself, it is a low-risk way to begin
+experimenting with the Service Worker API which has the potential for &lt;a href="http://serviceworke.rs/"&gt;many more
+advanced use cases&lt;/a&gt; and can help the web get
+closer to an even playing field with mobile apps.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Service Worker on Rails</title>
     <link rel="alternate" href="/blog/service-worker-on-rails.html"/>
@@ -1001,458 +1254,6 @@ sacrifices readability. I might be inclined to choose the iterative or recursive
 approach in situations where performance isn&amp;rsquo;t the key concern.&lt;/p&gt;
 
 &lt;p&gt;Given my preference for &lt;a href="https://rossta.net/blog/series/enumerable.html"&gt;Enumerable&lt;/a&gt;, I personally love the enumerative approach, but, as &lt;a href="https://rossta.net/talks/ruby-enumerator.html"&gt;I discussed at Ancient City Ruby&lt;/a&gt;, I doubt most would agree.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Thread Pool - A Ruby Antihero</title>
-    <link rel="alternate" href="/blog/a-ruby-antihero-thread-pool.html"/>
-    <id>/blog/a-ruby-antihero-thread-pool.html</id>
-    <published>2016-03-01T19:00:00-05:00</published>
-    <updated>2016-03-01T19:00:00-05:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;One of the fundamental concepts in key Ruby libraries that embrace
-concurrency is the &lt;a href="https://en.wikipedia.org/wiki/Thread_pool"&gt;thread pool&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can find examples of thread pool implementations in gems like
-&lt;a href="https://github.com/puma/puma"&gt;puma&lt;/a&gt;,
-&lt;a href="https://github.com/ruby-concurrency/concurrent-ruby"&gt;concurrent-ruby&lt;/a&gt;,
-&lt;a href="https://github.com/celluloid/celluloid"&gt;celluloid&lt;/a&gt;,
-&lt;a href="https://github.com/bruceadams/pmap"&gt;pmap&lt;/a&gt;,
-&lt;a href="https://github.com/grosser/parallel/blob/6ebee4ff5c0933da241a182e366eee9227b49764/lib/parallel.rb#L66"&gt;parallel&lt;/a&gt;,
-and &lt;a href="https://github.com/meh/ruby-thread"&gt;ruby-thread&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;A thread pool...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;One of the fundamental concepts in key Ruby libraries that embrace
-concurrency is the &lt;a href="https://en.wikipedia.org/wiki/Thread_pool"&gt;thread pool&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;You can find examples of thread pool implementations in gems like
-&lt;a href="https://github.com/puma/puma"&gt;puma&lt;/a&gt;,
-&lt;a href="https://github.com/ruby-concurrency/concurrent-ruby"&gt;concurrent-ruby&lt;/a&gt;,
-&lt;a href="https://github.com/celluloid/celluloid"&gt;celluloid&lt;/a&gt;,
-&lt;a href="https://github.com/bruceadams/pmap"&gt;pmap&lt;/a&gt;,
-&lt;a href="https://github.com/grosser/parallel/blob/6ebee4ff5c0933da241a182e366eee9227b49764/lib/parallel.rb#L66"&gt;parallel&lt;/a&gt;,
-and &lt;a href="https://github.com/meh/ruby-thread"&gt;ruby-thread&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;A thread pool is an abstraction for re-using a limited number of threads to
-performing concurrent work.&lt;/p&gt;
-
-&lt;p&gt;&lt;img alt="Thread pool - no relation" src="/assets/images/blog/threadpool-428287d8.png" /&gt;&lt;/p&gt;
-
-&lt;p&gt;General usage of a thread pool might look something like the following, where the &lt;code&gt;:size&lt;/code&gt;
-represents the maximum number of threads open at any given time.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;pool = ThreadPool.new(size: 5)
-
-10_000.times do
-  pool.schedule { do_work }
-end
-
-pool.shutdown
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The calculation would be performed 10,000 times across five separate threads.&lt;/p&gt;
-
-&lt;p&gt;To get a better understanding of how thread pools work, let&amp;rsquo;s implement a thread
-pool in test-driven fashion.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;
-&lt;p&gt;
-  The code samples in this post are run on &lt;code&gt;rubinius-3.14&lt;/code&gt; to take advantage of
-  parallel processing. As you may know, MRI&amp;rsquo;s
-&lt;a href="http://www.jstorimer.com/blogs/workingwithcode/8085491-nobody-understands-the-gil"&gt;global interpreter lock&lt;/a&gt;
-ensures only one code can execute Ruby code at any one time.
-&lt;/p&gt;
-&lt;/aside&gt;
-
-&lt;h3&gt;Don&amp;rsquo;t be afraid&lt;/h3&gt;
-
-&lt;p&gt;Before we dive in, let&amp;rsquo;s acknowledge that Rubyists, and most OO programmers in general,
-are taught to fear multi-threaded concurrency.&lt;/p&gt;
-
-&lt;p&gt;The &lt;em&gt;first rule&lt;/em&gt; of concurrency on the JRuby wiki, a Ruby implementation
-designed to take advantage of native operating systems threads, is this:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Don&amp;rsquo;t do it, if you can avoid it.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;For the purpose of this post, I&amp;rsquo;m going to assume the author means &amp;ldquo;in
-production&amp;rdquo;. In the safety of your development environment, playing with
-concurrency in Ruby can be a tremendous learning opportunity.&lt;/p&gt;
-
-&lt;h3&gt;A simple thread pool&lt;/h3&gt;
-
-&lt;p&gt;So we&amp;rsquo;ll implement a simple thread pool guided by tests. Our thread pool will use the
-interface we described earlier while limiting the number of threads
-used to carry out a set of concurrent &amp;ldquo;jobs&amp;rdquo;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;pool = ThreadPool.new(size: 5)
-
-pool.schedule { do_work }
-
-pool.shutdown
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;Basic usage&lt;/h3&gt;
-
-&lt;p&gt;We&amp;rsquo;ll start with a thread pool that doesn&amp;rsquo;t do any concurrent processing.
-It will execute the block given to its &lt;code&gt;#schedule&lt;/code&gt; method
-directly. Though we&amp;rsquo;ll add other tests later to exercise concurrency in the
-implementation, this first test will assume the concurrency is already
-implemented.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s our first test.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;minitest/autorun&amp;#39;
-require &amp;#39;minitest/pride&amp;#39;
-require_relative &amp;#39;./thread_pool&amp;#39;
-
-class TestThreadPool &amp;lt; Minitest::Test
-  def test_basic_usage
-    pool_size = 5
-    pool = ThreadPool.new(size: pool_size)
-
-    mutex = Mutex.new
-
-    iterations = pool_size * 3
-    results = Array.new(iterations)
-
-    iterations.times do |i|
-      pool.schedule do
-        mutex.synchronize do
-          results[i] = i + 1
-        end
-      end
-    end
-    pool.shutdown
-
-    assert_equal(1.upto(pool_size * 3).to_a, results)
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s break it down. To test the basic usage of a thread pool scheduler, we&amp;rsquo;ll pass in an array and
-augment it with in the scheduled blocks. Because &lt;a href="http://www.jstorimer.com/pages/ruby-core-classes-arent-thread-safe"&gt;&lt;code&gt;Array&lt;/code&gt; is not thread safe&lt;/a&gt;,
-we need to use a &lt;a href="http://ruby-doc.org/core-2.2.0/Mutex.html"&gt;&lt;code&gt;Mutex&lt;/code&gt;&lt;/a&gt; object to lock the pooled threads while adding items to the array.&lt;/p&gt;
-
-&lt;p&gt;The key snippet is here:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;pool.schedule do
-  mutex.synchronize do
-    results[i] = i + 1
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The test asserts that the results match &lt;code&gt;1.upto(15)&lt;/code&gt; as an array.&lt;/p&gt;
-
-&lt;p&gt;To make the tests pass:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class ThreadPool
-  def initialize(size:)
-  end
-
-  def schedule(*args, &amp;amp;block)
-    block.call(args)
-  end
-
-  def shutdown
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;ve just stubbed out the &lt;code&gt;#initialize&lt;/code&gt; and &lt;code&gt;#shutdown&lt;/code&gt; methods since
-additional behavior isn&amp;rsquo;t needed to get the tests to pass.&lt;/p&gt;
-
-&lt;p&gt;You can see the source for &lt;a href="https://github.com/rossta/loves-enumerable/commit/fcd81ec86ae3525d8f0a3acf914507e2962fb962"&gt;this changeset on Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3&gt;Saving time&lt;/h3&gt;
-
-&lt;p&gt;Our next test will demonstrate that we&amp;rsquo;re actually taking advantage of concurrency by
-(crudely) measuring the time taken to process multiple jobs.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ll use a small test helper method to measure the number of
-seconds elapsed during execution:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def time_taken
-  now = Time.now.to_f
-  yield
-  Time.now.to_f - now
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Our test will schedule 5 jobs that will each sleep for 1 second.
-If the jobs executed serially, the total execution time would be at least 5
-seconds. Running in parallel on Rubinius, we&amp;rsquo;d expect threaded-execution of 5 jobs
-across 5 threads to take less time.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def test_time_taken
-  pool_size = 5
-  pool = ThreadPool.new(size: pool_size)
-  elapsed = time_taken do
-    pool_size.times do
-      pool.schedule { sleep 1 }
-    end
-    pool.shutdown
-  end
-  assert_operator 4.5, :&amp;gt;, elapsed,
-    &amp;#39;Elapsed time was too long: %.1f seconds&amp;#39; % elapsed
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This test fails with our first pass-through implementation of &lt;code&gt;ThreadPool&lt;/code&gt;. We
-can make this test pass by wrapping each scheduled job in its own thread.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class ThreadPool
-  def initialize(size:)
-    @pool = []
-  end
-
-  def schedule(*args, &amp;amp;block)
-    @pool &amp;lt;&amp;lt; Thread.new { block.call(args) }
-  end
-
-  def shutdown
-    @pool.map(&amp;amp;:join)
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We push each of these threads onto an array, &lt;code&gt;@pool&lt;/code&gt;, which we can use to join
-the threads during the &lt;code&gt;#shutdown&lt;/code&gt; method. The tests pass again.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/rossta/loves-enumerable/commit/1d1cbc808a536a449b8f6dab5b9d4e0cb037f99c"&gt;Source for this changeset&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3&gt;Adding Pooling&lt;/h3&gt;
-
-&lt;p&gt;While we&amp;rsquo;ve achieved concurrency, you may notice there&amp;rsquo;s (at least) one problem.&lt;/p&gt;
-
-&lt;p&gt;Our current implementation will naively create a new thread for each scheduled
-job. This may not be an issue for small, trivial use cases, but it can be easily
-abused. Thread creation does not come for free; every OS has its limit.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ll prove it with our next test in which we&amp;rsquo;ll schedule a large number of
-jobs.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def test_pool_size_limit
-  pool_size = 5
-  pool = ThreadPool.new(size: pool_size)
-  mutex = Mutex.new
-  threads = Set.new
-
-  100_000.times do
-    pool.schedule do
-      mutex.synchronize do
-        threads &amp;lt;&amp;lt; Thread.current
-      end
-    end
-  end
-  pool.shutdown
-
-  assert_equal(pool_size, threads.size)
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Running these tests on my mid-2014 MacBook Pro, I hit the resource limit:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;TestThreadPool#test_pool_size_limit:
-ThreadError: can&amp;#39;t create Thread: Resource temporarily unavailable
-    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `initialize&amp;#39;
-    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `new&amp;#39;
-    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `block in test_pool_size_limit&amp;#39;
-    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:52:in `times&amp;#39;
-    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:52:in `test_pool_size_limit&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This is now the whole point of our &lt;code&gt;ThreadPool&lt;/code&gt;, to limit the number of threads
-in use. To implement this behavior, instead of executing the scheduled job in a
-new thread, we&amp;rsquo;ll add them to a &lt;code&gt;Queue&lt;/code&gt;. We&amp;rsquo;ll separately create a
-limited number of threads whose responsibility will be to pop new &amp;ldquo;jobs&amp;rdquo; off the
-queue and execute them when available.&lt;/p&gt;
-
-&lt;p&gt;The beauty of &lt;code&gt;Queue&lt;/code&gt; is that it is thread-safe; multiple threads in the thread pool an access this resource without corrupting its contents.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s the revised implementation:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class ThreadPool
-  def initialize(size:)
-    @size = size
-    @jobs = Queue.new
-    @pool = Array.new(size) do
-      Thread.new do
-        catch(:exit) do
-          loop do
-            job, args = @jobs.pop
-            job.call(*args)
-          end
-        end
-      end
-    end
-  end
-
-  def schedule(*args, &amp;amp;block)
-    @jobs &amp;lt;&amp;lt; [block, args]
-  end
-
-  def shutdown
-    @size.times do
-      schedule { throw :exit }
-    end
-
-    @pool.map(&amp;amp;:join)
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s start with the &lt;code&gt;#schedule&lt;/code&gt; method. Where before we immediately creating a
-new thread to call the block, we instead push the block and arguments onto the
-new &lt;code&gt;@jobs&lt;/code&gt; queue instance variable.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def schedule(*args, &amp;amp;block)
-  @jobs &amp;lt;&amp;lt; [block, args]
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This instance variable is setup in the &lt;code&gt;#initialize&lt;/code&gt; method where we also
-eagerly create the maximum number of threads that will become our worker &lt;code&gt;@pool&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def initialize(size:)
-  @size = size
-  @jobs = Queue.new
-  @pool = Array.new(size) do
-    Thread.new do
-      catch(:exit) do
-        loop do
-          job, args = @jobs.pop
-          job.call(*args)
-        end
-      end
-    end
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Each thread runs an infinite loop that repeatedly pops jobs of the queue with
-&lt;code&gt;@jobs.pop&lt;/code&gt;. The &lt;a href="http://ruby-doc.org/stdlib-2.0.0/libdoc/thread/rdoc/Queue.html#method-i-pop"&gt;&lt;code&gt;Queue#pop&lt;/code&gt;&lt;/a&gt; method here will block when the queue is empty so the thread will happily wait for new jobs to be scheduled at this point.&lt;/p&gt;
-
-&lt;p&gt;Notice also to &lt;a href="http://ruby-doc.org/core-2.3.0/Kernel.html#method-i-catch"&gt;&lt;code&gt;catch&lt;/code&gt;&lt;/a&gt; block. We break out of the thread loops by
-pushing &lt;code&gt;throw :exit&lt;/code&gt; on to the job queue, once for each thread in the
-&lt;code&gt;#shutdown&lt;/code&gt; method. This means that jobs currently executing when the shutdown
-method is called will be able to complete before the threads can be joined.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def shutdown
-  @size.times do
-    schedule { throw :exit }
-  end
-
-  @pool.map(&amp;amp;:join)
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now we have a simple abstraction for handing concurrent work across a limited
-number of threads. For more on this implementation, check out the original author&amp;rsquo;s &lt;a href="http://www.burgestrand.se/articles/quick-and-simple-ruby-thread-pool.html"&gt;blog post on
-the subject&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/rossta/loves-enumerable/commit/cd6e89328948b9fd7e902764947163e4dd16b73d"&gt;Source for this changeset&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3&gt;In the Wild&lt;/h3&gt;
-
-&lt;p&gt;Of course, if you&amp;rsquo;re planning on using a thread pool in production code, you&amp;rsquo;ll
-may be better off leveraging the hard work of others. Our implementation omits
-some key considerations, like providing reflection, handing timeouts, dealing with
-exceptions, and better thread safety. Let&amp;rsquo;s look at some alternatives in the
-community.&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href="https://github.com/meh/ruby-thread"&gt;ruby-thread&lt;/a&gt; project provides a few extensions to the standard library &lt;code&gt;Thread&lt;/code&gt; class, including &lt;code&gt;Thread::Pool&lt;/code&gt;. Usage of &lt;code&gt;Thread::Pool&lt;/code&gt; is very similar to what we came up with on the surface.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;thread/pool&amp;#39;
-
-pool = Thread.pool(4)
-
-10.times {
-  pool.process {
-    sleep 2
-
-    puts &amp;#39;lol&amp;#39;
-  }
-}
-
-pool.shutdown
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This implementation goes farther to ensure standard locking functions to work
-properly across multiple Ruby implementations. Among other things, it has
-support for handling timeouts, methods for introspecting pool objects, like
-&lt;code&gt;#running?&lt;/code&gt; and &lt;code&gt;#terminated?&lt;/code&gt;, and optimizations for dealing with unused
-threads. On reading the source, my impression is the implementation was heavily inspired by &lt;a href="https://github.com/puma/puma/blob/32b1fb3742e5918e0e79ee705b48c912a1f0742d/lib/puma/thread_pool.rb"&gt;Puma::ThreadPool&lt;/a&gt;, a class used internally by the puma web server. You be the judge.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/celluloid/celluloid"&gt;Celluloid&lt;/a&gt;, the most famous
-collection of concurrency abstractions, provides a thread pool class,
-most commonly accessed via a class method provided by the
-&lt;code&gt;Celluloid&lt;/code&gt; mixin.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;class MyWorker
-  include Celluloid
-
-  def add_one(number)
-    # roflscale computation goes here
-    number + 1
-  end
-end
-
-MyWorker.pool
-
-pool.future(:add_one, 5).value
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The new hotness for working with concurrency is the toolkit provided by &lt;a href="https://github.com/ruby-concurrency/concurrent-ruby"&gt;concurrent-ruby&lt;/a&gt;. While &lt;code&gt;Celluloid&lt;/code&gt; is easy to get started with, &lt;code&gt;Concurrent&lt;/code&gt; is the &amp;ldquo;Swiss Army Knife&amp;rdquo;, providing a large array of abstractions and classes, including futures, promises, thread-safe collections, maybes, and so on. &lt;code&gt;Concurrent&lt;/code&gt; provides several different thread pool implementations for different purposes, each supporting a number of configurations, including min and max pool sizes, advanced shutdown behaviors, max queue size (along with a fallback policy when the job queue size is exceeded) to name a few.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;pool = Concurrent::FixedThreadPool.new(5) # 5 threads
-pool.post do
-  # some parallel work
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Consider the &lt;a href="http://ruby-concurrency.github.io/concurrent-ruby/file.thread_pools.html"&gt;Thread Pool&lt;/a&gt; overview provided in the &lt;code&gt;Concurrent&lt;/code&gt; docs required reading.&lt;/p&gt;
-
-&lt;p&gt;And, of course, the ultimate thread pool for Rails developers is &lt;a href="https://github.com/mperham/sidekiq"&gt;Sidekiq&lt;/a&gt;. Unlike the examples we&amp;rsquo;ve discussed so far, the components of the Sidekiq thread pool model are distributed: the caller, the job queue, and the threaded workers all run in separate processes, often on separate machines, in a production environment.&lt;/p&gt;
-
-&lt;h3&gt;Credits&lt;/h3&gt;
-
-&lt;p&gt;In preparing for this post, I read through the source of several thread pool
-implementations from various sources, ranging from simple examples, to internal
-interfaces, to public-facing libraries.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="http://www.burgestrand.se/code/ruby-thread-pool/"&gt;A simple, annotated thread pool&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/meh/ruby-thread/blob/f25dd1184f4f4bee7cde0d54ad5ce5e32dc15279/lib/thread/pool.rb"&gt;&lt;code&gt;Thread::Pool&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/celluloid/celluloid/blob/c54bbde76e6a71b44c3ca6d1abf71197c64d7614/lib/celluloid/group/pool.rb"&gt;&lt;code&gt;Celluloid::Group::Pool&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/ruby-concurrency/concurrent-ruby/blob/536478817a3d0440f00ac09098f3ba71f0d8ce7c/lib/concurrent/executor/ruby_thread_pool_executor.rb"&gt;&lt;code&gt;Concurrent::RubyThreadPoolExecutor&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/puma/puma/blob/32b1fb3742e5918e0e79ee705b48c912a1f0742d/lib/puma/thread_pool.rb"&gt;&lt;code&gt;Puma::ThreadPool&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Though it&amp;rsquo;s well documented how much &lt;a href="http://adam.herokuapp.com/past/2009/8/13/threads_suck/"&gt;threads suck&lt;/a&gt;, that shouldn&amp;rsquo;t discourage Rubyists from trying to get some first-hand experience with working with threads, supporting classes from the standard library like &lt;code&gt;Queue&lt;/code&gt;, &lt;code&gt;Mutex&lt;/code&gt;, and &lt;code&gt;ConditionVariable&lt;/code&gt; and generic abstractions like &lt;code&gt;ThreadPool&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3&gt;Connection Pool, the Sequel&lt;/h3&gt;
-
-&lt;p&gt;Related, though not necessarily thread-based, is the concept of a connection
-pool, which limits the number of network connections to a particular service.
-You&amp;rsquo;ll find connection pools in &lt;a href="https://github.com/rails/rails/blob/107f4282bbfabc011d5ad3bcf3fb3c6fb812ad30/activerecord/lib/active_record/connection_adapters/abstract/connection_pool.rb"&gt;activerecord&lt;/a&gt;, &lt;a href="https://github.com/mongodb/mongo-ruby-driver/blob/eece2a769bbf1a302b2f70b23dc6a43490392979/lib/mongo/server/connection_pool.rb"&gt;mongodb&lt;/a&gt;, and, as a standalone
-abstraction in the approrpriately-named,
-&lt;a href="https://github.com/mperham/connection_pool"&gt;connection_pool&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s good to know
-about connection pools for setting a connection to Redis from your Ruby
-applications with the &lt;a href="https://github.com/redis/redis-rb"&gt;redis-rb&lt;/a&gt; gem. As of this writing, this client does not manage a connection pool for you, so &lt;a href="http://www.blrice.net/blog/2015/04/24/take-a-swim-in-the-connection-pool/"&gt;the common gotcha&lt;/a&gt; is a memory-leak that originates from creating a lot of open connections to the Redis server. You can avoid this with &lt;code&gt;ConnectionPool&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;redis = ConnectionPool.new { Redis.new }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Much like &lt;code&gt;ThreadPool&lt;/code&gt;, having at least a cursory understanding of what&amp;rsquo;s happening
-underneath can help you avoid issues with managing resources like network
-connections.&lt;/p&gt;
 </content>
   </entry>
 </feed>
