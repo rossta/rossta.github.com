@@ -3,7 +3,7 @@ title: An offline page for your Rails application
 author: Ross Kaffenberger
 published: true
 summary: Use Service Worker to connect with your users even when they're not
-description: This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to preacache and render an offline page for your Rails application when visitors have no network connection.
+description: This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to precache and render an offline page for your Rails application when visitors have no network connection.
 pull_image: 'screenshots/screenshot-offline-chrome.jpg'
 series: Service Worker
 category: Code
