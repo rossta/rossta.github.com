@@ -18,7 +18,7 @@ No wonder we tend to think of websites as less reliable than mobile applications
 
 At least, not typically. We could use [App Cache](http://diveintohtml5.info/offline.html) and the Cache Manifest to create an offline experience. For [a number of reasons](http://alistapart.com/article/application-cache-is-a-douchebag), developers have found App Cache difficult to work with.
 
-Luckily, there's a new web standard, [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API), that potentially supplants App Cache by providing more granular control over network mechanism is JavaScript, as opposed to manifest files.
+Luckily, there's a new web standard, [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API), that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.
 
 For now, let's consider how we might render a simple error page with our own branding
 when a user attempts to come back to our site without a connection. Keep in
