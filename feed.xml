@@ -237,9 +237,7 @@ Chrome Canary to take your browser offline while Firefox has the &lt;em&gt;Work 
 differently than other JavaScript resources. For example, a hard refresh isn&amp;rsquo;t
 enough to get your browser to install an updated service worker &amp;ndash; the browser
 will keep the current worker active while any tab to your browser is currently
-open. So while the &lt;code&gt;install&lt;/code&gt; event will be triggered right away when a new service worker
-is detected by the browser, the worker won&amp;rsquo;t be able to respond to &lt;code&gt;activate&lt;/code&gt;
-and &lt;code&gt;fetch&lt;/code&gt; until is has control of the page.&lt;/p&gt;
+open.&lt;/p&gt;
 
 &lt;p&gt;You can navigate to a different host and back or close and reopen
 the tab(s). The &lt;code&gt;self.skipWaiting&lt;/code&gt; function will also instruct the browser to
