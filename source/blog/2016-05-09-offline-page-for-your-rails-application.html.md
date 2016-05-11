@@ -223,6 +223,10 @@ Your offline page should now be ready for consumption. Try disabling your
 network connection to test it out. You can use the *Network* tab in Chrome and
 Chrome Canary to take your browser offline while Firefox has the *Work Offline* mode under the File menu.
 
+To see a working demo of an offline page, check out the [Service Worker Rails
+Sandbox app](https://serviceworker-rails.herokuapp.com/offline-fallback/). You
+can find its [source code on GitHub](https://github.com/rossta/serviceworker-rails-sandbox).
+
 ![](screenshots/screenshot-offline-custom.jpg)
 
 ### Debugging
