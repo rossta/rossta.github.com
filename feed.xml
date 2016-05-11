@@ -228,6 +228,10 @@ instead:&lt;/p&gt;
 network connection to test it out. You can use the &lt;em&gt;Network&lt;/em&gt; tab in Chrome and
 Chrome Canary to take your browser offline while Firefox has the &lt;em&gt;Work Offline&lt;/em&gt; mode under the File menu.&lt;/p&gt;
 
+&lt;p&gt;To see a working demo of an offline page, check out the &lt;a href="https://serviceworker-rails.herokuapp.com/offline-fallback/"&gt;Service Worker Rails
+Sandbox app&lt;/a&gt;. You
+can find its &lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;source code on GitHub&lt;/a&gt;.&lt;/p&gt;
+
 &lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-offline-custom-4e1f1089.jpg" /&gt;&lt;/p&gt;
 
 &lt;h3&gt;Debugging&lt;/h3&gt;
