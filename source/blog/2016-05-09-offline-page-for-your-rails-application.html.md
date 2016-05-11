@@ -232,9 +232,7 @@ Chrome also provides some useful debugging tools for service workers under the
 differently than other JavaScript resources. For example, a hard refresh isn't
 enough to get your browser to install an updated service worker -- the browser
 will keep the current worker active while any tab to your browser is currently
-open. So while the `install` event will be triggered right away when a new service worker
-is detected by the browser, the worker won't be able to respond to `activate`
-and `fetch` until is has control of the page.
+open.
 
 You can navigate to a different host and back or close and reopen
 the tab(s). The `self.skipWaiting` function will also instruct the browser to
