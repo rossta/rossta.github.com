@@ -24,6 +24,12 @@ For now, we use a service worker to render a simple error page with our own bran
 when a user attempts to come back to our site without a connection. Keep in
 mind, the techniques used here are building blocks that can be taken further to enhance functionality.
 
+<aside class="callout panel">
+  <p>
+Sidebar: I've wondered: should the offline response be associated with an HTTP status code? I don't believe one exists for "No network connection". If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won't be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like "Not found", "Moved permanently", and "Site offline for maintenance". Philosophically, is a request that never reaches the server a request at all?
+</p>
+</aside>
+
 To do this, we're going to use a service worker to precache the offline
 assets on the first visit to the site. Later, during a return visit without a
 network connection, we can use our service worker to render the offline page.
@@ -40,12 +46,6 @@ First we need an offline page. We could simply use an HTML page in the public di
 [Source: /offline.html](https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0)
 
 Alternatively, set up a route to an offline controller action as a [dynamic Rails error page](https://mattbrictson.com/dynamic-rails-error-pages).
-
-<aside class="callout panel">
-  <p>
-As an aside, I've wondered: should the offline response be associated with an HTTP status code? I don't believe one exists for "No network connection". If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won't be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like "Not found", "Moved permanently", and "Site offline for maintenance". Philosophically, is a request that never reaches the server a request at all?
-</p>
-</aside>
 
 ### Add a service worker file
 
@@ -214,6 +214,8 @@ match "/serviceworker.js" => "nested/directory/serviceworker.js"
 ```
 
 See the project [README](https://github.com/rossta/serviceworker-rails/blob/master/README.md) for more info on how to configure the middleware.
+
+While you're at it, [star the project on GitHub](https://github.com/rossta/serviceworker-rails)!
 
 ### Moment of truth
 
