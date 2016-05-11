@@ -85,11 +85,17 @@ offline dinosaur.</p>
 
 <p>At least, not typically. We could use <a href="http://diveintohtml5.info/offline.html">App Cache</a> and the Cache Manifest to create an offline experience. For <a href="http://alistapart.com/article/application-cache-is-a-douchebag">a number of reasons</a>, developers have found App Cache difficult to work with.</p>
 
-<p>Luckily, there&rsquo;s a new web standard, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">Service Worker</a>, that potentially supplants App Cache by providing more granular control over network mechanism is JavaScript, as opposed to manifest files.</p>
+<p>Luckily, there&rsquo;s a new web standard, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">Service Worker</a>, that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.</p>
 
-<p>For now, let&rsquo;s consider how we might render a simple error page with our own branding
+<p>For now, we use a service worker to render a simple error page with our own branding
 when a user attempts to come back to our site without a connection. Keep in
 mind, the techniques used here are building blocks that can be taken further to enhance functionality.</p>
+
+<aside class="callout panel">
+  <p>
+Sidebar: I&rsquo;ve wondered: should the offline response be associated with an HTTP status code? I don&rsquo;t believe one exists for &ldquo;No network connection&rdquo;. If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won&rsquo;t be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like &ldquo;Not found&rdquo;, &ldquo;Moved permanently&rdquo;, and &ldquo;Site offline for maintenance&rdquo;. Philosophically, is a request that never reaches the server a request at all?
+</p>
+</aside>
 
 <p>To do this, we&rsquo;re going to use a service worker to precache the offline
 assets on the first visit to the site. Later, during a return visit without a
@@ -107,12 +113,6 @@ visitor&rsquo;s browser and your servers <em>outside the lifecycle of a page</em
 <p><a href="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0">Source: /offline.html</a></p>
 
 <p>Alternatively, set up a route to an offline controller action as a <a href="https://mattbrictson.com/dynamic-rails-error-pages">dynamic Rails error page</a>.</p>
-
-<aside class="callout panel">
-  <p>
-As an aside, I&rsquo;ve wondered: should the offline response be associated with an HTTP status code? I don&rsquo;t believe one exists for &ldquo;No network connection&rdquo;. If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won&rsquo;t be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like &ldquo;Not found&rdquo;, &ldquo;Moved permanently&rdquo;, and &ldquo;Site offline for maintenance&rdquo;. Philosophically, is a request that never reaches the server a request at all?
-</p>
-</aside>
 
 <h3>Add a service worker file</h3>
 
@@ -273,6 +273,8 @@ instead:</p>
 </code></pre>
 
 <p>See the project <a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md">README</a> for more info on how to configure the middleware.</p>
+
+<p>While you&rsquo;re at it, <a href="https://github.com/rossta/serviceworker-rails">star the project on GitHub</a>!</p>
 
 <h3>Moment of truth</h3>
 

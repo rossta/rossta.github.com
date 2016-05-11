@@ -31,11 +31,17 @@ offline dinosaur.&lt;/p&gt;
 
 &lt;p&gt;At least, not typically. We could use &lt;a href="http://diveintohtml5.info/offline.html"&gt;App Cache&lt;/a&gt; and the Cache Manifest to create an offline experience. For &lt;a href="http://alistapart.com/article/application-cache-is-a-douchebag"&gt;a number of reasons&lt;/a&gt;, developers have found App Cache difficult to work with.&lt;/p&gt;
 
-&lt;p&gt;Luckily, there&amp;rsquo;s a new web standard, &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker&lt;/a&gt;, that potentially supplants App Cache by providing more granular control over network mechanism is JavaScript, as opposed to manifest files.&lt;/p&gt;
+&lt;p&gt;Luckily, there&amp;rsquo;s a new web standard, &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker&lt;/a&gt;, that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.&lt;/p&gt;
 
-&lt;p&gt;For now, let&amp;rsquo;s consider how we might render a simple error page with our own branding
+&lt;p&gt;For now, we use a service worker to render a simple error page with our own branding
 when a user attempts to come back to our site without a connection. Keep in
 mind, the techniques used here are building blocks that can be taken further to enhance functionality.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;
+  &lt;p&gt;
+Sidebar: I&amp;rsquo;ve wondered: should the offline response be associated with an HTTP status code? I don&amp;rsquo;t believe one exists for &amp;ldquo;No network connection&amp;rdquo;. If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won&amp;rsquo;t be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like &amp;ldquo;Not found&amp;rdquo;, &amp;ldquo;Moved permanently&amp;rdquo;, and &amp;ldquo;Site offline for maintenance&amp;rdquo;. Philosophically, is a request that never reaches the server a request at all?
+&lt;/p&gt;
+&lt;/aside&gt;
 
 &lt;p&gt;To do this, we&amp;rsquo;re going to use a service worker to precache the offline
 assets on the first visit to the site. Later, during a return visit without a
@@ -53,12 +59,6 @@ visitor&amp;rsquo;s browser and your servers &lt;em&gt;outside the lifecycle of 
 &lt;p&gt;&lt;a href="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0"&gt;Source: /offline.html&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Alternatively, set up a route to an offline controller action as a &lt;a href="https://mattbrictson.com/dynamic-rails-error-pages"&gt;dynamic Rails error page&lt;/a&gt;.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;
-  &lt;p&gt;
-As an aside, I&amp;rsquo;ve wondered: should the offline response be associated with an HTTP status code? I don&amp;rsquo;t believe one exists for &amp;ldquo;No network connection&amp;rdquo;. If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won&amp;rsquo;t be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like &amp;ldquo;Not found&amp;rdquo;, &amp;ldquo;Moved permanently&amp;rdquo;, and &amp;ldquo;Site offline for maintenance&amp;rdquo;. Philosophically, is a request that never reaches the server a request at all?
-&lt;/p&gt;
-&lt;/aside&gt;
 
 &lt;h3&gt;Add a service worker file&lt;/h3&gt;
 
@@ -219,6 +219,8 @@ instead:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;See the project &lt;a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md"&gt;README&lt;/a&gt; for more info on how to configure the middleware.&lt;/p&gt;
+
+&lt;p&gt;While you&amp;rsquo;re at it, &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;star the project on GitHub&lt;/a&gt;!&lt;/p&gt;
 
 &lt;h3&gt;Moment of truth&lt;/h3&gt;
 
