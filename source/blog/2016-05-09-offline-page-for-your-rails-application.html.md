@@ -20,7 +20,7 @@ At least, not typically. We could use [App Cache](http://diveintohtml5.info/offl
 
 Luckily, there's a new web standard, [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API), that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.
 
-For now, let's consider how we might render a simple error page with our own branding
+For now, we use a service worker to render a simple error page with our own branding
 when a user attempts to come back to our site without a connection. Keep in
 mind, the techniques used here are building blocks that can be taken further to enhance functionality.
 
