@@ -34,7 +34,7 @@ To do this, we're going to use a service worker to precache the offline
 assets on the first visit to the site. Later, during a return visit without a
 network connection, we can use our service worker to render the offline page.
 
-The reason this works is that Service Worker acts as a liason between your
+This is possible because Service Worker acts as a liason between your
 visitor's browser and your servers *outside the lifecycle of a page*.
 
 Keep in mind also, will be a *progressive enhancement*. Since service workers are [not available in all browsers](https://jakearchibald.github.io/isserviceworkerready/), this approach won't work for everyone, but the experience won't degrade for those visitors either.
@@ -45,16 +45,16 @@ First we need an offline page. We could simply use an HTML page in the public di
 
 [Source: /offline.html](https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0)
 
-Alternatively, set up a route to an offline controller action as a [dynamic Rails error page](https://mattbrictson.com/dynamic-rails-error-pages).
+Alternatively, set up a route to a controller action as a [dynamic Rails error page](https://mattbrictson.com/dynamic-rails-error-pages).
 
 ### Add a service worker file
 
 We're going to cache this offline HTML on the client side during their first
-visit so that it's available when the user returns. We can of course add links
+visit so that it's available later. We can of course add links
 to external CSS, JavaScript, and images in our offline pages - we just need to
 remember to cache those resources as well.
 
-We'll also assume we're using Sprockets, so if using something else, we'll need to adjust accordingly where the asset pipeline is concerned.
+(The following assumes Sprockets, so if using something else, we'll need to adjust accordingly where the asset pipeline is concerned.)
 
 The service worker script file must live outside our `application.js` or other
 bundled assets. It can live in any path from which Sprockets can load assets,
@@ -71,12 +71,10 @@ Rails.application.config.assets.precompile += %w[serviceworker.js]
 
 ### Declare an 'install' event
 
-Since service workers are event driven, we'll need to instruct it what to do in
-callbacks to three key events in the servive worker lifecycle: `install`,
-`activate`, and `fetch`.
+Since service workers are event driven, we'll provide callbacks to three key events in the servive worker lifecycle: `install`, `activate`, and `fetch`.
 
 The `install` event will be invoked just the first time the service worker is
-requested or any time it is updated and redeployed. Here, we'll precache our offline assets:
+requested or any time it is updated and redeployed prior to being activated. Here, we'll precache our offline assets:
 
 ```ruby
 var version = 'v1::';
@@ -219,9 +217,11 @@ While you're at it, [star the project on GitHub](https://github.com/rossta/servi
 
 ### Moment of truth
 
-Your offline page should now be ready for consumption. Try disabling your
+Phew! That took some setup. Our offline page should now be ready for consumption. Try disabling your
 network connection to test it out. You can use the *Network* tab in Chrome and
 Chrome Canary to take your browser offline while Firefox has the *Work Offline* mode under the File menu.
+
+![](screenshots/screenshot-dev-tools-network-offline.jpg)
 
 To see a working demo of an offline page, check out the [Service Worker Rails
 Sandbox app](https://serviceworker-rails.herokuapp.com/offline-fallback/). You
