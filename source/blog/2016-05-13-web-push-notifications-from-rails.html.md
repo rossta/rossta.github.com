@@ -16,14 +16,14 @@ We've had push notifications in our mobile and desktop apps for sometime. It's n
 
 Web Push notifications are powerful because they allow you to engage with your users *even when they're not on your site*.
 
-I'm going to share how to I got a working demo of the new [Web Push API](https://www.w3.org/TR/push-api/) from a Rails (or any Ruby) web application to push desktop notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.
+I'm going to share how to I got a working demo of the new [Web Push API](https://www.w3.org/TR/push-api/) from a Rails (or any Ruby) web application to push desktop-style notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.
 
 We'll cover the basics of implementing Push yourself though it's interesting to note that third party services are already stepping in to do some of the technical work for you, like [Roost](https://goroost.com/), [PushCrew](https://pushcrew.com/), or
 [OneSignal](https://onesignal.com/webpush).
 
 <div class="callout panel">
 <p>
-  The <a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html">Apple Push Notification Service</a> has made push notifications available to Safari since 2013. While there are some <a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/">nice tutorials</a> for implementing Apple Push for the web, coming support for open Web Push in Safari is currently unknown.
+  The <a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html">Apple Push Notification Service</a> has made push notifications available to Safari since 2013. While there are some <a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/">nice tutorials</a> for implementing Apple Push for the web, coming support for Web Push in Safari is "maybe?".
 </p>
 </div>
 
