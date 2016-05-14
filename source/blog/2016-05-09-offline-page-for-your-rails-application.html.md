@@ -9,6 +9,7 @@ series: Service Worker
 category: Code
 tags:
   - Rails
+  - JavaScript
 ---
 
 When you visit a website without an internet connection in Chrome, you see the
