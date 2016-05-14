@@ -36,10 +36,10 @@ Sandbox](https://serviceworker-rails.herokuapp.com/push-simple/) to show how a
 simple push message would look like. Try it out in Firefox or Chrome or check
 out the [source code on GitHub](https://github.com/rossta/serviceworker-rails-sandbox).
 
-[![](screenshots/screenshot-sw-sandbox-push-simple.png)](https://serviceworker-rails.herokuapp.com/)
+[![](screenshots/screenshot-sw-sandbox-push-simple-1.png)](https://serviceworker-rails.herokuapp.com/)
 
 My demo is mostly informed by Mozilla's [Service Worker
-Cookbook](https://serviceworke.rs/) which I highly recommend if you're looking
+Cookbook](https://serviceworke.rs/), which I highly recommend if you're looking
 to learn more about Service Worker.
 
 ## Bird's eye view
