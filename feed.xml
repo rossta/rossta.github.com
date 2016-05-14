@@ -38,6 +38,14 @@
 &lt;/p&gt;
 &lt;/div&gt;
 
+&lt;h2&gt;Why?&lt;/h2&gt;
+
+&lt;p&gt;&amp;ldquo;Yeah, Ross, but Rails 5. Action Cable. Web Sockets&amp;hellip; and &lt;code&gt;$MY_FAVORITE_ALTERNATIVE&lt;/code&gt;!&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;While browser support is still improving, Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill.&lt;/p&gt;
+
+&lt;p&gt;But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site.&lt;/p&gt;
+
 &lt;h2&gt;Demo&lt;/h2&gt;
 
 &lt;p&gt;Want to see it in action first?&lt;/p&gt;
@@ -314,12 +322,45 @@ end
 
 &lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-2-b270f8bc.jpg" /&gt;&lt;/p&gt;
 
+&lt;h2&gt;Unsubscribing&lt;/h2&gt;
+
+&lt;p&gt;We can programmatically turn off notifications by calling
+&lt;code&gt;PushSubscription#unsubscribe&lt;/code&gt;. This could be done in a callback to a click handler, for example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;function unsubscribe() {
+  navigator.serviceWorker.ready
+    .then((serviceWorkerRegistration) =&amp;gt; {
+      serviceWorkerRegistration.pushManager.getSubscription()
+        .then((subscription) =&amp;gt; {
+          if (!subscription) {
+            console.log(&amp;quot;Not subscribed, nothing to do.&amp;quot;);
+            return;
+          }
+
+          subscription.unsubscribe()
+            then(function() {
+              console.log(&amp;quot;Successfully unsubscribed!.&amp;quot;);
+            })
+            .catch((e) =&amp;gt; {
+              logger.error(&amp;#39;Error thrown while unsubscribing from push messaging&amp;#39;, e);
+            });
+        });
+    });
+}
+
+$(&amp;quot;.js-unsubscribe-button&amp;quot;).on(&amp;quot;click&amp;quot;, unsubscribe)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You&amp;rsquo;d also want to send a request to your Rails app to delete the persisted
+subscription data from the backend which will no longer be valid on the Web Push
+server. That exercise is left up to you!&lt;/p&gt;
+
 &lt;h2&gt;Wrap up&lt;/h2&gt;
 
-&lt;p&gt;Ouch, this took quite a bit of setup though not nearly as much as getting &lt;a href="https://developer.apple.com/notifications/safari-push-notifications/"&gt;Apple
-Push Notifications to work in Safari&lt;/a&gt;. Overall, the Web Push API is an interesting step for the web in terms of feature parity with mobile. While browser support is still improving, it could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill.&lt;/p&gt;
+&lt;p&gt;This took quite a bit of setup though not nearly as much as getting &lt;a href="https://developer.apple.com/notifications/safari-push-notifications/"&gt;Apple
+Push Notifications to work in Safari&lt;/a&gt;. Overall, the Web Push API is an interesting step for the web in terms of feature parity with mobile.&lt;/p&gt;
 
-&lt;p&gt;What do you think of Web Push?&lt;/p&gt;
+&lt;p&gt;What do you think?&lt;/p&gt;
 </content>
   </entry>
   <entry>
