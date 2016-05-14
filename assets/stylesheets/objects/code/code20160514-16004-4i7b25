@@ -1,21 +1,19 @@
 /*
-Error: Undefined variable: "$greyColor".
-        on line 21 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/objects.scss
+Error: Undefined variable: "$lightGreyColor".
+        on line 4 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/objects/code.scss
 
-16:   &.double {
-17:     margin-bottom: 2em;
-18:   }
-19: }
-20: 
-21: .font-light { color:$greyColor; }
-22: 
-23: .text-center { text-align: center; }
-24: 
-25: .subtle { color: $subtleColor; }
-26: 
+1: code {
+2:   border: none;
+3:   // background-color: rgba(0,0,0,0.04);
+4:   background-color: $lightGreyColor;
+5:   font-size: 1rem;
+6:   padding: 0.2em 0.3em;
+7: }
+8: 
+9: pre {
 
 Backtrace:
-/Users/ross/apps/rossta.net/home/source/assets/stylesheets/objects.scss:21
+/Users/ross/apps/rossta.net/home/source/assets/stylesheets/objects/code.scss:4
 /Users/ross/.gem/ruby/2.3.0/gems/sass-3.4.22/lib/sass/script/tree/variable.rb:49:in `_perform'
 /Users/ross/.gem/ruby/2.3.0/gems/sass-3.4.22/lib/sass/script/tree/node.rb:58:in `perform'
 /Users/ross/.gem/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:397:in `visit_prop'
@@ -138,4 +136,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined variable: \"$greyColor\".\A         on line 21 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/objects.scss\A \A 16:   &.double {\A 17:     margin-bottom: 2em;\A 18:   }\A 19: }\A 20: \A 21: .font-light { color:$greyColor; }\A 22: \A 23: .text-center { text-align: center; }\A 24: \A 25: .subtle { color: $subtleColor; }\A 26: "; }
+  content: "Error: Undefined variable: \"$lightGreyColor\".\A         on line 4 of /Users/ross/apps/rossta.net/home/source/assets/stylesheets/objects/code.scss\A \A 1: code {\A 2:   border: none;\A 3:   // background-color: rgba(0,0,0,0.04);\A 4:   background-color: $lightGreyColor;\A 5:   font-size: 1rem;\A 6:   padding: 0.2em 0.3em;\A 7: }\A 8: \A 9: pre {"; }
