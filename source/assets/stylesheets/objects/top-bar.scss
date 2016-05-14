@@ -1,0 +1,20 @@
+.top-bar {
+  margin-bottom: 1em;
+
+  .name {
+    .logo {
+      span {
+        font-size: inherit;
+        padding-left: 2px;
+        @media #{$small-only} { display: none; }
+      }
+    }
+  }
+
+  @media #{$small-only} { margin-bottom: 0em; }
+
+  @media #{$small-up} {
+    .name h1 a { padding: 0 15px; }
+  }
+}
+

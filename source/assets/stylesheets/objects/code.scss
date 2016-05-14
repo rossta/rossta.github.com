@@ -1,0 +1,31 @@
+code {
+  border: none;
+  // background-color: rgba(0,0,0,0.04);
+  background-color: $lightGreyColor;
+  font-size: 1rem;
+  padding: 0.2em 0.3em;
+}
+
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  line-height: 1.42857143;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: $paragraph-margin-bottom;
+  font-size: 0.85rem;
+
+  code {
+    overflow:auto;
+    font-weight:normal;
+    line-height:1.45em;
+    font-size: inherit;
+  }
+}
+
+@import "objects/code/docco-theme";
+// @import "objects/code/hybrid-theme";

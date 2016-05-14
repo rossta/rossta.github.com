@@ -1,3 +1,6 @@
+@import "objects/article";
+@import "objects/code";
+@import "objects/top-bar";
 @import "objects/video";
 
 .clearfix { overflow: auto; }
@@ -87,18 +90,6 @@
   }
   span {
     display: inline-block;
-  }
-}
-
-.top-bar {
-  .name {
-    .logo {
-      span {
-        font-size: inherit;
-        padding-left: 2px;
-        @media #{$small-only} { display: none; }
-      }
-    }
   }
 }
 

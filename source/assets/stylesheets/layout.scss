@@ -62,35 +62,6 @@ footer {
     font-size: 75%; }
 }
 
-code {
-  border: none;
-  // background-color: rgba(0,0,0,0.04);
-  background-color: $lightGreyColor;
-  font-size: .9em;
-  padding: 0.2em 0.3em;
-}
-
-pre {
-  code {
-    overflow:auto;
-    margin-bottom: $paragraph-margin-bottom;
-    font-weight:normal;
-    line-height:1.45em;
-    font-size:1.15em;
-    padding: 1.25em;
-  }
-}
-
-.top-bar {
-  margin-bottom: 1em;
-
-  @media #{$small-only} { margin-bottom: 0em; }
-
-  @media #{$small-up} {
-    .name h1 a { padding: 0 15px; }
-  }
-}
-
 @media #{$small-only} {
   ul {
     font-size: $rem-base;
@@ -99,16 +70,6 @@ pre {
     font-size: $rem-base;
     margin-bottom: 0.9rem;
     line-height: 1.5rem;
-  }
-  pre {
-    code {
-      &.hljs {
-        margin-bottom: 0.9rem;
-        line-height: 1.4em;
-        font-size: 14px;
-        padding: 1rem;
-      }
-    }
   }
   footer {
     margin: 1em 0;

@@ -25,44 +25,6 @@ ul.index {
   }
 }
 
-article {
-  @include base-font;
-  header {
-    @include base-font;
-    margin-bottom: 2.25rem;
-  }
-  h3,h4,h5 {
-    margin-top: 3rem;
-    margin-bottom: 2rem;
-  }
-  h4,h5 {
-    margin-bottom: 1.111rem;
-  }
-  &.index-post {
-    h3,h4,h5 {
-      margin-top: 1.111rem;
-      margin-bottom: 0.667rem;
-    }
-  }
-  p {
-    color: $mainColor;
-    letter-spacing: 0.15px;
-    line-height: 1.75;
-    margin-bottom: 1.5rem;
-  }
-  p:last-child {
-    margin-bottom: 0;
-  }
-
-  .icon-image {
-    width: 10%;
-
-    &.inline {
-      width: 3%;
-    }
-  }
-}
-
 .profile {
   padding-bottom: 2rem;
   text-align: center;

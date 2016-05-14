@@ -1,0 +1,34 @@
+article {
+  @include base-font;
+  header {
+    @include base-font;
+    margin-bottom: 2.25rem;
+  }
+  h2,h3,h4,h5 {
+    margin-top: 2.222rem;
+    margin-bottom: 1.111rem;
+  }
+  .panel {
+    &.callout {
+      margin-bottom: $paragraph-margin-bottom;
+    }
+  }
+
+  p {
+    color: $mainColor;
+    letter-spacing: 0.15px;
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  .icon-image {
+    width: 10%;
+
+    &.inline {
+      width: 3%;
+    }
+  }
+}
