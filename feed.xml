@@ -20,10 +20,14 @@
     </author>
     <summary type="html">&lt;p&gt;We’ve had push notifications in our mobile and desktop apps for sometime. It’s now becoming possible on the open web.&lt;/p&gt;
 
-&lt;p&gt;I’m going to share how to use the new &lt;a href="https://www.w3.org/TR/push-api/"&gt;Web Push API&lt;/a&gt; from a Rails (or any Ruby) web application to push desktop notifications through...&lt;/p&gt;</summary>
+&lt;p&gt;Web Push notifications are powerful because they allow you to engage with your users &lt;em&gt;even when they’re not on your site&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;I’m going...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;We&amp;rsquo;ve had push notifications in our mobile and desktop apps for sometime. It&amp;rsquo;s now becoming possible on the open web.&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;m going to share how to use the new &lt;a href="https://www.w3.org/TR/push-api/"&gt;Web Push API&lt;/a&gt; from a Rails (or any Ruby) web application to push desktop notifications through supporting browsers - currently Chrome and Firefox at the time of this writing. Push notifications are powerful because they allow you to engage with your users even when they&amp;rsquo;re not actively viewing your site.&lt;/p&gt;
+&lt;p&gt;Web Push notifications are powerful because they allow you to engage with your users &lt;em&gt;even when they&amp;rsquo;re not on your site&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m going to share how to I got a working demo of the new &lt;a href="https://www.w3.org/TR/push-api/"&gt;Web Push API&lt;/a&gt; from a Rails (or any Ruby) web application to push desktop-style notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.&lt;/p&gt;
 
 &lt;p&gt;We&amp;rsquo;ll cover the basics of implementing Push yourself though it&amp;rsquo;s interesting to note that third party services are already stepping in to do some of the technical work for you, like &lt;a href="https://goroost.com/"&gt;Roost&lt;/a&gt;, &lt;a href="https://pushcrew.com/"&gt;PushCrew&lt;/a&gt;, or
 &lt;a href="https://onesignal.com/webpush"&gt;OneSignal&lt;/a&gt;.&lt;/p&gt;
