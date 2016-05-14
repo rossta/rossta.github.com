@@ -34,7 +34,7 @@
 
 &lt;div class="callout panel"&gt;
 &lt;p&gt;
-  The &lt;a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html"&gt;Apple Push Notification Service&lt;/a&gt; has made push notifications available to Safari since 2013. While there are some &lt;a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/"&gt;nice tutorials&lt;/a&gt; for implementing Apple Push for the web, coming support for open Web Push in Safari is currently unknown.
+  The &lt;a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html"&gt;Apple Push Notification Service&lt;/a&gt; has made push notifications available to Safari since 2013. While there are some &lt;a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/"&gt;nice tutorials&lt;/a&gt; for implementing Apple Push for the web, coming support for Web Push in Safari is &amp;ldquo;maybe?&amp;rdquo;.
 &lt;/p&gt;
 &lt;/div&gt;
 
@@ -47,10 +47,10 @@ Sandbox&lt;/a&gt; to show how a
 simple push message would look like. Try it out in Firefox or Chrome or check
 out the &lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;source code on GitHub&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://serviceworker-rails.herokuapp.com/"&gt;&lt;img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple.png" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://serviceworker-rails.herokuapp.com/"&gt;&lt;img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-1-2927dd61.png" /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;My demo is mostly informed by Mozilla&amp;rsquo;s &lt;a href="https://serviceworke.rs/"&gt;Service Worker
-Cookbook&lt;/a&gt; which I highly recommend if you&amp;rsquo;re looking
+Cookbook&lt;/a&gt;, which I highly recommend if you&amp;rsquo;re looking
 to learn more about Service Worker.&lt;/p&gt;
 
 &lt;h2&gt;Bird&amp;rsquo;s eye view&lt;/h2&gt;
