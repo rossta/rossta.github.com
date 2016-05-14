@@ -1,7 +1,7 @@
 ---
 title: Sending Web Push Notifications from Rails
 author: Ross Kaffenberger
-published: false
+published: true
 summary: Web Push Notifications from Rails
 description: Web Push Notifications from Rails
 pull_image: 'blog/stock/guitarist-pexels-photo.jpeg'
@@ -14,7 +14,9 @@ tags:
 
 We've had push notifications in our mobile and desktop apps for sometime. It's now becoming possible on the open web.
 
-I'm going to share how to use the new [Web Push API](https://www.w3.org/TR/push-api/) from a Rails (or any Ruby) web application to push desktop notifications through supporting browsers - currently Chrome and Firefox at the time of this writing. Push notifications are powerful because they allow you to engage with your users even when they're not actively viewing your site.
+Web Push notifications are powerful because they allow you to engage with your users *even when they're not on your site*.
+
+I'm going to share how to I got a working demo of the new [Web Push API](https://www.w3.org/TR/push-api/) from a Rails (or any Ruby) web application to push desktop notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.
 
 We'll cover the basics of implementing Push yourself though it's interesting to note that third party services are already stepping in to do some of the technical work for you, like [Roost](https://goroost.com/), [PushCrew](https://pushcrew.com/), or
 [OneSignal](https://onesignal.com/webpush).
