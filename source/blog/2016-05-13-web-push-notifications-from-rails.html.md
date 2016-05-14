@@ -32,13 +32,13 @@ Want to see it in action first?
 I created a demo at the [Service Worker Rails
 Sandbox](https://serviceworker-rails.herokuapp.com/push-simple/) to show how a
 simple push message would look like. Try it out in Firefox or Chrome or check
-out the [source code on
-GitHub](https://github.com/rossta/serviceworker-rails-sandbox).
+out the [source code on GitHub](https://github.com/rossta/serviceworker-rails-sandbox).
 
-![](screenshot/screenshot-sw-sandbox-push-simple.png)
+[![](screenshots/screenshot-sw-sandbox-push-simple.png)](https://serviceworker-rails.herokuapp.com/)
 
-Mozilla also has a lot more demos at the [Service Worker
-Cookbook](https://serviceworke.rs/).
+My demo is mostly informed by Mozilla's [Service Worker
+Cookbook](https://serviceworke.rs/) which I highly recommend if you're looking
+to learn more about Service Worker.
 
 ## Bird's eye view
 
@@ -96,36 +96,47 @@ add a special `<link>` tag to the manifest:
 
 Here's the [actual manifest.json](https://serviceworker-rails.herokuapp.com/push-simple/manifest.json) for the Service Worker Rails Sandbox [push demo](https://serviceworker-rails.herokuapp.com/push-simple/) as another point of reference.
 
-## Register a service worker
+## Subscribe through a service worker
 
 Yes, Service Worker time! In case you missed it, I'm really [excited about
 Service Workers](/blog/series/service-worker.html). Service Workers have the
 potential to level the playing field of reliability between the web and mobile devices.
 
-Service workers come with special functionality and must also be deployed a bit differently than typical bundled JavaScript that's requested as part of the web page context. I've gone into more detail on how to [integrate Service Worker with Rails](/blog/service-worker-on-rails.html) previously.
+Service workers must be deployed a bit differently than JavaScript evaluated in
+the web page context. I've gone into more detail on how to [integrate Service
+Worker with Rails](/blog/service-worker-on-rails.html) previously but for now, here's the quick setup for push.
 
-Here's the quick setup for push. In `application.js` (or another `.js` required
-by `application.js`) we'll use this following snippet to request registration of
+In `application.js` (or another `.js` required by `application.js`) we'll use this following snippet to request registration of
 a service worker script.
 
 ```javascript
-# app/assets/javascripts/application.js
+// app/assets/javascripts/application.js
+
 if ('serviceWorker' in navigator) {
   console.log('Service Worker is supported');
   navigator.serviceWorker.register('/serviceworker.js')
     .then(function(reg) {
-      console.log(':^)', reg);
+      console.log('Successfully registered!', ':^)', reg);
       reg.pushManager.subscribe({ userVisibleOnly: true })
         .then(function(subscription) {
             console.log('endpoint:', sub.endpoint);
         });
   }).catch(function(error) {
-    console.log(':^(', error);
+    console.log('Registration failed', ':^(', error);
   });
 }
 ```
 
 This code registers a service worker on the given scope via `navigator.serviceWorker.register`. This returns a [Promise]() which will resolve to an instance of `ServiceWorkerRegistration`. This registration object has a `pushManager` property which we use to `subscribe` to the Web Push server. The `{ userVisibleOnly: true }` parameter is required for us to use notifications.
+
+### Troubleshooting
+
+I got an error at this stage in Google Chrome the first time: `Unable to subscribe to push DOMException: Registration failed - push service error`. Turns out, the `pushmanage.subscribe` request can fail if you haven't properly configured your `manifest.json` with a valid Google Cloud Message sender id.
+
+Also, if the `pushManager` can't find the `manifest.json` via the link tag, or
+if it's not included in the page altogether, you may see another error: `Unable to subscribe to push DOMException: Registration failed - manifest empty or missing`, so you'll need to get that working to proceed.
+
+### The Service Worker
 
 In a separate file, `app/assets/javascripts/serviceworker.js`, we'll have our service worker show notifications when the `'push'` event is received:
 
@@ -149,6 +160,8 @@ Because `serviceworker.js` needs to be a separate script available on the root
 path, we either need to copy it to our `public/` directory , or, even better, we
 can use the [`serviceworker-rails` (Star it on GitHub!)](https://github.com/rossta/serviceworker-rails) gem which will allow us to make use of both the asset pipeline and custom routing features we need.
 
+### Rails setup
+
 ```ruby
 # Gemfile
 
@@ -159,6 +172,7 @@ To routes requests from `/serviceworker.js` to our JavaScript file in the asset 
 
 ```ruby
 # config/initializers/serviceworker.rb
+
 Rails.application.configure do
   config.serviceworker.routes do
     match "serviceworker.js"
@@ -175,14 +189,15 @@ Let's set up a controller action to serialize the subscription into the visitor'
 The push subscription has important pieces of data: the endpoint and a set of keys: p256dh and auth. We need use this data in requests from our rails app to the push server.
 
 ```javascript
-subscription.toJSON();
-> {
-    endpoint: "https://android.googleapis.com/gcm/send/a-subscription-id",
-    keys: {
-      auth: "16ByteString",
-      p256dh: "65ByteString"
-    }
+// subscription.toJSON();
+
+{
+  endpoint: "https://android.googleapis.com/gcm/send/a-subscription-id",
+  keys: {
+    auth: "16ByteString",
+    p256dh: "65ByteString"
   }
+}
 ```
 
 When our visitor subscribes, we can post the subscription to our Rails app:
@@ -192,7 +207,6 @@ reg.pushManager.subscribe({ userVisibleOnly: true })
   .then(function(subscription) {
     $.post("/subscribe", { subscription: subscription.toJSON() });
   });
-
 ```
 
 The route:
@@ -228,7 +242,9 @@ gem "webpush"
 ```
 
 With the subscription info, we have what we need to send a message to a specific
-user that will get encrypted in passing over the wire:
+user that will get encrypted in passing over the wire.
+
+Here's a typical usage:
 
 ```ruby
 Webpush.payload_send(
@@ -236,11 +252,70 @@ Webpush.payload_send(
   endpoint: "https://android.googleapis.com/gcm/send/a-subscription-id",
   auth: "16ByteString",
   p256dh: "65ByteString"
-  api_key: "google_apik_key" # omit for Firefox, required for Google
+  api_key: "google_api_key" # omit for Firefox, required for Google
 )
 ```
+In a real Rails app, you'd probably deliver push notifications from background jobs in response to other events in the system. As a proof of concept, we'll create an endpoint to trigger a push notification directly from a user interaction in the browser.
 
-## Troubleshooting
+```html
+<!-- a view -->
+<button class="js-push-button">Send a message</button>
 
-The `pushmanage.subscribe` request can fail if you haven't properly configured
-your `manifest.json` with a valid Google Cloud Message sender id.
+<script type="text/javascript">
+  (function() {
+    $('.js-push-button').on("click", function onClick() {
+      $.post("/push");
+    });
+  })();
+</script>
+```
+
+```
+# config/routes.rb
+
+post "/push" => "push_notifications#create"
+```
+
+```ruby
+# app/controllers/push_notifications_controller.rb
+
+class PushNotificationsController < ApplicationController
+  def create
+    Webpush.payload_send webpush_params
+
+    head :ok
+  end
+
+  private
+
+  def webpush_params
+    subscription_params = fetch_subscription
+    message = "Hello world, the time is #{Time.zone.now}"
+    endpoint = subscription_params[:endpoint],
+    p256dh = subscription_params.dig(:keys, :p256dh)
+    auth = subscription_params.dig(:keys, :auth)
+    api_key = enpoint =~ /\.google.com\// = ENV.fetch('GOOGLE_CLOUD_MESSAGE_API_KEY') || ""
+
+    { message: message, endpoint: endpoint, p256dh: p256dh, auth: auth, api_key: api_key }
+  end
+
+  def fetch_subscription
+    encoded_subscription = session.fetch(:subscription) do
+      raise "Cannot create notification: no :subscription in params or session"
+    end
+
+    JSON.parse(Base64.urlsafe_decode64(encoded_subscription)).with_indifferent_access
+  end
+end
+```
+
+If everything worked, we get a push notification!
+
+![](screenshots/screenshot-sw-sandbox-push-simple-2.jpg)
+
+## Wrap up
+
+Ouch, this took quite a bit of setup though not nearly as much as getting [Apple
+Push Notifications to work in Safari](https://developer.apple.com/notifications/safari-push-notifications/). Overall, the Web Push API is an interesting step for the web in terms of feature parity with mobile. While browser support is still improving, it could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill.
+
+What do you think of Web Push?
