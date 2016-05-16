@@ -31,7 +31,7 @@ We'll cover the basics of implementing Push yourself though it's interesting to 
 
 "Yeah, Ross, but Rails 5. Action Cable. Web Sockets. Server Sent Events. `$MY_FAVORITE_ALTERNATIVE`!"
 
-You might not want to drop all those alternatives just yet, as browser support still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.
+You might not want to drop all those alternatives just yet, as [browser support for Web Push](http://caniuse.com/#feat=push-api) still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.
 
 But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site, something those other solutions cannot provide.
 
