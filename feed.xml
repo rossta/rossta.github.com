@@ -34,17 +34,17 @@
 
 &lt;div class="callout panel"&gt;
 &lt;p&gt;
-  The &lt;a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html"&gt;Apple Push Notification Service&lt;/a&gt; has made push notifications available to Safari since 2013. While there are some &lt;a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/"&gt;nice tutorials&lt;/a&gt; for implementing Apple Push for the web, coming support for Web Push in Safari is &amp;ldquo;maybe?&amp;rdquo;.
+  The &lt;a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html"&gt;Apple Push Notification Service&lt;/a&gt; has made push notifications available to Safari since 2013. There are some &lt;a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/"&gt;nice tutorials&lt;/a&gt; for implementing Apple Push on Safari. Support for Web Push in Safari is &amp;ldquo;maybe?&amp;rdquo;.
 &lt;/p&gt;
 &lt;/div&gt;
 
 &lt;h2&gt;Why?&lt;/h2&gt;
 
-&lt;p&gt;&amp;ldquo;Yeah, Ross, but Rails 5. Action Cable. Web Sockets&amp;hellip; and &lt;code&gt;$MY_FAVORITE_ALTERNATIVE&lt;/code&gt;!&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;Yeah, Ross, but Rails 5. Action Cable. Web Sockets. Server Sent Events. &lt;code&gt;$MY_FAVORITE_ALTERNATIVE&lt;/code&gt;!&amp;rdquo;&lt;/p&gt;
 
-&lt;p&gt;While browser support is still improving, Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill.&lt;/p&gt;
+&lt;p&gt;You might not want to drop all those alternatives just yet, as browser support still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.&lt;/p&gt;
 
-&lt;p&gt;But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site.&lt;/p&gt;
+&lt;p&gt;But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site, something those other solutions cannot provide.&lt;/p&gt;
 
 &lt;h2&gt;Demo&lt;/h2&gt;
 
@@ -267,7 +267,7 @@ user that will get encrypted in passing over the wire.&lt;/p&gt;
 )
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;In a real Rails app, you&amp;rsquo;d probably deliver push notifications from background jobs in response to other events in the system. As a proof of concept, we&amp;rsquo;ll create an endpoint to trigger a push notification directly from a user interaction in the browser.&lt;/p&gt;
+&lt;p&gt;As a proof of concept, we&amp;rsquo;ll create an endpoint to trigger a push notification directly from a user interaction in the browser.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- a view --&amp;gt;
 &amp;lt;button class=&amp;quot;js-push-button&amp;quot;&amp;gt;Send a message&amp;lt;/button&amp;gt;
@@ -281,10 +281,14 @@ user that will get encrypted in passing over the wire.&lt;/p&gt;
 &amp;lt;/script&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;Start with a button to trigger a &lt;code&gt;POST&lt;/code&gt; to a new &lt;code&gt;/push&lt;/code&gt; endpoint in our app. In a real Rails app, you&amp;rsquo;d probably deliver push notifications from background jobs in response to other events in the system.&lt;/p&gt;
+
 &lt;pre&gt;&lt;code&gt;# config/routes.rb
 
 post &amp;quot;/push&amp;quot; =&amp;gt; &amp;quot;push_notifications#create&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Route the request to a new controller.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;# app/controllers/push_notifications_controller.rb
 
@@ -317,6 +321,11 @@ class PushNotificationsController &amp;lt; ApplicationController
   end
 end
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The controller deserializes the subscription from the session and builds up the
+necessary parameters to send to the &lt;code&gt;Webpush&lt;/code&gt; Ruby client. Only the &lt;code&gt;:endpoint&lt;/code&gt; is
+required to send a notification in theory. The &lt;code&gt;:p256dh&lt;/code&gt; and &lt;code&gt;:auth&lt;/code&gt; keys are also required if providing a &lt;code&gt;:message&lt;/code&gt; parameter, which must be encrypted to deliver over the wire. Google requires the Google Cloud Message API key we grabbed from th developer console, so we test the endpoint to
+decide whether to include it in the request.&lt;/p&gt;
 
 &lt;p&gt;If everything worked, we get a push notification!&lt;/p&gt;
 

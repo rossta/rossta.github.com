@@ -89,17 +89,17 @@
 
 <div class="callout panel">
 <p>
-  The <a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html">Apple Push Notification Service</a> has made push notifications available to Safari since 2013. While there are some <a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/">nice tutorials</a> for implementing Apple Push for the web, coming support for Web Push in Safari is &ldquo;maybe?&rdquo;.
+  The <a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html">Apple Push Notification Service</a> has made push notifications available to Safari since 2013. There are some <a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/">nice tutorials</a> for implementing Apple Push on Safari. Support for Web Push in Safari is &ldquo;maybe?&rdquo;.
 </p>
 </div>
 
 <h2>Why?</h2>
 
-<p>&ldquo;Yeah, Ross, but Rails 5. Action Cable. Web Sockets&hellip; and <code>$MY_FAVORITE_ALTERNATIVE</code>!&rdquo;</p>
+<p>&ldquo;Yeah, Ross, but Rails 5. Action Cable. Web Sockets. Server Sent Events. <code>$MY_FAVORITE_ALTERNATIVE</code>!&rdquo;</p>
 
-<p>While browser support is still improving, Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill.</p>
+<p>You might not want to drop all those alternatives just yet, as browser support still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.</p>
 
-<p>But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site.</p>
+<p>But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site, something those other solutions cannot provide.</p>
 
 <h2>Demo</h2>
 
@@ -322,7 +322,7 @@ user that will get encrypted in passing over the wire.</p>
 )
 </code></pre>
 
-<p>In a real Rails app, you&rsquo;d probably deliver push notifications from background jobs in response to other events in the system. As a proof of concept, we&rsquo;ll create an endpoint to trigger a push notification directly from a user interaction in the browser.</p>
+<p>As a proof of concept, we&rsquo;ll create an endpoint to trigger a push notification directly from a user interaction in the browser.</p>
 
 <pre><code class="html">&lt;!-- a view --&gt;
 &lt;button class=&quot;js-push-button&quot;&gt;Send a message&lt;/button&gt;
@@ -336,10 +336,14 @@ user that will get encrypted in passing over the wire.</p>
 &lt;/script&gt;
 </code></pre>
 
+<p>Start with a button to trigger a <code>POST</code> to a new <code>/push</code> endpoint in our app. In a real Rails app, you&rsquo;d probably deliver push notifications from background jobs in response to other events in the system.</p>
+
 <pre><code># config/routes.rb
 
 post &quot;/push&quot; =&gt; &quot;push_notifications#create&quot;
 </code></pre>
+
+<p>Route the request to a new controller.</p>
 
 <pre><code class="ruby"># app/controllers/push_notifications_controller.rb
 
@@ -372,6 +376,11 @@ class PushNotificationsController &lt; ApplicationController
   end
 end
 </code></pre>
+
+<p>The controller deserializes the subscription from the session and builds up the
+necessary parameters to send to the <code>Webpush</code> Ruby client. Only the <code>:endpoint</code> is
+required to send a notification in theory. The <code>:p256dh</code> and <code>:auth</code> keys are also required if providing a <code>:message</code> parameter, which must be encrypted to deliver over the wire. Google requires the Google Cloud Message API key we grabbed from th developer console, so we test the endpoint to
+decide whether to include it in the request.</p>
 
 <p>If everything worked, we get a push notification!</p>
 
