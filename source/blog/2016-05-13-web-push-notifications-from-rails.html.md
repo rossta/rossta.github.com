@@ -23,17 +23,17 @@ We'll cover the basics of implementing Push yourself though it's interesting to 
 
 <div class="callout panel">
 <p>
-  The <a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html">Apple Push Notification Service</a> has made push notifications available to Safari since 2013. While there are some <a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/">nice tutorials</a> for implementing Apple Push for the web, coming support for Web Push in Safari is "maybe?".
+  The <a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html">Apple Push Notification Service</a> has made push notifications available to Safari since 2013. There are some <a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/">nice tutorials</a> for implementing Apple Push on Safari. Support for Web Push in Safari is "maybe?".
 </p>
 </div>
 
 ## Why?
 
-"Yeah, Ross, but Rails 5. Action Cable. Web Sockets... and `$MY_FAVORITE_ALTERNATIVE`!"
+"Yeah, Ross, but Rails 5. Action Cable. Web Sockets. Server Sent Events. `$MY_FAVORITE_ALTERNATIVE`!"
 
-While browser support is still improving, Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill.
+You might not want to drop all those alternatives just yet, as browser support still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.
 
-But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site.
+But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site, something those other solutions cannot provide.
 
 ## Demo
 
@@ -265,7 +265,7 @@ Webpush.payload_send(
   api_key: "google_api_key" # omit for Firefox, required for Google
 )
 ```
-In a real Rails app, you'd probably deliver push notifications from background jobs in response to other events in the system. As a proof of concept, we'll create an endpoint to trigger a push notification directly from a user interaction in the browser.
+As a proof of concept, we'll create an endpoint to trigger a push notification directly from a user interaction in the browser.
 
 ```html
 <!-- a view -->
@@ -280,11 +280,15 @@ In a real Rails app, you'd probably deliver push notifications from background j
 </script>
 ```
 
+Start with a button to trigger a `POST` to a new `/push` endpoint in our app. In a real Rails app, you'd probably deliver push notifications from background jobs in response to other events in the system.
+
 ```
 # config/routes.rb
 
 post "/push" => "push_notifications#create"
 ```
+
+Route the request to a new controller.
 
 ```ruby
 # app/controllers/push_notifications_controller.rb
@@ -318,6 +322,11 @@ class PushNotificationsController < ApplicationController
   end
 end
 ```
+
+The controller deserializes the subscription from the session and builds up the
+necessary parameters to send to the `Webpush` Ruby client. Only the `:endpoint` is
+required to send a notification in theory. The `:p256dh` and `:auth` keys are also required if providing a `:message` parameter, which must be encrypted to deliver over the wire. Google requires the Google Cloud Message API key we grabbed from th developer console, so we test the endpoint to
+decide whether to include it in the request.
 
 If everything worked, we get a push notification!
 
