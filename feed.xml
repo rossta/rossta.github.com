@@ -34,7 +34,7 @@
 
 &lt;div class="callout panel"&gt;
 &lt;p&gt;
-  The &lt;a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html"&gt;Apple Push Notification Service&lt;/a&gt; has made push notifications available to Safari since 2013. There are some &lt;a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/"&gt;nice tutorials&lt;/a&gt; for implementing Apple Push on Safari. Support for Web Push in Safari is &amp;ldquo;maybe?&amp;rdquo;.
+  The &lt;a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html"&gt;Apple Push Notification Service&lt;/a&gt; has made push notifications available to Safari since 2013. There are some &lt;a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/"&gt;nice tutorials&lt;/a&gt; for implementing Apple Push on Safari. The status of future support for Web Push in Safari is: &amp;ldquo;maybe?&amp;rdquo;.
 &lt;/p&gt;
 &lt;/div&gt;
 
