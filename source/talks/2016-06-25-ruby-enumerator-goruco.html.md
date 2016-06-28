@@ -14,10 +14,11 @@ At this year's [GORUCO X](http://goruco.com/), I gave a micro-talk version of th
 Conf 2016](/talks/ruby-enumerator.html). I boiled it down to the concepts I used
 to solve modeling recurring events in Ruby.
 
-<br />
 [Slides on Speaker Deck](https://speakerdeck.com/rossta/enumerables-ugly-cousin-goruco-microtalk)
 
 <script async class="speakerdeck-embed" data-id="b259e876252048fb8b753f6cd469f89d" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<br />
 
 When and where:
 

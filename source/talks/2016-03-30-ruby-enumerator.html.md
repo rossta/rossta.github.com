@@ -20,9 +20,12 @@ practical takeaways for your daily work.
 </div>
 
 <br />
+
 [Slides on Speaker Deck](https://speakerdeck.com/rossta/enumerator-enumerables-ugly-cousin)
 
 <script async class="speakerdeck-embed" data-id="d55b25d9fdf24e768dc5d01df1c5a58f" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<br />
 
 When and where:
 
