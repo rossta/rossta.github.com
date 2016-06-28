@@ -1,5 +1,5 @@
 ---
-title: Enumerable's Ugly Cousin at GORUCO X
+title: Enumerable's Ugly Cousin at GORUCO 2016
 author: Ross Kaffenberger
 summary: How Ruby's Enumerator helped me solved recurring events
 description:
@@ -10,7 +10,7 @@ tags:
   - Ruby
 ---
 
-At this year's [GORUCO X](http://goruco.com/), I gave a micro-talk version of the [Enumerator talk I gave at Ancient City Ruby
+At [GORUCO 2016](http://goruco.com/), I gave a micro-version of [my Enumerator talk from Ancient City Ruby
 Conf 2016](/talks/ruby-enumerator.html). I boiled it down to the concepts I used
 to solve modeling recurring events in Ruby.
 
