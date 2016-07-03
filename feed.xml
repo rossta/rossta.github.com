@@ -135,11 +135,11 @@ a service worker script.&lt;/p&gt;
 if (&amp;#39;serviceWorker&amp;#39; in navigator) {
   console.log(&amp;#39;Service Worker is supported&amp;#39;);
   navigator.serviceWorker.register(&amp;#39;/serviceworker.js&amp;#39;)
-    .then(function(reg) {
-      console.log(&amp;#39;Successfully registered!&amp;#39;, &amp;#39;:^)&amp;#39;, reg);
-      reg.pushManager.subscribe({ userVisibleOnly: true })
+    .then(function(registration) {
+      console.log(&amp;#39;Successfully registered!&amp;#39;, &amp;#39;:^)&amp;#39;, registration);
+      registration.pushManager.subscribe({ userVisibleOnly: true })
         .then(function(subscription) {
-            console.log(&amp;#39;endpoint:&amp;#39;, sub.endpoint);
+            console.log(&amp;#39;endpoint:&amp;#39;, subscription.endpoint);
         });
   }).catch(function(error) {
     console.log(&amp;#39;Registration failed&amp;#39;, &amp;#39;:^(&amp;#39;, error);
@@ -165,7 +165,7 @@ if it&amp;rsquo;s not included in the page altogether, you may see another error
 
   event.waitUntil(
     self.registration.showNotification(title, {
-      body: &amp;quot;We have received a push message&amp;quot;;,
+      body: &amp;quot;We have received a push message&amp;quot;,
       icon: &amp;quot;/assets/path/to/icon.png&amp;quot;,
       tag:  &amp;quot;push-simple-demo-notification-tag&amp;quot;
     });

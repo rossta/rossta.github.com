@@ -184,11 +184,11 @@ a service worker script.</p>
 if (&#39;serviceWorker&#39; in navigator) {
   console.log(&#39;Service Worker is supported&#39;);
   navigator.serviceWorker.register(&#39;/serviceworker.js&#39;)
-    .then(function(reg) {
-      console.log(&#39;Successfully registered!&#39;, &#39;:^)&#39;, reg);
-      reg.pushManager.subscribe({ userVisibleOnly: true })
+    .then(function(registration) {
+      console.log(&#39;Successfully registered!&#39;, &#39;:^)&#39;, registration);
+      registration.pushManager.subscribe({ userVisibleOnly: true })
         .then(function(subscription) {
-            console.log(&#39;endpoint:&#39;, sub.endpoint);
+            console.log(&#39;endpoint:&#39;, subscription.endpoint);
         });
   }).catch(function(error) {
     console.log(&#39;Registration failed&#39;, &#39;:^(&#39;, error);
@@ -214,7 +214,7 @@ if it&rsquo;s not included in the page altogether, you may see another error: <c
 
   event.waitUntil(
     self.registration.showNotification(title, {
-      body: &quot;We have received a push message&quot;;,
+      body: &quot;We have received a push message&quot;,
       icon: &quot;/assets/path/to/icon.png&quot;,
       tag:  &quot;push-simple-demo-notification-tag&quot;
     });
