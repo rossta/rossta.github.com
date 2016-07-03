@@ -125,11 +125,11 @@ a service worker script.
 if ('serviceWorker' in navigator) {
   console.log('Service Worker is supported');
   navigator.serviceWorker.register('/serviceworker.js')
-    .then(function(reg) {
-      console.log('Successfully registered!', ':^)', reg);
-      reg.pushManager.subscribe({ userVisibleOnly: true })
+    .then(function(registration) {
+      console.log('Successfully registered!', ':^)', registration);
+      registration.pushManager.subscribe({ userVisibleOnly: true })
         .then(function(subscription) {
-            console.log('endpoint:', sub.endpoint);
+            console.log('endpoint:', subscription.endpoint);
         });
   }).catch(function(error) {
     console.log('Registration failed', ':^(', error);
@@ -156,7 +156,7 @@ function onPush(event) {
 
   event.waitUntil(
     self.registration.showNotification(title, {
-      body: "We have received a push message";,
+      body: "We have received a push message",
       icon: "/assets/path/to/icon.png",
       tag:  "push-simple-demo-notification-tag"
     });
