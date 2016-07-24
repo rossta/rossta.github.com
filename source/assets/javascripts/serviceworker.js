@@ -8,12 +8,14 @@ const offlineResources = [
 ];
 
 const ignoreFetch = [
-  /https?:\/\/[^\/]*mixpanel\.com\//,
-  /https?:\/\/[^\/]*segment\.io\//,
-  /https?:\/\/[^\/]*getclicky\.com\//,
-  /https?:\/\/[^\/]*typekit\.net\//,
-  /https?:\/\/[^\/]*sumome\.com\//,
+  /https?:\/\/[^\/]*mixpanel[^\/]*\.com\//,
+  /https?:\/\/[^\/]*mxpnl[^\/]*\.com\//,
+  /https?:\/\/[^\/]*segment[^\/]*\.io\//,
+  /https?:\/\/[^\/]*getclicky[^\/]*\.com\//,
+  /https?:\/\/[^\/]*typekit[^\/]*\.net\//,
+  /https?:\/\/[^\/]*sumome[^\/]*\.com\//,
   /https?:\/\/[^\/]*disqus[^\/]*\.com\//,
+  /https?:\/\/[^\/]*google-analytics[^\/]*\.com\//,
   /https?:\/\/zenkaffe\.herokuapp\.com\//,
   /\/__rack\//,
 ];
