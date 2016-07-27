@@ -61,7 +61,7 @@ On `fetch`:
 * Render an offline page when a visitor can't connect to rossta.net
 * Allow normal pass-through network request of non-GET and white-listed resources like Twitter embeds and analytics tracking
 
-### Deployment my service worker
+### Deploying the service worker
 
 Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. [As I've said before](https://rossta.net/blog/why-i-ditched-wordpress-for-github.html), this is a static site hosted on Github pages, [built with Webpack and Middleman](/blog/using-webpack-with-middleman.html).
 
