@@ -23,7 +23,7 @@ You can find examples of thread pool implementations in gems like
 and [ruby-thread](https://github.com/meh/ruby-thread).
 
 A thread pool is an abstraction for re-using a limited number of threads to
-performing concurrent work.
+perform concurrent work.
 
 ![Thread pool - no relation](blog/threadpool.png)
 
@@ -70,7 +70,7 @@ concurrency in Ruby can be a tremendous learning opportunity.
 
 ### A simple thread pool
 
-So we'll implement a simple thread pool guided by tests. Our thread pool will use the
+We'll implement a simple thread pool guided by tests. Our thread pool will use the
 interface we described earlier while limiting the number of threads
 used to carry out a set of concurrent "jobs".
 
@@ -350,7 +350,7 @@ def shutdown
 end
 ```
 
-Now we have a simple abstraction for handing concurrent work across a limited
+Now we have a simple abstraction for handling concurrent work across a limited
 number of threads. For more on this implementation, check out the original author's [blog post on
 the subject](http://www.burgestrand.se/articles/quick-and-simple-ruby-thread-pool.html).
 
@@ -359,8 +359,8 @@ the subject](http://www.burgestrand.se/articles/quick-and-simple-ruby-thread-poo
 ### In the Wild
 
 Of course, if you're planning on using a thread pool in production code, you'll
-may be better off leveraging the hard work of others. Our implementation omits
-some key considerations, like providing reflection, handing timeouts, dealing with
+be better off leveraging the hard work of others. Our implementation omits
+some key considerations, like reflection, handling timeouts, dealing with
 exceptions, and better thread safety. Let's look at some alternatives in the
 community.
 
