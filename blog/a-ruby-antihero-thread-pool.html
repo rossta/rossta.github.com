@@ -84,7 +84,7 @@ concurrency is the <a href="https://en.wikipedia.org/wiki/Thread_pool">thread po
 and <a href="https://github.com/meh/ruby-thread">ruby-thread</a>.</p>
 
 <p>A thread pool is an abstraction for re-using a limited number of threads to
-performing concurrent work.</p>
+perform concurrent work.</p>
 
 <p><img alt="Thread pool - no relation" src="/assets/images/blog/threadpool-428287d8.png" /></p>
 
@@ -132,7 +132,7 @@ concurrency in Ruby can be a tremendous learning opportunity.</p>
 
 <h3>A simple thread pool</h3>
 
-<p>So we&rsquo;ll implement a simple thread pool guided by tests. Our thread pool will use the
+<p>We&rsquo;ll implement a simple thread pool guided by tests. Our thread pool will use the
 interface we described earlier while limiting the number of threads
 used to carry out a set of concurrent &ldquo;jobs&rdquo;.</p>
 
@@ -399,7 +399,7 @@ method is called will be able to complete before the threads can be joined.</p>
 end
 </code></pre>
 
-<p>Now we have a simple abstraction for handing concurrent work across a limited
+<p>Now we have a simple abstraction for handling concurrent work across a limited
 number of threads. For more on this implementation, check out the original author&rsquo;s <a href="http://www.burgestrand.se/articles/quick-and-simple-ruby-thread-pool.html">blog post on
 the subject</a>.</p>
 
@@ -408,8 +408,8 @@ the subject</a>.</p>
 <h3>In the Wild</h3>
 
 <p>Of course, if you&rsquo;re planning on using a thread pool in production code, you&rsquo;ll
-may be better off leveraging the hard work of others. Our implementation omits
-some key considerations, like providing reflection, handing timeouts, dealing with
+be better off leveraging the hard work of others. Our implementation omits
+some key considerations, like reflection, handling timeouts, dealing with
 exceptions, and better thread safety. Let&rsquo;s look at some alternatives in the
 community.</p>
 
