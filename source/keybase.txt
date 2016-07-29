@@ -1,0 +1,54 @@
+==================================================================
+https://keybase.io/rossta
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://rossta.net
+  * I am rossta (https://keybase.io/rossta) on keybase.
+  * I have a public key ASBcO-l0V-5tVb1-FdQHOO7JBLthnAggypJpXmtFWYs3Mgo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "01205c3be97457ee6d55bd7e15d40738eec904bb619c0820ca92695e6b45598b37320a",
+            "host": "keybase.io",
+            "kid": "01205c3be97457ee6d55bd7e15d40738eec904bb619c0820ca92695e6b45598b37320a",
+            "uid": "d7e56800e7d284a47bab0f707fe3f519",
+            "username": "rossta"
+        },
+        "service": {
+            "hostname": "rossta.net",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.16"
+    },
+    "ctime": 1469795231,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1469795215,
+        "hash": "ae1d8882386fc541089a7c85251be1d9287ce61ea3f1398a6f92fff2497aade323cb3e310a318938bf9d77ee762bb7f4435114e38779847740b2632313cd1306",
+        "seqno": 548271
+    },
+    "prev": "f3227aa0dac08463f61cb483433e31af54e38d5c61f1ae5c0b6e5b88bfeaa066",
+    "seqno": 9,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgXDvpdFfubVW9fhXUBzjuyQS7YZwIIMqSaV5rRVmLNzIKp3BheWxvYWTFAvB7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwNWMzYmU5NzQ1N2VlNmQ1NWJkN2UxNWQ0MDczOGVlYzkwNGJiNjE5YzA4MjBjYTkyNjk1ZTZiNDU1OThiMzczMjBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwNWMzYmU5NzQ1N2VlNmQ1NWJkN2UxNWQ0MDczOGVlYzkwNGJiNjE5YzA4MjBjYTkyNjk1ZTZiNDU1OThiMzczMjBhIiwidWlkIjoiZDdlNTY4MDBlN2QyODRhNDdiYWIwZjcwN2ZlM2Y1MTkiLCJ1c2VybmFtZSI6InJvc3N0YSJ9LCJzZXJ2aWNlIjp7Imhvc3RuYW1lIjoicm9zc3RhLm5ldCIsInByb3RvY29sIjoiaHR0cHM6In0sInR5cGUiOiJ3ZWJfc2VydmljZV9iaW5kaW5nIiwidmVyc2lvbiI6MX0sImNsaWVudCI6eyJuYW1lIjoia2V5YmFzZS5pbyBnbyBjbGllbnQiLCJ2ZXJzaW9uIjoiMS4wLjE2In0sImN0aW1lIjoxNDY5Nzk1MjMxLCJleHBpcmVfaW4iOjUwNDU3NjAwMCwibWVya2xlX3Jvb3QiOnsiY3RpbWUiOjE0Njk3OTUyMTUsImhhc2giOiJhZTFkODg4MjM4NmZjNTQxMDg5YTdjODUyNTFiZTFkOTI4N2NlNjFlYTNmMTM5OGE2ZjkyZmZmMjQ5N2FhZGUzMjNjYjNlMzEwYTMxODkzOGJmOWQ3N2VlNzYyYmI3ZjQ0MzUxMTRlMzg3Nzk4NDc3NDBiMjYzMjMxM2NkMTMwNiIsInNlcW5vIjo1NDgyNzF9LCJwcmV2IjoiZjMyMjdhYTBkYWMwODQ2M2Y2MWNiNDgzNDMzZTMxYWY1NGUzOGQ1YzYxZjFhZTVjMGI2ZTViODhiZmVhYTA2NiIsInNlcW5vIjo5LCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQEiRtBjLRaKaC+4E7AUPm4zxpPDSI3s5O523EWfzvMt9XwqiP8x7bXKOCqvWLQ8r2jNywhaxXKRvYdVBqX0g2wCoc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCB9PJ3KLrdH8j0zx1qZ55wez1GTVrl//cD9oy3VAsvxEKN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/rossta
+
+==================================================================
