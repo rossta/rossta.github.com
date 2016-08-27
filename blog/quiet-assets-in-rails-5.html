@@ -1,0 +1,353 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Quiet assets in Rails 5 - rossta.net</title>
+<meta name="description" content="Sprockets recently added the ability to serve assets Quiet Assets in Rails 5" />
+<meta name="keywords" content="Rails" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Sprockets recently added the ability to serve assets Quiet Assets in Rails 5" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/outerspace-unsplash-91c5bcb2.jpg" />
+<meta name="twitter:title" content="Quiet assets in Rails 5" />
+<meta property="og:description" content="Sprockets recently added the ability to serve assets Quiet Assets in Rails 5" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/outerspace-unsplash-91c5bcb2.jpg" />
+<meta property="og:title" content="Quiet assets in Rails 5" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                 href="/apple-touch-icon.png" />
+    <link rel="icon"             sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon"             sizes="36x36"   href="/touch-icon-36x36.png" />
+    <link rel="icon"             sizes="48x48"   href="/touch-icon-48x48.png" />
+    <link rel="icon"             sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon"             sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon"             sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon"                             href="/touch-icon-192x192.png" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/index.bundle-e144d7b3.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-e5633bf0.js"></script>
+    <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Quiet assets in Rails 5
+  </h1>
+    <h3>
+      How to silence asset request logging in Rails 5 development
+    </h3>
+</header>
+
+        <p><img src="/assets/images/blog/stock/outerspace-unsplash-91c5bcb2.jpg" /></p>
+
+      <p>Recent changes to the <code>sprockets-rails</code> gem now include a configuration option
+for silencing the logging of requests for assets in development.</p>
+
+<h3>The problem</h3>
+
+<p>I love logs. Whenever someone comes to me with a Rails problem or we need to
+debug something, the first question I&rsquo;m thinking is, &ldquo;What do the logs say?&rdquo;.</p>
+
+<p>That said, sometimes Rails logs more than we need. By default, Rails will log the web requests for each asset in developemnt. Each page load could incur several to many additional request for JavaScript, CSS, and images, potentially drowning your STDOUT or <code>development.log</code> with requests like this:</p>
+
+<pre><code class="bash">Started GET &quot;/assets/jquery.self-bd7ddd393353a8d2480a622e80342adf488fb6006d667e8b42e4c0073393abee.js?body=1&quot; for 127.0.0.1 at 2016-08-27 18:38:00 -0400
+...
+</code></pre>
+
+<p>Unless you&rsquo;re debugging an issue in the asset pipeline, numerous asset requests are not very useful and tend to mask the typically more important info logged in the controller actions.</p>
+
+<h3>Quieting assets, the old way</h3>
+
+<p>To disable this behavior, many Rails 4 projects have used the <code>quiet_assets</code>
+gem. How does the <code>quiet_assets</code> gem work? It <a href="https://github.com/evrone/quiet_assets/blob/e54ca548f005ca2a93e781c7b583ff4d0b59dd35/lib/quiet_assets.rb#L20">monkeypatches the
+<code>Rails::Rack::Logger</code></a>.</p>
+
+<p>Here&rsquo;s the relevant code provided in the gem:</p>
+
+<pre><code class="ruby">Rails::Rack::Logger.class_eval do
+  def call_with_quiet_assets(env)
+    begin
+      if env[&#39;PATH_INFO&#39;] =~ ASSETS_REGEX
+        env[KEY] = Rails.logger.level
+        Rails.logger.level = Logger::ERROR
+      end
+      call_without_quiet_assets(env)
+    ensure
+      Rails.logger.level = env[KEY] if env[KEY]
+    end
+  end
+  alias_method_chain :call, :quiet_assets
+end
+</code></pre>
+
+<p><code>Rails::Rack::Logger</code> is a middleware that logs all requests coming into your
+Rails app and implements an <code>ActiveSupport::Notification</code> for each request you
+can hook into for additional information. The <code>quiet_assets</code> gem simply sets the
+log level to <code>Logger::Error</code> for any request matching your application&rsquo;s assets
+path prefix, which means it won&rsquo;t show up in your log file or <code>STDOUT</code>.</p>
+
+<h3>Replacing the quiet_assets gem</h3>
+
+<p>Now, as of <code>sprockets-rails 3.1.1</code>, this gem is not needed. At the time of this
+writing, this is the latest version of <code>sprockets-rails</code> that would be installed
+in a fresh Rails 5 application.</p>
+
+<p>With <code>sprockets-rails 3.1.1</code> installed, you can now set a Rails configuration
+option to quiet asset logging:</p>
+
+<pre><code class="ruby"># config/environments/development.rb
+
+Rails.application.configure do
+
+  config.assets.quiet = true
+
+  # ...
+end
+</code></pre>
+
+<p>So how does this approach work? The <code>sprockets-rails</code> gem now inserts an additional middleware ahead of <code>Rails::Rack::Logger</code> in the middleware stack:</p>
+
+<pre><code class="bash">$ bin/rake middleware
+# ...
+use Sprockets::Rails::QuietAssets
+use Rails::Rack::Logger
+# ...
+</code></pre>
+
+<p>The <code>Sprockets::Rails::Middleware</code> also matches on asset requests, but instead
+uses the <code>Rails.logger.silence { ... }</code> block method to change the log level to
+<code>Logger::ERROR</code>. The entire middleware is only 18 lines:</p>
+
+<pre><code class="ruby">module Sprockets
+  module Rails
+    class QuietAssets
+      def initialize(app)
+        @app = app
+        @assets_regex = %r(\A/{0,2}#{::Rails.application.config.assets.prefix})
+      end
+
+      def call(env)
+        if env[&#39;PATH_INFO&#39;] =~ @assets_regex
+          ::Rails.logger.silence { @app.call(env) }  # silences the logs!
+        else
+          @app.call(env)
+        end
+      end
+    end
+  end
+end
+</code></pre>
+
+<p>Here&rsquo;s a <a href="https://github.com/rails/sprockets-rails/pull/355">link to the recent pull request</a> if you&rsquo;re interested to take a closer look. Of course, this feature isn&rsquo;t just for Rails 5; it should also be possible for you to upgrade to this version of <code>sprockets-rails</code> for existing Rails 4 applications.</p>
+
+<p>In case you&rsquo;re wondering, the <code>::Rails.logger.silence { ... }</code> call assumes your
+Rails logger includes the <a href="http://api.rubyonrails.org/classes/LoggerSilence.html"><code>LoggerSilence</code> module</a>, which works very much like the relevant code provided by the <code>quiet_assets</code> gem.</p>
+
+<h3>Logging to STDOUT</h3>
+
+<p>You may be surprised then to see asset requests fail if you&rsquo;re using a non-compliant logger. Unfortunately, this includes the stdlib Ruby <code>Logger</code>, which, of course, does not include the <code>LoggerSilence</code> module. You might be using Ruby&rsquo;s <code>Logger</code> if you&rsquo;ve followed common recommendations to change your Rails logger to log to <code>STDOUT</code>, as in <a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html">this tutorial</a>:</p>
+
+<pre><code class="ruby">config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+</code></pre>
+
+<p>I ran into this issue recently when assets were failing to load after I upgraded
+to <code>sprockets-rails 3.1.1</code> and began seeing <code>NoMethodError: undefined method &#39;silence&#39; for #&lt;Logger:...&gt;</code> in my development logs.</p>
+
+<p>The fix is simple: to log to <code>STDOUT</code> and take advantage of the new
+<code>Sprockets::Rails::QuietAssets</code> middleware, you could use <code>ActiveSupport::Logger</code> instead, which inherits from Ruby <code>Logger</code> and includes <code>LoggerSilence</code>:</p>
+
+<pre><code class="ruby">config.logger = ActiveSupport::TaggedLogging.new(ActiveSupport::Logger.new(STDOUT))
+</code></pre>
+
+<p>Alternatively, we could create our own subclass of <code>Logger</code> with <code>LoggerSilence</code>
+included. If we just want <code>STDOUT</code> logging, we could instead use Heroku&rsquo;s
+<a href="https://github.com/heroku/rails_stdout_logging"><code>rails_stdout_logging</code></a> gem,
+which will also try to include the <code>LoggerSilence</code> module in our logger, if available.</p>
+
+<h3>Resources</h3>
+
+<p>Be sure to check out the following links if you&rsquo;re interested to learn more
+about customizing your Rails logger. Happy logging!</p>
+
+<ul>
+<li><a href="http://hawkins.io/2013/08/using-the-ruby-logger/">Using the Ruby Logger</a></li>
+<li><a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html">Rails 5 allows to send log to STDOUT via environment variable</a></li>
+<li><a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html">Ruby Logger</a></li>
+<li><a href="http://apidock.com/rails/LoggerSilence/silence">LoggerSilence</a></li>
+<li><a href="https://eliotsykes.com/quiet-assets">Debug Rails faster with quiet assets &amp; quieter logs</a></li>
+<li><a href="https://github.com/evrone/quiet_assets">Quiet Assets gem</a></li>
+<li><a href="https://github.com/heroku/rails_stdout_logging">Rails STDOUT logging gem</a></li>
+<li><a href="https://github.com/rails/sprockets-rails/pull/355">PR to introduce quiet assets to <code>sprockets-rails</code></a></li>
+</ul>
+
+
+    </article>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Quiet%20assets%20in%20Rails%205%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fquiet-assets-in-rails-5.html">share it on Twitter</a>,
+          <a href="https://twitter.com/rossta">follow me - @rossta</a>,
+          and sign up for my newsletter. Thanks!
+        </p>
+      </section>
+    </section>
+    <section class="signup-form-standalone margin-bottom double">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2016-08-26-quiet-assets-in-rails-5.html" />
+      <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Rails" />
+    </form>
+  </div>
+
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <section class="margin-bottom double">
+      <p>
+        Published on Aug 26, 2016
+    </p>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "quiet-assets-in-rails-5";
+    var disqus_title      = "Quiet assets in Rails 5";
+    var disqus_url        = "https://rossta.net/blog/quiet-assets-in-rails-5.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img class="turtle" src="/assets/images/turtle-logo-096698b6.svg" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/whats-new-in-ruby-2-3-enumerable.html">What's new in Ruby 2.3 Enumerable</a></li>
+          <li><a href="/blog/recurring-events-in-ruby.html">Recurring events in Ruby</a></li>
+          <li><a href="/blog/how-to-write-a-simple-web-crawler-in-ruby-revisited.html">How to write a simple web crawler in Ruby - revisited</a></li>
+          <li><a href="/blog/a-ruby-antihero-thread-pool.html">Thread Pool - A Ruby Antihero</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/rspec.html">RSpec</a></li>
+          <li><a href="/blog/tags/process.html">Process</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2016 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/index.bundle-caeda52d.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>
