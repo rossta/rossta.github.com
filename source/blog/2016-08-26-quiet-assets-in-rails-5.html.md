@@ -19,7 +19,9 @@ for silencing the logging of Sprockets asset requests in development.
 I love logs. Whenever someone comes to me with a Rails problem or we need to
 debug something, the first question I'm thinking is, "What do the logs say?".
 
-That said, sometimes Rails logs more info than we need. By default, Rails will record the web requests for each asset in development. Each page load could incur several to many additional requests for JavaScript, CSS, and images, potentially drowning your `STDOUT` or `development.log` with requests like this:
+That said, sometimes Rails logs more info than we need. By default, Rails will record the web requests for each asset in development. Each page load could incur several to many additional requests for JavaScript, CSS, and images, potentially drowning your `STDOUT` or `development.log`.
+
+As [this great article on Rails debugging with quiet logs points out](https://eliotsykes.com/quiet-assets), your log may get filled with lines like this:
 
 ```bash
 Started GET "/assets/jquery.abcde.js?body=1" for 127.0.0.1 at 2016-08-27 18:38:00 -0400
