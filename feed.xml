@@ -33,7 +33,9 @@ for silencing the logging of Sprockets asset requests in development.&lt;/p&gt;
 &lt;p&gt;I love logs. Whenever someone comes to me with a Rails problem or we need to
 debug something, the first question I&amp;rsquo;m thinking is, &amp;ldquo;What do the logs say?&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;That said, sometimes Rails logs more info than we need. By default, Rails will record the web requests for each asset in development. Each page load could incur several to many additional requests for JavaScript, CSS, and images, potentially drowning your &lt;code&gt;STDOUT&lt;/code&gt; or &lt;code&gt;development.log&lt;/code&gt; with requests like this:&lt;/p&gt;
+&lt;p&gt;That said, sometimes Rails logs more info than we need. By default, Rails will record the web requests for each asset in development. Each page load could incur several to many additional requests for JavaScript, CSS, and images, potentially drowning your &lt;code&gt;STDOUT&lt;/code&gt; or &lt;code&gt;development.log&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;As &lt;a href="https://eliotsykes.com/quiet-assets"&gt;this great article on Rails debugging with quiet logs points out&lt;/a&gt;, your log may get filled with lines like this:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="bash"&gt;Started GET &amp;quot;/assets/jquery.abcde.js?body=1&amp;quot; for 127.0.0.1 at 2016-08-27 18:38:00 -0400
 ...
