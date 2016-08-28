@@ -18,67 +18,65 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Recent changes to the &lt;code&gt;sprockets-rails&lt;/code&gt; gem now include a configuration option
-for silencing the logging of requests for assets in development.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;Recent changes to the &lt;a href="https://github.com/rails/sprockets-rails"&gt;&lt;code&gt;sprockets-rails&lt;/code&gt;&lt;/a&gt; gem now include a configuration option
+for silencing the logging of Sprockets asset requests in development.&lt;/p&gt;
 
 &lt;h3&gt;The problem&lt;/h3&gt;
 
 &lt;p&gt;I love logs. Whenever someone comes to me with a Rails problem or we need to
 debug something...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Recent changes to the &lt;code&gt;sprockets-rails&lt;/code&gt; gem now include a configuration option
-for silencing the logging of requests for assets in development.&lt;/p&gt;
+    <content type="html">&lt;p&gt;Recent changes to the &lt;a href="https://github.com/rails/sprockets-rails"&gt;&lt;code&gt;sprockets-rails&lt;/code&gt;&lt;/a&gt; gem now include a configuration option
+for silencing the logging of Sprockets asset requests in development.&lt;/p&gt;
 
 &lt;h3&gt;The problem&lt;/h3&gt;
 
 &lt;p&gt;I love logs. Whenever someone comes to me with a Rails problem or we need to
 debug something, the first question I&amp;rsquo;m thinking is, &amp;ldquo;What do the logs say?&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;That said, sometimes Rails logs more than we need. By default, Rails will log the web requests for each asset in developemnt. Each page load could incur several to many additional request for JavaScript, CSS, and images, potentially drowning your STDOUT or &lt;code&gt;development.log&lt;/code&gt; with requests like this:&lt;/p&gt;
+&lt;p&gt;That said, sometimes Rails logs more info than we need. By default, Rails will record the web requests for each asset in development. Each page load could incur several to many additional requests for JavaScript, CSS, and images, potentially drowning your &lt;code&gt;STDOUT&lt;/code&gt; or &lt;code&gt;development.log&lt;/code&gt; with requests like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="bash"&gt;Started GET &amp;quot;/assets/jquery.self-bd7ddd393353a8d2480a622e80342adf488fb6006d667e8b42e4c0073393abee.js?body=1&amp;quot; for 127.0.0.1 at 2016-08-27 18:38:00 -0400
+&lt;pre&gt;&lt;code class="bash"&gt;Started GET &amp;quot;/assets/jquery.abcde.js?body=1&amp;quot; for 127.0.0.1 at 2016-08-27 18:38:00 -0400
 ...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Unless you&amp;rsquo;re debugging an issue in the asset pipeline, numerous asset requests are not very useful and tend to mask the typically more important info logged in the controller actions.&lt;/p&gt;
+&lt;p&gt;Unless you&amp;rsquo;re debugging an issue in the asset pipeline, numerous asset requests are not very useful and tend to mask more important info logged in the controller actions.&lt;/p&gt;
 
 &lt;h3&gt;Quieting assets, the old way&lt;/h3&gt;
 
-&lt;p&gt;To disable this behavior, many Rails 4 projects have used the &lt;code&gt;quiet_assets&lt;/code&gt;
-gem. How does the &lt;code&gt;quiet_assets&lt;/code&gt; gem work? It &lt;a href="https://github.com/evrone/quiet_assets/blob/e54ca548f005ca2a93e781c7b583ff4d0b59dd35/lib/quiet_assets.rb#L20"&gt;monkeypatches the
-&lt;code&gt;Rails::Rack::Logger&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To disable asset logging behavior, many Rails 4 projects have used the &lt;code&gt;quiet_assets&lt;/code&gt; gem.&lt;/p&gt;
 
-&lt;p&gt;Here&amp;rsquo;s the relevant code provided in the gem:&lt;/p&gt;
+&lt;p&gt;So, why did we need a separate gem in the first place?&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Rails::Rack::Logger&lt;/code&gt; is a middleware in the Rails middleware stack that logs all requests coming into your Rails app and implements an &lt;code&gt;ActiveSupport::Notification&lt;/code&gt; for each request you can hook into for additional information. The &lt;code&gt;quiet_assets&lt;/code&gt; gem simply sets the log level to &lt;code&gt;Logger::Error&lt;/code&gt; for any request matching your application&amp;rsquo;s assets path prefix, which means it won&amp;rsquo;t show up in your log file or &lt;code&gt;STDOUT&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;quiet_assets&lt;/code&gt; gem &lt;a href="https://github.com/evrone/quiet_assets/blob/e54ca548f005ca2a93e781c7b583ff4d0b59dd35/lib/quiet_assets.rb#L20"&gt;monkeypatches &lt;code&gt;Rails::Rack::Logger&lt;/code&gt;&lt;/a&gt; to accomplish this. Here&amp;rsquo;s the relevant code provided in the gem:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;Rails::Rack::Logger.class_eval do
   def call_with_quiet_assets(env)
     begin
       if env[&amp;#39;PATH_INFO&amp;#39;] =~ ASSETS_REGEX
         env[KEY] = Rails.logger.level
-        Rails.logger.level = Logger::ERROR
+        Rails.logger.level = Logger::ERROR       # set the log level to silence
       end
       call_without_quiet_assets(env)
     ensure
-      Rails.logger.level = env[KEY] if env[KEY]
+      Rails.logger.level = env[KEY] if env[KEY]  # resets the previous log level
     end
   end
   alias_method_chain :call, :quiet_assets
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;code&gt;Rails::Rack::Logger&lt;/code&gt; is a middleware that logs all requests coming into your
-Rails app and implements an &lt;code&gt;ActiveSupport::Notification&lt;/code&gt; for each request you
-can hook into for additional information. The &lt;code&gt;quiet_assets&lt;/code&gt; gem simply sets the
-log level to &lt;code&gt;Logger::Error&lt;/code&gt; for any request matching your application&amp;rsquo;s assets
-path prefix, which means it won&amp;rsquo;t show up in your log file or &lt;code&gt;STDOUT&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;While useful, it would be preferable to avoid monkeypatching the Rails logging
+middleware and remove the &lt;code&gt;quiet_assets&lt;/code&gt; dependency if &lt;code&gt;sprockets-rails&lt;/code&gt; could
+handle this for us.&lt;/p&gt;
 
 &lt;h3&gt;Replacing the quiet_assets gem&lt;/h3&gt;
 
-&lt;p&gt;Now, as of &lt;code&gt;sprockets-rails 3.1.1&lt;/code&gt;, this gem is not needed. At the time of this
-writing, this is the latest version of &lt;code&gt;sprockets-rails&lt;/code&gt; that would be installed
-in a fresh Rails 5 application.&lt;/p&gt;
+&lt;p&gt;Now, as of the most recent version of &lt;code&gt;sprockets-rails&lt;/code&gt; as the time of this writing, version &lt;code&gt;3.1.1&lt;/code&gt;, provides the ability to silence assets requests. This means the &lt;code&gt;quiet_assets&lt;/code&gt; gem is no longer needed in a fresh Rails 5 application.&lt;/p&gt;
 
-&lt;p&gt;With &lt;code&gt;sprockets-rails 3.1.1&lt;/code&gt; installed, you can now set a Rails configuration
-option to quiet asset logging:&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s how to configure your Rails app to silence asset logging with this most
+recent version of &lt;code&gt;sprockets-rails&lt;/code&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;# config/environments/development.rb
 
@@ -90,7 +88,7 @@ Rails.application.configure do
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;So how does this approach work? The &lt;code&gt;sprockets-rails&lt;/code&gt; gem now inserts an additional middleware ahead of &lt;code&gt;Rails::Rack::Logger&lt;/code&gt; in the middleware stack:&lt;/p&gt;
+&lt;p&gt;So how does this work? The &lt;code&gt;sprockets-rails&lt;/code&gt; gem now inserts an additional middleware ahead of &lt;code&gt;Rails::Rack::Logger&lt;/code&gt; in the middleware stack:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="bash"&gt;$ bin/rake middleware
 # ...
@@ -99,9 +97,9 @@ use Rails::Rack::Logger
 # ...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The &lt;code&gt;Sprockets::Rails::Middleware&lt;/code&gt; also matches on asset requests, but instead
-uses the &lt;code&gt;Rails.logger.silence { ... }&lt;/code&gt; block method to change the log level to
-&lt;code&gt;Logger::ERROR&lt;/code&gt;. The entire middleware is only 18 lines:&lt;/p&gt;
+&lt;p&gt;When &lt;code&gt;config.assets.quiet&lt;/code&gt; is enabled in development, the &lt;code&gt;Sprockets::Rails::Middleware&lt;/code&gt; also matches on asset requests, but instead uses the &lt;code&gt;Rails.logger.silence { ... }&lt;/code&gt; block method to change the log level to &lt;code&gt;Logger::ERROR&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a &lt;a href="https://github.com/rails/sprockets-rails/pull/355"&gt;link to the recent pull request&lt;/a&gt; if you&amp;rsquo;re interested to take a closer look at how this functionality works. The entire middleware is &lt;a href="https://github.com/rails/sprockets-rails/blob/df5950017d7f2aa6fcbfa3949edfef85c35c28c7/lib/sprockets/rails/quiet_assets.rb"&gt;currently only 18 lines&lt;/a&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;module Sprockets
   module Rails
@@ -123,14 +121,14 @@ uses the &lt;code&gt;Rails.logger.silence { ... }&lt;/code&gt; block method to c
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Here&amp;rsquo;s a &lt;a href="https://github.com/rails/sprockets-rails/pull/355"&gt;link to the recent pull request&lt;/a&gt; if you&amp;rsquo;re interested to take a closer look. Of course, this feature isn&amp;rsquo;t just for Rails 5; it should also be possible for you to upgrade to this version of &lt;code&gt;sprockets-rails&lt;/code&gt; for existing Rails 4 applications.&lt;/p&gt;
+&lt;p&gt;Of course, this feature isn&amp;rsquo;t just for Rails 5; it should also be possible for you to upgrade to this version of &lt;code&gt;sprockets-rails&lt;/code&gt; for existing Rails 4 applications.&lt;/p&gt;
 
-&lt;p&gt;In case you&amp;rsquo;re wondering, the &lt;code&gt;::Rails.logger.silence { ... }&lt;/code&gt; call assumes your
-Rails logger includes the &lt;a href="http://api.rubyonrails.org/classes/LoggerSilence.html"&gt;&lt;code&gt;LoggerSilence&lt;/code&gt; module&lt;/a&gt;, which works very much like the relevant code provided by the &lt;code&gt;quiet_assets&lt;/code&gt; gem.&lt;/p&gt;
+&lt;p&gt;In case you&amp;rsquo;re wondering, the &lt;code&gt;Rails.logger.silence { ... }&lt;/code&gt; call assumes your
+Rails logger includes the &lt;a href="http://api.rubyonrails.org/classes/LoggerSilence.html"&gt;&lt;code&gt;LoggerSilence&lt;/code&gt; module&lt;/a&gt;, which adds the &lt;code&gt;#silence&lt;/code&gt; method to the including logger class, which will set the log level to &lt;code&gt;Logger::ERROR&lt;/code&gt; for the duration of the block, similar to how the &lt;code&gt;quiet_assets&lt;/code&gt; gem works, but without monkeypatching.&lt;/p&gt;
 
 &lt;h3&gt;Logging to STDOUT&lt;/h3&gt;
 
-&lt;p&gt;You may be surprised then to see asset requests fail if you&amp;rsquo;re using a non-compliant logger. Unfortunately, this includes the stdlib Ruby &lt;code&gt;Logger&lt;/code&gt;, which, of course, does not include the &lt;code&gt;LoggerSilence&lt;/code&gt; module. You might be using Ruby&amp;rsquo;s &lt;code&gt;Logger&lt;/code&gt; if you&amp;rsquo;ve followed common recommendations to change your Rails logger to log to &lt;code&gt;STDOUT&lt;/code&gt;, as in &lt;a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html"&gt;this tutorial&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;You may be surprised then to see asset requests fail if you&amp;rsquo;re using a non-compliant logger. Unfortunately, this includes the &lt;code&gt;Logger&lt;/code&gt; class from the Ruby standard library, which, of course, does not include the &lt;code&gt;LoggerSilence&lt;/code&gt; module. You might be using Ruby&amp;rsquo;s &lt;code&gt;Logger&lt;/code&gt; if you&amp;rsquo;ve followed common recommendations to change your Rails logger to log to &lt;code&gt;STDOUT&lt;/code&gt;, as in &lt;a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html"&gt;this tutorial&lt;/a&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 &lt;/code&gt;&lt;/pre&gt;
