@@ -19,14 +19,14 @@
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html">&lt;p&gt;Recent changes to the &lt;a href="https://github.com/rails/sprockets-rails"&gt;&lt;code&gt;sprockets-rails&lt;/code&gt;&lt;/a&gt; gem now include a configuration option
-for silencing the logging of Sprockets asset requests in development.&lt;/p&gt;
+to silence asset request logging in development.&lt;/p&gt;
 
 &lt;h3&gt;The problem&lt;/h3&gt;
 
 &lt;p&gt;I love logs. Whenever someone comes to me with a Rails problem or we need to
-debug something...&lt;/p&gt;</summary>
+debug something, the first question...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Recent changes to the &lt;a href="https://github.com/rails/sprockets-rails"&gt;&lt;code&gt;sprockets-rails&lt;/code&gt;&lt;/a&gt; gem now include a configuration option
-for silencing the logging of Sprockets asset requests in development.&lt;/p&gt;
+to silence asset request logging in development.&lt;/p&gt;
 
 &lt;h3&gt;The problem&lt;/h3&gt;
 
