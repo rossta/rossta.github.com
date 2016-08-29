@@ -12,7 +12,7 @@ tags:
 ---
 
 Recent changes to the [`sprockets-rails`](https://github.com/rails/sprockets-rails) gem now include a configuration option
-for silencing the logging of Sprockets asset requests in development.
+to silence asset request logging in development.
 
 ### The problem
 
