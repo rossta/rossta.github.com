@@ -1,7 +1,7 @@
 ---
 title: How to Test Your Eventmachine Code with RSpec
 author: Ross Kaffenberger
-summary: A walkthrough example of testing a server-client socket connection through eventmachine with rspec.
+summary: Test an eventmachine server-client socket connection with rspec
 permalink: /2010/12/behavior-driven-event-driven-eventmachine-rspec/
 category: Code
 tags:

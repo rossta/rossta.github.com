@@ -1,7 +1,7 @@
 ---
 title: How to Test Features with Rails Caching in RSpec
 author: Ross Kaffenberger
-summary: An RSpec helper for using Rails caching in acceptance tests
+summary: A RSpec helper for using Rails caching in acceptance tests
 description: Learn how to use RSpec metadata to add declarative ways to toggle features like Rails caching during test runs
 pull_image: 'blog/noun_6185_cc.png'
 published: true
