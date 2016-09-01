@@ -15,6 +15,6 @@ compile:
     - git config --global user.email circleci@circleci
     - git config --global user.name CircleCI
     - bundle exec rake deploy
-test
+test:
   override:
-    - echo "No tests"
+    - echo noop
