@@ -5,7 +5,7 @@ published: true
 summary: Understanding a fundamental Ruby abstraction for concurrency
 description: A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources
 pull_image: 'blog/deadpool.jpg'
-popular: 4
+popular: 2
 category: Code
 tags:
   - Ruby

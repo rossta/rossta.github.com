@@ -7,6 +7,7 @@ description: This blog post describes how to integerate JavasScript for the new 
 pull_image: 'blog/stock/blue-buildings-pexels-photo.jpeg'
 series: Service Worker
 category: Code
+popular: 5
 tags:
 - Rails
 - JavaScript
