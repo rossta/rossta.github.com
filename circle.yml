@@ -1,17 +1,10 @@
+USER_NAME: rossta
+USER_EMAIL: rosskaff@gmail.com
 machine:
   ruby:
     version: 2.3.1
   node:
     version: 5.3.0
-dependencies:
-  cache_directories:
-    - node_modules
 test:
   override:
-    - echo Y
-checkout:
-  post:
-    - bundle install
-    - npm install
-    - npm rebuild node-sass
     - ./bin/rake deploy
