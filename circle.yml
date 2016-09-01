@@ -6,9 +6,6 @@ machine:
 dependencies:
   cache_directories:
     - node_modules
-database:
-  override:
-    - echo Y
 test:
   override:
     - echo Y
