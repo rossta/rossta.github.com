@@ -6,7 +6,7 @@ machine:
 deployment:
   production:
     owner: rossta
-    branch: development
+    branch: develop
     commands:
       - bin/rake deploy
 dependencies:
