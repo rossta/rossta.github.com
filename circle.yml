@@ -13,4 +13,5 @@ checkout:
   post:
     - bundle install
     - npm install
+    - npm rebuild node-sass
     - ./bin/rake deploy
