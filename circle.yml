@@ -11,4 +11,10 @@ dependencies:
     - gem install bundler -v 1.12.5
 compile:
   override:
+    - git config --global -l # debug
+    - git config --global user.email circleci@circleci
+    - git config --global user.name CircleCI
     - bundle exec rake deploy
+test
+  override:
+    - echo "No tests"
