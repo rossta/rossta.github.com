@@ -51,6 +51,7 @@ task :publish do |t, args|
   head = `git log --pretty="%h" -n1`.strip
   message = "Site updated to #{head}"
 
+  mkdir_p ".tmp"
   mkdir_p "dist"
   Dir.chdir "dist" do
     git_initialize
