@@ -18,3 +18,7 @@ compile:
 test:
   override:
     - echo noop
+general:
+  branches:
+    ignore:
+      - master
