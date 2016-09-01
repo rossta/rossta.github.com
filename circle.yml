@@ -3,15 +3,15 @@ machine:
     version: 2.3.1
   node:
     version: 5.3.0
-deployment:
-  production:
-    owner: rossta
-    branch: develop
-    commands:
-      - bin/rake deploy
 dependencies:
   cache_directories:
     - node_modules
+database:
+  override:
+    - echo Y
 test:
   override:
     - echo Y
+checkout:
+  post:
+    - bin/rake deploy
