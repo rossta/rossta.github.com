@@ -75,7 +75,7 @@ handle this for us.&lt;/p&gt;
 
 &lt;h3&gt;Replacing the quiet_assets gem&lt;/h3&gt;
 
-&lt;p&gt;Now, as of the most recent version of &lt;code&gt;sprockets-rails&lt;/code&gt; as the time of this writing, version &lt;code&gt;3.1.1&lt;/code&gt;, provides the ability to silence assets requests. This means the &lt;code&gt;quiet_assets&lt;/code&gt; gem is no longer needed in a fresh Rails 5 application.&lt;/p&gt;
+&lt;p&gt;Now, as of the most recent version of &lt;code&gt;sprockets-rails&lt;/code&gt; (at the time of this writing, version &lt;code&gt;3.1.1&lt;/code&gt;) provides the ability to silence assets requests. This means the &lt;code&gt;quiet_assets&lt;/code&gt; gem is no longer needed in a fresh Rails 5 application.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;rsquo;s how to configure your Rails app to silence asset logging with this most
 recent version of &lt;code&gt;sprockets-rails&lt;/code&gt;:&lt;/p&gt;
