@@ -63,7 +63,7 @@ handle this for us.
 
 ### Replacing the quiet_assets gem
 
-Now, as of the most recent version of `sprockets-rails` as the time of this writing, version `3.1.1`, provides the ability to silence assets requests. This means the `quiet_assets` gem is no longer needed in a fresh Rails 5 application.
+Now, as of the most recent version of `sprockets-rails` (at the time of this writing, version `3.1.1`) provides the ability to silence assets requests. This means the `quiet_assets` gem is no longer needed in a fresh Rails 5 application.
 
 Here's how to configure your Rails app to silence asset logging with this most
 recent version of `sprockets-rails`:
