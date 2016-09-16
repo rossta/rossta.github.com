@@ -1,7 +1,7 @@
 ---
 title: Enumerable's Ugly Cousin at GORUCO 2016
 author: Ross Kaffenberger
-summary: How Ruby's Enumerator helped me solved recurring events
+summary: How Ruby's Enumerator helped me solve recurring events
 description:
 pull_image: 'blog/enumerator-1-2-3.jpg'
 published: true
