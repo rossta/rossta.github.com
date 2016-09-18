@@ -1,5 +1,5 @@
 ---
-title: N+1 is a Rails Feature, not a Bug
+title: N+1 is a Rails feature, not a bug
 author: Ross Kaffenberger
 published: true
 summary: Stop and think before you reach for eager loading next time
