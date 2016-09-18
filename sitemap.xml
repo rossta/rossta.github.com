@@ -271,6 +271,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2016-09-17-n+1-is-a-rails-feature.html</loc>
+    <lastmod>2016-09-18T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/index.html</loc>
     <lastmod>2016-09-18T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -470,6 +476,18 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2016.html</loc>
+    <lastmod>2016-09-18T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2016/09.html</loc>
+    <lastmod>2016-09-18T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2016/09/17.html</loc>
     <lastmod>2016-09-18T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

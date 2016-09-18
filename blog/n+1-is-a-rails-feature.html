@@ -1,0 +1,449 @@
+<!doctype html>
+<html>
+  <head>
+    <title>N+1 is a Rails Feature, not a Bug - rossta.net</title>
+<meta name="description" content="In which we talk about how N+1 queries allow Rails developers to opt for Russian Doll caching to address performance bottlenecks." />
+<meta name="keywords" content="Rails" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="In which we talk about how N+1 queries allow Rails developers to opt for Russian Doll caching to address performance bottlenecks." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/ladybug-pexels-photo-5e5b1393.jpg" />
+<meta name="twitter:title" content="N+1 is a Rails Feature, not a Bug" />
+<meta property="og:description" content="In which we talk about how N+1 queries allow Rails developers to opt for Russian Doll caching to address performance bottlenecks." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/ladybug-pexels-photo-5e5b1393.jpg" />
+<meta property="og:title" content="N+1 is a Rails Feature, not a Bug" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                 href="/apple-touch-icon.png" />
+    <link rel="icon"             sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon"             sizes="36x36"   href="/touch-icon-36x36.png" />
+    <link rel="icon"             sizes="48x48"   href="/touch-icon-48x48.png" />
+    <link rel="icon"             sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon"             sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon"             sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon"                             href="/touch-icon-192x192.png" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/index.bundle-b473780b.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-a0229364.js"></script>
+    <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    N+1 is a Rails Feature, not a Bug
+  </h1>
+    <h3>
+      Stop and think before you reach for eager loading
+    </h3>
+</header>
+
+        <p><img src="/assets/images/blog/stock/ladybug-pexels-photo-5e5b1393.jpg" /></p>
+
+      <p>One of the many mantras one learns on the path to &ldquo;Rails enlightenment&rdquo; is:
+BEWARE OF THE N+1 QUERY!</p>
+
+<h3>Mo&rsquo; queries, Mo&rsquo; problems</h3>
+
+<p>To refresh, an N+1 query occurs when N additional rows are queried separately for each (1) resource. For example, if (Example)</p>
+
+<p>Here&rsquo;s the evidence of the N+1 query in the Rails log.</p>
+
+<p>Do a quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8">N+1 Rails</a> and all you see are &ldquo;Problems&rdquo;, &ldquo;Issues&rdquo;, etc. And just about every one of those posts will state that the Silver Bullet to solve this problem is Eager Loading. There is actually a gem <a href="https://github.com/flyerhzm/bullet"><code>bullet</code></a> that will auto-magically help resolve your N+1 issues with warnings and suggestions to use Eager Loading right in your logs.</p>
+
+<p>At some point, we&rsquo;ve all started to wonder why Rails doesn&rsquo;t figure out where we
+need eager loading and insert those <code>includes</code> for us.</p>
+
+<h3>From the experts</h3>
+
+<p>Now consider this. Back in April, the author of <a href="https://www.railsspeed.com/">The Complete Guide to Rails Performance</a> (check it out, it&rsquo;s awesome), <a href="http://nateberkopec.com/">Nate Berkopec</a> spoke with <a href="https://twitter.com/dhh">DHH</a> to talk shop. <a href="https://youtu.be/ktZLpjCanvg?t=4m27s">Not 5 minutes in</a>, DHH says this:</p>
+
+<blockquote>
+<p>N+1 is a feature</p>
+</blockquote>
+
+<p>WTF? But all those articles!</p>
+
+<p>Here&rsquo;s the rest of what he said about it (emphasis mine):</p>
+
+<blockquote>
+<p>N+1 is a feature, which is usually seen as a bug, right?</p>
+
+<p>If you have N+1 query it means you&rsquo;re executing
+one SQL query per element so if you have 50 emails in an inbox, that&rsquo;d be 50
+SQL calls, right? That sounds like a bug. Well in a Russian doll caching setup, it&rsquo;s
+not a bug, it&rsquo;s a feature. <b>The beauty of those individual calls are that
+they&rsquo;re individually cached</b>, on their own timeline, and that they&rsquo;re super-simple.</p>
+
+<p>Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they&rsquo;re super-simple, but there&rsquo;s just more of them, well, you win if and only if you have a caching strategy to support that.</p>
+</blockquote>
+
+<p>Now I don&rsquo;t agree with everything DHH says, but he has a point. When he says N+1 is a feature, what he really means is that the <em>lazy-loading</em> of the default Rails ActiveRecord query interface along with proper caching can be a big advantage.</p>
+
+<p>AR will defer the SQL queries on associated models until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
+queries that can be wrapped in cache blocks meaning the queries can be skipped
+altogether on subsequent requests. On the other hand, using
+the broadly-recommended strategy of using <code>includes</code> to eager-load data means we
+incur that additional, potentially complex, query on each page request, regardless of caching strategies.</p>
+
+<h3>Example, please</h3>
+
+<p>Let&rsquo;s illustrate DHH&rsquo;s point with a simple example where we have a Rails app
+that renders a index of <code>Post</code> models at <code>/posts</code>. Each <code>Post</code> belongs to an
+<code>Author</code> whose details are rendered inline on the index page.</p>
+
+<pre><code class="ruby"># app/models/post.rb
+class Post &lt; ApplicationRecord
+  belongs_to :author
+end
+
+# app/models/author.rb
+class Author &lt; ApplicationRecord
+  has_many :posts
+end
+
+# app/controllers/posts_controller.rb
+class PostsController &lt; ApplicationController
+  def index
+    @posts = Post.all.order(published_at: :desc)
+  end
+end
+
+# posts/index.html.erb
+&lt;% @posts.each do |post| %&gt;
+  &lt;div&gt;
+    &lt;h2&gt;&lt;%= link_to post.title, post %&gt;&lt;h2&gt;
+    &lt;%= render post.author %&gt;
+  &lt;/div&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>Rendering this page will reveal the N+1 query in our Rails log, where each
+author is queried individually for each post.</p>
+
+<pre><code class="sh"># log/development.log
+
+Started GET &quot;/posts&quot; for ::1 at 2016-09-18 07:26:15 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (2.2ms)  SELECT &quot;posts&quot;.* FROM &quot;posts&quot; ORDER BY &quot;posts&quot;.&quot;published_at&quot; DESC
+  Author Load (0.2ms)  SELECT  &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; = $1 LIMIT $2  [[&quot;id&quot;, 90], [&quot;LIMIT&quot;, 1]]
+  Author Load (0.1ms)  SELECT  &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; = $1 LIMIT $2  [[&quot;id&quot;, 82], [&quot;LIMIT&quot;, 1]]
+  Author Load (0.1ms)  SELECT  &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; = $1 LIMIT $2  [[&quot;id&quot;, 83], [&quot;LIMIT&quot;, 1]]
+  #...
+</code></pre>
+
+<p>The common suggestion to &ldquo;fix&rdquo; this N+1 query is to use <code>includes</code> to eager load
+the author records. Now our N+1 query is reduced to two queries: one for all the
+posts and one for all the authors.</p>
+
+<pre><code>class PostsController &lt; ApplicationController
+  def index
+    @posts = Post.all.order(published_at: :desc).includes(:author) # eager loads
+authors
+  end
+end
+</code></pre>
+
+<pre><code>Started GET &quot;/posts&quot; for ::1 at 2016-09-18 07:29:09 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (2.2ms)  SELECT &quot;posts&quot;.* FROM &quot;posts&quot; ORDER BY &quot;posts&quot;.&quot;published_at&quot; DESC
+  Author Load (0.4ms)  SELECT &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; IN (90, 82, 83, 89, 81, 84, 85, 86, 87, 88)
+  # rendering
+</code></pre>
+
+<p>Let&rsquo;s say we later add fragment caching to the view by wrapping each post in a
+cache block:</p>
+
+<pre><code class="erb">&lt;% @posts.each do |post| %&gt;
+  &lt;% cache post do %&gt;
+    &lt;div&gt;
+      &lt;h2&gt;&lt;%= link_to post.title, post %&gt;&lt;h2&gt;
+      &lt;%= render post.author %&gt;
+    &lt;/div&gt;
+  &lt;% end %&gt;
+&lt;% end %&gt;
+</code></pre>
+
+<p>We need to enable caching in our development environment to test it out locally. In Rails 5, you can run a simple command to instruct your Rails server to turn on caching:</p>
+
+<pre><code class="sh">$ bin/rails dev:cache
+</code></pre>
+
+<p>In pre-Rails 5, you&rsquo;ll need to edit your development configuration yourself:</p>
+
+<pre><code class="ruby"># config/development.rb
+config.action_controller.perform_caching = true
+
+config.cache_store = :memory_store
+config.public_file_server.headers = {
+  &#39;Cache-Control&#39; =&gt; &#39;public, max-age=172800&#39;
+}
+</code></pre>
+
+<p>With caching enabled and still using <code>includes</code> in our controller, we can see
+the fragment caching at work in the Rails log. Since the cache is cold on the
+first page render, you&rsquo;ll see alternating Reads that miss and subsequence Writes
+for posts and authors.</p>
+
+<pre><code class="sh">Started GET &quot;/posts&quot; for ::1 at 2016-09-18 08:25:17 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (1.3ms)  SELECT  &quot;posts&quot;.* FROM &quot;posts&quot; ORDER BY &quot;posts&quot;.&quot;published_at&quot; DESC LIMIT $1  [[&quot;LIMIT&quot;, 20]]
+  Author Load (0.3ms)  SELECT &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; IN (90, 82, 83, 89, 81, 84, 85, 86, 87, 88)
+  Read fragment views/posts/679-20160918112202701660/e554fd834425697f04b28a155f7cfd0d (0.1ms)
+  Read fragment views/authors/90-20160918113201462920/5c4a91f59546eb97daa8693b93d7c376 (0.0ms)
+  Write fragment views/authors/90-20160918113201462920/5c4a91f59546eb97daa8693b93d7c376 (0.1ms)
+  Rendered authors/_author.html.erb (4.0ms)
+  Write fragment views/posts/679-20160918112202701660/e554fd834425697f04b28a155f7cfd0d (0.3ms)
+  Read fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+  # ...
+</code></pre>
+
+<p>With the cache now warm, still using <code>includes</code> in the controller, we see the
+two queries and reads for each post:</p>
+
+<pre><code class="sh">Started GET &quot;/posts&quot; for ::1 at 2016-09-18 08:27:36 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (1.5ms)  SELECT  &quot;posts&quot;.* FROM &quot;posts&quot; ORDER BY &quot;posts&quot;.&quot;published_at&quot; DESC LIMIT $1  [[&quot;LIMIT&quot;, 20]]
+  Author Load (0.8ms)  SELECT &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; IN (90, 82, 83, 89, 81, 84, 85, 86, 87, 88)
+  Read fragment views/posts/679-20160918112202701660/e554fd834425697f04b28a155f7cfd0d (0.1ms)
+  Read fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+</code></pre>
+
+<p>Notice that the authors are still queried because we&rsquo;re still eager loading even
+though this data won&rsquo;t be used in a warm cache. What a waste! In truth, it doesn&rsquo;t matter much for this simplistic example, but we can imagine an eager-loaded complex query creating a problem for us in a real world use case.</p>
+
+<p>We can eliminate the wasted authors query by removing the <code>includes</code> method call from our controller. Now our fully-cached page request requires only one query for the posts:</p>
+
+<pre><code class="sh">Started GET &quot;/posts&quot; for ::1 at 2016-09-18 07:41:09 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (2.3ms)  SELECT &quot;posts&quot;.* FROM &quot;posts&quot; ORDER BY &quot;posts&quot;.&quot;published_at&quot; DESC
+  Read fragment views/posts/679-20160918112202701660/8c2dcb06ead7afb44586a0d022005ef0 (0.0ms)
+  Read fragment views/posts/725-20160918112202826113/8c2dcb06ead7afb44586a0d022005ef0 (0.0ms)
+</code></pre>
+
+<p>In either case, we want to be sure the post cache is expired if the author
+details change. To set this up, we&rsquo;ll need to link the updates of an author to
+her posts. A basic change could be to <code>touch</code> each post when an author is
+updated.</p>
+
+<pre><code class="ruby">class Author &lt; ApplicationRecord
+  has_many :posts
+
+  after_touch :touch_posts
+
+  def touch_posts
+    posts.find_each(&amp;:touch)
+  end
+end
+</code></pre>
+
+<p>Now that we&rsquo;re no longer eager loading authors, only the posts and authors
+who&rsquo;ve been updated need to be rewritten to cache. In our <code>development.log</code>,
+we&rsquo;ll see a &ldquo;less than N+1&rdquo; number of queries to recache the author details and
+the surrounding post html:</p>
+
+<pre><code class="sh">Started GET &quot;/posts&quot; for ::1 at 2016-09-18 08:07:53 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (16.1ms)  SELECT  &quot;posts&quot;.* FROM &quot;posts&quot; ORDER BY &quot;posts&quot;.&quot;published_at&quot; DESC LIMIT $1  [[&quot;LIMIT&quot;, 20]]
+  Read fragment views/posts/679-20160918112202701660/e554fd834425697f04b28a155f7cfd0d (0.1ms)
+  Read fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+  Author Load (0.2ms)  SELECT  &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; = $1 LIMIT $2  [[&quot;id&quot;, 82], [&quot;LIMIT&quot;, 1]]
+  Read fragment views/authors/82-20160918120741822003/5c4a91f59546eb97daa8693b93d7c376 (0.0ms)
+  Write fragment views/authors/82-20160918120741822003/5c4a91f59546eb97daa8693b93d7c376 (0.0ms)
+  Rendered authors/_author.html.erb (2.4ms)
+  Write fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+  Read fragment views/posts/541-20160918112202120403/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+  Read fragment views/posts/634-20160918112202551250/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+</code></pre>
+
+<p>Assuming authors and posts aren&rsquo;t updated frequently, leaving the N+1 query in
+place along with a proper Russian Doll caching scheme might be more performant
+that complex eager loading queries.</p>
+
+<h3>Go forth and measure</h3>
+
+<p>The point of this article isn&rsquo;t to 💩 on eager loading - it&rsquo;s an important
+tool to have in your toolbox - but to encourage Rails developers to understand
+how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.</p>
+
+<p>Now, don&rsquo;t blindly remove all your <code>includes</code> statements either. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&rsquo;s up to you to determine the best approach.</p>
+
+<p>Just beware of silver bullets.</p>
+
+
+    </article>
+    <hr />
+    <section class="margin-bottom double">
+      <p>
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=N%2B1%20is%20a%20Rails%20Feature%2C%20not%20a%20Bug%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fn%2B1-is-a-rails-feature.html">share it on Twitter</a>,
+          <a href="https://twitter.com/rossta">follow me - @rossta</a>,
+          and sign up for my newsletter. Thanks!
+        </p>
+      </section>
+    </section>
+    <section class="signup-form-standalone margin-bottom double">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2016-09-17-n+1-is-a-rails-feature.html" />
+      <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Rails" />
+    </form>
+  </div>
+
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <section class="margin-bottom double">
+      <p>
+        Published on Sep 17, 2016
+    </p>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "n+1-is-a-rails-feature";
+    var disqus_title      = "N+1 is a Rails Feature, not a Bug";
+    var disqus_url        = "https://rossta.net/blog/n+1-is-a-rails-feature.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img class="turtle" src="/assets/images/turtle-logo-096698b6.svg" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/a-ruby-antihero-thread-pool.html">Thread Pool - A Ruby Antihero</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/rspec.html">RSpec</a></li>
+          <li><a href="/blog/tags/process.html">Process</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2016 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/index.bundle-33458126.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>

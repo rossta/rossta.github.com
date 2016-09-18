@@ -5,10 +5,262 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-08-26T00:00:00+00:00</updated>
+  <updated>2016-09-17T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>N+1 is a Rails Feature, not a Bug</title>
+    <link rel="alternate" href="/blog/n+1-is-a-rails-feature.html"/>
+    <id>/blog/n+1-is-a-rails-feature.html</id>
+    <published>2016-09-17T00:00:00+00:00</published>
+    <updated>2016-09-17T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;One of the many mantras one learns on the path to “Rails enlightenment” is:
+BEWARE OF THE N+1 QUERY!&lt;/p&gt;
+
+&lt;h3&gt;Mo’ queries, Mo’ problems&lt;/h3&gt;
+
+&lt;p&gt;To refresh, an N+1 query occurs when N additional rows are queried separately for each (1) resource. For example, if (Example...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;One of the many mantras one learns on the path to &amp;ldquo;Rails enlightenment&amp;rdquo; is:
+BEWARE OF THE N+1 QUERY!&lt;/p&gt;
+
+&lt;h3&gt;Mo&amp;rsquo; queries, Mo&amp;rsquo; problems&lt;/h3&gt;
+
+&lt;p&gt;To refresh, an N+1 query occurs when N additional rows are queried separately for each (1) resource. For example, if (Example)&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the evidence of the N+1 query in the Rails log.&lt;/p&gt;
+
+&lt;p&gt;Do a quick search for &lt;a href="https://www.google.com/search?q=N%2B1+Rails&amp;amp;oq=N%2B1+Rails&amp;amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;amp;sourceid=chrome&amp;amp;ie=UTF-8"&gt;N+1 Rails&lt;/a&gt; and all you see are &amp;ldquo;Problems&amp;rdquo;, &amp;ldquo;Issues&amp;rdquo;, etc. And just about every one of those posts will state that the Silver Bullet to solve this problem is Eager Loading. There is actually a gem &lt;a href="https://github.com/flyerhzm/bullet"&gt;&lt;code&gt;bullet&lt;/code&gt;&lt;/a&gt; that will auto-magically help resolve your N+1 issues with warnings and suggestions to use Eager Loading right in your logs.&lt;/p&gt;
+
+&lt;p&gt;At some point, we&amp;rsquo;ve all started to wonder why Rails doesn&amp;rsquo;t figure out where we
+need eager loading and insert those &lt;code&gt;includes&lt;/code&gt; for us.&lt;/p&gt;
+
+&lt;h3&gt;From the experts&lt;/h3&gt;
+
+&lt;p&gt;Now consider this. Back in April, the author of &lt;a href="https://www.railsspeed.com/"&gt;The Complete Guide to Rails Performance&lt;/a&gt; (check it out, it&amp;rsquo;s awesome), &lt;a href="http://nateberkopec.com/"&gt;Nate Berkopec&lt;/a&gt; spoke with &lt;a href="https://twitter.com/dhh"&gt;DHH&lt;/a&gt; to talk shop. &lt;a href="https://youtu.be/ktZLpjCanvg?t=4m27s"&gt;Not 5 minutes in&lt;/a&gt;, DHH says this:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;N+1 is a feature&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;WTF? But all those articles!&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the rest of what he said about it (emphasis mine):&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;N+1 is a feature, which is usually seen as a bug, right?&lt;/p&gt;
+
+&lt;p&gt;If you have N+1 query it means you&amp;rsquo;re executing
+one SQL query per element so if you have 50 emails in an inbox, that&amp;rsquo;d be 50
+SQL calls, right? That sounds like a bug. Well in a Russian doll caching setup, it&amp;rsquo;s
+not a bug, it&amp;rsquo;s a feature. &lt;b&gt;The beauty of those individual calls are that
+they&amp;rsquo;re individually cached&lt;/b&gt;, on their own timeline, and that they&amp;rsquo;re super-simple.&lt;/p&gt;
+
+&lt;p&gt;Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they&amp;rsquo;re super-simple, but there&amp;rsquo;s just more of them, well, you win if and only if you have a caching strategy to support that.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Now I don&amp;rsquo;t agree with everything DHH says, but he has a point. When he says N+1 is a feature, what he really means is that the &lt;em&gt;lazy-loading&lt;/em&gt; of the default Rails ActiveRecord query interface along with proper caching can be a big advantage.&lt;/p&gt;
+
+&lt;p&gt;AR will defer the SQL queries on associated models until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
+queries that can be wrapped in cache blocks meaning the queries can be skipped
+altogether on subsequent requests. On the other hand, using
+the broadly-recommended strategy of using &lt;code&gt;includes&lt;/code&gt; to eager-load data means we
+incur that additional, potentially complex, query on each page request, regardless of caching strategies.&lt;/p&gt;
+
+&lt;h3&gt;Example, please&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s illustrate DHH&amp;rsquo;s point with a simple example where we have a Rails app
+that renders a index of &lt;code&gt;Post&lt;/code&gt; models at &lt;code&gt;/posts&lt;/code&gt;. Each &lt;code&gt;Post&lt;/code&gt; belongs to an
+&lt;code&gt;Author&lt;/code&gt; whose details are rendered inline on the index page.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# app/models/post.rb
+class Post &amp;lt; ApplicationRecord
+  belongs_to :author
+end
+
+# app/models/author.rb
+class Author &amp;lt; ApplicationRecord
+  has_many :posts
+end
+
+# app/controllers/posts_controller.rb
+class PostsController &amp;lt; ApplicationController
+  def index
+    @posts = Post.all.order(published_at: :desc)
+  end
+end
+
+# posts/index.html.erb
+&amp;lt;% @posts.each do |post| %&amp;gt;
+  &amp;lt;div&amp;gt;
+    &amp;lt;h2&amp;gt;&amp;lt;%= link_to post.title, post %&amp;gt;&amp;lt;h2&amp;gt;
+    &amp;lt;%= render post.author %&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;% end %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Rendering this page will reveal the N+1 query in our Rails log, where each
+author is queried individually for each post.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;# log/development.log
+
+Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 07:26:15 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (2.2ms)  SELECT &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; ORDER BY &amp;quot;posts&amp;quot;.&amp;quot;published_at&amp;quot; DESC
+  Author Load (0.2ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT $2  [[&amp;quot;id&amp;quot;, 90], [&amp;quot;LIMIT&amp;quot;, 1]]
+  Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT $2  [[&amp;quot;id&amp;quot;, 82], [&amp;quot;LIMIT&amp;quot;, 1]]
+  Author Load (0.1ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT $2  [[&amp;quot;id&amp;quot;, 83], [&amp;quot;LIMIT&amp;quot;, 1]]
+  #...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The common suggestion to &amp;ldquo;fix&amp;rdquo; this N+1 query is to use &lt;code&gt;includes&lt;/code&gt; to eager load
+the author records. Now our N+1 query is reduced to two queries: one for all the
+posts and one for all the authors.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class PostsController &amp;lt; ApplicationController
+  def index
+    @posts = Post.all.order(published_at: :desc).includes(:author) # eager loads
+authors
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 07:29:09 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (2.2ms)  SELECT &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; ORDER BY &amp;quot;posts&amp;quot;.&amp;quot;published_at&amp;quot; DESC
+  Author Load (0.4ms)  SELECT &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; IN (90, 82, 83, 89, 81, 84, 85, 86, 87, 88)
+  # rendering
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say we later add fragment caching to the view by wrapping each post in a
+cache block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;% @posts.each do |post| %&amp;gt;
+  &amp;lt;% cache post do %&amp;gt;
+    &amp;lt;div&amp;gt;
+      &amp;lt;h2&amp;gt;&amp;lt;%= link_to post.title, post %&amp;gt;&amp;lt;h2&amp;gt;
+      &amp;lt;%= render post.author %&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;% end %&amp;gt;
+&amp;lt;% end %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We need to enable caching in our development environment to test it out locally. In Rails 5, you can run a simple command to instruct your Rails server to turn on caching:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ bin/rails dev:cache
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In pre-Rails 5, you&amp;rsquo;ll need to edit your development configuration yourself:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# config/development.rb
+config.action_controller.perform_caching = true
+
+config.cache_store = :memory_store
+config.public_file_server.headers = {
+  &amp;#39;Cache-Control&amp;#39; =&amp;gt; &amp;#39;public, max-age=172800&amp;#39;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;With caching enabled and still using &lt;code&gt;includes&lt;/code&gt; in our controller, we can see
+the fragment caching at work in the Rails log. Since the cache is cold on the
+first page render, you&amp;rsquo;ll see alternating Reads that miss and subsequence Writes
+for posts and authors.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 08:25:17 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (1.3ms)  SELECT  &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; ORDER BY &amp;quot;posts&amp;quot;.&amp;quot;published_at&amp;quot; DESC LIMIT $1  [[&amp;quot;LIMIT&amp;quot;, 20]]
+  Author Load (0.3ms)  SELECT &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; IN (90, 82, 83, 89, 81, 84, 85, 86, 87, 88)
+  Read fragment views/posts/679-20160918112202701660/e554fd834425697f04b28a155f7cfd0d (0.1ms)
+  Read fragment views/authors/90-20160918113201462920/5c4a91f59546eb97daa8693b93d7c376 (0.0ms)
+  Write fragment views/authors/90-20160918113201462920/5c4a91f59546eb97daa8693b93d7c376 (0.1ms)
+  Rendered authors/_author.html.erb (4.0ms)
+  Write fragment views/posts/679-20160918112202701660/e554fd834425697f04b28a155f7cfd0d (0.3ms)
+  Read fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+  # ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;With the cache now warm, still using &lt;code&gt;includes&lt;/code&gt; in the controller, we see the
+two queries and reads for each post:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 08:27:36 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (1.5ms)  SELECT  &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; ORDER BY &amp;quot;posts&amp;quot;.&amp;quot;published_at&amp;quot; DESC LIMIT $1  [[&amp;quot;LIMIT&amp;quot;, 20]]
+  Author Load (0.8ms)  SELECT &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; IN (90, 82, 83, 89, 81, 84, 85, 86, 87, 88)
+  Read fragment views/posts/679-20160918112202701660/e554fd834425697f04b28a155f7cfd0d (0.1ms)
+  Read fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice that the authors are still queried because we&amp;rsquo;re still eager loading even
+though this data won&amp;rsquo;t be used in a warm cache. What a waste! In truth, it doesn&amp;rsquo;t matter much for this simplistic example, but we can imagine an eager-loaded complex query creating a problem for us in a real world use case.&lt;/p&gt;
+
+&lt;p&gt;We can eliminate the wasted authors query by removing the &lt;code&gt;includes&lt;/code&gt; method call from our controller. Now our fully-cached page request requires only one query for the posts:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 07:41:09 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (2.3ms)  SELECT &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; ORDER BY &amp;quot;posts&amp;quot;.&amp;quot;published_at&amp;quot; DESC
+  Read fragment views/posts/679-20160918112202701660/8c2dcb06ead7afb44586a0d022005ef0 (0.0ms)
+  Read fragment views/posts/725-20160918112202826113/8c2dcb06ead7afb44586a0d022005ef0 (0.0ms)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In either case, we want to be sure the post cache is expired if the author
+details change. To set this up, we&amp;rsquo;ll need to link the updates of an author to
+her posts. A basic change could be to &lt;code&gt;touch&lt;/code&gt; each post when an author is
+updated.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;class Author &amp;lt; ApplicationRecord
+  has_many :posts
+
+  after_touch :touch_posts
+
+  def touch_posts
+    posts.find_each(&amp;amp;:touch)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now that we&amp;rsquo;re no longer eager loading authors, only the posts and authors
+who&amp;rsquo;ve been updated need to be rewritten to cache. In our &lt;code&gt;development.log&lt;/code&gt;,
+we&amp;rsquo;ll see a &amp;ldquo;less than N+1&amp;rdquo; number of queries to recache the author details and
+the surrounding post html:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 08:07:53 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (16.1ms)  SELECT  &amp;quot;posts&amp;quot;.* FROM &amp;quot;posts&amp;quot; ORDER BY &amp;quot;posts&amp;quot;.&amp;quot;published_at&amp;quot; DESC LIMIT $1  [[&amp;quot;LIMIT&amp;quot;, 20]]
+  Read fragment views/posts/679-20160918112202701660/e554fd834425697f04b28a155f7cfd0d (0.1ms)
+  Read fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+  Author Load (0.2ms)  SELECT  &amp;quot;authors&amp;quot;.* FROM &amp;quot;authors&amp;quot; WHERE &amp;quot;authors&amp;quot;.&amp;quot;id&amp;quot; = $1 LIMIT $2  [[&amp;quot;id&amp;quot;, 82], [&amp;quot;LIMIT&amp;quot;, 1]]
+  Read fragment views/authors/82-20160918120741822003/5c4a91f59546eb97daa8693b93d7c376 (0.0ms)
+  Write fragment views/authors/82-20160918120741822003/5c4a91f59546eb97daa8693b93d7c376 (0.0ms)
+  Rendered authors/_author.html.erb (2.4ms)
+  Write fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+  Read fragment views/posts/541-20160918112202120403/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+  Read fragment views/posts/634-20160918112202551250/e554fd834425697f04b28a155f7cfd0d (0.0ms)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Assuming authors and posts aren&amp;rsquo;t updated frequently, leaving the N+1 query in
+place along with a proper Russian Doll caching scheme might be more performant
+that complex eager loading queries.&lt;/p&gt;
+
+&lt;h3&gt;Go forth and measure&lt;/h3&gt;
+
+&lt;p&gt;The point of this article isn&amp;rsquo;t to 💩 on eager loading - it&amp;rsquo;s an important
+tool to have in your toolbox - but to encourage Rails developers to understand
+how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.&lt;/p&gt;
+
+&lt;p&gt;Now, don&amp;rsquo;t blindly remove all your &lt;code&gt;includes&lt;/code&gt; statements either. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&amp;rsquo;s up to you to determine the best approach.&lt;/p&gt;
+
+&lt;p&gt;Just beware of silver bullets.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Quiet assets in Rails 5</title>
     <link rel="alternate" href="/blog/quiet-assets-in-rails-5.html"/>
@@ -1066,133 +1318,6 @@ gem elsewhere on our machine sets us up for three potential problems without aut
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;And don&amp;rsquo;t believe everything you read on StackOverflow.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Adding Service Worker to a simple website</title>
-    <link rel="alternate" href="/blog/adding-serviceworker-to-a-simple-website.html"/>
-    <id>/blog/adding-serviceworker-to-a-simple-website.html</id>
-    <published>2016-04-20T00:00:00+00:00</published>
-    <updated>2016-04-20T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Service Worker is well-suited to enhance a simple website like this blog. The &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker API&lt;/a&gt; has been designed in such as a way that developers can pick and choose the features they want without reworking their sites or committing to a (or another...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Service Worker is well-suited to enhance a simple website like this blog. The &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker API&lt;/a&gt; has been designed in such as a way that developers can pick and choose the features they want without reworking their sites or committing to a (or another) JavaScript framework.&lt;/p&gt;
-
-&lt;p&gt;I recently added a service worker to rossta.net. You can read
-the &lt;a href="https://github.com/rossta/rossta.github.com/blob/efbb4d41697a64543f5d4870c9915e633dda962d/source/assets/javascripts/serviceworker.js"&gt;full source of my serviceworker.js implementation&lt;/a&gt; here.&lt;/p&gt;
-
-&lt;h3&gt;Requirements&lt;/h3&gt;
-
-&lt;p&gt;To get my first service worker running, I did the following:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;HTTPS everywhere&lt;/strong&gt; I moved rossta.net to &lt;a href="https://en.wikipedia.org/wiki/HTTPS_Everywhere"&gt;&amp;ldquo;HTTPS everywhere&amp;rdquo;&lt;/a&gt; with &lt;a href="https://www.cloudflare.com/"&gt;Cloudflare&lt;/a&gt;. Service workers will only run on sites served over HTTPS (or &lt;code&gt;localhost&lt;/code&gt; for development). If you&amp;rsquo;re considering Cloudflare for SSL, &lt;a href="https://scotthelme.co.uk/tls-conundrum-and-leaving-cloudflare/"&gt;be aware of the drawbacks&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Registration&lt;/strong&gt; Though the Service Worker runs in its own thread outside the context of a webpage, we need to initiate its use from the webpage we&amp;rsquo;re on. So when you hit a page on rossta.net, there&amp;rsquo;s a snippet of JavaScript that checks for browser support and registers a service worker script for the root scope of the website.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// index.js
-if(&amp;#39;serviceWorker&amp;#39; in navigator) {
-  navigator.serviceWorker.register(&amp;#39;/serviceworker.js&amp;#39;, {
-    scope: &amp;#39;/&amp;#39;
-  });
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Service Worker Script&lt;/strong&gt; The service worker script gets deployed to &lt;a href="https://rossta.net/serviceworker.js"&gt;https://rossta.net/serviceworker.js&lt;/a&gt; separately from
-the concatenated, versioned JavaScript bundles used on the main site.&lt;/p&gt;
-
-&lt;h3&gt;The script&lt;/h3&gt;
-
-&lt;p&gt;For the code in my first service worker script, I followed the strategy outlined by Jeremy Keith&amp;rsquo;s excellent
-&lt;a href="https://adactio.com/journal/9775"&gt;My first Service Worker&lt;/a&gt;. He also provided a
-generalized version of his script in a &lt;a href="https://gist.github.com/adactio/fbaa3a5952774553f5e7"&gt;service worker gist&lt;/a&gt; that&amp;rsquo;s definitely worth a look.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s a general summary of the Service Worker&amp;rsquo;s responsibilities at various stages in its life cycle:&lt;/p&gt;
-
-&lt;p&gt;On &lt;code&gt;install&lt;/code&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&amp;ldquo;Pre-cache&amp;rdquo; any desired resource, primarily for rendering in an offline context&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;On &lt;code&gt;activate&lt;/code&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Clean up old cache when activating an update to the Service Worker&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;On &lt;code&gt;fetch&lt;/code&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Render HTML from the network while adding it to the local cache for use when offline&lt;/li&gt;
-&lt;li&gt;Render JavaScript and CSS assets immediately from cache while updating the cache from the network when possible&lt;/li&gt;
-&lt;li&gt;Render an offline page when a visitor can&amp;rsquo;t connect to rossta.net&lt;/li&gt;
-&lt;li&gt;Allow normal pass-through network request of non-GET and white-listed resources like Twitter embeds and analytics tracking&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3&gt;Deploying the service worker&lt;/h3&gt;
-
-&lt;p&gt;Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. &lt;a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html"&gt;As I&amp;rsquo;ve said before&lt;/a&gt;, this is a static site hosted on Github pages, &lt;a href="/blog/using-webpack-with-middleman.html"&gt;built with Webpack and Middleman&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Setting up Github pages to use Cloudflare was relatively straightforward and has been &lt;a href="https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/"&gt;well-documented&lt;/a&gt;. I also wanted to make sure &lt;code&gt;serviceworker.js&lt;/code&gt; is always served over HTTPS and that it would not be cached. Since I don&amp;rsquo;t have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules on Cloudflare to mitigate this issue.&lt;/p&gt;
-
-&lt;p&gt;To ensure content on rossta.net is always loaded over HTTPS, I added a redirect page rule:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/cloud-flare-page-rules-https-7d097ad2.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m using Webpack to create &lt;a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12"&gt;separate bundles&lt;/a&gt; and Middleman&amp;rsquo;s &lt;a href="https://middlemanapp.com/advanced/improving_cacheability/"&gt;&lt;code&gt;:asset_hash&lt;/code&gt; extension&lt;/a&gt; to add a digest to each file, similar to the &lt;a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production"&gt;Rails asset pipeline production behavior&lt;/a&gt; to improve the cacheability of CSS and JavaScript assets on rossta.net.&lt;/p&gt;
-
-&lt;p&gt;I don&amp;rsquo;t want either for serviceworker.js: it must be served separately from the main asset bundles and it should not be cached.&lt;/p&gt;
-
-&lt;p&gt;Webpack supports &lt;a href="https://webpack.github.io/docs/configuration.html#multiple-configurations"&gt;multiple configurations&lt;/a&gt;, so I set up my &lt;a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80"&gt;&lt;code&gt;webpack.config.js&lt;/code&gt;&lt;/a&gt; to use ES2015 transpilation for &lt;code&gt;serviceworker.js&lt;/code&gt; but output to a different destination from the other concatenated script files.&lt;/p&gt;
-
-&lt;p&gt;To make sure Cloudflare does not cache &lt;code&gt;serviceworker.js&lt;/code&gt;, as it would by default for the CDN, I instructed Cloudflare to bypass the cache.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/cloud-flare-page-rules-serviceworker-9f251642.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;Github pages currently adds 10-minute &lt;code&gt;Expires&lt;/code&gt; and &lt;code&gt;Cache-Control&lt;/code&gt; headers to resource requests meaning browsers and proxies may choose to cache &lt;code&gt;serviceworker.js&lt;/code&gt; past an update I&amp;rsquo;ve just deployed. This is a tradeoff I&amp;rsquo;ll have to live with until I move rossta.net to another host.&lt;/p&gt;
-
-&lt;h3&gt;Caching considerations&lt;/h3&gt;
-
-&lt;p&gt;There are some key considerations regarding the browser cache when setting up your first service worker with
-an approach like the one &lt;a href="https://adactio.com/journal/9775"&gt;Jeremy Keith&lt;/a&gt; outlines and that I&amp;rsquo;ve used here in
-rossta.net. Jeff Posnick, maintainer of Google Chrome&amp;rsquo;s &lt;a href="https://github.com/GoogleChrome/sw-precache"&gt;sw-precache&lt;/a&gt;, highlights some of these points &lt;a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker"&gt;in a recent comment&lt;/a&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Any of the following would be safe, though they each have certain drawbacks:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Serving all of the local assets with browser caching disabled.&lt;/li&gt;
-&lt;li&gt;Cache-busting the requests that are used to populate the SW cache, using the non-cache-busted URL as the SW cache key.&lt;/li&gt;
-&lt;li&gt;Explicitly versioning all of your local assets using something like gulp-rev, and then using long-lived browser caching headers.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Some drawbacks of each:&lt;/p&gt;
-
-&lt;p&gt;Approach 1. Means that all requests, even those coming from browsers without SW support, will bypass the browser cache, and that&amp;rsquo;s can be a lot of wasteful traffic.&lt;/p&gt;
-
-&lt;p&gt;Approach 2. Can mean some extra code that makes the simple copy and paste example look a bit more complicated.&lt;/p&gt;
-
-&lt;p&gt;Approach 3. Is a good practice to follow in general, but there&amp;rsquo;s an extra build-time step that you need to introduce, and it only applies to subresources, not URLs used as navigation targets (you&amp;rsquo;d likely just have to serve those bypassing the browser cache completely).&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Realize that the browser cache is separate from the local cache used by the
-service worker. So, when caching resources in your service worker, you may need
-to consider the &amp;ldquo;cache busting&amp;rdquo; strategy for both your service worker and the
-browser and &lt;a href="https://github.com/GoogleChrome/css-triggers/issues/14"&gt;how users may be affected when pushing updates to the site&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;If browser cache is disabled, then you can happily use your service worker to
-cache resources without conflict, albeit, without the obvious benefits of a browser cache.&lt;/p&gt;
-
-&lt;p&gt;In other words, take a moment to consider how your assets may (or may not) be cached by
-browsers before &lt;a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker"&gt;copying and pasting your first service worker&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3&gt;Onward&lt;/h3&gt;
-
-&lt;p&gt;There&amp;rsquo;s a lot more that can be done with the Service Worker API, but this was a
-good start to see some impressive perceived performance improvements, especially when
-reloading pages with images and special fonts.&lt;/p&gt;
 </content>
   </entry>
 </feed>
