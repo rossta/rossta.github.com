@@ -78,7 +78,7 @@
 
 <h3>Everyone&rsquo;s favorite issue</h3>
 
-<p>To refresh, an N+1 query occurs when N additional rows are queried separately for each (1) resource. Here&rsquo;s what an N+1 query looks like in the Rails log:</p>
+<p>To refresh, an N+1 query occurs when an association for a requested resource leads to N additional separate queries. Here&rsquo;s what an N+1 query looks like in the Rails log:</p>
 
 <pre><code class="sh">Started GET &quot;/posts&quot; for ::1 at 2016-09-18 07:26:15 -0400
 Processing by PostsController#index as HTML
