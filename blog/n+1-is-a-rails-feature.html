@@ -207,11 +207,7 @@ cache block:</p>
 
 <pre><code class="ruby"># config/development.rb
 config.action_controller.perform_caching = true
-
 config.cache_store = :memory_store
-config.public_file_server.headers = {
-  &#39;Cache-Control&#39; =&gt; &#39;public, max-age=172800&#39;
-}
 </code></pre>
 
 <p>With caching enabled and still using <code>includes</code> in our controller, we can see
