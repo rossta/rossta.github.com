@@ -72,23 +72,31 @@
 
         <p><img src="/assets/images/blog/stock/ladybug-pexels-photo-5e5b1393.jpg" /></p>
 
-      <p>One of the many mantras one learns on the path to &ldquo;Rails enlightenment&rdquo; is:
-BEWARE OF THE N+1 QUERY!</p>
+      <p>One of the many mantras one learns on the path to &ldquo;Rails enlightenment&rdquo; is:</p>
 
-<h3>Mo&rsquo; queries, Mo&rsquo; problems</h3>
+<p>BEWARE OF THE N+1 QUERY!</p>
 
-<p>To refresh, an N+1 query occurs when N additional rows are queried separately for each (1) resource. For example, if (Example)</p>
+<h3>Everyone&rsquo;s favorite issue</h3>
 
-<p>Here&rsquo;s the evidence of the N+1 query in the Rails log.</p>
+<p>To refresh, an N+1 query occurs when N additional rows are queried separately for each (1) resource. Here&rsquo;s what an N+1 query looks like in the Rails log:</p>
 
-<p>Do a quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8">N+1 Rails</a> and all you see are &ldquo;Problems&rdquo;, &ldquo;Issues&rdquo;, etc. And just about every one of those posts will state that the Silver Bullet to solve this problem is Eager Loading. There is actually a gem <a href="https://github.com/flyerhzm/bullet"><code>bullet</code></a> that will auto-magically help resolve your N+1 issues with warnings and suggestions to use Eager Loading right in your logs.</p>
+<pre><code class="sh">Started GET &quot;/posts&quot; for ::1 at 2016-09-18 07:26:15 -0400
+Processing by PostsController#index as HTML
+  Rendering posts/index.html.erb within layouts/application
+  Post Load (2.2ms)  SELECT &quot;posts&quot;.* FROM &quot;posts&quot; ORDER BY &quot;posts&quot;.&quot;published_at&quot; DESC
+  Author Load (0.2ms)  SELECT  &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; = $1 LIMIT $2  [[&quot;id&quot;, 90], [&quot;LIMIT&quot;, 1]]
+  Author Load (0.1ms)  SELECT  &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; = $1 LIMIT $2  [[&quot;id&quot;, 82], [&quot;LIMIT&quot;, 1]]
+  Author Load (0.1ms)  SELECT  &quot;authors&quot;.* FROM &quot;authors&quot; WHERE &quot;authors&quot;.&quot;id&quot; = $1 LIMIT $2  [[&quot;id&quot;, 83], [&quot;LIMIT&quot;, 1]]
+  #...
+</code></pre>
 
-<p>At some point, we&rsquo;ve all started to wonder why Rails doesn&rsquo;t figure out where we
-need eager loading and insert those <code>includes</code> for us.</p>
+<p>Do a quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8">N+1 Rails</a> and all you see are &ldquo;Problems&rdquo;, &ldquo;Issues&rdquo;, etc. And just about every one of those posts will state that the <em>Silver Bullet</em> to solve this problem is Eager Loading. No joke, there is actually a gem called <a href="https://github.com/flyerhzm/bullet"><code>bullet</code></a> that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.</p>
 
-<h3>From the experts</h3>
+<p>At some point, we&rsquo;ve probably started to wonder why Rails just eager load for us.</p>
 
-<p>Now consider this. Back in April, the author of <a href="https://www.railsspeed.com/">The Complete Guide to Rails Performance</a> (check it out, it&rsquo;s awesome), <a href="http://nateberkopec.com/">Nate Berkopec</a> spoke with <a href="https://twitter.com/dhh">DHH</a> to talk shop. <a href="https://youtu.be/ktZLpjCanvg?t=4m27s">Not 5 minutes in</a>, DHH says this:</p>
+<h3>When gurus chat</h3>
+
+<p>Now consider this. Back in April, the author of <a href="https://www.railsspeed.com/">The Complete Guide to Rails Performance</a> (check it out, it&rsquo;s awesome), <a href="http://nateberkopec.com/">Nate Berkopec</a> spoke with <a href="https://twitter.com/dhh">DHH</a> about, ahem, Rails performance. <a href="https://youtu.be/ktZLpjCanvg?t=4m27s">Not 5 minutes in</a>, DHH says this:</p>
 
 <blockquote>
 <p>N+1 is a feature</p>
@@ -110,15 +118,15 @@ they&rsquo;re individually cached</b>, on their own timeline, and that they&rsqu
 <p>Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they&rsquo;re super-simple, but there&rsquo;s just more of them, well, you win if and only if you have a caching strategy to support that.</p>
 </blockquote>
 
-<p>Now I don&rsquo;t agree with everything DHH says, but he has a point. When he says N+1 is a feature, what he really means is that the <em>lazy-loading</em> of the default Rails ActiveRecord query interface along with proper caching can be a big advantage.</p>
+<p>Now I don&rsquo;t agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that the <em>lazy-loading</em>, which ActiveRecord the query interface uses by default, along with a proper caching strategy can be a big advantage.</p>
 
-<p>AR will defer the SQL queries on associated models until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
+<p>ActiveRecord will defer the SQL queries on associated models until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
 queries that can be wrapped in cache blocks meaning the queries can be skipped
 altogether on subsequent requests. On the other hand, using
 the broadly-recommended strategy of using <code>includes</code> to eager-load data means we
 incur that additional, potentially complex, query on each page request, regardless of caching strategies.</p>
 
-<h3>Example, please</h3>
+<h3>Hrm, example please</h3>
 
 <p>Let&rsquo;s illustrate DHH&rsquo;s point with a simple example where we have a Rails app
 that renders a index of <code>Post</code> models at <code>/posts</code>. Each <code>Post</code> belongs to an
@@ -203,14 +211,14 @@ cache block:</p>
 <pre><code class="sh">$ bin/rails dev:cache
 </code></pre>
 
-<p>In pre-Rails 5, you&rsquo;ll need to edit your development configuration yourself:</p>
+<p>In Rails 4, you&rsquo;ll need to edit your development configuration yourself:</p>
 
 <pre><code class="ruby"># config/development.rb
 config.action_controller.perform_caching = true
 config.cache_store = :memory_store
 </code></pre>
 
-<p>With caching enabled and still using <code>includes</code> in our controller, we can see
+<p>With caching enabled and while eager loading authors in our controller, we can see
 the fragment caching at work in the Rails log. Since the cache is cold on the
 first page render, you&rsquo;ll see alternating Reads that miss and subsequence Writes
 for posts and authors.</p>
@@ -272,7 +280,7 @@ end
 
 <p>Now that we&rsquo;re no longer eager loading authors, only the posts and authors
 who&rsquo;ve been updated need to be rewritten to cache. In our <code>development.log</code>,
-we&rsquo;ll see a &ldquo;less than N+1&rdquo; number of queries to recache the author details and
+we&rsquo;ll see a &ldquo;less than N+1&rdquo; number of queries to re-cache the author details and
 the surrounding post html:</p>
 
 <pre><code class="sh">Started GET &quot;/posts&quot; for ::1 at 2016-09-18 08:07:53 -0400
@@ -291,7 +299,7 @@ Processing by PostsController#index as HTML
 </code></pre>
 
 <p>Assuming authors and posts aren&rsquo;t updated frequently, leaving the N+1 query in
-place along with a proper Russian Doll caching scheme might be more performant
+place along with a proper Russian Doll caching scheme might be more efficient
 that complex eager loading queries.</p>
 
 <h3>Go forth and measure</h3>
