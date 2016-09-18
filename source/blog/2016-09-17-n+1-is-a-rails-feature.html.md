@@ -2,7 +2,7 @@
 title: N+1 is a Rails Feature, not a Bug
 author: Ross Kaffenberger
 published: true
-summary: Stop and think before you reach for eager loading
+summary: Stop and think before you reach for eager loading next time
 description: In which we talk about how N+1 queries allow Rails developers to opt for Russian Doll caching to address performance bottlenecks.
 pull_image: 'blog/stock/ladybug-pexels-photo.jpg'
 series:
