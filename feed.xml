@@ -5,16 +5,16 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-09-16T20:00:00-04:00</updated>
+  <updated>2016-09-17T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>N+1 is a Rails Feature, not a Bug</title>
+    <title>N+1 is a Rails feature, not a bug</title>
     <link rel="alternate" href="/blog/n+1-is-a-rails-feature.html"/>
     <id>/blog/n+1-is-a-rails-feature.html</id>
-    <published>2016-09-16T20:00:00-04:00</published>
-    <updated>2016-09-16T20:00:00-04:00</updated>
+    <published>2016-09-17T00:00:00+00:00</published>
+    <updated>2016-09-17T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -270,8 +270,8 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
     <title>Quiet assets in Rails 5</title>
     <link rel="alternate" href="/blog/quiet-assets-in-rails-5.html"/>
     <id>/blog/quiet-assets-in-rails-5.html</id>
-    <published>2016-08-25T20:00:00-04:00</published>
-    <updated>2016-08-25T20:00:00-04:00</updated>
+    <published>2016-08-26T00:00:00+00:00</published>
+    <updated>2016-08-26T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -427,8 +427,8 @@ about customizing your Rails logger. Happy logging!&lt;/p&gt;
     <title>Sending Web Push Notifications from Rails</title>
     <link rel="alternate" href="/blog/web-push-notifications-from-rails.html"/>
     <id>/blog/web-push-notifications-from-rails.html</id>
-    <published>2016-05-12T20:00:00-04:00</published>
-    <updated>2016-05-12T20:00:00-04:00</updated>
+    <published>2016-05-13T00:00:00+00:00</published>
+    <updated>2016-05-13T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -790,8 +790,8 @@ Push Notifications to work in Safari&lt;/a&gt;. Overall, the Web Push API is an 
     <title>An offline page for your Rails application</title>
     <link rel="alternate" href="/blog/offline-page-for-your-rails-application.html"/>
     <id>/blog/offline-page-for-your-rails-application.html</id>
-    <published>2016-05-08T20:00:00-04:00</published>
-    <updated>2016-05-08T20:00:00-04:00</updated>
+    <published>2016-05-09T00:00:00+00:00</published>
+    <updated>2016-05-09T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -1043,8 +1043,8 @@ closer to an even playing field with mobile apps.&lt;/p&gt;
     <title>Service Worker on Rails</title>
     <link rel="alternate" href="/blog/service-worker-on-rails.html"/>
     <id>/blog/service-worker-on-rails.html</id>
-    <published>2016-05-02T20:00:00-04:00</published>
-    <updated>2016-05-02T20:00:00-04:00</updated>
+    <published>2016-05-03T00:00:00+00:00</published>
+    <updated>2016-05-03T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -1162,8 +1162,8 @@ match &amp;quot;/project/:id/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;proj
     <title>How to specify local Ruby gems in your Gemfile</title>
     <link rel="alternate" href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html"/>
     <id>/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html</id>
-    <published>2016-04-22T20:00:00-04:00</published>
-    <updated>2016-04-22T20:00:00-04:00</updated>
+    <published>2016-04-23T00:00:00+00:00</published>
+    <updated>2016-04-23T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
