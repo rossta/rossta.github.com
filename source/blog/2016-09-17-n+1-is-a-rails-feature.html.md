@@ -149,11 +149,7 @@ In pre-Rails 5, you'll need to edit your development configuration yourself:
 ```ruby
 # config/development.rb
 config.action_controller.perform_caching = true
-
 config.cache_store = :memory_store
-config.public_file_server.headers = {
-  'Cache-Control' => 'public, max-age=172800'
-}
 ```
 
 With caching enabled and still using `includes` in our controller, we can see
