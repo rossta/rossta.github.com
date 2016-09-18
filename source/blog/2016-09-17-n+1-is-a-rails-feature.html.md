@@ -17,7 +17,7 @@ BEWARE OF THE N+1 QUERY!
 
 ### Everyone's favorite issue
 
-To refresh, an N+1 query occurs when an association for a requested resource leads to N additional separate queries. Here's what an N+1 query looks like in the Rails log:
+To refresh, an N+1 query occurs when an association for a requested resource leads to N additional separate queries. Here's what an N+1 query looks like in the Rails log where a `post` request is followed by N requests for their associated `authors`:
 
 ```sh
 Started GET "/posts" for ::1 at 2016-09-18 07:26:15 -0400
