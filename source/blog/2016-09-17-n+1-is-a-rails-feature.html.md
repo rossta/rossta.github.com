@@ -54,7 +54,7 @@ Here's the rest of what he said about it (emphasis mine):
 >
 > Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they're super-simple, but there's just more of them, well, you win if and only if you have a caching strategy to support that.
 
-Now I don't agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that the *lazy-loading*, which ActiveRecord the query interface uses by default, along with a proper caching strategy can be a big advantage.
+Now I don't agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that the *lazy-loading*, which ActiveRecord the query interface uses by default, along with a proper caching strategy can be a big advantage. It's this aspect of Rails that has enabled his team to squeeze out sub 100 ms response times at Basecamp.
 
 ActiveRecord will defer the SQL queries on associated models until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
 queries that can be wrapped in cache blocks meaning the queries can be skipped
