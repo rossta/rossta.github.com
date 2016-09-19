@@ -12,7 +12,7 @@ tags:
 ---
 
 *To be clear, N+1 queries in your app are bad. That they are a default behavior
-  through lazy loading in Rails enables developers to take advantage of Russian doll caching to tune app performance - a necessary step to scale Ruby apps*
+  through lazy loading in Rails enables developers to take advantage of Russian doll caching to tune performance - a necessary step to scale Ruby apps.*
 
 One of the many mantras one learns on the path to "Rails enlightenment" is:
 
