@@ -90,7 +90,14 @@ Processing by PostsController#index as HTML
   #...
 </code></pre>
 
-<p>Do a quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8">N+1 Rails</a> and all you see are &ldquo;Problems&rdquo;, &ldquo;Issues&rdquo;, etc. And just about every one of those posts will state that the <em>Silver Bullet</em> to solve this problem is Eager Loading. No joke, there is actually a gem called <a href="https://github.com/flyerhzm/bullet"><code>bullet</code></a> that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.</p>
+<p>Do a quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8">N+1 Rails</a> and all you see are &ldquo;Problems&rdquo;, &ldquo;Issues&rdquo;, etc. Just about every one of those posts will state that the <em>Silver Bullet</em> to solve this problem is to use eager loading.</p>
+
+<p>Speaking of which, there is actually a gem called <a href="https://github.com/flyerhzm/bullet"><code>bullet</code></a> that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.</p>
+
+<p>Typically, this means changing a statement like <code>Post.all</code> to
+<code>Post.all.includes(:authors)</code> to ensure the authors records are loaded in a
+separate query or through a complex join (depending on the nature of the
+association).</p>
 
 <p>At some point, we&rsquo;ve probably started to wonder why Rails just eager load for us.</p>
 
@@ -113,14 +120,14 @@ Processing by PostsController#index as HTML
 one SQL query per element so if you have 50 emails in an inbox, that&rsquo;d be 50
 SQL calls, right? That sounds like a bug. Well in a Russian doll caching setup, it&rsquo;s
 not a bug, it&rsquo;s a feature. <b>The beauty of those individual calls are that
-they&rsquo;re individually cached</b>, on their own timeline, and that they&rsquo;re super-simple.</p>
+they&rsquo;re individually cached</b>, on their own timeline, and that they&rsquo;re super simple.</p>
 
-<p>Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they&rsquo;re super-simple, but there&rsquo;s just more of them, well, you win if and only if you have a caching strategy to support that.</p>
+<p>Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they&rsquo;re super simple, but there&rsquo;s just more of them, well, you win if and only if you have a caching strategy to support that.</p>
 </blockquote>
 
-<p>Now I don&rsquo;t agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that the <em>lazy-loading</em>, which ActiveRecord the query interface uses by default, along with a proper caching strategy can be a big advantage. It&rsquo;s this aspect of Rails that has enabled his team to squeeze out sub 100 ms response times at Basecamp.</p>
+<p>Now I don&rsquo;t agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that <em>lazy-loading</em>, which the ActiveRecord query interface uses by default, along with a proper caching strategy can be a big advantage. It&rsquo;s this aspect of Rails that has enabled his team to squeeze out sub 100 ms response times at Basecamp.</p>
 
-<p>ActiveRecord will defer the SQL queries on associated models until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
+<p>ActiveRecord will defer the SQL queries for associations until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
 queries that can be wrapped in cache blocks meaning the queries can be skipped
 altogether on subsequent requests. On the other hand, using
 the broadly-recommended strategy of using <code>includes</code> to eager-load data means we
@@ -129,7 +136,7 @@ incur that additional, potentially complex, query on each page request, regardle
 <h3>Hrm, example please</h3>
 
 <p>Let&rsquo;s illustrate DHH&rsquo;s point with a simple example where we have a Rails app
-that renders a index of <code>Post</code> models at <code>/posts</code>. Each <code>Post</code> belongs to an
+that renders an index of <code>Post</code> models at <code>/posts</code>. Each <code>Post</code> belongs to an
 <code>Author</code> whose details are rendered inline on the index page.</p>
 
 <pre><code class="ruby"># app/models/post.rb
@@ -173,7 +180,7 @@ Processing by PostsController#index as HTML
   #...
 </code></pre>
 
-<p>The common suggestion to &ldquo;fix&rdquo; this N+1 query is to use <code>includes</code> to eager load
+<p>The common suggestion to fix this N+1 query is to use <code>includes</code> to eager load
 the author records. Now our N+1 query is reduced to two queries: one for all the
 posts and one for all the authors.</p>
 
@@ -304,11 +311,16 @@ that complex eager loading queries.</p>
 
 <h3>Go forth and measure</h3>
 
+<p>It&rsquo;s time to acknowledge we, in the Rails community, have been over-prescribing
+eager loading as the cure for our N+1 ailments.</p>
+
 <p>The point of this article isn&rsquo;t to 💩 on eager loading - it&rsquo;s an important
 tool to have in your toolbox - but to encourage Rails developers to understand
 how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.</p>
 
 <p>Now, don&rsquo;t blindly remove all your <code>includes</code> statements either. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&rsquo;s up to you to determine the best approach.</p>
+
+<p>Be careful of over-prescribing eager loading to squash your N+1 queries.</p>
 
 <p>Just beware of silver bullets.</p>
 
