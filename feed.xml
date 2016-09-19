@@ -48,7 +48,7 @@ Processing by PostsController#index as HTML
 &lt;p&gt;Speaking of which, there is actually a gem called &lt;a href="https://github.com/flyerhzm/bullet"&gt;&lt;code&gt;bullet&lt;/code&gt;&lt;/a&gt; that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.&lt;/p&gt;
 
 &lt;p&gt;Typically, this means changing a statement like &lt;code&gt;Post.all&lt;/code&gt; to
-&lt;code&gt;Post.all.includes(:authors)&lt;/code&gt; to ensure the authors records are loaded in a
+&lt;code&gt;Post.all.includes(:author)&lt;/code&gt; to ensure the authors records are loaded in a
 separate query or through a complex join (depending on the nature of the
 association).&lt;/p&gt;
 
