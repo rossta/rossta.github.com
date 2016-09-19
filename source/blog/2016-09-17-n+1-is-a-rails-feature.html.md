@@ -12,7 +12,7 @@ tags:
 ---
 
 *To be clear, N+1 queries in your app are bad. That they are a default behavior
-  in Rails means you can take advantage of Russian Doll caching to tune app performance, a necessary step for Rails developers*
+  in Rails means you can take advantage of Russian doll caching to tune app performance, a necessary step for Rails developers*
 
 One of the many mantras one learns on the path to "Rails enlightenment" is:
 
@@ -272,7 +272,7 @@ The point of this article isn't to 💩 on eager loading - it's an important
 tool to have in your toolbox - but to encourage Rails developers to understand
 how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.
 
-Now, don't blindly remove all your `includes` statements either. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it's up to you to determine the best approach.
+Keep in mind, Russian doll caching may not be the best approach for your app, especially if that cache is frequently cleared or updated. Caching also means you'll need to think about cache expiry which introduces its own set of challenges. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it's up to you to determine the best approach.
 
 Be careful of over-prescribing eager loading to squash your N+1 queries.
 
