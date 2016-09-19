@@ -35,7 +35,7 @@ Do a quick search for [N+1 Rails](https://www.google.com/search?q=N%2B1+Rails&oq
 Speaking of which, there is actually a gem called [`bullet`](https://github.com/flyerhzm/bullet) that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.
 
 Typically, this means changing a statement like `Post.all` to
-`Post.all.includes(:authors)` to ensure the authors records are loaded in a
+`Post.all.includes(:author)` to ensure the authors records are loaded in a
 separate query or through a complex join (depending on the nature of the
 association).
 
