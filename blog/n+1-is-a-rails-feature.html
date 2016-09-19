@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>N+1 is a Rails feature, not a bug - rossta.net</title>
+    <title>N+1 is a Rails feature - rossta.net</title>
 <meta name="description" content="In which we talk about how N+1 queries allow Rails developers to opt for Russian Doll caching to address performance bottlenecks." />
 <meta name="keywords" content="Rails" />
 <meta name="site" content="rossta.net" />
@@ -10,10 +10,10 @@
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="In which we talk about how N+1 queries allow Rails developers to opt for Russian Doll caching to address performance bottlenecks." />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/ladybug-pexels-photo-5e5b1393.jpg" />
-<meta name="twitter:title" content="N+1 is a Rails feature, not a bug" />
+<meta name="twitter:title" content="N+1 is a Rails feature" />
 <meta property="og:description" content="In which we talk about how N+1 queries allow Rails developers to opt for Russian Doll caching to address performance bottlenecks." />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/stock/ladybug-pexels-photo-5e5b1393.jpg" />
-<meta property="og:title" content="N+1 is a Rails feature, not a bug" />
+<meta property="og:title" content="N+1 is a Rails feature" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -63,16 +63,19 @@
     <article class="post margin-bottom double">
       <header class="page-header with-summary">
   <h1>
-    N+1 is a Rails feature, not a bug
+    N+1 is a Rails feature
   </h1>
     <h3>
-      Stop and think before you reach for eager loading next time
+      Solving this issue with eager loading may not always be the best thing
     </h3>
 </header>
 
         <p><img src="/assets/images/blog/stock/ladybug-pexels-photo-5e5b1393.jpg" /></p>
 
-      <p>One of the many mantras one learns on the path to &ldquo;Rails enlightenment&rdquo; is:</p>
+      <p><em>To be clear, N+1 queries in your app are bad. That they are a default behavior
+  in Rails means you can take advantage of Russian doll caching to tune app performance, a necessary step for Rails developers</em></p>
+
+<p>One of the many mantras one learns on the path to &ldquo;Rails enlightenment&rdquo; is:</p>
 
 <p>BEWARE OF THE N+1 QUERY!</p>
 
@@ -321,7 +324,7 @@ eager loading as the cure for our N+1 ailments.</p>
 tool to have in your toolbox - but to encourage Rails developers to understand
 how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.</p>
 
-<p>Now, don&rsquo;t blindly remove all your <code>includes</code> statements either. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&rsquo;s up to you to determine the best approach.</p>
+<p>Keep in mind, Russian doll caching may not be the best approach for your app, especially if that cache is frequently cleared or updated. Caching also means you&rsquo;ll need to think about cache expiry which introduces its own set of challenges. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&rsquo;s up to you to determine the best approach.</p>
 
 <p>Be careful of over-prescribing eager loading to squash your N+1 queries.</p>
 
@@ -332,7 +335,7 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=N%2B1%20is%20a%20Rails%20feature%2C%20not%20a%20bug%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fn%2B1-is-a-rails-feature.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=N%2B1%20is%20a%20Rails%20feature%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fn%2B1-is-a-rails-feature.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -389,7 +392,7 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
     /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
     var disqus_shortname  = "rosskaff";
     var disqus_identifier = "n+1-is-a-rails-feature";
-    var disqus_title      = "N+1 is a Rails feature, not a bug";
+    var disqus_title      = "N+1 is a Rails feature";
     var disqus_url        = "https://rossta.net/blog/n+1-is-a-rails-feature.html";
 
     var disqus_config = function () {
