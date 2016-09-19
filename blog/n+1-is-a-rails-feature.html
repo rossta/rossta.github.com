@@ -76,6 +76,9 @@
 
 <p>BEWARE OF THE N+1 QUERY!</p>
 
+<p>You might be surprised to hear the conventional advice around fixing the N+1
+problem may not always be the best option.</p>
+
 <h3>Everyone&rsquo;s favorite issue</h3>
 
 <p>To refresh, an N+1 query occurs when an association for a requested resource leads to N additional separate queries. Here&rsquo;s what an N+1 query looks like in the Rails log where a <code>post</code> request is followed by N requests for their associated <code>authors</code>:</p>
