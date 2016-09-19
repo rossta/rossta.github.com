@@ -30,7 +30,14 @@ Processing by PostsController#index as HTML
   #...
 ```
 
-Do a quick search for [N+1 Rails](https://www.google.com/search?q=N%2B1+Rails&oq=N%2B1+Rails&aqs=chrome..69i57j69i60l2.2907j0j1&sourceid=chrome&ie=UTF-8) and all you see are "Problems", "Issues", etc. And just about every one of those posts will state that the *Silver Bullet* to solve this problem is Eager Loading. No joke, there is actually a gem called [`bullet`](https://github.com/flyerhzm/bullet) that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.
+Do a quick search for [N+1 Rails](https://www.google.com/search?q=N%2B1+Rails&oq=N%2B1+Rails&aqs=chrome..69i57j69i60l2.2907j0j1&sourceid=chrome&ie=UTF-8) and all you see are "Problems", "Issues", etc. Just about every one of those posts will state that the *Silver Bullet* to solve this problem is to use eager loading.
+
+Speaking of which, there is actually a gem called [`bullet`](https://github.com/flyerhzm/bullet) that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.
+
+Typically, this means changing a statement like `Post.all` to
+`Post.all.includes(:authors)` to ensure the authors records are loaded in a
+separate query or through a complex join (depending on the nature of the
+association).
 
 At some point, we've probably started to wonder why Rails just eager load for us.
 
@@ -50,13 +57,13 @@ Here's the rest of what he said about it (emphasis mine):
 > one SQL query per element so if you have 50 emails in an inbox, that'd be 50
 > SQL calls, right? That sounds like a bug. Well in a Russian doll caching setup, it's
 > not a bug, it's a feature. <b>The beauty of those individual calls are that
-> they're individually cached</b>, on their own timeline, and that they're super-simple.
+> they're individually cached</b>, on their own timeline, and that they're super simple.
 >
-> Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they're super-simple, but there's just more of them, well, you win if and only if you have a caching strategy to support that.
+> Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they're super simple, but there's just more of them, well, you win if and only if you have a caching strategy to support that.
 
-Now I don't agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that the *lazy-loading*, which ActiveRecord the query interface uses by default, along with a proper caching strategy can be a big advantage. It's this aspect of Rails that has enabled his team to squeeze out sub 100 ms response times at Basecamp.
+Now I don't agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that *lazy-loading*, which the ActiveRecord query interface uses by default, along with a proper caching strategy can be a big advantage. It's this aspect of Rails that has enabled his team to squeeze out sub 100 ms response times at Basecamp.
 
-ActiveRecord will defer the SQL queries on associated models until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
+ActiveRecord will defer the SQL queries for associations until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
 queries that can be wrapped in cache blocks meaning the queries can be skipped
 altogether on subsequent requests. On the other hand, using
 the broadly-recommended strategy of using `includes` to eager-load data means we
@@ -65,7 +72,7 @@ incur that additional, potentially complex, query on each page request, regardle
 ### Hrm, example please
 
 Let's illustrate DHH's point with a simple example where we have a Rails app
-that renders a index of `Post` models at `/posts`. Each `Post` belongs to an
+that renders an index of `Post` models at `/posts`. Each `Post` belongs to an
 `Author` whose details are rendered inline on the index page.
 
 ```ruby
@@ -111,7 +118,7 @@ Processing by PostsController#index as HTML
   #...
 ```
 
-The common suggestion to "fix" this N+1 query is to use `includes` to eager load
+The common suggestion to fix this N+1 query is to use `includes` to eager load
 the author records. Now our N+1 query is reduced to two queries: one for all the
 posts and one for all the authors.
 
@@ -252,10 +259,15 @@ that complex eager loading queries.
 
 ### Go forth and measure
 
+It's time to acknowledge we, in the Rails community, have been over-prescribing
+eager loading as the cure for our N+1 ailments.
+
 The point of this article isn't to 💩 on eager loading - it's an important
 tool to have in your toolbox - but to encourage Rails developers to understand
 how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.
 
 Now, don't blindly remove all your `includes` statements either. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it's up to you to determine the best approach.
+
+Be careful of over-prescribing eager loading to squash your N+1 queries.
 
 Just beware of silver bullets.
