@@ -36,9 +36,9 @@ Processing by PostsController#index as HTML
   #...
 ```
 
-Do a quick search for [N+1 Rails](https://www.google.com/search?q=N%2B1+Rails&oq=N%2B1+Rails&aqs=chrome..69i57j69i60l2.2907j0j1&sourceid=chrome&ie=UTF-8) and all you see are "Problems", "Issues", etc. Just about every one of those posts will state that the *Silver Bullet* to solve this problem is to use eager loading.
+Do a quick search for [N+1 Rails](https://www.google.com/search?q=N%2B1+Rails&oq=N%2B1+Rails&aqs=chrome..69i57j69i60l2.2907j0j1&sourceid=chrome&ie=UTF-8) and just about every one of those post will state that the *silver bullet* to solve this problem is to use eager loading.
 
-Speaking of which, there is actually a gem called [`bullet`](https://github.com/flyerhzm/bullet) that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.
+There is actually a gem called [`bullet`](https://github.com/flyerhzm/bullet) that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.
 
 Typically, this means changing a statement like `Post.all` to
 `Post.all.includes(:author)` to ensure the authors records are loaded in a
