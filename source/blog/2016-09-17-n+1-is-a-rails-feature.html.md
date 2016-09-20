@@ -265,8 +265,7 @@ that complex eager loading queries.
 
 ### Go forth and measure
 
-It's time to acknowledge we, in the Rails community, have been over-prescribing
-eager loading as the cure for our N+1 ailments.
+Eager loading may not always be the best the cure for our N+1 ailments.
 
 The point of this article isn't to 💩 on eager loading - it's an important
 tool to have in your toolbox - but to encourage Rails developers to understand
