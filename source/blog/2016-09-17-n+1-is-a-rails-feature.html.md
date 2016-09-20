@@ -274,6 +274,4 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
 
 Keep in mind, Russian doll caching may not be the best approach for your app, especially if that cache is frequently cleared or updated. Caching also means you'll need to think about cache expiry which introduces its own set of challenges. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it's up to you to determine the best approach.
 
-Be careful of over-prescribing eager loading to squash your N+1 queries.
-
 Just beware of silver bullets.
