@@ -3,13 +3,11 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var Clean = require('clean-webpack-plugin');
 var exec = require('child_process').execSync;
 
-var ref = exec('git rev-parse --short HEAD').toString().trim();
-
 var definePlugin = new webpack.DefinePlugin({
   __DEVELOPMENT__: JSON.stringify(JSON.parse(process.env.WEBPACK_ENV === 'development')),
   __DEBUG__:       JSON.stringify(JSON.parse(process.env.WEBPACK_ENV === 'debug')),
   __BUILD__:       JSON.stringify(JSON.parse(process.env.WEBPACK_ENV === 'build')),
-  __REF__:         ref
+  __REF__:         exec('git rev-parse --short HEAD').toString().trim()
 });
 
 var siteConfig = {
