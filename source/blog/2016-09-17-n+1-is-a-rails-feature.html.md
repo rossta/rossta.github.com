@@ -12,7 +12,7 @@ tags:
 ---
 
 *To be clear, N+1 queries in your app are bad. That they are a default behavior
-  through lazy loading in Rails enables developers to take advantage of Russian doll caching to tune performance - a necessary step to scale Ruby apps.*
+  through due to lazy loading in Rails enables developers to take advantage of Russian doll caching to tune performance - a necessary step to scale Ruby apps.*
 
 One of the many mantras one learns on the path to "Rails enlightenment" is:
 
@@ -67,7 +67,7 @@ Here's the rest of what he said about it (emphasis mine):
 >
 > Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they're super simple, but there's just more of them, well, you win if and only if you have a caching strategy to support that.
 
-Now I don't agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that *lazy-loading*, which the ActiveRecord query interface uses by default, along with a proper caching strategy can be a big advantage. It's this aspect of Rails that has enabled his team to squeeze out sub 100 ms response times at Basecamp.
+Now I don't agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that *lazy-loading*, which the ActiveRecord query interface uses by default, along with a proper caching strategy can be a big advantage. It's this aspect of Rails that has enabled his team to squeeze out sub-100 ms response times at Basecamp.
 
 ActiveRecord will defer the SQL queries for associations until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
 queries that can be wrapped in cache blocks meaning the queries can be skipped
