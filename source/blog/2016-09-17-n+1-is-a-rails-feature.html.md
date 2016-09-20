@@ -238,8 +238,7 @@ end
 
 Now that we're no longer eager loading authors, only the posts and authors
 who've been updated need to be rewritten to cache. In our `development.log`,
-we'll see a "less than N+1" number of queries to re-cache the author details and
-the surrounding post html:
+we'll see only see the additional queries for associations when an author is updated, triggering cache invalidation on the author and associated posts:
 
 ```sh
 Started GET "/posts" for ::1 at 2016-09-18 08:07:53 -0400
@@ -258,8 +257,7 @@ Processing by PostsController#index as HTML
 ```
 
 Assuming authors and posts aren't updated frequently, leaving the N+1 query in
-place along with a proper Russian Doll caching scheme might be more efficient
-that complex eager loading queries.
+place along with a proper Russian Doll caching scheme might better for overall app performance than triggering complex eager loading queries on every request.
 
 ### Go forth and measure
 
