@@ -96,9 +96,9 @@ Processing by PostsController#index as HTML
   #...
 </code></pre>
 
-<p>Do a quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8">N+1 Rails</a> and all you see are &ldquo;Problems&rdquo;, &ldquo;Issues&rdquo;, etc. Just about every one of those posts will state that the <em>Silver Bullet</em> to solve this problem is to use eager loading.</p>
+<p>Do a quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8">N+1 Rails</a> and just about every one of those post will state that the <em>silver bullet</em> to solve this problem is to use eager loading.</p>
 
-<p>Speaking of which, there is actually a gem called <a href="https://github.com/flyerhzm/bullet"><code>bullet</code></a> that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.</p>
+<p>There is actually a gem called <a href="https://github.com/flyerhzm/bullet"><code>bullet</code></a> that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.</p>
 
 <p>Typically, this means changing a statement like <code>Post.all</code> to
 <code>Post.all.includes(:author)</code> to ensure the authors records are loaded in a
@@ -325,8 +325,6 @@ tool to have in your toolbox - but to encourage Rails developers to understand
 how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.</p>
 
 <p>Keep in mind, Russian doll caching may not be the best approach for your app, especially if that cache is frequently cleared or updated. Caching also means you&rsquo;ll need to think about cache expiry which introduces its own set of challenges. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&rsquo;s up to you to determine the best approach.</p>
-
-<p>Be careful of over-prescribing eager loading to squash your N+1 queries.</p>
 
 <p>Just beware of silver bullets.</p>
 

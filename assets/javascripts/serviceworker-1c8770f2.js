@@ -1,6 +1,7 @@
 'use strict';
 
-const version = 'v20160917-1';
+const version = __REF__ || '201609119-1';
+console.log('Cache version', version);
 const offlineResources = [
   '/',
   '/offline.html',

@@ -46,9 +46,9 @@ Processing by PostsController#index as HTML
   #...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Do a quick search for &lt;a href="https://www.google.com/search?q=N%2B1+Rails&amp;amp;oq=N%2B1+Rails&amp;amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;amp;sourceid=chrome&amp;amp;ie=UTF-8"&gt;N+1 Rails&lt;/a&gt; and all you see are &amp;ldquo;Problems&amp;rdquo;, &amp;ldquo;Issues&amp;rdquo;, etc. Just about every one of those posts will state that the &lt;em&gt;Silver Bullet&lt;/em&gt; to solve this problem is to use eager loading.&lt;/p&gt;
+&lt;p&gt;Do a quick search for &lt;a href="https://www.google.com/search?q=N%2B1+Rails&amp;amp;oq=N%2B1+Rails&amp;amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;amp;sourceid=chrome&amp;amp;ie=UTF-8"&gt;N+1 Rails&lt;/a&gt; and just about every one of those post will state that the &lt;em&gt;silver bullet&lt;/em&gt; to solve this problem is to use eager loading.&lt;/p&gt;
 
-&lt;p&gt;Speaking of which, there is actually a gem called &lt;a href="https://github.com/flyerhzm/bullet"&gt;&lt;code&gt;bullet&lt;/code&gt;&lt;/a&gt; that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.&lt;/p&gt;
+&lt;p&gt;There is actually a gem called &lt;a href="https://github.com/flyerhzm/bullet"&gt;&lt;code&gt;bullet&lt;/code&gt;&lt;/a&gt; that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.&lt;/p&gt;
 
 &lt;p&gt;Typically, this means changing a statement like &lt;code&gt;Post.all&lt;/code&gt; to
 &lt;code&gt;Post.all.includes(:author)&lt;/code&gt; to ensure the authors records are loaded in a
@@ -275,8 +275,6 @@ tool to have in your toolbox - but to encourage Rails developers to understand
 how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.&lt;/p&gt;
 
 &lt;p&gt;Keep in mind, Russian doll caching may not be the best approach for your app, especially if that cache is frequently cleared or updated. Caching also means you&amp;rsquo;ll need to think about cache expiry which introduces its own set of challenges. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&amp;rsquo;s up to you to determine the best approach.&lt;/p&gt;
-
-&lt;p&gt;Be careful of over-prescribing eager loading to squash your N+1 queries.&lt;/p&gt;
 
 &lt;p&gt;Just beware of silver bullets.&lt;/p&gt;
 </content>
