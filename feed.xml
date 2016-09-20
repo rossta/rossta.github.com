@@ -46,16 +46,14 @@ Processing by PostsController#index as HTML
   #...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Do a quick search for &lt;a href="https://www.google.com/search?q=N%2B1+Rails&amp;amp;oq=N%2B1+Rails&amp;amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;amp;sourceid=chrome&amp;amp;ie=UTF-8"&gt;N+1 Rails&lt;/a&gt; and just about every one of those post will state that the &lt;em&gt;silver bullet&lt;/em&gt; to solve this problem is to use eager loading.&lt;/p&gt;
+&lt;p&gt;A quick search for &lt;a href="https://www.google.com/search?q=N%2B1+Rails&amp;amp;oq=N%2B1+Rails&amp;amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;amp;sourceid=chrome&amp;amp;ie=UTF-8"&gt;N+1 Rails&lt;/a&gt; reveals many posts describing &amp;ldquo;eager loading&amp;rdquo; as state that the &lt;em&gt;silver bullet&lt;/em&gt; to this problem.&lt;/p&gt;
 
 &lt;p&gt;There is actually a gem called &lt;a href="https://github.com/flyerhzm/bullet"&gt;&lt;code&gt;bullet&lt;/code&gt;&lt;/a&gt; that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.&lt;/p&gt;
 
 &lt;p&gt;Typically, this means changing a statement like &lt;code&gt;Post.all&lt;/code&gt; to
 &lt;code&gt;Post.all.includes(:author)&lt;/code&gt; to ensure the authors records are loaded in a
 separate query or through a complex join (depending on the nature of the
-association).&lt;/p&gt;
-
-&lt;p&gt;At some point, we&amp;rsquo;ve probably started to wonder why Rails just eager load for us.&lt;/p&gt;
+association). We may have even wondered why Rails doesn&amp;rsquo;t just eager load for us.&lt;/p&gt;
 
 &lt;h3&gt;When gurus chat&lt;/h3&gt;
 
@@ -65,7 +63,7 @@ association).&lt;/p&gt;
 &lt;p&gt;N+1 is a feature&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;WTF? But all those articles!&lt;/p&gt;
+&lt;p&gt;WTF? But all those queries!&lt;/p&gt;
 
 &lt;p&gt;Here&amp;rsquo;s the rest of what he said about it (emphasis mine):&lt;/p&gt;
 
@@ -81,7 +79,7 @@ they&amp;rsquo;re individually cached&lt;/b&gt;, on their own timeline, and that
 &lt;p&gt;Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they&amp;rsquo;re super simple, but there&amp;rsquo;s just more of them, well, you win if and only if you have a caching strategy to support that.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Now I don&amp;rsquo;t agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that &lt;em&gt;lazy-loading&lt;/em&gt;, which the ActiveRecord query interface uses by default, along with a proper caching strategy can be a big advantage. It&amp;rsquo;s this aspect of Rails that has enabled his team to squeeze out sub-100 ms response times at Basecamp.&lt;/p&gt;
+&lt;p&gt;Now I don&amp;rsquo;t agree with everything DHH says, but it&amp;rsquo;s an interesting take on the issue. When he says N+1 is a feature, I believe what he really means is that &amp;ldquo;lazy loading&amp;rdquo;, which the ActiveRecord query interface uses by default, along with a proper caching strategy &lt;em&gt;can&lt;/em&gt; be a big advantage. It&amp;rsquo;s this aspect of Rails that has enabled his team to squeeze out sub-100 ms response times at Basecamp.&lt;/p&gt;
 
 &lt;p&gt;ActiveRecord will defer the SQL queries for associations until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
 queries that can be wrapped in cache blocks meaning the queries can be skipped
@@ -243,8 +241,7 @@ end
 
 &lt;p&gt;Now that we&amp;rsquo;re no longer eager loading authors, only the posts and authors
 who&amp;rsquo;ve been updated need to be rewritten to cache. In our &lt;code&gt;development.log&lt;/code&gt;,
-we&amp;rsquo;ll see a &amp;ldquo;less than N+1&amp;rdquo; number of queries to re-cache the author details and
-the surrounding post html:&lt;/p&gt;
+we&amp;rsquo;ll see only see the additional queries for associations when an author is updated, triggering cache invalidation on the author and associated posts:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="sh"&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 08:07:53 -0400
 Processing by PostsController#index as HTML
@@ -262,8 +259,7 @@ Processing by PostsController#index as HTML
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Assuming authors and posts aren&amp;rsquo;t updated frequently, leaving the N+1 query in
-place along with a proper Russian Doll caching scheme might be more efficient
-that complex eager loading queries.&lt;/p&gt;
+place along with a proper Russian Doll caching scheme might better for overall app performance than triggering complex eager loading queries on every request.&lt;/p&gt;
 
 &lt;h3&gt;Go forth and measure&lt;/h3&gt;
 
