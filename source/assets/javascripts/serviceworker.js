@@ -1,6 +1,6 @@
 'use strict';
 
-const version = __REF__ || '201609119-1';
+const version = __VERSION__;
 const offlineResources = [
   '/',
   '/offline.html',
