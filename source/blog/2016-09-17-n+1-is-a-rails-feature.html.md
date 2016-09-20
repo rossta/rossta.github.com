@@ -36,16 +36,14 @@ Processing by PostsController#index as HTML
   #...
 ```
 
-Do a quick search for [N+1 Rails](https://www.google.com/search?q=N%2B1+Rails&oq=N%2B1+Rails&aqs=chrome..69i57j69i60l2.2907j0j1&sourceid=chrome&ie=UTF-8) and just about every one of those post will state that the *silver bullet* to solve this problem is to use eager loading.
+A quick search for [N+1 Rails](https://www.google.com/search?q=N%2B1+Rails&oq=N%2B1+Rails&aqs=chrome..69i57j69i60l2.2907j0j1&sourceid=chrome&ie=UTF-8) reveals many posts describing "eager loading" as state that the *silver bullet* to this problem.
 
 There is actually a gem called [`bullet`](https://github.com/flyerhzm/bullet) that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.
 
 Typically, this means changing a statement like `Post.all` to
 `Post.all.includes(:author)` to ensure the authors records are loaded in a
 separate query or through a complex join (depending on the nature of the
-association).
-
-At some point, we've probably started to wonder why Rails just eager load for us.
+association). We may have even wondered why Rails doesn't just eager load for us.
 
 ### When gurus chat
 
@@ -53,7 +51,7 @@ Now consider this. Back in April, the author of [The Complete Guide to Rails Per
 
 > N+1 is a feature
 
-WTF? But all those articles!
+WTF? But all those queries!
 
 Here's the rest of what he said about it (emphasis mine):
 
@@ -67,7 +65,7 @@ Here's the rest of what he said about it (emphasis mine):
 >
 > Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they're super simple, but there's just more of them, well, you win if and only if you have a caching strategy to support that.
 
-Now I don't agree with everything DHH says, but here he has a point. When he says N+1 is a feature, what he really means is that *lazy-loading*, which the ActiveRecord query interface uses by default, along with a proper caching strategy can be a big advantage. It's this aspect of Rails that has enabled his team to squeeze out sub-100 ms response times at Basecamp.
+Now I don't agree with everything DHH says, but it's an interesting take on the issue. When he says N+1 is a feature, I believe what he really means is that "lazy loading", which the ActiveRecord query interface uses by default, along with a proper caching strategy *can* be a big advantage. It's this aspect of Rails that has enabled his team to squeeze out sub-100 ms response times at Basecamp.
 
 ActiveRecord will defer the SQL queries for associations until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
 queries that can be wrapped in cache blocks meaning the queries can be skipped
