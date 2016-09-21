@@ -43,7 +43,7 @@ There is actually a gem called [`bullet`](https://github.com/flyerhzm/bullet) th
 Typically, this means changing a statement like `Post.all` to
 `Post.all.includes(:author)` to ensure the authors records are loaded in a
 separate query or through a complex join (depending on the nature of the
-association). We may have even wondered why Rails doesn't just eager load for us.
+association). This a really useful technique to reduce the number of queries you're making in your Rails apps to improve response times. We may have even wondered why Rails doesn't just eager load for us.
 
 ### When gurus chat
 
