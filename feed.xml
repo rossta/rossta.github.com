@@ -53,7 +53,7 @@ Processing by PostsController#index as HTML
 &lt;p&gt;Typically, this means changing a statement like &lt;code&gt;Post.all&lt;/code&gt; to
 &lt;code&gt;Post.all.includes(:author)&lt;/code&gt; to ensure the authors records are loaded in a
 separate query or through a complex join (depending on the nature of the
-association). We may have even wondered why Rails doesn&amp;rsquo;t just eager load for us.&lt;/p&gt;
+association). This a really useful technique to reduce the number of queries you&amp;rsquo;re making in your Rails apps to improve response times. We may have even wondered why Rails doesn&amp;rsquo;t just eager load for us.&lt;/p&gt;
 
 &lt;h3&gt;When gurus chat&lt;/h3&gt;
 
