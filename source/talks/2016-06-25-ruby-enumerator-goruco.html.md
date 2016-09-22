@@ -5,8 +5,8 @@ summary: How Ruby's Enumerator helped me solve recurring events
 description:
 pull_image: 'blog/enumerator-1-2-3.jpg'
 published: true
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 

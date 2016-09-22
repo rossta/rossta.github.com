@@ -5,8 +5,8 @@ summary: Modeling recurrence with the Montrose gem
 description: A talk on how to define, enumerate, and query recurrence objects in Ruby using the Montrose gem
 pull_image: 'blog/stock/clock-pexels-photo.jpg'
 published: true
+category: Code
 tags:
-  - Code
   - Ruby
 ---
 
