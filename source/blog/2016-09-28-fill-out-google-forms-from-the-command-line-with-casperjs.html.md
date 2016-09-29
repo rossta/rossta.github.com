@@ -1,8 +1,8 @@
 ---
-title: Using CasperJS to automate webpage interaction
+title: Fill out Google Forms from the command line with CasperJS
 author: Ross Kaffenberger
 published: true
-summary: For folks like me who are too lazy for web forms
+summary: Using CasperJS to automate webpage interaction
 description: A tutorial for writing a CasperJS script to fill out a Google Form, which is also available now as an npm package called "form-to-terminal"
 pull_image: 'blog/stock/coding-a-pexels-photo.jpg'
 series:
