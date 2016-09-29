@@ -13,13 +13,11 @@ tags:
 ---
 
 To give you some idea about what a geek I am, when [Saron](https://twitter.com/saronyitbarek) asked me to fill out a form to submit blog posts to the
-[CodeNewbie Newsletter](http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter), I thought, "what if I could automate that?". I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...
+[CodeNewbie Newsletter](http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter), I thought, "what if I could automate that?" I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...
 
-Instead of filling out the form for my last article, I ended up creating a tool to fill out and submit a Google Form from the command line. At it's core, it's a [CasperJS](http://casperjs.org/) script available as an npm package
-called [`form-to-terminal`](https://github.com/rossta/form-to-terminal).
+Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it's a [CasperJS](http://casperjs.org/) script available as an npm package. It's called [`form-to-terminal`](https://github.com/rossta/form-to-terminal).
 
-To use `form-to-terminal`, install via npm and use the executable `ftt` with a
-Google Form url to put it into action:
+To use `form-to-terminal`, install it via npm and use the executable `ftt` along with a url to a Google Form url:
 
 ```bash
 # Open a terminal and enter the following commands after the prompt ($):
@@ -41,10 +39,9 @@ write got a whole lot easier by using the CasperJS module on top of it.
 
 ## A closer look
 
-Let's look at some sample code; what follows are simplified excerpts of code
-taken from the `form-to-terminal` CasperJS script.
+Let's look at some sample code. What follows are simplified excerpts from the `form-to-terminal` CasperJS script.
 
-Given a URL to a Google Form, first we `start` the webpage interaction, which waits to complete
+Given a `url` to a Google Form, first we `start` the webpage interaction, which waits to complete
 before moving to the next step.
 
 ```javascript
@@ -88,7 +85,7 @@ casper.then(function() {
 
     input.value = system.stdin.readLine();
 t
-    ireturn input;
+    return input;
   });
 });m
 ```
@@ -133,7 +130,7 @@ enter on the command line is passed to CasperJS.
 
 ## Going further
 
-`form-to-terminal` (as of version 1.0.1) only supports Google Forms and only
+`form-to-terminal` (as of version 1.0.2) only supports Google Forms and only
 fully those with text inputs. It's likely quite buggy - for example, it doesn't
 currently check that you've filled out all required fields, nor does it check
 for validations errors after you've submitted the form - but, hey, it's a start.
@@ -143,8 +140,8 @@ CasperJS is a fun tool for automating your workflow and worth a look for
 automated testing for web developers.
 
 Of course, I submitted this post to the CodeNewbie Newsletter using
-`form-to-terminal` - (how meta?) - it comes with a built-in shortcut to the
-CodeNewbie Google Form so you can try it too:
+`form-to-terminal` - how meta? It comes with a built-in shortcut to the
+CodeNewbie Google Form, so you can try it too:
 
 ```javascript
 $ ftt codenewbie
