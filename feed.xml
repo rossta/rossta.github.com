@@ -10,9 +10,9 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>Using CasperJS to automate webpage interaction</title>
-    <link rel="alternate" href="/blog/using-casperjs-to-automate-webpage-interaction.html"/>
-    <id>/blog/using-casperjs-to-automate-webpage-interaction.html</id>
+    <title>Fill out Google Forms from the command line with CasperJS</title>
+    <link rel="alternate" href="/blog/fill-out-google-forms-from-the-command-line-with-casperjs.html"/>
+    <id>/blog/fill-out-google-forms-from-the-command-line-with-casperjs.html</id>
     <published>2016-09-28T00:00:00+00:00</published>
     <updated>2016-09-28T00:00:00+00:00</updated>
     <author>

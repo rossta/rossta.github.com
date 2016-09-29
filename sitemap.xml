@@ -277,7 +277,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/2016-09-28-using-casperjs-to-automate-webpage-interaction.html</loc>
+    <loc>https://rossta.net/blog/2016-09-28-fill-out-google-forms-from-the-command-line-with-casperjs.html</loc>
     <lastmod>2016-09-29T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
