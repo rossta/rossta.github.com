@@ -1,5 +1,5 @@
 ---
-title: Fill out Google Forms from the command line with CasperJS
+title: Fill out Google Forms from the command line
 author: Ross Kaffenberger
 published: true
 summary: Using CasperJS to automate webpage interaction
