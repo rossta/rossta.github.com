@@ -73,13 +73,11 @@
         <p><img src="/assets/images/blog/stock/coding-a-pexels-photo-b323cc54.jpg" /></p>
 
       <p>To give you some idea about what a geek I am, when <a href="https://twitter.com/saronyitbarek">Saron</a> asked me to fill out a form to submit blog posts to the
-<a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter">CodeNewbie Newsletter</a>, I thought, &ldquo;what if I could automate that?&rdquo;. I happen to spend a lot of time in a terminal and thinking about webpage interaction, so&hellip;</p>
+<a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter">CodeNewbie Newsletter</a>, I thought, &ldquo;what if I could automate that?&rdquo; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so&hellip;</p>
 
-<p>Instead of filling out the form for my last article, I ended up creating a tool to fill out and submit a Google Form from the command line. At it&rsquo;s core, it&rsquo;s a <a href="http://casperjs.org/">CasperJS</a> script available as an npm package
-called <a href="https://github.com/rossta/form-to-terminal"><code>form-to-terminal</code></a>.</p>
+<p>Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&rsquo;s a <a href="http://casperjs.org/">CasperJS</a> script available as an npm package. It&rsquo;s called <a href="https://github.com/rossta/form-to-terminal"><code>form-to-terminal</code></a>.</p>
 
-<p>To use <code>form-to-terminal</code>, install via npm and use the executable <code>ftt</code> with a
-Google Form url to put it into action:</p>
+<p>To use <code>form-to-terminal</code>, install it via npm and use the executable <code>ftt</code> along with a url to a Google Form url:</p>
 
 <pre><code class="bash"># Open a terminal and enter the following commands after the prompt ($):
 $ npm install -g form-to-terminal
@@ -100,10 +98,9 @@ write got a whole lot easier by using the CasperJS module on top of it.</p>
 
 <h2>A closer look</h2>
 
-<p>Let&rsquo;s look at some sample code; what follows are simplified excerpts of code
-taken from the <code>form-to-terminal</code> CasperJS script.</p>
+<p>Let&rsquo;s look at some sample code. What follows are simplified excerpts from the <code>form-to-terminal</code> CasperJS script.</p>
 
-<p>Given a URL to a Google Form, first we <code>start</code> the webpage interaction, which waits to complete
+<p>Given a <code>url</code> to a Google Form, first we <code>start</code> the webpage interaction, which waits to complete
 before moving to the next step.</p>
 
 <pre><code class="javascript">var casper = require(&quot;casper&quot;).create();
@@ -144,7 +141,7 @@ casper.then(function() {
 
     input.value = system.stdin.readLine();
 t
-    ireturn input;
+    return input;
   });
 });m
 </code></pre>
@@ -187,7 +184,7 @@ enter on the command line is passed to CasperJS.</p>
 
 <h2>Going further</h2>
 
-<p><code>form-to-terminal</code> (as of version 1.0.1) only supports Google Forms and only
+<p><code>form-to-terminal</code> (as of version 1.0.2) only supports Google Forms and only
 fully those with text inputs. It&rsquo;s likely quite buggy - for example, it doesn&rsquo;t
 currently check that you&rsquo;ve filled out all required fields, nor does it check
 for validations errors after you&rsquo;ve submitted the form - but, hey, it&rsquo;s a start.
@@ -197,8 +194,8 @@ Go ahead and <a href="https://github.com/rossta/form-to-terminal">check it out o
 automated testing for web developers.</p>
 
 <p>Of course, I submitted this post to the CodeNewbie Newsletter using
-<code>form-to-terminal</code> - (how meta?) - it comes with a built-in shortcut to the
-CodeNewbie Google Form so you can try it too:</p>
+<code>form-to-terminal</code> - how meta? It comes with a built-in shortcut to the
+CodeNewbie Google Form, so you can try it too:</p>
 
 <pre><code class="javascript">$ ftt codenewbie
 </code></pre>

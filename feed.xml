@@ -19,15 +19,13 @@
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the
-&lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, “what if I could automate that?”. I happen to spend a lot of time in a terminal and thinking about webpage...&lt;/p&gt;</summary>
+&lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, “what if I could automate that?” I happen to spend a lot of time in a terminal and thinking about webpage...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the
-&lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, &amp;ldquo;what if I could automate that?&amp;rdquo;. I happen to spend a lot of time in a terminal and thinking about webpage interaction, so&amp;hellip;&lt;/p&gt;
+&lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, &amp;ldquo;what if I could automate that?&amp;rdquo; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so&amp;hellip;&lt;/p&gt;
 
-&lt;p&gt;Instead of filling out the form for my last article, I ended up creating a tool to fill out and submit a Google Form from the command line. At it&amp;rsquo;s core, it&amp;rsquo;s a &lt;a href="http://casperjs.org/"&gt;CasperJS&lt;/a&gt; script available as an npm package
-called &lt;a href="https://github.com/rossta/form-to-terminal"&gt;&lt;code&gt;form-to-terminal&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&amp;rsquo;s a &lt;a href="http://casperjs.org/"&gt;CasperJS&lt;/a&gt; script available as an npm package. It&amp;rsquo;s called &lt;a href="https://github.com/rossta/form-to-terminal"&gt;&lt;code&gt;form-to-terminal&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;To use &lt;code&gt;form-to-terminal&lt;/code&gt;, install via npm and use the executable &lt;code&gt;ftt&lt;/code&gt; with a
-Google Form url to put it into action:&lt;/p&gt;
+&lt;p&gt;To use &lt;code&gt;form-to-terminal&lt;/code&gt;, install it via npm and use the executable &lt;code&gt;ftt&lt;/code&gt; along with a url to a Google Form url:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="bash"&gt;# Open a terminal and enter the following commands after the prompt ($):
 $ npm install -g form-to-terminal
@@ -48,10 +46,9 @@ write got a whole lot easier by using the CasperJS module on top of it.&lt;/p&gt
 
 &lt;h2&gt;A closer look&lt;/h2&gt;
 
-&lt;p&gt;Let&amp;rsquo;s look at some sample code; what follows are simplified excerpts of code
-taken from the &lt;code&gt;form-to-terminal&lt;/code&gt; CasperJS script.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s look at some sample code. What follows are simplified excerpts from the &lt;code&gt;form-to-terminal&lt;/code&gt; CasperJS script.&lt;/p&gt;
 
-&lt;p&gt;Given a URL to a Google Form, first we &lt;code&gt;start&lt;/code&gt; the webpage interaction, which waits to complete
+&lt;p&gt;Given a &lt;code&gt;url&lt;/code&gt; to a Google Form, first we &lt;code&gt;start&lt;/code&gt; the webpage interaction, which waits to complete
 before moving to the next step.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;var casper = require(&amp;quot;casper&amp;quot;).create();
@@ -92,7 +89,7 @@ casper.then(function() {
 
     input.value = system.stdin.readLine();
 t
-    ireturn input;
+    return input;
   });
 });m
 &lt;/code&gt;&lt;/pre&gt;
@@ -135,7 +132,7 @@ enter on the command line is passed to CasperJS.&lt;/p&gt;
 
 &lt;h2&gt;Going further&lt;/h2&gt;
 
-&lt;p&gt;&lt;code&gt;form-to-terminal&lt;/code&gt; (as of version 1.0.1) only supports Google Forms and only
+&lt;p&gt;&lt;code&gt;form-to-terminal&lt;/code&gt; (as of version 1.0.2) only supports Google Forms and only
 fully those with text inputs. It&amp;rsquo;s likely quite buggy - for example, it doesn&amp;rsquo;t
 currently check that you&amp;rsquo;ve filled out all required fields, nor does it check
 for validations errors after you&amp;rsquo;ve submitted the form - but, hey, it&amp;rsquo;s a start.
@@ -145,8 +142,8 @@ Go ahead and &lt;a href="https://github.com/rossta/form-to-terminal"&gt;check it
 automated testing for web developers.&lt;/p&gt;
 
 &lt;p&gt;Of course, I submitted this post to the CodeNewbie Newsletter using
-&lt;code&gt;form-to-terminal&lt;/code&gt; - (how meta?) - it comes with a built-in shortcut to the
-CodeNewbie Google Form so you can try it too:&lt;/p&gt;
+&lt;code&gt;form-to-terminal&lt;/code&gt; - how meta? It comes with a built-in shortcut to the
+CodeNewbie Google Form, so you can try it too:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;$ ftt codenewbie
 &lt;/code&gt;&lt;/pre&gt;
