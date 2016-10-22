@@ -194,8 +194,8 @@ helpers do
   Series = Struct.new(:id, :title, :summary)
   def blog_series
     [
-      ["Enumerable", "Exploring Ruby's Enumerable", "Working with collections and sequences in Ruby"],
-      ["Service Worker", "Service Worker in Practice", "Leveraging the powerful JavaScript API for Progressive Web Apps"]
+      ["Service Worker", "Service Worker in Practice", "Leveraging the powerful JavaScript API for Progressive Web Apps"],
+      ["Enumerable", "Exploring Ruby's Enumerable", "Working with collections and sequences in Ruby"]
     ].map { |data| Series.new(*data) }
   end
 
