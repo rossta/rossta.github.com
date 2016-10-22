@@ -5,10 +5,335 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-09-28T00:00:00+00:00</updated>
+  <updated>2016-10-21T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Using the Push API with VAPID</title>
+    <link rel="alternate" href="/blog/using-the-web-push-api-with-vapid.html"/>
+    <id>/blog/using-the-web-push-api-with-vapid.html</id>
+    <published>2016-10-21T00:00:00+00:00</published>
+    <updated>2016-10-21T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Push messages from mobile and desktop browsers are &lt;a href="http://caniuse.com/#feat=push-api"&gt;now a thing&lt;/a&gt; on the open web.&lt;/p&gt;
+
+&lt;p&gt;Why use the Push API? It allows us to use free, third-party services to notify our users
+of events, even when they’re not actively engaged with our site. It’s
+not meant...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Push messages from mobile and desktop browsers are &lt;a href="http://caniuse.com/#feat=push-api"&gt;now a thing&lt;/a&gt; on the open web.&lt;/p&gt;
+
+&lt;p&gt;Why use the Push API? It allows us to use free, third-party services to notify our users
+of events, even when they&amp;rsquo;re not actively engaged with our site. It&amp;rsquo;s
+not meant to replace other methods of pushing data to clients, like
+&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"&gt;WebSockets&lt;/a&gt; or &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"&gt;Server Sent Events&lt;/a&gt;, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&amp;rsquo;s
+common place on our smartphones from installed apps is now possible from the browser.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/"&gt;&lt;img alt="Push message in Chrome" src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-3-36a167ad.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Though only supportedin Chrome and Firefox on the desktop and in Chrome on Android at the time of this writing, it&amp;rsquo;ll be more widespread soon enough. While I previously &lt;a href="/blog/web-push-notifications-from-rails.html"&gt;wrote about this topic&lt;/a&gt;, there have been recent changes in the Chrome implementation to make the API consistent with Firefox, which we&amp;rsquo;ll describe here.&lt;/p&gt;
+
+&lt;p&gt;In this post, we&amp;rsquo;ll walk through setting up a Ruby or Node.js web application to use the Push API with the &lt;a href="https://tools.ietf.org/html/draft-ietf-webpush-vapid-01"&gt;Voluntary Application server Identification (VAPID)&lt;/a&gt;. Use of VAPID for push requests is optional, but primarily a security benefit. Application servers use VAPID to identify themselves to the push servers so push subscriptions can be properly restricted to their origin app servers. In other words, VAPID could theoretically prevent an attacker from stealing a user &lt;code&gt;PushSubscription&lt;/code&gt; and sending push messages to that recipient from another server. Down the road, push services may be able to provide analytics and debugging assistance for app servers using the VAPID protocol. Another benefit: in Chrome, it is no longer necessary to register our web apps through the Google Developer Console and pass around Google app credentials in web push requests.&lt;/p&gt;
+
+&lt;h2&gt;Overview&lt;/h2&gt;
+
+&lt;p&gt;There are three parties involved in delivering a push message.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Your application server&lt;/li&gt;
+&lt;li&gt;Your user&lt;/li&gt;
+&lt;li&gt;A push server, e.g., Google or Mozilla&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Before a push message can be delivered with VAPID, a few criteria should be satisfied:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Your application server has generated a set of VAPID keys that will be used to sign Push API requests. This is a one-time step (at least until we decide to reset the keys).&lt;/li&gt;
+&lt;li&gt;A &lt;code&gt;manifest.json&lt;/code&gt; file, linked from a page on our website, identifies our app settings.&lt;/li&gt;
+&lt;li&gt;In the user&amp;rsquo;s web browser, a service worker script is installed and activated. The &lt;code&gt;pushManager&lt;/code&gt; property of the &lt;code&gt;ServiceWorkerRegistration&lt;/code&gt; is subscribed to push events with our VAPID public key, with creates a &lt;code&gt;subscription&lt;/code&gt; JSON object on the client side.&lt;/li&gt;
+&lt;li&gt;Your server makes an API request to a push server (likely using a server-side library) to send a notification with the &lt;code&gt;subscription&lt;/code&gt; obtained from the client and an optional payload (the message).&lt;/li&gt;
+&lt;li&gt;Your service worker is set up to receive &lt;code&gt;&amp;#39;push&amp;#39;&lt;/code&gt; events. To trigger a desktop notification, the user has accepted the prompt to receive notifications from our site.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2&gt;Generating VAPID keys&lt;/h2&gt;
+
+&lt;p&gt;To take advantage of the VAPID protocol, we would generate a public/private VAPID key pair to store on our server to be used for all user subscriptions.&lt;/p&gt;
+
+&lt;p&gt;In Ruby, we can use the &lt;code&gt;webpush&lt;/code&gt; gem to generate a VAPID key that has both a &lt;code&gt;public_key&lt;/code&gt; and &lt;code&gt;private_key&lt;/code&gt; attribute to be saved on the server side.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
+gem &amp;#39;webpush&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In a Ruby console:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;webpush&amp;#39;
+
+# One-time, on the server
+vapid_key = Webpush.generate_key
+
+# Save these in our application server settings
+vapid_key.public_key
+# =&amp;gt; &amp;quot;BC1mp...HQ=&amp;quot;
+
+vapid_key.private_key
+# =&amp;gt; &amp;quot;XhGUr...Kec&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In Node.js, we can use the &lt;code&gt;web-push&lt;/code&gt; package:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;npm install web-push --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the node REPL:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const webpush = require(&amp;#39;web-push&amp;#39;);
+
+const vapidKeys = webpush.generateVAPIDKeys()
+
+vapidKeys.publicKey
+&amp;#39;BDO0P...eoH&amp;#39;
+
+vapidKeys.privateKey
+&amp;#39;3J303..r4I&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The keys returned will both be Base64-encoded byte strings. Only the public key
+will be shared, both with the user&amp;rsquo;s browser and the push server as we&amp;rsquo;ll see
+later.&lt;/p&gt;
+
+&lt;p&gt;Setting VAPID details is optional in Firefox and appears to be required in Chrome if not using GCM API credentials as &lt;a href="/blog/web-push-notifications-from-rails.html"&gt;described previously&lt;/a&gt;). Since we probably have users from both browsers, we may as well set VAPID details for all.&lt;/p&gt;
+
+&lt;h2&gt;Declaring manifest.json&lt;/h2&gt;
+
+&lt;p&gt;Add a &lt;code&gt;manifest.json&lt;/code&gt; file served at the scope of our app (or above), like at the root to describe our client application for use with the Push API.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;{
+  &amp;quot;name&amp;quot;: &amp;quot;My App&amp;quot;,
+    &amp;quot;short_name&amp;quot;: &amp;quot;my-app&amp;quot;,
+    &amp;quot;start_url&amp;quot;: &amp;quot;/&amp;quot;,
+    &amp;quot;icons&amp;quot;: [
+    {
+      &amp;quot;src&amp;quot;: &amp;quot;/images/my-push-logo-192x192.png&amp;quot;,
+      &amp;quot;sizes&amp;quot;: &amp;quot;192x192&amp;quot;,
+      &amp;quot;type&amp;quot;: &amp;quot;image/png&amp;quot;
+    }
+    ]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Link to it somewhere in the &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; tag:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- index.html --&amp;gt;
+&amp;lt;link rel=&amp;quot;manifest&amp;quot; href=&amp;quot;/manifest.json&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Installing a service worker&lt;/h2&gt;
+
+&lt;p&gt;Your application javascript must register a service worker script at an appropriate scope (we&amp;rsquo;re sticking with the root).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// application.js
+// Register the serviceWorker script at /serviceworker.js from our server if supported
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register(&amp;#39;/serviceworker.js&amp;#39;)
+  .then(function(reg) {
+    console.log(&amp;#39;Service worker change, registered the service worker&amp;#39;);
+  });
+}
+// Otherwise, no push notifications :(
+else {
+  console.error(&amp;#39;Service worker is not supported in this browser&amp;#39;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For Rails developers, we may want to look at the &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt; gem&lt;/a&gt; and this &lt;a href="https://rossta.net/blog/service-worker-on-rails.html"&gt;helpful tutorial&lt;/a&gt; to integrate service worker scripts with the Rails asset pipeline.&lt;/p&gt;
+
+&lt;h2&gt;Subscribing to push notifications&lt;/h2&gt;
+
+&lt;p&gt;The VAPID public key we generated earlier is made available to the client as a &lt;code&gt;Uint8Array&lt;/code&gt;. To do this, one way would be to expose the urlsafe-decoded bytes from Ruby to JavaScript when rendering the HTML template.&lt;/p&gt;
+
+&lt;p&gt;In Ruby, we might embed the key as raw bytes from the application &lt;code&gt;ENV&lt;/code&gt; or some other application settings mechanism into an HTML template with help from the &lt;code&gt;Base64&lt;/code&gt; module in the standard library. Global variables are used here for simplicity.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# server
+@decodedVapidPublicKey = Base64.urlsafe_decode64(ENV[&amp;#39;VAPID_PUBLIC_KEY&amp;#39;]).bytes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- html template --&amp;gt;
+&amp;lt;script&amp;gt;
+window.vapidPublicKey = new Uint8Array(&amp;lt;%= @decodedVapidPublicKey %&amp;gt;);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In Node.js, we could use the &lt;code&gt;urlsafe-base64&lt;/code&gt; package to decode the public key and convert it to raw bytes:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// server
+const urlsafeBase64 = require(&amp;#39;urlsafe-base64&amp;#39;);
+const decodedVapidPublicKey = urlsafeBase64.decode(process.env.VAPID_PUBLIC_KEY);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- html template --&amp;gt;
+&amp;lt;script&amp;gt;
+window.vapidPublicKey = new Uint8Array(&amp;lt;%= decodedVapidPublicKey %&amp;gt;);
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Your application javascript would then use the &lt;code&gt;pushManager&lt;/code&gt; property to subscribe to push notifications, passing the VAPID public key to the subscription settings.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// application.js
+// When serviceWorker is supported, installed, and activated,
+// subscribe the pushManager property with the vapidPublicKey
+navigator.serviceWorker.ready.then((serviceWorkerRegistration) =&amp;gt; {
+  serviceWorkerRegistration.pushManager
+  .subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: window.vapidPublicKey
+  });
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Triggering a web push notification&lt;/h2&gt;
+
+&lt;p&gt;The web push library we&amp;rsquo;re using on the backend will be responsible for
+packaging up the request to the subscription&amp;rsquo;s endpoint and handling encryption, so the user&amp;rsquo;s push subscription must be sent from the client to the application server at some point.&lt;/p&gt;
+
+&lt;p&gt;In the example below, we send the JSON generated subscription object to our backend with a message when a button on the page is clicked.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// application.js
+$(&amp;#39;.webpush-button&amp;#39;).on(&amp;#39;click&amp;#39;, (e) =&amp;gt; {
+  navigator.serviceWorker.ready
+  .then((serviceWorkerRegistration) =&amp;gt; {
+    serviceWorkerRegistration.pushManager.getSubscription()
+    .then((subscription) =&amp;gt; {
+      $.post(&amp;#39;/push&amp;#39;, {
+        subscription: subscription.toJSON(),
+        message: &amp;#39;You clicked a button!&amp;#39;
+      });
+    });
+  });
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The call to &lt;code&gt;pushManager.getSubscription()&lt;/code&gt; returns a Promise that provides the
+&lt;code&gt;PushSubscription&lt;/code&gt; instance with all the information the push service needs to
+send a push message to this user&amp;rsquo;s browser. This includes an &lt;code&gt;endpoint&lt;/code&gt;, the URL
+on the push server where we&amp;rsquo;ll send the push request, and a pair of &lt;code&gt;keys&lt;/code&gt;
+labelled as &lt;code&gt;p256dh&lt;/code&gt; and &lt;code&gt;auth&lt;/code&gt; required to encrypt the push message payload. If interested to learn more about how this encryption works, check out this detailed summary on &lt;a href="https://developers.google.com/web/updates/2016/03/web-push-encryption"&gt;web push payload encryption&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// subscription.toJSON();
+{
+  endpoint: &amp;quot;https://android.googleapis.com/gcm/send/a-subscription-id&amp;quot;,
+  keys: {
+    auth: &amp;#39;AEl35...7fG&amp;#39;,
+    p256dh: &amp;#39;Fg5t8...2rC&amp;#39;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Imagine a Ruby app endpoint that responds to the request by triggering notification through the &lt;code&gt;webpush&lt;/code&gt; gem. VAPID details include a URL or mailto address for our website and the Base64-encoded public/private VAPID key pair we generated earlier.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# app.rb
+post &amp;#39;/push&amp;#39; do
+  Webpush.payload_send(
+    message: params[:message]
+    endpoint: params[:subscription][:endpoint],
+    p256dh: params[:subscription][:keys][:p256dh],
+    auth: params[:subscription][:keys][:auth],
+    ttl: 24 * 60 * 60,
+    vapid: {
+      subject: &amp;#39;mailto:sender@example.com&amp;#39;,
+      public_key: ENV[&amp;#39;VAPID_PUBLIC_KEY&amp;#39;],
+      private_key: ENV[&amp;#39;VAPID_PRIVATE_KEY&amp;#39;]
+    }
+  )
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In Node.js, usage of the &lt;code&gt;web-push&lt;/code&gt; package might look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;# index.js
+const webpush = require(&amp;#39;web-push&amp;#39;);
+
+// ...
+
+app.post(&amp;#39;/push&amp;#39;, function(request, response) {
+  const subscription = request.param(&amp;#39;subscription&amp;#39;);
+  const message = request.param(&amp;#39;message&amp;#39;);
+
+  setTimeout(() =&amp;gt; {
+    const options = {
+      TTL: 24 * 60 * 60,
+      vapidDetails: {
+        subject: &amp;#39;mailto:sender@example.com&amp;#39;,
+        publicKey: process.env.VAPID_PUBLIC_KEY,
+        privateKey: process.env.VAPID_PRIVATE_KEY
+      },
+    }
+
+    webpush.sendNotification(
+      subscription,
+      message,
+      options
+    );
+
+  }, 0);
+
+  response.send(&amp;#39;OK&amp;#39;);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2&gt;Receiving the push event&lt;/h2&gt;
+
+&lt;p&gt;Your &lt;code&gt;/serviceworker.js&lt;/code&gt; script can respond to &lt;code&gt;&amp;#39;push&amp;#39;&lt;/code&gt; events to trigger desktop notifications by calling &lt;code&gt;showNotification&lt;/code&gt; on the &lt;code&gt;registration&lt;/code&gt; property.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// serviceworker.js
+// The serviceworker context can respond to &amp;#39;push&amp;#39; events and trigger
+// notifications on the registration property
+self.addEventListener(&amp;quot;push&amp;quot;, (event) =&amp;gt; {
+  let title = (event.data &amp;amp;&amp;amp; event.data.text()) || &amp;quot;Yay a message&amp;quot;;
+  let body = &amp;quot;We have received a push message&amp;quot;;
+  let tag = &amp;quot;push-simple-demo-notification-tag&amp;quot;;
+  let icon = &amp;#39;/assets/my-logo-120x120.png&amp;#39;;
+
+  event.waitUntil(
+    self.registration.showNotification(title, { body, icon, tag })
+  )
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Before the notifications can be displayed, the user must grant permission for &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/notification"&gt;notifications&lt;/a&gt; in a browser prompt, using something like the example below.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// application.js
+
+// Let&amp;#39;s check if the browser supports notifications
+if (!(&amp;quot;Notification&amp;quot; in window)) {
+  console.error(&amp;quot;This browser does not support desktop notification&amp;quot;);
+}
+
+// Let&amp;#39;s check whether notification permissions have already been granted
+else if (Notification.permission === &amp;quot;granted&amp;quot;) {
+  console.log(&amp;quot;Permission to receive notifications has been granted&amp;quot;);
+}
+
+// Otherwise, we need to ask the user for permission
+else if (Notification.permission !== &amp;#39;denied&amp;#39;) {
+  Notification.requestPermission(function (permission) {
+  // If the user accepts, let&amp;#39;s create a notification
+    if (permission === &amp;quot;granted&amp;quot;) {
+      console.log(&amp;quot;Permission to receive notifications has been granted&amp;quot;);
+    }
+  });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After all that setup, we should see a browser notification triggered via the Push API.&lt;/p&gt;
+
+&lt;p&gt;As this is still an emerging technology, things are rapidly changing. I&amp;rsquo;d be
+interested to hear how things are working out for folks integrating web push
+into their web apps.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Fill out Google Forms from the command line</title>
     <link rel="alternate" href="/blog/fill-out-google-forms-from-the-command-line-with-casperjs.html"/>
@@ -1191,125 +1516,6 @@ offline page isn&amp;rsquo;t a game changer by itself, it is a low-risk way to b
 experimenting with the Service Worker API which has the potential for &lt;a href="http://serviceworke.rs/"&gt;many more
 advanced use cases&lt;/a&gt; and can help the web get
 closer to an even playing field with mobile apps.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Service Worker on Rails</title>
-    <link rel="alternate" href="/blog/service-worker-on-rails.html"/>
-    <id>/blog/service-worker-on-rails.html</id>
-    <published>2016-05-03T00:00:00+00:00</published>
-    <updated>2016-05-03T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Have you heard about &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API"&gt;Service
-Worker&lt;/a&gt;? I
-believe this new JavaScript API has the potential to transform the way users
-interact with the web and how web developers construct websites. Though still in
-development, Service Worker is already &lt;a href="https://jakearchibald.github.io/isserviceworkerready/"&gt;landing in modern...&lt;/a&gt;&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Have you heard about &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API"&gt;Service
-Worker&lt;/a&gt;? I
-believe this new JavaScript API has the potential to transform the way users
-interact with the web and how web developers construct websites. Though still in
-development, Service Worker is already &lt;a href="https://jakearchibald.github.io/isserviceworkerready/"&gt;landing in modern
-browsers&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;So far, there hasn&amp;rsquo;t been a good story for adding Service Worker to Rails. Until
-now!&lt;/p&gt;
-
-&lt;p&gt;There&amp;rsquo;s a new Ruby gem, &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt;&lt;/a&gt;, to make it easier to integrate Service Worker with the Rails asset pipeline. To understand why Rails developers might want to use this, let&amp;rsquo;s take a step back.&lt;/p&gt;
-
-&lt;h2&gt;A brief intro&lt;/h2&gt;
-
-&lt;p&gt;In its plainest form, service workers are just JavaScript running in a separate thread outside the context of a web page, like any other &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API"&gt;web worker&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;But, service workers are special; they can act as &lt;strong&gt;client-side proxies&lt;/strong&gt;. This means they can &lt;em&gt;hook into the request/response cycle&lt;/em&gt; on the user&amp;rsquo;s machine.&lt;/p&gt;
-
-&lt;p&gt;Hooking in to the request/response cycle on the client-side means we can improve the user experience in ways that weren&amp;rsquo;t possible (or much more difficult) previously. We could render HTML from a local cache while waiting for a response from the network or we could display another friendly page altogether when the network is offline. With service workers, we&amp;rsquo;ll be able to pre-fetch and sync data in the background, push activity notifications to users and even let them know when new releases have been deployed.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve been &lt;a href="/blog/adding-serviceworker-to-a-simple-website.html"&gt;playing with Service Worker&lt;/a&gt; a bit lately. Now that you&amp;rsquo;ve visited my site, your browser has cached the data for &lt;a href="/offline.html"&gt;my offline page&lt;/a&gt;, so if you lost your network connection, you&amp;rsquo;d at least see a friendly message instead of the dreaded Chrome dinosaur.&lt;/p&gt;
-
-&lt;p&gt;Go ahead and take a look at the &lt;a href="https://github.com/rossta/rossta.github.com/blob/45b67d326bb1118c9e0743ae74e1a5ca570a5947/source/assets/javascripts/serviceworker.js"&gt;source code for the rossta.net service worker&lt;/a&gt; to see how I did it. I&amp;rsquo;m still learning about Service Worker - is it &lt;em&gt;really&lt;/em&gt; new after all - so I&amp;rsquo;m sure there&amp;rsquo;s lots of ways I could improve it!&lt;/p&gt;
-
-&lt;h2&gt;Let&amp;rsquo;s talk Rails&lt;/h2&gt;
-
-&lt;p&gt;Next I wondered how I&amp;rsquo;d add a Service Worker to a Rails application. I&amp;rsquo;d expect Rails developers would want to be able to develop and deploy their service workers like any other JavaScript assets using the Rails asset pipeline. Not so fast though.&lt;/p&gt;
-
-&lt;p&gt;As it turns out, to use Service Workers on Rails, we want some, but not all, of the Rails asset pipeline.&lt;/p&gt;
-
-&lt;p&gt;The Rails asset pipeline makes a number of assumptions about what&amp;rsquo;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &amp;ldquo;cacheability&amp;rdquo;. Rails also assumes a single parent directory, &lt;code&gt;/public/assets&lt;/code&gt;, to make it easier to look up the file path for a given asset.&lt;/p&gt;
-
-&lt;p&gt;Service worker assets must play by different rules. Consider these behaviors:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Service workers may only be active from within the scope from which they are
-served. So if you try to register a service worker from a Rails asset pipeline
-path, like &lt;code&gt;/assets/serviceworker-abcd1234.js&lt;/code&gt;, it will only be able to interact
-with requests and responses within &lt;code&gt;/assets/&lt;/code&gt;&lt;em&gt;**&lt;/em&gt;. This is not what we want.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API#Download_install_and_activate"&gt;MDN states&lt;/a&gt; browsers check for updated service worker scripts in the background every 24 hours (possibly less). Rails developers wouldn&amp;rsquo;t be able to take advantage of this feature since the fingerprint strategy means assets at a given url are immutable. Beside fingerprintings, the &lt;code&gt;Cache-Control&lt;/code&gt; headers used for static files served from Rails also work against browser&amp;rsquo;s treatment of service workers.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;**&lt;/em&gt;&lt;a href="https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-allowed"&gt;There is an early proposal&lt;/a&gt; to use the &lt;code&gt;Service-Worker-Allowed&lt;/code&gt; header to change scopes.&lt;/p&gt;
-
-&lt;h2&gt;What to do?&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/rails/sprockets/issues/44"&gt;For now&lt;/a&gt;, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.&lt;/p&gt;
-
-&lt;p&gt;One approach would be to just place service worker scripts in &lt;code&gt;/public&lt;/code&gt;. That
-could work, but it could mean foregoing the asset pipeline altogether. We lose
-bundling, transpilation, testing and other features we do want. You could use
-the pipeline but would then need to add steps to the build process to copy
-precompiled service workers to the correct paths. In this case, you may want toaugment your
-web server configuration to change &lt;code&gt;Cache-Control&lt;/code&gt; headers for those selected service worker scripts - this may not be possible in certain environments.&lt;/p&gt;
-
-&lt;p&gt;Given the constraints around scoping, you could create
-special controller actions to mount service workers at arbitrary routes. Rails
-also gives you the ability to set custom headers on controller actions so that&amp;rsquo;s
-another benefit. From there, you either write your JavaScript in a template where you may lose the advantage of the asset pipeline or
-expose the contents of a precompiled asset from within the controller.&lt;/p&gt;
-
-&lt;p&gt;I like this last option up until the point where a standard Rails controller
-adds a lot of overhead, e.g. parameter parsing, session and cookie management, CSRF
-protection, that isn&amp;rsquo;t needed for serving static files. From there, you can drop
-down to a &lt;code&gt;ActionController::Metal&lt;/code&gt; subclass and figure out which extensions to
-pull in&amp;hellip; or put this in a Rack middleware!&lt;/p&gt;
-
-&lt;h2&gt;Using serviceworker-rails&lt;/h2&gt;
-
-&lt;p&gt;This is what I&amp;rsquo;ve done with &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt;&lt;/a&gt;. It inserts a middleware into the Rails stack that acts as a separate router for service worker scripts. In development, you can edit and recompile your service workers on the fly as with any other asset in the pipeline. In production, the service worker endpoints map to the precompiled asset in &lt;code&gt;/public/assets&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Once the gem is added to your &lt;code&gt;Gemfile&lt;/code&gt;, you can add a Rails initializer to set
-up the service worker middleware router:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/serviceworker.rb
-Rails.application.configure do
-  config.serviceworker.routes.draw do
-    match &amp;quot;/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;path/to/precompiled/serviceworker&amp;quot;
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;By default, the middleware sets the &lt;code&gt;Cache-Control&lt;/code&gt; header to avoid aggressive caching. It also gives you the ability to customize headers as desired.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;match &amp;quot;/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;app/serviceworker&amp;quot;, headers: { &amp;quot;X-Custom-Header&amp;quot; =&amp;gt; &amp;quot;foobar&amp;quot; }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Use globbing or named parameters in the service worker paths to interpolate
-asset names.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;match &amp;quot;/*segments/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;%{segments}/serviceworker&amp;quot;
-match &amp;quot;/project/:id/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;project/%{id}/serviceworker&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Check out the project &lt;a href="https://github.com/rossta/serviceworker-rails#serviceworkerrails"&gt;README&lt;/a&gt; for more info on how to set up and configure the middleware for your Rails app.&lt;/p&gt;
-
-&lt;p&gt;Though the project is still young, you can see &lt;code&gt;serviceworker-rails&lt;/code&gt; in action in the &lt;a href="https://serviceworker-rails.herokuapp.com/"&gt;Service Workers on Rails Sandbox&lt;/a&gt;. Inspired by Mozilla&amp;rsquo;s &lt;a href="https://serviceworke.rs/"&gt;Service Workers Cookbook&lt;/a&gt;, it serves as good place to experiment with Service Workers on Rails in an open source setting. Try using the site in Chrome Canary with the &lt;a href="https://www.chromium.org/blink/serviceworker/service-worker-faq"&gt;advanced service worker debugging tools&lt;/a&gt; to play around. I&amp;rsquo;ve added just a few examples so far but am interested to explore further with various caching strategies, push notifications, and eventually background sync to name a few.&lt;/p&gt;
-
-&lt;p&gt;What do you think of this approach?&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;p&gt;Interested in contributing? &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;Fork the serviceworker-rails gem&lt;/a&gt; or the &lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;Service Workers on Rails Sandbox&lt;/a&gt; to get started.&lt;/p&gt;
 </content>
   </entry>
 </feed>
