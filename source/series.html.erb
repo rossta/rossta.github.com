@@ -2,14 +2,16 @@
 pageable: true
 per_page: 25
 ---
+<% content_for(:section) { "Series" } %>
 
-<%= page_header series, 'A rossta.net series' %>
+<% series_object = blog_series.find { |s| s.id == series } %>
+<%= page_header series_object.title, series_object.summary %>
 
-<br>
+<br /><hr /><br/>
 <section class="index-posts margin-top">
-  <% page_articles.each_with_index do |article, i| %>
-    <%= partial "partials/post_item", locals: { title: article.title, path: article, summary: article.data.summary} %>
-  <% end %>
+  <%- blog('blog').articles.group_by {|a| a.metadata[:page][series] }.each do |article| %>
+    <%= partial "partials/article_index", locals: { article: article } %>
+  <%- end %>
 </section>
 
 <br>

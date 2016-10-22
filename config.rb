@@ -13,12 +13,6 @@ activate :external_pipeline,
          source: ".tmp/dist",
          latency: 1
 
-# {
-#   "/about/index.html" => "/about.html",
-# }.each do |old_path, new_path|
-#   redirect old_path, to: new_path
-# end
-
 ###########################
 ## Blog
 ###########################
@@ -36,7 +30,7 @@ activate :blog do |blog|
   blog.custom_collections = {
     series: {
       link: '/series/{series}.html',
-      template: '/series.html'
+      template: 'series.html'
     }
   }
 end
@@ -195,6 +189,14 @@ helpers do
 
   def top_articles
     blog('blog').articles.select { |a| a.data[:popular] }.sort_by { |a| a.data[:popular] }
+  end
+
+  Series = Struct.new(:id, :title, :summary)
+  def blog_series
+    [
+      ["Enumerable", "Exploring Ruby's Enumerable", "Working with collections and sequences in Ruby"],
+      ["Service Worker", "Service Worker in Practice", "Leveraging the powerful JavaScript API for Progressive Web Apps"]
+    ].map { |data| Series.new(*data) }
   end
 
   def current_page_tags

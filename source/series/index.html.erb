@@ -1,0 +1,23 @@
+---
+pageable: true
+per_page: 25
+---
+<% content_for(:section) { "Series" } %>
+
+<%= page_header "Series on rossta.net", "Programming for the web" %>
+
+<br /><hr /><br/>
+<section id="talks" class="index-posts">
+  <%- blog_series.each do |series| %>
+    <article class="index-post">
+      <header>
+        <h3><%= link_to series.title, series_path(series.id, "blog") %></h3>
+        <p class="alt-title subtle"><%= series.summary %></p>
+      </header>
+    </article>
+  <%- end %>
+  <br /><hr /><br />
+</section>
+<section class="signup-form-standalone margin-bottom double">
+  <%= partial "partials/signup" %>
+</section>
