@@ -385,6 +385,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/series/index.html</loc>
+    <lastmod>2016-10-22T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/sitemap.html</loc>
     <lastmod>2016-10-22T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -1028,6 +1034,12 @@
   </url>
   <url>
     <loc>https://rossta.net/projects/page/2/index.html</loc>
+    <lastmod>2016-10-22T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/series/page/2/index.html</loc>
     <lastmod>2016-10-22T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
