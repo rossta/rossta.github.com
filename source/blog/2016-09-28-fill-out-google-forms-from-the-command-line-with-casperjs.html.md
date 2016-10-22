@@ -12,8 +12,7 @@ tags:
   - Node
 ---
 
-To give you some idea about what a geek I am, when [Saron](https://twitter.com/saronyitbarek) asked me to fill out a form to submit blog posts to the
-[CodeNewbie Newsletter](http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter), I thought, "what if I could automate that?" I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...
+To give you some idea about what a geek I am, when [Saron](https://twitter.com/saronyitbarek) asked me to fill out a form to submit blog posts to the [CodeNewbie Newsletter](http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter), I thought, "what if I could automate that?" I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...
 
 Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it's a [CasperJS](http://casperjs.org/) script available as an npm package. It's called [`form-to-terminal`](https://github.com/rossta/form-to-terminal).
 
