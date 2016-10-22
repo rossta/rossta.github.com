@@ -18,10 +18,8 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the
-&lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, “what if I could automate that?” I happen to spend a lot of time in a terminal and thinking about webpage...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the
-&lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, &amp;ldquo;what if I could automate that?&amp;rdquo; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so&amp;hellip;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the &lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, “what if I could automate that?” I happen to spend a lot of time in a terminal and thinking about webpage...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the &lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, &amp;ldquo;what if I could automate that?&amp;rdquo; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so&amp;hellip;&lt;/p&gt;
 
 &lt;p&gt;Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&amp;rsquo;s a &lt;a href="http://casperjs.org/"&gt;CasperJS&lt;/a&gt; script available as an npm package. It&amp;rsquo;s called &lt;a href="https://github.com/rossta/form-to-terminal"&gt;&lt;code&gt;form-to-terminal&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
 
@@ -670,6 +668,14 @@ provide metadata for push subscriptions and notifications. Here&amp;rsquo;s an e
   &amp;quot;gcm_user_visible_only&amp;quot;: true
 }
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class="callout panel"&gt;
+&lt;p&gt;
+Update: as of Chrome 52, it is no longer necessary to set the &lt;code&gt;gcm_sender_id&lt;/code&gt;
+and &lt;code&gt;gcm_user_visible_only&lt;/code&gt; attributes in your &lt;code&gt;manifest.json&lt;/code&gt; configuration
+as long as you use VAPID details as &lt;a href="/blog/using-the-web-push-api-in-ruby.html"&gt;described in this followup post&lt;/a&gt;.
+&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;p&gt;For now, this file can go in &lt;code&gt;public/manifest.json&lt;/code&gt;. In your &lt;code&gt;app/views/layouts/application.html.erb&lt;/code&gt; template, you&amp;rsquo;ll also need to
 add a special &lt;code&gt;&amp;lt;link&amp;gt;&lt;/code&gt; tag to the manifest:&lt;/p&gt;

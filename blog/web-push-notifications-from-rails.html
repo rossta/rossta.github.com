@@ -158,6 +158,14 @@ provide metadata for push subscriptions and notifications. Here&rsquo;s an examp
 }
 </code></pre>
 
+<div class="callout panel">
+<p>
+Update: as of Chrome 52, it is no longer necessary to set the <code>gcm_sender_id</code>
+and <code>gcm_user_visible_only</code> attributes in your <code>manifest.json</code> configuration
+as long as you use VAPID details as <a href="/blog/using-the-web-push-api-in-ruby.html">described in this followup post</a>.
+</p>
+</div>
+
 <p>For now, this file can go in <code>public/manifest.json</code>. In your <code>app/views/layouts/application.html.erb</code> template, you&rsquo;ll also need to
 add a special <code>&lt;link&gt;</code> tag to the manifest:</p>
 
@@ -548,7 +556,7 @@ Push Notifications to work in Safari</a>. Overall, the Web Push API is an intere
   </p>
 </footer>
 
-    <script src="/assets/javascripts/index.bundle-33458126.js"></script>
+    <script src="/assets/javascripts/index.bundle-058e0478.js"></script>
     
     <script type="text/javascript">
 !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
