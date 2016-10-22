@@ -98,6 +98,14 @@ provide metadata for push subscriptions and notifications. Here's an example:
 }
 ```
 
+<div class="callout panel">
+<p>
+Update: as of Chrome 52, it is no longer necessary to set the <code>gcm_sender_id</code>
+and <code>gcm_user_visible_only</code> attributes in your <code>manifest.json</code> configuration
+as long as you use VAPID details as <a href="/blog/using-the-web-push-api-in-ruby.html">described in this followup post</a>.
+</p>
+</div>
+
 For now, this file can go in `public/manifest.json`. In your `app/views/layouts/application.html.erb` template, you'll also need to
 add a special `<link>` tag to the manifest:
 
