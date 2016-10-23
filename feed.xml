@@ -903,12 +903,12 @@ about customizing your Rails logger. Happy logging!&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;We’ve had push notifications in our mobile and desktop apps for sometime. It’s now becoming possible on the open web.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;em&gt;Update: Check out &lt;a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html"&gt;Using the Push API with VAPID&lt;/a&gt; to use the voluntary server identification protocol in place of GCM app settings for sending push notifications to Chrome&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;Web Push notifications are powerful because they allow you to engage with your users &lt;em&gt;even when they’re not on your site&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;We’ve had push notifications in our mobile and desktop apps for sometime. It...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;em&gt;Update: Check out &lt;a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html"&gt;Using the Push API with VAPID&lt;/a&gt; to use the voluntary server identification protocol in place of GCM app settings for sending push notifications to Chrome&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;I’m going...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;We&amp;rsquo;ve had push notifications in our mobile and desktop apps for sometime. It&amp;rsquo;s now becoming possible on the open web.&lt;/p&gt;
+&lt;p&gt;We&amp;rsquo;ve had push notifications in our mobile and desktop apps for sometime. It&amp;rsquo;s now becoming possible on the open web.&lt;/p&gt;
 
 &lt;p&gt;Web Push notifications are powerful because they allow you to engage with your users &lt;em&gt;even when they&amp;rsquo;re not on your site&lt;/em&gt;.&lt;/p&gt;
 
@@ -998,7 +998,7 @@ provide metadata for push subscriptions and notifications. Here&amp;rsquo;s an e
 &lt;p&gt;
 Update: as of Chrome 52, it is no longer necessary to set the &lt;code&gt;gcm_sender_id&lt;/code&gt;
 and &lt;code&gt;gcm_user_visible_only&lt;/code&gt; attributes in your &lt;code&gt;manifest.json&lt;/code&gt; configuration
-as long as you use VAPID details as &lt;a href="/blog/using-the-web-push-api-in-ruby.html"&gt;described in this followup post&lt;/a&gt;.
+as long as you use VAPID details as &lt;a href="/blog/using-the-web-push-api-in-ruby.html"&gt;described in my followup post&lt;/a&gt;.
 &lt;/p&gt;
 &lt;/div&gt;
 
@@ -1090,7 +1090,21 @@ Rails.application.configure do
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;With these settings, we should be able to see our service worker register with the logging we put in place and be able to accept the browser prompt to receive notifications&lt;/p&gt;
+&lt;p&gt;With these settings, we should be able to see our service worker register with the logging we put in place and be able to accept the browser prompt to receive notifications.&lt;/p&gt;
+
+&lt;p&gt;As a side note, we can also use the &lt;code&gt;serviceworker-rails&lt;/code&gt; routing to move our
+&lt;code&gt;manifest.json&lt;/code&gt; file to &lt;code&gt;app/assets/javascripts&amp;#39;/&lt;/code&gt; from the &lt;code&gt;public/&lt;/code&gt; directory so we can take advantage for the asset pipeline, say for calculating image paths, for this file as well:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/serviceworker.rb
+
+Rails.application.configure do
+  config.serviceworker.routes do
+    # ...
+
+    match &amp;quot;manifest.json&amp;quot;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;Persist the subscription&lt;/h2&gt;
 

@@ -71,7 +71,9 @@
 
         <p><img src="/assets/images/blog/stock/guitarist-pexels-photo-acfa3247.jpeg" /></p>
 
-      <p>We&rsquo;ve had push notifications in our mobile and desktop apps for sometime. It&rsquo;s now becoming possible on the open web.</p>
+      <p><em>Update: Check out <a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html">Using the Push API with VAPID</a> to use the voluntary server identification protocol in place of GCM app settings for sending push notifications to Chrome</em></p>
+
+<p>We&rsquo;ve had push notifications in our mobile and desktop apps for sometime. It&rsquo;s now becoming possible on the open web.</p>
 
 <p>Web Push notifications are powerful because they allow you to engage with your users <em>even when they&rsquo;re not on your site</em>.</p>
 
@@ -161,7 +163,7 @@ provide metadata for push subscriptions and notifications. Here&rsquo;s an examp
 <p>
 Update: as of Chrome 52, it is no longer necessary to set the <code>gcm_sender_id</code>
 and <code>gcm_user_visible_only</code> attributes in your <code>manifest.json</code> configuration
-as long as you use VAPID details as <a href="/blog/using-the-web-push-api-in-ruby.html">described in this followup post</a>.
+as long as you use VAPID details as <a href="/blog/using-the-web-push-api-in-ruby.html">described in my followup post</a>.
 </p>
 </div>
 
@@ -253,7 +255,21 @@ Rails.application.configure do
 end
 </code></pre>
 
-<p>With these settings, we should be able to see our service worker register with the logging we put in place and be able to accept the browser prompt to receive notifications</p>
+<p>With these settings, we should be able to see our service worker register with the logging we put in place and be able to accept the browser prompt to receive notifications.</p>
+
+<p>As a side note, we can also use the <code>serviceworker-rails</code> routing to move our
+<code>manifest.json</code> file to <code>app/assets/javascripts&#39;/</code> from the <code>public/</code> directory so we can take advantage for the asset pipeline, say for calculating image paths, for this file as well:</p>
+
+<pre><code class="ruby"># config/initializers/serviceworker.rb
+
+Rails.application.configure do
+  config.serviceworker.routes do
+    # ...
+
+    match &quot;manifest.json&quot;
+  end
+end
+</code></pre>
 
 <h2>Persist the subscription</h2>
 
