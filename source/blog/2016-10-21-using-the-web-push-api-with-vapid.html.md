@@ -93,8 +93,6 @@ The keys returned will both be Base64-encoded byte strings. Only the public key
 will be shared, both with the user's browser and the push server as we'll see
 later.
 
-Setting VAPID details is optional in Firefox and appears to be required in Chrome if not using GCM API credentials as [described previously](/blog/web-push-notifications-from-rails.html)). Since we probably have users from both browsers, we may as well set VAPID details for all.
-
 ## Declaring manifest.json
 
 Add a `manifest.json` file served at the scope of our app (or above), like at the root to describe our client application for use with the Push API.
