@@ -13,6 +13,8 @@ tags:
   - JavaScript
 ---
 
+*Update: Check out [Using the Push API with VAPID](https://rossta.net/blog/using-the-web-push-api-with-vapid.html) to use the voluntary server identification protocol in place of GCM app settings for sending push notifications to Chrome*
+
 We've had push notifications in our mobile and desktop apps for sometime. It's now becoming possible on the open web.
 
 Web Push notifications are powerful because they allow you to engage with your users *even when they're not on your site*.
@@ -102,7 +104,7 @@ provide metadata for push subscriptions and notifications. Here's an example:
 <p>
 Update: as of Chrome 52, it is no longer necessary to set the <code>gcm_sender_id</code>
 and <code>gcm_user_visible_only</code> attributes in your <code>manifest.json</code> configuration
-as long as you use VAPID details as <a href="/blog/using-the-web-push-api-in-ruby.html">described in this followup post</a>.
+as long as you use VAPID details as <a href="/blog/using-the-web-push-api-in-ruby.html">described in my followup post</a>.
 </p>
 </div>
 
@@ -199,7 +201,22 @@ Rails.application.configure do
 end
 ```
 
-With these settings, we should be able to see our service worker register with the logging we put in place and be able to accept the browser prompt to receive notifications
+With these settings, we should be able to see our service worker register with the logging we put in place and be able to accept the browser prompt to receive notifications.
+
+As a side note, we can also use the `serviceworker-rails` routing to move our
+`manifest.json` file to `app/assets/javascripts'/` from the `public/` directory so we can take advantage for the asset pipeline, say for calculating image paths, for this file as well:
+
+```ruby
+# config/initializers/serviceworker.rb
+
+Rails.application.configure do
+  config.serviceworker.routes do
+    # ...
+
+    match "manifest.json"
+  end
+end
+```
 
 ## Persist the subscription
 
