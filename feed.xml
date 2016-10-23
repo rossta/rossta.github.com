@@ -104,8 +104,6 @@ vapidKeys.privateKey
 will be shared, both with the user&amp;rsquo;s browser and the push server as we&amp;rsquo;ll see
 later.&lt;/p&gt;
 
-&lt;p&gt;Setting VAPID details is optional in Firefox and appears to be required in Chrome if not using GCM API credentials as &lt;a href="/blog/web-push-notifications-from-rails.html"&gt;described previously&lt;/a&gt;). Since we probably have users from both browsers, we may as well set VAPID details for all.&lt;/p&gt;
-
 &lt;h2&gt;Declaring manifest.json&lt;/h2&gt;
 
 &lt;p&gt;Add a &lt;code&gt;manifest.json&lt;/code&gt; file served at the scope of our app (or above), like at the root to describe our client application for use with the Push API.&lt;/p&gt;
