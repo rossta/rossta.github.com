@@ -62,9 +62,13 @@ Memcached.
 
 Setting up the project on the development machine and deployment considerations
 all becomes much simpler when you're concerned only with the requirements of
-managing a single OS process. We're obviously free to use these other tools
-(Redis, memcached, a separate jobs queue, a web server, etc.) but they no longer
-need to be the default in Elixir.
+managing a single OS process.
+
+We're obviously free to use these other tools (Redis, memcached, a separate jobs
+queue, a web server, etc.) but they no longer need to be the default in Elixir.
+If you're building a web app in [Phoenix](http://www.phoenixframework.org/), you
+still may need a database, and you'll probably still feel the need to pick
+a JavaScript framework. But you get the idea.
 
 As I discovered this, I tweeted it out, imagining all the money saved on hosting
 costs. Here's [Sasha's response](https://twitter.com/sasajuric/status/750078059286556673).
