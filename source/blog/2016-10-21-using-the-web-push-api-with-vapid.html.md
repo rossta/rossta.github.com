@@ -3,7 +3,8 @@ title: Using the Push API with VAPID
 author: Ross Kaffenberger
 published: true
 summary: Sending push notifications in Ruby or Node.js on the open web
-description: Using the Web Push API in Ruby or Node.js to send push notifications on the open web
+description: Sending push notifications in Ruby or Node.js on the open web using
+the Voluntary Application server Identification (VAPID) protocol.
 pull_image: 'blog/stock/horsehead-nebula-pexels-photo.jpeg'
 series: Service Worker
 category: Code
