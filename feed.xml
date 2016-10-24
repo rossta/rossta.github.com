@@ -5,12 +5,158 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-10-21T00:00:00+00:00</updated>
+  <updated>2016-10-23T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>Using the Push API with VAPID</title>
+    <title/>
+    <link rel="alternate" href="/blog/why-i-am-betting-on-elixir.html"/>
+    <id>/blog/why-i-am-betting-on-elixir.html</id>
+    <published>2016-10-23T00:00:00+00:00</published>
+    <updated>2016-10-23T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;While reading the first chapter of &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;em&gt;Elixir in
+Action&lt;/em&gt;&lt;/a&gt;, I had my “a-ha!”
+moment with Elixir; this table:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I’d already been playing with Elixir for a few month when before I picked up
+Sasha Juric’s book introducing the Elixir language and its abstractions...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;While reading the first chapter of &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;em&gt;Elixir in
+Action&lt;/em&gt;&lt;/a&gt;, I had my &amp;ldquo;a-ha!&amp;rdquo;
+moment with Elixir; this table:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d already been playing with Elixir for a few month when before I picked up
+Sasha Juric&amp;rsquo;s book introducing the Elixir language and its abstractions for the
+Open Telecom Platform (OTP). If you&amp;rsquo;re interested in Elixir, &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;please check out
+the book&lt;/a&gt;; no affiliate links, I
+just enjoyed it immensely.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://elixir-lang.org/"&gt;Elixir&lt;/a&gt; is a new programming language that targets the
+Erlang virtual machine.  Therefore, it comes with many of the benefits of
+&lt;a href="https://www.erlang.org/"&gt;Erlang&lt;/a&gt;, including fault tolerance, scalability,
+distribution, and concurrency, in a cleaner, more concise syntax.&lt;/p&gt;
+
+&lt;h2&gt;Running your tools&lt;/h2&gt;
+
+&lt;p&gt;Anyone who has built a non-trivial Ruby on Rails app (or Node.js, Django, PHP,
+etc.) knows the left-side of the table well. When we deploy a Rails app, we don&amp;rsquo;t just set up the Rails process. We need a web server like Nginx, Apache, or
+Phusion Passenger, to queue requests and serve static content, neither of which
+Rails does well.&lt;/p&gt;
+
+&lt;p&gt;Running background jobs becomes an essential tool for moving intensive tasks out
+of the request/response process, typically requiring separate processes, e.g.
+Sidekiq, often on deployed on other servers. Setting up additional caching
+processes in Redis or Memcached is also an assumed requirement for storing HTML
+fragments or other bits of precalculated data. See the theme? performance
+improvements in Ruby apps often mean avoiding Ruby.&lt;/p&gt;
+
+&lt;p&gt;Getting all these separate processes running for development often requires
+complicated setup or additional tools like Docker/Vagrant/Boxen, etc. Keeping
+these processes running in production means relying on a yet another process to
+act as a supervisor or service manager like &lt;a href="http://upstart.ubuntu.com/"&gt;Upstart&lt;/a&gt; or
+&lt;a href="https://mmonit.com/monit/"&gt;Monit&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In Elixir, all these features can be handled by the Erlang virtual machine
+(called BEAM) in a &lt;em&gt;single&lt;/em&gt; operating system process. The runtime itself is like
+a separate operating system that provides its own processes and a scheduler. In
+a web application, this means responses to web requests and background jobs can
+run concurrently, all within the same BEAM process. Elixir and Erlang have
+built-in abstractions for supervising processes in your application, so you can
+provide fine-grained logic for monitoring and restarting failed tasks within
+your project as an integral part of your business logic. There are also built-in
+tools for persisting and sharing state in place of separate tools like Redis or
+Memcached.&lt;/p&gt;
+
+&lt;p&gt;Setting up the project on the development machine and deployment considerations
+all becomes much simpler when you&amp;rsquo;re concerned only with the requirements of
+managing a single OS process. We&amp;rsquo;re obviously free to use these other tools
+(Redis, memcached, a separate jobs queue, a web server, etc.) but they no longer
+need to be the default in Elixir.&lt;/p&gt;
+
+&lt;p&gt;As I discovered this, I tweeted it out, imagining all the money saved on hosting
+costs. Here&amp;rsquo;s &lt;a href="https://twitter.com/sasajuric/status/750078059286556673"&gt;Sasha&amp;rsquo;s response&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;&lt;a
+href="https://twitter.com/rossta"&gt;@rossta&lt;/a&gt; That&amp;rsquo;s the smallest gain.
+Imagine all the money saved on not developing/maintaining overcomplex error
+prone solutions :-)&lt;/p&gt;&amp;mdash; Saša Jurić (@sasajuric) &lt;a
+href="https://twitter.com/sasajuric/status/750078059286556673"&gt;July 4,
+2016&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="//platform.twitter.com/widgets.js"
+charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;So Elixir has some measurable benefits.&lt;/p&gt;
+
+&lt;h2&gt;Choosing your tools&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve never much enjoyed the phrase &amp;ldquo;right tool for the job&amp;rdquo;. We programmers
+often fall back on this phrase as a way to justify our technology choices. In my
+experience, there are many possible languages/frameworks (the &amp;ldquo;tools&amp;rdquo;) that can
+serve the needs of a given business (the &amp;ldquo;job&amp;rdquo;). As my professional software experience
+is largely based on building web applications for startups, I don&amp;rsquo;t wish to
+speak for systems software, game programmers, or even mobile app developers. But
+on the web, there really a great number of tools that are serving teams well,
+and it&amp;rsquo;s hard for me to call any of them &lt;em&gt;the&lt;/em&gt; right tool.&lt;/p&gt;
+
+&lt;p&gt;The trouble I have with &amp;ldquo;right tool for the job&amp;rdquo; is we tend to focus our
+arguments on technology features and capabilities, but very rarely does this
+include factors such as our current constraints or the people involved in as
+part of the equation. The team has 25 years of experience building Node.js web
+apps? We&amp;rsquo;re probably going to be choosing Node.js for our next web app. The
+DevOps team invested months and thousands of dollars in shoring up our
+architecture for Ruby on Rails? I probably won&amp;rsquo;t be switching to Django for our
+next feature.&lt;/p&gt;
+
+&lt;p&gt;How about admitting we&amp;rsquo;d most often love to choose the tools we&amp;rsquo;d
+most enjoy using?&lt;/p&gt;
+
+&lt;p&gt;Giles Bowkett wrote a &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;thoroughly entertaining essay on why the Rails asset
+pipeline should
+die&lt;/a&gt;,
+which is really an essay about the fundamental nature of Ruby and Rails. He
+reminds us that a big reason for the success of Ruby and of Rails is that they
+optimize for programmer happiness. Ruby isn&amp;rsquo;t successful for its performance
+benefits, (if anything, it&amp;rsquo;s successful in spite of performance), but because
+programmers really eff-ing love writing Ruby.&lt;/p&gt;
+
+&lt;p&gt;Which brings me to back to Elixir: writing Elixir is so darn fun. For a Rubyist
+getting introduced to Elixir for the first time, the surface area of the language feels
+familiar. We get new concepts, like pattern matching, guard clauses, and
+comprehensions. Working with OTP abstractions feels a bit foreign at first, but once this
+flavor starts to sink in, we may start to regain some of that feeling of how
+exciting it can be to play with new ideas (new, at least, to Rubyists).&lt;/p&gt;
+
+&lt;p&gt;With all abstractions and functionality provided by the Elixir language, and its
+ability to scale, handle fault tolerance, to be distributed - I can&amp;rsquo;t imagine a
+technology choice better suited for the web.  These traits alone may help
+convince engineering leads to go along with Elixir for the next web app, i.e.,
+&amp;ldquo;right tool for the job&amp;rdquo;.  Maybe our next web app doesn&amp;rsquo;t truly need the
+concurrency or scalability made possible by the BEAM virtual machine, but it&amp;rsquo;s
+sure fun to learn how to take advantage of it and be able to apply it when
+necessary.&lt;/p&gt;
+
+&lt;p&gt;I haven&amp;rsquo;t been this excited about a language and its primary web framework,
+since, well, Ruby on Rails came along.&lt;/p&gt;
+
+&lt;p&gt;With Elixir we get a tool that&amp;rsquo;s both fun to use and that can scale with the needs
+business. It&amp;rsquo;s like getting the best of Ruby and whatever you think you need to
+replace it with from the start. Something about that just feels right.&lt;/p&gt;
+
+&lt;div class="callout panel"&gt;
+&lt;p&gt;
+  If you&amp;rsquo;re interest in Elixir and in New York City on Thursday, Oct 27 2016, please check out the &lt;a href="http://empex.co"&gt;Empire City Elixir Conference Halloween Lightning Talks&lt;/a&gt;. Registration is free and you&amp;rsquo;ll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
+&lt;/p&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry>
+    <title/>
     <link rel="alternate" href="/blog/using-the-web-push-api-with-vapid.html"/>
     <id>/blog/using-the-web-push-api-with-vapid.html</id>
     <published>2016-10-21T00:00:00+00:00</published>
@@ -1275,259 +1421,6 @@ server. That exercise is left up to you!&lt;/p&gt;
 Push Notifications to work in Safari&lt;/a&gt;. Overall, the Web Push API is an interesting step for the web in terms of feature parity with mobile.&lt;/p&gt;
 
 &lt;p&gt;What do you think?&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>An offline page for your Rails application</title>
-    <link rel="alternate" href="/blog/offline-page-for-your-rails-application.html"/>
-    <id>/blog/offline-page-for-your-rails-application.html</id>
-    <published>2016-05-09T00:00:00+00:00</published>
-    <updated>2016-05-09T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;When you visit a website without an internet connection in Chrome, you see the
-offline dinosaur.&lt;/p&gt;
-
-&lt;p&gt;No wonder we tend to think of websites as less reliable than mobile applications - we can’t use them without the network.&lt;/p&gt;
-
-&lt;p&gt;At least, not typically. We...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;When you visit a website without an internet connection in Chrome, you see the
-offline dinosaur.&lt;/p&gt;
-
-&lt;p&gt;No wonder we tend to think of websites as less reliable than mobile applications - we can&amp;rsquo;t use them without the network.&lt;/p&gt;
-
-&lt;p&gt;At least, not typically. We could use &lt;a href="http://diveintohtml5.info/offline.html"&gt;App Cache&lt;/a&gt; and the Cache Manifest to create an offline experience. For &lt;a href="http://alistapart.com/article/application-cache-is-a-douchebag"&gt;a number of reasons&lt;/a&gt;, developers have found App Cache difficult to work with.&lt;/p&gt;
-
-&lt;p&gt;Luckily, there&amp;rsquo;s a new web standard, &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker&lt;/a&gt;, that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.&lt;/p&gt;
-
-&lt;p&gt;For now, we use a service worker to render a simple error page with our own branding
-when a user attempts to come back to our site without a connection. Keep in
-mind, the techniques used here are building blocks that can be taken further to enhance functionality.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;
-  &lt;p&gt;
-Sidebar: I&amp;rsquo;ve wondered: should the offline response be associated with an HTTP status code? I don&amp;rsquo;t believe one exists for &amp;ldquo;No network connection&amp;rdquo;. If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won&amp;rsquo;t be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like &amp;ldquo;Not found&amp;rdquo;, &amp;ldquo;Moved permanently&amp;rdquo;, and &amp;ldquo;Site offline for maintenance&amp;rdquo;. Philosophically, is a request that never reaches the server a request at all?
-&lt;/p&gt;
-&lt;/aside&gt;
-
-&lt;p&gt;To do this, we&amp;rsquo;re going to use a service worker to precache the offline
-assets on the first visit to the site. Later, during a return visit without a
-network connection, we can use our service worker to render the offline page.&lt;/p&gt;
-
-&lt;p&gt;This is possible because Service Worker acts as a liason between your
-visitor&amp;rsquo;s browser and your servers &lt;em&gt;outside the lifecycle of a page&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Keep in mind also, will be a &lt;em&gt;progressive enhancement&lt;/em&gt;. Since service workers are &lt;a href="https://jakearchibald.github.io/isserviceworkerready/"&gt;not available in all browsers&lt;/a&gt;, this approach won&amp;rsquo;t work for everyone, but the experience won&amp;rsquo;t degrade for those visitors either.&lt;/p&gt;
-
-&lt;h3&gt;Produce the assets&lt;/h3&gt;
-
-&lt;p&gt;First we need an offline page. We could simply use an HTML page in the public directory with embedded styles like the generated Rails 404 and 500 pages.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0"&gt;Source: /offline.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Alternatively, set up a route to a controller action as a &lt;a href="https://mattbrictson.com/dynamic-rails-error-pages"&gt;dynamic Rails error page&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3&gt;Add a service worker file&lt;/h3&gt;
-
-&lt;p&gt;We&amp;rsquo;re going to cache this offline HTML on the client side during their first
-visit so that it&amp;rsquo;s available later. We can of course add links
-to external CSS, JavaScript, and images in our offline pages - we just need to
-remember to cache those resources as well.&lt;/p&gt;
-
-&lt;p&gt;(The following assumes Sprockets, so if using something else, we&amp;rsquo;ll need to adjust accordingly where the asset pipeline is concerned.)&lt;/p&gt;
-
-&lt;p&gt;The service worker script file must live outside our &lt;code&gt;application.js&lt;/code&gt; or other
-bundled assets. It can live in any path from which Sprockets can load assets,
-but for now, we&amp;rsquo;ll add a new JavaScript file in &lt;code&gt;app/assets/javascripts/serviceworker.js&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Since it won&amp;rsquo;t be bundled with &lt;code&gt;application.js&lt;/code&gt;, we&amp;rsquo;ll need to let our Rails
-configuration know to precompile our serviceworker separately:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/assets.rb
-
-Rails.application.config.assets.precompile += %w[serviceworker.js]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;Declare an &amp;lsquo;install&amp;rsquo; event&lt;/h3&gt;
-
-&lt;p&gt;Since service workers are event driven, we&amp;rsquo;ll provide callbacks to three key events in the servive worker lifecycle: &lt;code&gt;install&lt;/code&gt;, &lt;code&gt;activate&lt;/code&gt;, and &lt;code&gt;fetch&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;install&lt;/code&gt; event will be invoked just the first time the service worker is
-requested or any time it is updated and redeployed prior to being activated. Here, we&amp;rsquo;ll precache our offline assets:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;var version = &amp;#39;v1::&amp;#39;;
-
-self.addEventListener(&amp;#39;install&amp;#39;, function onInstall(event) {
-  event.waitUntil(
-    caches.open(version + &amp;#39;offline&amp;#39;).then(function prefill(cache) {
-      return cache.addAll([
-        &amp;#39;/offline.html&amp;#39;,
-        // etc
-      ]);
-    })
-  );
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;event.waitUntil&lt;/code&gt; accepts &lt;a href="http://www.html5rocks.com/en/tutorials/es6/promises/"&gt;a promise&lt;/a&gt; which must succeed for the &lt;code&gt;install&lt;/code&gt; event to install the service worker successfully. We use &lt;code&gt;caches.open&lt;/code&gt; to return a promise that adds our static offline assets to a named cache associated with our site and the user&amp;rsquo;s browser. The &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache"&gt;Cache API&lt;/a&gt; provides client-side storage for request/response pairs, a lot like a built in HTTP cache.&lt;/p&gt;
-
-&lt;p&gt;We can also cache precompiled assets by renaming our &lt;code&gt;serviceworker.js&lt;/code&gt; to &lt;code&gt;serviceworker.js.erb&lt;/code&gt; and embedding helper methods:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;return cache.addAll([
-  &amp;#39;/offline.html&amp;#39;,
-  &amp;#39;&amp;lt;%= asset_path &amp;quot;application.css&amp;quot; %&amp;gt;&amp;#39;,
-]);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;&amp;#39;fetch&amp;rsquo; or fallback&lt;/h3&gt;
-
-&lt;p&gt;Our service worker can intercept any external network request from our visitor&amp;rsquo;s
-browser - even to cross-origin hosts - within the fetch event.&lt;/p&gt;
-
-&lt;p&gt;There are &lt;a href="https://jakearchibald.com/2014/offline-cookbook/"&gt;a ton of strategies we can
-employ&lt;/a&gt; to give the service
-worker power to respond to various requests, for our simple offline page&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;self.addEventListener(&amp;#39;fetch&amp;#39;, function onFetch(event) {
-  var request = event.request;
-
-  if (!request.url.match(/^https?:\/\/example.com/) ) { return; }
-  if (request.method !== &amp;#39;GET&amp;#39;) { return; }
-
-  event.respondWith(
-    fetch(request).                                      // first, the network
-      .catch(function fallback() {
-        caches.match(request).then(function(response) {  // then, the cache
-          response || caches.match(&amp;quot;/offline.html&amp;quot;);     // then, /offline cache
-        })
-      })
-  );
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This code will filter for GET requests to our host. Ignored &lt;code&gt;fetch&lt;/code&gt; events will simply proceed to the network. When we may want to provide the offline fallback, we&amp;rsquo;ll then ask then network to &lt;code&gt;fetch&lt;/code&gt; the
-request. If that doesn&amp;rsquo;t resolve, our &lt;code&gt;catch&lt;/code&gt; handler will be invoked and
-attempt to match the request in the cache or simply return our cached offline
-page.&lt;/p&gt;
-
-&lt;h3&gt;Clean up during &amp;#39;activate&amp;rsquo;&lt;/h3&gt;
-
-&lt;p&gt;The &lt;code&gt;activate&lt;/code&gt; event is useful to clean up old caches, say when the offline page
-or any of the linked static resources changes.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// var version = &amp;quot;v2::&amp;quot;;
-
-self.addEventListener(&amp;#39;activate&amp;#39;, function onActivate(event) {
-  event.waitUntil(
-    caches.keys().then(function deleteOldCache(cacheNames) {
-      return Promise.all(
-        cacheNames.filter(function(cacheName) {
-          return key.indexOf(version) !== 0;
-        }).map(function(cacheName) {
-          return caches.delete(cacheName);
-        })
-      );
-    })
-  );
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If we deploy a service worker with a new version number, the &lt;code&gt;install&lt;/code&gt; event
-will be invoked again to re-cache the static resources for the offline page.
-During &lt;code&gt;activate&lt;/code&gt;, any cache names that don&amp;rsquo;t match the new version number will
-be removed.&lt;/p&gt;
-
-&lt;h3&gt;Register that worker&lt;/h3&gt;
-
-&lt;p&gt;With our service worker event handling in place, we must register the script
-from the main page. In any file included in &lt;code&gt;application.js&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/assets/application.js
-
-if (&amp;#39;serviceWorker&amp;#39; in navigator) {
-  navigator.serviceWorker.register(&amp;#39;/serviceworker.js&amp;#39;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It&amp;rsquo;s important for this script to be available at the scope for which we want
-the service worker to be active. In other words, registering the service worker
-at its precompiled path &lt;code&gt;/assets/serviceworker.js&lt;/code&gt;, won&amp;rsquo;t be helpful since we
-won&amp;rsquo;t be able to intercept requests to the root path.&lt;/p&gt;
-
-&lt;h3&gt;Sprinkle in some middleware&lt;/h3&gt;
-
-&lt;p&gt;To make this work with the Rails asset pipeline, we can use the
-&lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt;&lt;/a&gt; gem.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
-
-gem &amp;quot;serviceworker-rails&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;ServiceWorker::Rails&lt;/code&gt; will insert middleware into the Rails stack that we can
-configure to route requests to bundled assets.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/serviceworker.rb
-
-Rails.application.configure do
-  config.serviceworker.routes.draw do
-    match &amp;quot;/serviceworker.js&amp;quot;
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, any request to the path &lt;code&gt;/serviceworker.js&lt;/code&gt; will match an asset of that
-name. If your service worker script is in a nested directory, you&amp;rsquo;d use this
-instead:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;match &amp;quot;/serviceworker.js&amp;quot; =&amp;gt; &amp;quot;nested/directory/serviceworker.js&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;See the project &lt;a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md"&gt;README&lt;/a&gt; for more info on how to configure the middleware.&lt;/p&gt;
-
-&lt;p&gt;While you&amp;rsquo;re at it, &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;star the project on GitHub&lt;/a&gt;!&lt;/p&gt;
-
-&lt;h3&gt;Moment of truth&lt;/h3&gt;
-
-&lt;p&gt;Phew! That took some setup. Our offline page should now be ready for consumption. Try disabling your
-network connection to test it out. You can use the &lt;em&gt;Network&lt;/em&gt; tab in Chrome and
-Chrome Canary to take your browser offline while Firefox has the &lt;em&gt;Work Offline&lt;/em&gt; mode under the File menu.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-dev-tools-network-offline-fc2a31d1.jpg" /&gt;&lt;/p&gt;
-
-&lt;p&gt;To see a working demo of an offline page, check out the &lt;a href="https://serviceworker-rails.herokuapp.com/offline-fallback/"&gt;Service Worker Rails
-Sandbox app&lt;/a&gt;. You
-can find its &lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;source code on GitHub&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-offline-custom-4e1f1089.jpg" /&gt;&lt;/p&gt;
-
-&lt;h3&gt;Debugging&lt;/h3&gt;
-
-&lt;p&gt;Chrome also provides some useful debugging tools for service workers under the
-&lt;em&gt;Resources&lt;/em&gt;. It&amp;rsquo;s helpful to read up on the Service Worker life cycle since it is treated
-differently than other JavaScript resources. For example, a hard refresh isn&amp;rsquo;t
-enough to get your browser to install an updated service worker &amp;ndash; the browser
-will keep the current worker active while any tab to your browser is currently
-open.&lt;/p&gt;
-
-&lt;p&gt;You can navigate to a different host and back or close and reopen
-the tab(s). The &lt;code&gt;self.skipWaiting&lt;/code&gt; function will also instruct the browser to
-let a new service worker take control immediately when used during &lt;code&gt;install&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;self.addEventListener(&amp;#39;install&amp;#39;, function(event) {
-  event.waitUntil(self.skipWaiting());
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3&gt;Final word&lt;/h3&gt;
-
-&lt;p&gt;I believe it&amp;rsquo;s important for web developers to start thinking about ways to make
-our application more reliable in the eyes of consumers. While rendering an
-offline page isn&amp;rsquo;t a game changer by itself, it is a low-risk way to begin
-experimenting with the Service Worker API which has the potential for &lt;a href="http://serviceworke.rs/"&gt;many more
-advanced use cases&lt;/a&gt; and can help the web get
-closer to an even playing field with mobile apps.&lt;/p&gt;
 </content>
   </entry>
 </feed>
