@@ -28,7 +28,7 @@ Erlang virtual machine.  Therefore, it comes with many of the benefits of
 [Erlang](https://www.erlang.org/), including fault tolerance, scalability,
 distribution, and concurrency, in a cleaner, more concise syntax.
 
-## Running your tools
+## Using your tools
 
 Anyone who has built a non-trivial Ruby on Rails app (or Node.js, Django, PHP,
 etc.) knows the left-side of the table well. When we deploy a Rails app, we don't just set up the Rails process. We need a web server like Nginx, Apache, or
