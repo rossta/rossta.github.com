@@ -5,7 +5,7 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-10-22T20:00:00-04:00</updated>
+  <updated>2016-10-23T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
@@ -13,8 +13,8 @@
     <title/>
     <link rel="alternate" href="/blog/why-i-am-betting-on-elixir.html"/>
     <id>/blog/why-i-am-betting-on-elixir.html</id>
-    <published>2016-10-22T20:00:00-04:00</published>
-    <updated>2016-10-22T20:00:00-04:00</updated>
+    <published>2016-10-23T00:00:00+00:00</published>
+    <updated>2016-10-23T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -165,8 +165,8 @@ replace it with from the start. Something about that just feels right.&lt;/p&gt;
     <title/>
     <link rel="alternate" href="/blog/using-the-web-push-api-with-vapid.html"/>
     <id>/blog/using-the-web-push-api-with-vapid.html</id>
-    <published>2016-10-20T20:00:00-04:00</published>
-    <updated>2016-10-20T20:00:00-04:00</updated>
+    <published>2016-10-21T00:00:00+00:00</published>
+    <updated>2016-10-21T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -488,8 +488,8 @@ into their web apps.&lt;/p&gt;
     <title>Fill out Google Forms from the command line</title>
     <link rel="alternate" href="/blog/fill-out-google-forms-from-the-command-line-with-casperjs.html"/>
     <id>/blog/fill-out-google-forms-from-the-command-line-with-casperjs.html</id>
-    <published>2016-09-27T20:00:00-04:00</published>
-    <updated>2016-09-27T20:00:00-04:00</updated>
+    <published>2016-09-28T00:00:00+00:00</published>
+    <updated>2016-09-28T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -626,8 +626,8 @@ CodeNewbie Google Form, so you can try it too:&lt;/p&gt;
     <title>N+1 is a Rails feature</title>
     <link rel="alternate" href="/blog/n+1-is-a-rails-feature.html"/>
     <id>/blog/n+1-is-a-rails-feature.html</id>
-    <published>2016-09-16T20:00:00-04:00</published>
-    <updated>2016-09-16T20:00:00-04:00</updated>
+    <published>2016-09-17T00:00:00+00:00</published>
+    <updated>2016-09-17T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -891,8 +891,8 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
     <title>Quiet assets in Rails 5</title>
     <link rel="alternate" href="/blog/quiet-assets-in-rails-5.html"/>
     <id>/blog/quiet-assets-in-rails-5.html</id>
-    <published>2016-08-25T20:00:00-04:00</published>
-    <updated>2016-08-25T20:00:00-04:00</updated>
+    <published>2016-08-26T00:00:00+00:00</published>
+    <updated>2016-08-26T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -1048,8 +1048,8 @@ about customizing your Rails logger. Happy logging!&lt;/p&gt;
     <title>Sending Web Push Notifications from Rails</title>
     <link rel="alternate" href="/blog/web-push-notifications-from-rails.html"/>
     <id>/blog/web-push-notifications-from-rails.html</id>
-    <published>2016-05-12T20:00:00-04:00</published>
-    <updated>2016-05-12T20:00:00-04:00</updated>
+    <published>2016-05-13T00:00:00+00:00</published>
+    <updated>2016-05-13T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
