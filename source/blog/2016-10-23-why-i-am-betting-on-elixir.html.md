@@ -3,8 +3,7 @@ title: Why I'm betting on Elixir
 author: Ross Kaffenberger
 published: true
 summary: Looking beyond Ruby for the next big thing
-description: Starting a new web application? Take a good look at Elixir which
-can help scale with the needs of a business and still be really fun to use.
+description: Starting a new web application? Take a good look at Elixir which can help scale with the needs of a business and still be really fun to use.
 pull_image: 'blog/stock/purple-sunset-beach-pexels-photo.jpg'
 series:
 category: Code
