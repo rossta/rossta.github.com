@@ -100,7 +100,9 @@ architecture for Ruby on Rails? I probably won't be switching to Django for our
 next feature.
 
 How about admitting we'd most often love to choose the tools we'd
-most enjoy using?
+most enjoy using? This is a much more personal choice than "right tool"
+suggests. I don't think there's anything wrong with choosing tools you like -
+as long as you can still get the job done, of course!
 
 Giles Bowkett wrote a [thoroughly entertaining essay on why the Rails asset
 pipeline should
