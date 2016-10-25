@@ -41,38 +41,41 @@ just enjoyed it immensely.&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://elixir-lang.org/"&gt;Elixir&lt;/a&gt; is a new programming language that targets the
 Erlang virtual machine.  Therefore, it comes with many of the benefits of
 &lt;a href="https://www.erlang.org/"&gt;Erlang&lt;/a&gt;, including fault tolerance, scalability,
-distribution, and concurrency, in a cleaner, more concise syntax.&lt;/p&gt;
+distribution, and concurrency, in a cleaner, more concise syntax. I knew all
+this but the graphic above revealed a new perspective, especially in regards to
+web development as we know it in the Rails community.&lt;/p&gt;
 
 &lt;h2&gt;Using your tools&lt;/h2&gt;
 
 &lt;p&gt;Anyone who has built a non-trivial Ruby on Rails app (or Node.js, Django, PHP,
-etc.) knows the left-side of the table well. When we deploy a Rails app, we don&amp;rsquo;t just set up the Rails process. We need a web server like Nginx, Apache, or
-Phusion Passenger, to queue requests and serve static content, neither of which
-Rails does well.&lt;/p&gt;
+etc.) knows the left-side of the table above well. When we deploy a Rails app,
+we don&amp;rsquo;t just set up the Rails process. We need a web server like Nginx, Apache,
+or Phusion Passenger, to queue requests and serve static content, neither of
+which Rails does well.&lt;/p&gt;
 
 &lt;p&gt;Running background jobs becomes an essential tool for moving intensive tasks out
 of the request/response process, typically requiring separate processes, e.g.
-Sidekiq, often on deployed on other servers. Setting up additional caching
+Sidekiq, often deployed on other servers. Setting up additional caching
 processes in Redis or Memcached is also an assumed requirement for storing HTML
 fragments or other bits of precalculated data. See the theme? performance
 improvements in Ruby apps often mean avoiding Ruby.&lt;/p&gt;
 
-&lt;p&gt;Getting all these separate processes running for development often requires
+&lt;p&gt;Getting all these separate dependencies up and running for development often requires
 complicated setup or additional tools like Docker/Vagrant/Boxen, etc. Keeping
-these processes running in production means relying on a yet another process to
-act as a supervisor or service manager like &lt;a href="http://upstart.ubuntu.com/"&gt;Upstart&lt;/a&gt; or
+them running in production means relying on a yet another service to
+act as a supervisor or monitor like &lt;a href="http://upstart.ubuntu.com/"&gt;Upstart&lt;/a&gt; or
 &lt;a href="https://mmonit.com/monit/"&gt;Monit&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;In Elixir, all these features can be handled by the Erlang virtual machine
-(called BEAM) in a &lt;em&gt;single&lt;/em&gt; operating system process. The runtime itself is like
-a separate operating system that provides its own processes and a scheduler. In
-a web application, this means responses to web requests and background jobs can
-run concurrently, all within the same BEAM process. Elixir and Erlang have
-built-in abstractions for supervising processes in your application, so you can
-provide fine-grained logic for monitoring and restarting failed tasks within
-your project as an integral part of your business logic. There are also built-in
-tools for persisting and sharing state in place of separate tools like Redis or
-Memcached.&lt;/p&gt;
+(called BEAM) in a &lt;em&gt;single&lt;/em&gt; operating system process. The runtime itself is
+behaves like its own operating system that provides its lightweight processes
+and a scheduler. In a web application, this means responses to web requests and
+background jobs can run concurrently, all within the same BEAM process. Elixir
+and Erlang have built-in abstractions for supervising processes in your
+application, so you can provide fine-grained logic for monitoring and restarting
+failed tasks within your project as an integral part of your business logic.
+There are also built-in tools for persisting and sharing state in place of
+separate tools like Redis or Memcached.&lt;/p&gt;
 
 &lt;p&gt;Setting up the project on the development machine and deployment considerations
 all becomes much simpler when you&amp;rsquo;re concerned only with the requirements of
@@ -105,12 +108,12 @@ experience, there are many possible languages/frameworks (the &amp;ldquo;tools&a
 serve the needs of a given business (the &amp;ldquo;job&amp;rdquo;). As my professional software experience
 is largely based on building web applications for startups, I don&amp;rsquo;t wish to
 speak for systems software, game programmers, or even mobile app developers. But
-on the web, there really a great number of tools that are serving teams well,
-and it&amp;rsquo;s hard for me to call any of them &lt;em&gt;the&lt;/em&gt; right tool.&lt;/p&gt;
+on the web, there exist a great number of tools serving teams quite well,
+and it would difficult for me to call any of them &lt;em&gt;the&lt;/em&gt; right tool.&lt;/p&gt;
 
 &lt;p&gt;The trouble I have with &amp;ldquo;right tool for the job&amp;rdquo; is we tend to focus our
-arguments on technology features and capabilities, but very rarely does this
-include factors such as our current constraints or the people involved in as
+arguments on technology features and capabilities, but very rarely do we
+consider factors such as our current constraints or the people involved in as
 part of the equation. The team has 25 years of experience building Node.js web
 apps? We&amp;rsquo;re probably going to be choosing Node.js for our next web app. The
 DevOps team invested months and thousands of dollars in shoring up our
@@ -151,12 +154,12 @@ necessary.&lt;/p&gt;
 since, well, Ruby on Rails came along.&lt;/p&gt;
 
 &lt;p&gt;With Elixir we get a tool that&amp;rsquo;s both fun to use and that can scale with the needs
-business. It&amp;rsquo;s like getting the best of Ruby and whatever you think you need to
-replace it with from the start. Something about that just feels right.&lt;/p&gt;
+of the business. From the start, it&amp;rsquo;s like getting the best of Ruby and whatever you think you
+will replace it with later. Something about that just feels right.&lt;/p&gt;
 
 &lt;div class="callout panel"&gt;
 &lt;p&gt;
-  If you&amp;rsquo;re interest in Elixir and in New York City on Thursday, Oct 27 2016, please check out the &lt;a href="http://empex.co"&gt;Empire City Elixir Conference Halloween Lightning Talks&lt;/a&gt;. Registration is free and you&amp;rsquo;ll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
+  If you&amp;rsquo;re interested in Elixir and in New York City on Thursday, Oct 27 2016, please check out the &lt;a href="http://empex.co"&gt;Empire City Elixir Conference Halloween Lightning Talks&lt;/a&gt;. Registration is free and you&amp;rsquo;ll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
 &lt;/p&gt;
 &lt;/div&gt;
 </content>
