@@ -26,38 +26,41 @@ just enjoyed it immensely.
 [Elixir](http://elixir-lang.org/) is a new programming language that targets the
 Erlang virtual machine.  Therefore, it comes with many of the benefits of
 [Erlang](https://www.erlang.org/), including fault tolerance, scalability,
-distribution, and concurrency, in a cleaner, more concise syntax.
+distribution, and concurrency, in a cleaner, more concise syntax. I knew all
+this but the graphic above revealed a new perspective, especially in regards to
+web development as we know it in the Rails community.
 
 ## Using your tools
 
 Anyone who has built a non-trivial Ruby on Rails app (or Node.js, Django, PHP,
-etc.) knows the left-side of the table well. When we deploy a Rails app, we don't just set up the Rails process. We need a web server like Nginx, Apache, or
-Phusion Passenger, to queue requests and serve static content, neither of which
-Rails does well.
+etc.) knows the left-side of the table above well. When we deploy a Rails app,
+we don't just set up the Rails process. We need a web server like Nginx, Apache,
+or Phusion Passenger, to queue requests and serve static content, neither of
+which Rails does well.
 
 Running background jobs becomes an essential tool for moving intensive tasks out
 of the request/response process, typically requiring separate processes, e.g.
-Sidekiq, often on deployed on other servers. Setting up additional caching
+Sidekiq, often deployed on other servers. Setting up additional caching
 processes in Redis or Memcached is also an assumed requirement for storing HTML
 fragments or other bits of precalculated data. See the theme? performance
 improvements in Ruby apps often mean avoiding Ruby.
 
-Getting all these separate processes running for development often requires
+Getting all these separate dependencies up and running for development often requires
 complicated setup or additional tools like Docker/Vagrant/Boxen, etc. Keeping
-these processes running in production means relying on a yet another process to
-act as a supervisor or service manager like [Upstart](http://upstart.ubuntu.com/) or
+them running in production means relying on a yet another service to
+act as a supervisor or monitor like [Upstart](http://upstart.ubuntu.com/) or
 [Monit](https://mmonit.com/monit/).
 
 In Elixir, all these features can be handled by the Erlang virtual machine
-(called BEAM) in a *single* operating system process. The runtime itself is like
-a separate operating system that provides its own processes and a scheduler. In
-a web application, this means responses to web requests and background jobs can
-run concurrently, all within the same BEAM process. Elixir and Erlang have
-built-in abstractions for supervising processes in your application, so you can
-provide fine-grained logic for monitoring and restarting failed tasks within
-your project as an integral part of your business logic. There are also built-in
-tools for persisting and sharing state in place of separate tools like Redis or
-Memcached.
+(called BEAM) in a *single* operating system process. The runtime itself is
+behaves like its own operating system that provides its lightweight processes
+and a scheduler. In a web application, this means responses to web requests and
+background jobs can run concurrently, all within the same BEAM process. Elixir
+and Erlang have built-in abstractions for supervising processes in your
+application, so you can provide fine-grained logic for monitoring and restarting
+failed tasks within your project as an integral part of your business logic.
+There are also built-in tools for persisting and sharing state in place of
+separate tools like Redis or Memcached.
 
 Setting up the project on the development machine and deployment considerations
 all becomes much simpler when you're concerned only with the requirements of
@@ -90,12 +93,12 @@ experience, there are many possible languages/frameworks (the "tools") that can
 serve the needs of a given business (the "job"). As my professional software experience
 is largely based on building web applications for startups, I don't wish to
 speak for systems software, game programmers, or even mobile app developers. But
-on the web, there really a great number of tools that are serving teams well,
-and it's hard for me to call any of them *the* right tool.
+on the web, there exist a great number of tools serving teams quite well,
+and it would difficult for me to call any of them *the* right tool.
 
 The trouble I have with "right tool for the job" is we tend to focus our
-arguments on technology features and capabilities, but very rarely does this
-include factors such as our current constraints or the people involved in as
+arguments on technology features and capabilities, but very rarely do we
+consider factors such as our current constraints or the people involved in as
 part of the equation. The team has 25 years of experience building Node.js web
 apps? We're probably going to be choosing Node.js for our next web app. The
 DevOps team invested months and thousands of dollars in shoring up our
@@ -136,11 +139,11 @@ I haven't been this excited about a language and its primary web framework,
 since, well, Ruby on Rails came along.
 
 With Elixir we get a tool that's both fun to use and that can scale with the needs
-business. It's like getting the best of Ruby and whatever you think you need to
-replace it with from the start. Something about that just feels right.
+of the business. From the start, it's like getting the best of Ruby and whatever you think you
+will replace it with later. Something about that just feels right.
 
 <div class="callout panel">
 <p>
-  If you're interest in Elixir and in New York City on Thursday, Oct 27 2016, please check out the <a href="http://empex.co">Empire City Elixir Conference Halloween Lightning Talks</a>. Registration is free and you'll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
+  If you're interested in Elixir and in New York City on Thursday, Oct 27 2016, please check out the <a href="http://empex.co">Empire City Elixir Conference Halloween Lightning Talks</a>. Registration is free and you'll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
 </p>
 </div>
