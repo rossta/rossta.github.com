@@ -101,8 +101,10 @@ Looking closely at the pairs, taking just first members of each pair form the ar
 
 Getting the nested array pairs from these groups is perfect for the `Enumerable#zip` method: `zip` groups members of given arrays by position. Therefore, we can "zip" `[0, 1, 3, 3, 1]` with `[1, 3, 3, 1, 0]` to produce `[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]`:
 
+```ruby
 [0, 1, 3, 3, 1].zip([1, 3, 3, 1, 0])
 => [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
+```
 
 Let's extract a variable to represent row four:
 
