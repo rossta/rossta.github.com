@@ -1,9 +1,9 @@
 ---
 title: Enumerator - Enumerable's Ugly Cousin
 author: Ross Kaffenberger
-summary: Learn about the fundamental concepts of Ruby's Enumerator class
-description:
-pull_image: 'blog/enumerator-1-2-3.jpg'
+summary: Talk at Ancient City Ruby Conf, 2016
+description: Learn about the fundamental concepts of Ruby's Enumerator class from Ross Kaffenberger's talk at Ancient City Ruby Conf, 2016, in St Augustine, Florida.
+pull_image: 'blog/enumerator_ancient_city_2016.jpg'
 published: true
 category: Code
 tags:
