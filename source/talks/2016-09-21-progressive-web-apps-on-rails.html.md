@@ -3,7 +3,7 @@ title: Progressive Web Apps on Rails
 author: Ross Kaffenberger
 summary: Use this little gem for integrating Service Workers with Rails
 description:
-pull_image: 'blog/stock/louvre-pexels-photo.jpg'
+pull_image: 'blog/progressive_web_apps_on_rails.jpg'
 published: true
 category: Code
 tags:
