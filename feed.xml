@@ -19,27 +19,32 @@
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html">&lt;p&gt;Discussion around Progressive Web Apps is catching fire in the JavaScript
-community. In Rails community, not so much.&lt;/p&gt;
+community. In the Rails community, not so much. Perhaps it’s because Rails
+culture “has had a problem” with JavaScript, as &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;Giles Bowkett recently pointed
+out&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
-app-like experience. Open web technologies...&lt;/p&gt;</summary>
+&lt;p&gt;What are Progressive...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Discussion around Progressive Web Apps is catching fire in the JavaScript
-community. In Rails community, not so much.&lt;/p&gt;
+community. In the Rails community, not so much. Perhaps it&amp;rsquo;s because Rails
+culture &amp;ldquo;has had a problem&amp;rdquo; with JavaScript, as &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;Giles Bowkett recently pointed
+out&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
 app-like experience. Open web technologies are now making it possible to make browser-based web apps:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;installable: we can add them to the Home Screen of a mobile device easily&lt;/li&gt;
-&lt;li&gt;more reliable: we can provide a user experience when the device is offline or
+&lt;li&gt;installable - we can add them to the Home Screen of a mobile device easily&lt;/li&gt;
+&lt;li&gt;more reliable - we can provide a user experience when the device is offline or
 network responsiveness has degraded, and can sync user requests in the
 background when network capability is restored&lt;/li&gt;
-&lt;li&gt;more engaging: we can notify users of activity even when they&amp;rsquo;re not using the
+&lt;li&gt;more engaging - we can notify users of activity even when they&amp;rsquo;re not using the
 site&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;While these benefits have gotten a lot of attention amongst JavaScript
-developers, nothing about Rails makes it impossible to take advantage of Progressive Web App technology. I bet it&amp;rsquo;s just a little more difficult to know how to get started. Let&amp;rsquo;s fix that.&lt;/p&gt;
+&lt;p&gt;Technically, nothing about Rails is incongruent with Progressive Web App technology. Better yet, the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling. In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.&lt;/p&gt;
+
+&lt;p&gt;Rails hasn&amp;rsquo;t been tuned in to take advantage of benefits of Progressive Web
+Apps and I&amp;rsquo;ll bet you might not be sure how to get started. Let&amp;rsquo;s fix that.&lt;/p&gt;
 
 &lt;h2&gt;Your first Progressive Web App on Rails&lt;/h2&gt;
 
