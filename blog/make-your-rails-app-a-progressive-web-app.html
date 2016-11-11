@@ -71,28 +71,20 @@
 
         <p><img src="/assets/images/blog/stock/phone-photo-pexels-photo-77c18a3f.jpg" /></p>
 
-      <p>Discussion of <a href="https://developers.google.com/web/progressive-web-apps/">Progressive Web Apps</a>(PWA) is catching fire in the JavaScript community, but amongst Rails developers, not so much yet. Perhaps it&rsquo;s because Rails culture &ldquo;has had a problem&rdquo; with JavaScript, as <a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html">Giles Bowkett recently pointed
-out</a>, but
-I&rsquo;m not so sure.</p>
+      <p>Discussion of <a href="https://developers.google.com/web/progressive-web-apps/">Progressive Web Apps</a> (PWA) is <a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0">catching fire</a> in the JavaScript community, but amongst Rails developers&hellip; not so much.</p>
 
-<p>Progressive Web App technology is still very young and rapidly churning; there&rsquo;s reluctance to get on board until APIs become more stable. Also, the Rails community hasn&rsquo;t had a clear path to integrating PWA technology with their app&mdash;until now. In this post, we&rsquo;ll demonstrate how to turn your Rails app into a Progressive Web App using the <code>serviceworker-rails</code> gem.</p>
+<p>Progressive Web App technology is still very young and rapidly churning; perhaps there&rsquo;s more reluctance on Rails teams to get onboard with new JavaScript APIs until they become more stable. Also, the Rails community hasn&rsquo;t had a clear path to integrating PWA technology&mdash;until now. In this post, we&rsquo;ll demonstrate how to turn your Rails app into a Progressive Web App using the <code>serviceworker-rails</code> gem.</p>
 
-<p>What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
-app-like experience. Open web technologies are now making it possible to make browser-based web apps:</p>
+<p>What are Progressive Web Apps? Simply put, they are web applications that deliver mobile
+app-like experiences. For example, open web technologies are now making it possible for browser-based web apps to be:</p>
 
 <ul>
-<li>installable - we can add them to the Home Screen of a mobile device easily</li>
-<li>more reliable - we can provide a user experience when the device is offline or
-network responsiveness has degraded, and can sync user requests in the
-background when network capability is restored</li>
-<li>more engaging - we can notify users of activity even when they&rsquo;re not using the
-site</li>
+<li><strong>installable</strong> - add web apps to the Home Screen of a mobile device easily</li>
+<li><strong>more reliable</strong> - provide a user experience when the device is offline or network responsiveness has degraded; sync user requests in the background when network capability is restored</li>
+<li><strong>more engaging</strong> - notify users of activity even when they&rsquo;re not using the site</li>
 </ul>
 
-<p>Technically, nothing about Rails is incongruent with Progressive Web App technology. Better yet, the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling. In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.</p>
-
-<p>Rails hasn&rsquo;t been tuned in to take advantage of benefits of Progressive Web
-Apps and I&rsquo;ll bet you might not be sure how to get started. Let&rsquo;s fix that.</p>
+<p>Sound good? Let&rsquo;s get started.</p>
 
 <h2>Your first Progressive Web App on Rails</h2>
 
@@ -239,6 +231,12 @@ and demos from Mozilla</li>
 <li><a href="https://github.com/TalAter/awesome-progressive-web-apps">Awesome Progressive Web Apps</a> - kitchen sink of PWA resources</li>
 <li><a href="https://github.com/TalAter/awesome-service-workers">Awesome Service Workers</a> - kitchen sink of Service Worker resources</li>
 </ul>
+
+<h2>Rails 💜 PWA</h2>
+
+<p>Nothing about Rails is incongruent with Progressive Web App technology so there&rsquo;s no technical reason why we can&rsquo;t start introducing these features today. It&rsquo;s worth noting the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling.</p>
+
+<p>In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.</p>
 
 
     </article>
