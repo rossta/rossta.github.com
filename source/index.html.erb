@@ -1,6 +1,6 @@
 ---
 pageable: true
-per_page: 5
+per_page: 4
 ---
 <% content_for(:title) { } %>
 <% content_for(:section) { 'I make things' } %>
@@ -19,16 +19,15 @@ per_page: 5
 
 <h2 class="margin-bottom">New? Start here</h2>
 <section class="index-posts margin-top">
-   <article class="index-post">
-     <header>
-       <h4><%= link_to "Exploring Ruby's Enumerable", series_path("Enumerable", "blog") %></h4>
-        <p class="alt-title subtle">Working with collections and sequences in Ruby</p>
-     </header>
-   </article>
-</section>
-
-<section class="index-posts margin-top">
-  <% page_articles.each_with_index do |article, i| %>
+  <% blog_series.each do |series| %>
+    <article class="index-post">
+      <header>
+        <h4><%= link_to series.title, series_path(series.id, "blog") %> <small>&middot; SERIES</small></h4>
+        <p class="alt-title subtle"><%= series.summary %></p>
+      </header>
+    </article>
+  <% end %>
+  <% page_articles.each do |article| %>
     <article class="index-post">
       <header>
         <h4>
