@@ -345,7 +345,7 @@ will replace it with later. Something about that just feels right.&lt;/p&gt;
 </content>
   </entry>
   <entry>
-    <title>Using the Push API with VAPID</title>
+    <title>Using Web Push Notifcations with VAPID</title>
     <link rel="alternate" href="/blog/using-the-web-push-api-with-vapid.html"/>
     <id>/blog/using-the-web-push-api-with-vapid.html</id>
     <published>2016-10-21T00:00:00+00:00</published>
