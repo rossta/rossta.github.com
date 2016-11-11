@@ -1075,6 +1075,18 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/page/11/index.html</loc>
+    <lastmod>2016-11-11T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/page/12/index.html</loc>
+    <lastmod>2016-11-11T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/projects/page/2/index.html</loc>
     <lastmod>2016-11-11T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>

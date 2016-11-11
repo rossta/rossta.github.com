@@ -10,7 +10,7 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>Make your Rails app a Progressive Web App</title>
+    <title>Your first Progressive Web App on Rails</title>
     <link rel="alternate" href="/blog/make-your-rails-app-a-progressive-web-app.html"/>
     <id>/blog/make-your-rails-app-a-progressive-web-app.html</id>
     <published>2016-11-09T00:00:00+00:00</published>
@@ -18,16 +18,13 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Discussion around Progressive Web Apps is catching fire in the JavaScript
-community. In the Rails community, not so much. Perhaps it’s because Rails
-culture “has had a problem” with JavaScript, as &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;Giles Bowkett recently pointed
-out&lt;/a&gt;.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;Discussion of &lt;a href="https://developers.google.com/web/progressive-web-apps/"&gt;Progressive Web Apps&lt;/a&gt;(PWA) is catching fire in the JavaScript community, but amongst Rails developers, not so much yet. Perhaps it’s because Rails culture “has had a problem” with JavaScript, as &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;Giles Bowkett recently pointed
+out&lt;/a&gt;, but...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Discussion of &lt;a href="https://developers.google.com/web/progressive-web-apps/"&gt;Progressive Web Apps&lt;/a&gt;(PWA) is catching fire in the JavaScript community, but amongst Rails developers, not so much yet. Perhaps it&amp;rsquo;s because Rails culture &amp;ldquo;has had a problem&amp;rdquo; with JavaScript, as &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;Giles Bowkett recently pointed
+out&lt;/a&gt;, but
+I&amp;rsquo;m not so sure.&lt;/p&gt;
 
-&lt;p&gt;What are Progressive...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Discussion around Progressive Web Apps is catching fire in the JavaScript
-community. In the Rails community, not so much. Perhaps it&amp;rsquo;s because Rails
-culture &amp;ldquo;has had a problem&amp;rdquo; with JavaScript, as &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;Giles Bowkett recently pointed
-out&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Progressive Web App technology is still very young and rapidly churning; there&amp;rsquo;s reluctance to get on board until APIs become more stable. Also, the Rails community hasn&amp;rsquo;t had a clear path to integrating PWA technology with their app&amp;mdash;until now. In this post, we&amp;rsquo;ll demonstrate how to turn your Rails app into a Progressive Web App using the &lt;code&gt;serviceworker-rails&lt;/code&gt; gem.&lt;/p&gt;
 
 &lt;p&gt;What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
 app-like experience. Open web technologies are now making it possible to make browser-based web apps:&lt;/p&gt;
@@ -154,8 +151,10 @@ choose which features we want to add.&lt;/p&gt;
 &lt;p&gt;Here are few things you can try:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://rossta.net/blog/offline-page-for-your-rails-application.html"&gt;Adding an offline page for your Rails app&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://rossta.net/blog/web-push-notifications-from-rails.html"&gt;Sending Web Push notifications from Rails&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://rossta.net/blog/offline-page-for-your-rails-application.html"&gt;Adding an offline page for your Rails app&lt;/a&gt; - by @rossta&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://rossta.net/blog/web-push-notifications-from-rails.html"&gt;Sending Web Push notifications from Rails&lt;/a&gt; - by @rossta&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://addyosmani.com/blog/application-shell/"&gt;Instant loading Web Apps with a Service Worker application shell architecture&lt;/a&gt; - by Addy Osmani
+*&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2&gt;Going further&lt;/h2&gt;
@@ -172,6 +171,9 @@ treats in great detail:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://developers.google.com/web/fundamentals/instant-and-offline/service-worker/lifecycle"&gt;The Service Worker Lifecycle&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;For some open-source abstractions for implementing Service Worker fetching and
+caching strategies, checkout out &lt;a href="https://github.com/GoogleChrome/sw-toolbox"&gt;SW-Toolbox&lt;/a&gt; and &lt;a href="https://github.com/GoogleChrome/sw-precache"&gt;SW-Precache&lt;/a&gt; from the Google Chrome team.&lt;/p&gt;
 
 &lt;p&gt;Of course, we&amp;rsquo;ve only covered the getting started part of our journey with
 Progressive Web Apps. I&amp;rsquo;ve left out a lot of fun parts like decided how to implement
