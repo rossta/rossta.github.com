@@ -5,10 +5,184 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2016-10-23T00:00:00+00:00</updated>
+  <updated>2016-11-09T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Make your Rails app a Progressive Web App</title>
+    <link rel="alternate" href="/blog/make-your-rails-app-a-progressive-web-app.html"/>
+    <id>/blog/make-your-rails-app-a-progressive-web-app.html</id>
+    <published>2016-11-09T00:00:00+00:00</published>
+    <updated>2016-11-09T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Discussion around Progressive Web Apps is catching fire in the JavaScript
+community. In Rails community, not so much.&lt;/p&gt;
+
+&lt;p&gt;What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
+app-like experience. Open web technologies...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Discussion around Progressive Web Apps is catching fire in the JavaScript
+community. In Rails community, not so much.&lt;/p&gt;
+
+&lt;p&gt;What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
+app-like experience. Open web technologies are now making it possible to make browser-based web apps:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;installable: we can add them to the Home Screen of a mobile device easily&lt;/li&gt;
+&lt;li&gt;more reliable: we can provide a user experience when the device is offline or
+network responsiveness has degraded, and can sync user requests in the
+background when network capability is restored&lt;/li&gt;
+&lt;li&gt;more engaging: we can notify users of activity even when they&amp;rsquo;re not using the
+site&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;While these benefits have gotten a lot of attention amongst JavaScript
+developers, nothing about Rails makes it impossible to take advantage of Progressive Web App technology. I bet it&amp;rsquo;s just a little more difficult to know how to get started. Let&amp;rsquo;s fix that.&lt;/p&gt;
+
+&lt;h2&gt;Your first Progressive Web App on Rails&lt;/h2&gt;
+
+&lt;p&gt;Eric Elliot recently posted &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;a thorough overview of Progessive Web App
+requirements&lt;/a&gt;
+that&amp;rsquo;s worth a read. Here&amp;rsquo;s summary of what&amp;rsquo;s needed:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;HTTPS - any page that uses Progressive Web App technology needs to be served
+over SSL/TLS so &amp;ldquo;HTTPS everywhere&amp;rdquo; is recommended&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/Manifest"&gt;Web App Manifest&lt;/a&gt; - a
+text file with application metadata to support home screen installation&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker&lt;/a&gt; - a client-side JavaScript worker that can intercept network requests, modify responses, interact with local caches, sync data in the background, and enable push notifications&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;Set up HTTPS&lt;/h3&gt;
+
+&lt;p&gt;To enable HTTPS on our website, we&amp;rsquo;ll need to decide for ourselves how to set up our web
+server depending on our hosting provider and deployment needs. Tutorials for setting up &lt;a href="https://devcenter.heroku.com/articles/ssl"&gt;Heroku&lt;/a&gt; and &lt;a href="https://www.digitalocean.com/community/tutorials/how-to-install-an-ssl-certificate-from-a-commercial-certificate-authority"&gt;Digital Ocean&lt;/a&gt; may be a good place to start.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll also want to force SSL settings in our Rails application
+configuration for our remote environments, i.e., &lt;code&gt;production&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# config/environments/production.rb
+
+Rails.application.configure do
+  # ...
+
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  config.force_ssl = true
+
+  # ...
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We should be sure to test out this behavior on a secondary remote environment before going live in
+production as we&amp;rsquo;ll want to be aware of hiccups like mixed content warnings and
+hard-coded non-HTTPS urls in our application.&lt;/p&gt;
+
+&lt;h3&gt;Add a manifest and Service Worker&lt;/h3&gt;
+
+&lt;p&gt;For this next step, we&amp;rsquo;ll assume we&amp;rsquo;re using the Rails asset pipeline. This is
+both helpful and presents a problem:&lt;/p&gt;
+
+&lt;p&gt;The Rails asset pipeline makes a number of assumptions about what&amp;rsquo;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &amp;ldquo;cacheability&amp;rdquo;. Rails also assumes a single parent directory, /public/assets, to make it easier to look up the file path for a given asset.&lt;/p&gt;
+
+&lt;p&gt;Service worker and manifest assets must play by different rules. Service workers may only be active from within the scope from which they are served. So if you try to register a service worker from a Rails asset pipeline path, like &lt;code&gt;/assets/serviceworker-abcd1234.js&lt;/code&gt;, it will only be able to interact with requests and responses within &lt;code&gt;/assets/**&lt;/code&gt;. This is not what we want.&lt;/p&gt;
+
+&lt;p&gt;To address this issue, I created the &lt;code&gt;serviceworker-rails&lt;/code&gt; gem (&lt;a href="https://github.com/rossta/serviceworker-rails"&gt;source&lt;/a&gt;). This Rails
+plugin makes it easier to set up your app to serve service worker
+scripts and web app manifests at canonical urls while taking advantage of the transpilation and
+interpolation features the asset pipeline provides.&lt;/p&gt;
+
+&lt;p&gt;To get started with &lt;code&gt;serviceworker-rails&lt;/code&gt;, we&amp;rsquo;ll bundle it with our Rails app.&lt;/p&gt;
+
+&lt;p&gt;Add the gem to the &lt;code&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
+
+gem &amp;quot;serviceworker-rails&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bundle the app:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;$ bundle
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ll use the built-in generator from service worker rails to add some starter
+JavaScript files to our project and the proper configuration.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;$ rails g serviceworker:install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The generator will create the following files:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;config/initializers/serviceworker.rb&lt;/code&gt; - for configuring your Rails app&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;app/assets/javascripts/serviceworker.js.erb&lt;/code&gt; - a blank Service Worker
+script with some example strategies&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;app/assets/javascripts/serviceworker-companion.js&lt;/code&gt; - a snippet of JavaScript
+necessary to register your Service Worker in the browser&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;app/assets/javascripts/manifest.json.erb&lt;/code&gt; - a starter web app manifest
+pointing to some default app icons provided by the gem&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;public/offline.html&lt;/code&gt; - a starter offline page&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It will also make the following modifications to existing files:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Adds a sprockets directive to &lt;code&gt;application.js&lt;/code&gt; to require
+&lt;code&gt;serviceworker-companion.js&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Adds &lt;code&gt;serviceworker.js&lt;/code&gt; and &lt;code&gt;manifest.json&lt;/code&gt; to the list of compiled assets in
+&lt;code&gt;config/initializers/assets.rb&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Injects tags into the &lt;code&gt;head&lt;/code&gt; of &lt;code&gt;app/views/layouts/application.html.erb&lt;/code&gt; for
+linking to the web app manifest&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Of course, we could do this set up manually, but it may be helpful to run the
+automated install for our first attempt. If going manual, consult the &lt;code&gt;serviceworker-rails&lt;/code&gt;
+&lt;a href="https://github.com/rossta/serviceworker-rails"&gt;README&lt;/a&gt; and my previous &lt;a href="https://rossta.net/blog/service-worker-on-rails.html"&gt;blog
+post on configuring the gem&lt;/a&gt; for more help during setup.&lt;/p&gt;
+
+&lt;p&gt;At this point, we&amp;rsquo;ve got all the boilerplate in place in our Rails app to begin
+adding Progessive Web App functionality. The great part is, we can pick and
+choose which features we want to add.&lt;/p&gt;
+
+&lt;p&gt;Here are few things you can try:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://rossta.net/blog/offline-page-for-your-rails-application.html"&gt;Adding an offline page for your Rails app&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://rossta.net/blog/web-push-notifications-from-rails.html"&gt;Sending Web Push notifications from Rails&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Going further&lt;/h2&gt;
+
+&lt;p&gt;For more on grasping Service Worker fundamentals and developing offline solutions for the web, I highly recommend this free Udacity course:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.udacity.com/course/offline-web-applications--ud899"&gt;Offline Web Applications&lt;/a&gt; by Google&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You&amp;rsquo;ll want to understand the Service Worker life cycle, which Jake Archibald
+treats in great detail:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developers.google.com/web/fundamentals/instant-and-offline/service-worker/lifecycle"&gt;The Service Worker Lifecycle&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Of course, we&amp;rsquo;ve only covered the getting started part of our journey with
+Progressive Web Apps. I&amp;rsquo;ve left out a lot of fun parts like decided how to implement
+caching strategies or send push notifications. Here are some resources to check
+out to take your PWA skills to the next level:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://serviceworke.rs/"&gt;ServiceWorke.rs&lt;/a&gt; - a set of Service Worker recipes
+and demos from Mozilla&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://jakearchibald.com/2014/offline-cookbook/"&gt;Offline Cookbook&lt;/a&gt; - a great rundown of Service Worker snippets, including a number of caching strategies, by Jake Archibald&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;Service Worker on Rails Sandbox&lt;/a&gt; - a demo Progressive Web App on Rails using the &lt;code&gt;serviceworker-rails&lt;/code&gt; gem by &lt;a href="https://github.com/rossta"&gt;@rossta&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/TalAter/awesome-progressive-web-apps"&gt;Awesome Progressive Web Apps&lt;/a&gt; - kitchen sink of PWA resources&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/TalAter/awesome-service-workers"&gt;Awesome Service Workers&lt;/a&gt; - kitchen sink of Service Worker resources&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
   <entry>
     <title>Why I'm betting on Elixir</title>
     <link rel="alternate" href="/blog/why-i-am-betting-on-elixir.html"/>
@@ -1045,391 +1219,6 @@ about customizing your Rails logger. Happy logging!&lt;/p&gt;
 &lt;li&gt;&lt;a href="https://github.com/heroku/rails_stdout_logging"&gt;Rails STDOUT logging gem&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/rails/sprockets-rails/pull/355"&gt;PR to introduce quiet assets to &lt;code&gt;sprockets-rails&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Sending Web Push Notifications from Rails</title>
-    <link rel="alternate" href="/blog/web-push-notifications-from-rails.html"/>
-    <id>/blog/web-push-notifications-from-rails.html</id>
-    <published>2016-05-13T00:00:00+00:00</published>
-    <updated>2016-05-13T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;&lt;em&gt;Update: Check out &lt;a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html"&gt;Using the Push API with VAPID&lt;/a&gt; to use the voluntary server identification protocol in place of GCM app settings for sending push notifications to Chrome&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;We’ve had push notifications in our mobile and desktop apps for sometime. It...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;em&gt;Update: Check out &lt;a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html"&gt;Using the Push API with VAPID&lt;/a&gt; to use the voluntary server identification protocol in place of GCM app settings for sending push notifications to Chrome&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ve had push notifications in our mobile and desktop apps for sometime. It&amp;rsquo;s now becoming possible on the open web.&lt;/p&gt;
-
-&lt;p&gt;Web Push notifications are powerful because they allow you to engage with your users &lt;em&gt;even when they&amp;rsquo;re not on your site&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m going to share how to I got a working demo of the new &lt;a href="https://www.w3.org/TR/push-api/"&gt;Web Push API&lt;/a&gt; from a Rails (or any Ruby) web application to push desktop-style notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ll cover the basics of implementing Push yourself though it&amp;rsquo;s interesting to note that third party services are already stepping in to do some of the technical work for you, like &lt;a href="https://goroost.com/"&gt;Roost&lt;/a&gt;, &lt;a href="https://pushcrew.com/"&gt;PushCrew&lt;/a&gt;, or
-&lt;a href="https://onesignal.com/webpush"&gt;OneSignal&lt;/a&gt;.&lt;/p&gt;
-
-&lt;div class="callout panel"&gt;
-&lt;p&gt;
-  The &lt;a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html"&gt;Apple Push Notification Service&lt;/a&gt; has made push notifications available to Safari since 2013. There are some &lt;a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/"&gt;nice tutorials&lt;/a&gt; for implementing Apple Push on Safari. The status of future support for Web Push in Safari is: &amp;ldquo;maybe?&amp;rdquo;.
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;h2&gt;Why?&lt;/h2&gt;
-
-&lt;p&gt;&amp;ldquo;Yeah, Ross, but Rails 5. Action Cable. Web Sockets. Server Sent Events. &lt;code&gt;$MY_FAVORITE_ALTERNATIVE&lt;/code&gt;!&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;You might not want to drop all those alternatives just yet, as &lt;a href="http://caniuse.com/#feat=push-api"&gt;browser support for Web Push&lt;/a&gt; still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.&lt;/p&gt;
-
-&lt;p&gt;But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site, something those other solutions cannot provide.&lt;/p&gt;
-
-&lt;h2&gt;Demo&lt;/h2&gt;
-
-&lt;p&gt;Want to see it in action first?&lt;/p&gt;
-
-&lt;p&gt;I created a demo at the &lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/"&gt;Service Worker Rails
-Sandbox&lt;/a&gt; to show how a
-simple push message would look like. Try it out in Firefox or Chrome or check
-out the &lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;source code on GitHub&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/"&gt;&lt;img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-1-2927dd61.png" /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;My demo is mostly informed by Mozilla&amp;rsquo;s &lt;a href="https://serviceworke.rs/"&gt;Service Worker
-Cookbook&lt;/a&gt;, which I highly recommend if you&amp;rsquo;re looking
-to learn more about Service Worker.&lt;/p&gt;
-
-&lt;h2&gt;Bird&amp;rsquo;s eye view&lt;/h2&gt;
-
-&lt;p&gt;Delivering push notifications involve interactions among three parties - the
-user (through her browser), your Rails application, and the Web Push server,
-which for our purposes is either Google or Firefox.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/push-notification-high-level-9cb4f185.png" /&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Diagram courtesy of the &lt;a href="https://wiki.mozilla.org/Firefox/Push_Notifications"&gt;Firefox wiki&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;We&amp;rsquo;ll use JavaScript on the user&amp;rsquo;s current page to &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register"&gt;register a service worker&lt;/a&gt; subscribe to push notifications via the &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/PushManager/subscribe"&gt;&lt;code&gt;pushManager&lt;/code&gt;&lt;/a&gt; interface. The browser will make a request to the Web Push server to a &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription"&gt;&lt;code&gt;PushSubscription&lt;/code&gt;&lt;/a&gt; which will contain a unique endpoint to the Web Push server and authorization keys required for encrypting the push notification request body.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;We&amp;rsquo;ll post the subscription info to our Rails app to be persisted on the server side.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;To send a push notification, we&amp;rsquo;ll use the &lt;a href="https://github.com/zaru/webpush"&gt;&lt;code&gt;webpush&lt;/code&gt;&lt;/a&gt; Ruby gem triggered from our Rails app. &lt;code&gt;webpush&lt;/code&gt; is responsible for sending a proper request to the Web Push server, including &lt;a href="https://developers.google.com/web/updates/2016/03/web-push-encryption?hl=en"&gt;encryption of the message payload&lt;/a&gt; for delivery.&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;If the request is successful, the Web Push server opens a socket to our
-registered service worker which can listen for &lt;code&gt;&amp;#39;push&amp;#39;&lt;/code&gt; events to show a
-notification to the user. Since service workers have a lifecycle independent of
-the web page, they can process events even when the user is not visiting our
-website.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2&gt;Setup&lt;/h2&gt;
-
-&lt;p&gt;At the time of this writing, we&amp;rsquo;ll need to configure our app to use the Google Cloud Messaging platform by registering for application keys. No special authorization is needed to use the Firefox push server as far as I can tell.&lt;/p&gt;
-
-&lt;p&gt;Google provides some decent &lt;a href="https://developers.google.com/web/fundamentals/getting-started/push-notifications/step-04?hl=en"&gt;instructions for registering your app for push
-notifications&lt;/a&gt; which involves some clicking around on the &lt;a href="https://console.developers.google.com"&gt;Google developer console&lt;/a&gt;. (I&amp;rsquo;ve heard rumors this may not be necessary in the near future.) You&amp;rsquo;ll want to come away with a project id for your app and an API key to make authorized requests to the push server.&lt;/p&gt;
-
-&lt;p&gt;Both Firefox and Chrome will expect us to link to a &lt;code&gt;manifest&lt;/code&gt; json file to
-provide metadata for push subscriptions and notifications. Here&amp;rsquo;s an example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;{
-  &amp;quot;name&amp;quot;: &amp;quot;Your app name&amp;quot;,
-  &amp;quot;short_name&amp;quot;: &amp;quot;Your app&amp;quot;,
-  &amp;quot;icons&amp;quot;: [{
-    &amp;quot;src&amp;quot;: &amp;quot;images/icon-192x192.png&amp;quot;,
-    &amp;quot;sizes&amp;quot;: &amp;quot;192x192&amp;quot;,
-    &amp;quot;type&amp;quot;: &amp;quot;image/png&amp;quot;
-  }],
-  &amp;quot;start_url&amp;quot;: &amp;quot;/&amp;quot;,
-  &amp;quot;display&amp;quot;: &amp;quot;standalone&amp;quot;,
-  &amp;quot;gcm_sender_id&amp;quot;: &amp;quot;&amp;lt;Your Project ID&amp;gt;&amp;quot;,
-  &amp;quot;gcm_user_visible_only&amp;quot;: true
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;div class="callout panel"&gt;
-&lt;p&gt;
-Update: as of Chrome 52, it is no longer necessary to set the &lt;code&gt;gcm_sender_id&lt;/code&gt;
-and &lt;code&gt;gcm_user_visible_only&lt;/code&gt; attributes in your &lt;code&gt;manifest.json&lt;/code&gt; configuration
-as long as you use VAPID details as &lt;a href="/blog/using-the-web-push-api-in-ruby.html"&gt;described in my followup post&lt;/a&gt;.
-&lt;/p&gt;
-&lt;/div&gt;
-
-&lt;p&gt;For now, this file can go in &lt;code&gt;public/manifest.json&lt;/code&gt;. In your &lt;code&gt;app/views/layouts/application.html.erb&lt;/code&gt; template, you&amp;rsquo;ll also need to
-add a special &lt;code&gt;&amp;lt;link&amp;gt;&lt;/code&gt; tag to the manifest:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;link rel=&amp;quot;manifest&amp;quot; href=&amp;quot;/manifest.json&amp;quot;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here&amp;rsquo;s the &lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/manifest.json"&gt;actual manifest.json&lt;/a&gt; for the Service Worker Rails Sandbox &lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/"&gt;push demo&lt;/a&gt; as another point of reference.&lt;/p&gt;
-
-&lt;h2&gt;Subscribe through a service worker&lt;/h2&gt;
-
-&lt;p&gt;Yes, Service Worker time! In case you missed it, I&amp;rsquo;m really &lt;a href="/blog/series/service-worker.html"&gt;excited about
-Service Workers&lt;/a&gt;. Service Workers have the
-potential to level the playing field of reliability between the web and mobile devices.&lt;/p&gt;
-
-&lt;p&gt;Service workers must be deployed a bit differently than JavaScript evaluated in
-the web page context. I&amp;rsquo;ve gone into more detail on how to &lt;a href="/blog/service-worker-on-rails.html"&gt;integrate Service
-Worker with Rails&lt;/a&gt; previously but for now, here&amp;rsquo;s the quick setup for push.&lt;/p&gt;
-
-&lt;p&gt;In &lt;code&gt;application.js&lt;/code&gt; (or another &lt;code&gt;.js&lt;/code&gt; required by &lt;code&gt;application.js&lt;/code&gt;) we&amp;rsquo;ll use this following snippet to request registration of
-a service worker script.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/assets/javascripts/application.js
-
-if (&amp;#39;serviceWorker&amp;#39; in navigator) {
-  console.log(&amp;#39;Service Worker is supported&amp;#39;);
-  navigator.serviceWorker.register(&amp;#39;/serviceworker.js&amp;#39;)
-    .then(function(registration) {
-      console.log(&amp;#39;Successfully registered!&amp;#39;, &amp;#39;:^)&amp;#39;, registration);
-      registration.pushManager.subscribe({ userVisibleOnly: true })
-        .then(function(subscription) {
-            console.log(&amp;#39;endpoint:&amp;#39;, subscription.endpoint);
-        });
-  }).catch(function(error) {
-    console.log(&amp;#39;Registration failed&amp;#39;, &amp;#39;:^(&amp;#39;, error);
-  });
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This code registers a service worker on the given scope via &lt;code&gt;navigator.serviceWorker.register&lt;/code&gt;. This returns a &lt;a href="#"&gt;Promise&lt;/a&gt; which will resolve to an instance of &lt;code&gt;ServiceWorkerRegistration&lt;/code&gt;. This registration object has a &lt;code&gt;pushManager&lt;/code&gt; property which we use to &lt;code&gt;subscribe&lt;/code&gt; to the Web Push server. The &lt;code&gt;{ userVisibleOnly: true }&lt;/code&gt; parameter is required for us to use notifications.&lt;/p&gt;
-
-&lt;h3&gt;Troubleshooting&lt;/h3&gt;
-
-&lt;p&gt;I got an error at this stage in Google Chrome the first time: &lt;code&gt;Unable to subscribe to push DOMException: Registration failed - push service error&lt;/code&gt;. Turns out, the &lt;code&gt;pushmanage.subscribe&lt;/code&gt; request can fail if you haven&amp;rsquo;t properly configured your &lt;code&gt;manifest.json&lt;/code&gt; with a valid Google Cloud Message sender id.&lt;/p&gt;
-
-&lt;p&gt;Also, if the &lt;code&gt;pushManager&lt;/code&gt; can&amp;rsquo;t find the &lt;code&gt;manifest.json&lt;/code&gt; via the link tag, or
-if it&amp;rsquo;s not included in the page altogether, you may see another error: &lt;code&gt;Unable to subscribe to push DOMException: Registration failed - manifest empty or missing&lt;/code&gt;, so you&amp;rsquo;ll need to get that working to proceed.&lt;/p&gt;
-
-&lt;h3&gt;The Service Worker&lt;/h3&gt;
-
-&lt;p&gt;In a separate file, &lt;code&gt;app/assets/javascripts/serviceworker.js&lt;/code&gt;, we&amp;rsquo;ll have our service worker show notifications when the &lt;code&gt;&amp;#39;push&amp;#39;&lt;/code&gt; event is received:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;function onPush(event) {
-  var title = (event.data &amp;amp;&amp;amp; event.data.text()) || &amp;quot;Yay a message&amp;quot;;
-
-  event.waitUntil(
-    self.registration.showNotification(title, {
-      body: &amp;quot;We have received a push message&amp;quot;,
-      icon: &amp;quot;/assets/path/to/icon.png&amp;quot;,
-      tag:  &amp;quot;push-simple-demo-notification-tag&amp;quot;
-    });
-  )
-}
-
-self.addEventListener(&amp;quot;push&amp;quot;, onPush);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Because &lt;code&gt;serviceworker.js&lt;/code&gt; needs to be a separate script available on the root
-path, we either need to copy it to our &lt;code&gt;public/&lt;/code&gt; directory , or, even better, we
-can use the &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt; (Star it on GitHub!)&lt;/a&gt; gem which will allow us to make use of both the asset pipeline and custom routing features we need.&lt;/p&gt;
-
-&lt;h3&gt;Rails setup&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
-
-gem &amp;#39;serviceworker-rails&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To routes requests from &lt;code&gt;/serviceworker.js&lt;/code&gt; to our JavaScript file in the asset pipeline, we&amp;rsquo;ll configure the service worker rails middleware as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/serviceworker.rb
-
-Rails.application.configure do
-  config.serviceworker.routes do
-    match &amp;quot;serviceworker.js&amp;quot;
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With these settings, we should be able to see our service worker register with the logging we put in place and be able to accept the browser prompt to receive notifications.&lt;/p&gt;
-
-&lt;p&gt;As a side note, we can also use the &lt;code&gt;serviceworker-rails&lt;/code&gt; routing to move our
-&lt;code&gt;manifest.json&lt;/code&gt; file to &lt;code&gt;app/assets/javascripts&amp;#39;/&lt;/code&gt; from the &lt;code&gt;public/&lt;/code&gt; directory so we can take advantage for the asset pipeline, say for calculating image paths, for this file as well:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/serviceworker.rb
-
-Rails.application.configure do
-  config.serviceworker.routes do
-    # ...
-
-    match &amp;quot;manifest.json&amp;quot;
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;Persist the subscription&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s set up a controller action to serialize the subscription into the visitor&amp;rsquo;s session though any persistence method that will allow us to retrieve the subscription(s) for a given user will do.&lt;/p&gt;
-
-&lt;p&gt;The push subscription has important pieces of data: the endpoint and a set of keys: p256dh and auth. We need use this data in requests from our rails app to the push server.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// subscription.toJSON();
-
-{
-  endpoint: &amp;quot;https://android.googleapis.com/gcm/send/a-subscription-id&amp;quot;,
-  keys: {
-    auth: &amp;quot;16ByteString&amp;quot;,
-    p256dh: &amp;quot;65ByteString&amp;quot;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;When our visitor subscribes, we can post the subscription to our Rails app:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;reg.pushManager.subscribe({ userVisibleOnly: true })
-  .then(function(subscription) {
-    $.post(&amp;quot;/subscribe&amp;quot;, { subscription: subscription.toJSON() });
-  });
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The route:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/routes.rb
-
-post &amp;quot;/subscribe&amp;quot; =&amp;gt; &amp;quot;subscriptions#create&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Our controller - of course, greatly simplified for the purposes of the this demo:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# app/controllers/subscriptions_controller.rb
-
-class SubscriptionsController &amp;lt; ApplicationController
-  def create
-    session[:subscription] = JSON.dump(params.fetch(:subscription, {}))
-
-    head :ok
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2&gt;Push it&lt;/h2&gt;
-
-&lt;p&gt;Now that we have a subscription, we can send a push notification. For this, we&amp;rsquo;ll use the &lt;code&gt;webpush&lt;/code&gt; gem:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
-
-gem &amp;quot;webpush&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With the subscription info, we have what we need to send a message to a specific
-user that will get encrypted in passing over the wire.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s a typical usage:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;Webpush.payload_send(
-  message: &amp;quot;Hello World!&amp;quot;,
-  endpoint: &amp;quot;https://android.googleapis.com/gcm/send/a-subscription-id&amp;quot;,
-  auth: &amp;quot;16ByteString&amp;quot;,
-  p256dh: &amp;quot;65ByteString&amp;quot;
-  api_key: &amp;quot;google_api_key&amp;quot; # omit for Firefox, required for Google
-)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As a proof of concept, we&amp;rsquo;ll create an endpoint to trigger a push notification directly from a user interaction in the browser.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- a view --&amp;gt;
-&amp;lt;button class=&amp;quot;js-push-button&amp;quot;&amp;gt;Send a message&amp;lt;/button&amp;gt;
-
-&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
-  (function() {
-    $(&amp;#39;.js-push-button&amp;#39;).on(&amp;quot;click&amp;quot;, function onClick() {
-      $.post(&amp;quot;/push&amp;quot;);
-    });
-  })();
-&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Start with a button to trigger a &lt;code&gt;POST&lt;/code&gt; to a new &lt;code&gt;/push&lt;/code&gt; endpoint in our app. In a real Rails app, you&amp;rsquo;d probably deliver push notifications from background jobs in response to other events in the system.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# config/routes.rb
-
-post &amp;quot;/push&amp;quot; =&amp;gt; &amp;quot;push_notifications#create&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Route the request to a new controller.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# app/controllers/push_notifications_controller.rb
-
-class PushNotificationsController &amp;lt; ApplicationController
-  def create
-    Webpush.payload_send webpush_params
-
-    head :ok
-  end
-
-  private
-
-  def webpush_params
-    subscription_params = fetch_subscription
-    message = &amp;quot;Hello world, the time is #{Time.zone.now}&amp;quot;
-    endpoint = subscription_params[:endpoint],
-    p256dh = subscription_params.dig(:keys, :p256dh)
-    auth = subscription_params.dig(:keys, :auth)
-    api_key = enpoint =~ /\.google.com\// = ENV.fetch(&amp;#39;GOOGLE_CLOUD_MESSAGE_API_KEY&amp;#39;) || &amp;quot;&amp;quot;
-
-    { message: message, endpoint: endpoint, p256dh: p256dh, auth: auth, api_key: api_key }
-  end
-
-  def fetch_subscription
-    encoded_subscription = session.fetch(:subscription) do
-      raise &amp;quot;Cannot create notification: no :subscription in params or session&amp;quot;
-    end
-
-    JSON.parse(Base64.urlsafe_decode64(encoded_subscription)).with_indifferent_access
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The controller deserializes the subscription from the session and builds up the
-necessary parameters to send to the &lt;code&gt;Webpush&lt;/code&gt; Ruby client. Only the &lt;code&gt;:endpoint&lt;/code&gt; is
-required to send a notification in theory. The &lt;code&gt;:p256dh&lt;/code&gt; and &lt;code&gt;:auth&lt;/code&gt; keys are also required if providing a &lt;code&gt;:message&lt;/code&gt; parameter, which must be encrypted to deliver over the wire. Google requires the Google Cloud Message API key we grabbed from th developer console, so we test the endpoint to
-decide whether to include it in the request.&lt;/p&gt;
-
-&lt;p&gt;If everything worked, we get a push notification!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-2-b270f8bc.jpg" /&gt;&lt;/p&gt;
-
-&lt;h2&gt;Unsubscribing&lt;/h2&gt;
-
-&lt;p&gt;We can programmatically turn off notifications by calling
-&lt;code&gt;PushSubscription#unsubscribe&lt;/code&gt;. This could be done in a callback to a click handler, for example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;function unsubscribe() {
-  navigator.serviceWorker.ready
-    .then((serviceWorkerRegistration) =&amp;gt; {
-      serviceWorkerRegistration.pushManager.getSubscription()
-        .then((subscription) =&amp;gt; {
-          if (!subscription) {
-            console.log(&amp;quot;Not subscribed, nothing to do.&amp;quot;);
-            return;
-          }
-
-          subscription.unsubscribe()
-            then(function() {
-              console.log(&amp;quot;Successfully unsubscribed!.&amp;quot;);
-            })
-            .catch((e) =&amp;gt; {
-              logger.error(&amp;#39;Error thrown while unsubscribing from push messaging&amp;#39;, e);
-            });
-        });
-    });
-}
-
-$(&amp;quot;.js-unsubscribe-button&amp;quot;).on(&amp;quot;click&amp;quot;, unsubscribe)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You&amp;rsquo;d also want to send a request to your Rails app to delete the persisted
-subscription data from the backend which will no longer be valid on the Web Push
-server. That exercise is left up to you!&lt;/p&gt;
-
-&lt;h2&gt;Wrap up&lt;/h2&gt;
-
-&lt;p&gt;This took quite a bit of setup though not nearly as much as getting &lt;a href="https://developer.apple.com/notifications/safari-push-notifications/"&gt;Apple
-Push Notifications to work in Safari&lt;/a&gt;. Overall, the Web Push API is an interesting step for the web in terms of feature parity with mobile.&lt;/p&gt;
-
-&lt;p&gt;What do you think?&lt;/p&gt;
 </content>
   </entry>
 </feed>
