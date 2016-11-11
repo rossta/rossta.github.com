@@ -13,20 +13,24 @@ tags:
 ---
 
 Discussion around Progressive Web Apps is catching fire in the JavaScript
-community. In Rails community, not so much.
+community. In the Rails community, not so much. Perhaps it's because Rails
+culture "has had a problem" with JavaScript, as [Giles Bowkett recently pointed
+out](http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html).
 
 What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
 app-like experience. Open web technologies are now making it possible to make browser-based web apps:
 
-* installable: we can add them to the Home Screen of a mobile device easily
-* more reliable: we can provide a user experience when the device is offline or
+* installable - we can add them to the Home Screen of a mobile device easily
+* more reliable - we can provide a user experience when the device is offline or
   network responsiveness has degraded, and can sync user requests in the
 background when network capability is restored
-* more engaging: we can notify users of activity even when they're not using the
+* more engaging - we can notify users of activity even when they're not using the
   site
 
-While these benefits have gotten a lot of attention amongst JavaScript
-developers, nothing about Rails makes it impossible to take advantage of Progressive Web App technology. I bet it's just a little more difficult to know how to get started. Let's fix that.
+Technically, nothing about Rails is incongruent with Progressive Web App technology. Better yet, the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling. In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.
+
+Rails hasn't been tuned in to take advantage of benefits of Progressive Web
+Apps and I'll bet you might not be sure how to get started. Let's fix that.
 
 ## Your first Progressive Web App on Rails
 
