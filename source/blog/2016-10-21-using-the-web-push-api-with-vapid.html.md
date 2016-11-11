@@ -1,5 +1,5 @@
 ---
-title: Using the Push API with VAPID
+title: Using Web Push Notifcations with VAPID
 author: Ross Kaffenberger
 published: true
 summary: Sending push notifications in Ruby or Node.js on the open web
