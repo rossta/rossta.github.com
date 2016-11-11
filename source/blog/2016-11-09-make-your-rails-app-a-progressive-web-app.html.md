@@ -12,26 +12,18 @@ tags:
   - JavaScript
 ---
 
-Discussion of [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)(PWA) is catching fire in the JavaScript community, but amongst Rails developers, not so much yet. Perhaps it's because Rails culture "has had a problem" with JavaScript, as [Giles Bowkett recently pointed
-out](http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html), but
-I'm not so sure.
+Discussion of [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/) (PWA) is [catching fire](https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0) in the JavaScript community, but amongst Rails developers... not so much.
 
-Progressive Web App technology is still very young and rapidly churning; there's reluctance to get on board until APIs become more stable. Also, the Rails community hasn't had a clear path to integrating PWA technology with their app&mdash;until now. In this post, we'll demonstrate how to turn your Rails app into a Progressive Web App using the `serviceworker-rails` gem.
+Progressive Web App technology is still very young and rapidly churning; perhaps there's more reluctance on Rails teams to get onboard with new JavaScript APIs until they become more stable. Also, the Rails community hasn't had a clear path to integrating PWA technology&mdash;until now. In this post, we'll demonstrate how to turn your Rails app into a Progressive Web App using the `serviceworker-rails` gem.
 
-What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
-app-like experience. Open web technologies are now making it possible to make browser-based web apps:
+What are Progressive Web Apps? Simply put, they are web applications that deliver mobile
+app-like experiences. For example, open web technologies are now making it possible for browser-based web apps to be:
 
-* installable - we can add them to the Home Screen of a mobile device easily
-* more reliable - we can provide a user experience when the device is offline or
-  network responsiveness has degraded, and can sync user requests in the
-background when network capability is restored
-* more engaging - we can notify users of activity even when they're not using the
-  site
+* **installable** - add web apps to the Home Screen of a mobile device easily
+* **more reliable** - provide a user experience when the device is offline or network responsiveness has degraded; sync user requests in the background when network capability is restored
+* **more engaging** - notify users of activity even when they're not using the site
 
-Technically, nothing about Rails is incongruent with Progressive Web App technology. Better yet, the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling. In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.
-
-Rails hasn't been tuned in to take advantage of benefits of Progressive Web
-Apps and I'll bet you might not be sure how to get started. Let's fix that.
+Sound good? Let's get started.
 
 ## Your first Progressive Web App on Rails
 
@@ -168,3 +160,9 @@ out to take your PWA skills to the next level:
 * [Service Worker on Rails Sandbox](https://github.com/rossta/serviceworker-rails-sandbox) - a demo Progressive Web App on Rails using the `serviceworker-rails` gem by [@rossta](https://github.com/rossta)
 * [Awesome Progressive Web Apps](https://github.com/TalAter/awesome-progressive-web-apps) - kitchen sink of PWA resources
 * [Awesome Service Workers](https://github.com/TalAter/awesome-service-workers) - kitchen sink of Service Worker resources
+
+## Rails 💜 PWA
+
+Nothing about Rails is incongruent with Progressive Web App technology so there's no technical reason why we can't start introducing these features today. It's worth noting the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling.
+
+In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.
