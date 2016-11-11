@@ -1,10 +1,10 @@
 ---
-title: Make your Rails app a Progressive Web App
+title: Your first Progressive Web App on Rails
 author: Ross Kaffenberger
 published: true
-summary: From the Rails Way to PWA in no time
+summary: Use the serviceworker-rails gem to bring native features to the mobile web
 description: This tutorial shows how to make Progressive Web App on Rails using the serviceworker-rails gem
-pull_image: 'blog/stock/louvre-pexels-photo.jpg'
+pull_image: 'blog/stock/phone-photo-pexels-photo.jpg'
 series: Service Worker
 category: Code
 tags:
@@ -12,10 +12,11 @@ tags:
   - JavaScript
 ---
 
-Discussion around Progressive Web Apps is catching fire in the JavaScript
-community. In the Rails community, not so much. Perhaps it's because Rails
-culture "has had a problem" with JavaScript, as [Giles Bowkett recently pointed
-out](http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html).
+Discussion of [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)(PWA) is catching fire in the JavaScript community, but amongst Rails developers, not so much yet. Perhaps it's because Rails culture "has had a problem" with JavaScript, as [Giles Bowkett recently pointed
+out](http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html), but
+I'm not so sure.
+
+Progressive Web App technology is still very young and rapidly churning; there's reluctance to get on board until APIs become more stable. Also, the Rails community hasn't had a clear path to integrating PWA technology with their app&mdash;until now. In this post, we'll demonstrate how to turn your Rails app into a Progressive Web App using the `serviceworker-rails` gem.
 
 What are Progressive Web Apps? Simply put, they are web applications that deliver a mobile
 app-like experience. Open web technologies are now making it possible to make browser-based web apps:
@@ -137,8 +138,10 @@ choose which features we want to add.
 
 Here are few things you can try:
 
-* [Adding an offline page for your Rails app](https://rossta.net/blog/offline-page-for-your-rails-application.html)
-* [Sending Web Push notifications from Rails](https://rossta.net/blog/web-push-notifications-from-rails.html)
+* [Adding an offline page for your Rails app](https://rossta.net/blog/offline-page-for-your-rails-application.html) - by @rossta
+* [Sending Web Push notifications from Rails](https://rossta.net/blog/web-push-notifications-from-rails.html) - by @rossta
+* [Instant loading Web Apps with a Service Worker application shell architecture](https://addyosmani.com/blog/application-shell/) - by Addy Osmani
+*
 
 ## Going further
 
@@ -150,6 +153,9 @@ You'll want to understand the Service Worker life cycle, which Jake Archibald
 treats in great detail:
 
 * [The Service Worker Lifecycle](https://developers.google.com/web/fundamentals/instant-and-offline/service-worker/lifecycle)
+
+For some open-source abstractions for implementing Service Worker fetching and
+caching strategies, checkout out [SW-Toolbox](https://github.com/GoogleChrome/sw-toolbox) and [SW-Precache](https://github.com/GoogleChrome/sw-precache) from the Google Chrome team.
 
 Of course, we've only covered the getting started part of our journey with
 Progressive Web Apps. I've left out a lot of fun parts like decided how to implement
