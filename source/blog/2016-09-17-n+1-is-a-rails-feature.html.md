@@ -6,6 +6,7 @@ summary: Solving this issue with eager loading may not always be best
 description: In which we talk about how N+1 queries allow Rails developers to opt for Russian Doll caching to address performance bottlenecks.
 pull_image: 'blog/stock/ladybug-pexels-photo.jpg'
 series:
+popular: 2
 category: Code
 tags:
   - Rails
