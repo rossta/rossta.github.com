@@ -9,7 +9,6 @@ popular: 4
 category: Code
 tags:
   - Ruby
-  - Process
 ---
 
 Let's say you're building a Ruby app and your team has extracted one or more
