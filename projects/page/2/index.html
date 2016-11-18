@@ -74,6 +74,28 @@
 <section id="projects" class="index-posts">
     <article class="index-post">
       <header>
+        <h3><a href="https://rossta.net/">ServiceWorker::Rails</a></h3>
+          <p class="alt-title subtle">Turn your Rails app into a Progressive Web App</p>
+      </header>
+      <p>The Rails asset pipeline makes a number of assumptions about what&rsquo;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &ldquo;cacheability&rdquo;. Rails also assumes a single parent directory, <code>/public/assets</code>, to make it easier to look up the file path for a given asset.</p>
+
+<p>We want Sprockets to compile service worker JavaScript from ES6/7, CoffeeScript, ERB, etc. but must remove the caching and scoping mechanisms offered by Rails asset pipeline defaults. This is where <code>serviceworker-rails</code> comes in.</p>
+
+<p><em>Check out the <a href="https://rossta.net/blog/service-worker-on-rails.html">blog post</a>
+for more background.</em></p>
+
+<p><img alt="Service Worker Rails
+Sandbox" src="/assets/images/screenshots/screenshot-serviceworker-rails-a36be754.png" /></p>
+
+        <p>
+            <a href="https://github.com/rossta/serviceworker-rails">Source code on GitHub</a>
+              &middot;
+            <a href="https://serviceworker-rails.herokuapp.com/">Demo app</a>
+        </p>
+    </article>
+      <br /><hr /><br />
+    <article class="index-post">
+      <header>
         <h3><a href="https://rossta.net/montrose">Montrose</a></h3>
           <p class="alt-title subtle">A Ruby library for modeling recurring events</p>
       </header>
