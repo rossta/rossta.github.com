@@ -13,7 +13,7 @@ tags:
   - JavaScript
 ---
 
-*Update: Check out [Using the Push API with VAPID](https://rossta.net/blog/using-the-web-push-api-with-vapid.html) to use the voluntary server identification protocol in place of GCM app settings for sending push notifications to Chrome*
+*Update: Check out [Using the Push API with VAPID](https://rossta.net/blog/using-the-web-push-api-with-vapid.html) for sending Web Push notifications without needing to configure Google app settings*
 
 We've had push notifications in our mobile and desktop apps for sometime. It's now becoming possible on the open web.
 
