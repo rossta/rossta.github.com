@@ -1,7 +1,3 @@
----
-pageable: true
-per_page: 25
----
 <% content_for(:section) { "Series" } %>
 
 <% series_object = blog_series.find { |s| s.id == series } %>
@@ -13,19 +9,3 @@ per_page: 25
     <%= partial "partials/article_index", locals: { article: article } %>
   <%- end %>
 </section>
-
-<br>
-<% if paginate %>
-  <p>Page <%= page_number %> of <%= num_pages %></p>
-
-  <% if prev_page || next_page %>
-    <p>
-      <% if prev_page %>
-        <%= link_to "Previous", prev_page %></p>
-      <% end %>
-      <% if next_page %>
-        <%= link_to "Next page", next_page %>
-      <% end %>
-    </p>
-  <% end %>
-<% end %>

@@ -8,21 +8,7 @@ per_page: 25
 <br /><hr /><br/>
 <section class="index-posts">
   <%= partial "partials/article_index", locals: { articles: page_articles } %>
-  <br /><hr /><br />
+  <hr /><br /><br />
+  <%= partial "partials/pagination" %>
+  <br />
 </section>
-
-<br>
-<% if paginate %>
-  <p>Page <%= page_number %> of <%= num_pages %></p>
-
-  <% if prev_page || next_page %>
-    <p>
-      <% if prev_page %>
-        <%= link_to "Previous", prev_page %></p>
-      <% end %>
-      <% if next_page %>
-        <%= link_to "Next page", next_page %>
-      <% end %>
-    </p>
-  <% end %>
-<% end %>

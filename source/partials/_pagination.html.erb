@@ -1,0 +1,15 @@
+<% if paginate %>
+  <section>
+    <p>
+      Page <%= page_number %> of <%= num_pages %>
+      <% if prev_page || next_page %>
+        <% if prev_page %>
+          &middot; <%= link_to "Previous", prev_page %></p>
+        <% end %>
+        <% if next_page %>
+          &middot; <%= link_to "Next page", next_page %>
+        <% end %>
+      <% end %>
+    </p>
+  </section>
+<% end %>
