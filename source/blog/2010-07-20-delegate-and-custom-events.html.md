@@ -2,7 +2,7 @@
 title: $.delegate and Custom Events
 author: Ross Kaffenberger
 summary: Use event delegation to attach javascript callbacks
-permalink: /2010/07/delegate-and-custom-events/
+pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:
   - JavaScript

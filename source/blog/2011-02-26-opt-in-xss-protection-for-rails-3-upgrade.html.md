@@ -2,7 +2,7 @@
 title: Opt-in XSS protection for Rails 3 upgrade
 author: Ross Kaffenberger
 summary: A useful technique for upgrading ERB templates in Rails 3
-permalink: /2011/02/opt-in-xss-protection-for-rails-3-upgrade/
+pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:
   - Ruby

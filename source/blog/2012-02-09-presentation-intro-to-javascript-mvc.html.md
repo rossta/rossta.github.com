@@ -2,7 +2,7 @@
 title: Presentation Intro to JavaScript MVC
 author: Ross Kaffenberger
 summary: A brief intro to Backbone.js for a team brownbag at ChallengePost
-permalink: /2012/02/presentation-intro-to-javascript-mvc/
+pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:
   - JavaScript

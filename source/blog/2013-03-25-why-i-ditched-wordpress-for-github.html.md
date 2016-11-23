@@ -2,6 +2,7 @@
 title: Why I Ditched Wordpress for GitHub
 author: Ross Kaffenberger
 summary: Moving my blog to a static website tool hosted on GitHub
+pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Life
 tags:
   - GitHub
