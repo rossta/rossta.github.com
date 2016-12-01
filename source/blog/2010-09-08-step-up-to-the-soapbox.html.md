@@ -2,6 +2,7 @@
 title: Step up to the soapbox
 author: Ross Kaffenberger
 summary: Entry in the 10K Apart Contest to build a web-based app in less than 10kb of javascript
+pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:
   - JavaScript
