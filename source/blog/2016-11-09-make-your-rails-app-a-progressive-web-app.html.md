@@ -3,7 +3,7 @@ title: Your first Progressive Web App on Rails
 author: Ross Kaffenberger
 published: true
 summary: Use the serviceworker-rails gem to bring native features to the mobile web
-description: This tutorial shows how to make Progressive Web App on Rails using the serviceworker-rails gem
+description: This tutorial shows how to make a Progressive Web App on Rails using the serviceworker-rails gem
 pull_image: 'blog/stock/phone-photo-pexels-photo.jpg'
 series: Service Worker
 category: Code
