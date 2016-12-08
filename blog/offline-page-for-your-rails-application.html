@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-b473780b.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-3de9d7c1.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-a0229364.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -74,11 +74,11 @@
       <p>When you visit a website without an internet connection in Chrome, you see the
 offline dinosaur.</p>
 
-<p>No wonder we tend to think of websites as less reliable than mobile applications - we can&rsquo;t use them without the network.</p>
+<p>No wonder we tend to think of websites as less reliable than mobile applications - we can&#39;t use them without the network.</p>
 
 <p>At least, not typically. We could use <a href="http://diveintohtml5.info/offline.html">App Cache</a> and the Cache Manifest to create an offline experience. For <a href="http://alistapart.com/article/application-cache-is-a-douchebag">a number of reasons</a>, developers have found App Cache difficult to work with.</p>
 
-<p>Luckily, there&rsquo;s a new web standard, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">Service Worker</a>, that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.</p>
+<p>Luckily, there&#39;s a new web standard, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">Service Worker</a>, that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.</p>
 
 <p>For now, we use a service worker to render a simple error page with our own branding
 when a user attempts to come back to our site without a connection. Keep in
@@ -86,41 +86,53 @@ mind, the techniques used here are building blocks that can be taken further to 
 
 <aside class="callout panel">
   <p>
-Sidebar: I&rsquo;ve wondered: should the offline response be associated with an HTTP status code? I don&rsquo;t believe one exists for &ldquo;No network connection&rdquo;. If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won&rsquo;t be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like &ldquo;Not found&rdquo;, &ldquo;Moved permanently&rdquo;, and &ldquo;Site offline for maintenance&rdquo;. Philosophically, is a request that never reaches the server a request at all?
+Sidebar: I've wondered: should the offline response be associated with an HTTP status code? I don't believe one exists for "No network connection". If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won't be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like "Not found", "Moved permanently", and "Site offline for maintenance". Philosophically, is a request that never reaches the server a request at all?
 </p>
 </aside>
 
-<p>To do this, we&rsquo;re going to use a service worker to precache the offline
+<p>To do this, we&#39;re going to use a service worker to precache the offline
 assets on the first visit to the site. Later, during a return visit without a
 network connection, we can use our service worker to render the offline page.</p>
 
 <p>This is possible because Service Worker acts as a liason between your
-visitor&rsquo;s browser and your servers <em>outside the lifecycle of a page</em>.</p>
+visitor&#39;s browser and your servers <em>outside the lifecycle of a page</em>.</p>
 
-<p>Keep in mind also, will be a <em>progressive enhancement</em>. Since service workers are <a href="https://jakearchibald.github.io/isserviceworkerready/">not available in all browsers</a>, this approach won&rsquo;t work for everyone, but the experience won&rsquo;t degrade for those visitors either.</p>
+<p>Keep in mind also, will be a <em>progressive enhancement</em>. Since service workers are <a href="https://jakearchibald.github.io/isserviceworkerready/">not available in all browsers</a>, this approach won&#39;t work for everyone, but the experience won&#39;t degrade for those visitors either.</p>
 
-<h3>Produce the assets</h3>
-
+      <h3 id="produce-the-assets" class="title">
+        <a name="produce-the-assets" class="anchor" href="#produce-the-assets">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Produce the assets
+      </h3>
+    
 <p>First we need an offline page. We could simply use an HTML page in the public directory with embedded styles like the generated Rails 404 and 500 pages.</p>
 
 <p><a href="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0">Source: /offline.html</a></p>
 
 <p>Alternatively, set up a route to a controller action as a <a href="https://mattbrictson.com/dynamic-rails-error-pages">dynamic Rails error page</a>.</p>
 
-<h3>Add a service worker file</h3>
-
-<p>We&rsquo;re going to cache this offline HTML on the client side during their first
-visit so that it&rsquo;s available later. We can of course add links
+      <h3 id="add-a-service-worker-file" class="title">
+        <a name="add-a-service-worker-file" class="anchor" href="#add-a-service-worker-file">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Add a service worker file
+      </h3>
+    
+<p>We&#39;re going to cache this offline HTML on the client side during their first
+visit so that it&#39;s available later. We can of course add links
 to external CSS, JavaScript, and images in our offline pages - we just need to
 remember to cache those resources as well.</p>
 
-<p>(The following assumes Sprockets, so if using something else, we&rsquo;ll need to adjust accordingly where the asset pipeline is concerned.)</p>
+<p>(The following assumes Sprockets, so if using something else, we&#39;ll need to adjust accordingly where the asset pipeline is concerned.)</p>
 
 <p>The service worker script file must live outside our <code>application.js</code> or other
 bundled assets. It can live in any path from which Sprockets can load assets,
-but for now, we&rsquo;ll add a new JavaScript file in <code>app/assets/javascripts/serviceworker.js</code>.</p>
+but for now, we&#39;ll add a new JavaScript file in <code>app/assets/javascripts/serviceworker.js</code>.</p>
 
-<p>Since it won&rsquo;t be bundled with <code>application.js</code>, we&rsquo;ll need to let our Rails
+<p>Since it won&#39;t be bundled with <code>application.js</code>, we&#39;ll need to let our Rails
 configuration know to precompile our serviceworker separately:</p>
 
 <pre><code class="ruby"># config/initializers/assets.rb
@@ -128,12 +140,18 @@ configuration know to precompile our serviceworker separately:</p>
 Rails.application.config.assets.precompile += %w[serviceworker.js]
 </code></pre>
 
-<h3>Declare an &lsquo;install&rsquo; event</h3>
-
-<p>Since service workers are event driven, we&rsquo;ll provide callbacks to three key events in the servive worker lifecycle: <code>install</code>, <code>activate</code>, and <code>fetch</code>.</p>
+      <h3 id="declare-an-39-install-39-event" class="title">
+        <a name="declare-an-39-install-39-event" class="anchor" href="#declare-an-39-install-39-event">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Declare an &#39;install&#39; event
+      </h3>
+    
+<p>Since service workers are event driven, we&#39;ll provide callbacks to three key events in the servive worker lifecycle: <code>install</code>, <code>activate</code>, and <code>fetch</code>.</p>
 
 <p>The <code>install</code> event will be invoked just the first time the service worker is
-requested or any time it is updated and redeployed prior to being activated. Here, we&rsquo;ll precache our offline assets:</p>
+requested or any time it is updated and redeployed prior to being activated. Here, we&#39;ll precache our offline assets:</p>
 
 <pre><code class="ruby">var version = &#39;v1::&#39;;
 
@@ -149,7 +167,7 @@ self.addEventListener(&#39;install&#39;, function onInstall(event) {
 });
 </code></pre>
 
-<p><code>event.waitUntil</code> accepts <a href="http://www.html5rocks.com/en/tutorials/es6/promises/">a promise</a> which must succeed for the <code>install</code> event to install the service worker successfully. We use <code>caches.open</code> to return a promise that adds our static offline assets to a named cache associated with our site and the user&rsquo;s browser. The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache">Cache API</a> provides client-side storage for request/response pairs, a lot like a built in HTTP cache.</p>
+<p><code>event.waitUntil</code> accepts <a href="http://www.html5rocks.com/en/tutorials/es6/promises/">a promise</a> which must succeed for the <code>install</code> event to install the service worker successfully. We use <code>caches.open</code> to return a promise that adds our static offline assets to a named cache associated with our site and the user&#39;s browser. The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache">Cache API</a> provides client-side storage for request/response pairs, a lot like a built in HTTP cache.</p>
 
 <p>We can also cache precompiled assets by renaming our <code>serviceworker.js</code> to <code>serviceworker.js.erb</code> and embedding helper methods:</p>
 
@@ -159,9 +177,15 @@ self.addEventListener(&#39;install&#39;, function onInstall(event) {
 ]);
 </code></pre>
 
-<h3>&#39;fetch&rsquo; or fallback</h3>
-
-<p>Our service worker can intercept any external network request from our visitor&rsquo;s
+      <h3 id="-39-fetch-39-or-fallback" class="title">
+        <a name="-39-fetch-39-or-fallback" class="anchor" href="#-39-fetch-39-or-fallback">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        &#39;fetch&#39; or fallback
+      </h3>
+    
+<p>Our service worker can intercept any external network request from our visitor&#39;s
 browser - even to cross-origin hosts - within the fetch event.</p>
 
 <p>There are <a href="https://jakearchibald.com/2014/offline-cookbook/">a ton of strategies we can
@@ -185,13 +209,19 @@ worker power to respond to various requests, for our simple offline page</p>
 });
 </code></pre>
 
-<p>This code will filter for GET requests to our host. Ignored <code>fetch</code> events will simply proceed to the network. When we may want to provide the offline fallback, we&rsquo;ll then ask then network to <code>fetch</code> the
-request. If that doesn&rsquo;t resolve, our <code>catch</code> handler will be invoked and
+<p>This code will filter for GET requests to our host. Ignored <code>fetch</code> events will simply proceed to the network. When we may want to provide the offline fallback, we&#39;ll then ask then network to <code>fetch</code> the
+request. If that doesn&#39;t resolve, our <code>catch</code> handler will be invoked and
 attempt to match the request in the cache or simply return our cached offline
 page.</p>
 
-<h3>Clean up during &#39;activate&rsquo;</h3>
-
+      <h3 id="clean-up-during-39-activate-39-" class="title">
+        <a name="clean-up-during-39-activate-39-" class="anchor" href="#clean-up-during-39-activate-39-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Clean up during &#39;activate&#39;
+      </h3>
+    
 <p>The <code>activate</code> event is useful to clean up old caches, say when the offline page
 or any of the linked static resources changes.</p>
 
@@ -214,11 +244,17 @@ self.addEventListener(&#39;activate&#39;, function onActivate(event) {
 
 <p>If we deploy a service worker with a new version number, the <code>install</code> event
 will be invoked again to re-cache the static resources for the offline page.
-During <code>activate</code>, any cache names that don&rsquo;t match the new version number will
+During <code>activate</code>, any cache names that don&#39;t match the new version number will
 be removed.</p>
 
-<h3>Register that worker</h3>
-
+      <h3 id="register-that-worker" class="title">
+        <a name="register-that-worker" class="anchor" href="#register-that-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Register that worker
+      </h3>
+    
 <p>With our service worker event handling in place, we must register the script
 from the main page. In any file included in <code>application.js</code>:</p>
 
@@ -229,13 +265,19 @@ if (&#39;serviceWorker&#39; in navigator) {
 }
 </code></pre>
 
-<p>It&rsquo;s important for this script to be available at the scope for which we want
+<p>It&#39;s important for this script to be available at the scope for which we want
 the service worker to be active. In other words, registering the service worker
-at its precompiled path <code>/assets/serviceworker.js</code>, won&rsquo;t be helpful since we
-won&rsquo;t be able to intercept requests to the root path.</p>
+at its precompiled path <code>/assets/serviceworker.js</code>, won&#39;t be helpful since we
+won&#39;t be able to intercept requests to the root path.</p>
 
-<h3>Sprinkle in some middleware</h3>
-
+      <h3 id="sprinkle-in-some-middleware" class="title">
+        <a name="sprinkle-in-some-middleware" class="anchor" href="#sprinkle-in-some-middleware">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Sprinkle in some middleware
+      </h3>
+    
 <p>To make this work with the Rails asset pipeline, we can use the
 <a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code></a> gem.</p>
 
@@ -257,7 +299,7 @@ end
 </code></pre>
 
 <p>Now, any request to the path <code>/serviceworker.js</code> will match an asset of that
-name. If your service worker script is in a nested directory, you&rsquo;d use this
+name. If your service worker script is in a nested directory, you&#39;d use this
 instead:</p>
 
 <pre><code class="ruby">match &quot;/serviceworker.js&quot; =&gt; &quot;nested/directory/serviceworker.js&quot;
@@ -265,10 +307,16 @@ instead:</p>
 
 <p>See the project <a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md">README</a> for more info on how to configure the middleware.</p>
 
-<p>While you&rsquo;re at it, <a href="https://github.com/rossta/serviceworker-rails">star the project on GitHub</a>!</p>
+<p>While you&#39;re at it, <a href="https://github.com/rossta/serviceworker-rails">star the project on GitHub</a>!</p>
 
-<h3>Moment of truth</h3>
-
+      <h3 id="moment-of-truth" class="title">
+        <a name="moment-of-truth" class="anchor" href="#moment-of-truth">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Moment of truth
+      </h3>
+    
 <p>Phew! That took some setup. Our offline page should now be ready for consumption. Try disabling your
 network connection to test it out. You can use the <em>Network</em> tab in Chrome and
 Chrome Canary to take your browser offline while Firefox has the <em>Work Offline</em> mode under the File menu.</p>
@@ -281,12 +329,18 @@ can find its <a href="https://github.com/rossta/serviceworker-rails-sandbox">sou
 
 <p><img src="/assets/images/screenshots/screenshot-offline-custom-4e1f1089.jpg" /></p>
 
-<h3>Debugging</h3>
-
+      <h3 id="debugging" class="title">
+        <a name="debugging" class="anchor" href="#debugging">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Debugging
+      </h3>
+    
 <p>Chrome also provides some useful debugging tools for service workers under the
-<em>Resources</em>. It&rsquo;s helpful to read up on the Service Worker life cycle since it is treated
-differently than other JavaScript resources. For example, a hard refresh isn&rsquo;t
-enough to get your browser to install an updated service worker &ndash; the browser
+<em>Resources</em>. It&#39;s helpful to read up on the Service Worker life cycle since it is treated
+differently than other JavaScript resources. For example, a hard refresh isn&#39;t
+enough to get your browser to install an updated service worker -- the browser
 will keep the current worker active while any tab to your browser is currently
 open.</p>
 
@@ -299,11 +353,17 @@ let a new service worker take control immediately when used during <code>install
 });
 </code></pre>
 
-<h3>Final word</h3>
-
-<p>I believe it&rsquo;s important for web developers to start thinking about ways to make
+      <h3 id="final-word" class="title">
+        <a name="final-word" class="anchor" href="#final-word">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Final word
+      </h3>
+    
+<p>I believe it&#39;s important for web developers to start thinking about ways to make
 our application more reliable in the eyes of consumers. While rendering an
-offline page isn&rsquo;t a game changer by itself, it is a low-risk way to begin
+offline page isn&#39;t a game changer by itself, it is a low-risk way to begin
 experimenting with the Service Worker API which has the potential for <a href="http://serviceworke.rs/">many more
 advanced use cases</a> and can help the web get
 closer to an even playing field with mobile apps.</p>
@@ -423,11 +483,11 @@ closer to an even playing field with mobile apps.</p>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net">email</a></li>
-        <li><a href="https://twitter.com/rossta">twitter</a></li>
-        <li><a href="https://github.com/rossta">github</a></li>
-        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
+        <li><a href="https://github.com/rossta" rel="me">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
       </ul>
     </section>
   </div>

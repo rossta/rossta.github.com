@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-b473780b.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-3de9d7c1.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-a0229364.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -71,7 +71,7 @@
 
         <p><img src="/assets/images/blog/stock/clock-pexels-photo-160981e8.jpg" /></p>
 
-      <p>I was considering recently how I&rsquo;d build an <a href="http://meetedgar.com/">Edgar</a> clone to post updates about <a href="/">rossta.net</a> on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.</p>
+      <p>I was considering recently how I&#39;d build an <a href="http://meetedgar.com/">Edgar</a> clone to post updates about <a href="/">rossta.net</a> on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.</p>
 
 <p>For scheduling tasks, we have <a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html">cron</a> at the system level and even such options as the <a href="https://github.com/javan/whenever"><code>whenever</code></a> gem to setup cron from Rails and Sinatra applications. Rubyists can also take advantage of fantastic background job schedulers like <a href="https://github.com/jmettraux/rufus-scheduler"><code>rufus-scheduler</code></a> to run recurring tasks from a separate process or even an API for defining repeating <a href="https://github.com/mperham/sidekiq"><code>Sidekiq</code></a> jobs with <a href="https://github.com/tobiassvn/sidetiq"><code>Sidetiq</code></a>.</p>
 
@@ -82,22 +82,22 @@
 <li>enumerable, so we can determine when the next post(s) should be shared on designated social networks.</li>
 </ol>
 
-<p>It&rsquo;s an interesting problem to model. While we have classes like <code>Time</code>, <code>Date</code>, and event <code>ActiveSupport::Duration</code>, it&rsquo;s more elusive to consider recurrences. I mean, what does it mean to represent the meeting time of my <a href="http://www.meetup.com/NYC-rb/">NYC.rb</a> meetup: &ldquo;every second Tuesday of the month at 7pm&rdquo;.</p>
+<p>It&#39;s an interesting problem to model. While we have classes like <code>Time</code>, <code>Date</code>, and event <code>ActiveSupport::Duration</code>, it&#39;s more elusive to consider recurrences. I mean, what does it mean to represent the meeting time of my <a href="http://www.meetup.com/NYC-rb/">NYC.rb</a> meetup: &quot;every second Tuesday of the month at 7pm&quot;.</p>
 
-<p>Solutions for this exist in Ruby, namely <a href="https://github.com/seejohnrun/ice_cube"><code>ice_cube</code></a>. If you&rsquo;re looking for a mature, up-to-date project devoted to modeling recurring events in Ruby, please check it out. I did, and highly recommend it. After playing with it for awhile, I found felt the urge for alternative semantics - like the ability to define a recurrence without a start date - and API similar to the hash-like syntax provided by another less-active recurring events library, <a href="https://github.com/fnando/recurrence"><code>recurrence</code></a>.</p>
+<p>Solutions for this exist in Ruby, namely <a href="https://github.com/seejohnrun/ice_cube"><code>ice_cube</code></a>. If you&#39;re looking for a mature, up-to-date project devoted to modeling recurring events in Ruby, please check it out. I did, and highly recommend it. After playing with it for awhile, I found felt the urge for alternative semantics - like the ability to define a recurrence without a start date - and API similar to the hash-like syntax provided by another less-active recurring events library, <a href="https://github.com/fnando/recurrence"><code>recurrence</code></a>.</p>
 
 <p>I thought of the <a href="https://github.com/httprb/http"><code>HTTP</code></a> gem which bills
 itself as the following:</p>
 
 <blockquote>
-<p>HTTP (The Gem! a.k.a. http.rb) is an easy-to-use client library for making requests from Ruby. It uses a simple method chaining system for building requests, similar to Python&rsquo;s <a href="http://docs.python-requests.org/en/latest/">Requests</a>.</p>
+<p>HTTP (The Gem! a.k.a. http.rb) is an easy-to-use client library for making requests from Ruby. It uses a simple method chaining system for building requests, similar to Python&#39;s <a href="http://docs.python-requests.org/en/latest/">Requests</a>.</p>
 </blockquote>
 
 <p>Taking a cue from <code>http.rb</code> and the <code>recurrence</code> gem, I set out to create something similar for recurring events.</p>
 
 <p>Introducing <a href="https://github.com/rossta/montrose"><code>Montrose</code></a>.</p>
 
-<p>Montrose allows you to easily create &ldquo;recurrence&rdquo; objects through chaining:</p>
+<p>Montrose allows you to easily create &quot;recurrence&quot; objects through chaining:</p>
 
 <pre><code class="ruby"># Every Monday at 10:30am
 Montrose.weekly.on(:monday).at(&quot;10:30 am&quot;)
@@ -177,7 +177,7 @@ Montrose::ConfigurationError: Please specify the :every option
 </code></pre>
 
 <p>Conceptually, recurrences can represent an infinite sequence. When we say
-simply &ldquo;every day&rdquo;, there is no implied ending. It&rsquo;s therefore possible to
+simply &quot;every day&quot;, there is no implied ending. It&#39;s therefore possible to
 create a recurrence that can enumerate forever.</p>
 
 <pre><code class="ruby"># Every day starting now
@@ -195,7 +195,7 @@ Mon, 29 Feb 2016,
 Sat, 26 Mar 2016]
 </code></pre>
 
-<p>It&rsquo;s straightforward to convert recurrence options back to a hash.</p>
+<p>It&#39;s straightforward to convert recurrence options back to a hash.</p>
 
 <pre><code class="ruby"># Every 10 minutes starting now
 opts = Montrose::Recurrence.new(every: 10.minutes).to_h
@@ -225,7 +225,7 @@ es.recurrence
 
 <p>There are <a href="https://github.com/rossta/montrose/issues">plenty of missing features</a>, including iCal serialization though Montrose already <a href="https://github.com/rossta/montrose/blob/master/spec/rfc_spec.rb">supports most of the examples</a> given by the iCal spec, <a href="https://www.ietf.org/rfc/rfc2445.txt">rfc2445</a>.</p>
 
-<p>I still haven&rsquo;t built that Edgar clone, but feel this is a good place from which to grow. As I said earlier, the <code>ice_cube</code> gem is a mature library and already does much of what I&rsquo;ve described here. Writing my own solution allowed me to think more deeply about the internal mechanisms for calculating recurrences and ultimately, once my curiosity was piqued, I couldn&rsquo;t stop. If, you like what <code>Montrose</code> has to offer and you&rsquo;re feeling adventurous, try it out in your own application and send some feedback. Don&rsquo;t hesitate to <a href="https://github.com/rossta/montrose">fork the project</a> and contribute.</p>
+<p>I still haven&#39;t built that Edgar clone, but feel this is a good place from which to grow. As I said earlier, the <code>ice_cube</code> gem is a mature library and already does much of what I&#39;ve described here. Writing my own solution allowed me to think more deeply about the internal mechanisms for calculating recurrences and ultimately, once my curiosity was piqued, I couldn&#39;t stop. If, you like what <code>Montrose</code> has to offer and you&#39;re feeling adventurous, try it out in your own application and send some feedback. Don&#39;t hesitate to <a href="https://github.com/rossta/montrose">fork the project</a> and contribute.</p>
 
 <p>NYC.rb?</p>
 
@@ -350,11 +350,11 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net">email</a></li>
-        <li><a href="https://twitter.com/rossta">twitter</a></li>
-        <li><a href="https://github.com/rossta">github</a></li>
-        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
+        <li><a href="https://github.com/rossta" rel="me">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
       </ul>
     </section>
   </div>

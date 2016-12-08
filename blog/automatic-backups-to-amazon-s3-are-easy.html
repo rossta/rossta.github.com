@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-b473780b.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-3de9d7c1.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-a0229364.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -71,10 +71,16 @@
 
         <p><img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" /></p>
 
-      <p>You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&rsquo;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.</p>
+      <p>You have good reason to backup your files. Amazon S3 is a cost-effective storage option. It doesn&#39;t take the place of a dedicated drive that you own, it can be useful for redundancy nonetheless. With a few easy command-line steps (plus some pre-requisites), you can set up your machine to automate backups to S3 in no time.</p>
 
-<h3>Pre-requisites</h3>
-
+      <h3 id="pre-requisites" class="title">
+        <a name="pre-requisites" class="anchor" href="#pre-requisites">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Pre-requisites
+      </h3>
+    
 <ul>
 <li>An <a href="http://aws.amazon.com/">Amazon web services account</a> and <a href="http://aws.amazon.com/iam/">your Amazon access credentials</a></li>
 <li><code>s3cmd</code>: command line interface to S3.</li>
@@ -98,13 +104,19 @@ $ apt-get install s3cmd
 <li><code>gpg</code>: opensource encryption program</li>
 </ul>
 
-<h3>Setup</h3>
+      <h3 id="setup" class="title">
+        <a name="setup" class="anchor" href="#setup">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Setup
+      </h3>
+    
+<p>First you&#39;ll need to configure s3cmd: <code>s3cmd --configure</code>. Have your Amazon access key and secret key at the ready.</p>
 
-<p>First you&rsquo;ll need to configure s3cmd: <code>s3cmd --configure</code>. Have your Amazon access key and secret key at the ready.</p>
+<p>If you plan to store sensitive data on S3, enter the path to your <code>gpg</code> executable; <code>s3cmd</code> will encrypt your data before transferring from your machine to S3. It also decrypts when downloading to your machine. Keep in mind, encrypted files won&#39;t be readable by others with direct access.</p>
 
-<p>If you plan to store sensitive data on S3, enter the path to your <code>gpg</code> executable; <code>s3cmd</code> will encrypt your data before transferring from your machine to S3. It also decrypts when downloading to your machine. Keep in mind, encrypted files won&rsquo;t be readable by others with direct access.</p>
-
-<p>Here&rsquo;s a sample result:</p>
+<p>Here&#39;s a sample result:</p>
 
 <pre><code>$ s3cmd --configure
 
@@ -145,11 +157,17 @@ Save settings? [y/N] y
 Configuration saved to &#39;$HOME/.s3cfg&#39;
 </code></pre>
 
-<h3>Backup</h3>
-
+      <h3 id="backup" class="title">
+        <a name="backup" class="anchor" href="#backup">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Backup
+      </h3>
+    
 <p>Now all you need is a file to backup and an S3 bucket to store it.</p>
 
-<p>Let&rsquo;s say you&rsquo;re a web developer like me and you want to back up your MySQL or Postgres development data. First, generate the backup file (you may need to add database credentials command-line options, of course):</p>
+<p>Let&#39;s say you&#39;re a web developer like me and you want to back up your MySQL or Postgres development data. First, generate the backup file (you may need to add database credentials command-line options, of course):</p>
 
 <pre><code># mysql
 $ mysqldump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
@@ -158,19 +176,19 @@ $ mysqldump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
 $ pg_dump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
 </code></pre>
 
-<p>You can use <code>s3cmd</code> to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be unique to <em>all</em> S3 users, you won&rsquo;t be able to call it something like &ldquo;backups&rdquo;. It&rsquo;s helpful to use a prefix like your email or handle.</p>
+<p>You can use <code>s3cmd</code> to create a bucket. This is essentially a top-level directory in your S3 account. Since bucket names must be unique to <em>all</em> S3 users, you won&#39;t be able to call it something like &quot;backups&quot;. It&#39;s helpful to use a prefix like your email or handle.</p>
 
-<p>Creates an S3 bucket called &lsquo;myname-backups&rsquo;:</p>
+<p>Creates an S3 bucket called &#39;myname-backups&#39;:</p>
 
 <pre><code>$ s3cmd mb s3://myname-backups
 </code></pre>
 
-<p>Now you&rsquo;re ready to deliver. Encrypt and send your sql dump file to your new S3 bucket:</p>
+<p>Now you&#39;re ready to deliver. Encrypt and send your sql dump file to your new S3 bucket:</p>
 
 <pre><code>$ s3cmd put backup-2014-02-01.sql s3://myname-backups/backup-2014-02-01.sql --encrypt
 </code></pre>
 
-<p>You can verify it&rsquo;s in the bucket:</p>
+<p>You can verify it&#39;s in the bucket:</p>
 
 <pre><code>$ s3cmd ls s3://myname-backups/
 2014-02-01 22:32   1109702   s3://myname-backups/test/backup-2014-02-01.sql
@@ -183,11 +201,17 @@ $ pg_dump my_app_development &gt; backup-`date +%Y-%m-%d`.sql
 
 <p><code>s3cmd</code> supports a wide range of configuration options beyond those entered during the setup phase.Once set, your global configuration is editable in your <code>.s3cfg</code> file, typically saved in your home directory. You can also set options at the command line.</p>
 
-<h3>Automate</h3>
+      <h3 id="automate" class="title">
+        <a name="automate" class="anchor" href="#automate">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Automate
+      </h3>
+    
+<p>Backing up is good but automatic, recurring backups are even better; like saving money, it&#39;s more likely to happen when you make a computer do it for you.</p>
 
-<p>Backing up is good but automatic, recurring backups are even better; like saving money, it&rsquo;s more likely to happen when you make a computer do it for you.</p>
-
-<p>Let&rsquo;s add a cron task:</p>
+<p>Let&#39;s add a cron task:</p>
 
 <pre><code>#!/usr/bin/env bash
 
@@ -323,11 +347,11 @@ rm &quot;$TEMP_FILE&quot;
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net">email</a></li>
-        <li><a href="https://twitter.com/rossta">twitter</a></li>
-        <li><a href="https://github.com/rossta">github</a></li>
-        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
+        <li><a href="https://github.com/rossta" rel="me">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
       </ul>
     </section>
   </div>

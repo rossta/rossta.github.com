@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-b473780b.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-3de9d7c1.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-a0229364.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -71,22 +71,28 @@
 
         <p><img src="/assets/images/blog/stock/open-book-pexels-photo-8add5398.jpg" /></p>
 
-      <p>The thing with paginated data is we can&rsquo;t get it all at once.</p>
+      <p>The thing with paginated data is we can&#39;t get it all at once.</p>
 
-<p>Let&rsquo;s say we&rsquo;re using the <a href="https://developers.trello.com/">Trello API</a>. There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
+<p>Let&#39;s say we&#39;re using the <a href="https://developers.trello.com/">Trello API</a>. There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
 cards, and actions (like comments, copies, moves, etc).</p>
 
-<p>If we&rsquo;re querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of &ldquo;cards&rdquo; <img src="/assets/images/icons/noun_63447-2fa20b1a.png" class="icon-image inline" /> <img src="/assets/images/icons/noun_63453-5cc436ec.png" class="icon-image inline" /></p>
+<p>If we&#39;re querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of &quot;cards&quot; <img src="/assets/images/icons/noun_63447-2fa20b1a.png" class="icon-image inline" /> <img src="/assets/images/icons/noun_63453-5cc436ec.png" class="icon-image inline" /></p>
 
-<p>In most cases, Trello will provide a default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that? In this post, we&rsquo;ll examine a few ways to collect paginated results in Ruby.</p>
+<p>In most cases, Trello will provide a default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that? In this post, we&#39;ll examine a few ways to collect paginated results in Ruby.</p>
 
-<h3>Trello World</h3>
+      <h3 id="trello-world" class="title">
+        <a name="trello-world" class="anchor" href="#trello-world">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Trello World
+      </h3>
+    
+<p>The <a href="https://developers.trello.com/">Trello developer docs</a> provide a quickstart in javascript - here&#39;s the unofficial Ruby version.</p>
 
-<p>The <a href="https://developers.trello.com/">Trello developer docs</a> provide a quickstart in javascript - here&rsquo;s the unofficial Ruby version.</p>
+<p>While logged into your Trello account (you&#39;ll need one first), <strong><a href="https://trello.com/app-key">retrieve your app key</a></strong>. We won&#39;t need the &quot;secret&quot; for this article.</p>
 
-<p>While logged into your Trello account (you&rsquo;ll need one first), <strong><a href="https://trello.com/app-key">retrieve your app key</a></strong>. We won&rsquo;t need the &ldquo;secret&rdquo; for this article.</p>
-
-<p>Next, you&rsquo;ll generate an <strong>app token</strong>. Paste the following URL into your browser with your app <strong>key</strong> subsituted for the placeholder.</p>
+<p>Next, you&#39;ll generate an <strong>app token</strong>. Paste the following URL into your browser with your app <strong>key</strong> subsituted for the placeholder.</p>
 
 <pre><code class="bash">https://trello.com/1/authorize?expiration=never&amp;scope=read,write,account&amp;response_type=token&amp;name=Trello%20World&amp;key=YOUR_KEY
 </code></pre>
@@ -98,17 +104,23 @@ cards, and actions (like comments, copies, moves, etc).</p>
 
 <p>You should see a JSON response with attributes like your Trello id, username, bio, etc.</p>
 
-<h3>Script mode</h3>
-
-<p>Now let&rsquo;s fetch some paginated data in Ruby. For the following examples, we&rsquo;ll be using Ruby 2.2.</p>
+      <h3 id="script-mode" class="title">
+        <a name="script-mode" class="anchor" href="#script-mode">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Script mode
+      </h3>
+    
+<p>Now let&#39;s fetch some paginated data in Ruby. For the following examples, we&#39;ll be using Ruby 2.2.</p>
 
 <aside class="callout panel"><p>
 
-For academic reasons, we&rsquo;re ignoring available Ruby clients for the Trello API like <strong><a href="https://github.com/jeremytregunna/ruby-trello">ruby-trello</a></strong>, a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <strong><a href="https://github.com/rossta/tacokit.rb">tacokit.rb</a></strong>, a client with different design goals including simplicity and flexibility, inspired by the ideas presented in this post and the GitHub API Ruby wrapper, <a href="https://github.com/octokit/octokit.rb">octokit.rb</a>, in aiming to be a &ldquo;flat API client&hellip; that requires little knowledge of REST&rdquo;.
+For academic reasons, we're ignoring available Ruby clients for the Trello API like <strong><a href="https://github.com/jeremytregunna/ruby-trello">ruby-trello</a></strong>, a popular library which aims to provide some ActiveRecord-like abstractions over Trello resources, and <strong><a href="https://github.com/rossta/tacokit.rb">tacokit.rb</a></strong>, a client with different design goals including simplicity and flexibility, inspired by the ideas presented in this post and the GitHub API Ruby wrapper, <a href="https://github.com/octokit/octokit.rb">octokit.rb</a>, in aiming to be a "flat API client... that requires little knowledge of REST".
 
 </p></aside>
 
-<p>To make HTTP requests, we&rsquo;ll also use the <a href="https://github.com/httprb/http">http.rb</a>, but feel free to subsitute with your HTTP client of choice. Install the gem yourself with <code>gem install http</code> or add it to your <code>Gemfile</code>:</p>
+<p>To make HTTP requests, we&#39;ll also use the <a href="https://github.com/httprb/http">http.rb</a>, but feel free to subsitute with your HTTP client of choice. Install the gem yourself with <code>gem install http</code> or add it to your <code>Gemfile</code>:</p>
 
 <pre><code># Gemfile
 
@@ -122,7 +134,7 @@ export TRELLO_APP_KEY=your-key
 export TRELLO_APP_TOKEN=your-token
 </code></pre>
 
-<p>Now, let&rsquo;s run Ruby version of our Trello World test.</p>
+<p>Now, let&#39;s run Ruby version of our Trello World test.</p>
 
 <pre><code class="ruby"># trello_eager.rb
 require &quot;http&quot;
@@ -141,7 +153,7 @@ puts HTTP.get(url).parse
 
 <p>If it worked correctly, you should see the same result we saw in your browser earlier.</p>
 
-<p>Let&rsquo;s extract a few helpers to build the url. We&rsquo;ll use <code>Addressable::URI</code>, which is available as a dependency of the http.rb gem as of version <code>1.0.0.pre1</code> or otherwise may be installed as <code>gem install addressable</code> or <code>gem &quot;addressable&quot;</code> in your <code>Gemfile</code>:</p>
+<p>Let&#39;s extract a few helpers to build the url. We&#39;ll use <code>Addressable::URI</code>, which is available as a dependency of the http.rb gem as of version <code>1.0.0.pre1</code> or otherwise may be installed as <code>gem install addressable</code> or <code>gem &quot;addressable&quot;</code> in your <code>Gemfile</code>:</p>
 
 <pre><code class="ruby">require &quot;http&quot;
 require &quot;addressable/uri&quot;
@@ -170,9 +182,15 @@ def get(path)
 end
 </code></pre>
 
-<h3>Let&rsquo;s Paginate</h3>
-
-<p>Now we&rsquo;ll add an alternative method to <code>#get</code> that can handle pagination.</p>
+      <h3 id="let-39-s-paginate" class="title">
+        <a name="let-39-s-paginate" class="anchor" href="#let-39-s-paginate">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Let&#39;s Paginate
+      </h3>
+    
+<p>Now we&#39;ll add an alternative method to <code>#get</code> that can handle pagination.</p>
 
 <pre><code class="ruby">MAX = 1000
 
@@ -197,9 +215,9 @@ def paginated_get(path, options = {})
 end
 </code></pre>
 
-<p>Given a path and hash of parameter options, we&rsquo;ll build up an array of results by fetching the endpoint and requesting the next set of 50 before the last id of the previos set. Once either the max is reached or no more results are returned from the API, we&rsquo;ll exit the loop.</p>
+<p>Given a path and hash of parameter options, we&#39;ll build up an array of results by fetching the endpoint and requesting the next set of 50 before the last id of the previos set. Once either the max is reached or no more results are returned from the API, we&#39;ll exit the loop.</p>
 
-<p>As a starting point, this works nicely. We can simply use <code>paginated_get</code> to collect up to 1000 results for a given resource without the caller caring about pages. Here&rsquo;s how we can grab the all the comments we&rsquo;ve added to Trello cards:</p>
+<p>As a starting point, this works nicely. We can simply use <code>paginated_get</code> to collect up to 1000 results for a given resource without the caller caring about pages. Here&#39;s how we can grab the all the comments we&#39;ve added to Trello cards:</p>
 
 <pre><code class="ruby">def comments(params = {})
   paginated_get(&quot;members/me/actions&quot;, filter: &quot;commentCard&quot;)
@@ -211,9 +229,15 @@ comments
 
 <p>The main problem with this approach is that it forces the results to be eager loaded. Unless a max is specified in the method call, we could be waiting for up to 1000 comments to load - 20 requests of 50 comments each - to execute before the results are returned.</p>
 
-<h3>Stop, enumerate, and listen</h3>
-
-<p>Next step is to refactor our <code>paginated_get</code> method to take advantage of Ruby&rsquo;s <code>Enumerator</code>. I previously <a href="/blog/what-is-enumerator.html">described Enumerator</a> and showed how it can be used to <a href="/blog/infinite-sequences-in-ruby.html">generate infinite sequences in Ruby</a>, including <a href="/blog/pascals-triangle-with-rubys-enumerator.html">Pascal&rsquo;s Triangle</a>.</p>
+      <h3 id="stop-enumerate-and-listen" class="title">
+        <a name="stop-enumerate-and-listen" class="anchor" href="#stop-enumerate-and-listen">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Stop, enumerate, and listen
+      </h3>
+    
+<p>Next step is to refactor our <code>paginated_get</code> method to take advantage of Ruby&#39;s <code>Enumerator</code>. I previously <a href="/blog/what-is-enumerator.html">described Enumerator</a> and showed how it can be used to <a href="/blog/infinite-sequences-in-ruby.html">generate infinite sequences in Ruby</a>, including <a href="/blog/pascals-triangle-with-rubys-enumerator.html">Pascal&#39;s Triangle</a>.</p>
 
 <p>The main advantage of using <code>Enumerator</code> will be to give callers flexibility to work with the results including filtering, searching, and lazy enumeration.</p>
 
@@ -242,9 +266,9 @@ def paginated_get(path, options = {})
 end
 </code></pre>
 
-<p>We&rsquo;ve got a few similarities with our first implementation. We still loop over repeated requests for successive pages until either the max is reach or no data is returned from the API. There are a few big differences though.</p>
+<p>We&#39;ve got a few similarities with our first implementation. We still loop over repeated requests for successive pages until either the max is reach or no data is returned from the API. There are a few big differences though.</p>
 
-<p>First, you&rsquo;ll notice we&rsquo;ve wrapped our expression in <code>Enumerator</code> which will serve as the return value for <code>#paginated_get</code>.</p>
+<p>First, you&#39;ll notice we&#39;ve wrapped our expression in <code>Enumerator</code> which will serve as the return value for <code>#paginated_get</code>.</p>
 
 <p>Using an enumerator may look strange but it offers a huge advantage over our first iteration. Enumerators allow callers to interact with data <strong>as it is generated</strong>. Conceptually, the enumerator represents the algorithm for retrieving or generating data in <code>Enumerable</code> form.</p>
 
@@ -271,11 +295,17 @@ end
 
 <p>The <code>y.yield</code> is not the keyword <code>yield</code>, but the invokation of the <code>#yield</code> method of <code>Enumerator::Yielder</code>, an object the enumerator uses internally to pass values through to the first block used in the enumerator chain. For a more detailed look at how enumerators work under the hood, read more about how <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Ruby works hard so you can be lazy</a>.</p>
 
-<h3>A cursor-y example</h3>
+      <h3 id="a-cursor-y-example" class="title">
+        <a name="a-cursor-y-example" class="anchor" href="#a-cursor-y-example">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        A cursor-y example
+      </h3>
+    
+<p>Let&#39;s do one more iteration on our <code>#paginated_get</code> refactoring. Up to this point, we&#39;ve been using a &quot;functional&quot; approach; we&#39;ve just been using a bunch of methods defined in the outermost lexical scope.</p>
 
-<p>Let&rsquo;s do one more iteration on our <code>#paginated_get</code> refactoring. Up to this point, we&rsquo;ve been using a &ldquo;functional&rdquo; approach; we&rsquo;ve just been using a bunch of methods defined in the outermost lexical scope.</p>
-
-<p>First, we&rsquo;ll extract a <code>Client</code> responsible for sending requests to the Trello API and parsing the responses as JSON.</p>
+<p>First, we&#39;ll extract a <code>Client</code> responsible for sending requests to the Trello API and parsing the responses as JSON.</p>
 
 <pre><code class="ruby"># trello_client.rb
 
@@ -307,9 +337,9 @@ class Client
 end
 </code></pre>
 
-<p>Next, we&rsquo;ll provide a class to represent the paginated collection of results to replace our implementation of <code>#paginated_get</code>.</p>
+<p>Next, we&#39;ll provide a class to represent the paginated collection of results to replace our implementation of <code>#paginated_get</code>.</p>
 
-<p>The Twitter API uses <a href="https://dev.twitter.com/overview/api/cursoring">cursors</a> to navigate through pages, a concept similar to &ldquo;next&rdquo; and &ldquo;previous&rdquo; links on websites. Although Trello doesn&rsquo;t provide explicit cursors in their API, we can still wrap the paginated results in an enumerable class to get similar behavior.</p>
+<p>The Twitter API uses <a href="https://dev.twitter.com/overview/api/cursoring">cursors</a> to navigate through pages, a concept similar to &quot;next&quot; and &quot;previous&quot; links on websites. Although Trello doesn&#39;t provide explicit cursors in their API, we can still wrap the paginated results in an enumerable class to get similar behavior.</p>
 
 <pre><code class="ruby"># trello_cursor.rb
 require_relative &quot;./trello_client&quot;
@@ -326,7 +356,7 @@ class Cursor
 end
 </code></pre>
 
-<p>The <code>Cursor</code> will be initialized with a path and params, like our <code>paginated_get</code>. We&rsquo;ll also maintain an internal <code>@collection</code> array to cache elements as they are returned from Trello.</p>
+<p>The <code>Cursor</code> will be initialized with a path and params, like our <code>paginated_get</code>. We&#39;ll also maintain an internal <code>@collection</code> array to cache elements as they are returned from Trello.</p>
 
 <pre><code class="ruby">class Cursor
   private
@@ -350,7 +380,7 @@ end
 end
 </code></pre>
 
-<p>We&rsquo;ll introduce a dependency on the <code>Client</code> to interface with Trello through the private client method. We&rsquo;ll use our client to fetch the next page, append the latest results to our cached <code>@collection</code> and increment the page number. Now for the key public method:</p>
+<p>We&#39;ll introduce a dependency on the <code>Client</code> to interface with Trello through the private client method. We&#39;ll use our client to fetch the next page, append the latest results to our cached <code>@collection</code> and increment the page number. Now for the key public method:</p>
 
 <pre><code class="ruby">class Cursor
   include Enumerable
@@ -373,7 +403,7 @@ end
 end
 </code></pre>
 
-<p>We&rsquo;ve chosen to have our <code>Cursor</code> expose the Enumerable API by including the <code>Enumerable</code> module and implementing <code>#each</code>. This will give cursor instances enumerable behavior so we can simply replace our paginated_get definition to return a new <code>Cursor</code>.</p>
+<p>We&#39;ve chosen to have our <code>Cursor</code> expose the Enumerable API by including the <code>Enumerable</code> module and implementing <code>#each</code>. This will give cursor instances enumerable behavior so we can simply replace our paginated_get definition to return a new <code>Cursor</code>.</p>
 
 <pre><code class="ruby">def paginated_get(path, params)
   Cursor.new(path, param)
@@ -384,7 +414,7 @@ def comments(params = {})
 end
 </code></pre>
 
-<p>Let&rsquo;s break down <code>Cursor#each</code> a bit further. The first line allows us retain the <code>Enumerator</code> behavior before.</p>
+<p>Let&#39;s break down <code>Cursor#each</code> a bit further. The first line allows us retain the <code>Enumerator</code> behavior before.</p>
 
 <pre><code class="ruby">return to_enum(:each, start) unless block_given?
 </code></pre>
@@ -397,7 +427,7 @@ end
   take(2).force
 </code></pre>
 
-<p>For more info on using <code>#to_enum</code>, check out Arkency&rsquo;s <a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/">Stop including Enumerable, return Enumerator instead</a>.</p>
+<p>For more info on using <code>#to_enum</code>, check out Arkency&#39;s <a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/">Stop including Enumerable, return Enumerator instead</a>.</p>
 
 <p>We also need to <code>yield</code> each element in the <code>@collection</code> to pass elements to callers of <code>#each</code></p>
 
@@ -406,7 +436,7 @@ end
 end
 </code></pre>
 
-<p>We iterate from the start of the collection to the end with <code>Array(@collection[start..-1]).each</code>&hellip; but wait! when we start iterating, the <code>@collection</code> is empty:</p>
+<p>We iterate from the start of the collection to the end with <code>Array(@collection[start..-1]).each</code>... but wait! when we start iterating, the <code>@collection</code> is empty:</p>
 
 <pre><code class="ruby">def initialize
   # ...
@@ -427,7 +457,7 @@ end
 end
 </code></pre>
 
-<p>Unless we&rsquo;ve encountered the last page, we fetch the next page, which appends the latest results to the collection and we recursively invoke <code>#each</code> with a starting point. This means <code>#each</code> will be invoked again with new results until no new data is encountered. Sweet!</p>
+<p>Unless we&#39;ve encountered the last page, we fetch the next page, which appends the latest results to the collection and we recursively invoke <code>#each</code> with a starting point. This means <code>#each</code> will be invoked again with new results until no new data is encountered. Sweet!</p>
 
 <p>A neat trick is how we forward the block given to <code>#each</code>. When we <code>Proc.new</code> without explicitly passing a block or proc object, it will instantiate with the block given to its surrounding method if there is one. The behavior is similar to the following:</p>
 
@@ -438,13 +468,19 @@ end
 end
 </code></pre>
 
-<p>The main benefit being we don&rsquo;t needlessly invoke <code>Proc.new</code> by omitting <code>&amp;block</code> in the arguments. For more on this, read up on <a href="http://mudge.name/2011/01/26/passing-blocks-in-ruby-without-block.html">Passing Blocks in Ruby without &amp;block</a></p>
+<p>The main benefit being we don&#39;t needlessly invoke <code>Proc.new</code> by omitting <code>&amp;block</code> in the arguments. For more on this, read up on <a href="http://mudge.name/2011/01/26/passing-blocks-in-ruby-without-block.html">Passing Blocks in Ruby without &amp;block</a></p>
 
-<p>&ldquo;Recursive each&rdquo; is a powerful technique for providing a seamless, enumerable interface to paginated or cursored results. I first encountered <a href="https://github.com/sferik/twitter/blob/c6c2fe44e4a56c3e3544a3c08492a8b83b549635/lib/twitter/enumerable.rb">this approach</a> in the <a href="https://github.com/sferik">sferik&rsquo;s</a> <a href="https://github.com/sferik/twitter">Twitter gem</a> - a great resource for those considering writing an API wrapper in Ruby.</p>
+<p>&quot;Recursive each&quot; is a powerful technique for providing a seamless, enumerable interface to paginated or cursored results. I first encountered <a href="https://github.com/sferik/twitter/blob/c6c2fe44e4a56c3e3544a3c08492a8b83b549635/lib/twitter/enumerable.rb">this approach</a> in the <a href="https://github.com/sferik">sferik&#39;s</a> <a href="https://github.com/sferik/twitter">Twitter gem</a> - a great resource for those considering writing an API wrapper in Ruby.</p>
 
-<h3>On your own</h3>
-
-<p>Give it a shot! Pick out an API you like to use and play with techniques for modeling its collection resources. This is a great way to get more experience with Ruby&rsquo;s <a href="/blog/series/enumerable.html">Enumerable</a>. Consider one of these approaches when you need to traverse paginated or partitioned subsets of data in an external or internal API.</p>
+      <h3 id="on-your-own" class="title">
+        <a name="on-your-own" class="anchor" href="#on-your-own">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        On your own
+      </h3>
+    
+<p>Give it a shot! Pick out an API you like to use and play with techniques for modeling its collection resources. This is a great way to get more experience with Ruby&#39;s <a href="/blog/series/enumerable.html">Enumerable</a>. Consider one of these approaches when you need to traverse paginated or partitioned subsets of data in an external or internal API.</p>
 
 <p>Think less about <strong>pages</strong> and more about <strong>data</strong>.</p>
 
@@ -455,14 +491,20 @@ end
 <p>2016-01-28</p>
 
 <ul>
-<li>Updated the examples to use the <code>:before</code> parameter instead of <code>:page</code> for requests for successive &ldquo;pages&rdquo;</li>
+<li>Updated the examples to use the <code>:before</code> parameter instead of <code>:page</code> for requests for successive &quot;pages&quot;</li>
 <li>Posted the <a href="https://github.com/rossta/loves-enumerable/tree/master/examples/paginated_resources">full source of the examples above on GitHub</a></li>
 </ul>
 
 <hr>
 
-<h3>Credits</h3>
-
+      <h3 id="credits" class="title">
+        <a name="credits" class="anchor" href="#credits">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Credits
+      </h3>
+    
 <p>Icons via the <a href="https://thenounproject.com/">Noun Project</a>:</p>
 
 <ul>
@@ -584,11 +626,11 @@ end
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net">email</a></li>
-        <li><a href="https://twitter.com/rossta">twitter</a></li>
-        <li><a href="https://github.com/rossta">github</a></li>
-        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
+        <li><a href="https://github.com/rossta" rel="me">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
       </ul>
     </section>
   </div>

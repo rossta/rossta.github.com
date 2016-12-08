@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-b473780b.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-3de9d7c1.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-a0229364.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -73,17 +73,23 @@
 
       <p>This is the post I wished existed before attempting to write tests for a Rails generator with TDD.</p>
 
-<p>I recently added a Rails generator to my gem, <code>serviceworker-rails</code>, to make it easier to add the assets and configuration files needed to <a href="/blog/make-your-rails-app-a-progressive-web-app.html">turn your Rails app into a Progressive Web App</a>. I&rsquo;ve written a few Rails generators before, but have usually skipped the part about writing tests because––no excuse.</p>
+<p>I recently added a Rails generator to my gem, <code>serviceworker-rails</code>, to make it easier to add the assets and configuration files needed to <a href="/blog/make-your-rails-app-a-progressive-web-app.html">turn your Rails app into a Progressive Web App</a>. I&#39;ve written a few Rails generators before, but have usually skipped the part about writing tests because––no excuse.</p>
 
-<h2>The requirements</h2>
-
+      <h2 id="the-requirements" class="title">
+        <a name="the-requirements" class="anchor" href="#the-requirements">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The requirements
+      </h2>
+    
 <p>Rails generators are commonly used to create and/more modify project files in a Rails project. Setting up a Rails project with a Service Worker in the Rails asset pipeline can be a bit involved, and using the Rails generator to take care of the boilerplate makes it more convenient to get up-and-running with the gem.</p>
 
-<p>Here&rsquo;s what the <code>serviceworker-rails</code> install generator does:</p>
+<p>Here&#39;s what the <code>serviceworker-rails</code> install generator does:</p>
 
 <ul>
 <li>Adds a starter <code>serviceworker.js</code> file and companion JavaScript to <code>app/assets/javascripts</code> for service worker registration</li>
-<li>Modifies &lsquo;application.js` to require the companion JavaScript</li>
+<li>Modifies &#39;application.js` to require the companion JavaScript</li>
 <li>Adds a web app manifest file, <code>manifest.json</code>, to <code>app/assets/javascripts</code></li>
 <li>Adds a <code>&lt;link&gt;</code> tag to the application layout for the browser to locate the manifest</li>
 <li>Adds a Rails initializer to configure the serviceworker asset routes</li>
@@ -91,15 +97,21 @@
 <li>Adds a default <code>offline.html</code> file to <code>public/</code></li>
 </ul>
 
-<p>Though this is a testing post but I&rsquo;ll briefly mention some resources I&rsquo;ve found helpeful for writing Rails generators. I recommend the <a href="http://guides.rubyonrails.org/generators.html">Rails guides</a> to get your Rails generator started. It also help to understand how <code>Thor</code> works (<a href="http://whatisthor.com/">What is Thor?</a>), the library on which most Rails commandline tools are based. The Rails generator base classes leverage <a href="http://www.rubydoc.info/github/erikhuda/thor/master/Thor/Actions">Thor actions</a>, i.e., <code>create_file</code>, <code>gsub_file</code>, <code>insert_into_file</code>, and sprinkle in some <a href="http://api.rubyonrails.org/classes/Rails/Generators/Actions.html">Rails-specific methods</a>, including <code>gem</code>, <code>rake</code>, <code>initializer</code>, etc.</p>
+<p>Though this is a testing post but I&#39;ll briefly mention some resources I&#39;ve found helpeful for writing Rails generators. I recommend the <a href="http://guides.rubyonrails.org/generators.html">Rails guides</a> to get your Rails generator started. It also help to understand how <code>Thor</code> works (<a href="http://whatisthor.com/">What is Thor?</a>), the library on which most Rails commandline tools are based. The Rails generator base classes leverage <a href="http://www.rubydoc.info/github/erikhuda/thor/master/Thor/Actions">Thor actions</a>, i.e., <code>create_file</code>, <code>gsub_file</code>, <code>insert_into_file</code>, and sprinkle in some <a href="http://api.rubyonrails.org/classes/Rails/Generators/Actions.html">Rails-specific methods</a>, including <code>gem</code>, <code>rake</code>, <code>initializer</code>, etc.</p>
 
-<h2>A first pass</h2>
-
+      <h2 id="a-first-pass" class="title">
+        <a name="a-first-pass" class="anchor" href="#a-first-pass">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        A first pass
+      </h2>
+    
 <p>So: how do I test this?</p>
 
-<p>Without consulting an external library for &ldquo;testing Rails generators&rdquo;, I wanted to take a pass at figuring it out on my own. I&rsquo;d need to run the generator in the tests to verify the output and that the generator is working. This means the tests would have side effects that modify the file system.</p>
+<p>Without consulting an external library for &quot;testing Rails generators&quot;, I wanted to take a pass at figuring it out on my own. I&#39;d need to run the generator in the tests to verify the output and that the generator is working. This means the tests would have side effects that modify the file system.</p>
 
-<p>When using database access in tests, we typically expect to wipe test database clean before each test either by truncating or rolling back transactions. Modifying the file system is pretty much the same thing we&rsquo;re trying to do with testing a Rails generator: trigger some side effects, wipe the slate clean, repeat.</p>
+<p>When using database access in tests, we typically expect to wipe test database clean before each test either by truncating or rolling back transactions. Modifying the file system is pretty much the same thing we&#39;re trying to do with testing a Rails generator: trigger some side effects, wipe the slate clean, repeat.</p>
 
 <p>Since the <code>serviceworker-rails</code> generator adds and modifies files in a Rails app, I decided I needed to generate a fresh Rails app while running the tests and delete it after the tests finish. Crazy, right? I ended up with a test helper that generates the app with something like this:</p>
 
@@ -158,7 +170,7 @@ end
 <li>assert a generated file with interpolations renders valid output</li>
 </ul>
 
-<p>For this first pass, I ended up with something very similar to Zurb&rsquo;s
+<p>For this first pass, I ended up with something very similar to Zurb&#39;s
 <code>foundation-rails</code> tests for its install generator: <a href="https://github.com/zurb/foundation-rails/blob/4dfe9b12e8cf3a1aa04b257ff64c782832efc6a0/spec/features/generator_spec.rb">spec</a> and <a href="https://github.com/zurb/foundation-rails/blob/4dfe9b12e8cf3a1aa04b257ff64c782832efc6a0/spec/support/helpers.rb">helper
 methods</a>.</p>
 
@@ -176,11 +188,17 @@ end
 <p>I had several tests that read the contents of files and matches expected content
 through regular expressions.</p>
 
-<h2>Using Rails::Generators::TestCase</h2>
+      <h2 id="using-rails-generators-testcase" class="title">
+        <a name="using-rails-generators-testcase" class="anchor" href="#using-rails-generators-testcase">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Using Rails::Generators::TestCase
+      </h2>
+    
+<p>Though what I came up with worked and didn&#39;t rely on any third-party dependencies, I wasn&#39;t totally happy with it. The tests were very verbose. I didn&#39;t like that I had to shell out to run the generator. I finally decided to &quot;peek&quot; and see how Rails tests its own generators, you know, the ones you love for generating models, migrations, and entire resource scaffolds.</p>
 
-<p>Though what I came up with worked and didn&rsquo;t rely on any third-party dependencies, I wasn&rsquo;t totally happy with it. The tests were very verbose. I didn&rsquo;t like that I had to shell out to run the generator. I finally decided to &ldquo;peek&rdquo; and see how Rails tests its own generators, you know, the ones you love for generating models, migrations, and entire resource scaffolds.</p>
-
-<p>It turns out Rails generators are tested using <code>Rails::Generators::TestCase</code>. Since Rails tests are also written in <code>MiniTest</code> and my library already relies on Rails as a dependency&ndash;it <em>is</em> a Rails engine&ndash;making the switch in my tests easy. If you&rsquo;re using RSpec, I did come across <a href="https://github.com/alexrothenberg/ammeter"><code>ammeter</code></a>, which delegates to <code>Rails::Generators::TestCase</code> under the hood, so it&rsquo;d be quite similar to what I did here.</p>
+<p>It turns out Rails generators are tested using <code>Rails::Generators::TestCase</code>. Since Rails tests are also written in <code>MiniTest</code> and my library already relies on Rails as a dependency--it <em>is</em> a Rails engine--making the switch in my tests easy. If you&#39;re using RSpec, I did come across <a href="https://github.com/alexrothenberg/ammeter"><code>ammeter</code></a>, which delegates to <code>Rails::Generators::TestCase</code> under the hood, so it&#39;d be quite similar to what I did here.</p>
 
 <p>First, we inherit from the base class:</p>
 
@@ -272,7 +290,7 @@ provide in the <code>serviceworker-rails</code> install generator, <code>manifes
 Ruby method calls. At compile time for the browser, the file must contain valid
 JSON. How to test this again? No convenience methods here, so I rolled up my sleeves on this one.</p>
 
-<p>Here&rsquo;s what the source template looks like for <code>manifest.json.erb</code>:</p>
+<p>Here&#39;s what the source template looks like for <code>manifest.json.erb</code>:</p>
 
 <pre><code class="ruby">&lt;%% icon_sizes = Rails.configuration.serviceworker.icon_sizes %&gt;
 {
@@ -295,7 +313,7 @@ JSON. How to test this again? No convenience methods here, so I rolled up my sle
 }
 </code></pre>
 
-<p>First, I&rsquo;m using the &ldquo;double-percent&rdquo; style ERB tags, <code>&lt;%% %&gt;</code>, on purpose.
+<p>First, I&#39;m using the &quot;double-percent&quot; style ERB tags, <code>&lt;%% %&gt;</code>, on purpose.
 Because the template itself is rendered through ERB, the double-percent tag
 escapes interpolation so we can actually output ERB tags in its place.</p>
 
@@ -322,9 +340,9 @@ NoMethodError: undefined method `image_path&#39; for main:Object
 /Users/ross/dev/rossta/serviceworker-rails/test/serviceworker/install_generator_test.rb:27:in `block in &lt;class:InstallGeneratorTest&gt;&#39;
 </code></pre>
 
-<p>The asset helper method <code>image_path</code> is needed to output an appropriate digest urls for the web app icons. This will work in development or asset precompilation for production because this method is provided by the Sprockets environment. While I could load the Sprockets environment just for this test, it seems like both overkill and, honestly, way more work than I&rsquo;m interested in.</p>
+<p>The asset helper method <code>image_path</code> is needed to output an appropriate digest urls for the web app icons. This will work in development or asset precompilation for production because this method is provided by the Sprockets environment. While I could load the Sprockets environment just for this test, it seems like both overkill and, honestly, way more work than I&#39;m interested in.</p>
 
-<p>Instead of loading Sprockets, I decided to stub the <code>image_path</code> method. The <code>ERB#result</code> method takes a <code>binding</code> as an optional argument. All Ruby objects have a private method <code>binding</code>, which exposes the execution context to other objects, like <code>ERB</code> for rendering template strings. The template doesn&rsquo;t care what binding we give it, as long as it responds to the methods and instance variables present in the embedded ERB tags. It&rsquo;s a classic example of dependency injection in the Ruby standard library.</p>
+<p>Instead of loading Sprockets, I decided to stub the <code>image_path</code> method. The <code>ERB#result</code> method takes a <code>binding</code> as an optional argument. All Ruby objects have a private method <code>binding</code>, which exposes the execution context to other objects, like <code>ERB</code> for rendering template strings. The template doesn&#39;t care what binding we give it, as long as it responds to the methods and instance variables present in the embedded ERB tags. It&#39;s a classic example of dependency injection in the Ruby standard library.</p>
 
 <p>So I defined some helper methods to build up a context to mimic the behavior of
 Sprockets by defining an implementation of the <code>image_path</code> method and exposing
@@ -349,7 +367,7 @@ def asset_context_class
 end
 </code></pre>
 
-<p>Now I&rsquo;m able to assert the contents of the generated, compiled JSON!</p>
+<p>Now I&#39;m able to assert the contents of the generated, compiled JSON!</p>
 
 <pre><code class="ruby">test &quot;generates web app manifest&quot; do
   assert_file &quot;app/assets/javascripts/manifest.json.erb&quot; do |content|
@@ -362,14 +380,20 @@ end
 
 <p><a href="https://github.com/rossta/serviceworker-rails/blob/94c45720f793397f0df66dbd4d67c680f3a293c3/test/serviceworker/install_generator_test.rb">Check out the source</a> of the <code>serviceworker-rails</code> generator test case to see the full picture of how all the pieces fit together.</p>
 
-<h2>Wrapping up</h2>
-
-<p>I don&rsquo;t often have to write generators for my libraries or production codebases,
-but now that I&rsquo;ve worked through both &ldquo;rolling my own&rdquo; testing strategy and
-leveraging the behavior of Rails own <code>Rails::Generators::TestCase</code>, I think I&rsquo;ve
+      <h2 id="wrapping-up" class="title">
+        <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Wrapping up
+      </h2>
+    
+<p>I don&#39;t often have to write generators for my libraries or production codebases,
+but now that I&#39;ve worked through both &quot;rolling my own&quot; testing strategy and
+leveraging the behavior of Rails own <code>Rails::Generators::TestCase</code>, I think I&#39;ve
 got a good feel for how I can test more generators moving forward.</p>
 
-<p>Hopefully, you&rsquo;ll find this useful when and if you decide to write a Rails generator yourself.</p>
+<p>Hopefully, you&#39;ll find this useful when and if you decide to write a Rails generator yourself.</p>
 
 
     </article>
@@ -485,11 +509,11 @@ got a good feel for how I can test more generators moving forward.</p>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net">email</a></li>
-        <li><a href="https://twitter.com/rossta">twitter</a></li>
-        <li><a href="https://github.com/rossta">github</a></li>
-        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
+        <li><a href="https://github.com/rossta" rel="me">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
       </ul>
     </section>
   </div>

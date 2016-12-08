@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-b473780b.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-3de9d7c1.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-a0229364.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -98,14 +98,20 @@ The examples in the post are based on RSpec version <code>~> 3</code>.
 </p>
 </aside>
 
-<h3>Changing Test Runner Behavior</h3>
-
+      <h3 id="changing-test-runner-behavior" class="title">
+        <a name="changing-test-runner-behavior" class="anchor" href="#changing-test-runner-behavior">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Changing Test Runner Behavior
+      </h3>
+    
 <p>Testing libraries like RSpec and Capybara do some heavy lifting to set up the
 Rails environment and make it suitable for running in test mode. For performance
 reasons, it may be beneficial to run each of our specs in a database
 transaction so test data can be easily rolled back at the start of each spec.</p>
 
-<p>Here&rsquo;s a common base configuration for using the popular <a href="https://github.com/DatabaseCleaner/database_cleaner">DatabaseCleaner</a> gem to
+<p>Here&#39;s a common base configuration for using the popular <a href="https://github.com/DatabaseCleaner/database_cleaner">DatabaseCleaner</a> gem to
 set up transactional database behavior for RSpec:</p>
 
 <pre><code class="ruby">RSpec.configure do |config|
@@ -128,12 +134,12 @@ end
 
 <p>Not all specs can be run this way - once we add a javascript acceptance specs, for
 example, the javascript driver will likely need its own connection to the
-database so it won&rsquo;t have access to data setup in the tests. We need to run
+database so it won&#39;t have access to data setup in the tests. We need to run
 javascript acceptance specs in <em>truncation</em> mode to ensure database changes are
 committed to the database so multiple database connections will have access to the same data.</p>
 
-<p>Let&rsquo;s use RSpec metadata to toggle database behavior automatically when using
-the javascript driver (i.e., not the default <code>:rack_test</code> driver). We&rsquo;ll add the
+<p>Let&#39;s use RSpec metadata to toggle database behavior automatically when using
+the javascript driver (i.e., not the default <code>:rack_test</code> driver). We&#39;ll add the
 following hooks, borrowed from the DatabaseCleaner <a href="https://github.com/DatabaseCleaner/database_cleaner/tree/f32abebc4f28faa6ff944c4d1d4fee3f21ceb0bb#rspec-example">README</a>:</p>
 
 <pre><code class="ruby"># spec/spec_helper.rb
@@ -167,7 +173,7 @@ config.before(:each, :truncation_mode) do
 end
 </code></pre>
 
-<p>Here&rsquo;s a consolidated configuration for providing hooks for the issues related
+<p>Here&#39;s a consolidated configuration for providing hooks for the issues related
 to database truncation mentioned above:</p>
 
 <pre><code class="ruby"># spec/spec_helper.rb
@@ -204,14 +210,20 @@ RSpec.configure do |config|
 end
 </code></pre>
 
-<h3>Changing Application Settings</h3>
-
+      <h3 id="changing-application-settings" class="title">
+        <a name="changing-application-settings" class="anchor" href="#changing-application-settings">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Changing Application Settings
+      </h3>
+    
 <p>Rails provides a number of settings that can be easily configured based on the
 environment, so we avoid undesired work in development or test environments,
-such as sending emails. For any mature Rails application, we&rsquo;ll likely have
+such as sending emails. For any mature Rails application, we&#39;ll likely have
 our own custom settings layered on top of the Rails defaults.</p>
 
-<p>There are many cases where we&rsquo;ll still want to test the production settings in
+<p>There are many cases where we&#39;ll still want to test the production settings in
 our test environments.  For example, by default, controller caching is disabled in tests:</p>
 
 <pre><code class="ruby"># config/initializers/test.rb
@@ -223,10 +235,16 @@ end
 </code></pre>
 
 <p>For selected acceptances specs, we may still want to test behavior of caching at
-the view layer, say that users can see new info when a model attribute changes. We don&rsquo;t need this caching behavior is all test, so it may be useful to toggle specs on/off during the test run.</p>
+the view layer, say that users can see new info when a model attribute changes. We don&#39;t need this caching behavior is all test, so it may be useful to toggle specs on/off during the test run.</p>
 
-<h4>First attempt</h4>
-
+      <h4 id="first-attempt" class="title">
+        <a name="first-attempt" class="anchor" href="#first-attempt">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        First attempt
+      </h4>
+    
 <p>We could try to stub the setting in the context of a single spec run with the enabled state.</p>
 
 <pre><code class="ruby"># spec/spec_helper.rb
@@ -243,10 +261,16 @@ end
 
 <p>This may require changing behavior of instances which is <a href="https://relishapp.com/rspec/rspec-mocks/docs/working-with-legacy-code/any-instance">typically discouraged</a>. We may also need to clean up other global state, like clearing the Rails cache after the test run.</p>
 
-<h4>Better attempt</h4>
-
+      <h4 id="better-attempt" class="title">
+        <a name="better-attempt" class="anchor" href="#better-attempt">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Better attempt
+      </h4>
+    
 <p>Alternatively, we can set the actual values on while settings are derived.
-Here&rsquo;s how it might look for enabling controller caching with an <code>around</code> block:</p>
+Here&#39;s how it might look for enabling controller caching with an <code>around</code> block:</p>
 
 <pre><code class="ruby"># spec/spec_helper.rb
 RSpec.configure do |config|
@@ -286,14 +310,26 @@ other tests unintentionally - a big no-no.</p>
 situations. PaperTrail even <a href="https://github.com/airblade/paper_trail/blob/eef918bca42bab85c4467541037897f0788b6062/lib/paper_trail/frameworks/rspec.rb">provides a helper</a> to take advantage of RSpec. It may be worth considering whether to provide an interface to toggle behavior and RSpec helpers next time we write a gem.
 metadata to toggle behavior in specs.</p>
 
-<h3>Filtering Specs</h3>
-
+      <h3 id="filtering-specs" class="title">
+        <a name="filtering-specs" class="anchor" href="#filtering-specs">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Filtering Specs
+      </h3>
+    
 <p>One useful technique while developing is to run a selected set of specs. We may
 be editing acceptances specs, model validations, and other disparate tests while test driving a
 feature from <a href="http://everydayrails.com/2014/01/15/outside-in-example-ruby-tapas.html">outside to in</a>.</p>
 
-<h4>Manual tagging</h4>
-
+      <h4 id="manual-tagging" class="title">
+        <a name="manual-tagging" class="anchor" href="#manual-tagging">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Manual tagging
+      </h4>
+    
 <p>Adding arbitrary metadata like <code>:focus</code> to set of specs is one way to approach
 this.</p>
 
@@ -314,7 +350,7 @@ end
 </code></pre>
 
 <p>We can also add some global configuration so this will be the default behavior
-when using <code>:focus</code> specs, as long as we don&rsquo;t make the mistake of filtering on the build server unintentionally.</p>
+when using <code>:focus</code> specs, as long as we don&#39;t make the mistake of filtering on the build server unintentionally.</p>
 
 <pre><code class="rspec">RSpec.configure do |config|
   # enable auto-focus only when running locally
@@ -343,8 +379,14 @@ end
 end
 </code></pre>
 
-<h4>Auto Tagging</h4>
-
+      <h4 id="auto-tagging" class="title">
+        <a name="auto-tagging" class="anchor" href="#auto-tagging">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Auto Tagging
+      </h4>
+    
 <p>A less-known feature of RSpec 3 is an API for telling RSpec to derive additional metadata
 automatically based on <em>other</em> metadata.</p>
 
@@ -354,7 +396,7 @@ allows us to alter spec behavior based on the spec directories, for example.</p>
 
 <p><em>Why is this useful and how do we use it?</em> Glad you asked.</p>
 
-<p>Let&rsquo;s say we want to isolate model specs that require database truncation since
+<p>Let&#39;s say we want to isolate model specs that require database truncation since
 they are more like functional specs than unit specs. We may set up our spec
 directory like so:</p>
 
@@ -370,7 +412,7 @@ directory like so:</p>
 </code></pre>
 
 <p>Instead of manually tagging each file with our <code>:truncation_mode</code> metadata we
-used earlier to toggle DatabaseCleaner&rsquo;s truncation strategy, we can configure
+used earlier to toggle DatabaseCleaner&#39;s truncation strategy, we can configure
 all the specs in <code>spec/truncation</code> as follows:</p>
 
 <pre><code class="rspec"># spec/spec_helper.rb
@@ -393,8 +435,14 @@ and the database strategy will be set to <code>:truncation</code> as long as it 
 </p>
 </aside>
 
-<h3>Using and Abusing</h3>
-
+      <h3 id="using-and-abusing" class="title">
+        <a name="using-and-abusing" class="anchor" href="#using-and-abusing">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Using and Abusing
+      </h3>
+    
 <p>While using RSpec metadata can be a powerful technique for altering test
 behavior and application settings in specs, it can also be taken too far.</p>
 
@@ -402,8 +450,8 @@ behavior and application settings in specs, it can also be taken too far.</p>
 
 <p>One rule of thumb for adding metadata is decide whether it would be generally useful to any Rails app (good) or it is specific to the business logic of your current application (bad). The latter is best set up more explicitly within or alongside your tests.</p>
 
-<p>Before considering a new metadata tag, I ask the rubber duck &ldquo;Could I extract
-this configuration into a gem?&rdquo; To answer yes, the behavior would have to be
+<p>Before considering a new metadata tag, I ask the rubber duck &quot;Could I extract
+this configuration into a gem?&quot; To answer yes, the behavior would have to be
 non-specific to my application. If so, the behavior <em>might</em> be useful as metadata.</p>
 
 <p>While metadata can nicely separate the boilerplate required to setup and teardown test behavior, it also adds a layer of indirection that can cause readability issues when stretched too far. Understand that there is a big increase in mental overhead to permuting test behavior with each new tag option and consider the tradeoffs with the rest of the team.</p>
@@ -524,11 +572,11 @@ non-specific to my application. If so, the behavior <em>might</em> be useful as 
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net">email</a></li>
-        <li><a href="https://twitter.com/rossta">twitter</a></li>
-        <li><a href="https://github.com/rossta">github</a></li>
-        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
+        <li><a href="https://github.com/rossta" rel="me">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
       </ul>
     </section>
   </div>

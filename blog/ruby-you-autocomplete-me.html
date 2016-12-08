@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-b473780b.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-3de9d7c1.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-a0229364.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -74,8 +74,8 @@
       <p>My team recently added a tagging feature to our web app. As the user types in
 the text input, the app supplies autocomplete suggestions from our database via
 javascript; a familiar UX. While backporting tags to existing records on the
-<code>rails console</code>, it hit me: &ldquo;Why not bring tag autocompletion to the command
-line?&rdquo;</p>
+<code>rails console</code>, it hit me: &quot;Why not bring tag autocompletion to the command
+line?&quot;</p>
 
 <p>The default <code>rails console</code> provides completion out-of-the-box though all the script
 does is start <code>irb</code> with the rails environment and <code>irb/completion</code> required.</p>
@@ -130,7 +130,7 @@ Readline.completion\_append\_character = &quot; &quot;
 Readline.completion\_proc = comp
 </code></pre>
 
-<p>There&rsquo;s nothing stopping us from taking this to the <code>rails console</code> to take
+<p>There&#39;s nothing stopping us from taking this to the <code>rails console</code> to take
 advantage of our rails environment and even access the database. Building off
 the example, we can replace the hard-coded array with a list of tags plucked
 from a simple activerecord query:</p>
@@ -145,7 +145,7 @@ Readline.completion\_proc = comp
 <p>We have room for improvement. For one thing, this makes a new query every time
 you attempt to autocomplete. For a reasonable number of tags, we could load the
 tag list in memory and grep for the matches instead. There is still another problem;
-by replacing the <code>Readline.completion_proc</code>, we&rsquo;ve clobbered the functionality
+by replacing the <code>Readline.completion_proc</code>, we&#39;ve clobbered the functionality
 provided by <code>irb/completion</code>. One approach would be to fall back to the
 <code>IRB::InputCompletor::CompletionProc</code> or add its result to the array of candidates.
 Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorrect-completions">incorrect completions</a>
@@ -153,7 +153,7 @@ Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorr
 this could get messy.</p>
 
 <p>Enter <a href="https://github.com/cldwalker/bond">bond</a>, a drop-in replacement for IRB
-completion. It aims to improve on IRB&rsquo;s shortcomings and provides methods for
+completion. It aims to improve on IRB&#39;s shortcomings and provides methods for
 adding custom completions. To take advantage of Bond in the console:</p>
 
 <pre><code class="ruby">require &#39;bond&#39;
@@ -164,9 +164,9 @@ Bond.start
 <code>Bond.completion</code> method</a>.
 To set up a Bond completion, we need a condition and an action; when the condition is matched,
 then the given action will determine which candidates are returned. Calling
-<code>Bond.start</code> will register Bond&rsquo;s default completions. For example, the
+<code>Bond.start</code> will register Bond&#39;s default completions. For example, the
 following completion is triggered with the text for completion starts with a
-letter preceded by &ldquo;::&rdquo;; the search space is scoped to <code>Object.constants</code>.</p>
+letter preceded by &quot;::&quot;; the search space is scoped to <code>Object.constants</code>.</p>
 
 <pre><code class="ruby"># https://github.com/cldwalker/bond/blob/master/lib/bond/completion.rb#L13
 complete(:prefix=\&gt;&#39;::&#39;, :anywhere=\&gt;&#39;[A-Z][^:\.\(]\*&#39;) {|e| Object.constants }
@@ -320,11 +320,11 @@ simple ways to hook into features easily taken for granted.</p>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net">email</a></li>
-        <li><a href="https://twitter.com/rossta">twitter</a></li>
-        <li><a href="https://github.com/rossta">github</a></li>
-        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
+        <li><a href="https://github.com/rossta" rel="me">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
       </ul>
     </section>
   </div>
