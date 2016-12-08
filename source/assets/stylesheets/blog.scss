@@ -35,3 +35,22 @@ ul.index {
     text-transform: uppercase;
   }
 }
+
+.anchor {
+  padding-right: 2px;
+  margin-left: -27px;
+  float: left;
+
+  svg {
+    visibility: hidden;
+  }
+}
+.title {
+  &:hover {
+    .anchor {
+      svg {
+        visibility: visible;
+      }
+    }
+  }
+}

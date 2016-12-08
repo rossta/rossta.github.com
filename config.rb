@@ -1,3 +1,5 @@
+require_relative "./lib/custom_markdown_renderer"
+
 activate :livereload
 activate :meta_tags
 # activate :directory_indexes
@@ -73,7 +75,8 @@ set :markdown,
   autolink: true,
   disable_indented_code_blocks: true,
   smartypants: true,
-  lax_spacing: true
+  lax_spacing: true,
+  renderer: CustomMarkdownRenderer
 
 set :css_dir, 'assets/stylesheets'
 set :js_dir, 'assets/javascripts'
