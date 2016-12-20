@@ -176,8 +176,16 @@ helpers do
     "mailto:ross@rossta.net"
   end
 
-  def signup_form_url
-    "//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=#{config[:mailchimp_form_id]}"
+  def signup_form_url(params = {})
+    Addressable::URI.new(
+      scheme: nil,
+      host: "rossta.us6.list-manage.com",
+      path: "/subscribe/post",
+      query_values: {
+        u: "8ce159842b5c98cecb4ebdf16",
+        id: config[:mailchimp_form_id],
+      }.merge(params)
+    )
   end
 
   def tweet_link_to(text, params = {})
