@@ -8,15 +8,16 @@ const offlineResources = [
 ];
 
 const ignoreFetch = [
-  /https?:\/\/[^\/]*mixpanel[^\/]*\.com\//,
-  /https?:\/\/[^\/]*mxpnl[^\/]*\.com\//,
-  /https?:\/\/[^\/]*segment[^\/]*\.io\//,
-  /https?:\/\/[^\/]*getclicky[^\/]*\.com\//,
-  /https?:\/\/[^\/]*typekit[^\/]*\.net\//,
-  /https?:\/\/[^\/]*sumome[^\/]*\.com\//,
-  /https?:\/\/[^\/]*disqus[^\/]*\.com\//,
-  /https?:\/\/[^\/]*google-analytics[^\/]*\.com\//,
-  /https?:\/\/zenkaffe\.herokuapp\.com\//,
+  /\/\/[^\/]*mixpanel[^\/]*\.com\//,
+  /\/\/[^\/]*mxpnl[^\/]*\.com\//,
+  /\/\/[^\/]*segment[^\/]*\.io\//,
+  /\/\/[^\/]*getclicky[^\/]*\.com\//,
+  /\/\/[^\/]*typekit[^\/]*\.net\//,
+  /\/\/[^\/]*sumome[^\/]*\.com\//,
+  /\/\/[^\/]*disqus[^\/]*\.com\//,
+  /\/\/[^\/]*google-analytics[^\/]*\.com\//,
+  /\/\/[^\/]*list-manage[^\/]*\.com\//,
+  /\/\/zenkaffe\.herokuapp\.com\//,
   /\/__rack\//,
 ];
 
