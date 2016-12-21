@@ -86,7 +86,7 @@ set :images_dir, 'assets/images'
 configure :build do
   set :trailing_slash, false
 
-  set :protocol, "https://"
+  set :protocol, "https"
   set :host, "rossta.net"
   set :google_analytics_id, 'UA-16458563-2'
   set :mailchimp_form_id,   '96030b0bda'
@@ -98,9 +98,9 @@ configure :build do
 end
 
 configure :development do
-  set :protocol, "http://"
+  set :protocol, "http"
   set :host, "localhost"
-  set :port, "4567"
+  set :port, 4567
 
   set :google_analytics_id, 'UA-xxxxxxxx-x'
   set :mailchimp_form_id,   'a57e354058'
@@ -160,31 +160,37 @@ helpers do
     (yield_content(:section) || title || "")
   end
 
-  def url_with_host(path)
-    host_with_port + path
+  def to_url(opts = {})
+    Addressable::URI.new({
+      scheme: config[:protocol],
+      host: config[:host],
+      port: config[:port],
+    }.merge(opts))
   end
 
-  def host_with_port
-    [config[:host], config[:port]].compact.join(':')
+  def current_url
+    path = current_page.path
+    path = "/" if current_page.path == "index.html"
+    to_url(path: path)
   end
 
   def image_url(source)
-    protocol + host_with_port + image_path(source)
+    to_url(path: image_path(source))
   end
 
   def email_url
     "mailto:ross@rossta.net"
   end
 
-  def signup_form_url(params = {})
+  def signup_form_url
     Addressable::URI.new(
       scheme: nil,
       host: "rossta.us6.list-manage.com",
       path: "/subscribe/post",
       query_values: {
         u: "8ce159842b5c98cecb4ebdf16",
-        id: config[:mailchimp_form_id],
-      }.merge(params)
+        id: config[:mailchimp_form_id]
+      }
     )
   end
 

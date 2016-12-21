@@ -17,7 +17,7 @@
       <p>
         If you liked this presentation, <%= tweet_link_to "share it on Twitter",
           text: [current_article.title, "rossta.net"].join(" - "),
-          url: url_with_host(current_article.url) %>
+          url: to_url(path: current_article.path) %>
         and <a href="https://twitter.com/rossta">follow me</a>.
       </p>
     </section>
