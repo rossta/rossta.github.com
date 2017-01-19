@@ -17,7 +17,7 @@ tags:
 
 At [Arlington Ruby](http://www.meetup.com/Arlington-Ruby/events/233611761/), I gave a very brief (inadequate) introduction to [Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/) and [Service Worker](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) and how you can incorporate these concepts into your Rails app with my gem, [`serviceworker-rails`](https://github.com/rossta/serviceworker-rails).
 
-Be sure to check out my [blog post](/serviceworker-on-rails) where I go
+Be sure to check out my [blog post](/blog/make-your-rails-app-a-progressive-web-app.html) where I go
 into more depth on how to add a simple Service Worker to your Rails app.
 
 And finally, here are slides for [another talk on PWAs with Rails](http://slides.com/sophiedeziel/progressive-web-apps#/) worth a look.
