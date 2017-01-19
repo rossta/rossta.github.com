@@ -13,7 +13,6 @@ const ignoreFetch = [
   /\/\/[^\/]*segment[^\/]*\.io\//,
   /\/\/[^\/]*getclicky[^\/]*\.com\//,
   /\/\/[^\/]*typekit[^\/]*\.net\//,
-  /\/\/[^\/]*sumome[^\/]*\.com\//,
   /\/\/[^\/]*disqus[^\/]*\.com\//,
   /\/\/[^\/]*google-analytics[^\/]*\.com\//,
   /\/\/[^\/]*list-manage[^\/]*\.com\//,
