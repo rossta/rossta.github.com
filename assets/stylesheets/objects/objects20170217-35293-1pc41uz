@@ -1,22 +1,26 @@
 /*
-Error: Undefined variable: "$lightGreyColor".
-        on line 4 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/code.scss
+Error: Undefined mixin 'base-font'.
+        on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss, in `base-font'
+        from line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss
+        from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects.scss
 
-1: code {
-2:   border: none;
-3:   // background-color: rgba(0,0,0,0.04);
-4:   background-color: $lightGreyColor;
-5:   font-size: 1rem;
-6:   padding: 0.2em 0.3em;
-7: }
-8: 
-9: pre {
+1: @import "objects/article";
+2: @import "objects/code";
+3: @import "objects/top-bar";
+4: @import "objects/video";
+5: 
+6: .clearfix { overflow: auto; }
+7: .hidden { display: none; }
 
 Backtrace:
-/home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/code.scss:4
-/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/script/tree/variable.rb:49:in `_perform'
-/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/script/tree/node.rb:58:in `perform'
-/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:397:in `visit_prop'
+/home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss:2:in `base-font'
+/home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss:2
+/home/ubuntu/rossta.github.com/source/assets/stylesheets/objects.scss:1
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:351:in `block in visit_mixin'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:98:in `block in with_mixin'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:115:in `with_frame'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:98:in `with_mixin'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:349:in `visit_mixin'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:36:in `visit'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:79:in `block in with_base'
@@ -28,6 +32,19 @@ Backtrace:
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:433:in `block in visit_rule'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:181:in `with_environment'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:431:in `visit_rule'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:36:in `visit'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:79:in `block in with_base'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:115:in `with_frame'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:79:in `with_base'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `visit'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:328:in `block (2 levels) in visit_import'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:328:in `map'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:328:in `block in visit_import'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:88:in `block in with_import'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:115:in `with_frame'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:88:in `with_import'
+/home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:325:in `visit_import'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/base.rb:36:in `visit'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/sass-3.4.22/lib/sass/stack.rb:79:in `block in with_base'
@@ -132,19 +149,19 @@ Backtrace:
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/gems/middleman-cli-4.1.7/bin/middleman:67:in `<top (required)>'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/bin/middleman:23:in `load'
 /home/ubuntu/rossta.github.com/vendor/bundle/ruby/2.3.0/bin/middleman:23:in `<top (required)>'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/cli/exec.rb:74:in `load'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/cli/exec.rb:74:in `kernel_load'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/cli/exec.rb:27:in `run'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/cli.rb:332:in `exec'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/vendor/thor/lib/thor/command.rb:27:in `run'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/vendor/thor/lib/thor/invocation.rb:126:in `invoke_command'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/vendor/thor/lib/thor.rb:359:in `dispatch'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/cli.rb:20:in `dispatch'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/vendor/thor/lib/thor/base.rb:440:in `start'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/cli.rb:11:in `start'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/exe/bundle:34:in `block in <top (required)>'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/lib/bundler/friendly_errors.rb:100:in `with_friendly_errors'
-/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.13.7/exe/bundle:26:in `<top (required)>'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/cli/exec.rb:74:in `load'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/cli/exec.rb:74:in `kernel_load'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/cli/exec.rb:27:in `run'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/cli.rb:335:in `exec'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/vendor/thor/lib/thor/command.rb:27:in `run'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/vendor/thor/lib/thor/invocation.rb:126:in `invoke_command'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/vendor/thor/lib/thor.rb:359:in `dispatch'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/cli.rb:20:in `dispatch'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/vendor/thor/lib/thor/base.rb:440:in `start'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/cli.rb:11:in `start'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/exe/bundle:32:in `block in <top (required)>'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/lib/bundler/friendly_errors.rb:121:in `with_friendly_errors'
+/home/ubuntu/.rvm/gems/ruby-2.3.1@global/gems/bundler-1.14.4/exe/bundle:24:in `<top (required)>'
 /home/ubuntu/.rvm/gems/ruby-2.3.1/bin/bundle:23:in `load'
 /home/ubuntu/.rvm/gems/ruby-2.3.1/bin/bundle:23:in `<main>'
 /home/ubuntu/.rvm/gems/ruby-2.3.1/bin/ruby_executable_hooks:15:in `eval'
@@ -153,4 +170,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined variable: \"$lightGreyColor\".\A         on line 4 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/code.scss\A \A 1: code {\A 2:   border: none;\A 3:   // background-color: rgba(0,0,0,0.04);\A 4:   background-color: $lightGreyColor;\A 5:   font-size: 1rem;\A 6:   padding: 0.2em 0.3em;\A 7: }\A 8: \A 9: pre {"; }
+  content: "Error: Undefined mixin 'base-font'.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss, in `base-font'\A         from line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects.scss\A \A 1: @import \"objects/article\";\A 2: @import \"objects/code\";\A 3: @import \"objects/top-bar\";\A 4: @import \"objects/video\";\A 5: \A 6: .clearfix { overflow: auto; }\A 7: .hidden { display: none; }"; }
