@@ -95,7 +95,7 @@ end
 
 # app/models/post.rb
 class Post < ActiveRecord::Base
-  belongs_to :author, inverse_of: :post
+  belongs_to :author, inverse_of: :posts
 end
 ```
 
