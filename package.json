@@ -9,10 +9,7 @@
   "scripts": {
     "test": "echo \"No test specified\" && exit 0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rossta/rossta.github.com.git"
-  },
+  "repository": "git+https://github.com/rossta/rossta.github.com.git",
   "author": "Ross Kaffenberger",
   "license": "ISC",
   "bugs": {
