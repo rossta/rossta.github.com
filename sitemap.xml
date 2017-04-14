@@ -163,6 +163,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2015-12-02-use-inverse_of.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/2015-12-15-paginated-resources-in-ruby.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -289,6 +295,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2016-11-09-make-your-rails-app-a-progressive-web-app.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/2016-11-12-testing-rails-generators.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -301,13 +313,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/2015-12-02-use-inverse_of.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2016-11-09-make-your-rails-app-a-progressive-web-app.html</loc>
+    <loc>https://rossta.net/index.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -439,6 +445,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/talks/2016-09-21-progressive-web-apps-on-rails.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/talks/2016-11-18-what-i-look-for-in-a-junior-developer.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -451,19 +463,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/talks/2016-09-21-progressive-web-apps-on-rails.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://rossta.net/thanks/index.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/index.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -1045,24 +1045,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/projects/page/2/index.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/series/page/2/index.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/talks/page/2/index.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://rossta.net/page/2/index.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -1124,6 +1106,24 @@
   </url>
   <url>
     <loc>https://rossta.net/page/12/index.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/projects/page/2/index.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/series/page/2/index.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/talks/page/2/index.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

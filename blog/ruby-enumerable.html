@@ -27,19 +27,20 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
+    <link href="/assets/stylesheets/index.bundle-bc0b1daa.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-12bac7ac.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
-    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
-
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
   <ul class="title-area">
     <li class="name">
-      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" /><span>rossta.net</span></a></h1>
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
     </li>
     <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
   </ul>
@@ -69,13 +70,13 @@
     </h3>
 </header>
 
-        <p><img src="/assets/images/blog/enumerator-1-2-3-b7cfed08.jpg" /></p>
+        <p><img src="/assets/images/blog/enumerator-1-2-3-b7cfed08.jpg" alt="Enumerator 1 2 3" /></p>
 
       <p>I like to say I started programming by accident. While facilitating a Lego robotics club during my teaching years, I was surprised to realize how much I enjoyed coding. Later, when I first learned Ruby as a full-time developer, I rediscovered that joy.</p>
 
 <p>A big reason for my love of Ruby is the <a href="http://ruby-doc.org/core-2.2.3/Enumerable.html">Enumerable</a> module because of its simple, functional style and ability to be combined and chained to form useful constructs - a lot like Legos.</p>
 
-<p>I recently gave a talk at both <a title="NYC.rb" href="http://www.meetup.com/NYC-rb/events/223864932/">NYC.rb</a> and <a title="DC Ruby User's Group" href="http://www.meetup.com/dcruby/events/225338026/">DCRUG</a> about some great features of <code>Enumerable</code> that deserve more attention. I touch on interesting use cases for using <code>Enumerable</code> and <code>Enumerator</code> including API client libraries, streaming HTTP, web crawlers, CSV parsing, and infinite sequences.</p>
+<p>I recently gave a talk at both <a href="http://www.meetup.com/NYC-rb/events/223864932/" title="NYC.rb">NYC.rb</a> and <a href="http://www.meetup.com/dcruby/events/225338026/" title="DC Ruby User's Group">DCRUG</a> about some great features of <code>Enumerable</code> that deserve more attention. I touch on interesting use cases for using <code>Enumerable</code> and <code>Enumerator</code> including API client libraries, streaming HTTP, web crawlers, CSV parsing, and infinite sequences.</p>
 
 <script async class="speakerdeck-embed" data-id="df623bc08aa642328c303a619c92fab0" data-ratio="1.55386949924127" src="//speakerdeck.com/assets/embed.js"></script>
 
@@ -102,7 +103,7 @@ $ bundle install
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Enumerable%20-%20Why%20I%20Fell%20in%20Love%20with%20Ruby%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fruby-enumerable.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a href="https://twitter.com/intent/tweet?text=Enumerable%20-%20Why%20I%20Fell%20in%20Love%20with%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2015-11-17-ruby-enumerable.html" target="_blank">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -111,10 +112,10 @@ $ bundle install
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>LEVEL UP your web development</h3>
-  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
+  <h3>Stay in the LOOP</h3>
+  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -138,11 +139,12 @@ $ bundle install
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
+      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2015-11-17-ruby-enumerable.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2015-11-17-ruby-enumerable.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Ruby" />
     </form>
   </div>
-
   <!--End mc_embed_signup-->
 </div>
 
@@ -188,7 +190,7 @@ $ bundle install
     
     <footer>
   <div class="row">
-    <img class="turtle" src="/assets/images/turtle-logo-096698b6.svg" />
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
     <section class="large-6 columns">
       <h5>Most Popular</h5>
       <ul>
@@ -212,11 +214,12 @@ $ bundle install
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net">email</a></li>
-        <li><a href="https://twitter.com/rossta">twitter</a></li>
-        <li><a href="https://github.com/rossta">github</a></li>
-        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
       </ul>
     </section>
   </div>
@@ -225,7 +228,7 @@ $ bundle install
   </p>
 </footer>
 
-    <script src="/assets/javascripts/index.bundle-d1285365.js"></script>
+    <script src="/assets/javascripts/index.bundle-720ed250.js"></script>
     
     <script type="text/javascript">
 !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";

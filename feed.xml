@@ -569,7 +569,7 @@ and demos from Mozilla&lt;/li&gt;
 Action&lt;/em&gt;&lt;/a&gt;, I had my "a-ha!"
 moment with Elixir; this table:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg" alt="Screenshot elixir in action table 1.1"&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;I'd already been playing with Elixir for a few month when before I picked up
 Sasha Juric's book introducing the Elixir language and its abstractions...&lt;/p&gt;</summary>
@@ -577,7 +577,7 @@ Sasha Juric's book introducing the Elixir language and its abstractions...&lt;/p
 Action&lt;/em&gt;&lt;/a&gt;, I had my &amp;quot;a-ha!&amp;quot;
 moment with Elixir; this table:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg" alt="Screenshot elixir in action table 1.1" /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;I&amp;#39;d already been playing with Elixir for a few month when before I picked up
 Sasha Juric&amp;#39;s book introducing the Elixir language and its abstractions for the
@@ -745,7 +745,7 @@ not meant to replace other methods of pushing data to clients, like
 &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"&gt;WebSockets&lt;/a&gt; or &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"&gt;Server Sent Events&lt;/a&gt;, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&amp;#39;s
 common place on our smartphones from installed apps is now possible from the browser.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/"&gt;&lt;img alt="Push message in Chrome" src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-3-36a167ad.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/"&gt;&lt;img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-3-36a167ad.jpg" alt="Push message in Chrome" /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Though only supported in Chrome and Firefox on the desktop and in Chrome on Android at the time of this writing, it&amp;#39;ll be more widespread soon enough. While I previously &lt;a href="/blog/web-push-notifications-from-rails.html"&gt;wrote about this topic&lt;/a&gt;, there have been recent changes in the Chrome implementation to make the API consistent with Firefox, which we&amp;#39;ll describe here.&lt;/p&gt;
 
