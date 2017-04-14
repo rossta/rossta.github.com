@@ -2,10 +2,9 @@
 
 <% series_object = blog_series.find { |s| s.id == series } %>
 <%= page_header series_object.title, series_object.summary %>
+<% local_articles = blog('blog').articles.group_by {|a| a.metadata[:page][:series] }[series] %>
 
 <br /><hr /><br/>
 <section class="index-posts margin-top">
-  <%- blog('blog').articles.group_by {|a| a.metadata[:page][series] }.each do |article| %>
-    <%= partial "partials/article_index", locals: { article: article } %>
-  <%- end %>
+  <%= partial "partials/article_index", locals: { local_articles: local_articles } %>
 </section>

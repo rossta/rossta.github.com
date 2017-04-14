@@ -2,8 +2,7 @@
 title: Adding Service Worker to a simple website
 author: Ross Kaffenberger
 published: true
-summary: 'Where "simple" is a static website hosted on Github pages and
-Cloudflare'
+summary: 'Where "simple" is a static website hosted on Github pages and Cloudflare'
 description: 'Described how I added a Service Worker script to rossta.net with
 some considerations concerning cache-busting strategies and deployment'
 pull_image: 'blog/stock/cyclists-unsplash-photo.jpg'

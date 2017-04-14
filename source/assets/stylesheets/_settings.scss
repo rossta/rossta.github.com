@@ -1,5 +1,5 @@
 // Required global settings and mixins for Foundation
-@import "foundation-sites/scss/foundation/components/global";
+@import "~foundation-sites/scss/foundation/components/global";
 
 // Foundation by ZURB
 // foundation.zurb.com
@@ -13,7 +13,7 @@
 $rem-base: 18px;
 
 // Allows the use of rem-calc() or lower-bound() in your settings
-@import "foundation-sites/scss/foundation/functions.scss";
+@import "~foundation-sites/scss/foundation/functions";
 
 // $experimental: true;
 
