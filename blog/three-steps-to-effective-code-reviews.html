@@ -9,10 +9,10 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
 <meta name="twitter:title" content="Three Steps to Effective Code Reviews" />
 <meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
 <meta property="og:title" content="Three Steps to Effective Code Reviews" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -70,7 +69,6 @@
     </h3>
 </header>
 
-        <p><img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" /></p>
 
       <p>These days, software developers are living in a <a href="http://scottchacon.com/2011/08/31/github-flow.html">GitHub Workflow</a></a> world. They develop new code on version-controlled <a href="http://git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging">branches</a> and gather feedback prior to inclusion in the primary release, or “master” branch, through <a href="https://help.github.com/articles/using-pull-requests">pull requests</a>.</p>
 
@@ -78,62 +76,32 @@
 
 <p>This has led to resentment and injured relationships on occasion. In response, I’m working to improve how we give and receive criticism.</p>
 
-      <h3 id="building-trust" class="title">
-        <a name="building-trust" class="anchor" href="#building-trust">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Building trust
-      </h3>
-    
+<h3>Building trust</h3>
+
 <p>Let&#8217;s assume that, when done well, code reviews are a good thing. That is to say, the practice of giving and receiving feedback in a consistent, continual manner has true benefits. These may include improving code quality over time and driving convergence of ideas and practices within your team. In my experience, for feedback to be effective, trust amongst team members is a key requirement.</p>
 
 <p>This may not be an issue for teams that have been together for a long time or share common values, but for others, trust has to be earned. In the absence of trust, there&#8217;s more opportunity for personal differences to get intertwined with feedback. While there are no quick fixes, what follows are code review practices that we have adopted to foster our shared sense of trust.</p>
 
-      <h3 id="1-adopt-a-style-guide" class="title">
-        <a name="1-adopt-a-style-guide" class="anchor" href="#1-adopt-a-style-guide">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        1. Adopt a style guide
-      </h3>
-    
+<h3>1. Adopt a style guide</h3>
+
 <p><strong>Spoiler alert</strong>: code syntax and formatting are trivial choices. What&#8217;s most important is your team agrees on and adheres to a set of guidelines.</p>
 
 <p>Take a few hours as a team to hammer out a style guide for each of the languages you use. Better yet, use a public example like <a href="https://github.com/styleguide">GitHub&#8217;s style guide</a> as a starting point. Besides the obvious benefits of consistency and maintainability, style guides reduce the likelihood of flared tempers during reviews; when you’re pushing to get a new feature out the door, it&#8217;s unhealthy to argue over whitespace. This works when your team respectfully follows and comments on style issues respectfully, saving concerns about existing guidelines for separate discussions.</p>
 
-      <h3 id="2-start-with-the-end-in-mind" class="title">
-        <a name="2-start-with-the-end-in-mind" class="anchor" href="#2-start-with-the-end-in-mind">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        2. Start with the end in mind
-      </h3>
-    
+<h3>2. Start with the end in mind</h3>
+
 <p>Imagine a developer who emerges, after hours or days off in the “zone,” with a sparkly new feature and asks for a review. All is good, right? Except that the rest of the team has issues with the implementation. Words are exchanged, the developer takes the feedback personally, and suddenly the entire team is distracted from shipping code.</p>
 
 <p>Personally, I believe code review should begin well before the final commit. It can happen early on; in short discussions with teammates once the ideas start to take shape. Get buy-in on your approach before you’re ready to merge your branch. Opening a pull request and asking for feedback while work is still in progress is a great way to build trust between teammates, and reduce the likelihood that criticism may be interpreted as a personal attack.</p>
 
-      <h3 id="3-use-the-rubber-duck" class="title">
-        <a name="3-use-the-rubber-duck" class="anchor" href="#3-use-the-rubber-duck">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        3. Use the Rubber Duck
-      </h3>
-    
+<h3>3. Use the Rubber Duck</h3>
+
 <p><a href="http://en.wikipedia.org/wiki/Rubber_duck_debugging">Rubber duck</a> debugging is a method of finding solutions simply by explaining code line-by-line to an inanimate object. We&#8217;ve found it helps to do the same with our writing, especially when our first instinct is to respond to code or another comment with sarcasm or anger. Take a moment to read your response aloud and question the wording, timing, and appropriateness. This includes taking into account the personality of the team members you’re addressing. <a href="http://thoughtbot.com">Thoughtbot</a> has compiled a useful set of <a href="https://github.com/thoughtbot/guides/tree/master/code-review">code review guidelines</a> to help both readers and writers respond thoughtfully. I also suggest that teammates share meta-feedback to ensure that everyone is hitting the right notes of tone and instruction.</p>
 
 <p>The next time you feel pain in a code review, take a step back to consider what’s missing. It could be that your team needs to adopt some guidelines to reduce friction and ensure feedback is exchanged in as a constructive and positive manner as possible. After all, you have both code and relationships to maintain.</p>
 
-      <h3 id="resources" class="title">
-        <a name="resources" class="anchor" href="#resources">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Resources
-      </h3>
-    
+<h3>Resources</h3>
+
 <ul>
 <li><a href="https://github.com/bbatsov/ruby-style-guide">Community ruby style guide</a></li>
 <li><a href="https://github.com/styleguide">GitHub style guide</a></li>
@@ -148,7 +116,7 @@
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Three%20Steps%20to%20Effective%20Code%20Reviews%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2014-02-25-three-steps-to-effective-code-reviews.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Three%20Steps%20to%20Effective%20Code%20Reviews%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fthree-steps-to-effective-code-reviews.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -157,10 +125,10 @@
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -184,12 +152,11 @@
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2014-02-25-three-steps-to-effective-code-reviews.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2014-02-25-three-steps-to-effective-code-reviews.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Process" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -252,18 +219,17 @@
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>

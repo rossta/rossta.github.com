@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -75,39 +74,17 @@
 <section id="projects" class="index-posts">
     <article class="index-post">
       <header>
-        <h3><a href="https://rossta.net/">ServiceWorker::Rails</a></h3>
-          <p class="alt-title subtle">Turn your Rails app into a Progressive Web App</p>
-      </header>
-      <p>The Rails asset pipeline makes a number of assumptions about what&#39;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &quot;cacheability&quot;. Rails also assumes a single parent directory, <code>/public/assets</code>, to make it easier to look up the file path for a given asset.</p>
-
-<p>We want Sprockets to compile service worker JavaScript from ES6/7, CoffeeScript, ERB, etc. but must remove the caching and scoping mechanisms offered by Rails asset pipeline defaults. This is where <code>serviceworker-rails</code> comes in.</p>
-
-<p><em>Check out the <a href="https://rossta.net/blog/service-worker-on-rails.html">blog post</a>
-for more background.</em></p>
-
-<p><img alt="Service Worker Rails
-Sandbox" src="/assets/images/screenshots/screenshot-serviceworker-rails-a36be754.png" /></p>
-
-        <p>
-            <a href="https://github.com/rossta/serviceworker-rails">Source code on GitHub</a>
-              &middot;
-            <a href="https://serviceworker-rails.herokuapp.com/">Demo app</a>
-        </p>
-    </article>
-      <br /><hr /><br />
-    <article class="index-post">
-      <header>
         <h3><a href="https://rossta.net/montrose">Montrose</a></h3>
           <p class="alt-title subtle">A Ruby library for modeling recurring events</p>
       </header>
-      <p>Why would you need <a href="https://github.com/rossta/montrose"><code>Montrose</code></a>? Well, a calendaring or scheduling application may reach a point where it needs to handle entries that repeat at predefined intervals; it may useful to have an abstraction to represent that recurrence.  How would you handle &quot;every Friday 13th, forever&quot;? It wouldn&#39;t be feasible to generate infinite events upfront to represent each instance - <code>Montrose</code> helps
+      <p>Why would you need <a href="https://github.com/rossta/montrose"><code>Montrose</code></a>? Well, a calendaring or scheduling application may reach a point where it needs to handle entries that repeat at predefined intervals; it may useful to have an abstraction to represent that recurrence.  How would you handle &ldquo;every Friday 13th, forever&rdquo;? It wouldn&rsquo;t be feasible to generate infinite events upfront to represent each instance - <code>Montrose</code> helps
 you define and enumerate these recurrences on demand.</p>
 
 <pre><code class="ruby"># Friday the 13th, forever
 Montrose.monthly(on: { friday: 13 })
 </code></pre>
 
-<p>I also <a href="https://rossta.net/blog/recurring-events-in-ruby.html">wrote plenty of examples using Montrose</a> if you&#39;re interested to learn more.</p>
+<p>I also <a href="https://rossta.net/blog/recurring-events-in-ruby.html">wrote plenty of examples using Montrose</a> if you&rsquo;re interested to learn more.</p>
 
 <p><a href="https://github.com/rossta/montrose">Go ahead and star the project on GitHub</a> and fork the project to contribute.</p>
 
@@ -125,7 +102,7 @@ Montrose.monthly(on: { friday: 13 })
         <h3><a href="https://rossta.net/tacokit.rb">Tacokit.rb</a></h3>
           <p class="alt-title subtle">A Ruby wrapper for the Trello API</p>
       </header>
-      <p>Ruby toolkit for the <a href="https://developer.trello.com">Trello API</a>... a work-in-progress. Design and philosophy inspired by <a href="https://gitbhub.com/octokit/octokit.rb">ocktokit.rb</a>. I love using <a href="https://trello.com">Trello</a> almost everyday for work and personal stuff - which means there&#39;s a treasure trove of data waiting to be unlocked. The <code>Tacokit</code> gem is a simple ruby interface. It&#39;s well-tested, well-documented, and easy to use by Rubyists.</p>
+      <p>Ruby toolkit for the <a href="https://developer.trello.com">Trello API</a>&hellip; a work-in-progress. Design and philosophy inspired by <a href="https://gitbhub.com/octokit/octokit.rb">ocktokit.rb</a>. I love using <a href="https://trello.com">Trello</a> almost everyday for work and personal stuff - which means there&rsquo;s a treasure trove of data waiting to be unlocked. The <code>Tacokit</code> gem is a simple ruby interface. It&rsquo;s well-tested, well-documented, and easy to use by Rubyists.</p>
 
 <p><code>$ gem install tacokit</code></p>
 
@@ -159,7 +136,7 @@ Montrose.monthly(on: { friday: 13 })
         <h3><a href="https://rossta.net/opensesame/">OpenSesame</a></h3>
           <p class="alt-title subtle">Rails engine for authenticating internal applications</p>
       </header>
-      <p><a href="https://rossta.net/opensesame/">OpenSesame</a> is a <a href="https://github.com/hassox/warden">Warden</a> strategy for providing &quot;walled garden&quot; authentication for access to Rack-based applications via Omniauth. For example, your company has internal apps and/or staging enviroments for multiple projects and you want something better than HTTP basic auth. The intent is protect the visibility of your app from the out</p>
+      <p><a href="https://rossta.net/opensesame/">OpenSesame</a> is a <a href="https://github.com/hassox/warden">Warden</a> strategy for providing &ldquo;walled garden&rdquo; authentication for access to Rack-based applications via Omniauth. For example, your company has internal apps and/or staging enviroments for multiple projects and you want something better than HTTP basic auth. The intent is protect the visibility of your app from the out</p>
 
 <p><code>$ gem install opensesame</code></p>
 
@@ -205,7 +182,7 @@ Montrose.monthly(on: { friday: 13 })
         <h3><a href="https://github.com/rossta/seymour">Seymour</a></h3>
           <p class="alt-title subtle">Redis-backed activity feeds for Rails</p>
       </header>
-      <p>A Ruby gem for distributing activity items to Redis-backed activity feeds in a Rails application. Abstractions are provided to make it easy to declare &quot;recipients&quot; of a given event and how these activities should be rendered. To install:</p>
+      <p>A Ruby gem for distributing activity items to Redis-backed activity feeds in a Rails application. Abstractions are provided to make it easy to declare &ldquo;recipients&rdquo; of a given event and how these activities should be rendered. To install:</p>
 
 <p><code>$ gem install seymour</code></p>
 
@@ -286,10 +263,10 @@ Montrose.monthly(on: { friday: 13 })
 <section class="signup-form-standalone margin-bottom double">
   <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -313,12 +290,11 @@ Montrose.monthly(on: { friday: 13 })
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/projects/page/2/index.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="projects/page/2/index.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -354,18 +330,17 @@ Montrose.monthly(on: { friday: 13 })
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>

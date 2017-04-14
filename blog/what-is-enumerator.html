@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -72,22 +71,22 @@
 
         <p><img src="/assets/images/blog/enumerator-1-2-3-b7cfed08.jpg" /></p>
 
-      <p>Let&#39;s pretend we know about Ruby&#39;s <a href="http://ruby-doc.org/core-2.2.3/Enumerable.html">Enumerable</a> module - that it&#39;s included in
-Ruby&#39;s core collection classes like Array and Hash and provides a bunch of
+      <p>Let&rsquo;s pretend we know about Ruby&rsquo;s <a href="http://ruby-doc.org/core-2.2.3/Enumerable.html">Enumerable</a> module - that it&rsquo;s included in
+Ruby&rsquo;s core collection classes like Array and Hash and provides a bunch of
 methods for traversal, searching and sorting, and that we can can introduce it
 to plain old ruby classes through inclusion and implementing the <code>#each</code> method.
-Check out this <a href="http://ruby.bastardsbook.com/chapters/enumerables/">dated - yet reliable - Enumerable primer</a> if you&#39;d like a refresher.</p>
+Check out this <a href="http://ruby.bastardsbook.com/chapters/enumerables/">dated - yet reliable - Enumerable primer</a> if you&rsquo;d like a refresher.</p>
 
-<p><a href="http://ruby-doc.org/core-2.2.0/Enumerator.html">Enumerator</a> is like <code>Enumerable&#39;s</code> kid sister; while <code>Enumerable</code> is getting all the attention, <code>Enumerator</code>, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&#39;s time you took notice, Ma.</p>
+<p><a href="http://ruby-doc.org/core-2.2.0/Enumerator.html">Enumerator</a> is like <code>Enumerable&#39;s</code> kid sister; while <code>Enumerable</code> is getting all the attention, <code>Enumerator</code>, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&rsquo;s time you took notice, Ma.</p>
 
-<p>So what exactly is <code>Enumerator</code>?. For one, it&#39;s a class. You can instantiate an
+<p>So what exactly is <code>Enumerator</code>?. For one, it&rsquo;s a class. You can instantiate an
 instance of <code>Enumerator</code> by calling certain <code>Enumerable</code> instance methods, like <code>Array#each</code>, without a block:</p>
 
 <pre><code class="ruby">[1, 2, 3].each
 =&gt; #&lt;Enumerator: [1, 2, 3]:each&gt;
 </code></pre>
 
-<p>In fact, you can do this for many (but not all) of Array&#39;s <code>Enumerable</code> methods
+<p>In fact, you can do this for many (but not all) of Array&rsquo;s <code>Enumerable</code> methods
 that expect a block:</p>
 
 <pre><code class="ruby">[1, 2, 3].map
@@ -114,9 +113,9 @@ e.each { |n| p n }
 
 <p>See what happened there? The expression printed out each digit, but returned <code>[nil, nil, nil]</code> instead of of <code>[1, 2, 3]</code>. The <code>Enumerator</code> implemented <code>map</code> in the context of <code>each</code>; since <code>p n</code> returns <code>nil</code>, we got three entries of <code>nil</code> in the return value. We chained the behavior of two enumerable methods.</p>
 
-<p>Here&#39;s another example. It&#39;s often useful to enumerate collection members along
-with the index. We can use <code>Enumerable#each_with_index</code>, we don&#39;t have
-<code>Enumerable#map_with_index</code>. JavaScript <code>forEach</code> and <code>map</code> gets this right, but not Ruby... or does it?</p>
+<p>Here&rsquo;s another example. It&rsquo;s often useful to enumerate collection members along
+with the index. We can use <code>Enumerable#each_with_index</code>, we don&rsquo;t have
+<code>Enumerable#map_with_index</code>. JavaScript <code>forEach</code> and <code>map</code> gets this right, but not Ruby&hellip; or does it?</p>
 
 <p>Almost - we can chain enumerators together to get effectively the same result:</p>
 
@@ -133,11 +132,11 @@ for each iteration. This usage is common enough, that <code>Enumerator</code> pr
 =&gt; [0, 2, 6]
 </code></pre>
 
-<p>Reads pretty well, eh? What&#39;s really interesting here is that enumerators package
+<p>Reads pretty well, eh? What&rsquo;s really interesting here is that enumerators package
 up knowledge of a collection and a method with which we want to enumerate.</p>
 
 <p>We can combine several enumerators in different orders to get different
-behaviors. Here&#39;s an nice example borrowed from <a href="http://dgiim.github.io/blog/2015/08/24/ruby-enumerators/#the-enumerator-class">another recent post on the subject</a>:</p>
+behaviors. Here&rsquo;s an nice example borrowed from <a href="http://dgiim.github.io/blog/2015/08/24/ruby-enumerators/#the-enumerator-class">another recent post on the subject</a>:</p>
 
 <pre><code class="ruby">letters = %w[a b c d e]
 
@@ -156,11 +155,11 @@ p group_2
 =&gt; {0=&gt;[[&quot;e&quot;, 0], [&quot;b&quot;, 3]], 1=&gt;[[&quot;d&quot;, 1], [&quot;a&quot;, 4]], 2=&gt;[[&quot;c&quot;, 2]]}
 </code></pre>
 
-<p><code>Enumerator</code> provides some additional methods that allow for &quot;external&quot;
+<p><code>Enumerator</code> provides some additional methods that allow for &ldquo;external&rdquo;
 enumeration as well. With an enumerator instance, we can call <code>next</code> to get each
 successive member of the collection.</p>
 
-<p>Consider <code>Enumerable#cycle</code>. Calling &quot;cycle&quot; on an enumerable collection (without a limit arg) will enumerate over members of a collection ad nauseum. When implemented as an enumerator of css colors, we can use <code>cycle</code> to create striped table rows:</p>
+<p>Consider <code>Enumerable#cycle</code>. Calling &ldquo;cycle&rdquo; on an enumerable collection (without a limit arg) will enumerate over members of a collection ad nauseum. When implemented as an enumerator of css colors, we can use <code>cycle</code> to create striped table rows:</p>
 
 <pre><code class="ruby">Project = Struct.new(:name)
 
@@ -200,7 +199,7 @@ p ERB.new(erb).result(binding).gsub(/^$\n/, &quot;&quot;)
 &lt;/table&gt;&#39;
 </code></pre>
 
-<p>Brilliant! Notice how, in each enumeration of <code>project</code>, we&#39;re calling <code>colors.next</code>. So external enumeration is one technique for enumerating more than one collection at a time.</p>
+<p>Brilliant! Notice how, in each enumeration of <code>project</code>, we&rsquo;re calling <code>colors.next</code>. So external enumeration is one technique for enumerating more than one collection at a time.</p>
 
 <p>Not all enumerators will enumerate forever. Using cycle with a limit will result
 in a <code>StopIteration</code> error:</p>
@@ -258,7 +257,7 @@ e.next
 =&gt; 1
 </code></pre>
 
-<p>So enumerators give us flexible and composable uses for enumerables. Combine them to extend behavior of existing enumerable methods. Use them for external enumeration with methods like <code>#next</code> and <code>#peek</code> for iterating over multiple arrays. In a future post, we&#39;ll take a look at how to create our own enumerators outside the context of arrays and hashes and some good reasons for doing so.</p>
+<p>So enumerators give us flexible and composable uses for enumerables. Combine them to extend behavior of existing enumerable methods. Use them for external enumeration with methods like <code>#next</code> and <code>#peek</code> for iterating over multiple arrays. In a future post, we&rsquo;ll take a look at how to create our own enumerators outside the context of arrays and hashes and some good reasons for doing so.</p>
 
 <p>In case you missed it, <a href="/blog/ruby-enumerable.html">check out my presentation in the previous post</a> on the <code>Enumerable</code> module for more examples on how to get the most out of this terrific Ruby module.</p>
 
@@ -267,7 +266,7 @@ e.next
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=What%20the%20Heck%20is%20a%20Ruby%20Enumerator%3F%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2015-11-18-what-is-enumerator.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=What%20the%20Heck%20is%20a%20Ruby%20Enumerator%3F%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fwhat-is-enumerator.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -276,10 +275,10 @@ e.next
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -303,12 +302,11 @@ e.next
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2015-11-18-what-is-enumerator.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2015-11-18-what-is-enumerator.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Ruby" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -372,18 +370,17 @@ e.next
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>

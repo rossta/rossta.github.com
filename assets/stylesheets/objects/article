@@ -9,7 +9,7 @@ Error: Undefined mixin 'base-font'.
 4:     @include base-font;
 5:     margin-bottom: 2.25rem;
 6:   }
-7:   .panel {
+7:   h2,h3,h4,h5 {
 
 Backtrace:
 /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss:2:in `base-font'
@@ -155,4 +155,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined mixin 'base-font'.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss, in `base-font'\A         from line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss\A \A 1: article {\A 2:   @include base-font;\A 3:   header {\A 4:     @include base-font;\A 5:     margin-bottom: 2.25rem;\A 6:   }\A 7:   .panel {"; }
+  content: "Error: Undefined mixin 'base-font'.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss, in `base-font'\A         from line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss\A \A 1: article {\A 2:   @include base-font;\A 3:   header {\A 4:     @include base-font;\A 5:     margin-bottom: 2.25rem;\A 6:   }\A 7:   h2,h3,h4,h5 {"; }

@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -72,11 +71,11 @@
 
         <p><img src="/assets/images/blog/stock/fall-leaves-pexels-photo-3210b976.jpg" /></p>
 
-      <p>Let&#39;s talk about <code>:inverse_of</code>.</p>
+      <p>Let&rsquo;s talk about <code>:inverse_of</code>.</p>
 
-<p>We know Rails has ActiveRecord and ActiveRecord gives us associations and associations can really simplify our interactions with databases. These associations provide a number of configuration options, one of which is to set the &quot;inverse of&quot; your current relation.</p>
+<p>We know Rails has ActiveRecord and ActiveRecord gives us associations and associations can really simplify our interactions with databases. These associations provide a number of configuration options, one of which is to set the &ldquo;inverse of&rdquo; your current relation.</p>
 
-<p>This option name can be a little confusing at first so let&#39;s use an example. Let&#39;s say we have an
+<p>This option name can be a little confusing at first so let&rsquo;s use an example. Let&rsquo;s say we have an
 <code>Author</code> class and it <code>has_many :posts</code>. This means we should have a <code>Post</code> class that maintains a
 column, <code>:author_id</code>, so it we can say it <code>belongs_to :author</code>.</p>
 
@@ -114,16 +113,10 @@ post.author
 #=&gt; #&lt;Author:0x007fde7a5c8518 id: 1, ... &gt;
 </code></pre>
 
-      <h3 id="what-it-39-s-for" class="title">
-        <a name="what-it-39-s-for" class="anchor" href="#what-it-39-s-for">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        What It&#39;s For
-      </h3>
-    
+<h3>What It&rsquo;s For</h3>
+
 <p>Now, for most of our associations, Rails helps us find the <strong>inverse</strong> relation. For example, if we
-start with an author, then ask for her posts, each post will &quot;know&quot; that the inverse instance of this
+start with an author, then ask for her posts, each post will &ldquo;know&rdquo; that the inverse instance of this
 relationship is the author. If we iterate over each of <code>author.posts</code> and ask each post for its
 author, we expect to get the same author record:</p>
 
@@ -131,9 +124,9 @@ author, we expect to get the same author record:</p>
 # =&gt; [#&lt;Author:0x007fde81898868 id: 1, ... &gt;, #&lt;Author:0x007fde81898868 id: 1, ... &gt;, ...]
 </code></pre>
 
-<p>For consistency, we want each post&#39;s author not only to be the same record, but the same
-<strong>instance</strong> in memory. If I modify one author&#39;s attributes, I expect that change to be reflected no
-matter with inverse I&#39;m working with. Let&#39;s confirm by inspecting the <code>:object_id</code>:</p>
+<p>For consistency, we want each post&rsquo;s author not only to be the same record, but the same
+<strong>instance</strong> in memory. If I modify one author&rsquo;s attributes, I expect that change to be reflected no
+matter with inverse I&rsquo;m working with. Let&rsquo;s confirm by inspecting the <code>:object_id</code>:</p>
 
 <pre><code class="ruby">author.object_id
 # =&gt; 70296816370740
@@ -145,7 +138,7 @@ object_ids.uniq.size == 1
 # =&gt; true
 </code></pre>
 
-<p>Great!, This means we can say that, for the <code>Author</code> class, <code>:author</code> is the &quot;inverse of&quot; the
+<p>Great!, This means we can say that, for the <code>Author</code> class, <code>:author</code> is the &ldquo;inverse of&rdquo; the
 <code>has_many :posts</code> association. So we could add the <code>:inverse_of</code> option to specify the name of the
 inverse association to ensure our object instances match up.</p>
 
@@ -156,7 +149,7 @@ end
 
 # app/models/post.rb
 class Post &lt; ActiveRecord::Base
-  belongs_to :author, inverse_of: :posts
+  belongs_to :author, inverse_of: :post
 end
 </code></pre>
 
@@ -167,21 +160,15 @@ setting the correct inverse instances as we might expect.</p>
 
 <p>So it should <strong>just work™</strong>!</p>
 
-      <h3 id="it-doesn-39-t-always-work" class="title">
-        <a name="it-doesn-39-t-always-work" class="anchor" href="#it-doesn-39-t-always-work">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        It Doesn&#39;t Always Work
-      </h3>
-    
+<h3>It Doesn&rsquo;t Always Work</h3>
+
 <p>I noticed something odd the other day.</p>
 
 <p>I was reviewing code for our Rails app which introduced abstraction to render a list of items given by a <code>has_many</code> association. The code was passing around the inverse instance (the original owner of the association) all over the place.</p>
 
-<p>Wouldn&#39;t we expect the inverse to be available on our <code>has_many</code> items?</p>
+<p>Wouldn&rsquo;t we expect the inverse to be available on our <code>has_many</code> items?</p>
 
-<p>Let&#39;s look at an oversimplified example of what we were dealing with. Building on our <code>Author</code> and <code>Post</code> from earlier, we&#39;ll add a <code>Tweet</code> class. Using ActiveRecord&#39;s single-table inheritance mechanism, <code>Tweet</code> inherits functionality from <code>Post</code>.</p>
+<p>Let&rsquo;s look at an oversimplified example of what we were dealing with. Building on our <code>Author</code> and <code>Post</code> from earlier, we&rsquo;ll add a <code>Tweet</code> class. Using ActiveRecord&rsquo;s single-table inheritance mechanism, <code>Tweet</code> inherits functionality from <code>Post</code>.</p>
 
 <pre><code class="ruby"># app/models/author.rb
 class Author &lt; ActiveRecord::Base
@@ -241,13 +228,13 @@ author.tweets.map { |tw| tw.author.twitter_handle }
 #=&gt; [&#39;vicenta&#39;, &#39;vicenta&#39;, ... ]
 </code></pre>
 
-<p>That&#39;s a lot of database queries for one author!</p>
+<p>That&rsquo;s a lot of database queries for one author!</p>
 
-<p>It&#39;s the classic problem with <code>has_many</code> associations: the &quot;N+1&quot; query. After the initial <code>author.tweet</code> query, &quot;N&quot; additional queries are needed to call each <code>tweet.author</code> back through the <code>belongs_to</code> association. We were avoiding the extra lookups by passing around the original author instance.</p>
+<p>It&rsquo;s the classic problem with <code>has_many</code> associations: the &ldquo;N+1&rdquo; query. After the initial <code>author.tweet</code> query, &ldquo;N&rdquo; additional queries are needed to call each <code>tweet.author</code> back through the <code>belongs_to</code> association. We were avoiding the extra lookups by passing around the original author instance.</p>
 
-<p>This is unfortunate because we, as we have seen, it should be possible to avoid these extra queries so that each tweet&#39;s author points to the same author object in memory.</p>
+<p>This is unfortunate because we, as we have seen, it should be possible to avoid these extra queries so that each tweet&rsquo;s author points to the same author object in memory.</p>
 
-<p>Not only do we want to avoid the extra queries, but if modifications are made in one place, we&#39;d like them to be reflected elsewhere. I want to avoid something like this:</p>
+<p>Not only do we want to avoid the extra queries, but if modifications are made in one place, we&rsquo;d like them to be reflected elsewhere. I want to avoid something like this:</p>
 
 <pre><code class="ruby">tweet_1 = author.tweets.first
 tweet_2 = author.tweets.second
@@ -261,9 +248,9 @@ tweet_1.author.name # =&gt; &quot;Martha&quot;
 tweet_2.author.name # =&gt; &quot;Cecily&quot;
 </code></pre>
 
-<p>So passing the <code>author</code> instance variable into the block, as an additional argument to method calls, or down to a view template is one workaround. But this can be difficult to maintain, especially if we&#39;re dealing with more than one author&#39;s posts. Wouldn&#39;t it be better not to make those unnecessary queries?</p>
+<p>So passing the <code>author</code> instance variable into the block, as an additional argument to method calls, or down to a view template is one workaround. But this can be difficult to maintain, especially if we&rsquo;re dealing with more than one author&rsquo;s posts. Wouldn&rsquo;t it be better not to make those unnecessary queries?</p>
 
-<p>Well, it&#39;s possible! <code>:inverse_of</code> to the rescue.</p>
+<p>Well, it&rsquo;s possible! <code>:inverse_of</code> to the rescue.</p>
 
 <pre><code class="ruby">class Author &lt; ActiveRecord::Base
   has_many :tweets, inverse_of: :author
@@ -286,29 +273,23 @@ author.tweets.map { |tw| tw.author.twitter_handle }
 =&gt; [&quot;vicenta&quot;, ... ]
 </code></pre>
 
-<p>Notice that additional queries for the author (<code>Author Load...</code>) don&#39;t appear in the query log: no more &quot;N+1&quot;!</p>
+<p>Notice that additional queries for the author (<code>Author Load...</code>) don&rsquo;t appear in the query log: no more &ldquo;N+1&rdquo;!</p>
 
-<p>You might be asking... why doesn&#39;t Rails just do this by default all the time? That&#39;s a good question. Turns out, it&#39;s not so easy. The <a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Rails guides</a> say:</p>
+<p>You might be asking&hellip; why doesn&rsquo;t Rails just do this by default all the time? That&rsquo;s a good question. Turns out, it&rsquo;s not so easy. The <a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Rails guides</a> say:</p>
 
 <blockquote>
 <p>Every association will attempt to automatically find the inverse association and set the <code>:inverse_of</code> option heuristically (based on the association name). Most associations with standard names will be supported.</p>
 </blockquote>
 
-<p>So Rails will &quot;try hard&quot; to make the inverse association work automatically to prevent the extra queries. If no name is found with the <code>:inverse_of</code> key in the association options, ActiveRecord will try to find the inverse association automatically inferring the class name from the association name, i.e. as <code>Post</code> is implied by <code>has_many :posts</code>.</p>
+<p>So Rails will &ldquo;try hard&rdquo; to make the inverse association work automatically to prevent the extra queries. If no name is found with the <code>:inverse_of</code> key in the association options, ActiveRecord will try to find the inverse association automatically inferring the class name from the association name, i.e. as <code>Post</code> is implied by <code>has_many :posts</code>.</p>
 
 <p>To summarize, when the name of the association and the name of the class Rails expects to find in the
-association don&#39;t match, or other certain other options are uses, automatic inverse lookup won&#39;t happen. Then you may see extra
+association don&rsquo;t match, or other certain other options are uses, automatic inverse lookup won&rsquo;t happen. Then you may see extra
 queries for objects that already exist in memory.</p>
 
-      <h3 id="avoid-uncertainty-be-explicit" class="title">
-        <a name="avoid-uncertainty-be-explicit" class="anchor" href="#avoid-uncertainty-be-explicit">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Avoid Uncertainty, Be Explicit
-      </h3>
-    
-<p>Here&#39;s my recommendation:</p>
+<h3>Avoid Uncertainty, Be Explicit</h3>
+
+<p>Here&rsquo;s my recommendation:</p>
 
 <p><strong>Set the <code>:inverse_of</code> option wherever you can.</strong></p>
 
@@ -316,7 +297,7 @@ queries for objects that already exist in memory.</p>
 
 <p>Also know that <strong>other ActiveRecord options can interfere with automatic inverses</strong>: for example, using <code>:foreign_key</code> in your association will make it impossible to guess the inverse. In these cases, if you expect to have inverses set properly, using <code>:inverse_of</code> is necessary.</p>
 
-<p>Here&#39;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&#39;t really want to write tests to be sure I&#39;m not unintentionally generating a &quot;N+1&quot; queries for my associations. I want to make it easier to introduce other changes into my app later.</p>
+<p>Here&rsquo;s an opportunity to reduce the chances that a name change or a Rails upgrade will introduce unexpected behavior to your application. I don&rsquo;t really want to write tests to be sure I&rsquo;m not unintentionally generating a &ldquo;N+1&rdquo; queries for my associations. I want to make it easier to introduce other changes into my app later.</p>
 
 <p><strong>Beware of the gotchas</strong>: <code>:inverse_of</code> will only work with <code>has_many</code>, <code>has_one</code>, and <code>belong_to</code> associations and they will not work with the <code>:as</code>, <code>:polymorphic</code>, and <code>:through</code> options. <a href="http://guides.rubyonrails.org/association_basics.html#bi-directional-associations">Check out to the Rails docs on bi-directional associations</a> for more info.</p>
 
@@ -327,7 +308,7 @@ queries for objects that already exist in memory.</p>
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Use%20inverse_of%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2015-12-02-use-inverse_of.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Use%20inverse_of%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fuse-inverse_of.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -336,10 +317,10 @@ queries for objects that already exist in memory.</p>
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -363,12 +344,11 @@ queries for objects that already exist in memory.</p>
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2015-12-02-use-inverse_of.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2015-12-02-use-inverse_of.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Ruby,Rails" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -431,18 +411,17 @@ queries for objects that already exist in memory.</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>

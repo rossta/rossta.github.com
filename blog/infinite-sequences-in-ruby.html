@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -76,14 +75,8 @@
 
 <p>The Ruby standard library doesn’t have an official sequence class or module, but we can get pretty far with the <code>Enumerable</code> module. Rubyists are typically introduced to <code>Enumerable</code> through methods on <code>Array</code>,  like <code>#map</code> and <code>#select</code>. Arrays like <code>[1,2,3,4]</code> may be thought of as finite, eagerly loaded sequences; they already contains all the members we want to enumerate with methods. We can also extend this API to sequences like “give me multiples of 5” in Ruby.</p>
 
-      <h3 id="enumerable-fibonacci" class="title">
-        <a name="enumerable-fibonacci" class="anchor" href="#enumerable-fibonacci">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Enumerable Fibonacci
-      </h3>
-    
+<h3>Enumerable Fibonacci</h3>
+
 <p>Consider an infinite sequence like fibonacci. We could create a method that generates the first <code>n</code> fibonacci members given <code>n</code> as a paramter. This implementation could look like this:</p>
 
 <pre><code class="ruby">def eager_fibonacci(n)
@@ -101,7 +94,7 @@
 end
 </code></pre>
 
-<p>This works, but we can go one step further. Instead of returning an eagerly-loaded array, we can return an <code>Enumerator</code>. We&#39;ll yield each member to the <code>Enumerator</code> as it is generated.</p>
+<p>This works, but we can go one step further. Instead of returning an eagerly-loaded array, we can return an <code>Enumerator</code>. We&rsquo;ll yield each member to the <code>Enumerator</code> as it is generated.</p>
 
 <pre><code class="ruby">def fibonacci
   Enumerator.new do |y|
@@ -115,7 +108,7 @@ end
 end
 </code></pre>
 
-<p>What the heck is an <code>Enumerator</code>? It’s an enumerable object that can be used for either internal or external enumeration of a collection - for more details, check out my <a href="https://rossta.net/blog/what-is-enumerator.html">previous post</a>. The <code>Enumerator</code> initialize method take a block that acts like a template for an enumerable algorithm. The block takes a parameter, <code>y</code>, which is an instance of an <code>Enumerator::Yielder</code>, which let&#39;s us yield each member of the <code>Enumerator</code> to blocks passed to <code>Enumerable</code> method calls. In short, this means we can treat an <code>Enumerator</code> like an <code>Array</code>, though we can also do so much more.</p>
+<p>What the heck is an <code>Enumerator</code>? It’s an enumerable object that can be used for either internal or external enumeration of a collection - for more details, check out my <a href="https://rossta.net/blog/what-is-enumerator.html">previous post</a>. The <code>Enumerator</code> initialize method take a block that acts like a template for an enumerable algorithm. The block takes a parameter, <code>y</code>, which is an instance of an <code>Enumerator::Yielder</code>, which let&rsquo;s us yield each member of the <code>Enumerator</code> to blocks passed to <code>Enumerable</code> method calls. In short, this means we can treat an <code>Enumerator</code> like an <code>Array</code>, though we can also do so much more.</p>
 
 <p>To retrieve the first ten members of our enumerable fibonacci method, we’d instead do something like:</p>
 
@@ -147,24 +140,18 @@ fibonacci.lazy.with_index.select { |n, i| n.even? }.first(10)
 
 <p>Notice we only need to enumerate 13 items to retrieve 10 odd numbers from fibonacci, while 29 are needed to retrieve the first 10 evens. These results wouldn’t be easily achieved with our previous fibonacci implementation in which the number of desired members must be known ahead of time.</p>
 
-<p>Try creating other numerical sequences with enumerators on your own, like multiples of <code>n</code>, factorials for the first <code>n</code> integers or enumerating sums of squares. Also be sure to check out Pat Shaughnessy&#39;s <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">great primer on lazy enumerators</a>.</p>
+<p>Try creating other numerical sequences with enumerators on your own, like multiples of <code>n</code>, factorials for the first <code>n</code> integers or enumerating sums of squares. Also be sure to check out Pat Shaughnessy&rsquo;s <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">great primer on lazy enumerators</a>.</p>
 
-      <h3 id="sequence-functions" class="title">
-        <a name="sequence-functions" class="anchor" href="#sequence-functions">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Sequence Functions
-      </h3>
-    
+<h3>Sequence Functions</h3>
+
 <p>Clojure also has a number of useful functions that allow us to generate sequences from other functions. Let’s look at <code>repeatedly</code> which simply calls the given function over and over, emitting the results as a sequence. To get a sequence of five random numbers between 0 - 100:</p>
 
 <pre><code class="clojure">(take 5 (repeatedly #(rand-int 100)))
 </code></pre>
 
-<p>For those new to Clojure, the syntax may look odd, but this expression &quot;takes the first 5 results of repeatedly asking for a random integer of 0 to 100&quot; and returns a sequence.</p>
+<p>For those new to Clojure, the syntax may look odd, but this expression &ldquo;takes the first 5 results of repeatedly asking for a random integer of 0 to 100&rdquo; and returns a sequence.</p>
 
-<p>We can use Ruby enumerators to do something similar in Ruby. Let’s create our own version of <code>repeatedly</code>, which takes a will call a given block over and over again. Let&#39;s start with a naive implementation which use a loop:</p>
+<p>We can use Ruby enumerators to do something similar in Ruby. Let’s create our own version of <code>repeatedly</code>, which takes a will call a given block over and over again. Let&rsquo;s start with a naive implementation which use a loop:</p>
 
 <pre><code class="ruby">def repeatedly_foo(&amp;block)
  loop do
@@ -173,7 +160,7 @@ fibonacci.lazy.with_index.select { |n, i| n.even? }.first(10)
 end
 </code></pre>
 
-<p>This method is not useful because the function will never return; it&#39;s an infinite loop! You’ll have to issue a kill signal to stop the execution (Ctrl-C!). We could give <code>repeatedly_foo</code> a limit <code>n</code> and break out of the loop with a counter.</p>
+<p>This method is not useful because the function will never return; it&rsquo;s an infinite loop! You’ll have to issue a kill signal to stop the execution (Ctrl-C!). We could give <code>repeatedly_foo</code> a limit <code>n</code> and break out of the loop with a counter.</p>
 
 <pre><code class="ruby">def repeatedly_foo(n, &amp;block)
   result = []
@@ -190,7 +177,7 @@ end
 
 <p>This is an improvement, but like our fibonacci example earlier, it means we need to load the desired number eagerly in the <code>result</code> array and have less control over the results.</p>
 
-<p>Again, we&#39;ll wrap the loop in an <code>Enumerator</code> so we can treat the result as a sequence. We’ll “yield” the result of calling the block to the <code>Enumerator::Yielder</code> object (the <code>y &lt;&lt; block.call</code>) expression in our loop:</p>
+<p>Again, we&rsquo;ll wrap the loop in an <code>Enumerator</code> so we can treat the result as a sequence. We’ll “yield” the result of calling the block to the <code>Enumerator::Yielder</code> object (the <code>y &lt;&lt; block.call</code>) expression in our loop:</p>
 
 <pre><code class="ruby">def repeatedly(&amp;block)
   Enumerator.new do |y|
@@ -207,22 +194,16 @@ end
 #=&gt; [48, 48, 72, 41, 70] # your results will vary... they&#39;re random!
 </code></pre>
 
-      <h3 id="to-infinity-and-beyond" class="title">
-        <a name="to-infinity-and-beyond" class="anchor" href="#to-infinity-and-beyond">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        To Infinity and Beyond
-      </h3>
-    
-<p>Of course, sequences of numbers aren&#39;t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.</p>
+<h3>To Infinity and Beyond</h3>
+
+<p>Of course, sequences of numbers aren&rsquo;t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.</p>
 
 
     </article>
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Infinite%20Sequences%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2015-11-21-infinite-sequences-in-ruby.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Infinite%20Sequences%20in%20Ruby%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Finfinite-sequences-in-ruby.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -231,10 +212,10 @@ end
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -258,12 +239,11 @@ end
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2015-11-21-infinite-sequences-in-ruby.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2015-11-21-infinite-sequences-in-ruby.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Ruby" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -327,18 +307,17 @@ end
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>

@@ -23,23 +23,17 @@
 &lt;p&gt;I recently added a Rails generator to my gem, &lt;code&gt;serviceworker-rails&lt;/code&gt;, to make it easier to add the assets and configuration files needed to &lt;a href="/blog/make-your-rails-app-a-progressive-web-app.html"&gt;turn your Rails...&lt;/a&gt;&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;This is the post I wished existed before attempting to write tests for a Rails generator with TDD.&lt;/p&gt;
 
-&lt;p&gt;I recently added a Rails generator to my gem, &lt;code&gt;serviceworker-rails&lt;/code&gt;, to make it easier to add the assets and configuration files needed to &lt;a href="/blog/make-your-rails-app-a-progressive-web-app.html"&gt;turn your Rails app into a Progressive Web App&lt;/a&gt;. I&amp;#39;ve written a few Rails generators before, but have usually skipped the part about writing tests because––no excuse.&lt;/p&gt;
+&lt;p&gt;I recently added a Rails generator to my gem, &lt;code&gt;serviceworker-rails&lt;/code&gt;, to make it easier to add the assets and configuration files needed to &lt;a href="/blog/make-your-rails-app-a-progressive-web-app.html"&gt;turn your Rails app into a Progressive Web App&lt;/a&gt;. I&amp;rsquo;ve written a few Rails generators before, but have usually skipped the part about writing tests because––no excuse.&lt;/p&gt;
 
-      &lt;h2 id="the-requirements" class="title"&gt;
-        &lt;a name="the-requirements" class="anchor" href="#the-requirements"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The requirements
-      &lt;/h2&gt;
-    
+&lt;h2&gt;The requirements&lt;/h2&gt;
+
 &lt;p&gt;Rails generators are commonly used to create and/more modify project files in a Rails project. Setting up a Rails project with a Service Worker in the Rails asset pipeline can be a bit involved, and using the Rails generator to take care of the boilerplate makes it more convenient to get up-and-running with the gem.&lt;/p&gt;
 
-&lt;p&gt;Here&amp;#39;s what the &lt;code&gt;serviceworker-rails&lt;/code&gt; install generator does:&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s what the &lt;code&gt;serviceworker-rails&lt;/code&gt; install generator does:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Adds a starter &lt;code&gt;serviceworker.js&lt;/code&gt; file and companion JavaScript to &lt;code&gt;app/assets/javascripts&lt;/code&gt; for service worker registration&lt;/li&gt;
-&lt;li&gt;Modifies &amp;#39;application.js` to require the companion JavaScript&lt;/li&gt;
+&lt;li&gt;Modifies &amp;lsquo;application.js` to require the companion JavaScript&lt;/li&gt;
 &lt;li&gt;Adds a web app manifest file, &lt;code&gt;manifest.json&lt;/code&gt;, to &lt;code&gt;app/assets/javascripts&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Adds a &lt;code&gt;&amp;lt;link&amp;gt;&lt;/code&gt; tag to the application layout for the browser to locate the manifest&lt;/li&gt;
 &lt;li&gt;Adds a Rails initializer to configure the serviceworker asset routes&lt;/li&gt;
@@ -47,21 +41,15 @@
 &lt;li&gt;Adds a default &lt;code&gt;offline.html&lt;/code&gt; file to &lt;code&gt;public/&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Though this is a testing post but I&amp;#39;ll briefly mention some resources I&amp;#39;ve found helpeful for writing Rails generators. I recommend the &lt;a href="http://guides.rubyonrails.org/generators.html"&gt;Rails guides&lt;/a&gt; to get your Rails generator started. It also help to understand how &lt;code&gt;Thor&lt;/code&gt; works (&lt;a href="http://whatisthor.com/"&gt;What is Thor?&lt;/a&gt;), the library on which most Rails commandline tools are based. The Rails generator base classes leverage &lt;a href="http://www.rubydoc.info/github/erikhuda/thor/master/Thor/Actions"&gt;Thor actions&lt;/a&gt;, i.e., &lt;code&gt;create_file&lt;/code&gt;, &lt;code&gt;gsub_file&lt;/code&gt;, &lt;code&gt;insert_into_file&lt;/code&gt;, and sprinkle in some &lt;a href="http://api.rubyonrails.org/classes/Rails/Generators/Actions.html"&gt;Rails-specific methods&lt;/a&gt;, including &lt;code&gt;gem&lt;/code&gt;, &lt;code&gt;rake&lt;/code&gt;, &lt;code&gt;initializer&lt;/code&gt;, etc.&lt;/p&gt;
+&lt;p&gt;Though this is a testing post but I&amp;rsquo;ll briefly mention some resources I&amp;rsquo;ve found helpeful for writing Rails generators. I recommend the &lt;a href="http://guides.rubyonrails.org/generators.html"&gt;Rails guides&lt;/a&gt; to get your Rails generator started. It also help to understand how &lt;code&gt;Thor&lt;/code&gt; works (&lt;a href="http://whatisthor.com/"&gt;What is Thor?&lt;/a&gt;), the library on which most Rails commandline tools are based. The Rails generator base classes leverage &lt;a href="http://www.rubydoc.info/github/erikhuda/thor/master/Thor/Actions"&gt;Thor actions&lt;/a&gt;, i.e., &lt;code&gt;create_file&lt;/code&gt;, &lt;code&gt;gsub_file&lt;/code&gt;, &lt;code&gt;insert_into_file&lt;/code&gt;, and sprinkle in some &lt;a href="http://api.rubyonrails.org/classes/Rails/Generators/Actions.html"&gt;Rails-specific methods&lt;/a&gt;, including &lt;code&gt;gem&lt;/code&gt;, &lt;code&gt;rake&lt;/code&gt;, &lt;code&gt;initializer&lt;/code&gt;, etc.&lt;/p&gt;
 
-      &lt;h2 id="a-first-pass" class="title"&gt;
-        &lt;a name="a-first-pass" class="anchor" href="#a-first-pass"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        A first pass
-      &lt;/h2&gt;
-    
+&lt;h2&gt;A first pass&lt;/h2&gt;
+
 &lt;p&gt;So: how do I test this?&lt;/p&gt;
 
-&lt;p&gt;Without consulting an external library for &amp;quot;testing Rails generators&amp;quot;, I wanted to take a pass at figuring it out on my own. I&amp;#39;d need to run the generator in the tests to verify the output and that the generator is working. This means the tests would have side effects that modify the file system.&lt;/p&gt;
+&lt;p&gt;Without consulting an external library for &amp;ldquo;testing Rails generators&amp;rdquo;, I wanted to take a pass at figuring it out on my own. I&amp;rsquo;d need to run the generator in the tests to verify the output and that the generator is working. This means the tests would have side effects that modify the file system.&lt;/p&gt;
 
-&lt;p&gt;When using database access in tests, we typically expect to wipe test database clean before each test either by truncating or rolling back transactions. Modifying the file system is pretty much the same thing we&amp;#39;re trying to do with testing a Rails generator: trigger some side effects, wipe the slate clean, repeat.&lt;/p&gt;
+&lt;p&gt;When using database access in tests, we typically expect to wipe test database clean before each test either by truncating or rolling back transactions. Modifying the file system is pretty much the same thing we&amp;rsquo;re trying to do with testing a Rails generator: trigger some side effects, wipe the slate clean, repeat.&lt;/p&gt;
 
 &lt;p&gt;Since the &lt;code&gt;serviceworker-rails&lt;/code&gt; generator adds and modifies files in a Rails app, I decided I needed to generate a fresh Rails app while running the tests and delete it after the tests finish. Crazy, right? I ended up with a test helper that generates the app with something like this:&lt;/p&gt;
 
@@ -120,7 +108,7 @@ end
 &lt;li&gt;assert a generated file with interpolations renders valid output&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;For this first pass, I ended up with something very similar to Zurb&amp;#39;s
+&lt;p&gt;For this first pass, I ended up with something very similar to Zurb&amp;rsquo;s
 &lt;code&gt;foundation-rails&lt;/code&gt; tests for its install generator: &lt;a href="https://github.com/zurb/foundation-rails/blob/4dfe9b12e8cf3a1aa04b257ff64c782832efc6a0/spec/features/generator_spec.rb"&gt;spec&lt;/a&gt; and &lt;a href="https://github.com/zurb/foundation-rails/blob/4dfe9b12e8cf3a1aa04b257ff64c782832efc6a0/spec/support/helpers.rb"&gt;helper
 methods&lt;/a&gt;.&lt;/p&gt;
 
@@ -138,17 +126,11 @@ end
 &lt;p&gt;I had several tests that read the contents of files and matches expected content
 through regular expressions.&lt;/p&gt;
 
-      &lt;h2 id="using-rails-generators-testcase" class="title"&gt;
-        &lt;a name="using-rails-generators-testcase" class="anchor" href="#using-rails-generators-testcase"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Using Rails::Generators::TestCase
-      &lt;/h2&gt;
-    
-&lt;p&gt;Though what I came up with worked and didn&amp;#39;t rely on any third-party dependencies, I wasn&amp;#39;t totally happy with it. The tests were very verbose. I didn&amp;#39;t like that I had to shell out to run the generator. I finally decided to &amp;quot;peek&amp;quot; and see how Rails tests its own generators, you know, the ones you love for generating models, migrations, and entire resource scaffolds.&lt;/p&gt;
+&lt;h2&gt;Using Rails::Generators::TestCase&lt;/h2&gt;
 
-&lt;p&gt;It turns out Rails generators are tested using &lt;code&gt;Rails::Generators::TestCase&lt;/code&gt;. Since Rails tests are also written in &lt;code&gt;MiniTest&lt;/code&gt; and my library already relies on Rails as a dependency--it &lt;em&gt;is&lt;/em&gt; a Rails engine--making the switch in my tests easy. If you&amp;#39;re using RSpec, I did come across &lt;a href="https://github.com/alexrothenberg/ammeter"&gt;&lt;code&gt;ammeter&lt;/code&gt;&lt;/a&gt;, which delegates to &lt;code&gt;Rails::Generators::TestCase&lt;/code&gt; under the hood, so it&amp;#39;d be quite similar to what I did here.&lt;/p&gt;
+&lt;p&gt;Though what I came up with worked and didn&amp;rsquo;t rely on any third-party dependencies, I wasn&amp;rsquo;t totally happy with it. The tests were very verbose. I didn&amp;rsquo;t like that I had to shell out to run the generator. I finally decided to &amp;ldquo;peek&amp;rdquo; and see how Rails tests its own generators, you know, the ones you love for generating models, migrations, and entire resource scaffolds.&lt;/p&gt;
+
+&lt;p&gt;It turns out Rails generators are tested using &lt;code&gt;Rails::Generators::TestCase&lt;/code&gt;. Since Rails tests are also written in &lt;code&gt;MiniTest&lt;/code&gt; and my library already relies on Rails as a dependency&amp;ndash;it &lt;em&gt;is&lt;/em&gt; a Rails engine&amp;ndash;making the switch in my tests easy. If you&amp;rsquo;re using RSpec, I did come across &lt;a href="https://github.com/alexrothenberg/ammeter"&gt;&lt;code&gt;ammeter&lt;/code&gt;&lt;/a&gt;, which delegates to &lt;code&gt;Rails::Generators::TestCase&lt;/code&gt; under the hood, so it&amp;rsquo;d be quite similar to what I did here.&lt;/p&gt;
 
 &lt;p&gt;First, we inherit from the base class:&lt;/p&gt;
 
@@ -240,7 +222,7 @@ provide in the &lt;code&gt;serviceworker-rails&lt;/code&gt; install generator, &
 Ruby method calls. At compile time for the browser, the file must contain valid
 JSON. How to test this again? No convenience methods here, so I rolled up my sleeves on this one.&lt;/p&gt;
 
-&lt;p&gt;Here&amp;#39;s what the source template looks like for &lt;code&gt;manifest.json.erb&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s what the source template looks like for &lt;code&gt;manifest.json.erb&lt;/code&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;&amp;lt;%% icon_sizes = Rails.configuration.serviceworker.icon_sizes %&amp;gt;
 {
@@ -263,7 +245,7 @@ JSON. How to test this again? No convenience methods here, so I rolled up my sle
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;First, I&amp;#39;m using the &amp;quot;double-percent&amp;quot; style ERB tags, &lt;code&gt;&amp;lt;%% %&amp;gt;&lt;/code&gt;, on purpose.
+&lt;p&gt;First, I&amp;rsquo;m using the &amp;ldquo;double-percent&amp;rdquo; style ERB tags, &lt;code&gt;&amp;lt;%% %&amp;gt;&lt;/code&gt;, on purpose.
 Because the template itself is rendered through ERB, the double-percent tag
 escapes interpolation so we can actually output ERB tags in its place.&lt;/p&gt;
 
@@ -290,9 +272,9 @@ NoMethodError: undefined method `image_path&amp;#39; for main:Object
 /Users/ross/dev/rossta/serviceworker-rails/test/serviceworker/install_generator_test.rb:27:in `block in &amp;lt;class:InstallGeneratorTest&amp;gt;&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The asset helper method &lt;code&gt;image_path&lt;/code&gt; is needed to output an appropriate digest urls for the web app icons. This will work in development or asset precompilation for production because this method is provided by the Sprockets environment. While I could load the Sprockets environment just for this test, it seems like both overkill and, honestly, way more work than I&amp;#39;m interested in.&lt;/p&gt;
+&lt;p&gt;The asset helper method &lt;code&gt;image_path&lt;/code&gt; is needed to output an appropriate digest urls for the web app icons. This will work in development or asset precompilation for production because this method is provided by the Sprockets environment. While I could load the Sprockets environment just for this test, it seems like both overkill and, honestly, way more work than I&amp;rsquo;m interested in.&lt;/p&gt;
 
-&lt;p&gt;Instead of loading Sprockets, I decided to stub the &lt;code&gt;image_path&lt;/code&gt; method. The &lt;code&gt;ERB#result&lt;/code&gt; method takes a &lt;code&gt;binding&lt;/code&gt; as an optional argument. All Ruby objects have a private method &lt;code&gt;binding&lt;/code&gt;, which exposes the execution context to other objects, like &lt;code&gt;ERB&lt;/code&gt; for rendering template strings. The template doesn&amp;#39;t care what binding we give it, as long as it responds to the methods and instance variables present in the embedded ERB tags. It&amp;#39;s a classic example of dependency injection in the Ruby standard library.&lt;/p&gt;
+&lt;p&gt;Instead of loading Sprockets, I decided to stub the &lt;code&gt;image_path&lt;/code&gt; method. The &lt;code&gt;ERB#result&lt;/code&gt; method takes a &lt;code&gt;binding&lt;/code&gt; as an optional argument. All Ruby objects have a private method &lt;code&gt;binding&lt;/code&gt;, which exposes the execution context to other objects, like &lt;code&gt;ERB&lt;/code&gt; for rendering template strings. The template doesn&amp;rsquo;t care what binding we give it, as long as it responds to the methods and instance variables present in the embedded ERB tags. It&amp;rsquo;s a classic example of dependency injection in the Ruby standard library.&lt;/p&gt;
 
 &lt;p&gt;So I defined some helper methods to build up a context to mimic the behavior of
 Sprockets by defining an implementation of the &lt;code&gt;image_path&lt;/code&gt; method and exposing
@@ -317,7 +299,7 @@ def asset_context_class
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Now I&amp;#39;m able to assert the contents of the generated, compiled JSON!&lt;/p&gt;
+&lt;p&gt;Now I&amp;rsquo;m able to assert the contents of the generated, compiled JSON!&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;test &amp;quot;generates web app manifest&amp;quot; do
   assert_file &amp;quot;app/assets/javascripts/manifest.json.erb&amp;quot; do |content|
@@ -330,20 +312,14 @@ end
 
 &lt;p&gt;&lt;a href="https://github.com/rossta/serviceworker-rails/blob/94c45720f793397f0df66dbd4d67c680f3a293c3/test/serviceworker/install_generator_test.rb"&gt;Check out the source&lt;/a&gt; of the &lt;code&gt;serviceworker-rails&lt;/code&gt; generator test case to see the full picture of how all the pieces fit together.&lt;/p&gt;
 
-      &lt;h2 id="wrapping-up" class="title"&gt;
-        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Wrapping up
-      &lt;/h2&gt;
-    
-&lt;p&gt;I don&amp;#39;t often have to write generators for my libraries or production codebases,
-but now that I&amp;#39;ve worked through both &amp;quot;rolling my own&amp;quot; testing strategy and
-leveraging the behavior of Rails own &lt;code&gt;Rails::Generators::TestCase&lt;/code&gt;, I think I&amp;#39;ve
+&lt;h2&gt;Wrapping up&lt;/h2&gt;
+
+&lt;p&gt;I don&amp;rsquo;t often have to write generators for my libraries or production codebases,
+but now that I&amp;rsquo;ve worked through both &amp;ldquo;rolling my own&amp;rdquo; testing strategy and
+leveraging the behavior of Rails own &lt;code&gt;Rails::Generators::TestCase&lt;/code&gt;, I think I&amp;rsquo;ve
 got a good feel for how I can test more generators moving forward.&lt;/p&gt;
 
-&lt;p&gt;Hopefully, you&amp;#39;ll find this useful when and if you decide to write a Rails generator yourself.&lt;/p&gt;
+&lt;p&gt;Hopefully, you&amp;rsquo;ll find this useful when and if you decide to write a Rails generator yourself.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -355,12 +331,12 @@ got a good feel for how I can test more generators moving forward.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Discussion of &lt;a href="https://developers.google.com/web/progressive-web-apps/"&gt;Progressive Web Apps&lt;/a&gt; (PWA) is &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;catching fire&lt;/a&gt; in the JavaScript community, but amongst Rails developers... not so much.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;Discussion of &lt;a href="https://developers.google.com/web/progressive-web-apps/"&gt;Progressive Web Apps&lt;/a&gt; (PWA) is &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;catching fire&lt;/a&gt; in the JavaScript community, but amongst Rails developers… not so much.&lt;/p&gt;
 
-&lt;p&gt;Progressive Web App technology is still very young and rapidly churning; perhaps there's more reluctance on Rails teams...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Discussion of &lt;a href="https://developers.google.com/web/progressive-web-apps/"&gt;Progressive Web Apps&lt;/a&gt; (PWA) is &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;catching fire&lt;/a&gt; in the JavaScript community, but amongst Rails developers... not so much.&lt;/p&gt;
+&lt;p&gt;Progressive Web App technology is still very young and rapidly churning; perhaps there’s more reluctance on Rails teams...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Discussion of &lt;a href="https://developers.google.com/web/progressive-web-apps/"&gt;Progressive Web Apps&lt;/a&gt; (PWA) is &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;catching fire&lt;/a&gt; in the JavaScript community, but amongst Rails developers&amp;hellip; not so much.&lt;/p&gt;
 
-&lt;p&gt;Progressive Web App technology is still very young and rapidly churning; perhaps there&amp;#39;s more reluctance on Rails teams to get onboard with new JavaScript APIs until they become more stable. Also, the Rails community hasn&amp;#39;t had a clear path to integrating PWA technology&amp;mdash;until now. In this post, we&amp;#39;ll demonstrate how to turn your Rails app into a Progressive Web App using the &lt;code&gt;serviceworker-rails&lt;/code&gt; gem.&lt;/p&gt;
+&lt;p&gt;Progressive Web App technology is still very young and rapidly churning; perhaps there&amp;rsquo;s more reluctance on Rails teams to get onboard with new JavaScript APIs until they become more stable. Also, the Rails community hasn&amp;rsquo;t had a clear path to integrating PWA technology&amp;mdash;until now. In this post, we&amp;rsquo;ll demonstrate how to turn your Rails app into a Progressive Web App using the &lt;code&gt;serviceworker-rails&lt;/code&gt; gem.&lt;/p&gt;
 
 &lt;p&gt;What are Progressive Web Apps? Simply put, they are web applications that deliver mobile
 app-like experiences. For example, open web technologies are now making it possible for browser-based web apps to be:&lt;/p&gt;
@@ -368,43 +344,31 @@ app-like experiences. For example, open web technologies are now making it possi
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;installable&lt;/strong&gt; - add web apps to the Home Screen of a mobile device easily&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;more reliable&lt;/strong&gt; - provide a user experience when the device is offline or network responsiveness has degraded; sync user requests in the background when network capability is restored&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;more engaging&lt;/strong&gt; - notify users of activity even when they&amp;#39;re not using the site&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;more engaging&lt;/strong&gt; - notify users of activity even when they&amp;rsquo;re not using the site&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Sound good? Let&amp;#39;s get started.&lt;/p&gt;
+&lt;p&gt;Sound good? Let&amp;rsquo;s get started.&lt;/p&gt;
 
-      &lt;h2 id="your-first-progressive-web-app-on-rails" class="title"&gt;
-        &lt;a name="your-first-progressive-web-app-on-rails" class="anchor" href="#your-first-progressive-web-app-on-rails"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Your first Progressive Web App on Rails
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Your first Progressive Web App on Rails&lt;/h2&gt;
+
 &lt;p&gt;Eric Elliot recently posted &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;a thorough overview of Progessive Web App
 requirements&lt;/a&gt;
-that&amp;#39;s worth a read. Here&amp;#39;s summary of what&amp;#39;s needed:&lt;/p&gt;
+that&amp;rsquo;s worth a read. Here&amp;rsquo;s summary of what&amp;rsquo;s needed:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;HTTPS - any page that uses Progressive Web App technology needs to be served
-over SSL/TLS so &amp;quot;HTTPS everywhere&amp;quot; is recommended&lt;/li&gt;
+over SSL/TLS so &amp;ldquo;HTTPS everywhere&amp;rdquo; is recommended&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/Manifest"&gt;Web App Manifest&lt;/a&gt; - a
 text file with application metadata to support home screen installation&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker&lt;/a&gt; - a client-side JavaScript worker that can intercept network requests, modify responses, interact with local caches, sync data in the background, and enable push notifications&lt;/li&gt;
 &lt;/ul&gt;
 
-      &lt;h3 id="set-up-https" class="title"&gt;
-        &lt;a name="set-up-https" class="anchor" href="#set-up-https"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Set up HTTPS
-      &lt;/h3&gt;
-    
-&lt;p&gt;To enable HTTPS on our website, we&amp;#39;ll need to decide for ourselves how to set up our web
+&lt;h3&gt;Set up HTTPS&lt;/h3&gt;
+
+&lt;p&gt;To enable HTTPS on our website, we&amp;rsquo;ll need to decide for ourselves how to set up our web
 server depending on our hosting provider and deployment needs. Tutorials for setting up &lt;a href="https://devcenter.heroku.com/articles/ssl"&gt;Heroku&lt;/a&gt; and &lt;a href="https://www.digitalocean.com/community/tutorials/how-to-install-an-ssl-certificate-from-a-commercial-certificate-authority"&gt;Digital Ocean&lt;/a&gt; may be a good place to start.&lt;/p&gt;
 
-&lt;p&gt;We&amp;#39;ll also want to force SSL settings in our Rails application
+&lt;p&gt;We&amp;rsquo;ll also want to force SSL settings in our Rails application
 configuration for our remote environments, i.e., &lt;code&gt;production&lt;/code&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;# config/environments/production.rb
@@ -420,21 +384,15 @@ end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We should be sure to test out this behavior on a secondary remote environment before going live in
-production as we&amp;#39;ll want to be aware of hiccups like mixed content warnings and
+production as we&amp;rsquo;ll want to be aware of hiccups like mixed content warnings and
 hard-coded non-HTTPS urls in our application.&lt;/p&gt;
 
-      &lt;h3 id="add-a-manifest-and-service-worker" class="title"&gt;
-        &lt;a name="add-a-manifest-and-service-worker" class="anchor" href="#add-a-manifest-and-service-worker"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Add a manifest and Service Worker
-      &lt;/h3&gt;
-    
-&lt;p&gt;For this next step, we&amp;#39;ll assume we&amp;#39;re using the Rails asset pipeline. This is
+&lt;h3&gt;Add a manifest and Service Worker&lt;/h3&gt;
+
+&lt;p&gt;For this next step, we&amp;rsquo;ll assume we&amp;rsquo;re using the Rails asset pipeline. This is
 both helpful and presents a problem:&lt;/p&gt;
 
-&lt;p&gt;The Rails asset pipeline makes a number of assumptions about what&amp;#39;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &amp;quot;cacheability&amp;quot;. Rails also assumes a single parent directory, /public/assets, to make it easier to look up the file path for a given asset.&lt;/p&gt;
+&lt;p&gt;The Rails asset pipeline makes a number of assumptions about what&amp;rsquo;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &amp;ldquo;cacheability&amp;rdquo;. Rails also assumes a single parent directory, /public/assets, to make it easier to look up the file path for a given asset.&lt;/p&gt;
 
 &lt;p&gt;Service worker and manifest assets must play by different rules. Service workers may only be active from within the scope from which they are served. So if you try to register a service worker from a Rails asset pipeline path, like &lt;code&gt;/assets/serviceworker-abcd1234.js&lt;/code&gt;, it will only be able to interact with requests and responses within &lt;code&gt;/assets/**&lt;/code&gt;. This is not what we want.&lt;/p&gt;
 
@@ -443,7 +401,7 @@ plugin makes it easier to set up your app to serve service worker
 scripts and web app manifests at canonical urls while taking advantage of the transpilation and
 interpolation features the asset pipeline provides.&lt;/p&gt;
 
-&lt;p&gt;To get started with &lt;code&gt;serviceworker-rails&lt;/code&gt;, we&amp;#39;ll bundle it with our Rails app.&lt;/p&gt;
+&lt;p&gt;To get started with &lt;code&gt;serviceworker-rails&lt;/code&gt;, we&amp;rsquo;ll bundle it with our Rails app.&lt;/p&gt;
 
 &lt;p&gt;Add the gem to the &lt;code&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
 
@@ -457,7 +415,7 @@ gem &amp;quot;serviceworker-rails&amp;quot;
 &lt;pre&gt;&lt;code class="bash"&gt;$ bundle
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;We&amp;#39;ll use the built-in generator from service worker rails to add some starter
+&lt;p&gt;We&amp;rsquo;ll use the built-in generator from service worker rails to add some starter
 JavaScript files to our project and the proper configuration.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="bash"&gt;$ rails g serviceworker:install
@@ -492,7 +450,7 @@ automated install for our first attempt. If going manual, consult the &lt;code&g
 &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;README&lt;/a&gt; and my previous &lt;a href="https://rossta.net/blog/service-worker-on-rails.html"&gt;blog
 post on configuring the gem&lt;/a&gt; for more help during setup.&lt;/p&gt;
 
-&lt;p&gt;At this point, we&amp;#39;ve got all the boilerplate in place in our Rails app to begin
+&lt;p&gt;At this point, we&amp;rsquo;ve got all the boilerplate in place in our Rails app to begin
 adding Progessive Web App functionality. The great part is, we can pick and
 choose which features we want to add.&lt;/p&gt;
 
@@ -505,21 +463,15 @@ choose which features we want to add.&lt;/p&gt;
 *&lt;/li&gt;
 &lt;/ul&gt;
 
-      &lt;h2 id="going-further" class="title"&gt;
-        &lt;a name="going-further" class="anchor" href="#going-further"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Going further
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Going further&lt;/h2&gt;
+
 &lt;p&gt;For more on grasping Service Worker fundamentals and developing offline solutions for the web, I highly recommend this free Udacity course:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://www.udacity.com/course/offline-web-applications--ud899"&gt;Offline Web Applications&lt;/a&gt; by Google&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;You&amp;#39;ll want to understand the Service Worker life cycle, which Jake Archibald
+&lt;p&gt;You&amp;rsquo;ll want to understand the Service Worker life cycle, which Jake Archibald
 treats in great detail:&lt;/p&gt;
 
 &lt;ul&gt;
@@ -529,8 +481,8 @@ treats in great detail:&lt;/p&gt;
 &lt;p&gt;For some open-source abstractions for implementing Service Worker fetching and
 caching strategies, checkout out &lt;a href="https://github.com/GoogleChrome/sw-toolbox"&gt;SW-Toolbox&lt;/a&gt; and &lt;a href="https://github.com/GoogleChrome/sw-precache"&gt;SW-Precache&lt;/a&gt; from the Google Chrome team.&lt;/p&gt;
 
-&lt;p&gt;Of course, we&amp;#39;ve only covered the getting started part of our journey with
-Progressive Web Apps. I&amp;#39;ve left out a lot of fun parts like decided how to implement
+&lt;p&gt;Of course, we&amp;rsquo;ve only covered the getting started part of our journey with
+Progressive Web Apps. I&amp;rsquo;ve left out a lot of fun parts like decided how to implement
 caching strategies or send push notifications. Here are some resources to check
 out to take your PWA skills to the next level:&lt;/p&gt;
 
@@ -543,15 +495,9 @@ and demos from Mozilla&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://github.com/TalAter/awesome-service-workers"&gt;Awesome Service Workers&lt;/a&gt; - kitchen sink of Service Worker resources&lt;/li&gt;
 &lt;/ul&gt;
 
-      &lt;h2 id="rails-pwa" class="title"&gt;
-        &lt;a name="rails-pwa" class="anchor" href="#rails-pwa"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Rails 💜 PWA
-      &lt;/h2&gt;
-    
-&lt;p&gt;Nothing about Rails is incongruent with Progressive Web App technology so there&amp;#39;s no technical reason why we can&amp;#39;t start introducing these features today. It&amp;#39;s worth noting the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling.&lt;/p&gt;
+&lt;h2&gt;Rails 💜 PWA&lt;/h2&gt;
+
+&lt;p&gt;Nothing about Rails is incongruent with Progressive Web App technology so there&amp;rsquo;s no technical reason why we can&amp;rsquo;t start introducing these features today. It&amp;rsquo;s worth noting the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling.&lt;/p&gt;
 
 &lt;p&gt;In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.&lt;/p&gt;
 </content>
@@ -566,22 +512,22 @@ and demos from Mozilla&lt;/li&gt;
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html">&lt;p&gt;While reading the first chapter of &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;em&gt;Elixir in
-Action&lt;/em&gt;&lt;/a&gt;, I had my "a-ha!"
+Action&lt;/em&gt;&lt;/a&gt;, I had my “a-ha!”
 moment with Elixir; this table:&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg"&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;I'd already been playing with Elixir for a few month when before I picked up
-Sasha Juric's book introducing the Elixir language and its abstractions...&lt;/p&gt;</summary>
+&lt;p&gt;I’d already been playing with Elixir for a few month when before I picked up
+Sasha Juric’s book introducing the Elixir language and its abstractions...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;While reading the first chapter of &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;em&gt;Elixir in
-Action&lt;/em&gt;&lt;/a&gt;, I had my &amp;quot;a-ha!&amp;quot;
+Action&lt;/em&gt;&lt;/a&gt;, I had my &amp;ldquo;a-ha!&amp;rdquo;
 moment with Elixir; this table:&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;I&amp;#39;d already been playing with Elixir for a few month when before I picked up
-Sasha Juric&amp;#39;s book introducing the Elixir language and its abstractions for the
-Open Telecom Platform (OTP). If you&amp;#39;re interested in Elixir, &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;please check out
+&lt;p&gt;I&amp;rsquo;d already been playing with Elixir for a few month when before I picked up
+Sasha Juric&amp;rsquo;s book introducing the Elixir language and its abstractions for the
+Open Telecom Platform (OTP). If you&amp;rsquo;re interested in Elixir, &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;please check out
 the book&lt;/a&gt;; no affiliate links, I
 just enjoyed it immensely.&lt;/p&gt;
 
@@ -592,17 +538,11 @@ distribution, and concurrency, in a cleaner, more concise syntax. I knew all
 this but the graphic above revealed a new perspective, especially in regards to
 web development as we know it in the Rails community.&lt;/p&gt;
 
-      &lt;h2 id="using-your-tools" class="title"&gt;
-        &lt;a name="using-your-tools" class="anchor" href="#using-your-tools"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Using your tools
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Using your tools&lt;/h2&gt;
+
 &lt;p&gt;Anyone who has built a non-trivial Ruby on Rails app (or Node.js, Django, PHP,
 etc.) knows the left-side of the table above well. When we deploy a Rails app,
-we don&amp;#39;t just set up the Rails process. We need a web server like Nginx, Apache,
+we don&amp;rsquo;t just set up the Rails process. We need a web server like Nginx, Apache,
 or Phusion Passenger, to queue requests and serve static content, neither of
 which Rails does well.&lt;/p&gt;
 
@@ -631,20 +571,20 @@ There are also built-in tools for persisting and sharing state in place of
 separate tools like Redis or Memcached.&lt;/p&gt;
 
 &lt;p&gt;Setting up the project on the development machine and deployment considerations
-all becomes much simpler when you&amp;#39;re concerned only with the requirements of
+all becomes much simpler when you&amp;rsquo;re concerned only with the requirements of
 managing a single OS process.&lt;/p&gt;
 
-&lt;p&gt;We&amp;#39;re obviously free to use these other tools (Redis, memcached, a separate jobs
+&lt;p&gt;We&amp;rsquo;re obviously free to use these other tools (Redis, memcached, a separate jobs
 queue, a web server, etc.) but they no longer need to be the default in Elixir.
-If you&amp;#39;re building a web app in &lt;a href="http://www.phoenixframework.org/"&gt;Phoenix&lt;/a&gt;, you
-still may need a database, and you&amp;#39;ll probably still feel the need to pick
+If you&amp;rsquo;re building a web app in &lt;a href="http://www.phoenixframework.org/"&gt;Phoenix&lt;/a&gt;, you
+still may need a database, and you&amp;rsquo;ll probably still feel the need to pick
 a JavaScript framework. But you get the idea.&lt;/p&gt;
 
 &lt;p&gt;As I discovered this, I tweeted it out, imagining all the money saved on hosting
-costs. Here&amp;#39;s &lt;a href="https://twitter.com/sasajuric/status/750078059286556673"&gt;Sasha&amp;#39;s response&lt;/a&gt;.&lt;/p&gt;
+costs. Here&amp;rsquo;s &lt;a href="https://twitter.com/sasajuric/status/750078059286556673"&gt;Sasha&amp;rsquo;s response&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;&lt;a
-href="https://twitter.com/rossta"&gt;@rossta&lt;/a&gt; That&amp;#39;s the smallest gain.
+href="https://twitter.com/rossta"&gt;@rossta&lt;/a&gt; That&amp;rsquo;s the smallest gain.
 Imagine all the money saved on not developing/maintaining overcomplex error
 prone solutions :-)&lt;/p&gt;&amp;mdash; Saša Jurić (@sasajuric) &lt;a
 href="https://twitter.com/sasajuric/status/750078059286556673"&gt;July 4,
@@ -653,35 +593,29 @@ charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;So Elixir has some measurable benefits.&lt;/p&gt;
 
-      &lt;h2 id="choosing-your-tools" class="title"&gt;
-        &lt;a name="choosing-your-tools" class="anchor" href="#choosing-your-tools"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Choosing your tools
-      &lt;/h2&gt;
-    
-&lt;p&gt;I&amp;#39;ve never much enjoyed the phrase &amp;quot;right tool for the job&amp;quot;. We programmers
+&lt;h2&gt;Choosing your tools&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve never much enjoyed the phrase &amp;ldquo;right tool for the job&amp;rdquo;. We programmers
 often fall back on this phrase as a way to justify our technology choices. In my
-experience, there are many possible languages/frameworks (the &amp;quot;tools&amp;quot;) that can
-serve the needs of a given business (the &amp;quot;job&amp;quot;). As my professional software experience
-is largely based on building web applications for startups, I don&amp;#39;t wish to
+experience, there are many possible languages/frameworks (the &amp;ldquo;tools&amp;rdquo;) that can
+serve the needs of a given business (the &amp;ldquo;job&amp;rdquo;). As my professional software experience
+is largely based on building web applications for startups, I don&amp;rsquo;t wish to
 speak for systems software, game programmers, or even mobile app developers. But
 on the web, there exist a great number of tools serving teams quite well,
 and it would difficult for me to call any of them &lt;em&gt;the&lt;/em&gt; right tool.&lt;/p&gt;
 
-&lt;p&gt;The trouble I have with &amp;quot;right tool for the job&amp;quot; is we tend to focus our
+&lt;p&gt;The trouble I have with &amp;ldquo;right tool for the job&amp;rdquo; is we tend to focus our
 arguments on technology features and capabilities, but very rarely do we
 consider factors such as our current constraints or the people involved in as
 part of the equation. The team has 25 years of experience building Node.js web
-apps? We&amp;#39;re probably going to be choosing Node.js for our next web app. The
+apps? We&amp;rsquo;re probably going to be choosing Node.js for our next web app. The
 DevOps team invested months and thousands of dollars in shoring up our
-architecture for Ruby on Rails? I probably won&amp;#39;t be switching to Django for our
+architecture for Ruby on Rails? I probably won&amp;rsquo;t be switching to Django for our
 next feature.&lt;/p&gt;
 
-&lt;p&gt;How about admitting we&amp;#39;d most often love to choose the tools we&amp;#39;d
-most enjoy using? This is a much more personal choice than &amp;quot;right tool&amp;quot;
-suggests. I don&amp;#39;t think there&amp;#39;s anything wrong with choosing tools you like -
+&lt;p&gt;How about admitting we&amp;rsquo;d most often love to choose the tools we&amp;rsquo;d
+most enjoy using? This is a much more personal choice than &amp;ldquo;right tool&amp;rdquo;
+suggests. I don&amp;rsquo;t think there&amp;rsquo;s anything wrong with choosing tools you like -
 as long as you can still get the job done, of course!&lt;/p&gt;
 
 &lt;p&gt;Giles Bowkett wrote a &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;thoroughly entertaining essay on why the Rails asset
@@ -689,8 +623,8 @@ pipeline should
 die&lt;/a&gt;,
 which is really an essay about the fundamental nature of Ruby and Rails. He
 reminds us that a big reason for the success of Ruby and of Rails is that they
-optimize for programmer happiness. Ruby isn&amp;#39;t successful for its performance
-benefits, (if anything, it&amp;#39;s successful in spite of performance), but because
+optimize for programmer happiness. Ruby isn&amp;rsquo;t successful for its performance
+benefits, (if anything, it&amp;rsquo;s successful in spite of performance), but because
 programmers really eff-ing love writing Ruby.&lt;/p&gt;
 
 &lt;p&gt;Which brings me to back to Elixir: writing Elixir is so darn fun. For a Rubyist
@@ -701,24 +635,24 @@ flavor starts to sink in, we may start to regain some of that feeling of how
 exciting it can be to play with new ideas (new, at least, to Rubyists).&lt;/p&gt;
 
 &lt;p&gt;With all abstractions and functionality provided by the Elixir language, and its
-ability to scale, handle fault tolerance, to be distributed - I can&amp;#39;t imagine a
+ability to scale, handle fault tolerance, to be distributed - I can&amp;rsquo;t imagine a
 technology choice better suited for the web.  These traits alone may help
 convince engineering leads to go along with Elixir for the next web app, i.e.,
-&amp;quot;right tool for the job&amp;quot;.  Maybe our next web app doesn&amp;#39;t truly need the
-concurrency or scalability made possible by the BEAM virtual machine, but it&amp;#39;s
+&amp;ldquo;right tool for the job&amp;rdquo;.  Maybe our next web app doesn&amp;rsquo;t truly need the
+concurrency or scalability made possible by the BEAM virtual machine, but it&amp;rsquo;s
 sure fun to learn how to take advantage of it and be able to apply it when
 necessary.&lt;/p&gt;
 
-&lt;p&gt;I haven&amp;#39;t been this excited about a language and its primary web framework,
+&lt;p&gt;I haven&amp;rsquo;t been this excited about a language and its primary web framework,
 since, well, Ruby on Rails came along.&lt;/p&gt;
 
-&lt;p&gt;With Elixir we get a tool that&amp;#39;s both fun to use and that can scale with the needs
-of the business. From the start, it&amp;#39;s like getting the best of Ruby and whatever you think you
+&lt;p&gt;With Elixir we get a tool that&amp;rsquo;s both fun to use and that can scale with the needs
+of the business. From the start, it&amp;rsquo;s like getting the best of Ruby and whatever you think you
 will replace it with later. Something about that just feels right.&lt;/p&gt;
 
 &lt;div class="callout panel"&gt;
 &lt;p&gt;
-  If you're interested in Elixir and in New York City on Thursday, Oct 27 2016, please check out the &lt;a href="http://empex.co"&gt;Empire City Elixir Conference Halloween Lightning Talks&lt;/a&gt;. Registration is free and you'll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
+  If you&amp;rsquo;re interested in Elixir and in New York City on Thursday, Oct 27 2016, please check out the &lt;a href="http://empex.co"&gt;Empire City Elixir Conference Halloween Lightning Talks&lt;/a&gt;. Registration is free and you&amp;rsquo;ll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
 &lt;/p&gt;
 &lt;/div&gt;
 </content>
@@ -735,30 +669,24 @@ will replace it with later. Something about that just feels right.&lt;/p&gt;
     <summary type="html">&lt;p&gt;Push messages from mobile and desktop browsers are &lt;a href="http://caniuse.com/#feat=push-api"&gt;now a thing&lt;/a&gt; on the open web.&lt;/p&gt;
 
 &lt;p&gt;Why use the Push API? It allows us to use free, third-party services to notify our users
-of events, even when they're not actively engaged with our site. It's
+of events, even when they’re not actively engaged with our site. It’s
 not meant...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Push messages from mobile and desktop browsers are &lt;a href="http://caniuse.com/#feat=push-api"&gt;now a thing&lt;/a&gt; on the open web.&lt;/p&gt;
 
 &lt;p&gt;Why use the Push API? It allows us to use free, third-party services to notify our users
-of events, even when they&amp;#39;re not actively engaged with our site. It&amp;#39;s
+of events, even when they&amp;rsquo;re not actively engaged with our site. It&amp;rsquo;s
 not meant to replace other methods of pushing data to clients, like
-&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"&gt;WebSockets&lt;/a&gt; or &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"&gt;Server Sent Events&lt;/a&gt;, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&amp;#39;s
+&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"&gt;WebSockets&lt;/a&gt; or &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"&gt;Server Sent Events&lt;/a&gt;, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&amp;rsquo;s
 common place on our smartphones from installed apps is now possible from the browser.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/"&gt;&lt;img alt="Push message in Chrome" src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-3-36a167ad.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Though only supported in Chrome and Firefox on the desktop and in Chrome on Android at the time of this writing, it&amp;#39;ll be more widespread soon enough. While I previously &lt;a href="/blog/web-push-notifications-from-rails.html"&gt;wrote about this topic&lt;/a&gt;, there have been recent changes in the Chrome implementation to make the API consistent with Firefox, which we&amp;#39;ll describe here.&lt;/p&gt;
+&lt;p&gt;Though only supportedin Chrome and Firefox on the desktop and in Chrome on Android at the time of this writing, it&amp;rsquo;ll be more widespread soon enough. While I previously &lt;a href="/blog/web-push-notifications-from-rails.html"&gt;wrote about this topic&lt;/a&gt;, there have been recent changes in the Chrome implementation to make the API consistent with Firefox, which we&amp;rsquo;ll describe here.&lt;/p&gt;
 
-&lt;p&gt;In this post, we&amp;#39;ll walk through setting up a Ruby or Node.js web application to use the Push API with the &lt;a href="https://tools.ietf.org/html/draft-ietf-webpush-vapid-01"&gt;Voluntary Application server Identification (VAPID)&lt;/a&gt;. Use of VAPID for push requests is optional, but primarily a security benefit. Application servers use VAPID to identify themselves to the push servers so push subscriptions can be properly restricted to their origin app servers. In other words, VAPID could theoretically prevent an attacker from stealing a user &lt;code&gt;PushSubscription&lt;/code&gt; and sending push messages to that recipient from another server. Down the road, push services may be able to provide analytics and debugging assistance for app servers using the VAPID protocol. Another benefit: in Chrome, it is no longer necessary to register our web apps through the Google Developer Console and pass around Google app credentials in web push requests.&lt;/p&gt;
+&lt;p&gt;In this post, we&amp;rsquo;ll walk through setting up a Ruby or Node.js web application to use the Push API with the &lt;a href="https://tools.ietf.org/html/draft-ietf-webpush-vapid-01"&gt;Voluntary Application server Identification (VAPID)&lt;/a&gt;. Use of VAPID for push requests is optional, but primarily a security benefit. Application servers use VAPID to identify themselves to the push servers so push subscriptions can be properly restricted to their origin app servers. In other words, VAPID could theoretically prevent an attacker from stealing a user &lt;code&gt;PushSubscription&lt;/code&gt; and sending push messages to that recipient from another server. Down the road, push services may be able to provide analytics and debugging assistance for app servers using the VAPID protocol. Another benefit: in Chrome, it is no longer necessary to register our web apps through the Google Developer Console and pass around Google app credentials in web push requests.&lt;/p&gt;
 
-      &lt;h2 id="overview" class="title"&gt;
-        &lt;a name="overview" class="anchor" href="#overview"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Overview
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Overview&lt;/h2&gt;
+
 &lt;p&gt;There are three parties involved in delivering a push message.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -772,19 +700,13 @@ common place on our smartphones from installed apps is now possible from the bro
 &lt;ol&gt;
 &lt;li&gt;Your application server has generated a set of VAPID keys that will be used to sign Push API requests. This is a one-time step (at least until we decide to reset the keys).&lt;/li&gt;
 &lt;li&gt;A &lt;code&gt;manifest.json&lt;/code&gt; file, linked from a page on our website, identifies our app settings.&lt;/li&gt;
-&lt;li&gt;In the user&amp;#39;s web browser, a service worker script is installed and activated. The &lt;code&gt;pushManager&lt;/code&gt; property of the &lt;code&gt;ServiceWorkerRegistration&lt;/code&gt; is subscribed to push events with our VAPID public key, with creates a &lt;code&gt;subscription&lt;/code&gt; JSON object on the client side.&lt;/li&gt;
+&lt;li&gt;In the user&amp;rsquo;s web browser, a service worker script is installed and activated. The &lt;code&gt;pushManager&lt;/code&gt; property of the &lt;code&gt;ServiceWorkerRegistration&lt;/code&gt; is subscribed to push events with our VAPID public key, with creates a &lt;code&gt;subscription&lt;/code&gt; JSON object on the client side.&lt;/li&gt;
 &lt;li&gt;Your server makes an API request to a push server (likely using a server-side library) to send a notification with the &lt;code&gt;subscription&lt;/code&gt; obtained from the client and an optional payload (the message).&lt;/li&gt;
 &lt;li&gt;Your service worker is set up to receive &lt;code&gt;&amp;#39;push&amp;#39;&lt;/code&gt; events. To trigger a desktop notification, the user has accepted the prompt to receive notifications from our site.&lt;/li&gt;
 &lt;/ol&gt;
 
-      &lt;h2 id="generating-vapid-keys" class="title"&gt;
-        &lt;a name="generating-vapid-keys" class="anchor" href="#generating-vapid-keys"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Generating VAPID keys
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Generating VAPID keys&lt;/h2&gt;
+
 &lt;p&gt;To take advantage of the VAPID protocol, we would generate a public/private VAPID key pair to store on our server to be used for all user subscriptions.&lt;/p&gt;
 
 &lt;p&gt;In Ruby, we can use the &lt;code&gt;webpush&lt;/code&gt; gem to generate a VAPID key that has both a &lt;code&gt;public_key&lt;/code&gt; and &lt;code&gt;private_key&lt;/code&gt; attribute to be saved on the server side.&lt;/p&gt;
@@ -827,17 +749,11 @@ vapidKeys.privateKey
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The keys returned will both be Base64-encoded byte strings. Only the public key
-will be shared, both with the user&amp;#39;s browser and the push server as we&amp;#39;ll see
+will be shared, both with the user&amp;rsquo;s browser and the push server as we&amp;rsquo;ll see
 later.&lt;/p&gt;
 
-      &lt;h2 id="declaring-manifest-json" class="title"&gt;
-        &lt;a name="declaring-manifest-json" class="anchor" href="#declaring-manifest-json"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Declaring manifest.json
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Declaring manifest.json&lt;/h2&gt;
+
 &lt;p&gt;Add a &lt;code&gt;manifest.json&lt;/code&gt; file served at the scope of our app (or above), like at the root to describe our client application for use with the Push API.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;{
@@ -860,15 +776,9 @@ later.&lt;/p&gt;
 &amp;lt;link rel=&amp;quot;manifest&amp;quot; href=&amp;quot;/manifest.json&amp;quot; /&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-      &lt;h2 id="installing-a-service-worker" class="title"&gt;
-        &lt;a name="installing-a-service-worker" class="anchor" href="#installing-a-service-worker"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Installing a service worker
-      &lt;/h2&gt;
-    
-&lt;p&gt;Your application javascript must register a service worker script at an appropriate scope (we&amp;#39;re sticking with the root).&lt;/p&gt;
+&lt;h2&gt;Installing a service worker&lt;/h2&gt;
+
+&lt;p&gt;Your application javascript must register a service worker script at an appropriate scope (we&amp;rsquo;re sticking with the root).&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// application.js
 // Register the serviceWorker script at /serviceworker.js from our server if supported
@@ -886,14 +796,8 @@ else {
 
 &lt;p&gt;For Rails developers, we may want to look at the &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt; gem&lt;/a&gt; and this &lt;a href="https://rossta.net/blog/service-worker-on-rails.html"&gt;helpful tutorial&lt;/a&gt; to integrate service worker scripts with the Rails asset pipeline.&lt;/p&gt;
 
-      &lt;h2 id="subscribing-to-push-notifications" class="title"&gt;
-        &lt;a name="subscribing-to-push-notifications" class="anchor" href="#subscribing-to-push-notifications"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Subscribing to push notifications
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Subscribing to push notifications&lt;/h2&gt;
+
 &lt;p&gt;The VAPID public key we generated earlier is made available to the client as a &lt;code&gt;Uint8Array&lt;/code&gt;. To do this, one way would be to expose the urlsafe-decoded bytes from Ruby to JavaScript when rendering the HTML template.&lt;/p&gt;
 
 &lt;p&gt;In Ruby, we might embed the key as raw bytes from the application &lt;code&gt;ENV&lt;/code&gt; or some other application settings mechanism into an HTML template with help from the &lt;code&gt;Base64&lt;/code&gt; module in the standard library. Global variables are used here for simplicity.&lt;/p&gt;
@@ -935,16 +839,10 @@ navigator.serviceWorker.ready.then((serviceWorkerRegistration) =&amp;gt; {
 });
 &lt;/code&gt;&lt;/pre&gt;
 
-      &lt;h2 id="triggering-a-web-push-notification" class="title"&gt;
-        &lt;a name="triggering-a-web-push-notification" class="anchor" href="#triggering-a-web-push-notification"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Triggering a web push notification
-      &lt;/h2&gt;
-    
-&lt;p&gt;The web push library we&amp;#39;re using on the backend will be responsible for
-packaging up the request to the subscription&amp;#39;s endpoint and handling encryption, so the user&amp;#39;s push subscription must be sent from the client to the application server at some point.&lt;/p&gt;
+&lt;h2&gt;Triggering a web push notification&lt;/h2&gt;
+
+&lt;p&gt;The web push library we&amp;rsquo;re using on the backend will be responsible for
+packaging up the request to the subscription&amp;rsquo;s endpoint and handling encryption, so the user&amp;rsquo;s push subscription must be sent from the client to the application server at some point.&lt;/p&gt;
 
 &lt;p&gt;In the example below, we send the JSON generated subscription object to our backend with a message when a button on the page is clicked.&lt;/p&gt;
 
@@ -965,8 +863,8 @@ $(&amp;#39;.webpush-button&amp;#39;).on(&amp;#39;click&amp;#39;, (e) =&amp;gt; {
 
 &lt;p&gt;The call to &lt;code&gt;pushManager.getSubscription()&lt;/code&gt; returns a Promise that provides the
 &lt;code&gt;PushSubscription&lt;/code&gt; instance with all the information the push service needs to
-send a push message to this user&amp;#39;s browser. This includes an &lt;code&gt;endpoint&lt;/code&gt;, the URL
-on the push server where we&amp;#39;ll send the push request, and a pair of &lt;code&gt;keys&lt;/code&gt;
+send a push message to this user&amp;rsquo;s browser. This includes an &lt;code&gt;endpoint&lt;/code&gt;, the URL
+on the push server where we&amp;rsquo;ll send the push request, and a pair of &lt;code&gt;keys&lt;/code&gt;
 labelled as &lt;code&gt;p256dh&lt;/code&gt; and &lt;code&gt;auth&lt;/code&gt; required to encrypt the push message payload. If interested to learn more about how this encryption works, check out this detailed summary on &lt;a href="https://developers.google.com/web/updates/2016/03/web-push-encryption"&gt;web push payload encryption&lt;/a&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// subscription.toJSON();
@@ -1031,14 +929,8 @@ app.post(&amp;#39;/push&amp;#39;, function(request, response) {
 });
 &lt;/code&gt;&lt;/pre&gt;
 
-      &lt;h2 id="receiving-the-push-event" class="title"&gt;
-        &lt;a name="receiving-the-push-event" class="anchor" href="#receiving-the-push-event"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Receiving the push event
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Receiving the push event&lt;/h2&gt;
+
 &lt;p&gt;Your &lt;code&gt;/serviceworker.js&lt;/code&gt; script can respond to &lt;code&gt;&amp;#39;push&amp;#39;&lt;/code&gt; events to trigger desktop notifications by calling &lt;code&gt;showNotification&lt;/code&gt; on the &lt;code&gt;registration&lt;/code&gt; property.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// serviceworker.js
@@ -1083,7 +975,7 @@ else if (Notification.permission !== &amp;#39;denied&amp;#39;) {
 
 &lt;p&gt;After all that setup, we should see a browser notification triggered via the Push API.&lt;/p&gt;
 
-&lt;p&gt;As this is still an emerging technology, things are rapidly changing. I&amp;#39;d be
+&lt;p&gt;As this is still an emerging technology, things are rapidly changing. I&amp;rsquo;d be
 interested to hear how things are working out for folks integrating web push
 into their web apps.&lt;/p&gt;
 </content>
@@ -1097,10 +989,10 @@ into their web apps.&lt;/p&gt;
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the &lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, "what if I could automate that?" I happen to spend a lot of time in a terminal and thinking about webpage...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the &lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, &amp;quot;what if I could automate that?&amp;quot; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...&lt;/p&gt;
+    <summary type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the &lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, “what if I could automate that?” I happen to spend a lot of time in a terminal and thinking about webpage...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the &lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, &amp;ldquo;what if I could automate that?&amp;rdquo; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so&amp;hellip;&lt;/p&gt;
 
-&lt;p&gt;Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&amp;#39;s a &lt;a href="http://casperjs.org/"&gt;CasperJS&lt;/a&gt; script available as an npm package. It&amp;#39;s called &lt;a href="https://github.com/rossta/form-to-terminal"&gt;&lt;code&gt;form-to-terminal&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&amp;rsquo;s a &lt;a href="http://casperjs.org/"&gt;CasperJS&lt;/a&gt; script available as an npm package. It&amp;rsquo;s called &lt;a href="https://github.com/rossta/form-to-terminal"&gt;&lt;code&gt;form-to-terminal&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;To use &lt;code&gt;form-to-terminal&lt;/code&gt;, install it via npm and use the executable &lt;code&gt;ftt&lt;/code&gt; along with a url to a Google Form url:&lt;/p&gt;
 
@@ -1109,33 +1001,21 @@ $ npm install -g form-to-terminal
 $ ftt [Google Form Url]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This assumes that you&amp;#39;ve already installed &lt;a href="https://nodejs.org/en/download/package-manager/"&gt;nodejs&lt;/a&gt;,  &lt;a href="http://docs.casperjs.org/en/latest/installation.html"&gt;CasperJS&lt;/a&gt;, and its pre-requisites.&lt;/p&gt;
+&lt;p&gt;This assumes that you&amp;rsquo;ve already installed &lt;a href="https://nodejs.org/en/download/package-manager/"&gt;nodejs&lt;/a&gt;,  &lt;a href="http://docs.casperjs.org/en/latest/installation.html"&gt;CasperJS&lt;/a&gt;, and its pre-requisites.&lt;/p&gt;
 
-      &lt;h2 id="casper-the-friendly-ghost" class="title"&gt;
-        &lt;a name="casper-the-friendly-ghost" class="anchor" href="#casper-the-friendly-ghost"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Casper, the friendly ghost
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Casper, the friendly ghost&lt;/h2&gt;
+
 &lt;p&gt;CasperJS is actually just a wrapper around &lt;a href="http://phantomjs.org/"&gt;PhantomJS&lt;/a&gt;, which provides
 fully-featured API for interacting with webpages from JavaScript.&lt;/p&gt;
 
 &lt;p&gt;CasperJS makes this scripting more pleasant by providing some syntactic sugar for dealing
 with multi-stage interactions and waiting for asynchronous actions. In other
-words, I could&amp;#39;ve done this with just using PhantomJS, but the code I needed to
+words, I could&amp;rsquo;ve done this with just using PhantomJS, but the code I needed to
 write got a whole lot easier by using the CasperJS module on top of it.&lt;/p&gt;
 
-      &lt;h2 id="a-closer-look" class="title"&gt;
-        &lt;a name="a-closer-look" class="anchor" href="#a-closer-look"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        A closer look
-      &lt;/h2&gt;
-    
-&lt;p&gt;Let&amp;#39;s look at some sample code. What follows are simplified excerpts from the &lt;code&gt;form-to-terminal&lt;/code&gt; CasperJS script.&lt;/p&gt;
+&lt;h2&gt;A closer look&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at some sample code. What follows are simplified excerpts from the &lt;code&gt;form-to-terminal&lt;/code&gt; CasperJS script.&lt;/p&gt;
 
 &lt;p&gt;Given a &lt;code&gt;url&lt;/code&gt; to a Google Form, first we &lt;code&gt;start&lt;/code&gt; the webpage interaction, which waits to complete
 before moving to the next step.&lt;/p&gt;
@@ -1196,14 +1076,8 @@ the form. CasperJS makes it easy to do this with additional args to
 
 &lt;p&gt;Check out the full &lt;a href="https://github.com/rossta/form-to-terminal/blob/96a4dd8be4b071b5bfb5adb50676a6383c685240/index.js"&gt;CasperJS script&lt;/a&gt; to see how &lt;code&gt;form-to-terminal&lt;/code&gt; interacts with Google Forms in more detail.&lt;/p&gt;
 
-      &lt;h2 id="command-line-node" class="title"&gt;
-        &lt;a name="command-line-node" class="anchor" href="#command-line-node"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Command line node
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Command line node&lt;/h2&gt;
+
 &lt;p&gt;I wanted to make this work for others on the command line as an npm package. To
 get this to work, we have to understand that &lt;code&gt;casperjs&lt;/code&gt; is already its own
 process. To make it work from &lt;code&gt;node&lt;/code&gt;, I needed to spawn the &lt;code&gt;casperjs&lt;/code&gt; while
@@ -1225,18 +1099,12 @@ child.on(&amp;#39;exit&amp;#39;, process.exit);
 will interact. The line &lt;code&gt;process.stdin.pipe(child.stdin);&lt;/code&gt; ensures the text we
 enter on the command line is passed to CasperJS.&lt;/p&gt;
 
-      &lt;h2 id="going-further" class="title"&gt;
-        &lt;a name="going-further" class="anchor" href="#going-further"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Going further
-      &lt;/h2&gt;
-    
+&lt;h2&gt;Going further&lt;/h2&gt;
+
 &lt;p&gt;&lt;code&gt;form-to-terminal&lt;/code&gt; (as of version 1.0.2) only supports Google Forms and only
-fully those with text inputs. It&amp;#39;s likely quite buggy - for example, it doesn&amp;#39;t
-currently check that you&amp;#39;ve filled out all required fields, nor does it check
-for validations errors after you&amp;#39;ve submitted the form - but, hey, it&amp;#39;s a start.
+fully those with text inputs. It&amp;rsquo;s likely quite buggy - for example, it doesn&amp;rsquo;t
+currently check that you&amp;rsquo;ve filled out all required fields, nor does it check
+for validations errors after you&amp;rsquo;ve submitted the form - but, hey, it&amp;rsquo;s a start.
 Go ahead and &lt;a href="https://github.com/rossta/form-to-terminal"&gt;check it out on GitHub&lt;/a&gt; and contribute some improvements!&lt;/p&gt;
 
 &lt;p&gt;CasperJS is a fun tool for automating your workflow and worth a look for
@@ -1266,22 +1134,16 @@ CodeNewbie Google Form, so you can try it too:&lt;/p&gt;
     <content type="html">&lt;p&gt;&lt;em&gt;To be clear, N+1 queries in your app are bad. That they are a default behavior
   through due to lazy loading in Rails enables developers to take advantage of Russian doll caching to tune performance - a necessary step to scale Ruby apps.&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;One of the many mantras one learns on the path to &amp;quot;Rails enlightenment&amp;quot; is:&lt;/p&gt;
+&lt;p&gt;One of the many mantras one learns on the path to &amp;ldquo;Rails enlightenment&amp;rdquo; is:&lt;/p&gt;
 
 &lt;p&gt;BEWARE OF THE N+1 QUERY!&lt;/p&gt;
 
 &lt;p&gt;You might be surprised to hear the conventional advice around fixing the N+1
 problem may not always be the best option.&lt;/p&gt;
 
-      &lt;h3 id="everyone-39-s-favorite-issue" class="title"&gt;
-        &lt;a name="everyone-39-s-favorite-issue" class="anchor" href="#everyone-39-s-favorite-issue"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Everyone&amp;#39;s favorite issue
-      &lt;/h3&gt;
-    
-&lt;p&gt;To refresh, an N+1 query occurs when an association for a requested resource leads to N additional separate queries. Here&amp;#39;s what an N+1 query looks like in the Rails log where a &lt;code&gt;post&lt;/code&gt; request is followed by N requests for their associated &lt;code&gt;authors&lt;/code&gt;:&lt;/p&gt;
+&lt;h3&gt;Everyone&amp;rsquo;s favorite issue&lt;/h3&gt;
+
+&lt;p&gt;To refresh, an N+1 query occurs when an association for a requested resource leads to N additional separate queries. Here&amp;rsquo;s what an N+1 query looks like in the Rails log where a &lt;code&gt;post&lt;/code&gt; request is followed by N requests for their associated &lt;code&gt;authors&lt;/code&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="sh"&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 07:26:15 -0400
 Processing by PostsController#index as HTML
@@ -1293,24 +1155,18 @@ Processing by PostsController#index as HTML
   #...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;A quick search for &lt;a href="https://www.google.com/search?q=N%2B1+Rails&amp;amp;oq=N%2B1+Rails&amp;amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;amp;sourceid=chrome&amp;amp;ie=UTF-8"&gt;N+1 Rails&lt;/a&gt; reveals many posts describing &amp;quot;eager loading&amp;quot; as state that the &lt;em&gt;silver bullet&lt;/em&gt; to this problem.&lt;/p&gt;
+&lt;p&gt;A quick search for &lt;a href="https://www.google.com/search?q=N%2B1+Rails&amp;amp;oq=N%2B1+Rails&amp;amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;amp;sourceid=chrome&amp;amp;ie=UTF-8"&gt;N+1 Rails&lt;/a&gt; reveals many posts describing &amp;ldquo;eager loading&amp;rdquo; as state that the &lt;em&gt;silver bullet&lt;/em&gt; to this problem.&lt;/p&gt;
 
 &lt;p&gt;There is actually a gem called &lt;a href="https://github.com/flyerhzm/bullet"&gt;&lt;code&gt;bullet&lt;/code&gt;&lt;/a&gt; that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.&lt;/p&gt;
 
 &lt;p&gt;Typically, this means changing a statement like &lt;code&gt;Post.all&lt;/code&gt; to
 &lt;code&gt;Post.all.includes(:author)&lt;/code&gt; to ensure the authors records are loaded in a
 separate query or through a complex join (depending on the nature of the
-association). This a really useful technique to reduce the number of queries you&amp;#39;re making in your Rails apps to improve response times. We may have even wondered why Rails doesn&amp;#39;t just eager load for us.&lt;/p&gt;
+association). This a really useful technique to reduce the number of queries you&amp;rsquo;re making in your Rails apps to improve response times. We may have even wondered why Rails doesn&amp;rsquo;t just eager load for us.&lt;/p&gt;
 
-      &lt;h3 id="when-gurus-chat" class="title"&gt;
-        &lt;a name="when-gurus-chat" class="anchor" href="#when-gurus-chat"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        When gurus chat
-      &lt;/h3&gt;
-    
-&lt;p&gt;Now consider this. Back in April, the author of &lt;a href="https://www.railsspeed.com/"&gt;The Complete Guide to Rails Performance&lt;/a&gt; (check it out, it&amp;#39;s awesome), &lt;a href="http://nateberkopec.com/"&gt;Nate Berkopec&lt;/a&gt; spoke with &lt;a href="https://twitter.com/dhh"&gt;DHH&lt;/a&gt; about, ahem, Rails performance. &lt;a href="https://youtu.be/ktZLpjCanvg?t=4m27s"&gt;Not 5 minutes in&lt;/a&gt;, DHH says this:&lt;/p&gt;
+&lt;h3&gt;When gurus chat&lt;/h3&gt;
+
+&lt;p&gt;Now consider this. Back in April, the author of &lt;a href="https://www.railsspeed.com/"&gt;The Complete Guide to Rails Performance&lt;/a&gt; (check it out, it&amp;rsquo;s awesome), &lt;a href="http://nateberkopec.com/"&gt;Nate Berkopec&lt;/a&gt; spoke with &lt;a href="https://twitter.com/dhh"&gt;DHH&lt;/a&gt; about, ahem, Rails performance. &lt;a href="https://youtu.be/ktZLpjCanvg?t=4m27s"&gt;Not 5 minutes in&lt;/a&gt;, DHH says this:&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;N+1 is a feature&lt;/p&gt;
@@ -1318,21 +1174,21 @@ association). This a really useful technique to reduce the number of queries you
 
 &lt;p&gt;WTF? But all those queries!&lt;/p&gt;
 
-&lt;p&gt;Here&amp;#39;s the rest of what he said about it (emphasis mine):&lt;/p&gt;
+&lt;p&gt;Here&amp;rsquo;s the rest of what he said about it (emphasis mine):&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;N+1 is a feature, which is usually seen as a bug, right?&lt;/p&gt;
 
-&lt;p&gt;If you have N+1 query it means you&amp;#39;re executing
-one SQL query per element so if you have 50 emails in an inbox, that&amp;#39;d be 50
-SQL calls, right? That sounds like a bug. Well in a Russian doll caching setup, it&amp;#39;s
-not a bug, it&amp;#39;s a feature. &lt;b&gt;The beauty of those individual calls are that
-they&amp;#39;re individually cached&lt;/b&gt;, on their own timeline, and that they&amp;#39;re super simple.&lt;/p&gt;
+&lt;p&gt;If you have N+1 query it means you&amp;rsquo;re executing
+one SQL query per element so if you have 50 emails in an inbox, that&amp;rsquo;d be 50
+SQL calls, right? That sounds like a bug. Well in a Russian doll caching setup, it&amp;rsquo;s
+not a bug, it&amp;rsquo;s a feature. &lt;b&gt;The beauty of those individual calls are that
+they&amp;rsquo;re individually cached&lt;/b&gt;, on their own timeline, and that they&amp;rsquo;re super simple.&lt;/p&gt;
 
-&lt;p&gt;Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they&amp;#39;re super simple, but there&amp;#39;s just more of them, well, you win if and only if you have a caching strategy to support that.&lt;/p&gt;
+&lt;p&gt;Because the whole way you get around doing N+1 queries is you do joins; you do more complicated queries that take longer to compute, and tax the database harder. If you can simplify those queries so that they&amp;rsquo;re super simple, but there&amp;rsquo;s just more of them, well, you win if and only if you have a caching strategy to support that.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Now I don&amp;#39;t agree with everything DHH says, but it&amp;#39;s an interesting take on the issue. When he says N+1 is a feature, I believe what he really means is that &amp;quot;lazy loading&amp;quot;, which the ActiveRecord query interface uses by default, along with a proper caching strategy &lt;em&gt;can&lt;/em&gt; be a big advantage. It&amp;#39;s this aspect of Rails that has enabled his team to squeeze out sub-100 ms response times at Basecamp.&lt;/p&gt;
+&lt;p&gt;Now I don&amp;rsquo;t agree with everything DHH says, but it&amp;rsquo;s an interesting take on the issue. When he says N+1 is a feature, I believe what he really means is that &amp;ldquo;lazy loading&amp;rdquo;, which the ActiveRecord query interface uses by default, along with a proper caching strategy &lt;em&gt;can&lt;/em&gt; be a big advantage. It&amp;rsquo;s this aspect of Rails that has enabled his team to squeeze out sub-100 ms response times at Basecamp.&lt;/p&gt;
 
 &lt;p&gt;ActiveRecord will defer the SQL queries for associations until they are accessed, say, while rendering author details on a list of posts in an index template. N+1 gives you the option to tackle complex pages with many separate
 queries that can be wrapped in cache blocks meaning the queries can be skipped
@@ -1340,15 +1196,9 @@ altogether on subsequent requests. On the other hand, using
 the broadly-recommended strategy of using &lt;code&gt;includes&lt;/code&gt; to eager-load data means we
 incur that additional, potentially complex, query on each page request, regardless of caching strategies.&lt;/p&gt;
 
-      &lt;h3 id="hrm-example-please" class="title"&gt;
-        &lt;a name="hrm-example-please" class="anchor" href="#hrm-example-please"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Hrm, example please
-      &lt;/h3&gt;
-    
-&lt;p&gt;Let&amp;#39;s illustrate DHH&amp;#39;s point with a simple example where we have a Rails app
+&lt;h3&gt;Hrm, example please&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s illustrate DHH&amp;rsquo;s point with a simple example where we have a Rails app
 that renders an index of &lt;code&gt;Post&lt;/code&gt; models at &lt;code&gt;/posts&lt;/code&gt;. Each &lt;code&gt;Post&lt;/code&gt; belongs to an
 &lt;code&gt;Author&lt;/code&gt; whose details are rendered inline on the index page.&lt;/p&gt;
 
@@ -1413,7 +1263,7 @@ Processing by PostsController#index as HTML
   # rendering
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Let&amp;#39;s say we later add fragment caching to the view by wrapping each post in a
+&lt;p&gt;Let&amp;rsquo;s say we later add fragment caching to the view by wrapping each post in a
 cache block:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;% @posts.each do |post| %&amp;gt;
@@ -1431,7 +1281,7 @@ cache block:&lt;/p&gt;
 &lt;pre&gt;&lt;code class="sh"&gt;$ bin/rails dev:cache
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;In Rails 4, you&amp;#39;ll need to edit your development configuration yourself:&lt;/p&gt;
+&lt;p&gt;In Rails 4, you&amp;rsquo;ll need to edit your development configuration yourself:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="ruby"&gt;# config/development.rb
 config.action_controller.perform_caching = true
@@ -1440,7 +1290,7 @@ config.cache_store = :memory_store
 
 &lt;p&gt;With caching enabled and while eager loading authors in our controller, we can see
 the fragment caching at work in the Rails log. Since the cache is cold on the
-first page render, you&amp;#39;ll see alternating Reads that miss and subsequence Writes
+first page render, you&amp;rsquo;ll see alternating Reads that miss and subsequence Writes
 for posts and authors.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="sh"&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 08:25:17 -0400
@@ -1469,8 +1319,8 @@ Processing by PostsController#index as HTML
   Read fragment views/posts/725-20160918120741840748/e554fd834425697f04b28a155f7cfd0d (0.0ms)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Notice that the authors are still queried because we&amp;#39;re still eager loading even
-though this data won&amp;#39;t be used in a warm cache. What a waste! In truth, it doesn&amp;#39;t matter much for this simplistic example, but we can imagine an eager-loaded complex query creating a problem for us in a real world use case.&lt;/p&gt;
+&lt;p&gt;Notice that the authors are still queried because we&amp;rsquo;re still eager loading even
+though this data won&amp;rsquo;t be used in a warm cache. What a waste! In truth, it doesn&amp;rsquo;t matter much for this simplistic example, but we can imagine an eager-loaded complex query creating a problem for us in a real world use case.&lt;/p&gt;
 
 &lt;p&gt;We can eliminate the wasted authors query by removing the &lt;code&gt;includes&lt;/code&gt; method call from our controller. Now our fully-cached page request requires only one query for the posts:&lt;/p&gt;
 
@@ -1483,7 +1333,7 @@ Processing by PostsController#index as HTML
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;In either case, we want to be sure the post cache is expired if the author
-details change. To set this up, we&amp;#39;ll need to link the updates of an author to
+details change. To set this up, we&amp;rsquo;ll need to link the updates of an author to
 her posts. A basic change could be to &lt;code&gt;touch&lt;/code&gt; each post when an author is
 updated.&lt;/p&gt;
 
@@ -1498,9 +1348,9 @@ updated.&lt;/p&gt;
 end
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Now that we&amp;#39;re no longer eager loading authors, only the posts and authors
-who&amp;#39;ve been updated need to be rewritten to cache. In our &lt;code&gt;development.log&lt;/code&gt;,
-we&amp;#39;ll see only see the additional queries for associations when an author is updated, triggering cache invalidation on the author and associated posts:&lt;/p&gt;
+&lt;p&gt;Now that we&amp;rsquo;re no longer eager loading authors, only the posts and authors
+who&amp;rsquo;ve been updated need to be rewritten to cache. In our &lt;code&gt;development.log&lt;/code&gt;,
+we&amp;rsquo;ll see only see the additional queries for associations when an author is updated, triggering cache invalidation on the author and associated posts:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="sh"&gt;Started GET &amp;quot;/posts&amp;quot; for ::1 at 2016-09-18 08:07:53 -0400
 Processing by PostsController#index as HTML
@@ -1517,24 +1367,18 @@ Processing by PostsController#index as HTML
   Read fragment views/posts/634-20160918112202551250/e554fd834425697f04b28a155f7cfd0d (0.0ms)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Assuming authors and posts aren&amp;#39;t updated frequently, leaving the N+1 query in
+&lt;p&gt;Assuming authors and posts aren&amp;rsquo;t updated frequently, leaving the N+1 query in
 place along with a proper Russian Doll caching scheme might better for overall app performance than triggering complex eager loading queries on every request.&lt;/p&gt;
 
-      &lt;h3 id="go-forth-and-measure" class="title"&gt;
-        &lt;a name="go-forth-and-measure" class="anchor" href="#go-forth-and-measure"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Go forth and measure
-      &lt;/h3&gt;
-    
+&lt;h3&gt;Go forth and measure&lt;/h3&gt;
+
 &lt;p&gt;Eager loading may not always be the best the cure for our N+1 ailments.&lt;/p&gt;
 
-&lt;p&gt;The point of this article isn&amp;#39;t to 💩 on eager loading - it&amp;#39;s an important
+&lt;p&gt;The point of this article isn&amp;rsquo;t to 💩 on eager loading - it&amp;rsquo;s an important
 tool to have in your toolbox - but to encourage Rails developers to understand
 how lazy loading and N+1 queries allow for Russian Doll caching to be a useful alternative to addressing performance bottlenecks in your Rails applications.&lt;/p&gt;
 
-&lt;p&gt;Keep in mind, Russian doll caching may not be the best approach for your app, especially if that cache is frequently cleared or updated. Caching also means you&amp;#39;ll need to think about cache expiry which introduces its own set of challenges. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&amp;#39;s up to you to determine the best approach.&lt;/p&gt;
+&lt;p&gt;Keep in mind, Russian doll caching may not be the best approach for your app, especially if that cache is frequently cleared or updated. Caching also means you&amp;rsquo;ll need to think about cache expiry which introduces its own set of challenges. As with any discussion of performance, profiling and benchmarking is a required step to before deciding how to tune your app for performance, so it&amp;rsquo;s up to you to determine the best approach.&lt;/p&gt;
 
 &lt;p&gt;Just beware of silver bullets.&lt;/p&gt;
 </content>

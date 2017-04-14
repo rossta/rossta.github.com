@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -72,17 +71,17 @@
 
         <p><img src="/assets/images/blog/stock/spider-web-pexels-photo-eda44250.jpg" /></p>
 
-      <p>Let&#39;s build a simple web crawler in Ruby. For inspiration, I&#39;d like to
-to revisit <a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/">Alan Skorkin&#39;s How to Write a Simple Web Crawler in Ruby</a> and attempt to achieve something similar with a fresh perspective.</p>
+      <p>Let&rsquo;s build a simple web crawler in Ruby. For inspiration, I&rsquo;d like to
+to revisit <a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/">Alan Skorkin&rsquo;s How to Write a Simple Web Crawler in Ruby</a> and attempt to achieve something similar with a fresh perspective.</p>
 
-<p>We&#39;ll adapt Skork&#39;s original goals and provide a few of our own:</p>
+<p>We&rsquo;ll adapt Skork&rsquo;s original goals and provide a few of our own:</p>
 
 <blockquote>
 <ul>
 <li>must be able to crawl just a single domain</li>
 <li>must be able to limit number of pages to crawl</li>
-<li>the results should be represented as structured data so we don&#39;t have an incomprehensible soup of content</li>
-<li>the results should be enumerable so we can have flexibility in how they&#39;re handled</li>
+<li>the results should be represented as structured data so we don&rsquo;t have an incomprehensible soup of content</li>
+<li>the results should be enumerable so we can have flexibility in how they&rsquo;re handled</li>
 </ul>
 </blockquote>
 
@@ -94,17 +93,11 @@ to revisit <a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-
 </p>
 </aside>
 
-      <h3 id="breaking-it-down" class="title">
-        <a name="breaking-it-down" class="anchor" href="#breaking-it-down">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Breaking it down
-      </h3>
-    
-<p>For this exercise, we&#39;re going to crawl <a href="http://www.programmableweb.com/">Programmable Web</a> to extract data from their <a href="http://www.programmableweb.com/apis/directory">API directory</a>.</p>
+<h3>Breaking it down</h3>
 
-<p>Rather than take the naive approach of grabbing all content from any page, we&#39;re going to build a webcrawler that emits
+<p>For this exercise, we&rsquo;re going to crawl <a href="http://www.programmableweb.com/">Programmable Web</a> to extract data from their <a href="http://www.programmableweb.com/apis/directory">API directory</a>.</p>
+
+<p>Rather than take the naive approach of grabbing all content from any page, we&rsquo;re going to build a webcrawler that emits
 structured data. Traversing from the first page of the api directory, our
 crawler will visit web pages like a nodes of a tree, collecting data and
 additional urls along the way.</p>
@@ -135,19 +128,13 @@ hashes with meaningful key-value pairs.</p>
 
 <aside class="callout panel">
 <p>
-  When using a web crawler, be aware of the limitations described in the website's <a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a> file. In this post, we skip automated parsing and detection of <a href="http://www.programmableweb.com/robots.txt">Programmable Web's robots.txt</a> to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
+  When using a web crawler, be aware of the limitations described in the website&rsquo;s <a href="https://en.wikipedia.org/wiki/Robots_exclusion_standard">robots.txt</a> file. In this post, we skip automated parsing and detection of <a href="http://www.programmableweb.com/robots.txt">Programmable Web&rsquo;s robots.txt</a> to filter out blacklisted urls and set a crawl delay dynamically. If you choose to run this code on your own, please crawl responsibly.
 </p>
 </aside>
 
-      <h3 id="designing-the-surface" class="title">
-        <a name="designing-the-surface" class="anchor" href="#designing-the-surface">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Designing the surface
-      </h3>
-    
-<p>If you&#39;ve been following my posts lately, you know that <a href="https://rossta.net/blog/ruby-enumerable.html">I love Enumerable</a> and you may not be surprised that I&#39;d like to model our structured, website data with an <a href="/blog/what-is-enumerator.html">Enumerator</a>. This will provide a familiar, flexible interface that can be adapted for logging, storage, transformation, and a wide range of use cases.</p>
+<h3>Designing the surface</h3>
+
+<p>If you&rsquo;ve been following my posts lately, you know that <a href="https://rossta.net/blog/ruby-enumerable.html">I love Enumerable</a> and you may not be surprised that I&rsquo;d like to model our structured, website data with an <a href="/blog/what-is-enumerator.html">Enumerator</a>. This will provide a familiar, flexible interface that can be adapted for logging, storage, transformation, and a wide range of use cases.</p>
 
 <p>I want to simply ask a <code>spider</code> object for its results and get back an enumerator:</p>
 
@@ -155,7 +142,7 @@ hashes with meaningful key-value pairs.</p>
 =&gt; #&lt;Enumerator: ...&gt;
 </code></pre>
 
-<p>We&#39;ll be able to do some interesting things, like stream the
+<p>We&rsquo;ll be able to do some interesting things, like stream the
 results lazily into a flexible storage engine, e.g. <a href="https://www.mongodb.org/">mongodb</a> or <code>PStore</code>,
 available from the <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/pstore/rdoc/PStore.html">Ruby standard library</a>:</p>
 
@@ -172,19 +159,13 @@ spider.results.lazy.take(50).each_with_index do |result, i|
 end
 </code></pre>
 
-      <h3 id="writing-the-crawler" class="title">
-        <a name="writing-the-crawler" class="anchor" href="#writing-the-crawler">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Writing the crawler
-      </h3>
-    
-<p>We&#39;re going to write a <code>Spider</code> class to enumerate website data. Our spider implementation borrows heavily from <a href="https://github.com/joeyAghion/spidey">joeyAghion&#39;s spidey</a> gem, described as a &quot;loose framework for crawling and scraping websites&quot; and Python&#39;s venerable <a href="http://scrapy.org/">Scrapy</a> project, which allows you to scrape websites &quot;in a fast, simple, yet extensible way.&quot; Both resources achieve the goals of being easy-to-use and extensible.</p>
+<h3>Writing the crawler</h3>
 
-<p>We&#39;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it <a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb">on GitHub</a>.</p>
+<p>We&rsquo;re going to write a <code>Spider</code> class to enumerate website data. Our spider implementation borrows heavily from <a href="https://github.com/joeyAghion/spidey">joeyAghion&rsquo;s spidey</a> gem, described as a &ldquo;loose framework for crawling and scraping websites&rdquo; and Python&rsquo;s venerable <a href="http://scrapy.org/">Scrapy</a> project, which allows you to scrape websites &ldquo;in a fast, simple, yet extensible way.&rdquo; Both resources achieve the goals of being easy-to-use and extensible.</p>
 
-<p>Our <code>Spider</code> will maintain a set of urls to visit, data is collects, and a set of url &quot;handlers&quot; that will describe how each page should be processed. We&#39;ll take advantage of one external dependency, <code>mechanize</code>, to handle interaction with the pages we visit - to extract data, resolve urls, follow redirects, etc. Below is the <code>#enqueue</code> method to add urls and their handlers to a running list in our spider.</p>
+<p>We&rsquo;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it <a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb">on GitHub</a>.</p>
+
+<p>Our <code>Spider</code> will maintain a set of urls to visit, data is collects, and a set of url &ldquo;handlers&rdquo; that will describe how each page should be processed. We&rsquo;ll take advantage of one external dependency, <code>mechanize</code>, to handle interaction with the pages we visit - to extract data, resolve urls, follow redirects, etc. Below is the <code>#enqueue</code> method to add urls and their handlers to a running list in our spider.</p>
 
 <pre><code class="ruby">require &quot;mechanize&quot; # as of this writing, the latest release is 2.7.4
 
@@ -204,7 +185,7 @@ class Spider
 end
 </code></pre>
 
-<p>As we process each page we&#39;ll need a way to record the structured data we extract from various pages. We&#39;ll expose a <code>#record</code> method append a hash of data to the <code>@results</code> array.</p>
+<p>As we process each page we&rsquo;ll need a way to record the structured data we extract from various pages. We&rsquo;ll expose a <code>#record</code> method append a hash of data to the <code>@results</code> array.</p>
 
 <pre><code class="ruby">class Spider
   def record(data = {})
@@ -213,7 +194,7 @@ end
 end
 </code></pre>
 
-<p>Since our <code>Spider</code> will only know how to enumerate urls and record data, we&#39;ll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we&#39;ll call this object a &quot;processor&quot;. The processor will respond to the messages <code>#root</code> and <code>#handler</code> - the first url and handler method to enqueue for the spider, respectively. We&#39;ll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.</p>
+<p>Since our <code>Spider</code> will only know how to enumerate urls and record data, we&rsquo;ll introduce a collaborator object to contain the implementation for consuming data for a specific site. For now, we&rsquo;ll call this object a &ldquo;processor&rdquo;. The processor will respond to the messages <code>#root</code> and <code>#handler</code> - the first url and handler method to enqueue for the spider, respectively. We&rsquo;ll also provide options for enforcing limits on the number of pages to crawl and the delay between each request.</p>
 
 <pre><code class="ruby">class Spider
   REQUEST_INTERVAL = 5
@@ -234,14 +215,8 @@ end
 end
 </code></pre>
 
-      <h3 id="enumerator-two-ways" class="title">
-        <a name="enumerator-two-ways" class="anchor" href="#enumerator-two-ways">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Enumerator Two Ways
-      </h3>
-    
+<h3>Enumerator Two Ways</h3>
+
 <p>Now for the real meat of our young <code>Spider</code>. The <code>#results</code> method is the key public interface: it enumerates the enqueued urls and yields members of the <code>@results</code> collection.</p>
 
 <pre><code class="ruby">class Spider
@@ -280,7 +255,7 @@ end
 end
 </code></pre>
 
-<p>An interesting thing to note is that the size of our url queue and the collected results may be growing as we crawl more pages. For the <code>#enqueued_urls</code> private method, we&#39;re using an <code>Enumerator</code> to wrap the logic for iterating over the list of <code>@urls</code> and maintaining state, like the <code>index</code>. The <code>Enumerator</code> class is well-suited to represent a lazily generated collection.</p>
+<p>An interesting thing to note is that the size of our url queue and the collected results may be growing as we crawl more pages. For the <code>#enqueued_urls</code> private method, we&rsquo;re using an <code>Enumerator</code> to wrap the logic for iterating over the list of <code>@urls</code> and maintaining state, like the <code>index</code>. The <code>Enumerator</code> class is well-suited to represent a lazily generated collection.</p>
 
 <pre><code class="ruby">def enqueued_urls
   Enumerator.new do |y|
@@ -289,9 +264,9 @@ end
 end
 </code></pre>
 
-<p>I find it to be a more expressive way to indicate we&#39;re enumerating values &quot;on demand&quot; as opposed to &quot;eagerly&quot;, like a typical collection.</p>
+<p>I find it to be a more expressive way to indicate we&rsquo;re enumerating values &ldquo;on demand&rdquo; as opposed to &ldquo;eagerly&rdquo;, like a typical collection.</p>
 
-<p>Notice we&#39;re also returning an enumerator from <code>#results</code>:</p>
+<p>Notice we&rsquo;re also returning an enumerator from <code>#results</code>:</p>
 
 <pre><code class="ruby">def results
   return enum_for(:results) unless block_given?
@@ -302,23 +277,17 @@ end
 <p>This technique provides the method caller to more flexibility when determining
 how to handler the results. While you could pass a block to consume the
 results, e.g., <code>spider.results { |r| puts r.inspect }</code>, this is an eager
-operation. We&#39;d have to wait for all the pages to be processed before continuing
+operation. We&rsquo;d have to wait for all the pages to be processed before continuing
 with the block. Returning an enumerator offers the potential to stream results
 to something like a data store.</p>
 
-<p>Why not include <code>Enumerable</code> in our <code>Spider</code> and implement <code>#each</code> instead? As pointed out in <a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/">Arkency&#39;s Stop including Enumerable, return Enumerator
+<p>Why not include <code>Enumerable</code> in our <code>Spider</code> and implement <code>#each</code> instead? As pointed out in <a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/">Arkency&rsquo;s Stop including Enumerable, return Enumerator
 instead</a>, our
-<code>Spider</code> class doesn&#39;t itself represent a collection, so exposing the <code>#results</code>
+<code>Spider</code> class doesn&rsquo;t itself represent a collection, so exposing the <code>#results</code>
 method as an enumerator is more appropriate.</p>
 
-      <h3 id="from-soup-to-net-results" class="title">
-        <a name="from-soup-to-net-results" class="anchor" href="#from-soup-to-net-results">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        From Soup to Net Results
-      </h3>
-    
+<h3>From Soup to Net Results</h3>
+
 <p>Our <code>Spider</code> is now functional so we can move onto the details of extracting data from an actual website.</p>
 
 <p>Our processor, <code>ProgrammableWeb</code> will be responsible for wrappin a <code>Spider</code> instance and extracting data from
@@ -354,7 +323,7 @@ Our spider will invoke the handlers (as seen above with <code>@processor.send(me
 end
 </code></pre>
 
-<p>... where <code>page</code> is an instance of <code>Mechanize::Page</code> (<a href="http://docs.seattlerb.org/mechanize/Mechanize/Page.html">docs</a>) providing a number of methods for interacting with html content:</p>
+<p>&hellip; where <code>page</code> is an instance of <code>Mechanize::Page</code> (<a href="http://docs.seattlerb.org/mechanize/Mechanize/Page.html">docs</a>) providing a number of methods for interacting with html content:</p>
 
 <p>The root handler method, <code>ProgrammableWeb#process_index</code>, will extract api names in the
 index list, enqueue api detail pages and additional, paginated indexes. As data
@@ -372,8 +341,8 @@ is collected, it may be passed on to handlers further down the tree via
 end
 </code></pre>
 
-<p>To process api detail pages, we&#39;ll define a separate handler. Since these pages
-will represent &quot;leaves&quot; in this exercise, we&#39;ll merge the data passed in with
+<p>To process api detail pages, we&rsquo;ll define a separate handler. Since these pages
+will represent &ldquo;leaves&rdquo; in this exercise, we&rsquo;ll merge the data passed in with
 that extracted from the page and pass it along to <code>Spider#record</code>.</p>
 
 <pre><code class="ruby">def process_api(page, data = {})
@@ -407,15 +376,9 @@ end
 # 4 : {:name=&gt;&quot;YouTube&quot;, :api_provider=&gt;&quot;http://www.google.com&quot;, :api_endpoint=&gt;&quot;http://gdata.youtube.com/feeds/&quot;, :api_homepage=&gt;&quot;https://developers.google.com/youtube/&quot;, :primary_category=&gt;&quot;Video&quot;, :secondary_categories=&gt;&quot;Media&quot;, :protocol_formats=&gt;&quot;Atom, RSS, JSON, XML, GData&quot;, :other_options=&gt;&quot;Atom Publishing Protocol (Atom/RSS)&quot;, :ssl_support=&gt;&quot;No&quot;, :api_kits=&gt;&quot;Java, PHP Python, Ruby, ActionScript&quot;, :api_forum=&gt;&quot;http://groups.google.com/group/youtube-api/&quot;, :twitter_url=&gt;&quot;https://twitter.com/YouTubeDev/&quot;, :developer_support=&gt;&quot;http://code.google.com/support/bin/topic.py?topic=12357&quot;, :console_url=&gt;&quot;http://code.google.com/apis/ajax/playground/?exp=youtube#simple_embed&quot;, :authentication_mode=&gt;&quot;OAuth2&quot;, :categories=&gt;[&quot;Video&quot;, &quot;Media&quot;]}
 </code></pre>
 
-      <h3 id="wrapping-up" class="title">
-        <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Wrapping up
-      </h3>
-    
-<p>I admit, it&#39;s arguable that this implementation is &quot;simple&quot;. Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work up front to define which links to consume and how to process them with &quot;handlers&quot;. However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.</p>
+<h3>Wrapping up</h3>
+
+<p>I admit, it&rsquo;s arguable that this implementation is &ldquo;simple&rdquo;. Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work up front to define which links to consume and how to process them with &ldquo;handlers&rdquo;. However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.</p>
 
 <p>Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction. It would now be trivial to take our <code>Spider</code> class and implement a new processor for a site like <a href="https://rubygems.org">rubygems.org</a> or <a href="https://craigslist.org">craigslist</a> and stream the results to a database like <a href="http://redis.io">Redis</a> or <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"><code>YAML::Store</code></a>.</p>
 
@@ -426,7 +389,7 @@ end
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=How%20to%20write%20a%20simple%20web%20crawler%20in%20Ruby%20-%20revisited%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2016-01-27-how-to-write-a-simple-web-crawler-in-ruby-revisited.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=How%20to%20write%20a%20simple%20web%20crawler%20in%20Ruby%20-%20revisited%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fhow-to-write-a-simple-web-crawler-in-ruby-revisited.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -435,10 +398,10 @@ end
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -462,12 +425,11 @@ end
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2016-01-27-how-to-write-a-simple-web-crawler-in-ruby-revisited.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2016-01-27-how-to-write-a-simple-web-crawler-in-ruby-revisited.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Ruby" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -531,18 +493,17 @@ end
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>

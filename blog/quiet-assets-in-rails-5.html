@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -75,16 +74,10 @@
       <p>Recent changes to the <a href="https://github.com/rails/sprockets-rails"><code>sprockets-rails</code></a> gem now include a configuration option
 to silence asset request logging in development.</p>
 
-      <h3 id="the-problem" class="title">
-        <a name="the-problem" class="anchor" href="#the-problem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        The problem
-      </h3>
-    
+<h3>The problem</h3>
+
 <p>I love logs. Whenever someone comes to me with a Rails problem or we need to
-debug something, the first question I&#39;m thinking is, &quot;What do the logs say?&quot;.</p>
+debug something, the first question I&rsquo;m thinking is, &ldquo;What do the logs say?&rdquo;.</p>
 
 <p>That said, sometimes Rails logs more info than we need. By default, Rails will record the web requests for each asset in development. Each page load could incur several to many additional requests for JavaScript, CSS, and images, potentially drowning your <code>STDOUT</code> or <code>development.log</code>.</p>
 
@@ -94,23 +87,17 @@ debug something, the first question I&#39;m thinking is, &quot;What do the logs 
 ...
 </code></pre>
 
-<p>Unless you&#39;re debugging an issue in the asset pipeline, numerous asset requests are not very useful and tend to mask more important info logged in the controller actions.</p>
+<p>Unless you&rsquo;re debugging an issue in the asset pipeline, numerous asset requests are not very useful and tend to mask more important info logged in the controller actions.</p>
 
-      <h3 id="quieting-assets-the-old-way" class="title">
-        <a name="quieting-assets-the-old-way" class="anchor" href="#quieting-assets-the-old-way">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Quieting assets, the old way
-      </h3>
-    
+<h3>Quieting assets, the old way</h3>
+
 <p>To disable asset logging behavior, many Rails 4 projects have used the <code>quiet_assets</code> gem.</p>
 
 <p>So, why did we need a separate gem in the first place?</p>
 
-<p><code>Rails::Rack::Logger</code> is a middleware in the Rails middleware stack that logs all requests coming into your Rails app and implements an <code>ActiveSupport::Notification</code> for each request you can hook into for additional information. The <code>quiet_assets</code> gem simply sets the log level to <code>Logger::Error</code> for any request matching your application&#39;s assets path prefix, which means it won&#39;t show up in your log file or <code>STDOUT</code>.</p>
+<p><code>Rails::Rack::Logger</code> is a middleware in the Rails middleware stack that logs all requests coming into your Rails app and implements an <code>ActiveSupport::Notification</code> for each request you can hook into for additional information. The <code>quiet_assets</code> gem simply sets the log level to <code>Logger::Error</code> for any request matching your application&rsquo;s assets path prefix, which means it won&rsquo;t show up in your log file or <code>STDOUT</code>.</p>
 
-<p>The <code>quiet_assets</code> gem <a href="https://github.com/evrone/quiet_assets/blob/e54ca548f005ca2a93e781c7b583ff4d0b59dd35/lib/quiet_assets.rb#L20">monkeypatches <code>Rails::Rack::Logger</code></a> to accomplish this. Here&#39;s the relevant code provided in the gem:</p>
+<p>The <code>quiet_assets</code> gem <a href="https://github.com/evrone/quiet_assets/blob/e54ca548f005ca2a93e781c7b583ff4d0b59dd35/lib/quiet_assets.rb#L20">monkeypatches <code>Rails::Rack::Logger</code></a> to accomplish this. Here&rsquo;s the relevant code provided in the gem:</p>
 
 <pre><code class="ruby">Rails::Rack::Logger.class_eval do
   def call_with_quiet_assets(env)
@@ -132,17 +119,11 @@ end
 middleware and remove the <code>quiet_assets</code> dependency if <code>sprockets-rails</code> could
 handle this for us.</p>
 
-      <h3 id="replacing-the-quiet_assets-gem" class="title">
-        <a name="replacing-the-quiet_assets-gem" class="anchor" href="#replacing-the-quiet_assets-gem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Replacing the quiet_assets gem
-      </h3>
-    
+<h3>Replacing the quiet_assets gem</h3>
+
 <p>Now, as of the most recent version of <code>sprockets-rails</code> (at the time of this writing, version <code>3.1.1</code>) provides the ability to silence assets requests. This means the <code>quiet_assets</code> gem is no longer needed in a fresh Rails 5 application.</p>
 
-<p>Here&#39;s how to configure your Rails app to silence asset logging with this most
+<p>Here&rsquo;s how to configure your Rails app to silence asset logging with this most
 recent version of <code>sprockets-rails</code>:</p>
 
 <pre><code class="ruby"># config/environments/development.rb
@@ -166,7 +147,7 @@ use Rails::Rack::Logger
 
 <p>When <code>config.assets.quiet</code> is enabled in development, the <code>Sprockets::Rails::Middleware</code> also matches on asset requests, but instead uses the <code>Rails.logger.silence { ... }</code> block method to change the log level to <code>Logger::ERROR</code>.</p>
 
-<p>Here&#39;s a <a href="https://github.com/rails/sprockets-rails/pull/355">link to the recent pull request</a> if you&#39;re interested to take a closer look at how this functionality works. The entire middleware is <a href="https://github.com/rails/sprockets-rails/blob/df5950017d7f2aa6fcbfa3949edfef85c35c28c7/lib/sprockets/rails/quiet_assets.rb">currently only 18 lines</a>:</p>
+<p>Here&rsquo;s a <a href="https://github.com/rails/sprockets-rails/pull/355">link to the recent pull request</a> if you&rsquo;re interested to take a closer look at how this functionality works. The entire middleware is <a href="https://github.com/rails/sprockets-rails/blob/df5950017d7f2aa6fcbfa3949edfef85c35c28c7/lib/sprockets/rails/quiet_assets.rb">currently only 18 lines</a>:</p>
 
 <pre><code class="ruby">module Sprockets
   module Rails
@@ -188,20 +169,14 @@ use Rails::Rack::Logger
 end
 </code></pre>
 
-<p>Of course, this feature isn&#39;t just for Rails 5; it should also be possible for you to upgrade to this version of <code>sprockets-rails</code> for existing Rails 4 applications.</p>
+<p>Of course, this feature isn&rsquo;t just for Rails 5; it should also be possible for you to upgrade to this version of <code>sprockets-rails</code> for existing Rails 4 applications.</p>
 
-<p>In case you&#39;re wondering, the <code>Rails.logger.silence { ... }</code> call assumes your
+<p>In case you&rsquo;re wondering, the <code>Rails.logger.silence { ... }</code> call assumes your
 Rails logger includes the <a href="http://api.rubyonrails.org/classes/LoggerSilence.html"><code>LoggerSilence</code> module</a>, which adds the <code>#silence</code> method to the including logger class, which will set the log level to <code>Logger::ERROR</code> for the duration of the block, similar to how the <code>quiet_assets</code> gem works, but without monkeypatching.</p>
 
-      <h3 id="logging-to-stdout" class="title">
-        <a name="logging-to-stdout" class="anchor" href="#logging-to-stdout">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Logging to STDOUT
-      </h3>
-    
-<p>You may be surprised then to see asset requests fail if you&#39;re using a non-compliant logger. Unfortunately, this includes the <code>Logger</code> class from the Ruby standard library, which, of course, does not include the <code>LoggerSilence</code> module. You might be using Ruby&#39;s <code>Logger</code> if you&#39;ve followed common recommendations to change your Rails logger to log to <code>STDOUT</code>, as in <a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html">this tutorial</a>:</p>
+<h3>Logging to STDOUT</h3>
+
+<p>You may be surprised then to see asset requests fail if you&rsquo;re using a non-compliant logger. Unfortunately, this includes the <code>Logger</code> class from the Ruby standard library, which, of course, does not include the <code>LoggerSilence</code> module. You might be using Ruby&rsquo;s <code>Logger</code> if you&rsquo;ve followed common recommendations to change your Rails logger to log to <code>STDOUT</code>, as in <a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html">this tutorial</a>:</p>
 
 <pre><code class="ruby">config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 </code></pre>
@@ -216,19 +191,13 @@ to <code>sprockets-rails 3.1.1</code> and began seeing <code>NoMethodError: unde
 </code></pre>
 
 <p>Alternatively, we could create our own subclass of <code>Logger</code> with <code>LoggerSilence</code>
-included. If we just want <code>STDOUT</code> logging, we could instead use Heroku&#39;s
+included. If we just want <code>STDOUT</code> logging, we could instead use Heroku&rsquo;s
 <a href="https://github.com/heroku/rails_stdout_logging"><code>rails_stdout_logging</code></a> gem,
 which will also try to include the <code>LoggerSilence</code> module in our logger, if available.</p>
 
-      <h3 id="resources" class="title">
-        <a name="resources" class="anchor" href="#resources">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        Resources
-      </h3>
-    
-<p>Be sure to check out the following links if you&#39;re interested to learn more
+<h3>Resources</h3>
+
+<p>Be sure to check out the following links if you&rsquo;re interested to learn more
 about customizing your Rails logger. Happy logging!</p>
 
 <ul>
@@ -247,7 +216,7 @@ about customizing your Rails logger. Happy logging!</p>
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Quiet%20assets%20in%20Rails%205%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2016-08-26-quiet-assets-in-rails-5.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Quiet%20assets%20in%20Rails%205%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fquiet-assets-in-rails-5.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -256,10 +225,10 @@ about customizing your Rails logger. Happy logging!</p>
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -283,12 +252,11 @@ about customizing your Rails logger. Happy logging!</p>
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2016-08-26-quiet-assets-in-rails-5.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2016-08-26-quiet-assets-in-rails-5.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Rails" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -351,18 +319,17 @@ about customizing your Rails logger. Happy logging!</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>

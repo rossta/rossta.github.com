@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -72,15 +71,15 @@
 
         <p><img src="/assets/images/blog/stock/louvre-pexels-photo-e2bd64cb.jpg" /></p>
 
-      <p>Pascal&#39;s Triangle is a fun sequence. Here&#39;s what it looks like:</p>
+      <p>Pascal&rsquo;s Triangle is a fun sequence. Here&rsquo;s what it looks like:</p>
 
 <p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_color-a0dd53d5.jpg" /></p>
 
-<p>It represents a <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">&quot;triangular array of the binomial coefficients&quot;</a>. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.</p>
+<p>It represents a <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">&ldquo;triangular array of the binomial coefficients&rdquo;</a>. Each row contains an increases in size and contains numbers which can be derived by adding adjacent members of the previous row.</p>
 
 <p><img alt="Pascal's Triangle" src="/assets/images/blog/pascals_triangle_animated-854e9197.gif" /></p>
 
-<p>We can model this in Ruby as an array of arrays. The first array member is <code>[1]</code>. Each successive array (or &quot;row&quot;) will increase in size, and each array member will be the sum of the member at the same index <code>n</code> in the <code>k-1</code> row, where <code>k</code> is the current row, and the <code>n-1</code> member in the <code>k-1</code> row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:</p>
+<p>We can model this in Ruby as an array of arrays. The first array member is <code>[1]</code>. Each successive array (or &ldquo;row&rdquo;) will increase in size, and each array member will be the sum of the member at the same index <code>n</code> in the <code>k-1</code> row, where <code>k</code> is the current row, and the <code>n-1</code> member in the <code>k-1</code> row or 0. In other words, add the number above and the number above to the left (or zero) to get the current number. We can express the first five rows as follows:</p>
 
 <pre><code class="ruby">[
   [1],
@@ -91,9 +90,9 @@
 ]
 </code></pre>
 
-<p>Let&#39;s solve this with Ruby. While there are a number of approaches to generating Pascal&#39;s Triangle, including both recursive and iterative solutions, we&#39;ll explore an approach to treating this as <a href="/blog/infinite-sequences-in-ruby.html">an enumerable</a>.</p>
+<p>Let&rsquo;s solve this with Ruby. While there are a number of approaches to generating Pascal&rsquo;s Triangle, including both recursive and iterative solutions, we&rsquo;ll explore an approach to treating this as <a href="/blog/infinite-sequences-in-ruby.html">an enumerable</a>.</p>
 
-<p>Starting with the first row, <code>[1]</code>, we can write a Ruby method that will generate the next row <code>[1, 1]</code>. Let&#39;s write this in a way so it will be possible to generate any row <code>k</code> from row <code>k-1</code>. Here&#39;s what the usage of this method will look like:</p>
+<p>Starting with the first row, <code>[1]</code>, we can write a Ruby method that will generate the next row <code>[1, 1]</code>. Let&rsquo;s write this in a way so it will be possible to generate any row <code>k</code> from row <code>k-1</code>. Here&rsquo;s what the usage of this method will look like:</p>
 
 <pre><code class="ruby">pascal_row([1])
 =&gt; [1, 1]
@@ -101,7 +100,7 @@ pascal_row([1, 3, 3, 1])
 =&gt; [1, 4, 6, 4, 1]
 </code></pre>
 
-<p>We&#39;ll use Test-Driven Development to validate our implementation starting with a few assertions to ensure the first several rows are returned as expected.</p>
+<p>We&rsquo;ll use Test-Driven Development to validate our implementation starting with a few assertions to ensure the first several rows are returned as expected.</p>
 
 <pre><code class="ruby">require &#39;minitest/autorun&#39;
 
@@ -139,7 +138,7 @@ Expected: [1, 1]
 1 runs, 1 assertions, 1 failures, 0 errors, 0 skips
 </code></pre>
 
-<p>To extract a general method, let&#39;s deconstruct a single row, the fifth: <code>[1, 4, 6, 4, 1]</code>. Each member is the sum of <code>n</code> and <code>n-1</code> from the previous row, <code>[1, 3, 3, 1]</code>. We substitute zero when <code>n</code> or <code>n-1</code> is missing. Therefore, we can rewrite the fifth row as</p>
+<p>To extract a general method, let&rsquo;s deconstruct a single row, the fifth: <code>[1, 4, 6, 4, 1]</code>. Each member is the sum of <code>n</code> and <code>n-1</code> from the previous row, <code>[1, 3, 3, 1]</code>. We substitute zero when <code>n</code> or <code>n-1</code> is missing. Therefore, we can rewrite the fifth row as</p>
 
 <pre><code class="ruby_">[(0 + 1), (1 + 3), (3 + 3), (3 + 1), (1 + 0)]
 =&gt; [1, 4, 6, 4, 1]
@@ -153,13 +152,13 @@ Expected: [1, 1]
 
 <p>Looking closely at the pairs, taking just first members of each pair form the array we get <code>[0, 1, 3, 3, 1]</code>. The second members of each pair are <code>[1, 3, 3, 1, 0]</code>. Written differently, the groups are <code>([0] + [1, 3, 3, 1])</code> and <code>([1, 3, 3, 1] + [0])</code>. In each we see the members of row four, <code>[1, 3, 3, 1]</code> augmented by prepending zero or appending zero respectively.</p>
 
-<p>Getting the nested array pairs from these groups is perfect for the <code>Enumerable#zip</code> method: <code>zip</code> groups members of given arrays by position. Therefore, we can &quot;zip&quot; <code>[0, 1, 3, 3, 1]</code> with <code>[1, 3, 3, 1, 0]</code> to produce <code>[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]</code>:</p>
+<p>Getting the nested array pairs from these groups is perfect for the <code>Enumerable#zip</code> method: <code>zip</code> groups members of given arrays by position. Therefore, we can &ldquo;zip&rdquo; <code>[0, 1, 3, 3, 1]</code> with <code>[1, 3, 3, 1, 0]</code> to produce <code>[[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]</code>:</p>
 
 <pre><code class="ruby">[0, 1, 3, 3, 1].zip([1, 3, 3, 1, 0])
 =&gt; [[0, 1], [1, 3], [3, 3], [3, 1], [1, 0]]
 </code></pre>
 
-<p>Let&#39;s extract a variable to represent row four:</p>
+<p>Let&rsquo;s extract a variable to represent row four:</p>
 
 <pre><code class="ruby">row = [1, 3, 3, 1]
 ([0] + row).zip(row + [0])
@@ -173,7 +172,7 @@ Expected: [1, 1]
 =&gt; [1, 4, 6, 4, 1]
 </code></pre>
 
-<p>Let&#39;s confirm this expression works with for other row conversions:</p>
+<p>Let&rsquo;s confirm this expression works with for other row conversions:</p>
 
 <pre><code class="ruby">row = [1]
 ([0] + row).zip(row + [0]).collect { |a, b| a + b }
@@ -188,14 +187,14 @@ row = [1, 2, 1]
 =&gt; [1, 3, 3, 1]
 </code></pre>
 
-<p>Yes! We now have the implementation for our method to produce any row for Pascal&#39;s Triangle given the preceding row:</p>
+<p>Yes! We now have the implementation for our method to produce any row for Pascal&rsquo;s Triangle given the preceding row:</p>
 
 <pre><code class="ruby">def pascal_row(row)
   ([0] + row).zip(row + [0]).collect { |a, b| a + b }
 end
 </code></pre>
 
-<p>Plugging in this implementation...</p>
+<p>Plugging in this implementation&hellip;</p>
 
 <pre><code class="ruby">require &#39;minitest/autorun&#39;
 
@@ -214,7 +213,7 @@ class TestPascalsTriangle &lt; Minitest::Test
 end
 </code></pre>
 
-<p>... we get passing tests</p>
+<p>&hellip; we get passing tests</p>
 
 <pre><code class="bash">$ ruby code/pascals_row_test.rb
 Run options: --seed 61039
@@ -228,17 +227,11 @@ Finished in 0.001020s, 980.6882 runs/s, 4903.4412 assertions/s.
 1 runs, 5 assertions, 0 failures, 0 errors, 0 skips
 </code></pre>
 
-      <h3 id="in-sequence" class="title">
-        <a name="in-sequence" class="anchor" href="#in-sequence">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        In Sequence
-      </h3>
-    
-<p>Now that we have a method to convert one row to its successor, we have a nice building block for an infinite sequence. We can call <code>pascals_row</code> repeatedly to generate the triangle rows infinitely. I previously wrote about creating <a href="/blog/infinite-sequences-in-ruby.html">infinite sequences in Ruby</a> with Enumerator and we&#39;ll apply this approach here.</p>
+<h3>In Sequence</h3>
 
-<p>We&#39;d like to be able to call a method and enumerate the rows representing Pascal&#39;s Triangle as we would for an array. Since we&#39;ll be using <code>Enumerator</code>, which exposes the <code>Enumerable</code> api, we can use external enumeration with <code>Enumerator#next</code> to extract rows in succession. Let&#39;s rewrite our previous test to demonstrate:</p>
+<p>Now that we have a method to convert one row to its successor, we have a nice building block for an infinite sequence. We can call <code>pascals_row</code> repeatedly to generate the triangle rows infinitely. I previously wrote about creating <a href="/blog/infinite-sequences-in-ruby.html">infinite sequences in Ruby</a> with Enumerator and we&rsquo;ll apply this approach here.</p>
+
+<p>We&rsquo;d like to be able to call a method and enumerate the rows representing Pascal&rsquo;s Triangle as we would for an array. Since we&rsquo;ll be using <code>Enumerator</code>, which exposes the <code>Enumerable</code> api, we can use external enumeration with <code>Enumerator#next</code> to extract rows in succession. Let&rsquo;s rewrite our previous test to demonstrate:</p>
 
 <pre><code class="bash">require &#39;minitest/autorun&#39;
 
@@ -283,12 +276,12 @@ NoMethodError: undefined method `next&#39; for nil:NilClass
 </code></pre>
 
 <p>Our enumerator needs to call the <code>pascals_row</code> method repeatedly with the
-previous result. We&#39;ll maintain the current row as <code>current</code>, pass this as the
+previous result. We&rsquo;ll maintain the current row as <code>current</code>, pass this as the
 arg to <code>pascals_row</code>, replace it with the result and repeat in a loop. Returning the
-<code>Enumerator</code> from the method will allow the caller to control how it&#39;s
+<code>Enumerator</code> from the method will allow the caller to control how it&rsquo;s
 enumerated.</p>
 
-<p>Here&#39;s what the implementation could look like:</p>
+<p>Here&rsquo;s what the implementation could look like:</p>
 
 <pre><code class="ruby">current = [1]
 Enumerator.new do |y|
@@ -299,7 +292,7 @@ Enumerator.new do |y|
 end
 </code></pre>
 
-<p>Let&#39;s plug this into our method and rerun:</p>
+<p>Let&rsquo;s plug this into our method and rerun:</p>
 
 <pre><code class="ruby">require &#39;minitest/autorun&#39;
 
@@ -330,7 +323,7 @@ class TestPascalsTriangle &lt; Minitest::Test
 end
 </code></pre>
 
-<p>The exciting thing about this implementation is we can treat our sequence like a collection and call enumerable methods. We can also chain enumerable methods like <code>Enumerator#with_index</code> and <code>Enumerator#each</code> to print a &quot;pretty&quot; triangle of each row with its row number.</p>
+<p>The exciting thing about this implementation is we can treat our sequence like a collection and call enumerable methods. We can also chain enumerable methods like <code>Enumerator#with_index</code> and <code>Enumerator#each</code> to print a &ldquo;pretty&rdquo; triangle of each row with its row number.</p>
 
 <pre><code class="ruby">pascals_triangle.with_index(1).take(10).each do |row, i|
   puts &quot;%d:%#{20+(row.inspect.length/2)}s&quot; % [i, row.inspect]
@@ -376,7 +369,7 @@ chains can augment the enumerated values.</p>
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Pascal%27s%20Triangle%20with%20Ruby%27s%20Enumerator%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2015-11-30-pascals-triangle-with-rubys-enumerator.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Pascal%27s%20Triangle%20with%20Ruby%27s%20Enumerator%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fpascals-triangle-with-rubys-enumerator.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -385,10 +378,10 @@ chains can augment the enumerated values.</p>
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -412,12 +405,11 @@ chains can augment the enumerated values.</p>
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2015-11-30-pascals-triangle-with-rubys-enumerator.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2015-11-30-pascals-triangle-with-rubys-enumerator.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Ruby" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -481,18 +473,17 @@ chains can augment the enumerated values.</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>

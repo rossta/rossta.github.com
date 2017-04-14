@@ -9,10 +9,10 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
 <meta name="twitter:title" content="Ruby, You Autocomplete Me" />
 <meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
 <meta property="og:title" content="Ruby, You Autocomplete Me" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
@@ -27,14 +27,13 @@
     <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
 
-    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
-    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
-
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-4affd4b8.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-04469b6f.js"></script>
+    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+    <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
+
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -70,13 +69,12 @@
     </h3>
 </header>
 
-        <p><img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" /></p>
 
       <p>My team recently added a tagging feature to our web app. As the user types in
 the text input, the app supplies autocomplete suggestions from our database via
 javascript; a familiar UX. While backporting tags to existing records on the
-<code>rails console</code>, it hit me: &quot;Why not bring tag autocompletion to the command
-line?&quot;</p>
+<code>rails console</code>, it hit me: &ldquo;Why not bring tag autocompletion to the command
+line?&rdquo;</p>
 
 <p>The default <code>rails console</code> provides completion out-of-the-box though all the script
 does is start <code>irb</code> with the rails environment and <code>irb/completion</code> required.</p>
@@ -131,7 +129,7 @@ Readline.completion\_append\_character = &quot; &quot;
 Readline.completion\_proc = comp
 </code></pre>
 
-<p>There&#39;s nothing stopping us from taking this to the <code>rails console</code> to take
+<p>There&rsquo;s nothing stopping us from taking this to the <code>rails console</code> to take
 advantage of our rails environment and even access the database. Building off
 the example, we can replace the hard-coded array with a list of tags plucked
 from a simple activerecord query:</p>
@@ -146,7 +144,7 @@ Readline.completion\_proc = comp
 <p>We have room for improvement. For one thing, this makes a new query every time
 you attempt to autocomplete. For a reasonable number of tags, we could load the
 tag list in memory and grep for the matches instead. There is still another problem;
-by replacing the <code>Readline.completion_proc</code>, we&#39;ve clobbered the functionality
+by replacing the <code>Readline.completion_proc</code>, we&rsquo;ve clobbered the functionality
 provided by <code>irb/completion</code>. One approach would be to fall back to the
 <code>IRB::InputCompletor::CompletionProc</code> or add its result to the array of candidates.
 Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorrect-completions">incorrect completions</a>
@@ -154,7 +152,7 @@ Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorr
 this could get messy.</p>
 
 <p>Enter <a href="https://github.com/cldwalker/bond">bond</a>, a drop-in replacement for IRB
-completion. It aims to improve on IRB&#39;s shortcomings and provides methods for
+completion. It aims to improve on IRB&rsquo;s shortcomings and provides methods for
 adding custom completions. To take advantage of Bond in the console:</p>
 
 <pre><code class="ruby">require &#39;bond&#39;
@@ -165,9 +163,9 @@ Bond.start
 <code>Bond.completion</code> method</a>.
 To set up a Bond completion, we need a condition and an action; when the condition is matched,
 then the given action will determine which candidates are returned. Calling
-<code>Bond.start</code> will register Bond&#39;s default completions. For example, the
+<code>Bond.start</code> will register Bond&rsquo;s default completions. For example, the
 following completion is triggered with the text for completion starts with a
-letter preceded by &quot;::&quot;; the search space is scoped to <code>Object.constants</code>.</p>
+letter preceded by &ldquo;::&rdquo;; the search space is scoped to <code>Object.constants</code>.</p>
 
 <pre><code class="ruby"># https://github.com/cldwalker/bond/blob/master/lib/bond/completion.rb#L13
 complete(:prefix=\&gt;&#39;::&#39;, :anywhere=\&gt;&#39;[A-Z][^:\.\(]\*&#39;) {|e| Object.constants }
@@ -212,7 +210,7 @@ simple ways to hook into features easily taken for granted.</p>
     <hr />
     <section class="margin-bottom double">
       <p>
-        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Ruby%2C%20You%20Autocomplete%20Me%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%3A4567%2Fblog%2F2014-02-05-ruby-you-autocomplete-me.html">share it on Twitter</a>,
+        Did you like this post? Do me a favor: <a target="_blank" href="https://twitter.com/intent/tweet?text=Ruby%2C%20You%20Autocomplete%20Me%20-%20rossta.net&amp;url=rossta.net%3A4567%2Fblog%2Fruby-you-autocomplete-me.html">share it on Twitter</a>,
           <a href="https://twitter.com/rossta">follow me - @rossta</a>,
           and sign up for my newsletter. Thanks!
         </p>
@@ -221,10 +219,10 @@ simple ways to hook into features easily taken for granted.</p>
     <section class="signup-form-standalone margin-bottom double">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>LEVEL UP your web development</h3>
+  <p>Sign up for my occasional newsletter on professional Ruby and Javascript for the web.</p>
   <div id="mc_embed_signup">
-    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <form action="//rossta.us6.list-manage.com/subscribe/post?u=8ce159842b5c98cecb4ebdf16&amp;id=96030b0bda" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
 
         <div class="row">
@@ -248,12 +246,11 @@ simple ways to hook into features easily taken for granted.</p>
         <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
       </div>
 
-      <input type="hidden" name="SIGNUP" value="https://rossta.net:4567/blog/2014-02-05-ruby-you-autocomplete-me.html" />
-      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2014-02-05-ruby-you-autocomplete-me.html" />
       <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Ruby" />
     </form>
   </div>
+
   <!--End mc_embed_signup-->
 </div>
 
@@ -316,18 +313,17 @@ simple ways to hook into features easily taken for granted.</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/css.html">CSS</a></li>
+          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
       <h5>Contact</h5>
       <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me">linkedin</a></li>
+        <li><a href="mailto:ross@rossta.net">email</a></li>
+        <li><a href="https://twitter.com/rossta">twitter</a></li>
+        <li><a href="https://github.com/rossta">github</a></li>
+        <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile">stackoverflow</a></li>
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger">linkedin</a></li>
       </ul>
     </section>
   </div>
