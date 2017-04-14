@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -71,7 +71,7 @@
 
         <p><img src="/assets/images/blog/stock/umbrellas-pexels-photo-963fb7db.jpg" /></p>
 
-      <p>In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, <a href="http://clojure.org/sequences">sequences</a>, not featured in the Ruby standard library. A Clojure sequence is an immutable collection that representing the result of an algorithm. Previously, I described how to generate Clojure-like <a href="https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html">sequences in Ruby</a> (without the immutability anyways), including <a href="https://rossta.net/blog/infinite-sequences-in-ruby.html">Pascal&rsquo;s Triangle</a> using <code>Enumerator</code>, which allows us to package up an algorithm as an object that can emit values as any &ldquo;eager&rdquo; collection can, like <code>Array</code> and <code>Hash</code>.</p>
+      <p>In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, <a href="http://clojure.org/sequences">sequences</a>, not featured in the Ruby standard library. A Clojure sequence is an immutable collection that representing the result of an algorithm. Previously, I described how to generate Clojure-like <a href="https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html">sequences in Ruby</a> (without the immutability anyways), including <a href="https://rossta.net/blog/infinite-sequences-in-ruby.html">Pascal&#39;s Triangle</a> using <code>Enumerator</code>, which allows us to package up an algorithm as an object that can emit values as any &quot;eager&quot; collection can, like <code>Array</code> and <code>Hash</code>.</p>
 
 <p>Clojure provides a few functions that can be used to generate sequences,
 including <code>iterate</code>. According to the <a href="https://clojuredocs.org/clojure.core/iterate">docs</a>,</p>
@@ -99,7 +99,7 @@ including <code>iterate</code>. According to the <a href="https://clojuredocs.or
 =&gt; [1, 2, 3, 4, 5]
 </code></pre>
 
-<p>But this solution doesn&rsquo;t generalize to other types of sequences like, for instance,
+<p>But this solution doesn&#39;t generalize to other types of sequences like, for instance,
 generating a sequence of the powers of 2. In the example below, <code>(partial * 2)</code>
 returns a function that multiplies a single argument by 2.</p>
 
@@ -113,18 +113,18 @@ returns a function that multiplies a single argument by 2.</p>
 =&gt; [1, 2, 4, 8, 16, 32, 64]
 </code></pre>
 
-<p>Not very pretty (ok, I admit that&rsquo;s a strawman). But this also is an &ldquo;eagerly&rdquo;
+<p>Not very pretty (ok, I admit that&#39;s a strawman). But this also is an &quot;eagerly&quot;
 generated collection whereas we want something that can be lazily generated to
 get closer to Clojure.</p>
 
 <p>While there may be a number of ways to generate these sequences in Ruby, for this
-exercise, we also want something that has a similar signature to Clojure&rsquo;s <code>iterate</code>,
+exercise, we also want something that has a similar signature to Clojure&#39;s <code>iterate</code>,
 like this:</p>
 
 <pre><code class="ruby">iterate(x, &amp;block)
 </code></pre>
 
-<p>We&rsquo;ll leverage Ruby&rsquo;s method block convention in place of the function, <code>f</code>.
+<p>We&#39;ll leverage Ruby&#39;s method block convention in place of the function, <code>f</code>.
 Usage:</p>
 
 <pre><code class="ruby">irb&gt; iterate(1) { |n| n + 1 }
@@ -133,7 +133,7 @@ irb&gt; iterate(1) { |n| n * 2 }
 =&gt; [1, 2, 4, 8, 16, 32, 64, ...]
 </code></pre>
 
-<p>The two examples now have the same &ldquo;surface area&rdquo; and have a lot in common with the Clojure
+<p>The two examples now have the same &quot;surface area&quot; and have a lot in common with the Clojure
 companions. So how would we implement this?</p>
 
 <p>First a test. By the way, all the code found in the following examples is <a href="https://github.com/rossta/loves-enumerable/tree/master/examples/sequence">on Github</a>.</p>
@@ -158,12 +158,12 @@ class TestSequence &lt; Minitest::Test
 end
 </code></pre>
 
-<p>We&rsquo;re going to implement <code>iterate</code> in a Ruby module called <code>Sequence</code>. Our test
+<p>We&#39;re going to implement <code>iterate</code> in a Ruby module called <code>Sequence</code>. Our test
 for <code>iterate</code> will return an instance of <code>Enumerator</code> (the <code>sequence</code> variable).
 The enumerator allows use to generate the sequence on demand with the call to
 <code>#first</code>.</p>
 
-<p>Here&rsquo;s the implementation:</p>
+<p>Here&#39;s the implementation:</p>
 
 <pre><code class="ruby">module Sequence
   def iterate(arg)
@@ -227,9 +227,9 @@ end
 
 <p>So what? Ok, well, you may be hard pressed to use <code>iterate</code> in your daily work,
 but there is certainly more room to think about data processing as functional
-operations (free of side effects) on sequences (values that can be generated on demand). Something like <code>iterate</code> need not apply to only numbers; you can imagine sequences of letters, time objects, or POROs also being generated. At times, Rubyist are too quick to wrap collections in other classes when simpler, more generalizable &ldquo;functional&rdquo; transforms could suffice.</p>
+operations (free of side effects) on sequences (values that can be generated on demand). Something like <code>iterate</code> need not apply to only numbers; you can imagine sequences of letters, time objects, or POROs also being generated. At times, Rubyist are too quick to wrap collections in other classes when simpler, more generalizable &quot;functional&quot; transforms could suffice.</p>
 
-<p>When I started <a href="http://devpost.com/software/learning-clojure">learning Clojure</a> last year, I got really excited about the functional aspects of Ruby. &ldquo;Wait, I thought everything in Ruby is an object.&rdquo; Yes, but a great thing about Ruby is its <a href="http://yehudakatz.com/2009/07/11/python-decorators-in-ruby/">ability to adopt aspects of other languages</a>. As Piotr Solnica illustrates in <a href="https://speakerdeck.com/solnic/blending-functional-and-oo-programming-in-ruby">his recent talk</a>, blending functional techniques with our OO code can have a lot of benefits including avoidance of side effects and favoring composability. Introducing sequence-generating methods, like we saw here, is just one small idea to help sprinkle a little functional flavor into your Ruby code.</p>
+<p>When I started <a href="http://devpost.com/software/learning-clojure">learning Clojure</a> last year, I got really excited about the functional aspects of Ruby. &quot;Wait, I thought everything in Ruby is an object.&quot; Yes, but a great thing about Ruby is its <a href="http://yehudakatz.com/2009/07/11/python-decorators-in-ruby/">ability to adopt aspects of other languages</a>. As Piotr Solnica illustrates in <a href="https://speakerdeck.com/solnic/blending-functional-and-oo-programming-in-ruby">his recent talk</a>, blending functional techniques with our OO code can have a lot of benefits including avoidance of side effects and favoring composability. Introducing sequence-generating methods, like we saw here, is just one small idea to help sprinkle a little functional flavor into your Ruby code.</p>
 
 
     </article>
@@ -340,7 +340,7 @@ operations (free of side effects) on sequences (values that can be generated on 
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

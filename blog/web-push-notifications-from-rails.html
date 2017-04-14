@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -71,33 +71,45 @@
 
         <p><img src="/assets/images/blog/stock/guitarist-pexels-photo-acfa3247.jpeg" /></p>
 
-      <p><em>Update: Check out <a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html">Using the Push API with VAPID</a> to use the voluntary server identification protocol in place of GCM app settings for sending push notifications to Chrome</em></p>
+      <p><em>Update: Check out <a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html">Using the Push API with VAPID</a> for sending Web Push notifications without needing to configure Google app settings</em></p>
 
-<p>We&rsquo;ve had push notifications in our mobile and desktop apps for sometime. It&rsquo;s now becoming possible on the open web.</p>
+<p>We&#39;ve had push notifications in our mobile and desktop apps for sometime. It&#39;s now becoming possible on the open web.</p>
 
-<p>Web Push notifications are powerful because they allow you to engage with your users <em>even when they&rsquo;re not on your site</em>.</p>
+<p>Web Push notifications are powerful because they allow you to engage with your users <em>even when they&#39;re not on your site</em>.</p>
 
-<p>I&rsquo;m going to share how to I got a working demo of the new <a href="https://www.w3.org/TR/push-api/">Web Push API</a> from a Rails (or any Ruby) web application to push desktop-style notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.</p>
+<p>I&#39;m going to share how to I got a working demo of the new <a href="https://www.w3.org/TR/push-api/">Web Push API</a> from a Rails (or any Ruby) web application to push desktop-style notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.</p>
 
-<p>We&rsquo;ll cover the basics of implementing Push yourself though it&rsquo;s interesting to note that third party services are already stepping in to do some of the technical work for you, like <a href="https://goroost.com/">Roost</a>, <a href="https://pushcrew.com/">PushCrew</a>, or
+<p>We&#39;ll cover the basics of implementing Push yourself though it&#39;s interesting to note that third party services are already stepping in to do some of the technical work for you, like <a href="https://goroost.com/">Roost</a>, <a href="https://pushcrew.com/">PushCrew</a>, or
 <a href="https://onesignal.com/webpush">OneSignal</a>.</p>
 
 <div class="callout panel">
 <p>
-  The <a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html">Apple Push Notification Service</a> has made push notifications available to Safari since 2013. There are some <a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/">nice tutorials</a> for implementing Apple Push on Safari. The status of future support for Web Push in Safari is: &ldquo;maybe?&rdquo;.
+  The <a href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html">Apple Push Notification Service</a> has made push notifications available to Safari since 2013. There are some <a href="http://samuli.hakoniemi.net/how-to-implement-safari-push-notifications-on-your-website/">nice tutorials</a> for implementing Apple Push on Safari. The status of future support for Web Push in Safari is: "maybe?".
 </p>
 </div>
 
-<h2>Why?</h2>
-
-<p>&ldquo;Yeah, Ross, but Rails 5. Action Cable. Web Sockets. Server Sent Events. <code>$MY_FAVORITE_ALTERNATIVE</code>!&rdquo;</p>
+      <h2 id="why-" class="title">
+        <a name="why-" class="anchor" href="#why-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Why?
+      </h2>
+    
+<p>&quot;Yeah, Ross, but Rails 5. Action Cable. Web Sockets. Server Sent Events. <code>$MY_FAVORITE_ALTERNATIVE</code>!&quot;</p>
 
 <p>You might not want to drop all those alternatives just yet, as <a href="http://caniuse.com/#feat=push-api">browser support for Web Push</a> still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.</p>
 
 <p>But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site, something those other solutions cannot provide.</p>
 
-<h2>Demo</h2>
-
+      <h2 id="demo" class="title">
+        <a name="demo" class="anchor" href="#demo">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Demo
+      </h2>
+    
 <p>Want to see it in action first?</p>
 
 <p>I created a demo at the <a href="https://serviceworker-rails.herokuapp.com/push-simple/">Service Worker Rails
@@ -107,12 +119,18 @@ out the <a href="https://github.com/rossta/serviceworker-rails-sandbox">source c
 
 <p><a href="https://serviceworker-rails.herokuapp.com/push-simple/"><img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-1-2927dd61.png" /></a></p>
 
-<p>My demo is mostly informed by Mozilla&rsquo;s <a href="https://serviceworke.rs/">Service Worker
-Cookbook</a>, which I highly recommend if you&rsquo;re looking
+<p>My demo is mostly informed by Mozilla&#39;s <a href="https://serviceworke.rs/">Service Worker
+Cookbook</a>, which I highly recommend if you&#39;re looking
 to learn more about Service Worker.</p>
 
-<h2>Bird&rsquo;s eye view</h2>
-
+      <h2 id="bird-39-s-eye-view" class="title">
+        <a name="bird-39-s-eye-view" class="anchor" href="#bird-39-s-eye-view">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Bird&#39;s eye view
+      </h2>
+    
 <p>Delivering push notifications involve interactions among three parties - the
 user (through her browser), your Rails application, and the Web Push server,
 which for our purposes is either Google or Firefox.</p>
@@ -124,9 +142,9 @@ which for our purposes is either Google or Firefox.</p>
 </blockquote>
 
 <ol>
-<li><p>We&rsquo;ll use JavaScript on the user&rsquo;s current page to <a href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register">register a service worker</a> subscribe to push notifications via the <a href="https://developer.mozilla.org/en-US/docs/Web/API/PushManager/subscribe"><code>pushManager</code></a> interface. The browser will make a request to the Web Push server to a <a href="https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription"><code>PushSubscription</code></a> which will contain a unique endpoint to the Web Push server and authorization keys required for encrypting the push notification request body.</p></li>
-<li><p>We&rsquo;ll post the subscription info to our Rails app to be persisted on the server side.</p></li>
-<li><p>To send a push notification, we&rsquo;ll use the <a href="https://github.com/zaru/webpush"><code>webpush</code></a> Ruby gem triggered from our Rails app. <code>webpush</code> is responsible for sending a proper request to the Web Push server, including <a href="https://developers.google.com/web/updates/2016/03/web-push-encryption?hl=en">encryption of the message payload</a> for delivery.</p></li>
+<li><p>We&#39;ll use JavaScript on the user&#39;s current page to <a href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register">register a service worker</a> subscribe to push notifications via the <a href="https://developer.mozilla.org/en-US/docs/Web/API/PushManager/subscribe"><code>pushManager</code></a> interface. The browser will make a request to the Web Push server to a <a href="https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription"><code>PushSubscription</code></a> which will contain a unique endpoint to the Web Push server and authorization keys required for encrypting the push notification request body.</p></li>
+<li><p>We&#39;ll post the subscription info to our Rails app to be persisted on the server side.</p></li>
+<li><p>To send a push notification, we&#39;ll use the <a href="https://github.com/zaru/webpush"><code>webpush</code></a> Ruby gem triggered from our Rails app. <code>webpush</code> is responsible for sending a proper request to the Web Push server, including <a href="https://developers.google.com/web/updates/2016/03/web-push-encryption?hl=en">encryption of the message payload</a> for delivery.</p></li>
 <li><p>If the request is successful, the Web Push server opens a socket to our
 registered service worker which can listen for <code>&#39;push&#39;</code> events to show a
 notification to the user. Since service workers have a lifecycle independent of
@@ -134,15 +152,21 @@ the web page, they can process events even when the user is not visiting our
 website.</p></li>
 </ol>
 
-<h2>Setup</h2>
-
-<p>At the time of this writing, we&rsquo;ll need to configure our app to use the Google Cloud Messaging platform by registering for application keys. No special authorization is needed to use the Firefox push server as far as I can tell.</p>
+      <h2 id="setup" class="title">
+        <a name="setup" class="anchor" href="#setup">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Setup
+      </h2>
+    
+<p>At the time of this writing, we&#39;ll need to configure our app to use the Google Cloud Messaging platform by registering for application keys. No special authorization is needed to use the Firefox push server as far as I can tell.</p>
 
 <p>Google provides some decent <a href="https://developers.google.com/web/fundamentals/getting-started/push-notifications/step-04?hl=en">instructions for registering your app for push
-notifications</a> which involves some clicking around on the <a href="https://console.developers.google.com">Google developer console</a>. (I&rsquo;ve heard rumors this may not be necessary in the near future.) You&rsquo;ll want to come away with a project id for your app and an API key to make authorized requests to the push server.</p>
+notifications</a> which involves some clicking around on the <a href="https://console.developers.google.com">Google developer console</a>. (I&#39;ve heard rumors this may not be necessary in the near future.) You&#39;ll want to come away with a project id for your app and an API key to make authorized requests to the push server.</p>
 
 <p>Both Firefox and Chrome will expect us to link to a <code>manifest</code> json file to
-provide metadata for push subscriptions and notifications. Here&rsquo;s an example:</p>
+provide metadata for push subscriptions and notifications. Here&#39;s an example:</p>
 
 <pre><code class="json">{
   &quot;name&quot;: &quot;Your app name&quot;,
@@ -167,25 +191,31 @@ as long as you use VAPID details as <a href="/blog/using-the-web-push-api-in-rub
 </p>
 </div>
 
-<p>For now, this file can go in <code>public/manifest.json</code>. In your <code>app/views/layouts/application.html.erb</code> template, you&rsquo;ll also need to
+<p>For now, this file can go in <code>public/manifest.json</code>. In your <code>app/views/layouts/application.html.erb</code> template, you&#39;ll also need to
 add a special <code>&lt;link&gt;</code> tag to the manifest:</p>
 
 <pre><code class="html">&lt;link rel=&quot;manifest&quot; href=&quot;/manifest.json&quot;&gt;
 </code></pre>
 
-<p>Here&rsquo;s the <a href="https://serviceworker-rails.herokuapp.com/push-simple/manifest.json">actual manifest.json</a> for the Service Worker Rails Sandbox <a href="https://serviceworker-rails.herokuapp.com/push-simple/">push demo</a> as another point of reference.</p>
+<p>Here&#39;s the <a href="https://serviceworker-rails.herokuapp.com/push-simple/manifest.json">actual manifest.json</a> for the Service Worker Rails Sandbox <a href="https://serviceworker-rails.herokuapp.com/push-simple/">push demo</a> as another point of reference.</p>
 
-<h2>Subscribe through a service worker</h2>
-
-<p>Yes, Service Worker time! In case you missed it, I&rsquo;m really <a href="/blog/series/service-worker.html">excited about
+      <h2 id="subscribe-through-a-service-worker" class="title">
+        <a name="subscribe-through-a-service-worker" class="anchor" href="#subscribe-through-a-service-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Subscribe through a service worker
+      </h2>
+    
+<p>Yes, Service Worker time! In case you missed it, I&#39;m really <a href="/blog/series/service-worker.html">excited about
 Service Workers</a>. Service Workers have the
 potential to level the playing field of reliability between the web and mobile devices.</p>
 
 <p>Service workers must be deployed a bit differently than JavaScript evaluated in
-the web page context. I&rsquo;ve gone into more detail on how to <a href="/blog/service-worker-on-rails.html">integrate Service
-Worker with Rails</a> previously but for now, here&rsquo;s the quick setup for push.</p>
+the web page context. I&#39;ve gone into more detail on how to <a href="/blog/service-worker-on-rails.html">integrate Service
+Worker with Rails</a> previously but for now, here&#39;s the quick setup for push.</p>
 
-<p>In <code>application.js</code> (or another <code>.js</code> required by <code>application.js</code>) we&rsquo;ll use this following snippet to request registration of
+<p>In <code>application.js</code> (or another <code>.js</code> required by <code>application.js</code>) we&#39;ll use this following snippet to request registration of
 a service worker script.</p>
 
 <pre><code class="javascript">// app/assets/javascripts/application.js
@@ -207,16 +237,28 @@ if (&#39;serviceWorker&#39; in navigator) {
 
 <p>This code registers a service worker on the given scope via <code>navigator.serviceWorker.register</code>. This returns a <a href="#">Promise</a> which will resolve to an instance of <code>ServiceWorkerRegistration</code>. This registration object has a <code>pushManager</code> property which we use to <code>subscribe</code> to the Web Push server. The <code>{ userVisibleOnly: true }</code> parameter is required for us to use notifications.</p>
 
-<h3>Troubleshooting</h3>
+      <h3 id="troubleshooting" class="title">
+        <a name="troubleshooting" class="anchor" href="#troubleshooting">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Troubleshooting
+      </h3>
+    
+<p>I got an error at this stage in Google Chrome the first time: <code>Unable to subscribe to push DOMException: Registration failed - push service error</code>. Turns out, the <code>pushmanage.subscribe</code> request can fail if you haven&#39;t properly configured your <code>manifest.json</code> with a valid Google Cloud Message sender id.</p>
 
-<p>I got an error at this stage in Google Chrome the first time: <code>Unable to subscribe to push DOMException: Registration failed - push service error</code>. Turns out, the <code>pushmanage.subscribe</code> request can fail if you haven&rsquo;t properly configured your <code>manifest.json</code> with a valid Google Cloud Message sender id.</p>
+<p>Also, if the <code>pushManager</code> can&#39;t find the <code>manifest.json</code> via the link tag, or
+if it&#39;s not included in the page altogether, you may see another error: <code>Unable to subscribe to push DOMException: Registration failed - manifest empty or missing</code>, so you&#39;ll need to get that working to proceed.</p>
 
-<p>Also, if the <code>pushManager</code> can&rsquo;t find the <code>manifest.json</code> via the link tag, or
-if it&rsquo;s not included in the page altogether, you may see another error: <code>Unable to subscribe to push DOMException: Registration failed - manifest empty or missing</code>, so you&rsquo;ll need to get that working to proceed.</p>
-
-<h3>The Service Worker</h3>
-
-<p>In a separate file, <code>app/assets/javascripts/serviceworker.js</code>, we&rsquo;ll have our service worker show notifications when the <code>&#39;push&#39;</code> event is received:</p>
+      <h3 id="the-service-worker" class="title">
+        <a name="the-service-worker" class="anchor" href="#the-service-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The Service Worker
+      </h3>
+    
+<p>In a separate file, <code>app/assets/javascripts/serviceworker.js</code>, we&#39;ll have our service worker show notifications when the <code>&#39;push&#39;</code> event is received:</p>
 
 <pre><code class="javascript">function onPush(event) {
   var title = (event.data &amp;&amp; event.data.text()) || &quot;Yay a message&quot;;
@@ -237,14 +279,20 @@ self.addEventListener(&quot;push&quot;, onPush);
 path, we either need to copy it to our <code>public/</code> directory , or, even better, we
 can use the <a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code> (Star it on GitHub!)</a> gem which will allow us to make use of both the asset pipeline and custom routing features we need.</p>
 
-<h3>Rails setup</h3>
-
+      <h3 id="rails-setup" class="title">
+        <a name="rails-setup" class="anchor" href="#rails-setup">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Rails setup
+      </h3>
+    
 <pre><code class="ruby"># Gemfile
 
 gem &#39;serviceworker-rails&#39;
 </code></pre>
 
-<p>To routes requests from <code>/serviceworker.js</code> to our JavaScript file in the asset pipeline, we&rsquo;ll configure the service worker rails middleware as follows:</p>
+<p>To routes requests from <code>/serviceworker.js</code> to our JavaScript file in the asset pipeline, we&#39;ll configure the service worker rails middleware as follows:</p>
 
 <pre><code class="ruby"># config/initializers/serviceworker.rb
 
@@ -271,9 +319,15 @@ Rails.application.configure do
 end
 </code></pre>
 
-<h2>Persist the subscription</h2>
-
-<p>Let&rsquo;s set up a controller action to serialize the subscription into the visitor&rsquo;s session though any persistence method that will allow us to retrieve the subscription(s) for a given user will do.</p>
+      <h2 id="persist-the-subscription" class="title">
+        <a name="persist-the-subscription" class="anchor" href="#persist-the-subscription">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Persist the subscription
+      </h2>
+    
+<p>Let&#39;s set up a controller action to serialize the subscription into the visitor&#39;s session though any persistence method that will allow us to retrieve the subscription(s) for a given user will do.</p>
 
 <p>The push subscription has important pieces of data: the endpoint and a set of keys: p256dh and auth. We need use this data in requests from our rails app to the push server.</p>
 
@@ -316,9 +370,15 @@ class SubscriptionsController &lt; ApplicationController
 end
 </code></pre>
 
-<h2>Push it</h2>
-
-<p>Now that we have a subscription, we can send a push notification. For this, we&rsquo;ll use the <code>webpush</code> gem:</p>
+      <h2 id="push-it" class="title">
+        <a name="push-it" class="anchor" href="#push-it">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Push it
+      </h2>
+    
+<p>Now that we have a subscription, we can send a push notification. For this, we&#39;ll use the <code>webpush</code> gem:</p>
 
 <pre><code class="ruby"># Gemfile
 
@@ -328,7 +388,7 @@ gem &quot;webpush&quot;
 <p>With the subscription info, we have what we need to send a message to a specific
 user that will get encrypted in passing over the wire.</p>
 
-<p>Here&rsquo;s a typical usage:</p>
+<p>Here&#39;s a typical usage:</p>
 
 <pre><code class="ruby">Webpush.payload_send(
   message: &quot;Hello World!&quot;,
@@ -339,7 +399,7 @@ user that will get encrypted in passing over the wire.</p>
 )
 </code></pre>
 
-<p>As a proof of concept, we&rsquo;ll create an endpoint to trigger a push notification directly from a user interaction in the browser.</p>
+<p>As a proof of concept, we&#39;ll create an endpoint to trigger a push notification directly from a user interaction in the browser.</p>
 
 <pre><code class="html">&lt;!-- a view --&gt;
 &lt;button class=&quot;js-push-button&quot;&gt;Send a message&lt;/button&gt;
@@ -353,7 +413,7 @@ user that will get encrypted in passing over the wire.</p>
 &lt;/script&gt;
 </code></pre>
 
-<p>Start with a button to trigger a <code>POST</code> to a new <code>/push</code> endpoint in our app. In a real Rails app, you&rsquo;d probably deliver push notifications from background jobs in response to other events in the system.</p>
+<p>Start with a button to trigger a <code>POST</code> to a new <code>/push</code> endpoint in our app. In a real Rails app, you&#39;d probably deliver push notifications from background jobs in response to other events in the system.</p>
 
 <pre><code># config/routes.rb
 
@@ -403,8 +463,14 @@ decide whether to include it in the request.</p>
 
 <p><img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-2-b270f8bc.jpg" /></p>
 
-<h2>Unsubscribing</h2>
-
+      <h2 id="unsubscribing" class="title">
+        <a name="unsubscribing" class="anchor" href="#unsubscribing">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Unsubscribing
+      </h2>
+    
 <p>We can programmatically turn off notifications by calling
 <code>PushSubscription#unsubscribe</code>. This could be done in a callback to a click handler, for example:</p>
 
@@ -432,12 +498,18 @@ decide whether to include it in the request.</p>
 $(&quot;.js-unsubscribe-button&quot;).on(&quot;click&quot;, unsubscribe)
 </code></pre>
 
-<p>You&rsquo;d also want to send a request to your Rails app to delete the persisted
+<p>You&#39;d also want to send a request to your Rails app to delete the persisted
 subscription data from the backend which will no longer be valid on the Web Push
 server. That exercise is left up to you!</p>
 
-<h2>Wrap up</h2>
-
+      <h2 id="wrap-up" class="title">
+        <a name="wrap-up" class="anchor" href="#wrap-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Wrap up
+      </h2>
+    
 <p>This took quite a bit of setup though not nearly as much as getting <a href="https://developer.apple.com/notifications/safari-push-notifications/">Apple
 Push Notifications to work in Safari</a>. Overall, the Web Push API is an interesting step for the web in terms of feature parity with mobile.</p>
 
@@ -552,7 +624,7 @@ Push Notifications to work in Safari</a>. Overall, the Web Push API is an intere
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

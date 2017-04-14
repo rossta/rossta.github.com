@@ -19,7 +19,121 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2010-01-04-hello-world.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010-02-17-just-in-time-css.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010-05-17-mott-hall-iii-school-career-day.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010-07-20-delegate-and-custom-events.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010-09-08-step-up-to-the-soapbox.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010-12-25-heuristics.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2010-12-27-behavior-driven-event-driven-eventmachine-rspec.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2011-02-26-opt-in-xss-protection-for-rails-3-upgrade.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2011-06-23-lean-startup-meetup-ignited.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2011-09-30-when-your-fat-models-need-to-go-on-a-diet.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2011-10-03-when-your-fat-models-need-to-go-on-a-diet-part-2.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/2011-12-22-how-to-test-features-with-rails-caching-in-rspec.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2012-02-09-presentation-intro-to-javascript-mvc.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2013-03-01-create-and-deploy-an-ember-app-in-5-minutes.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2013-03-25-why-i-ditched-wordpress-for-github.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2013-03-26-configuring-rack-test-driver-in-capybara-2.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2013-08-26-featured-post-for-speed-awareness-month.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2014-02-01-automatic-backups-to-amazon-s3-are-easy.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2014-02-05-ruby-you-autocomplete-me.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2014-02-25-three-steps-to-effective-code-reviews.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -139,6 +253,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2016-05-13-web-push-notifications-from-rails.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/2016-08-26-quiet-assets-in-rails-5.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -157,145 +277,13 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/2016-10-23-why-i-am-betting-on-elixir.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010-01-04-hello-world.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010-02-17-just-in-time-css.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010-05-17-mott-hall-iii-school-career-day.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010-07-20-delegate-and-custom-events.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010-09-08-step-up-to-the-soapbox.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010-12-25-heuristics.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2010-12-27-behavior-driven-event-driven-eventmachine-rspec.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2011-02-26-opt-in-xss-protection-for-rails-3-upgrade.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2011-06-23-lean-startup-meetup-ignited.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2011-09-30-when-your-fat-models-need-to-go-on-a-diet.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2011-10-03-when-your-fat-models-need-to-go-on-a-diet-part-2.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2012-02-09-presentation-intro-to-javascript-mvc.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2013-03-01-create-and-deploy-an-ember-app-in-5-minutes.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2013-03-25-why-i-ditched-wordpress-for-github.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2013-03-26-configuring-rack-test-driver-in-capybara-2.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2013-08-26-featured-post-for-speed-awareness-month.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2014-02-01-automatic-backups-to-amazon-s3-are-easy.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2014-02-05-ruby-you-autocomplete-me.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2014-02-25-three-steps-to-effective-code-reviews.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2015-12-02-use-inverse_of.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2016-05-13-web-push-notifications-from-rails.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://rossta.net/blog/2016-10-21-using-the-web-push-api-with-vapid.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/2016-11-09-make-your-rails-app-a-progressive-web-app.html</loc>
+    <loc>https://rossta.net/blog/2016-10-23-why-i-am-betting-on-elixir.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -308,6 +296,18 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/index.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2015-12-02-use-inverse_of.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2016-11-09-make-your-rails-app-a-progressive-web-app.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -391,6 +391,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/projects/2016-09-20-serviceworker-rails.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/projects/index.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -433,6 +439,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/talks/2016-11-18-what-i-look-for-in-a-junior-developer.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/talks/index.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -457,25 +469,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/tags/ruby.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/tags/rails.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/tags/rspec.html</loc>
-    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/tags/clojure.html</loc>
+    <loc>https://rossta.net/blog/tags/css.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -487,19 +481,19 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/tags/node.html</loc>
+    <loc>https://rossta.net/blog/tags/ruby.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/tags/elixir.html</loc>
+    <loc>https://rossta.net/blog/tags/rspec.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/tags/css.html</loc>
+    <loc>https://rossta.net/blog/tags/rails.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -524,6 +518,24 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/process.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/tags/clojure.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/tags/node.html</loc>
+    <lastmod>2017-04-14T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/tags/elixir.html</loc>
     <lastmod>2017-04-14T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -71,7 +71,7 @@
 
         <p><img src="/assets/images/blog/stock/jellyfish-pexels-photo-15935942.jpeg" /></p>
 
-      <p>Let&rsquo;s say you&rsquo;re building a Ruby app and your team has extracted one or more
+      <p>Let&#39;s say you&#39;re building a Ruby app and your team has extracted one or more
 gems referenced in your Gemfile, such as your custom Trello API client, <a href="https://github.com/rossta/tacokit.rb">Tacokit.rb</a>.</p>
 
 <pre><code class="ruby"># Gemfile
@@ -88,24 +88,30 @@ local checkout of the <code>tacokit</code> gem in another directory in your lapt
 
 <p>You add some code to the gem, but now you want to test the changes in your app. How do you do that?</p>
 
-<p>According to <em><a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile#answer-4488110">the most popular answer (and accepted) answer</a></em> to the question, <a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile">&ldquo;How can I specify a local gem in my Gemfile?&rdquo;</a>, we should do the following:</p>
+<p>According to <em><a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile#answer-4488110">the most popular answer (and accepted) answer</a></em> to the question, <a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile">&quot;How can I specify a local gem in my Gemfile?&quot;</a>, we should do the following:</p>
 
 <pre><code class="ruby">gem &quot;tacokit&quot;, path: &quot;/path/to/tacokit&quot;
 </code></pre>
 
-<p>Here&rsquo;s my take: <strong>avoid this recommendation</strong></p>
+<p>Here&#39;s my take: <strong>avoid this recommendation</strong></p>
 
-<p>&hellip;especially if you work on a team and/or deploy this code to remote servers.</p>
+<p>...especially if you work on a team and/or deploy this code to remote servers.</p>
 
-<h2>WAT</h2>
-
+      <h2 id="wat" class="title">
+        <a name="wat" class="anchor" href="#wat">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        WAT
+      </h2>
+    
 <p>Technically, it does work. Run <code>$ bundle update</code>, restart the app, and - boom! - our changes in
 the local <code>tacokit</code> checkout are showing up as expected.</p>
 
 <p>Then the trouble begins.</p>
 
 <p>We push our app changes and deploy to the staging server to test them out
-in the shared environment and - wait a minute - the app won&rsquo;t even start.</p>
+in the shared environment and - wait a minute - the app won&#39;t even start.</p>
 
 <pre><code class="sh">$ bundle
 The path `/Users/ross/does/not/exist` does not exist.
@@ -113,35 +119,47 @@ The path `/Users/ross/does/not/exist` does not exist.
 
 <p>Oops! We forgot to remove the <code>:path</code> reference in the <code>Gemfile</code>.</p>
 
-<p>Let&rsquo;s fix that&hellip; we remove the <code>:path</code> reference, push, and redeploy. The app
-restarts fine. But while testing the feature, we start getting 500 errors. This wasn&rsquo;t happening locally.</p>
+<p>Let&#39;s fix that... we remove the <code>:path</code> reference, push, and redeploy. The app
+restarts fine. But while testing the feature, we start getting 500 errors. This wasn&#39;t happening locally.</p>
 
 <blockquote>
-<p>&ldquo;But it worked on my machine!&rdquo; - <em>every developer ever</em></p>
+<p>&quot;But it worked on my machine!&quot; - <em>every developer ever</em></p>
 </blockquote>
 
-<p>The Rails logs reveal we have a bunch of undefined method errors coming from calls to <code>Tacokit</code>. That&rsquo;s right, we forgot another key step in this workflow: pushing our local <code>Tacokit</code> changes to the remote!</p>
+<p>The Rails logs reveal we have a bunch of undefined method errors coming from calls to <code>Tacokit</code>. That&#39;s right, we forgot another key step in this workflow: pushing our local <code>Tacokit</code> changes to the remote!</p>
 
-<p>OK, after we&rsquo;ve done that and redeployed the app, we&rsquo;re still getting 500 errors.</p>
+<p>OK, after we&#39;ve done that and redeployed the app, we&#39;re still getting 500 errors.</p>
 
-<p>D&#39;oh! We were working on a <em>branch</em> of <code>tacokit</code> but we reference it in our app&rsquo;s <code>Gemfile</code>.</p>
+<p>D&#39;oh! We were working on a <em>branch</em> of <code>tacokit</code> but we reference it in our app&#39;s <code>Gemfile</code>.</p>
 
-<h2>Taking a step back</h2>
+      <h2 id="taking-a-step-back" class="title">
+        <a name="taking-a-step-back" class="anchor" href="#taking-a-step-back">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Taking a step back
+      </h2>
+    
+<p>Good thing we weren&#39;t pushing that app feature to production. We would have been wise to run the tests on our CI server first where we would have seen the same errors (assuming we had the right tests... and a CI server).</p>
 
-<p>Good thing we weren&rsquo;t pushing that app feature to production. We would have been wise to run the tests on our CI server first where we would have seen the same errors (assuming we had the right tests&hellip; and a CI server).</p>
+<p>Using the <code>:path</code> often means pointing to a location that only exists on our local machine. Every time we want to develop against the local <code>tacokit</code> gem, we have to remember to edit the <code>Gemfile</code> to remove the option so we don&#39;t screw up our teammates or break the build. We also can&#39;t forget to point to correct branch.</p>
 
-<p>Using the <code>:path</code> often means pointing to a location that only exists on our local machine. Every time we want to develop against the local <code>tacokit</code> gem, we have to remember to edit the <code>Gemfile</code> to remove the option so we don&rsquo;t screw up our teammates or break the build. We also can&rsquo;t forget to point to correct branch.</p>
+<p>This workflow is no good because we&#39;re human and humans tend to forget to do things.</p>
 
-<p>This workflow is no good because we&rsquo;re human and humans tend to forget to do things.</p>
-
-<h2>&ldquo;bundle config local&rdquo; to the rescue</h2>
-
+      <h2 id="-quot-bundle-config-local-quot-to-the-rescue" class="title">
+        <a name="-quot-bundle-config-local-quot-to-the-rescue" class="anchor" href="#-quot-bundle-config-local-quot-to-the-rescue">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        &quot;bundle config local&quot; to the rescue
+      </h2>
+    
 <p>Buried deep in the Bundler docs is a better solution for <a href="http://bundler.io/git.html#local">working with local git repo</a>: the <code>bundle config local</code> command. Instead of specifying the <code>:path</code> option, we can run the following on command line:</p>
 
 <pre><code class="sh">$ bundle config local.tacokit /path/to/tacokit
 </code></pre>
 
-<p>Here we instruct Bundler to look in a local resource by modifying our local Bundler configuration. That&rsquo;s the one that lives in
+<p>Here we instruct Bundler to look in a local resource by modifying our local Bundler configuration. That&#39;s the one that lives in
 <code>.bundle/config</code> outside of version control.</p>
 
 <p><strong>No more editing shared code for local development settings.</strong></p>
@@ -168,36 +186,48 @@ Set for your local app (/Users/rossta/path/to/app/.bundle/config): &quot;/Users/
 <pre><code class="ruby">gem &quot;tacokit&quot;, github: &quot;rossta/tacokit&quot;, branch: &quot;master&quot;
 </code></pre>
 
-<p>Bundler will abort if the local gem branch doesn&rsquo;t match the one in the <code>Gemfile</code> and checks that the sha in Gemfile.lock exists in the local repository.</p>
+<p>Bundler will abort if the local gem branch doesn&#39;t match the one in the <code>Gemfile</code> and checks that the sha in Gemfile.lock exists in the local repository.</p>
 
 <p><strong>This way we ensure our Gemfile.lock contains a valid reference to our local gem.</strong></p>
 
-<p>We don&rsquo;t get these assertions when using the <code>:path</code> option.</p>
+<p>We don&#39;t get these assertions when using the <code>:path</code> option.</p>
 
-<p>It&rsquo;s easy to remove the local config after we don&rsquo;t need it:</p>
+<p>It&#39;s easy to remove the local config after we don&#39;t need it:</p>
 
 <p><code>bundle config --delete local.YOUR_GEM_NAME</code></p>
 
-<h2>Caveats</h2>
-
+      <h2 id="caveats" class="title">
+        <a name="caveats" class="anchor" href="#caveats">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Caveats
+      </h2>
+    
 <p>As with the <code>:path</code> option, we still need to remember to push our
 local gem changes to the remote repository when using <code>bundle config local</code>.</p>
 
 <p>I should also mention that a good use case for using <code>:path</code> instead of <code>bundle
 config local</code> it when the local gem is in a subdirectory relative to your app,
 like when using <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">git submodules</a>.
-I don&rsquo;t often see this in practice, but there are valid reasons for doing so.
+I don&#39;t often see this in practice, but there are valid reasons for doing so.
 The main point here is that the Gemfile options work for all systems where the
 repository is bundled.</p>
 
-<p>In general, I&rsquo;d encourage using either approach sparingly for gems that your
-team doesn&rsquo;t own as it&rsquo;s typically best to stick the official releases for
-active repositories. In my experience, it&rsquo;s most common to develop against local gems for
+<p>In general, I&#39;d encourage using either approach sparingly for gems that your
+team doesn&#39;t own as it&#39;s typically best to stick the official releases for
+active repositories. In my experience, it&#39;s most common to develop against local gems for
 projects that your team <em>does</em> own, so <code>bundle config local</code> will ensure your
 co-workers know where to look to verify code dependencies.</p>
 
-<h2>Don&rsquo;t use :path, use bundle config local instead</h2>
-
+      <h2 id="don-39-t-use-path-use-bundle-config-local-instead" class="title">
+        <a name="don-39-t-use-path-use-bundle-config-local-instead" class="anchor" href="#don-39-t-use-path-use-bundle-config-local-instead">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Don&#39;t use :path, use bundle config local instead
+      </h2>
+    
 <p>Though convenient, using the <code>:path</code> option in our <code>Gemfile</code> to point to a local
 gem elsewhere on our machine sets us up for three potential problems without automated prevention:</p>
 
@@ -207,14 +237,14 @@ gem elsewhere on our machine sets us up for three potential problems without aut
 <li>Failing to point to an existing git reference</li>
 </ul>
 
-<p>Forget the <code>:path</code> option and you&rsquo;ll never forget ^^this stuff^^ again.</p>
+<p>Forget the <code>:path</code> option and you&#39;ll never forget ^^this stuff^^ again.</p>
 
 <p>Just use this command:</p>
 
 <pre><code class="sh">bundle config local.YOUR_GEM_NAME`
 </code></pre>
 
-<p>And don&rsquo;t believe everything you read on StackOverflow.</p>
+<p>And don&#39;t believe everything you read on StackOverflow.</p>
 
 
     </article>
@@ -324,7 +354,7 @@ gem elsewhere on our machine sets us up for three potential problems without aut
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

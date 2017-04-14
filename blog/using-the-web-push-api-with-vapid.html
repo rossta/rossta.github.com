@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -74,19 +74,25 @@
       <p>Push messages from mobile and desktop browsers are <a href="http://caniuse.com/#feat=push-api">now a thing</a> on the open web.</p>
 
 <p>Why use the Push API? It allows us to use free, third-party services to notify our users
-of events, even when they&rsquo;re not actively engaged with our site. It&rsquo;s
+of events, even when they&#39;re not actively engaged with our site. It&#39;s
 not meant to replace other methods of pushing data to clients, like
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">WebSockets</a> or <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events">Server Sent Events</a>, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&rsquo;s
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">WebSockets</a> or <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events">Server Sent Events</a>, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&#39;s
 common place on our smartphones from installed apps is now possible from the browser.</p>
 
 <p><a href="https://serviceworker-rails.herokuapp.com/push-simple/"><img alt="Push message in Chrome" src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-3-36a167ad.jpg" /></a></p>
 
-<p>Though only supportedin Chrome and Firefox on the desktop and in Chrome on Android at the time of this writing, it&rsquo;ll be more widespread soon enough. While I previously <a href="/blog/web-push-notifications-from-rails.html">wrote about this topic</a>, there have been recent changes in the Chrome implementation to make the API consistent with Firefox, which we&rsquo;ll describe here.</p>
+<p>Though only supported in Chrome and Firefox on the desktop and in Chrome on Android at the time of this writing, it&#39;ll be more widespread soon enough. While I previously <a href="/blog/web-push-notifications-from-rails.html">wrote about this topic</a>, there have been recent changes in the Chrome implementation to make the API consistent with Firefox, which we&#39;ll describe here.</p>
 
-<p>In this post, we&rsquo;ll walk through setting up a Ruby or Node.js web application to use the Push API with the <a href="https://tools.ietf.org/html/draft-ietf-webpush-vapid-01">Voluntary Application server Identification (VAPID)</a>. Use of VAPID for push requests is optional, but primarily a security benefit. Application servers use VAPID to identify themselves to the push servers so push subscriptions can be properly restricted to their origin app servers. In other words, VAPID could theoretically prevent an attacker from stealing a user <code>PushSubscription</code> and sending push messages to that recipient from another server. Down the road, push services may be able to provide analytics and debugging assistance for app servers using the VAPID protocol. Another benefit: in Chrome, it is no longer necessary to register our web apps through the Google Developer Console and pass around Google app credentials in web push requests.</p>
+<p>In this post, we&#39;ll walk through setting up a Ruby or Node.js web application to use the Push API with the <a href="https://tools.ietf.org/html/draft-ietf-webpush-vapid-01">Voluntary Application server Identification (VAPID)</a>. Use of VAPID for push requests is optional, but primarily a security benefit. Application servers use VAPID to identify themselves to the push servers so push subscriptions can be properly restricted to their origin app servers. In other words, VAPID could theoretically prevent an attacker from stealing a user <code>PushSubscription</code> and sending push messages to that recipient from another server. Down the road, push services may be able to provide analytics and debugging assistance for app servers using the VAPID protocol. Another benefit: in Chrome, it is no longer necessary to register our web apps through the Google Developer Console and pass around Google app credentials in web push requests.</p>
 
-<h2>Overview</h2>
-
+      <h2 id="overview" class="title">
+        <a name="overview" class="anchor" href="#overview">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Overview
+      </h2>
+    
 <p>There are three parties involved in delivering a push message.</p>
 
 <ul>
@@ -100,13 +106,19 @@ common place on our smartphones from installed apps is now possible from the bro
 <ol>
 <li>Your application server has generated a set of VAPID keys that will be used to sign Push API requests. This is a one-time step (at least until we decide to reset the keys).</li>
 <li>A <code>manifest.json</code> file, linked from a page on our website, identifies our app settings.</li>
-<li>In the user&rsquo;s web browser, a service worker script is installed and activated. The <code>pushManager</code> property of the <code>ServiceWorkerRegistration</code> is subscribed to push events with our VAPID public key, with creates a <code>subscription</code> JSON object on the client side.</li>
+<li>In the user&#39;s web browser, a service worker script is installed and activated. The <code>pushManager</code> property of the <code>ServiceWorkerRegistration</code> is subscribed to push events with our VAPID public key, with creates a <code>subscription</code> JSON object on the client side.</li>
 <li>Your server makes an API request to a push server (likely using a server-side library) to send a notification with the <code>subscription</code> obtained from the client and an optional payload (the message).</li>
 <li>Your service worker is set up to receive <code>&#39;push&#39;</code> events. To trigger a desktop notification, the user has accepted the prompt to receive notifications from our site.</li>
 </ol>
 
-<h2>Generating VAPID keys</h2>
-
+      <h2 id="generating-vapid-keys" class="title">
+        <a name="generating-vapid-keys" class="anchor" href="#generating-vapid-keys">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Generating VAPID keys
+      </h2>
+    
 <p>To take advantage of the VAPID protocol, we would generate a public/private VAPID key pair to store on our server to be used for all user subscriptions.</p>
 
 <p>In Ruby, we can use the <code>webpush</code> gem to generate a VAPID key that has both a <code>public_key</code> and <code>private_key</code> attribute to be saved on the server side.</p>
@@ -149,11 +161,17 @@ vapidKeys.privateKey
 </code></pre>
 
 <p>The keys returned will both be Base64-encoded byte strings. Only the public key
-will be shared, both with the user&rsquo;s browser and the push server as we&rsquo;ll see
+will be shared, both with the user&#39;s browser and the push server as we&#39;ll see
 later.</p>
 
-<h2>Declaring manifest.json</h2>
-
+      <h2 id="declaring-manifest-json" class="title">
+        <a name="declaring-manifest-json" class="anchor" href="#declaring-manifest-json">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Declaring manifest.json
+      </h2>
+    
 <p>Add a <code>manifest.json</code> file served at the scope of our app (or above), like at the root to describe our client application for use with the Push API.</p>
 
 <pre><code class="javascript">{
@@ -176,9 +194,15 @@ later.</p>
 &lt;link rel=&quot;manifest&quot; href=&quot;/manifest.json&quot; /&gt;
 </code></pre>
 
-<h2>Installing a service worker</h2>
-
-<p>Your application javascript must register a service worker script at an appropriate scope (we&rsquo;re sticking with the root).</p>
+      <h2 id="installing-a-service-worker" class="title">
+        <a name="installing-a-service-worker" class="anchor" href="#installing-a-service-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Installing a service worker
+      </h2>
+    
+<p>Your application javascript must register a service worker script at an appropriate scope (we&#39;re sticking with the root).</p>
 
 <pre><code class="javascript">// application.js
 // Register the serviceWorker script at /serviceworker.js from our server if supported
@@ -196,8 +220,14 @@ else {
 
 <p>For Rails developers, we may want to look at the <a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code> gem</a> and this <a href="https://rossta.net/blog/service-worker-on-rails.html">helpful tutorial</a> to integrate service worker scripts with the Rails asset pipeline.</p>
 
-<h2>Subscribing to push notifications</h2>
-
+      <h2 id="subscribing-to-push-notifications" class="title">
+        <a name="subscribing-to-push-notifications" class="anchor" href="#subscribing-to-push-notifications">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Subscribing to push notifications
+      </h2>
+    
 <p>The VAPID public key we generated earlier is made available to the client as a <code>Uint8Array</code>. To do this, one way would be to expose the urlsafe-decoded bytes from Ruby to JavaScript when rendering the HTML template.</p>
 
 <p>In Ruby, we might embed the key as raw bytes from the application <code>ENV</code> or some other application settings mechanism into an HTML template with help from the <code>Base64</code> module in the standard library. Global variables are used here for simplicity.</p>
@@ -239,10 +269,16 @@ navigator.serviceWorker.ready.then((serviceWorkerRegistration) =&gt; {
 });
 </code></pre>
 
-<h2>Triggering a web push notification</h2>
-
-<p>The web push library we&rsquo;re using on the backend will be responsible for
-packaging up the request to the subscription&rsquo;s endpoint and handling encryption, so the user&rsquo;s push subscription must be sent from the client to the application server at some point.</p>
+      <h2 id="triggering-a-web-push-notification" class="title">
+        <a name="triggering-a-web-push-notification" class="anchor" href="#triggering-a-web-push-notification">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Triggering a web push notification
+      </h2>
+    
+<p>The web push library we&#39;re using on the backend will be responsible for
+packaging up the request to the subscription&#39;s endpoint and handling encryption, so the user&#39;s push subscription must be sent from the client to the application server at some point.</p>
 
 <p>In the example below, we send the JSON generated subscription object to our backend with a message when a button on the page is clicked.</p>
 
@@ -263,8 +299,8 @@ $(&#39;.webpush-button&#39;).on(&#39;click&#39;, (e) =&gt; {
 
 <p>The call to <code>pushManager.getSubscription()</code> returns a Promise that provides the
 <code>PushSubscription</code> instance with all the information the push service needs to
-send a push message to this user&rsquo;s browser. This includes an <code>endpoint</code>, the URL
-on the push server where we&rsquo;ll send the push request, and a pair of <code>keys</code>
+send a push message to this user&#39;s browser. This includes an <code>endpoint</code>, the URL
+on the push server where we&#39;ll send the push request, and a pair of <code>keys</code>
 labelled as <code>p256dh</code> and <code>auth</code> required to encrypt the push message payload. If interested to learn more about how this encryption works, check out this detailed summary on <a href="https://developers.google.com/web/updates/2016/03/web-push-encryption">web push payload encryption</a>.</p>
 
 <pre><code class="javascript">// subscription.toJSON();
@@ -329,8 +365,14 @@ app.post(&#39;/push&#39;, function(request, response) {
 });
 </code></pre>
 
-<h2>Receiving the push event</h2>
-
+      <h2 id="receiving-the-push-event" class="title">
+        <a name="receiving-the-push-event" class="anchor" href="#receiving-the-push-event">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Receiving the push event
+      </h2>
+    
 <p>Your <code>/serviceworker.js</code> script can respond to <code>&#39;push&#39;</code> events to trigger desktop notifications by calling <code>showNotification</code> on the <code>registration</code> property.</p>
 
 <pre><code class="javascript">// serviceworker.js
@@ -375,7 +417,7 @@ else if (Notification.permission !== &#39;denied&#39;) {
 
 <p>After all that setup, we should see a browser notification triggered via the Push API.</p>
 
-<p>As this is still an emerging technology, things are rapidly changing. I&rsquo;d be
+<p>As this is still an emerging technology, things are rapidly changing. I&#39;d be
 interested to hear how things are working out for folks integrating web push
 into their web apps.</p>
 
@@ -488,7 +530,7 @@ into their web apps.</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

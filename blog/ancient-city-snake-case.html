@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -73,29 +73,35 @@
 
       <p>Last week <a href="#">I spoke</a> at <a href="#">Ancient City Ruby Conference</a> where the organizers encouraged people to participate in a Ruby programming challenge called <a href="http://www.ancientcityruby.com/snake_case/">Snake Case</a>. I benchmarked a number of different ways to solve the challenge in Ruby and present the results here.</p>
 
-<p>Here&rsquo;s the challenge:</p>
+<p>Here&#39;s the challenge:</p>
 
 <blockquote>
 <p>THE ANCIENT CITY RUBY 2016 PROGRAMMING CHALLENGE</p>
 
-<p>You&rsquo;ve just arrived in sunny St. Augustine, and find yourself amazed by the visionary civic planning that would result in the area in which you now stand: a street grid exactly 10 blocks square.</p>
+<p>You&#39;ve just arrived in sunny St. Augustine, and find yourself amazed by the visionary civic planning that would result in the area in which you now stand: a street grid exactly 10 blocks square.</p>
 
-<p>You&rsquo;re in the northwest corner of this 10 by 10 block area, and would like to take a scenic walk to the southeast corner, while only ever moving south or east.</p>
+<p>You&#39;re in the northwest corner of this 10 by 10 block area, and would like to take a scenic walk to the southeast corner, while only ever moving south or east.</p>
 
-<p>As you begin walking, you wonder to yourself, &ldquo;how many different paths could I take from this northwest corner to the southeast corner?&rdquo;</p>
+<p>As you begin walking, you wonder to yourself, &quot;how many different paths could I take from this northwest corner to the southeast corner?&quot;</p>
 
 <p>You quickly note that if the downtown area were only a 2 block by 2 block grid, there would be 6 distinct paths from one corner to the other:</p>
 </blockquote>
 
 <p><img src="/assets/images/blog/snake-case-blocks-20fdedd0.png" /></p>
 
-<p>It&rsquo;s worth nothing that the intent of the problem was to calculate the correct
-number of &ldquo;optimal&rdquo; paths along the blocks, so a meandering path does not count.
+<p>It&#39;s worth nothing that the intent of the problem was to calculate the correct
+number of &quot;optimal&quot; paths along the blocks, so a meandering path does not count.
 Starting at the northwest corner of a 10x10 grid, there will be 20 moves in
 any valid path: 10 moves south and 10 moves east.</p>
 
-<h3>Recursion</h3>
-
+      <h3 id="recursion" class="title">
+        <a name="recursion" class="anchor" href="#recursion">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Recursion
+      </h3>
+    
 <p>How about a recursive solution? Consider that for any location <code>h, w</code> on the grid, there are either one or two incoming paths oriented in the south or west direction, one coming from neighbor <code>h-1, w</code> and the other coming from neighbor <code>h, w-1</code>.</p>
 
 <p>This means that the solution for the given location is the sum of two subproblems: the number of paths arriving at location <code>h-1, w</code> plus the number of paths arriving at location <code>h, w-1</code>. In pseudocode:</p>
@@ -103,8 +109,8 @@ any valid path: 10 moves south and 10 moves east.</p>
 <pre><code class="ruby">path_count(h, w) = path_count(h-1, w) + path_count(h, w-1)
 </code></pre>
 
-<p>The exception to this rule is if either <code>h</code> or <code>w</code> are on the &ldquo;edges&rdquo;, meaning the
-value is 0. In this case, there&rsquo;s only 1 path that can reach these locations.</p>
+<p>The exception to this rule is if either <code>h</code> or <code>w</code> are on the &quot;edges&quot;, meaning the
+value is 0. In this case, there&#39;s only 1 path that can reach these locations.</p>
 
 <p>Now we have enough information to construct a recursive solution to the problem:</p>
 
@@ -122,14 +128,20 @@ end
 # =&gt; 184756
 </code></pre>
 
-<p>This works!  Let&rsquo;s consider some alternative approaches.</p>
+<p>This works!  Let&#39;s consider some alternative approaches.</p>
 
-<h3>Binary and Binomial</h3>
-
-<p><a href="http://rayhightower.com/">Ray Hightower</a>, who also <a href="http://rayhightower.com/blog/2016/04/08/ancient-city-ruby-2016/">spoke at ACR</a>, recently published a nice writeup of a <a href="http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/">&ldquo;brute force&rdquo; solution in Ruby, C, and Go</a>. Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.</p>
+      <h3 id="binary-and-binomial" class="title">
+        <a name="binary-and-binomial" class="anchor" href="#binary-and-binomial">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Binary and Binomial
+      </h3>
+    
+<p><a href="http://rayhightower.com/">Ray Hightower</a>, who also <a href="http://rayhightower.com/blog/2016/04/08/ancient-city-ruby-2016/">spoke at ACR</a>, recently published a nice writeup of a <a href="http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/">&quot;brute force&quot; solution in Ruby, C, and Go</a>. Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.</p>
 
 <p>The mathematics approach is a factorial: given a 10x10 grid, we want to
-construct 20 moves where 10 moves are &ldquo;south&rdquo; and 10 moves are &ldquo;east&rdquo;. We could
+construct 20 moves where 10 moves are &quot;south&quot; and 10 moves are &quot;east&quot;. We could
 represent this conceptually as a bit map, where the total number of bits is
 20^2, or <code>(h+w)**2</code> where <code>h</code> is the height and <code>w</code> is the width of the grid. It
 turns out this can be represented as a <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a> often expressed as:</p>
@@ -150,7 +162,7 @@ end
 # =&gt; 184756
 </code></pre>
 
-<p>A &ldquo;brute-force&rdquo; solution counts up all the &ldquo;1&rdquo; bits in all possible combination
+<p>A &quot;brute-force&quot; solution counts up all the &quot;1&quot; bits in all possible combination
 of bits from 0 to 2^(h+w), or 2^20 in our case of a 10x10 grid.</p>
 
 <p>Expressed in a general Ruby function:</p>
@@ -162,14 +174,20 @@ end
 </code></pre>
 
 <p>The total number of bits to explore is equal to <code>2**(h+w)</code>. We count how many of
-those numbers, when expressed as binary with <code>x.to_s(2)</code> have 10 &ldquo;1&rdquo; bits.</p>
+those numbers, when expressed as binary with <code>x.to_s(2)</code> have 10 &quot;1&quot; bits.</p>
 
-<h3>Iteration</h3>
-
+      <h3 id="iteration" class="title">
+        <a name="iteration" class="anchor" href="#iteration">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Iteration
+      </h3>
+    
 <p>The recursive solution asks us to solve the problem backwards in a way: given
-the destination, figure out the solution by solving the problem for the nearest previous destinations and the ones that came before those and so on. What if we could &ldquo;build up&rdquo; to the solution instead? We can take an iterative approach in stead.</p>
+the destination, figure out the solution by solving the problem for the nearest previous destinations and the ones that came before those and so on. What if we could &quot;build up&quot; to the solution instead? We can take an iterative approach in stead.</p>
 
-<p>Imagine each corner or &ldquo;node&rdquo; of the grid can be represented as the number of paths leading to it. For a 5x5 grid, there are 6 nodes and each would have a value of <code>1</code>, since there is only one way to get to those nodes.</p>
+<p>Imagine each corner or &quot;node&quot; of the grid can be represented as the number of paths leading to it. For a 5x5 grid, there are 6 nodes and each would have a value of <code>1</code>, since there is only one way to get to those nodes.</p>
 
 <pre><code>1--1--1--1--1--1  # first row of a 5x5 grid
 </code></pre>
@@ -191,8 +209,8 @@ of <code>2</code> since the node to the west is now <code>1</code> and the node 
 1--3--6--10-15-21
 </code></pre>
 
-<p>And so on&hellip; The number of paths for a given grid would simply be the value of
-the last node in the last row. Let&rsquo;s implement this in Ruby:</p>
+<p>And so on... The number of paths for a given grid would simply be the value of
+the last node in the last row. Let&#39;s implement this in Ruby:</p>
 
 <pre><code class="ruby"># iterative
 def path_count(h, w)
@@ -227,8 +245,8 @@ can extract an Enumerator from the iterative solution to represent a function th
 end
 </code></pre>
 
-<p>Two key changes have been made. We&rsquo;ve inserted <code>yield</code> statements to allow the
-caller to receive each row of the grid as it is generated. We also  &ldquo;enumeratorize&rdquo; our iterative function by converting the behavior of the function into an <code>Enumerator</code> when no block is given in the first line.</p>
+<p>Two key changes have been made. We&#39;ve inserted <code>yield</code> statements to allow the
+caller to receive each row of the grid as it is generated. We also  &quot;enumeratorize&quot; our iterative function by converting the behavior of the function into an <code>Enumerator</code> when no block is given in the first line.</p>
 
 <p>Calling <code>grid(10, 10)</code> returns an <code>Enumerator</code>:</p>
 
@@ -236,7 +254,7 @@ caller to receive each row of the grid as it is generated. We also  &ldquo;enume
 # =&gt; #&lt;Enumerator: ...&gt;
 </code></pre>
 
-<p>Calling <code>to_a</code> on our <code>Enumerator</code> creates each &ldquo;node&rdquo; value:</p>
+<p>Calling <code>to_a</code> on our <code>Enumerator</code> creates each &quot;node&quot; value:</p>
 
 <pre><code class="ruby">grid(10, 10).to_a
 # =&gt; [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -263,12 +281,18 @@ def path_count(h, w)
 end
 </code></pre>
 
-<p>It&rsquo;s worth noting that the nodes of this grid follow the pattern of Pascal&rsquo;s
-Triangle expanding from the northwest corner. Pascal&rsquo;s Triangle is well suited for an Enumerator function as <a href="/blog/pascals-triangle-with-rubys-enumerator.html">I&rsquo;ve written about previously</a>.</p>
+<p>It&#39;s worth noting that the nodes of this grid follow the pattern of Pascal&#39;s
+Triangle expanding from the northwest corner. Pascal&#39;s Triangle is well suited for an Enumerator function as <a href="/blog/pascals-triangle-with-rubys-enumerator.html">I&#39;ve written about previously</a>.</p>
 
-<h3>Tradeoffs</h3>
-
-<p>We&rsquo;ve described a number of ways to solve Snake Case and each comes with
+      <h3 id="tradeoffs" class="title">
+        <a name="tradeoffs" class="anchor" href="#tradeoffs">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Tradeoffs
+      </h3>
+    
+<p>We&#39;ve described a number of ways to solve Snake Case and each comes with
 tradeoffs.</p>
 
 <p>In terms of readability, I would personally place the solutions in the following
@@ -282,12 +306,12 @@ order from most to least readable:</p>
 </ol>
 
 <p>At least for me, the recursive solution is the easiest to wrap my
-head around and most readable result. It&rsquo;s easy to see from the recursive implementation how the problem may be divided into smaller sub-problems. The others require some deeper visualization and/or mathematical understanding to &ldquo;grok&rdquo; I feel. The factorial expression seems farthest removed conceptually from the description of the problem. In other words, it&rsquo;s most at odds with my intuition, but I&rsquo;m also not a mathematician so am less inclined to think in those terms.</p>
+head around and most readable result. It&#39;s easy to see from the recursive implementation how the problem may be divided into smaller sub-problems. The others require some deeper visualization and/or mathematical understanding to &quot;grok&quot; I feel. The factorial expression seems farthest removed conceptually from the description of the problem. In other words, it&#39;s most at odds with my intuition, but I&#39;m also not a mathematician so am less inclined to think in those terms.</p>
 
 <p>How do they compare performance-wise? With <code>benchmark-ips</code> we can compare the
 iterations/second and share the results.</p>
 
-<p>Here&rsquo;s a file that defines each of the approaches we&rsquo;ve described in separate
+<p>Here&#39;s a file that defines each of the approaches we&#39;ve described in separate
 modules and benchmarks the performance for calculating the result for a 10x10
 grid. (<a href="https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb">Full source</a>)</p>
 
@@ -351,15 +375,21 @@ end
 
 <p>The maintainer of <code>benchmark-ips</code>, <a href="https://twitter.com/evanphx">Evan Phoenix</a>, added the ability to share benchmark results online. You can see <a href="https://benchmark.fyi/f">the results for this test on benchmark.fyi</a>. The <a href="https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb">full source code is also on GitHub</a>.</p>
 
-<h3>And the winner is&hellip;</h3>
-
+      <h3 id="and-the-winner-is-" class="title">
+        <a name="and-the-winner-is-" class="anchor" href="#and-the-winner-is-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        And the winner is...
+      </h3>
+    
 <p>All of the above!</p>
 
-<p>This serves as a good illustration of how there&rsquo;s often no single &ldquo;best&rdquo; way to
+<p>This serves as a good illustration of how there&#39;s often no single &quot;best&quot; way to
 solve a problem with considering the circumstance. In a situation where
 performance matters, the mathematical approach has a clear advantage, but
 sacrifices readability. I might be inclined to choose the iterative or recursive
-approach in situations where performance isn&rsquo;t the key concern.</p>
+approach in situations where performance isn&#39;t the key concern.</p>
 
 <p>Given my preference for <a href="https://rossta.net/blog/series/enumerable.html">Enumerable</a>, I personally love the enumerative approach, but, as <a href="https://rossta.net/talks/ruby-enumerator.html">I discussed at Ancient City Ruby</a>, I doubt most would agree.</p>
 
@@ -472,7 +502,7 @@ approach in situations where performance isn&rsquo;t the key concern.</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

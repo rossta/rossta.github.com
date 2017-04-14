@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -76,13 +76,19 @@
 <p>I recently added a service worker to rossta.net. You can read
 the <a href="https://github.com/rossta/rossta.github.com/blob/efbb4d41697a64543f5d4870c9915e633dda962d/source/assets/javascripts/serviceworker.js">full source of my serviceworker.js implementation</a> here.</p>
 
-<h3>Requirements</h3>
-
+      <h3 id="requirements" class="title">
+        <a name="requirements" class="anchor" href="#requirements">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Requirements
+      </h3>
+    
 <p>To get my first service worker running, I did the following:</p>
 
-<p><strong>HTTPS everywhere</strong> I moved rossta.net to <a href="https://en.wikipedia.org/wiki/HTTPS_Everywhere">&ldquo;HTTPS everywhere&rdquo;</a> with <a href="https://www.cloudflare.com/">Cloudflare</a>. Service workers will only run on sites served over HTTPS (or <code>localhost</code> for development). If you&rsquo;re considering Cloudflare for SSL, <a href="https://scotthelme.co.uk/tls-conundrum-and-leaving-cloudflare/">be aware of the drawbacks</a>.</p>
+<p><strong>HTTPS everywhere</strong> I moved rossta.net to <a href="https://en.wikipedia.org/wiki/HTTPS_Everywhere">&quot;HTTPS everywhere&quot;</a> with <a href="https://www.cloudflare.com/">Cloudflare</a>. Service workers will only run on sites served over HTTPS (or <code>localhost</code> for development). If you&#39;re considering Cloudflare for SSL, <a href="https://scotthelme.co.uk/tls-conundrum-and-leaving-cloudflare/">be aware of the drawbacks</a>.</p>
 
-<p><strong>Registration</strong> Though the Service Worker runs in its own thread outside the context of a webpage, we need to initiate its use from the webpage we&rsquo;re on. So when you hit a page on rossta.net, there&rsquo;s a snippet of JavaScript that checks for browser support and registers a service worker script for the root scope of the website.</p>
+<p><strong>Registration</strong> Though the Service Worker runs in its own thread outside the context of a webpage, we need to initiate its use from the webpage we&#39;re on. So when you hit a page on rossta.net, there&#39;s a snippet of JavaScript that checks for browser support and registers a service worker script for the root scope of the website.</p>
 
 <pre><code class="javascript">// index.js
 if(&#39;serviceWorker&#39; in navigator) {
@@ -95,18 +101,24 @@ if(&#39;serviceWorker&#39; in navigator) {
 <p><strong>Service Worker Script</strong> The service worker script gets deployed to <a href="https://rossta.net/serviceworker.js">https://rossta.net/serviceworker.js</a> separately from
 the concatenated, versioned JavaScript bundles used on the main site.</p>
 
-<h3>The script</h3>
-
-<p>For the code in my first service worker script, I followed the strategy outlined by Jeremy Keith&rsquo;s excellent
+      <h3 id="the-script" class="title">
+        <a name="the-script" class="anchor" href="#the-script">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The script
+      </h3>
+    
+<p>For the code in my first service worker script, I followed the strategy outlined by Jeremy Keith&#39;s excellent
 <a href="https://adactio.com/journal/9775">My first Service Worker</a>. He also provided a
-generalized version of his script in a <a href="https://gist.github.com/adactio/fbaa3a5952774553f5e7">service worker gist</a> that&rsquo;s definitely worth a look.</p>
+generalized version of his script in a <a href="https://gist.github.com/adactio/fbaa3a5952774553f5e7">service worker gist</a> that&#39;s definitely worth a look.</p>
 
-<p>Here&rsquo;s a general summary of the Service Worker&rsquo;s responsibilities at various stages in its life cycle:</p>
+<p>Here&#39;s a general summary of the Service Worker&#39;s responsibilities at various stages in its life cycle:</p>
 
 <p>On <code>install</code>:</p>
 
 <ul>
-<li>&ldquo;Pre-cache&rdquo; any desired resource, primarily for rendering in an offline context</li>
+<li>&quot;Pre-cache&quot; any desired resource, primarily for rendering in an offline context</li>
 </ul>
 
 <p>On <code>activate</code>:</p>
@@ -120,23 +132,29 @@ generalized version of his script in a <a href="https://gist.github.com/adactio/
 <ul>
 <li>Render HTML from the network while adding it to the local cache for use when offline</li>
 <li>Render JavaScript and CSS assets immediately from cache while updating the cache from the network when possible</li>
-<li>Render an offline page when a visitor can&rsquo;t connect to rossta.net</li>
+<li>Render an offline page when a visitor can&#39;t connect to rossta.net</li>
 <li>Allow normal pass-through network request of non-GET and white-listed resources like Twitter embeds and analytics tracking</li>
 </ul>
 
-<h3>Deploying the service worker</h3>
+      <h3 id="deploying-the-service-worker" class="title">
+        <a name="deploying-the-service-worker" class="anchor" href="#deploying-the-service-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Deploying the service worker
+      </h3>
+    
+<p>Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. <a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html">As I&#39;ve said before</a>, this is a static site hosted on Github pages, <a href="/blog/using-webpack-with-middleman.html">built with Webpack and Middleman</a>.</p>
 
-<p>Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. <a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html">As I&rsquo;ve said before</a>, this is a static site hosted on Github pages, <a href="/blog/using-webpack-with-middleman.html">built with Webpack and Middleman</a>.</p>
-
-<p>Setting up Github pages to use Cloudflare was relatively straightforward and has been <a href="https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/">well-documented</a>. I also wanted to make sure <code>serviceworker.js</code> is always served over HTTPS and that it would not be cached. Since I don&rsquo;t have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules on Cloudflare to mitigate this issue.</p>
+<p>Setting up Github pages to use Cloudflare was relatively straightforward and has been <a href="https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/">well-documented</a>. I also wanted to make sure <code>serviceworker.js</code> is always served over HTTPS and that it would not be cached. Since I don&#39;t have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules on Cloudflare to mitigate this issue.</p>
 
 <p>To ensure content on rossta.net is always loaded over HTTPS, I added a redirect page rule:</p>
 
 <p><img src="/assets/images/blog/cloud-flare-page-rules-https-7d097ad2.jpg" /></p>
 
-<p>I&rsquo;m using Webpack to create <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12">separate bundles</a> and Middleman&rsquo;s <a href="https://middlemanapp.com/advanced/improving_cacheability/"><code>:asset_hash</code> extension</a> to add a digest to each file, similar to the <a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production">Rails asset pipeline production behavior</a> to improve the cacheability of CSS and JavaScript assets on rossta.net.</p>
+<p>I&#39;m using Webpack to create <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12">separate bundles</a> and Middleman&#39;s <a href="https://middlemanapp.com/advanced/improving_cacheability/"><code>:asset_hash</code> extension</a> to add a digest to each file, similar to the <a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production">Rails asset pipeline production behavior</a> to improve the cacheability of CSS and JavaScript assets on rossta.net.</p>
 
-<p>I don&rsquo;t want either for serviceworker.js: it must be served separately from the main asset bundles and it should not be cached.</p>
+<p>I don&#39;t want either for serviceworker.js: it must be served separately from the main asset bundles and it should not be cached.</p>
 
 <p>Webpack supports <a href="https://webpack.github.io/docs/configuration.html#multiple-configurations">multiple configurations</a>, so I set up my <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80"><code>webpack.config.js</code></a> to use ES2015 transpilation for <code>serviceworker.js</code> but output to a different destination from the other concatenated script files.</p>
 
@@ -144,13 +162,19 @@ generalized version of his script in a <a href="https://gist.github.com/adactio/
 
 <p><img src="/assets/images/blog/cloud-flare-page-rules-serviceworker-9f251642.jpg" /></p>
 
-<p>Github pages currently adds 10-minute <code>Expires</code> and <code>Cache-Control</code> headers to resource requests meaning browsers and proxies may choose to cache <code>serviceworker.js</code> past an update I&rsquo;ve just deployed. This is a tradeoff I&rsquo;ll have to live with until I move rossta.net to another host.</p>
+<p>Github pages currently adds 10-minute <code>Expires</code> and <code>Cache-Control</code> headers to resource requests meaning browsers and proxies may choose to cache <code>serviceworker.js</code> past an update I&#39;ve just deployed. This is a tradeoff I&#39;ll have to live with until I move rossta.net to another host.</p>
 
-<h3>Caching considerations</h3>
-
+      <h3 id="caching-considerations" class="title">
+        <a name="caching-considerations" class="anchor" href="#caching-considerations">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Caching considerations
+      </h3>
+    
 <p>There are some key considerations regarding the browser cache when setting up your first service worker with
-an approach like the one <a href="https://adactio.com/journal/9775">Jeremy Keith</a> outlines and that I&rsquo;ve used here in
-rossta.net. Jeff Posnick, maintainer of Google Chrome&rsquo;s <a href="https://github.com/GoogleChrome/sw-precache">sw-precache</a>, highlights some of these points <a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker">in a recent comment</a>.</p>
+an approach like the one <a href="https://adactio.com/journal/9775">Jeremy Keith</a> outlines and that I&#39;ve used here in
+rossta.net. Jeff Posnick, maintainer of Google Chrome&#39;s <a href="https://github.com/GoogleChrome/sw-precache">sw-precache</a>, highlights some of these points <a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker">in a recent comment</a>.</p>
 
 <blockquote>
 <p>Any of the following would be safe, though they each have certain drawbacks:</p>
@@ -163,16 +187,16 @@ rossta.net. Jeff Posnick, maintainer of Google Chrome&rsquo;s <a href="https://g
 
 <p>Some drawbacks of each:</p>
 
-<p>Approach 1. Means that all requests, even those coming from browsers without SW support, will bypass the browser cache, and that&rsquo;s can be a lot of wasteful traffic.</p>
+<p>Approach 1. Means that all requests, even those coming from browsers without SW support, will bypass the browser cache, and that&#39;s can be a lot of wasteful traffic.</p>
 
 <p>Approach 2. Can mean some extra code that makes the simple copy and paste example look a bit more complicated.</p>
 
-<p>Approach 3. Is a good practice to follow in general, but there&rsquo;s an extra build-time step that you need to introduce, and it only applies to subresources, not URLs used as navigation targets (you&rsquo;d likely just have to serve those bypassing the browser cache completely).</p>
+<p>Approach 3. Is a good practice to follow in general, but there&#39;s an extra build-time step that you need to introduce, and it only applies to subresources, not URLs used as navigation targets (you&#39;d likely just have to serve those bypassing the browser cache completely).</p>
 </blockquote>
 
 <p>Realize that the browser cache is separate from the local cache used by the
 service worker. So, when caching resources in your service worker, you may need
-to consider the &ldquo;cache busting&rdquo; strategy for both your service worker and the
+to consider the &quot;cache busting&quot; strategy for both your service worker and the
 browser and <a href="https://github.com/GoogleChrome/css-triggers/issues/14">how users may be affected when pushing updates to the site</a>.</p>
 
 <p>If browser cache is disabled, then you can happily use your service worker to
@@ -181,9 +205,15 @@ cache resources without conflict, albeit, without the obvious benefits of a brow
 <p>In other words, take a moment to consider how your assets may (or may not) be cached by
 browsers before <a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker">copying and pasting your first service worker</a>.</p>
 
-<h3>Onward</h3>
-
-<p>There&rsquo;s a lot more that can be done with the Service Worker API, but this was a
+      <h3 id="onward" class="title">
+        <a name="onward" class="anchor" href="#onward">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Onward
+      </h3>
+    
+<p>There&#39;s a lot more that can be done with the Service Worker API, but this was a
 good start to see some impressive perceived performance improvements, especially when
 reloading pages with images and special fonts.</p>
 
@@ -296,7 +326,7 @@ reloading pages with images and special fonts.</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

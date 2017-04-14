@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -72,14 +72,14 @@
         <p><img src="/assets/images/blog/stock/purple-sunset-beach-pexels-photo-8d8b2b86.jpg" /></p>
 
       <p>While reading the first chapter of <a href="https://www.manning.com/books/elixir-in-action"><em>Elixir in
-Action</em></a>, I had my &ldquo;a-ha!&rdquo;
+Action</em></a>, I had my &quot;a-ha!&quot;
 moment with Elixir; this table:</p>
 
 <p><a href="https://www.manning.com/books/elixir-in-action"><img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg" /></a></p>
 
-<p>I&rsquo;d already been playing with Elixir for a few month when before I picked up
-Sasha Juric&rsquo;s book introducing the Elixir language and its abstractions for the
-Open Telecom Platform (OTP). If you&rsquo;re interested in Elixir, <a href="https://www.manning.com/books/elixir-in-action">please check out
+<p>I&#39;d already been playing with Elixir for a few month when before I picked up
+Sasha Juric&#39;s book introducing the Elixir language and its abstractions for the
+Open Telecom Platform (OTP). If you&#39;re interested in Elixir, <a href="https://www.manning.com/books/elixir-in-action">please check out
 the book</a>; no affiliate links, I
 just enjoyed it immensely.</p>
 
@@ -90,11 +90,17 @@ distribution, and concurrency, in a cleaner, more concise syntax. I knew all
 this but the graphic above revealed a new perspective, especially in regards to
 web development as we know it in the Rails community.</p>
 
-<h2>Using your tools</h2>
-
+      <h2 id="using-your-tools" class="title">
+        <a name="using-your-tools" class="anchor" href="#using-your-tools">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Using your tools
+      </h2>
+    
 <p>Anyone who has built a non-trivial Ruby on Rails app (or Node.js, Django, PHP,
 etc.) knows the left-side of the table above well. When we deploy a Rails app,
-we don&rsquo;t just set up the Rails process. We need a web server like Nginx, Apache,
+we don&#39;t just set up the Rails process. We need a web server like Nginx, Apache,
 or Phusion Passenger, to queue requests and serve static content, neither of
 which Rails does well.</p>
 
@@ -123,20 +129,20 @@ There are also built-in tools for persisting and sharing state in place of
 separate tools like Redis or Memcached.</p>
 
 <p>Setting up the project on the development machine and deployment considerations
-all becomes much simpler when you&rsquo;re concerned only with the requirements of
+all becomes much simpler when you&#39;re concerned only with the requirements of
 managing a single OS process.</p>
 
-<p>We&rsquo;re obviously free to use these other tools (Redis, memcached, a separate jobs
+<p>We&#39;re obviously free to use these other tools (Redis, memcached, a separate jobs
 queue, a web server, etc.) but they no longer need to be the default in Elixir.
-If you&rsquo;re building a web app in <a href="http://www.phoenixframework.org/">Phoenix</a>, you
-still may need a database, and you&rsquo;ll probably still feel the need to pick
+If you&#39;re building a web app in <a href="http://www.phoenixframework.org/">Phoenix</a>, you
+still may need a database, and you&#39;ll probably still feel the need to pick
 a JavaScript framework. But you get the idea.</p>
 
 <p>As I discovered this, I tweeted it out, imagining all the money saved on hosting
-costs. Here&rsquo;s <a href="https://twitter.com/sasajuric/status/750078059286556673">Sasha&rsquo;s response</a>.</p>
+costs. Here&#39;s <a href="https://twitter.com/sasajuric/status/750078059286556673">Sasha&#39;s response</a>.</p>
 
 <p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a
-href="https://twitter.com/rossta">@rossta</a> That&rsquo;s the smallest gain.
+href="https://twitter.com/rossta">@rossta</a> That&#39;s the smallest gain.
 Imagine all the money saved on not developing/maintaining overcomplex error
 prone solutions :-)</p>&mdash; Saša Jurić (@sasajuric) <a
 href="https://twitter.com/sasajuric/status/750078059286556673">July 4,
@@ -145,29 +151,35 @@ charset="utf-8"></script></p>
 
 <p>So Elixir has some measurable benefits.</p>
 
-<h2>Choosing your tools</h2>
-
-<p>I&rsquo;ve never much enjoyed the phrase &ldquo;right tool for the job&rdquo;. We programmers
+      <h2 id="choosing-your-tools" class="title">
+        <a name="choosing-your-tools" class="anchor" href="#choosing-your-tools">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Choosing your tools
+      </h2>
+    
+<p>I&#39;ve never much enjoyed the phrase &quot;right tool for the job&quot;. We programmers
 often fall back on this phrase as a way to justify our technology choices. In my
-experience, there are many possible languages/frameworks (the &ldquo;tools&rdquo;) that can
-serve the needs of a given business (the &ldquo;job&rdquo;). As my professional software experience
-is largely based on building web applications for startups, I don&rsquo;t wish to
+experience, there are many possible languages/frameworks (the &quot;tools&quot;) that can
+serve the needs of a given business (the &quot;job&quot;). As my professional software experience
+is largely based on building web applications for startups, I don&#39;t wish to
 speak for systems software, game programmers, or even mobile app developers. But
 on the web, there exist a great number of tools serving teams quite well,
 and it would difficult for me to call any of them <em>the</em> right tool.</p>
 
-<p>The trouble I have with &ldquo;right tool for the job&rdquo; is we tend to focus our
+<p>The trouble I have with &quot;right tool for the job&quot; is we tend to focus our
 arguments on technology features and capabilities, but very rarely do we
 consider factors such as our current constraints or the people involved in as
 part of the equation. The team has 25 years of experience building Node.js web
-apps? We&rsquo;re probably going to be choosing Node.js for our next web app. The
+apps? We&#39;re probably going to be choosing Node.js for our next web app. The
 DevOps team invested months and thousands of dollars in shoring up our
-architecture for Ruby on Rails? I probably won&rsquo;t be switching to Django for our
+architecture for Ruby on Rails? I probably won&#39;t be switching to Django for our
 next feature.</p>
 
-<p>How about admitting we&rsquo;d most often love to choose the tools we&rsquo;d
-most enjoy using? This is a much more personal choice than &ldquo;right tool&rdquo;
-suggests. I don&rsquo;t think there&rsquo;s anything wrong with choosing tools you like -
+<p>How about admitting we&#39;d most often love to choose the tools we&#39;d
+most enjoy using? This is a much more personal choice than &quot;right tool&quot;
+suggests. I don&#39;t think there&#39;s anything wrong with choosing tools you like -
 as long as you can still get the job done, of course!</p>
 
 <p>Giles Bowkett wrote a <a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html">thoroughly entertaining essay on why the Rails asset
@@ -175,8 +187,8 @@ pipeline should
 die</a>,
 which is really an essay about the fundamental nature of Ruby and Rails. He
 reminds us that a big reason for the success of Ruby and of Rails is that they
-optimize for programmer happiness. Ruby isn&rsquo;t successful for its performance
-benefits, (if anything, it&rsquo;s successful in spite of performance), but because
+optimize for programmer happiness. Ruby isn&#39;t successful for its performance
+benefits, (if anything, it&#39;s successful in spite of performance), but because
 programmers really eff-ing love writing Ruby.</p>
 
 <p>Which brings me to back to Elixir: writing Elixir is so darn fun. For a Rubyist
@@ -187,24 +199,24 @@ flavor starts to sink in, we may start to regain some of that feeling of how
 exciting it can be to play with new ideas (new, at least, to Rubyists).</p>
 
 <p>With all abstractions and functionality provided by the Elixir language, and its
-ability to scale, handle fault tolerance, to be distributed - I can&rsquo;t imagine a
+ability to scale, handle fault tolerance, to be distributed - I can&#39;t imagine a
 technology choice better suited for the web.  These traits alone may help
 convince engineering leads to go along with Elixir for the next web app, i.e.,
-&ldquo;right tool for the job&rdquo;.  Maybe our next web app doesn&rsquo;t truly need the
-concurrency or scalability made possible by the BEAM virtual machine, but it&rsquo;s
+&quot;right tool for the job&quot;.  Maybe our next web app doesn&#39;t truly need the
+concurrency or scalability made possible by the BEAM virtual machine, but it&#39;s
 sure fun to learn how to take advantage of it and be able to apply it when
 necessary.</p>
 
-<p>I haven&rsquo;t been this excited about a language and its primary web framework,
+<p>I haven&#39;t been this excited about a language and its primary web framework,
 since, well, Ruby on Rails came along.</p>
 
-<p>With Elixir we get a tool that&rsquo;s both fun to use and that can scale with the needs
-of the business. From the start, it&rsquo;s like getting the best of Ruby and whatever you think you
+<p>With Elixir we get a tool that&#39;s both fun to use and that can scale with the needs
+of the business. From the start, it&#39;s like getting the best of Ruby and whatever you think you
 will replace it with later. Something about that just feels right.</p>
 
 <div class="callout panel">
 <p>
-  If you&rsquo;re interested in Elixir and in New York City on Thursday, Oct 27 2016, please check out the <a href="http://empex.co">Empire City Elixir Conference Halloween Lightning Talks</a>. Registration is free and you&rsquo;ll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
+  If you're interested in Elixir and in New York City on Thursday, Oct 27 2016, please check out the <a href="http://empex.co">Empire City Elixir Conference Halloween Lightning Talks</a>. Registration is free and you'll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
 </p>
 </div>
 
@@ -316,7 +328,7 @@ will replace it with later. Something about that just feels right.</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

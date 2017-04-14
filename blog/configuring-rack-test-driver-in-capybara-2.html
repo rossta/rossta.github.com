@@ -9,10 +9,10 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" />
 <meta name="twitter:title" content="Configuring Rack Test Driver in Capybara 2" />
 <meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" />
 <meta property="og:title" content="Configuring Rack Test Driver in Capybara 2" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -69,8 +69,9 @@
     </h3>
 </header>
 
+        <p><img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" /></p>
 
-      <p>Though I don&rsquo;t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for <a href="https://github.com/jnicklas/capybara">Capybara</a>. When you exceed this limit, you get a dreaded <code>Capybara::InfiniteRedirectError</code>.</p>
+      <p>Though I don&#39;t recommend excessive redirects, sometimes you need more than 5 in your Capybara specs; this is the default redirect limit for <a href="https://github.com/jnicklas/capybara">Capybara</a>. When you exceed this limit, you get a dreaded <code>Capybara::InfiniteRedirectError</code>.</p>
 
 <p>In Capybara 2.0+, this limit is configurable:</p>
 
@@ -82,7 +83,7 @@
 end
 </code></pre>
 
-<p>Register a new instance of the rack test driver with options, as shown above. If you&rsquo;re on Rails, it may be necessary for you to set <code>:respect_data_method</code> to <code>true</code>; this instructs capybara to simulate the request method specified via data-method attributes in your link. With Rails, an extension like <a href="https://github.com/rails/jquery-ujs">rails/jquery-ujs</a> allows you to enable additional request methods via unobtrusive javascript in real browsers. This setting currently defaults to false in the RackTest driver; one of the primary configurations in <a href="https://github.com/jnicklas/capybara/blob/master/lib/capybara/rails.rb"><code>capybara/rails</code></a> is to set this option. So&hellip; you may be surprised if you omit this option and suddenly get missing route exceptions in your specs.</p>
+<p>Register a new instance of the rack test driver with options, as shown above. If you&#39;re on Rails, it may be necessary for you to set <code>:respect_data_method</code> to <code>true</code>; this instructs capybara to simulate the request method specified via data-method attributes in your link. With Rails, an extension like <a href="https://github.com/rails/jquery-ujs">rails/jquery-ujs</a> allows you to enable additional request methods via unobtrusive javascript in real browsers. This setting currently defaults to false in the RackTest driver; one of the primary configurations in <a href="https://github.com/jnicklas/capybara/blob/master/lib/capybara/rails.rb"><code>capybara/rails</code></a> is to set this option. So... you may be surprised if you omit this option and suddenly get missing route exceptions in your specs.</p>
 
 <p>The best long term solution for you and your users is to figure out how to reduce or eliminate unnecessary redirects. Playing with the redirect limit in your test environment may be a good way to identify potential problem areas of your app.</p>
 
@@ -194,7 +195,7 @@ end
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

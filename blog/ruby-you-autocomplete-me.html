@@ -9,10 +9,10 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" />
 <meta name="twitter:title" content="Ruby, You Autocomplete Me" />
 <meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, Clojure, HTML, and CSS" />
-<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" />
 <meta property="og:title" content="Ruby, You Autocomplete Me" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -69,12 +69,13 @@
     </h3>
 </header>
 
+        <p><img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" /></p>
 
       <p>My team recently added a tagging feature to our web app. As the user types in
 the text input, the app supplies autocomplete suggestions from our database via
 javascript; a familiar UX. While backporting tags to existing records on the
-<code>rails console</code>, it hit me: &ldquo;Why not bring tag autocompletion to the command
-line?&rdquo;</p>
+<code>rails console</code>, it hit me: &quot;Why not bring tag autocompletion to the command
+line?&quot;</p>
 
 <p>The default <code>rails console</code> provides completion out-of-the-box though all the script
 does is start <code>irb</code> with the rails environment and <code>irb/completion</code> required.</p>
@@ -129,7 +130,7 @@ Readline.completion\_append\_character = &quot; &quot;
 Readline.completion\_proc = comp
 </code></pre>
 
-<p>There&rsquo;s nothing stopping us from taking this to the <code>rails console</code> to take
+<p>There&#39;s nothing stopping us from taking this to the <code>rails console</code> to take
 advantage of our rails environment and even access the database. Building off
 the example, we can replace the hard-coded array with a list of tags plucked
 from a simple activerecord query:</p>
@@ -144,7 +145,7 @@ Readline.completion\_proc = comp
 <p>We have room for improvement. For one thing, this makes a new query every time
 you attempt to autocomplete. For a reasonable number of tags, we could load the
 tag list in memory and grep for the matches instead. There is still another problem;
-by replacing the <code>Readline.completion_proc</code>, we&rsquo;ve clobbered the functionality
+by replacing the <code>Readline.completion_proc</code>, we&#39;ve clobbered the functionality
 provided by <code>irb/completion</code>. One approach would be to fall back to the
 <code>IRB::InputCompletor::CompletionProc</code> or add its result to the array of candidates.
 Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorrect-completions">incorrect completions</a>
@@ -152,7 +153,7 @@ Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorr
 this could get messy.</p>
 
 <p>Enter <a href="https://github.com/cldwalker/bond">bond</a>, a drop-in replacement for IRB
-completion. It aims to improve on IRB&rsquo;s shortcomings and provides methods for
+completion. It aims to improve on IRB&#39;s shortcomings and provides methods for
 adding custom completions. To take advantage of Bond in the console:</p>
 
 <pre><code class="ruby">require &#39;bond&#39;
@@ -163,9 +164,9 @@ Bond.start
 <code>Bond.completion</code> method</a>.
 To set up a Bond completion, we need a condition and an action; when the condition is matched,
 then the given action will determine which candidates are returned. Calling
-<code>Bond.start</code> will register Bond&rsquo;s default completions. For example, the
+<code>Bond.start</code> will register Bond&#39;s default completions. For example, the
 following completion is triggered with the text for completion starts with a
-letter preceded by &ldquo;::&rdquo;; the search space is scoped to <code>Object.constants</code>.</p>
+letter preceded by &quot;::&quot;; the search space is scoped to <code>Object.constants</code>.</p>
 
 <pre><code class="ruby"># https://github.com/cldwalker/bond/blob/master/lib/bond/completion.rb#L13
 complete(:prefix=\&gt;&#39;::&#39;, :anywhere=\&gt;&#39;[A-Z][^:\.\(]\*&#39;) {|e| Object.constants }
@@ -313,7 +314,7 @@ simple ways to hook into features easily taken for granted.</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">

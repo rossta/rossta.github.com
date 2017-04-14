@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-f458191f.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-4bd1e64b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-5339d603.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
     <script src="//load.sumome.com/" data-sumo-site-id="4e5296d0b3f078761e3d795e6e9b33b6d80a1a1de31de31018515c9916e38ad7" async="async"></script>
@@ -71,9 +71,9 @@
 
         <p><img src="/assets/images/blog/stock/coding-a-pexels-photo-b323cc54.jpg" /></p>
 
-      <p>To give you some idea about what a geek I am, when <a href="https://twitter.com/saronyitbarek">Saron</a> asked me to fill out a form to submit blog posts to the <a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter">CodeNewbie Newsletter</a>, I thought, &ldquo;what if I could automate that?&rdquo; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so&hellip;</p>
+      <p>To give you some idea about what a geek I am, when <a href="https://twitter.com/saronyitbarek">Saron</a> asked me to fill out a form to submit blog posts to the <a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter">CodeNewbie Newsletter</a>, I thought, &quot;what if I could automate that?&quot; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...</p>
 
-<p>Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&rsquo;s a <a href="http://casperjs.org/">CasperJS</a> script available as an npm package. It&rsquo;s called <a href="https://github.com/rossta/form-to-terminal"><code>form-to-terminal</code></a>.</p>
+<p>Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&#39;s a <a href="http://casperjs.org/">CasperJS</a> script available as an npm package. It&#39;s called <a href="https://github.com/rossta/form-to-terminal"><code>form-to-terminal</code></a>.</p>
 
 <p>To use <code>form-to-terminal</code>, install it via npm and use the executable <code>ftt</code> along with a url to a Google Form url:</p>
 
@@ -82,21 +82,33 @@ $ npm install -g form-to-terminal
 $ ftt [Google Form Url]
 </code></pre>
 
-<p>This assumes that you&rsquo;ve already installed <a href="https://nodejs.org/en/download/package-manager/">nodejs</a>,  <a href="http://docs.casperjs.org/en/latest/installation.html">CasperJS</a>, and its pre-requisites.</p>
+<p>This assumes that you&#39;ve already installed <a href="https://nodejs.org/en/download/package-manager/">nodejs</a>,  <a href="http://docs.casperjs.org/en/latest/installation.html">CasperJS</a>, and its pre-requisites.</p>
 
-<h2>Casper, the friendly ghost</h2>
-
+      <h2 id="casper-the-friendly-ghost" class="title">
+        <a name="casper-the-friendly-ghost" class="anchor" href="#casper-the-friendly-ghost">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Casper, the friendly ghost
+      </h2>
+    
 <p>CasperJS is actually just a wrapper around <a href="http://phantomjs.org/">PhantomJS</a>, which provides
 fully-featured API for interacting with webpages from JavaScript.</p>
 
 <p>CasperJS makes this scripting more pleasant by providing some syntactic sugar for dealing
 with multi-stage interactions and waiting for asynchronous actions. In other
-words, I could&rsquo;ve done this with just using PhantomJS, but the code I needed to
+words, I could&#39;ve done this with just using PhantomJS, but the code I needed to
 write got a whole lot easier by using the CasperJS module on top of it.</p>
 
-<h2>A closer look</h2>
-
-<p>Let&rsquo;s look at some sample code. What follows are simplified excerpts from the <code>form-to-terminal</code> CasperJS script.</p>
+      <h2 id="a-closer-look" class="title">
+        <a name="a-closer-look" class="anchor" href="#a-closer-look">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        A closer look
+      </h2>
+    
+<p>Let&#39;s look at some sample code. What follows are simplified excerpts from the <code>form-to-terminal</code> CasperJS script.</p>
 
 <p>Given a <code>url</code> to a Google Form, first we <code>start</code> the webpage interaction, which waits to complete
 before moving to the next step.</p>
@@ -157,8 +169,14 @@ the form. CasperJS makes it easy to do this with additional args to
 
 <p>Check out the full <a href="https://github.com/rossta/form-to-terminal/blob/96a4dd8be4b071b5bfb5adb50676a6383c685240/index.js">CasperJS script</a> to see how <code>form-to-terminal</code> interacts with Google Forms in more detail.</p>
 
-<h2>Command line node</h2>
-
+      <h2 id="command-line-node" class="title">
+        <a name="command-line-node" class="anchor" href="#command-line-node">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Command line node
+      </h2>
+    
 <p>I wanted to make this work for others on the command line as an npm package. To
 get this to work, we have to understand that <code>casperjs</code> is already its own
 process. To make it work from <code>node</code>, I needed to spawn the <code>casperjs</code> while
@@ -180,12 +198,18 @@ child.on(&#39;exit&#39;, process.exit);
 will interact. The line <code>process.stdin.pipe(child.stdin);</code> ensures the text we
 enter on the command line is passed to CasperJS.</p>
 
-<h2>Going further</h2>
-
+      <h2 id="going-further" class="title">
+        <a name="going-further" class="anchor" href="#going-further">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Going further
+      </h2>
+    
 <p><code>form-to-terminal</code> (as of version 1.0.2) only supports Google Forms and only
-fully those with text inputs. It&rsquo;s likely quite buggy - for example, it doesn&rsquo;t
-currently check that you&rsquo;ve filled out all required fields, nor does it check
-for validations errors after you&rsquo;ve submitted the form - but, hey, it&rsquo;s a start.
+fully those with text inputs. It&#39;s likely quite buggy - for example, it doesn&#39;t
+currently check that you&#39;ve filled out all required fields, nor does it check
+for validations errors after you&#39;ve submitted the form - but, hey, it&#39;s a start.
 Go ahead and <a href="https://github.com/rossta/form-to-terminal">check it out on GitHub</a> and contribute some improvements!</p>
 
 <p>CasperJS is a fun tool for automating your workflow and worth a look for
@@ -306,7 +330,7 @@ CodeNewbie Google Form, so you can try it too:</p>
           <li><a href="/blog/tags/rails.html">Rails</a></li>
           <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
           <li><a href="/blog/tags/rspec.html">RSpec</a></li>
-          <li><a href="/blog/tags/clojure.html">Clojure</a></li>
+          <li><a href="/blog/tags/css.html">CSS</a></li>
       </ul>
     </section>
     <section class="large-3 columns">
