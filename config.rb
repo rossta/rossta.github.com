@@ -195,7 +195,7 @@ helpers do
   def tweet_link_to(text, params = {})
     uri = Addressable::URI.parse("https://twitter.com/intent/tweet")
     uri.query_values = params
-    link_to text, uri, target: "_blank"
+    link_to text, uri, target: "_blank", rel: "noopener"
   end
 
   def top_tags
