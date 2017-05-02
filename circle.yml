@@ -14,6 +14,7 @@ dependencies:
     - ~/.cache/yarn
   pre:
     - gem install bundler -v 1.14.6
+    - bundle check || bundle install
     - npm install -g yarn
 compile:
   override:
