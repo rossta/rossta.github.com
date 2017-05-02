@@ -6,14 +6,15 @@ machine:
   ruby:
     version: 2.3.1
   node:
-    version: 5.3.0
+    version: 6.9.1
 dependencies:
   override:
     - yarn
   cache_directories:
     - ~/.cache/yarn
   pre:
-    - gem install bundler -v 1.12.5
+    - gem install bundler -v 1.14.6
+    - npm install -g yarn
 compile:
   override:
     - git config --global -l # debug
