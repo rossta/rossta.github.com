@@ -1,24 +1,22 @@
 /*
-Error: Undefined mixin 'base-font'.
-        on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss, in `base-font'
-        from line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss
+Error: Undefined variable: "$lightGreyColor".
+        on line 4 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/code.scss
 
-1: article {
-2:   @include base-font;
-3:   header {
-4:     @include base-font;
-5:     margin-bottom: 2.25rem;
-6:   }
-7:   .panel {
+1: code {
+2:   border: none;
+3:   // background-color: rgba(0,0,0,0.04);
+4:   background-color: $lightGreyColor;
+5:   font-size: 1rem;
+6:   padding: 0.2em 0.3em;
+7: }
+8: 
+9: pre {
 
 Backtrace:
-/home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss:2:in `base-font'
-/home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss:2
-/home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:351:in `block in visit_mixin'
-/home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/stack.rb:98:in `block in with_mixin'
-/home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/stack.rb:115:in `with_frame'
-/home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/stack.rb:98:in `with_mixin'
-/home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:349:in `visit_mixin'
+/home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/code.scss:4
+/home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/script/tree/variable.rb:49:in `_perform'
+/home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/script/tree/node.rb:58:in `perform'
+/home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:397:in `visit_prop'
 /home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/tree/visitors/base.rb:36:in `visit'
 /home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
 /home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/stack.rb:79:in `block in with_base'
@@ -141,4 +139,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined mixin 'base-font'.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss, in `base-font'\A         from line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss\A \A 1: article {\A 2:   @include base-font;\A 3:   header {\A 4:     @include base-font;\A 5:     margin-bottom: 2.25rem;\A 6:   }\A 7:   .panel {"; }
+  content: "Error: Undefined variable: \"$lightGreyColor\".\A         on line 4 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/code.scss\A \A 1: code {\A 2:   border: none;\A 3:   // background-color: rgba(0,0,0,0.04);\A 4:   background-color: $lightGreyColor;\A 5:   font-size: 1rem;\A 6:   padding: 0.2em 0.3em;\A 7: }\A 8: \A 9: pre {"; }
