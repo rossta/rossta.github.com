@@ -162,7 +162,7 @@ helpers do
     Addressable::URI.new({
       scheme: config[:protocol],
       host: config[:host],
-      port: config[:port],
+      port: build? ? config[:port] : nil,
     }.merge(opts))
   end
 
