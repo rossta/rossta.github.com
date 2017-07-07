@@ -6,7 +6,7 @@ machine:
   ruby:
     version: 2.3.1
   node:
-    version: 6.9.1
+    version: 6.11.0
 dependencies:
   override:
     - yarn
@@ -15,7 +15,9 @@ dependencies:
   pre:
     - gem install bundler -v 1.14.6
     - bundle check || bundle install
+    - rm -rf ~/.yarn
     - npm install -g yarn
+    - yarn -v
 compile:
   override:
     - git config --global -l # debug
