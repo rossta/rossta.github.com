@@ -2,8 +2,9 @@
   "name": "rossta.net",
   "short_name": "rossta",
   "start_url": "/",
-  "display": "browser",
+  "display": "minimal-ui",
   "orientation": "portrait",
+  "theme_color": "#ffffff",
   "background_color": "#f8f8ff",
   "icons": [
     {
@@ -39,6 +40,11 @@
     {
       "src": "/touch-icon-192x192.png",
       "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/touch-icon-512x512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
