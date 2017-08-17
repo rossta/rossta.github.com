@@ -17,7 +17,7 @@ moment with Elixir; this table:
 
 [![](screenshots/screenshot-elixir-in-action-table-1.1.jpg)](https://www.manning.com/books/elixir-in-action)
 
-I'd already been playing with Elixir for a few month when before I picked up
+I'd already been playing with Elixir for a few months before I picked up
 Sasha Juric's book introducing the Elixir language and its abstractions for the
 Open Telecom Platform (OTP). If you're interested in Elixir, [please check out
 the book](https://www.manning.com/books/elixir-in-action); no affiliate links, I
