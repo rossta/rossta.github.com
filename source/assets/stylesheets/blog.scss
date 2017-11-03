@@ -1,6 +1,31 @@
 @import "settings";
 @import "mixins";
 
+article {
+  figure {
+    margin: 0 0 1.5rem;
+  }
+
+  figcaption {
+    letter-spacing: -.02em;
+    font-weight: 300;
+    font-style: normal;
+    font-feature-settings: "liga" on,"lnum" on;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: rgba(0,0,0,.68);
+    letter-spacing: 0;
+    position: relative;
+    left: 0;
+    width: 100%;
+    top: 0;
+    margin-top: 10px;
+    color: rgba(0,0,0,.68);
+    outline: 0;
+    text-align: center;
+  }
+}
+
 ul.index {
   @include block-list;
   li {
