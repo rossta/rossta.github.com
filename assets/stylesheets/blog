@@ -6,10 +6,10 @@ Error: File to import not found or unreadable: ~foundation-sites/scss/foundation
 1: @import "settings";
 2: @import "mixins";
 3: 
-4: ul.index {
-5:   @include block-list;
-6:   li {
-7:     padding:0.5rem 0;
+4: article {
+5:   figure {
+6:     margin: 0 0 1.5rem;
+7:   }
 
 Backtrace:
 /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss:2
@@ -143,4 +143,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/blog.scss\A \A 1: @import \"settings\";\A 2: @import \"mixins\";\A 3: \A 4: ul.index {\A 5:   @include block-list;\A 6:   li {\A 7:     padding:0.5rem 0;"; }
+  content: "Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/blog.scss\A \A 1: @import \"settings\";\A 2: @import \"mixins\";\A 3: \A 4: article {\A 5:   figure {\A 6:     margin: 0 0 1.5rem;\A 7:   }"; }
