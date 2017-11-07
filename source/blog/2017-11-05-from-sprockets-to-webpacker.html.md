@@ -182,8 +182,9 @@ Why is this an issue?
 It helps to understand that Sprockets and Webpack are two completely different paradigms of bundling JavaScript for the browser. The differences get to the heart of [the problems Wepback solves](https://what-problem-does-it-solve.com/webpack/intro.html#what-problem-does-webpack-solve). Instead of concatentating all your JavaScript into the global scope, as Sprockets does, Webpack provides a build system that compartmentalizes each JavaScript module into separate scopes so that access between modules must be declared via imports. By default, none of these modules are exposed to the global scope.
 
 <aside class="callout panel">
+<h4>What problem does Webpack solve?</h4>
 <p>
-For more background on the topic of "What problem does Webpack solve?", checkout <a href="https://twitter.com/davetron5000">David Copeland's</a> recent book, <a href="https://what-problem-does-it-solve.com/webpack/intro.html">Webpack from Nothing</a>.
+For more background on this topic, checkout <a href="https://twitter.com/davetron5000">David Copeland's</a> recent book, <a href="https://what-problem-does-it-solve.com/webpack/intro.html">Webpack from Nothing</a>.
 </p>
 </aside>
 
@@ -195,10 +196,9 @@ We decided, as a policy. we did not want our Webpack modules to depend on Sprock
 As for third party dependencies, we compromised. While most of our third party JavaScript could be moved to `node_modules`, we also relied on a number of vendor JavaScript APIs loaded via script tags in the browser. So our policy here was looser; if the third party JavaScript can be installed via `yarn` and imported from `node_modules`, then we should do that. In other cases, like our Google Analytics integration, we could accept the global reference, like `window.ga` in this case, as long as it was code that would execute after DOM content loaded, and not, say, during the initial code execution phase when the script is parsed by the browser.
 
 <aside class="callout panel">
+<h4>Guest appearance by TSort</h4>
 <p>
-<h4>Guess appearance by TSort</h4>
-
-To ensure we selected modules to migrate in the right order, we wrote a short script using Ruby's [`TSort`](https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html) module. `TSort` is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
+To ensure we selected modules to migrate in the right order, we wrote a short script using <a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html">Ruby's <code>TSort</code> module</a>. <code>TSort</code> is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
 </p>
 </aside>
 
@@ -381,9 +381,7 @@ Though Webpack tries hard to encourage you to avoid exporting your dependencies 
 
 To make our third party JavaScript libraries, like jQuery and knockout, available in the global scope, we added special [loader](https://webpack.js.org/concepts/loaders/) to the Webpack pipeline. A Webpack loader generally describes a type of transformation for a given file type. For example, [Babel integrates with Webpack via a loader](https://github.com/rails/webpacker/blob/b2d899b25fb9f1cb11426b1b5e2d699c680bdcf6/package/loaders/babel.js) in Webpacker to transform any JavaScript file from ES6 to ES5 syntax.
 
-At the time of this writing, we've found that the easiest way to instruct Webpack to expose variables exported by a given library to the global scope is via the official [expose-loader](https://github.com/webpack-contrib/expose-loader). 
-
-To use the loader, we updated the default Webpack config provided by Webpacker to ensure that our Webpack-compiled `jQuery` package is made available in the global scope for our legacy JavaScript:
+One way to instruct Webpack to expose variables exported by a given library to the global scope is via the official [expose-loader](https://github.com/webpack-contrib/expose-loader). To use this loader, we updated the default Webpack config provided by Webpacker to ensure that our Webpack-compiled `jQuery` package is made available in the global scope for our legacy JavaScript:
 
 ```javascript
 // config/webpack/custom.js
@@ -407,7 +405,7 @@ module: {
 
 // ...
 ```
-We have similar loader rules for each of our commonly-used libraries such as `knockout` and `lodash`. The `expose-loader` provided an easy mechanism for us to make third party libraries available both for import in Webpack and in the global scope for legacy code.
+We have similar `expose-loader` rules for each of our commonly-used libraries such as `knockout` and `lodash`.
 
 ## Discovering Webpack chunks
 
@@ -468,9 +466,9 @@ And after we added `slick-carousel`:
 
 ![](blog/webpack-bundle-analyzer-two-jquerys.png)
 
-Two jQuerys!
+Two jQuerys! (You may have noticed some other modules are duplicated as well.)
 
-Diving deeper, we found that Webpack is doing exactly what it's supposed to do, given our current configuration. Turns out that `slick-carousel` employs a common pattern in modern JavaScript packages to detect the presence of a JavaScript module loader API, such as AMD (Asynchronous Module Definition) or requireJS. The pattern looks something like this, [excerpted from the `slick-carousel` source](https://github.com/kenwheeler/slick/blob/ee7d37faeb92c4619ffeefeba2cc4c733f39b1b3/slick/slick.js#L18):
+It turns out that `slick-carousel` employs a common pattern in modern JavaScript packages to detect the presence of a JavaScript module loader API, such as AMD (Asynchronous Module Definition) or requireJS. The pattern looks something like this, [excerpted from the `slick-carousel` source](https://github.com/kenwheeler/slick/blob/ee7d37faeb92c4619ffeefeba2cc4c733f39b1b3/slick/slick.js#L18):
 
 ```javascript
 ;(function(factory) {
@@ -493,7 +491,7 @@ Webpack will recognize either AMD `define` or Node.js-style `require` to resolve
 
 Ok, but why didn't we see two jQuerys when we included `chosen-js`?
 
-Turns out, the Chosen jQuery plugin only works with browser globals, as described by [this issue on the chosen-js GitHub repository](https://github.com/harvesthq/chosen/issues/2215). It doesn't use a module loader pattern, so if we hadn't exported `jQuery` to global scope in the first place, it wouldn't have worked at all. In that case, we would have followed [this post that describes how to integrate Chosen with Webpack using the `imports-loader`](http://reactkungfu.com/2015/10/integrating-jquery-chosen-with-webpack-using-imports-loader/). 
+The reason is that the Chosen jQuery plugin only works with browser globals, as described by [this issue on the chosen-js GitHub repository](https://github.com/harvesthq/chosen/issues/2215). It doesn't use a module loader pattern, so if we hadn't exported `jQuery` to global scope in the first place, it wouldn't have worked at all. In that case, we would have followed [this post that describes how to integrate Chosen with Webpack using the `imports-loader`](http://reactkungfu.com/2015/10/integrating-jquery-chosen-with-webpack-using-imports-loader/). 
 
 When we import `chosen-js` in the `application.js` bundle, it attaches itself to the global `jQuery` instance we imported in `vendor.js`. When we then import `slick-carousel`, it subsequently imports `jQuery` again, which is represented by a separate "chunk" in Webpack. This new instance of `jQuery` clobbers the original instance in the global. Since the original instance is the one to which the Chosen plugin attached itself, no `$.fn.chosen` function appears in the browser.
 
