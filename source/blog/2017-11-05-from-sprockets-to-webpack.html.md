@@ -1,8 +1,8 @@
 ---
-title: Switching from Sprockets to Webpacker
+title: Switching from Sprockets to Webpack
 author: Ross Kaffenberger
 published: false
-summary: Lessons learned from adopting Webpack in an existing Rails application
+summary: Challenges and lessons learned while adopting the Webpacker gem
 descrption: In this post, we describe the challenges we faced while replacing the Rails asset pipeline with Webpack, how we solved those issues, and what we learned along the way.
 pull_image: 'blog/stock/denisse-leon-mixer-board-unsplash.jpg'
 pull_image_caption: Photo by Denisse Leon on Unsplash
@@ -15,14 +15,13 @@ tags:
 
 ---
 
-In case you missed the news, [Rails is loving JavaScript](http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/) and Rails 5.1 ships with the option to compile JavaScript with [Webpack](https://webpack.js.org) and adopts [Yarn](https://yarnpkg.org) as its package manager for JavaScript.
-My team at [LearnZillion](https://learnzillion.com) recently decided to switch from using the Rails asset pipeline for JavaScript compilation to Webpack on the heels of the Rails announcement.
+In case you missed the news, [Rails is loving JavaScript](http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/) and Rails 5.1 ships with the option to compile JavaScript with [Webpack](https://webpack.js.org) via the [Webpacker gem](https://github.com/rails/webpacker). This is a big change after years of the Rails asset pipeline running on Sprockets and my team at [LearnZillion](https://learnzillion.com) recently decided to make the change to Webpack for JavaScript compilation.
 
 This post describes the challenges we encountered while switching from Sprockets to Webpack, how we solved those issues, and what we learned along the way.
 
-Though I imagine many of the issues we encountered may be relevant to other teams considering this switch, this post is not intended to be a general guide for switching to Webpack from Sprockets. This post also won't help you integrate with of the currently popular frameworks like React, Angular, Vue, Ember (we use Knockout.js).
+The issues we encountered may be generally relevant, this post is not intended to be a step-by-step guide for replacing the Rails asset pipeline with Webpack. This post also won't help you integrate with of the currently popular frameworks like React, Angular, Vue, or Ember (we use Knockout.js).
 
-That said, if you're working in a legacy Rails application and considering switching Webpack, perhaps some of what follows will be useful and you can learn from our mistakes.
+That said, if you're working in a legacy Rails application and considering Webpack, perhaps you can learn from our mistakes.
 
 ## Why switch?
 
@@ -31,20 +30,20 @@ The asset pipeline was revolutionary in the Rails community when it was first in
 Given this context, here are a few reasons why we decided to switch, (paraphrasing):
 
 * Sprockets is too slow, i.e., in development, we don't want to run JavaScript compilation through our Rails process
-* We want to adopt ES6 sytax and [Sprockets support for ES6 is experimental](https://github.com/TannerRogalsky/sprockets-es6#sprockets-es6)
+* We want to adopt ES6 syntax and [Sprockets support for ES6 is experimental](https://github.com/TannerRogalsky/sprockets-es6#sprockets-es6)
 * We wanted improved development and deployment features not available in Sprockets or without extra effort, i.e., modularity, tree-shaking, live-reload, configurable source-maps, etc.
 
 Though there are number of JavaScript tools that we could have chosen instead Webpack, our decision here was pretty simple. As a team policy, we aim to stick with Rails conventions where possible. Given the official support in Rails and the general momentum in the Webpack community, this was the appropriate choice for our team.
 
 ## Webpack, the Rails Way
 
-There's an official Rails gem for bundling JavaScript with Webpack and it's called [Webpacker](https://github.com/rails/webpacker). [Guarav Tiwari](https://medium.com/@gauravtiwari) wrote a [detailed introduction to Webpacker here](https://medium.com/statuscode/introducing-webpacker-7136d66cddfb).
+[Webpacker](https://github.com/rails/webpacker) is the official Rails gem for integrating Webpack with Rails. [Guarav Tiwari](https://medium.com/@gauravtiwari) wrote a [detailed introduction to Webpacker here](https://medium.com/statuscode/introducing-webpacker-7136d66cddfb).
 
 Why does Webpacker exist?
 
-First, Webpacker helps make Webpack *Rails-friendly*. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch. This makes Webpack a somewhat odd choice for Rails, which promotes *convention over configuration*. Webpacker fills the gap. The Webpacker gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through Webpack.
+First, Webpacker helps make Webpack *Rails-friendly*. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes *convention over configuration*. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through Webpack.
 
-Also, Webpacker helps form the bridge between the Webpack build and the Rails application. Rails needs to be able to render `<script>` tags for Webpack assets in views. Webpacker provides helpers, including `javascript_pack_tag`, to point to these assets.
+Also, Webpacker helps form the bridge between the Webpack build output and the Rails application. Rails needs to be able to render `<script>` tags for Webpack assets in views. Webpacker provides helpers, including `javascript_pack_tag`, to point to these assets.
 
 By Webpacker convention, Webpack will build JavaScript from source files located in `app/javascript` (a new addition to the traditional Rails layout) along with `node_modules` installed via `yarn`. To determine what dependencies to build, Webpack is configured by Webpacker to treat each file in `app/javascript/packs` as a separate [entry](https://webpack.js.org/concepts/#entry) point. Entries in Webpack are analagous to `app/assets/javascripts/application.js` in Sprockets, along with any JavaScript file appended to the Rails configuration for asset precompilation.
 
