@@ -595,17 +595,19 @@ import &amp;#39;slick-carousel&amp;#39;;
 
 &lt;p&gt;To demonstrate, let&amp;#39;s say all we did was import jQuery in our vendor bundle and &lt;code&gt;./some_module&lt;/code&gt; in our application bundle:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;// app/javascript/packs/vendor.js
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/vendor.js
+
 import &amp;#39;jquery&amp;#39;;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;pre&gt;&lt;code&gt;// app/javascript/packs/application.js
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
+
 import SomeModule from &amp;#39;../some_module&amp;#39;;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Here&amp;#39;s the output of the Webpack build, using the &lt;code&gt;CommonsChunkPlugin&lt;/code&gt; setup as described in the previous section:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ bin/webpack
+&lt;pre&gt;&lt;code class="shell"&gt;$ bin/webpack
 Hash: 6331dfce0c27b4723c58
 Version: webpack 3.8.1
 Time: 779ms
@@ -620,7 +622,7 @@ application-5b435b20467ae799d8e6.js    3.42 kB       0  [emitted]         applic
 
 &lt;p&gt;Now let&amp;#39;s make only a change to &lt;code&gt;application.js&lt;/code&gt; as below. &lt;code&gt;AnotherModule&lt;/code&gt; brings in no new dependencies:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;// app/javascript/packs/application.js
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
 
 import SomeModule from &amp;#39;../some_module&amp;#39;;
 import AnotherModule from &amp;#39;../another_module&amp;#39;;
@@ -628,7 +630,7 @@ import AnotherModule from &amp;#39;../another_module&amp;#39;;
 
 &lt;p&gt;Rebuilding now, we might expect only the digest for &lt;code&gt;application.js&lt;/code&gt; would change:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ bin/webpack
+&lt;pre&gt;&lt;code class="shell"&gt;$ bin/webpack
 Hash: 7a033d5c3c2dffec095b
 Version: webpack 3.8.1
 Time: 758ms
@@ -735,7 +737,7 @@ set :default_env, { &amp;#39;NODE_ENV&amp;#39; =&amp;gt; &amp;#39;production&amp
 
 &lt;p&gt;First we added several packages.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;yarn add --dev karma karma-cli karma-sourcemap-loader karma-webpack karma-jasmine karma-chrome-launcher
+&lt;pre&gt;&lt;code class="shell"&gt;yarn add --dev karma karma-cli karma-sourcemap-loader karma-webpack karma-jasmine karma-chrome-launcher
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To make Karma work with our Webpacker setup, we started with the default &lt;code&gt;karma.config.js&lt;/code&gt; configuration file and made some modifications as shown below:&lt;/p&gt;
@@ -826,7 +828,7 @@ module.exports = function(config) {
 
 &lt;p&gt;We also add the following location block to development Nginx server configuration to allow the websocket connection to proxy through Nginx.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;server {
+&lt;pre&gt;&lt;code class="nginx"&gt;server {
     listen 80;
     server_name myapp.dev
 

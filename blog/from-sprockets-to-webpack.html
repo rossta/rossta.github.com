@@ -650,17 +650,19 @@ import &#39;slick-carousel&#39;;
 
 <p>To demonstrate, let&#39;s say all we did was import jQuery in our vendor bundle and <code>./some_module</code> in our application bundle:</p>
 
-<pre><code>// app/javascript/packs/vendor.js
+<pre><code class="javascript">// app/javascript/packs/vendor.js
+
 import &#39;jquery&#39;;
 </code></pre>
 
-<pre><code>// app/javascript/packs/application.js
+<pre><code class="javascript">// app/javascript/packs/application.js
+
 import SomeModule from &#39;../some_module&#39;;
 </code></pre>
 
 <p>Here&#39;s the output of the Webpack build, using the <code>CommonsChunkPlugin</code> setup as described in the previous section:</p>
 
-<pre><code>$ bin/webpack
+<pre><code class="shell">$ bin/webpack
 Hash: 6331dfce0c27b4723c58
 Version: webpack 3.8.1
 Time: 779ms
@@ -675,7 +677,7 @@ application-5b435b20467ae799d8e6.js    3.42 kB       0  [emitted]         applic
 
 <p>Now let&#39;s make only a change to <code>application.js</code> as below. <code>AnotherModule</code> brings in no new dependencies:</p>
 
-<pre><code>// app/javascript/packs/application.js
+<pre><code class="javascript">// app/javascript/packs/application.js
 
 import SomeModule from &#39;../some_module&#39;;
 import AnotherModule from &#39;../another_module&#39;;
@@ -683,7 +685,7 @@ import AnotherModule from &#39;../another_module&#39;;
 
 <p>Rebuilding now, we might expect only the digest for <code>application.js</code> would change:</p>
 
-<pre><code>$ bin/webpack
+<pre><code class="shell">$ bin/webpack
 Hash: 7a033d5c3c2dffec095b
 Version: webpack 3.8.1
 Time: 758ms
@@ -790,7 +792,7 @@ set :default_env, { &#39;NODE_ENV&#39; =&gt; &#39;production&#39; }
 
 <p>First we added several packages.</p>
 
-<pre><code>yarn add --dev karma karma-cli karma-sourcemap-loader karma-webpack karma-jasmine karma-chrome-launcher
+<pre><code class="shell">yarn add --dev karma karma-cli karma-sourcemap-loader karma-webpack karma-jasmine karma-chrome-launcher
 </code></pre>
 
 <p>To make Karma work with our Webpacker setup, we started with the default <code>karma.config.js</code> configuration file and made some modifications as shown below:</p>
@@ -881,7 +883,7 @@ module.exports = function(config) {
 
 <p>We also add the following location block to development Nginx server configuration to allow the websocket connection to proxy through Nginx.</p>
 
-<pre><code>server {
+<pre><code class="nginx">server {
     listen 80;
     server_name myapp.dev
 
