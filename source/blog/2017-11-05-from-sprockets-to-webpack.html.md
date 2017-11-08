@@ -1,5 +1,5 @@
 ---
-title: Switching from Sprockets to Webpack
+title: How we switched from Sprockets to Webpack
 author: Ross Kaffenberger
 published: true
 summary: Lessons learned adopting the Webpacker gem in an existing Rails app
@@ -74,15 +74,14 @@ Here's a high level overview of how we broke down the move to Webpack from Sproc
 	- Remove Rails assets gems and redundant Sprockets configuration
 	- Optimize our Webpack bundles
 
-Our gradual approach had its downsides: 
+Our gradual approach to the migration had its downsides: 
 
-* Supporting both Sprockets or Webpack for JS compilation required more effort and time
 * We needed to figure out how to reference modules across two scopes
 * We had a large suite of JavaScript unit tests to support in two separate testing environments
 * We assumed global variables our in Sprockets-based JavaScript, so any module bundled by Webpack would need to be exposed to the global scope somehow
 * We had a learning curve with Webpack such that simply moving a dependency from a Sprockets bundle to a Webpack bundle was not always straightforward
 
-Given the rapid development cycle of Webpacker, Webpack, and its various plugins and utilities, we were continually upgrading and smoothing wrinkles throughout the process. Ultimately, we allowed ourselves time to wade into the Webpack waters and adopt new conventions as we progressed.
+Supporting both Sprockets or Webpack while we rolled out incremental changes required more effort and time. Given the rapid development cycle of Webpacker, Webpack, and its various plugins and utilities, we were continually upgrading and smoothing wrinkles throughout the process. Ultimately, this approach worked for us as it allowed time to wade into the Webpack waters while adopting new conventions along the way.
 
 ## Setting up Webpack entries
 
@@ -608,7 +607,7 @@ First we added several packages.
 yarn add --dev karma karma-cli karma-sourcemap-loader karma-webpack karma-jasmine karma-chrome-launcher
 ```
 
-To make Karma work with our Webpacker setup, we started with the default `karma.config.js` configuration file generated via `yarn run karma init` and made some modifications as shown below:
+To make Karma work with our Webpacker setup, we started with the default `karma.config.js` configuration file and made some modifications as shown below:
 
 ```javascript
 // karma.conf.js
@@ -642,7 +641,7 @@ module.exports = function(config) {
   });
 };
 ```
-As you can see in the comments above, we workaround a few issues of using Karma with certain plugins, including [this issue](https://github.com/webpack-contrib/karma-webpack/issues/22) with `karma-webpack` and the `CommonsChunkPlugin` and [this issue](https://github.com/rails/webpacker/issues/435) with Webpacker's use of the `ManifestPlugin`. Turns out, to run unit tests in the Karma context, our Webpack plugins are irrelevant, so we've opted to remove them altogether in the Karma configuration for now. The downside is that our unit testing setup does not exercise our Webpack plugin configuration, but any issue there would be caught by our integration testing workflow.
+We ran into few problems using Karma with certain Webpack plugins, including [this issue](https://github.com/webpack-contrib/karma-webpack/issues/22) with `karma-webpack` plus the `CommonsChunkPlugin` and [this issue](https://github.com/rails/webpacker/issues/435) with Webpacker's use of the `ManifestPlugin`. Turns out, to run unit tests in the Karma context, our Webpack plugins are irrelevant, so we've opted to remove them altogether in the Karma configuration for now. The downside is that our unit testing setup does not exercise our Webpack plugin configuration, but any issue there would be caught by our integration testing workflow.
 
 Another problem we needed to solve was to keep our legacy specs in jasmine-rails passing during the transition. As soon as we moved our first critical dependency from the asset pipeline to Webpack, all of our jasmine-rails specs broke. This is because jasmine-rails assumes you're just using Sprockets and knows nothing about our Webpack output.
 
@@ -674,6 +673,42 @@ Fortunately, jasmine-rails allowed us to override the Rails template `spec_runne
 
 Once all our unit test were ported over to Karma, we were able to remove `jasmine-rails` from our application.
 
+## Local development with SSL
+
+Our team also strives for dev/prod parity as much as possible, from the 12 factor app methodology. This includes using a non-localhost domain, like `myapp.dev`, Nginx as a reverse proxy, and enforcing SSL in development. Fortunately, the Webpack dev server supports SSL, but we needed to do a few things to make it work properly, including submitting a few patches to Webpacker.
+
+Webpack assets are proxied to the Webpack dev server by the Webpacker middleware, but after enabling `https` for the dev server, autoreload wasn't working. This is because Webpack inserts a script that opens up a websocket connection to the dev server over the endpoint `/sockjs-node`.
+
+We needed to provide the hostname to webpack dev server so it can initiate the websocket connection for live reloading ([Webpack docs](https://webpack.js.org/configuration/dev-server/#devserver-public)). To do so, we set the `public` option in `config/webpacker.yml`:
+
+```yaml
+development:
+  # ...
+  dev_server:
+    # ...
+    public: myapp.dev
+```
+
+We also add the following location block to development Nginx server configuration to allow the websocket connection to proxy through Nginx.
+
+```
+server {
+    listen 80;
+    server_name myapp.dev
+
+    # Proxy webpack dev server websocket requests
+    location /sockjs-node {
+        proxy_redirect off;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_pass http://127.0.0.1:3035; # change to match your webpack-dev-server host
+    }
+
+    # ...
+}
+```
+
 ## Wrapping up
 
 Wow, you made it this far!
@@ -682,6 +717,6 @@ Perhaps the most important lesson we learned throughout this process is this:
 
 > Choosing Webpack means investing time in understanding how it works and how to get the most out of it.
 
-Gone are the days when we could "set it and forget it" as we did for most of our dependencies and configuration with Sprockets. Despite the ease with which Webpacker let us get Webpack running in our Rails application, it has required effort to experiment with configuration, optimize bundles, integrate with third-party modules, set up predictable, long-term caching, and stay up-to-date with rapidly changing dependencies, like Webpack itself.
+Gone are the days when we could "set it and forget it" for most of our dependencies under Sprockets. Despite the ease with which Webpacker let us get Webpack running in our Rails application, it has required effort to experiment with configuration, optimize bundles, integrate with third-party modules, set up predictable, long-term caching, and stay up-to-date with rapidly changing dependencies, like Webpack itself.
 
 As of this writing, all of our clientside application JavaScript now runs through Webpack in development and for deployment. So far, our team has been delighted by results and we're glad we invested in upgrading from the asset pipeline.
