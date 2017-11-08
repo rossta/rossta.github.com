@@ -700,6 +700,39 @@ application-80aab62cb2b8b0bfd6f3.js     4.5 kB       0  [emitted]         applic
 
 <p>Building on that primer, we followed the steps outlined in this <a href="https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31">great article on predictable long term caching</a> to ensure Webpack generates the same fingerprinted output for our infrequently changing vendor bundle.</p>
 
+      <h2 id="third-party-stylesheets-images-and-font" class="title">
+        <a name="third-party-stylesheets-images-and-font" class="anchor" href="#third-party-stylesheets-images-and-font">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Third-party stylesheets, images, and font
+      </h2>
+    
+<p>Since we decided to leave stylesheets, images, and fonts in <code>app/assets</code> <em>under Sprockets compilation</em>, we needed to make Sprockets aware of asset sources we we now installing as NPM modules.</p>
+
+<p>In most cases, we&#39;d replace the corresponding Rails asset gem and add the appropriate <code>node_modules</code> directory to the Sprockets load path. For example, for <code>foundation</code>, here&#39;s how we did it:</p>
+
+<pre><code class="ruby"># Gemfile
+
+- gem &quot;foundation-rails&quot;
+</code></pre>
+
+<pre><code class="javascript">// package.json
+
+&quot;dependencies&quot;: {
+   // ...
++ &quot;foundation-sites&quot;: &quot;~6.3.0&quot;,
+   // ...
+</code></pre>
+
+<pre><code class="ruby"># config/initializers/assets.rb
+
++ Rails.application.config.assets.paths &lt;&lt; Rails.root.join(&quot;node_modules&quot;, &quot;foundation-sites&quot;, &quot;scss&quot;)
+</code></pre>
+
+<p>Of course, Webpack can bundle stylesheets as well and we&#39;ll likely investigate
+this on a future iteration when we&#39;re ready to remove Sprockets entirely.</p>
+
       <h2 id="deploying-with-capistrano-and-nginx" class="title">
         <a name="deploying-with-capistrano-and-nginx" class="anchor" href="#deploying-with-capistrano-and-nginx">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
