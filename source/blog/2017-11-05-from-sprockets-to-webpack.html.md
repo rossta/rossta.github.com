@@ -1,7 +1,7 @@
 ---
 title: Switching from Sprockets to Webpack
 author: Ross Kaffenberger
-published: false
+published: true
 summary: Lessons learned adopting the Webpacker gem in an existing Rails app
 descrption: In this post, we describe the challenges we faced while replacing the Rails asset pipeline with Webpack, how we solved those issues, and what we learned along the way.
 pull_image: 'blog/stock/denisse-leon-mixer-board-unsplash.jpg'
