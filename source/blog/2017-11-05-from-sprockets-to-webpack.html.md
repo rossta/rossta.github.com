@@ -41,7 +41,7 @@ Though there are number of JavaScript tools that we could have chosen instead We
 
 Why does Webpacker exist?
 
-First, Webpacker helps make Webpack *Rails-friendly*. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes *convention over configuration*. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through Webpack.
+First, Webpacker helps make Webpack *Rails-friendly*. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes *convention over configuration*. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support via [Babel](https://babeljs.io/) support in Webpack.
 
 Also, Webpacker helps form the bridge between the Webpack build and the Rails application. Rails needs to be able to render `<script>` tags for Webpack assets in views. Webpacker provides helpers, including `javascript_pack_tag`, for this purpose.
 
@@ -214,7 +214,7 @@ App.SomeModule = (function() {
 }();
 ```
 
-We converted each module to use ES6 syntax as we moved them over to Webpack. We could also made sure to explicitly import dependencies where possible rather than rely on global variables. The new version of the file above might look like this:
+As we moved them over to Webpack, the new version of the file above might look like the example below as we converted to ES6 syntax and replaced global references with imports:
 
 ```javascript
 // app/javascript/some_module.js
@@ -232,26 +232,26 @@ const SomeModule = {
 export default SomeModule;
 ```
 
-There's a problem though. Once `SomeModule` moved to Webpack, it is no longer available in the global scope and no longer a property of `App`. References to `App.SomeModule` in Sprockets would be `undefined`. To maintain backwards compatibility, we wanted to make `SomeModule` available in both Webpack and Sprockets.
+There's a problem though. Once `SomeModule` moved to Webpack, it was no longer available in the global scope as a property of `App`. References to `App.SomeModule` in Sprockets would be `undefined`. To maintain backwards compatibility, we had to find a way to make `SomeModule` available in both Webpack and Sprockets.
 
-Practically, this meant `some_module.js` could be available through an import in Webpack:
+Practically, this meant `SomeModule` could be available both as an import in Webpack...
 
 ```javascript
 import SomeModule from '../some_module';
 
 SomeModule.someMethod();
 ```
-And in the global scope with Sprockets, it would be added back into the global `App` instance:
+...and in the global scope as a property the global `App` instance:
 
 ```javascript
 App.SomeModule.someMethod();
 ```
 
-In other words, we wanted to have ES6 module cake and eat it too. Luckily, Webpack provides a mechanism to do this.
+In other words, we wanted to have our ES6 module cake and eat it too. Luckily, Webpack provides a mechanism to do this.
 
 ## Exporting from Webpack
 
-Webpack has provides for a use case that met our needs: that of library authors. This entails [configuring the Webpack output to export a variable](https://webpack.js.org/configuration/output/#output-library) for public consumption. That meant we would package our Webpack modules into a library for our Sprockets code!
+Webpack provides for a use case that met our needs: that of library authors. This entails [configuring the Webpack output to export a variable](https://webpack.js.org/configuration/output/#output-library) to its receiving scope——in our case, the browser `window`. That meant we would package our Webpack modules into a library for our Sprockets code!
 
 To do this, we modified our Webpack config:
 
@@ -276,9 +276,9 @@ To add modules to the "library", we export them from our entry files. For exampl
 export { default as SomeModule } from './some_module`;
 ```
 
-Webpack would then make `SomeModule` a property of the `application` module: `Packs.application.SomeModule`.
+Webpack would then make `SomeModule` a property of the `Packs.application` module, i.e., `Packs.application.SomeModule`.
 
-Since Webpack would export this `Packs` variable to the global scope, its available in Sprockets land. We simply added some glue code to merge our `Packs` modules into `App`:
+This `Packs` variable gets exported to the global scope. We added some glue code to merge our `Packs` modules into the `App` namespace as below:
 
 ```javascript
 // app/assets/javascripts/application.js
@@ -291,17 +291,15 @@ Boom! Now, we'd be able to use our Webpack-compiled module as `App.SomeModule` i
 
 ## Resolving application modules
 
-Webpacker comes with [Babel](https://babeljs.io/) support for Webpack. Among other things, Babel allows us to use ES6-style modules and `import` and `export` syntax in our code.
+As a convenience, we learned to resolve modules in our application as `import 'some_module'` instead of via relative paths like `import '../some_module`. To do this, we set up an alias in `.babelrc`. Webpacker installs `.babelrc` as a separate configuration file for Babel.
 
-To resolve modules in our application as `import 'some_module'` instead of via relative paths like `import '../some_module`, we set up an alias in `.babelrc` which is an additional set of configurations Webpacker installs for Babel.
-
-First, we added a Babel plugin:
+Adding a Babel plugin:
 
 ```shell
 yarn add babel-plugin-module-resolver
 ```
 
-Then, we added the following to our `.babelrc` in the plugins section:
+And adding a relevant section in our `.babelrc` in the plugins section:
 
 ```javascript
 // .babelrc
