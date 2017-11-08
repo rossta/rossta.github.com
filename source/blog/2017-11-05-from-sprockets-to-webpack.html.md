@@ -15,7 +15,7 @@ tags:
 
 ---
 
-In case you missed the news, [Rails is loving JavaScript](http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/) and Rails 5.1 ships with the option to compile JavaScript with [Webpack](https://webpack.js.org) via the [Webpacker gem](https://github.com/rails/webpacker). This is a big change after years of the Rails asset pipeline running on Sprockets. My team at [LearnZillion](https://learnzillion.com) recently decided to embrace this change and make the switch to Webpack to compile our clientside JavasScript. *Gulp!*
+In case you missed the news, [Rails is loving JavaScript](http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/) and Rails 5.1 ships with the option to compile JavaScript with [Webpack](https://webpack.js.org) via the [Webpacker gem](https://github.com/rails/webpacker). This is a big change after years of the Rails asset pipeline running on Sprockets. My team at [LearnZillion](https://learnzillion.com) recently decided to embrace this change and make the switch to Webpack with Wthe Webpacker gem to compile our clientside JavasScript for our Rails 4.2 application. *Gulp!*
 
 This post describes the challenges we encountered while switching from Sprockets to Webpack, how we solved those issues, and what we learned along the way.
 
@@ -57,7 +57,7 @@ The key feature of Webpacker critical to our decision to making the switch is th
 
 > Webpacker allows Webpack and Sprockets to be used side-by-side.
 
-The ability to compile `some_module.js` via Webpack and `another_module.js` via Sprockets allowed us to move dependencies over to Webpack gradually, in small changesets. With any upgrade, our primary goal is *Don't break the site.* and the incremental adoption of Webpack allowed us to more easily address issues through our continuous integration and QA process. 
+The ability to compile `some_module.js` via Webpack and `another_module.js` via Sprockets allowed us to move dependencies over to Webpack gradually, in small changesets. With any upgrade, our primary goal is *Don't break the site.* and the incremental adoption of Webpack allowed us to more easily address issues through our continuous integration and QA process.
 
 Here's a high level overview of how we broke down the move to Webpack from Sprockets:
 
@@ -74,7 +74,7 @@ Here's a high level overview of how we broke down the move to Webpack from Sproc
 	- Remove Rails assets gems and redundant Sprockets configuration
 	- Optimize our Webpack bundles
 
-Our gradual approach to the migration had its downsides: 
+Our gradual approach to the migration had its downsides:
 
 * We needed to figure out how to reference modules across two scopes
 * We had a large suite of JavaScript unit tests to support in two separate testing environments
@@ -379,7 +379,7 @@ We have similar `expose-loader` rules for each of our commonly-used libraries su
 
 ## Discovering Webpack chunks
 
-However, after adding `expose-loader` for jQuery, not everything worked as we expected in the early going. 
+However, after adding `expose-loader` for jQuery, not everything worked as we expected in the early going.
 
 Consider the following where we import jQuery in `vendor.js`. Then we've added the `chosen-js` package and import it in `application.js`.
 
