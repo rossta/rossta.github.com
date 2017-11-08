@@ -557,6 +557,36 @@ The root problem (and solution) gets into the real meat of how Webpack works und
 
 Building on that primer, we followed the steps outlined in this [great article on predictable long term caching](https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31) to ensure Webpack generates the same fingerprinted output for our infrequently changing vendor bundle.
 
+## Third-party stylesheets, images, and font
+
+Since we decided to leave stylesheets, images, and fonts in `app/assets` _under Sprockets compilation_, we needed to make Sprockets aware of asset sources we we now installing as NPM modules.
+
+In most cases, we'd replace the corresponding Rails asset gem and add the appropriate `node_modules` directory to the Sprockets load path. For example, for `foundation`, here's how we did it:
+
+```ruby
+# Gemfile
+
+- gem "foundation-rails"
+```
+
+```javascript
+// package.json
+
+"dependencies": {
+   // ...
++ "foundation-sites": "~6.3.0",
+   // ...
+```
+
+```ruby
+# config/initializers/assets.rb
+
++ Rails.application.config.assets.paths << Rails.root.join("node_modules", "foundation-sites", "scss")
+```
+
+Of course, Webpack can bundle stylesheets as well and we'll likely investigate
+this on a future iteration when we're ready to remove Sprockets entirely.
+
 ## Deploying with Capistrano and Nginx
 
 We use Capistrano to deploy our Rails application. The `capistrano/rails` plugin adds some deployment configuration for the Rails asset pipeline, but we needed to make some changes to support Webpack properly.
