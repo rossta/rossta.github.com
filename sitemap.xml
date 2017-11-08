@@ -307,6 +307,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2017-11-05-from-sprockets-to-webpack.html</loc>
+    <lastmod>2017-11-08T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/index.html</loc>
     <lastmod>2017-11-08T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -536,6 +542,30 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/elixir.html</loc>
+    <lastmod>2017-11-08T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/tags/webpack.html</loc>
+    <lastmod>2017-11-08T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2017.html</loc>
+    <lastmod>2017-11-08T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2017/11.html</loc>
+    <lastmod>2017-11-08T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2017/11/05.html</loc>
     <lastmod>2017-11-08T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -1106,6 +1136,12 @@
   </url>
   <url>
     <loc>https://rossta.net/page/12/index.html</loc>
+    <lastmod>2017-11-08T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/page/13/index.html</loc>
     <lastmod>2017-11-08T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

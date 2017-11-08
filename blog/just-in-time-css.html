@@ -32,7 +32,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-fe1f2c06.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-6062734b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-bc33c5ab.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -73,7 +73,6 @@
         <figure>
           <img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" alt="Logs pexels photo" />
         </figure>
-
       <p>On top of the list of <a href="http://developer.yahoo.com/performance/rules.html">best practices for speeding up your website</a> is reducing the number of HTTP requests required to render the page. As our websites grow and there are more pages to style, we have more style rules to deliver to our visitors. Keeping the number of requests to a minimum usually means we either need to put all our styles in a single stylesheet, or use a bundling strategy such as <a href="http://documentcloud.github.com/jammit/">Jammit</a> or <a href="http://github.com/brynary/asset-trip">Asset Trip</a>, like we use at <a href="http://www.weplay.com">Weplay</a>, to pull our stylesheets together as one at deploy time.</p>
 
 <p>One problem with the single CSS request approach is we often send CSS rules that our users don’t need to render the page initially or at any time during the current page view. This is like making dinner for 10 when only 2 people have RSVP’d; it can potentially be a big waste. In this wacky ajaxy world we live in, who says all your CSS needs to be on the page at load time? Consider using just-in-time CSS for page elements that aren’t necessary to display right away.</p>
@@ -99,22 +98,15 @@ function require(url) {
 
 <p>The key is that the HTTP request is not made until the stylesheet tag is appended to the document head tag after the page has already loaded. We decrease the number and/or size of the requests needed to render the page initially keeping our visitors satisfied.</p>
 
-
     </article>
-    <hr />
     <section class="margin-bottom double">
-      <p>
-        Did you like this post? Do me a favor: <a href="https://twitter.com/intent/tweet?text=Just-in-Time%20CSS%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2F2010-02-17-just-in-time-css.html" target="_blank" rel="noopener">share it on Twitter</a>,
-          <a href="https://twitter.com/rossta">follow me - @rossta</a>,
-          and sign up for my newsletter. Thanks!
-        </p>
-      </section>
+      <a href="https://twitter.com/intent/tweet?text=Just-in-Time%20CSS%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2F2010-02-17-just-in-time-css.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
     </section>
-    <section class="signup-form-standalone margin-bottom double">
+    <section class="signup-form-standalone margin-bottom quadruple">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
   <div id="mc_embed_signup">
     <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
@@ -153,7 +145,8 @@ function require(url) {
     <section class="margin-bottom double">
       <p>
         Published on Feb 17, 2010
-    </p>
+      </p>
+    </section>
   </section>
     <hr />
     <section class="comments">

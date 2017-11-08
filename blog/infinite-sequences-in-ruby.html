@@ -32,7 +32,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-fe1f2c06.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-6062734b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-bc33c5ab.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -73,7 +73,6 @@
         <figure>
           <img src="/assets/images/blog/enumerator-1-2-3-b7cfed08.jpg" alt="Enumerator 1 2 3" />
         </figure>
-
       <p>Functional languages like Clojure have <a href="http://clojure.org/sequences">sequences</a>. Sequences are pretty amazing: they let us treat algorithms as data structures. We can call functions on the data as it is produced, allowing us to interact with the results like a collection even when the sequence is infinite.</p>
 
 <p>The Ruby standard library doesn’t have an official sequence class or module, but we can get pretty far with the <code>Enumerable</code> module. Rubyists are typically introduced to <code>Enumerable</code> through methods on <code>Array</code>,  like <code>#map</code> and <code>#select</code>. Arrays like <code>[1,2,3,4]</code> may be thought of as finite, eagerly loaded sequences; they already contains all the members we want to enumerate with methods. We can also extend this API to sequences like “give me multiples of 5” in Ruby.</p>
@@ -219,22 +218,15 @@ end
     
 <p>Of course, sequences of numbers aren&#39;t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.</p>
 
-
     </article>
-    <hr />
     <section class="margin-bottom double">
-      <p>
-        Did you like this post? Do me a favor: <a href="https://twitter.com/intent/tweet?text=Infinite%20Sequences%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2F2015-11-21-infinite-sequences-in-ruby.html" target="_blank" rel="noopener">share it on Twitter</a>,
-          <a href="https://twitter.com/rossta">follow me - @rossta</a>,
-          and sign up for my newsletter. Thanks!
-        </p>
-      </section>
+      <a href="https://twitter.com/intent/tweet?text=Infinite%20Sequences%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2F2015-11-21-infinite-sequences-in-ruby.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
     </section>
-    <section class="signup-form-standalone margin-bottom double">
+    <section class="signup-form-standalone margin-bottom quadruple">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
   <div id="mc_embed_signup">
     <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
@@ -274,7 +266,8 @@ end
       <p>
           Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
         Published on Nov 21, 2015
-    </p>
+      </p>
+    </section>
   </section>
     <hr />
     <section class="comments">

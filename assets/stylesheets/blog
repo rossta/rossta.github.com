@@ -7,8 +7,8 @@ Error: File to import not found or unreadable: ~foundation-sites/scss/foundation
 2: @import "mixins";
 3: 
 4: article {
-5:   figure {
-6:     margin: 0 0 1.5rem;
+5:   h2, h3, h4, h5, h6 {
+6:     margin-top: 1.5em;
 7:   }
 
 Backtrace:
@@ -143,4 +143,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/blog.scss\A \A 1: @import \"settings\";\A 2: @import \"mixins\";\A 3: \A 4: article {\A 5:   figure {\A 6:     margin: 0 0 1.5rem;\A 7:   }"; }
+  content: "Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/blog.scss\A \A 1: @import \"settings\";\A 2: @import \"mixins\";\A 3: \A 4: article {\A 5:   h2, h3, h4, h5, h6 {\A 6:     margin-top: 1.5em;\A 7:   }"; }

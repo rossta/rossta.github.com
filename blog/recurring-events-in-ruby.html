@@ -32,7 +32,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-fe1f2c06.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-6062734b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-bc33c5ab.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -73,7 +73,6 @@
         <figure>
           <img src="/assets/images/blog/stock/clock-pexels-photo-160981e8.jpg" alt="Clock pexels photo" />
         </figure>
-
       <p>I was considering recently how I&#39;d build an <a href="http://meetedgar.com/">Edgar</a> clone to post updates about <a href="/">rossta.net</a> on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.</p>
 
 <p>For scheduling tasks, we have <a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html">cron</a> at the system level and even such options as the <a href="https://github.com/javan/whenever"><code>whenever</code></a> gem to setup cron from Rails and Sinatra applications. Rubyists can also take advantage of fantastic background job schedulers like <a href="https://github.com/jmettraux/rufus-scheduler"><code>rufus-scheduler</code></a> to run recurring tasks from a separate process or even an API for defining repeating <a href="https://github.com/mperham/sidekiq"><code>Sidekiq</code></a> jobs with <a href="https://github.com/tobiassvn/sidetiq"><code>Sidetiq</code></a>.</p>
@@ -238,22 +237,15 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
 
 <p>See you there.</p>
 
-
     </article>
-    <hr />
     <section class="margin-bottom double">
-      <p>
-        Did you like this post? Do me a favor: <a href="https://twitter.com/intent/tweet?text=Recurring%20events%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2F2016-02-03-recurring-events-in-ruby.html" target="_blank" rel="noopener">share it on Twitter</a>,
-          <a href="https://twitter.com/rossta">follow me - @rossta</a>,
-          and sign up for my newsletter. Thanks!
-        </p>
-      </section>
+      <a href="https://twitter.com/intent/tweet?text=Recurring%20events%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2F2016-02-03-recurring-events-in-ruby.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
     </section>
-    <section class="signup-form-standalone margin-bottom double">
+    <section class="signup-form-standalone margin-bottom quadruple">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
   <div id="mc_embed_signup">
     <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
@@ -293,7 +285,8 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
       <p>
           Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
         Published on Feb  3, 2016
-    </p>
+      </p>
+    </section>
   </section>
     <hr />
     <section class="comments">

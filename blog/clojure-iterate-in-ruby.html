@@ -32,7 +32,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-fe1f2c06.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/index.bundle-6062734b.css" rel="stylesheet" />
     <script src="/assets/javascripts/head.bundle-bc33c5ab.js"></script>
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
   </head>
@@ -73,7 +73,6 @@
         <figure>
           <img src="/assets/images/blog/stock/umbrellas-pexels-photo-963fb7db.jpg" alt="Umbrellas pexels photo" />
         </figure>
-
       <p>In functional languages, the key building blocks are functions and data. Clojure has a particularly interesting data structure, <a href="http://clojure.org/sequences">sequences</a>, not featured in the Ruby standard library. A Clojure sequence is an immutable collection that representing the result of an algorithm. Previously, I described how to generate Clojure-like <a href="https://rossta.net/blog/pascals-triangle-with-rubys-enumerator.html">sequences in Ruby</a> (without the immutability anyways), including <a href="https://rossta.net/blog/infinite-sequences-in-ruby.html">Pascal&#39;s Triangle</a> using <code>Enumerator</code>, which allows us to package up an algorithm as an object that can emit values as any &quot;eager&quot; collection can, like <code>Array</code> and <code>Hash</code>.</p>
 
 <p>Clojure provides a few functions that can be used to generate sequences,
@@ -234,22 +233,15 @@ operations (free of side effects) on sequences (values that can be generated on 
 
 <p>When I started <a href="http://devpost.com/software/learning-clojure">learning Clojure</a> last year, I got really excited about the functional aspects of Ruby. &quot;Wait, I thought everything in Ruby is an object.&quot; Yes, but a great thing about Ruby is its <a href="http://yehudakatz.com/2009/07/11/python-decorators-in-ruby/">ability to adopt aspects of other languages</a>. As Piotr Solnica illustrates in <a href="https://speakerdeck.com/solnic/blending-functional-and-oo-programming-in-ruby">his recent talk</a>, blending functional techniques with our OO code can have a lot of benefits including avoidance of side effects and favoring composability. Introducing sequence-generating methods, like we saw here, is just one small idea to help sprinkle a little functional flavor into your Ruby code.</p>
 
-
     </article>
-    <hr />
     <section class="margin-bottom double">
-      <p>
-        Did you like this post? Do me a favor: <a href="https://twitter.com/intent/tweet?text=Clojure%27s%20iterate%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2F2016-02-17-clojure-iterate-in-ruby.html" target="_blank" rel="noopener">share it on Twitter</a>,
-          <a href="https://twitter.com/rossta">follow me - @rossta</a>,
-          and sign up for my newsletter. Thanks!
-        </p>
-      </section>
+      <a href="https://twitter.com/intent/tweet?text=Clojure%27s%20iterate%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2F2016-02-17-clojure-iterate-in-ruby.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
     </section>
-    <section class="signup-form-standalone margin-bottom double">
+    <section class="signup-form-standalone margin-bottom quadruple">
       <!-- Begin MailChimp Signup Form -->
 <div class="signup-form">
-  <h3>Stay in the LOOP</h3>
-  <p>Sign up for my occasional newsletter on Ruby, Javascript, and Elixir for the web!</p>
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
   <div id="mc_embed_signup">
     <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
       <div id="mc_embed_signup_scroll">
@@ -289,7 +281,8 @@ operations (free of side effects) on sequences (values that can be generated on 
       <p>
           Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
         Published on Feb 17, 2016
-    </p>
+      </p>
+    </section>
   </section>
     <hr />
     <section class="comments">
