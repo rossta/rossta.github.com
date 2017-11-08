@@ -505,17 +505,19 @@ Without prior knowledge of how Webpack works, one might expect that making a cha
 
 To demonstrate, let's say all we did was import jQuery in our vendor bundle and `./some_module` in our application bundle:
 
-```
+```javascript
 // app/javascript/packs/vendor.js
+
 import 'jquery';
 ```
-```
+```javascript
 // app/javascript/packs/application.js
+
 import SomeModule from '../some_module';
 ```
 Here's the output of the Webpack build, using the `CommonsChunkPlugin` setup as described in the previous section:
 
-```
+```shell
 $ bin/webpack
 Hash: 6331dfce0c27b4723c58
 Version: webpack 3.8.1
@@ -531,7 +533,7 @@ Note the digest of the application and vendor bundles under "Asset": `applicatio
 
 Now let's make only a change to `application.js` as below. `AnotherModule` brings in no new dependencies:
 
-```
+```javascript
 // app/javascript/packs/application.js
 
 import SomeModule from '../some_module';
@@ -539,7 +541,7 @@ import AnotherModule from '../another_module';
 ```
 Rebuilding now, we might expect only the digest for `application.js` would change:
 
-```
+```shell
 $ bin/webpack
 Hash: 7a033d5c3c2dffec095b
 Version: webpack 3.8.1
@@ -633,7 +635,7 @@ There are plenty of tutorials and tips out there for Karma + Webpack, including 
 
 First we added several packages.
 
-```
+```shell
 yarn add --dev karma karma-cli karma-sourcemap-loader karma-webpack karma-jasmine karma-chrome-launcher
 ```
 
@@ -721,7 +723,7 @@ development:
 
 We also add the following location block to development Nginx server configuration to allow the websocket connection to proxy through Nginx.
 
-```
+```nginx
 server {
     listen 80;
     server_name myapp.dev
