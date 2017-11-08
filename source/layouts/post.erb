@@ -16,23 +16,16 @@
           <% end %>
         </figure>
       <% end %>
-
       <%= yield %>
-
     </article>
-    <hr />
     <section class="margin-bottom double">
-      <p>
-        Did you like this post? Do me a favor: <%= tweet_link_to "share it on Twitter",
-          text: [current_article.title, "rossta.net"].join(" - "),
-          url: to_url(path: current_article.path) %>,
-          <a href="https://twitter.com/rossta">follow me - @rossta</a>,
-          and sign up for my newsletter. Thanks!
-        </p>
-      </section>
+      <%= tweet_link_to "Share this post on Twitter", {
+        text: [current_article.title, "rossta.net"].join(" - "),
+        url: to_url(path: current_article.path)
+      }, class: "button" %>
     </section>
-    <section class="signup-form-standalone margin-bottom double">
-      <%= partial "partials/signup" %>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <%= partial "partials/signup", locals: { title: "Did you like this post?" } %>
     </section>
     <section class="margin-bottom double">
       <p>
@@ -41,7 +34,8 @@
           Part of the <%= link_to series, series_path(series, "blog") %> series.
         <% end %>
         Published on <%= current_article.date.strftime('%b %e, %Y') %>
-    </p>
+      </p>
+    </section>
   </section>
   <% if build? %>
     <hr />

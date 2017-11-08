@@ -12,12 +12,18 @@
   &.double {
     margin-top: 2em;
   }
+  &.quadruple {
+    margin-top: 4em;
+  }
 }
 
 .margin-bottom {
   margin-bottom: 1em;
   &.double {
     margin-bottom: 2em;
+  }
+  &.quadruple {
+    margin-bottom: 4em;
   }
 }
 
