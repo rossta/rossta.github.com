@@ -19,7 +19,7 @@
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html">&lt;p&gt;In case you missed the news, &lt;a href="http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/"&gt;Rails is loving JavaScript&lt;/a&gt; and Rails 5.1 ships with the option to compile JavaScript with &lt;a href="https://webpack.js.org"&gt;Webpack&lt;/a&gt; via the &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker gem&lt;/a&gt;. This is a big change after years of the Rails asset pipeline running on Sprockets. My team at &lt;a href="https://learnzillion.com"&gt;LearnZillion&lt;/a&gt;&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;In case you missed the news, &lt;a href="http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/"&gt;Rails is loving JavaScript&lt;/a&gt; and Rails 5.1 ships with the option to compile JavaScript with &lt;a href="https://webpack.js.org"&gt;Webpack&lt;/a&gt; via the &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker gem&lt;/a&gt;. This is a big change after years of the Rails asset pipeline running on Sprockets. My team at &lt;a href="https://learnzillion.com"&gt;LearnZillion&lt;/a&gt; recently decided to embrace this change and make the switch to Webpack to compile our clientside JavasScript. &lt;em&gt;Gulp!&lt;/em&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;In case you missed the news, &lt;a href="http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/"&gt;Rails is loving JavaScript&lt;/a&gt; and Rails 5.1 ships with the option to compile JavaScript with &lt;a href="https://webpack.js.org"&gt;Webpack&lt;/a&gt; via the &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker gem&lt;/a&gt;. This is a big change after years of the Rails asset pipeline running on Sprockets. My team at &lt;a href="https://learnzillion.com"&gt;LearnZillion&lt;/a&gt; recently decided to embrace this change and make the switch to Webpack with Wthe Webpacker gem to compile our clientside JavasScript for our Rails 4.2 application. &lt;em&gt;Gulp!&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;This post describes the challenges we encountered while switching from Sprockets to Webpack, how we solved those issues, and what we learned along the way.&lt;/p&gt;
 
@@ -83,7 +83,7 @@
 &lt;p&gt;Webpacker allows Webpack and Sprockets to be used side-by-side.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;The ability to compile &lt;code&gt;some_module.js&lt;/code&gt; via Webpack and &lt;code&gt;another_module.js&lt;/code&gt; via Sprockets allowed us to move dependencies over to Webpack gradually, in small changesets. With any upgrade, our primary goal is &lt;em&gt;Don&amp;#39;t break the site.&lt;/em&gt; and the incremental adoption of Webpack allowed us to more easily address issues through our continuous integration and QA process. &lt;/p&gt;
+&lt;p&gt;The ability to compile &lt;code&gt;some_module.js&lt;/code&gt; via Webpack and &lt;code&gt;another_module.js&lt;/code&gt; via Sprockets allowed us to move dependencies over to Webpack gradually, in small changesets. With any upgrade, our primary goal is &lt;em&gt;Don&amp;#39;t break the site.&lt;/em&gt; and the incremental adoption of Webpack allowed us to more easily address issues through our continuous integration and QA process.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#39;s a high level overview of how we broke down the move to Webpack from Sprockets:&lt;/p&gt;
 
@@ -109,7 +109,7 @@
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;Our gradual approach to the migration had its downsides: &lt;/p&gt;
+&lt;p&gt;Our gradual approach to the migration had its downsides:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;We needed to figure out how to reference modules across two scopes&lt;/li&gt;
@@ -457,7 +457,7 @@ module: {
         Discovering Webpack chunks
       &lt;/h2&gt;
     
-&lt;p&gt;However, after adding &lt;code&gt;expose-loader&lt;/code&gt; for jQuery, not everything worked as we expected in the early going. &lt;/p&gt;
+&lt;p&gt;However, after adding &lt;code&gt;expose-loader&lt;/code&gt; for jQuery, not everything worked as we expected in the early going.&lt;/p&gt;
 
 &lt;p&gt;Consider the following where we import jQuery in &lt;code&gt;vendor.js&lt;/code&gt;. Then we&amp;#39;ve added the &lt;code&gt;chosen-js&lt;/code&gt; package and import it in &lt;code&gt;application.js&lt;/code&gt;.&lt;/p&gt;
 
