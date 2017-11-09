@@ -20,8 +20,8 @@
     </article>
     <section class="margin-bottom double">
       <%= tweet_link_to "Share this post on Twitter", {
-        text: [current_article.title, "rossta.net"].join(" - "),
-        url: to_url(path: current_article.path)
+        text: current_article.title,
+        url: to_url(path: current_article.url)
       }, class: "button" %>
     </section>
     <section class="signup-form-standalone margin-bottom quadruple">
