@@ -535,6 +535,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/tags/webpack.html</loc>
+    <lastmod>2017-11-09T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/tags/node.html</loc>
     <lastmod>2017-11-09T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -542,12 +548,6 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/elixir.html</loc>
-    <lastmod>2017-11-09T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/tags/webpack.html</loc>
     <lastmod>2017-11-09T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
