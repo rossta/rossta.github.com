@@ -10,6 +10,7 @@ category: Code
 tags:
   - Ruby
   - JavaScript
+  - Service Worker
 ---
 
 Push messages from mobile and desktop browsers are [now a thing](http://caniuse.com/#feat=push-api) on the open web.
