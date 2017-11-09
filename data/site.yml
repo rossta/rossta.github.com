@@ -5,6 +5,5 @@ description: 'Ross Kaffenberger writes about software engineering, computer prog
 keywords: 'Ross Kaffenberger, software, software developer, software engineering, computer programming, web development, test driven development, TDD, Ruby, Javascript, Ruby on Rails, Rails, Webpack, Service Worker, Progressive Web Apps, RSpec, Elixir, Clojure, HTML, CSS'
 twitter_card: 'summary'
 twitter_author: 'Ross Kaffenberger'
-twitter_description: 'Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, and Elixir'
 pull_image: 'blog/stock/louvre-pexels-photo.png'
 customize_by_frontmatter: true
