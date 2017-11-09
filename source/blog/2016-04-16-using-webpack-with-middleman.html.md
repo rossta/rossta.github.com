@@ -9,6 +9,7 @@ category: Code
 tags:
   - Ruby
   - JavaScript
+  - Webpack
 ---
 
 I've [hosted this site on Github Pages](/blog/why-i-ditched-wordpress-for-github.html) with the [Middleman static site framework](https://middlemanapp.com/) for several years now. To keep up with the most recent release of the framework, I decided to upgrade the site to [Middleman version 4](https://middlemanapp.com/basics/upgrade-v4/). There were some significant changes to the configuration options and helper methods, which are [well documented](https://middlemanapp.com/basics/upgrade-v4/) on the Middleman blog.
