@@ -9,8 +9,9 @@ series: Service Worker
 category: Code
 popular: 5
 tags:
-- Rails
-- JavaScript
+  - Rails
+  - JavaScript
+  - Service Worker
 ---
 
 Have you heard about [Service

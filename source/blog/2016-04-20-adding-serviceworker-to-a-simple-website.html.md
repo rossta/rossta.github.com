@@ -10,6 +10,8 @@ series: Service Worker
 category: Code
 tags:
   - JavaScript
+  - Service Worker
+  - Webpack
 ---
 
 Service Worker is well-suited to enhance a simple website like this blog. The [Service Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) has been designed in such as a way that developers can pick and choose the features they want without reworking their sites or committing to a (or another) JavaScript framework.

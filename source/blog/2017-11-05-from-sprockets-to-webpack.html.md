@@ -3,7 +3,7 @@ title: How we switched from Sprockets to Webpack
 author: Ross Kaffenberger
 published: true
 summary: Lessons learned adopting the Webpacker gem in an existing Rails app
-descrption: In this post, we describe the challenges we faced while replacing the Rails asset pipeline with Webpack, how we solved those issues, and what we learned along the way.
+description: In this post, we describe the challenges we faced while replacing the Rails asset pipeline with Webpack, how we solved those issues, and what we learned along the way.
 pull_image: 'blog/stock/denisse-leon-mixer-board-unsplash.jpg'
 pull_image_caption: Photo by Denisse Leon on Unsplash
 series:
@@ -12,14 +12,13 @@ tags:
   - Rails
   - JavaScript
   - Webpack
-
 ---
 
-In case you missed the news, [Rails is loving JavaScript](http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/) and Rails 5.1 ships with the option to compile JavaScript with [Webpack](https://webpack.js.org) via the [Webpacker gem](https://github.com/rails/webpacker). This is a big change after years of the Rails asset pipeline running on Sprockets. My team at [LearnZillion](https://learnzillion.com) recently decided to embrace this change and make the switch to Webpack with Wthe Webpacker gem to compile our clientside JavasScript for our Rails 4.2 application. *Gulp!*
+In case you missed the news, [Rails is loving JavaScript](http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/) and Rails 5.1 ships with the option to compile JavaScript with [Webpack](https://webpack.js.org) via the [Webpacker gem](https://github.com/rails/webpacker). This is a big change after years of the Rails asset pipeline running on Sprockets. My team at [LearnZillion](https://learnzillion.com) recently decided to embrace this change and make the switch to Webpack with Webpacker to compile our clientside JavasScript for our Rails 4.2 application. *Gulp!*
 
 This post describes the challenges we encountered while switching from Sprockets to Webpack, how we solved those issues, and what we learned along the way.
 
-The issues we encountered may be generally relevant, this post is not intended to be a step-by-step guide for replacing the Rails asset pipeline with Webpack. This post also won't help you integrate with of the currently popular frameworks like React, Angular, Vue, or Ember (we use Knockout.js).
+Though much of what follows may be generally relevant to other teams considering a similar change, this post is not intended to be a step-by-step guide for replacing the Rails asset pipeline with Webpack. This post also won't help you integrate with of the currently popular frameworks like React, Angular, Vue, or Ember (we use Knockout.js).
 
 That said, if you're working in a legacy Rails application and considering Webpack, perhaps you can learn from our mistakes.
 
@@ -505,17 +504,19 @@ Without prior knowledge of how Webpack works, one might expect that making a cha
 
 To demonstrate, let's say all we did was import jQuery in our vendor bundle and `./some_module` in our application bundle:
 
-```
+```javascript
 // app/javascript/packs/vendor.js
+
 import 'jquery';
 ```
-```
+```javascript
 // app/javascript/packs/application.js
+
 import SomeModule from '../some_module';
 ```
 Here's the output of the Webpack build, using the `CommonsChunkPlugin` setup as described in the previous section:
 
-```
+```shell
 $ bin/webpack
 Hash: 6331dfce0c27b4723c58
 Version: webpack 3.8.1
@@ -531,7 +532,7 @@ Note the digest of the application and vendor bundles under "Asset": `applicatio
 
 Now let's make only a change to `application.js` as below. `AnotherModule` brings in no new dependencies:
 
-```
+```javascript
 // app/javascript/packs/application.js
 
 import SomeModule from '../some_module';
@@ -539,7 +540,7 @@ import AnotherModule from '../another_module';
 ```
 Rebuilding now, we might expect only the digest for `application.js` would change:
 
-```
+```shell
 $ bin/webpack
 Hash: 7a033d5c3c2dffec095b
 Version: webpack 3.8.1
@@ -633,7 +634,7 @@ There are plenty of tutorials and tips out there for Karma + Webpack, including 
 
 First we added several packages.
 
-```
+```shell
 yarn add --dev karma karma-cli karma-sourcemap-loader karma-webpack karma-jasmine karma-chrome-launcher
 ```
 
@@ -721,7 +722,7 @@ development:
 
 We also add the following location block to development Nginx server configuration to allow the websocket connection to proxy through Nginx.
 
-```
+```nginx
 server {
     listen 80;
     server_name myapp.dev

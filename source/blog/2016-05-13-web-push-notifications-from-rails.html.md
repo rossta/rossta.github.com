@@ -11,6 +11,7 @@ category: Code
 tags:
   - Rails
   - JavaScript
+  - Service Worker
 ---
 
 *Update: Check out [Using the Push API with VAPID](https://rossta.net/blog/using-the-web-push-api-with-vapid.html) for sending Web Push notifications without needing to configure Google app settings*
