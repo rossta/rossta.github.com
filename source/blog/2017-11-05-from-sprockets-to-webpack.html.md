@@ -40,7 +40,7 @@ Though there are number of JavaScript tools that we could have chosen instead We
 
 Why does Webpacker exist?
 
-First, Webpacker helps make Webpack *Rails-friendly*. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes *convention over configuration*. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support via [Babel](https://babeljs.io/) support in Webpack.
+First, Webpacker helps make Webpack *Rails-friendly*. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes *convention over configuration*. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through integration with [Babel](https://babeljs.io/).
 
 Also, Webpacker helps form the bridge between the Webpack build and the Rails application. Rails needs to be able to render `<script>` tags for Webpack assets in views. Webpacker provides helpers, including `javascript_pack_tag`, for this purpose.
 
@@ -180,13 +180,6 @@ We decided, as a policy. we did not want our Webpack modules to depend on global
 
 In reality, we had to compromise in some cases. While most of our third party JavaScript could be moved to `node_modules`, we also relied on a number of vendor JavaScript APIs loaded via script tags in the browser. For example, since we don't compile our Google Analytics script via Webpack and instead load this script from Google's servers, we left global references to `window.ga` in our codebase.
 
-<aside class="callout panel">
-<h3>Guest appearance by TSort</h3>
-<p>
-To ensure we selected modules to migrate in the right order, we wrote a short script using <a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html">Ruby's <code>TSort</code> module</a>. <code>TSort</code> is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
-</p>
-</aside>
-
 ## Migrating a Javascript Module
 
 Our legacy JavaScript application consistently followed a pattern of defining and accessing properties on a global JavaScript object: `window.App`.
@@ -238,6 +231,13 @@ App.SomeModule.someMethod();
 ```
 
 In other words, we wanted to have our ES6 module cake and eat it too. Luckily, Webpack provides a mechanism to do this.
+
+<aside class="callout panel">
+<h3>Guest appearance by TSort</h3>
+<p>
+To ensure we selected modules to migrate in the right order, we wrote a short script using <a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html">Ruby's <code>TSort</code> module</a>. <code>TSort</code> is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
+</p>
+</aside>
 
 ## Exporting from Webpack
 
