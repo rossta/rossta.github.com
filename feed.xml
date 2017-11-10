@@ -59,7 +59,7 @@
 
 &lt;p&gt;Why does Webpacker exist?&lt;/p&gt;
 
-&lt;p&gt;First, Webpacker helps make Webpack &lt;em&gt;Rails-friendly&lt;/em&gt;. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes &lt;em&gt;convention over configuration&lt;/em&gt;. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support via &lt;a href="https://babeljs.io/"&gt;Babel&lt;/a&gt; support in Webpack.&lt;/p&gt;
+&lt;p&gt;First, Webpacker helps make Webpack &lt;em&gt;Rails-friendly&lt;/em&gt;. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes &lt;em&gt;convention over configuration&lt;/em&gt;. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through integration with &lt;a href="https://babeljs.io/"&gt;Babel&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Also, Webpacker helps form the bridge between the Webpack build and the Rails application. Rails needs to be able to render &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; tags for Webpack assets in views. Webpacker provides helpers, including &lt;code&gt;javascript_pack_tag&lt;/code&gt;, for this purpose.&lt;/p&gt;
 
@@ -231,13 +231,6 @@ For more background on this topic, checkout &lt;a href="https://twitter.com/dave
 
 &lt;p&gt;In reality, we had to compromise in some cases. While most of our third party JavaScript could be moved to &lt;code&gt;node_modules&lt;/code&gt;, we also relied on a number of vendor JavaScript APIs loaded via script tags in the browser. For example, since we don&amp;#39;t compile our Google Analytics script via Webpack and instead load this script from Google&amp;#39;s servers, we left global references to &lt;code&gt;window.ga&lt;/code&gt; in our codebase.&lt;/p&gt;
 
-&lt;aside class="callout panel"&gt;
-&lt;h3&gt;Guest appearance by TSort&lt;/h3&gt;
-&lt;p&gt;
-To ensure we selected modules to migrate in the right order, we wrote a short script using &lt;a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html"&gt;Ruby's &lt;code&gt;TSort&lt;/code&gt; module&lt;/a&gt;. &lt;code&gt;TSort&lt;/code&gt; is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
-&lt;/p&gt;
-&lt;/aside&gt;
-
       &lt;h2 id="migrating-a-javascript-module" class="title"&gt;
         &lt;a name="migrating-a-javascript-module" class="anchor" href="#migrating-a-javascript-module"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
@@ -292,6 +285,13 @@ SomeModule.someMethod();
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;In other words, we wanted to have our ES6 module cake and eat it too. Luckily, Webpack provides a mechanism to do this.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;
+&lt;h3&gt;Guest appearance by TSort&lt;/h3&gt;
+&lt;p&gt;
+To ensure we selected modules to migrate in the right order, we wrote a short script using &lt;a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html"&gt;Ruby's &lt;code&gt;TSort&lt;/code&gt; module&lt;/a&gt;. &lt;code&gt;TSort&lt;/code&gt; is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
+&lt;/p&gt;
+&lt;/aside&gt;
 
       &lt;h2 id="exporting-from-webpack" class="title"&gt;
         &lt;a name="exporting-from-webpack" class="anchor" href="#exporting-from-webpack"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;

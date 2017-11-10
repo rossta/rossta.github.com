@@ -32,8 +32,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/index.bundle-6062734b.css" rel="stylesheet" />
-    <script src="/assets/javascripts/head.bundle-bc33c5ab.js"></script>
+    <link href="/assets/stylesheets/app.bundle-6062734b.css" rel="stylesheet" />
     <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
   </head>
   <body id="application" class="typekit">
@@ -114,7 +113,7 @@
 
 <p>Why does Webpacker exist?</p>
 
-<p>First, Webpacker helps make Webpack <em>Rails-friendly</em>. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes <em>convention over configuration</em>. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support via <a href="https://babeljs.io/">Babel</a> support in Webpack.</p>
+<p>First, Webpacker helps make Webpack <em>Rails-friendly</em>. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes <em>convention over configuration</em>. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through integration with <a href="https://babeljs.io/">Babel</a>.</p>
 
 <p>Also, Webpacker helps form the bridge between the Webpack build and the Rails application. Rails needs to be able to render <code>&lt;script&gt;</code> tags for Webpack assets in views. Webpacker provides helpers, including <code>javascript_pack_tag</code>, for this purpose.</p>
 
@@ -286,13 +285,6 @@ For more background on this topic, checkout <a href="https://twitter.com/davetro
 
 <p>In reality, we had to compromise in some cases. While most of our third party JavaScript could be moved to <code>node_modules</code>, we also relied on a number of vendor JavaScript APIs loaded via script tags in the browser. For example, since we don&#39;t compile our Google Analytics script via Webpack and instead load this script from Google&#39;s servers, we left global references to <code>window.ga</code> in our codebase.</p>
 
-<aside class="callout panel">
-<h3>Guest appearance by TSort</h3>
-<p>
-To ensure we selected modules to migrate in the right order, we wrote a short script using <a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html">Ruby's <code>TSort</code> module</a>. <code>TSort</code> is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
-</p>
-</aside>
-
       <h2 id="migrating-a-javascript-module" class="title">
         <a name="migrating-a-javascript-module" class="anchor" href="#migrating-a-javascript-module">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
@@ -347,6 +339,13 @@ SomeModule.someMethod();
 </code></pre>
 
 <p>In other words, we wanted to have our ES6 module cake and eat it too. Luckily, Webpack provides a mechanism to do this.</p>
+
+<aside class="callout panel">
+<h3>Guest appearance by TSort</h3>
+<p>
+To ensure we selected modules to migrate in the right order, we wrote a short script using <a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html">Ruby's <code>TSort</code> module</a>. <code>TSort</code> is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
+</p>
+</aside>
 
       <h2 id="exporting-from-webpack" class="title">
         <a name="exporting-from-webpack" class="anchor" href="#exporting-from-webpack">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -1043,7 +1042,7 @@ module.exports = function(config) {
   </p>
 </footer>
 
-    <script src="/assets/javascripts/index.bundle-c5a45a1a.js"></script>
+    <script src="/assets/javascripts/runtime.bundle-a9c6ad20.js"></script><script src="/assets/javascripts/vendor.bundle-d9b5606a.js"></script><script src="/assets/javascripts/app.bundle-430bb711.js"></script>
     
     <script type="text/javascript">
 !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";

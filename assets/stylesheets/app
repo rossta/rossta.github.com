@@ -1,7 +1,7 @@
 /*
 Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.
         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss
-        from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/index.scss
+        from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/app.scss
 
 1: @import "settings";
 2: @import "~foundation-sites/scss/normalize";
@@ -13,7 +13,7 @@ Error: File to import not found or unreadable: ~foundation-sites/scss/foundation
 
 Backtrace:
 /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss:2
-/home/ubuntu/rossta.github.com/source/assets/stylesheets/index.scss:1
+/home/ubuntu/rossta.github.com/source/assets/stylesheets/app.scss:1
 /home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/tree/import_node.rb:67:in `rescue in import'
 /home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/tree/import_node.rb:45:in `import'
 /home/ubuntu/.rvm/gems/ruby-2.3.1/gems/sass-3.4.23/lib/sass/tree/import_node.rb:28:in `imported_file'
@@ -143,4 +143,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/index.scss\A \A 1: @import \"settings\";\A 2: @import \"~foundation-sites/scss/normalize\";\A 3: @import \"~foundation-sites/scss/foundation\";\A 4: \A 5: @import \"layout\";\A 6: @import \"objects\";\A 7: @import \"sections\";"; }
+  content: "Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/_settings.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/app.scss\A \A 1: @import \"settings\";\A 2: @import \"~foundation-sites/scss/normalize\";\A 3: @import \"~foundation-sites/scss/foundation\";\A 4: \A 5: @import \"layout\";\A 6: @import \"objects\";\A 7: @import \"sections\";"; }
