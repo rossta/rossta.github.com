@@ -7,6 +7,8 @@
     "doc": "doc"
   },
   "scripts": {
+    "build:prod": "NODE_ENV=development webpack --bail -p",
+    "build:dev": "NODE_ENV=build webpack --watch -d --progress --color",
     "test": "echo \"No test specified\" && exit 0"
   },
   "repository": "git+https://github.com/rossta/rossta.github.com.git",
@@ -21,27 +23,32 @@
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.2",
     "babel-loader": "^6.4.1",
-    "babel-polyfill": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.3.3",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
     "clean-webpack-plugin": "^0.1.16",
+    "compression-webpack-plugin": "^1.0.1",
     "css-loader": "^0.28.0",
     "eslint": "^3.19.0",
     "exports-loader": "^0.6.4",
     "expose-loader": "^0.7.3",
     "extract-text-webpack-plugin": "^2.1.0",
     "imports-loader": "^0.7.1",
-    "node-sass": "^4.5.2",
+    "node-sass": "^4.6.0",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
     "webpack": "^2.3.3"
   },
   "dependencies": {
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "foundation-sites": "^5.5.3",
     "highlight.js": "^9.2.0",
     "jquery": "^2.2.1",
     "react": "^0.14.7"
+  },
+  "engines": {
+    "node": "^8.6.0",
+    "yarn": "^1.2"
   }
 }

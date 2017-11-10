@@ -6,7 +6,7 @@ machine:
   ruby:
     version: 2.3.1
   node:
-    version: 6.11.0
+    version: 8.9.1
 dependencies:
   override:
     - yarn

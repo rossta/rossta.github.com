@@ -1,22 +1,27 @@
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var Clean = require('clean-webpack-plugin');
-var path = require('path');
+const path = require('path');
+const webpack = require('webpack');
 
-var definePlugin = new webpack.DefinePlugin({
-  __DEVELOPMENT__: JSON.stringify(JSON.parse(process.env.WEBPACK_ENV === 'development')),
-  __DEBUG__:       JSON.stringify(JSON.parse(process.env.WEBPACK_ENV === 'debug')),
-  __BUILD__:       JSON.stringify(JSON.parse(process.env.WEBPACK_ENV === 'build')),
-  __VERSION__:     (new Date().getTime().toString())
-});
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const {sitePlugins, swPlugins} = require('./config/plugins');
 
-var siteConfig = {
+const babelLoader = {
+  test: /.*\.js$/,
+  exclude: /(node_modules|\.tmp|vendor)/,
+  loader: "babel-loader",
+};
+
+const siteConfig = {
   entry: {
-    index: [
-      './source/assets/stylesheets/index.scss',
-      './source/assets/javascripts/index.js'
+    app: [
+      './source/assets/stylesheets/app.scss',
+      './source/assets/javascripts/app.js'
     ],
-    head: './source/assets/javascripts/head.js',
+    vendor: [
+      'babel-polyfill',
+      'jquery',
+      'foundation-sites/js/vendor/modernizr',
+      'highlight.js'
+    ],
   },
 
   resolve: {
@@ -33,16 +38,7 @@ var siteConfig = {
 
   module: {
     rules: [
-      {
-        test: /source\/assets\/javascripts\/.*\.js$/,
-        exclude: /(node_modules|\.tmp|vendor)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['env', 'es2015', 'stage-0'],
-          }
-        },
-      },
+      babelLoader,
 
       {
         test: require.resolve("jquery"),
@@ -91,20 +87,10 @@ var siteConfig = {
     console: true
   },
 
-  plugins: [
-    definePlugin,
-    new Clean([".tmp"]),
-    new ExtractTextPlugin("assets/stylesheets/index.bundle.css"),
-    new webpack.optimize.CommonsChunkPlugin({name: "head", filename: "assets/javascripts/head.bundle.js"}),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery"
-    }),
-  ],
+  plugins: sitePlugins,
 };
 
-var swConfig = {
+const swConfig = {
   entry: {
     serviceworker: "./source/assets/javascripts/serviceworker.js",
   },
@@ -123,17 +109,7 @@ var swConfig = {
 
   module: {
     rules: [
-      {
-        test: /source\/assets\/javascripts\/.*\.js$/,
-        exclude: /(node_modules|\.tmp|vendor)/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ["env", "es2015", "stage-0"],
-            // plugins: [require("babel-plugin-transform-object-rest-spread")]
-          }
-        },
-      },
+      babelLoader,
     ],
   },
 
@@ -141,7 +117,7 @@ var swConfig = {
     console: true
   },
 
-  plugins: [definePlugin],
+  plugins: swPlugins,
 }
 
 module.exports = [ siteConfig, swConfig ];

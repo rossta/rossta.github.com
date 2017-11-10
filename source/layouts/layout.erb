@@ -20,8 +20,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <%= stylesheet_link_tag "index.bundle" %>
-    <%= javascript_include_tag "head.bundle" %>
+    <%= stylesheet_link_tag "app.bundle" %>
     <%= favicon_tag 'turtle-favicon.ico' %>
   </head>
   <body id="application" class="typekit">
@@ -33,7 +32,7 @@
     </div>
     <%= partial "partials/zen" %>
     <%= partial "partials/footer" %>
-    <%= javascript_include_tag "index.bundle" %>
+    <%= javascript_include_tag "runtime.bundle", "vendor.bundle", "app.bundle" %>
     <%= yield_content :javascripts %>
     <%= partial "partials/analytics" %>
   </body>
