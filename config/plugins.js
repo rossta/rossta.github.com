@@ -7,7 +7,6 @@ const CompressionPlugin = require('compression-webpack-plugin');
 
 const definePlugin = new webpack.DefinePlugin({
   __DEVELOPMENT__: JSON.stringify(env.__DEVELOPMENT__),
-  __DEBUG__:       JSON.stringify(env.__DEBUG__),
   __BUILD__:       JSON.stringify(env.__BUILD__),
   __VERSION__:     JSON.stringify(env.__VERSION__),
 });

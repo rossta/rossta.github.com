@@ -1,4 +1,5 @@
-'use strict';
+import debug from 'debug';
+const log = debug('app:serviceworker');
 
 const version = __VERSION__;
 const offlineResources = [
@@ -47,17 +48,17 @@ function onFetch(event) {
   const request = event.request;
 
   if (shouldAlwaysFetch(request)) {
-    console.log('shouldAlwaysFetch', request.url)
+    log('shouldAlwaysFetch', request.url)
     return;
   }
 
   if (shouldFetchAndCache(request)) {
-    console.log('shouldFetchAndCache', request.url)
+    log('shouldFetchAndCache', request.url)
     event.respondWith(networkedOrCached(request));
     return;
   }
 
-  console.log('cachedOrNetworked', request.url)
+  log('cachedOrNetworked', request.url)
   event.respondWith(cachedOrNetworked(request));
 }
 
@@ -154,12 +155,6 @@ function cacheKey() {
   return [version, ...arguments].join(':');
 }
 
-function log() {
-  if (developmentMode()) {
-    console.log("SW:", ...arguments);
-  }
-}
-
 function shouldAlwaysFetch(request) {
   return __DEVELOPMENT__ ||
     request.method !== 'GET' ||
@@ -168,10 +163,6 @@ function shouldAlwaysFetch(request) {
 
 function shouldFetchAndCache(request) {
   return ~request.headers.get('Accept').indexOf('text/html');
-}
-
-function developmentMode() {
-  return __DEVELOPMENT__ || __DEBUG__;
 }
 
 log("Hello from ServiceWorker land!", version);

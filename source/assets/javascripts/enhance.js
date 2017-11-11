@@ -1,9 +1,12 @@
+import debug from 'debug';
+const log = debug('app:enhance');
+
 // ServiceWorker is a progressive technology. Ignore unsupported browsers
 if('serviceWorker' in navigator) {
   log('service worker registration in progress.');
   navigator.serviceWorker.register('/serviceworker.js', {
     scope: '/'
-  }).then(function (registration) {
+  }).then((registration) => {
     log('service worker is registered!');
       var serviceWorker;
       if (registration.installing) {
@@ -27,10 +30,4 @@ if('serviceWorker' in navigator) {
   });
 } else {
   log('service worker is not supported.');
-}
-
-function log() {
-  if (__DEVELOPMENT__) {
-    console.log("CLIENT:", ...arguments);
-  }
 }
