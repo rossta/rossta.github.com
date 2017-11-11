@@ -1,14 +1,16 @@
+import $ from 'jquery';
 import hljs from 'highlight.js';
 import 'tracking';
 import 'zen';
 import 'enhance';
 import debug from 'debug';
+
 const log = debug('app:app');
 
 hljs.initHighlightingOnLoad();
 
 $(() => {
-  $.zen(function(toBe) { $('#zen').find('.enlightenment').text(toBe); });
+  $.zen((toBe) => { $('#zen').find('.enlightenment').text(toBe); });
 
   $('.top-bar').on('click', '.menu-icon a', (e) => {
     e.preventDefault();
@@ -17,9 +19,9 @@ $(() => {
 });
 
 if (__DEVELOPMENT__) {
-  log("Running in development mode!");
+  log('Running in development mode!');
 }
 
 if (__BUILD__) {
-  log("Welcome to rossta.net!");
+  log('Welcome to rossta.net!');
 }

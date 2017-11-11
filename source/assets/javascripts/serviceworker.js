@@ -1,83 +1,88 @@
+/* global self, caches, fetch, URL, Response */
 import debug from 'debug';
+
 const log = debug('app:serviceworker');
 
 const version = __VERSION__;
 const offlineResources = [
   '/',
   '/offline.html',
-  '/offline.svg'
+  '/offline.svg',
 ];
 
 const ignoreFetch = [
-  /\/\/[^\/]*mixpanel[^\/]*\.com\//,
-  /\/\/[^\/]*mxpnl[^\/]*\.com\//,
-  /\/\/[^\/]*segment[^\/]*\.io\//,
-  /\/\/[^\/]*getclicky[^\/]*\.com\//,
-  /\/\/[^\/]*typekit[^\/]*\.net\//,
-  /\/\/[^\/]*disqus[^\/]*\.com\//,
-  /\/\/[^\/]*google-analytics[^\/]*\.com\//,
-  /\/\/[^\/]*list-manage[^\/]*\.com\//,
+  /\/\/[^/]*mixpanel[^/]*\.com\//,
+  /\/\/[^/]*mxpnl[^/]*\.com\//,
+  /\/\/[^/]*segment[^/]*\.io\//,
+  /\/\/[^/]*getclicky[^/]*\.com\//,
+  /\/\/[^/]*typekit[^/]*\.net\//,
+  /\/\/[^/]*disqus[^/]*\.com\//,
+  /\/\/[^/]*google-analytics[^/]*\.com\//,
+  /\/\/[^/]*list-manage[^/]*\.com\//,
   /\/\/zenkaffe\.herokuapp\.com\//,
   /\/__rack\//,
 ];
 
-//////////
-// Install
-//////////
-function onInstall(event) {
-  log('install event in progress.');
-
-  event.waitUntil(cacheOfflineResources());
+function cacheKey(...args) {
+  return [version, ...args].join(':');
 }
 
 function cacheOfflineResources() {
   return caches
     .open(cacheKey('offline'))
-    .then((cache) => {
-      return cache.addAll(offlineResources);
-    })
+    .then(cache => cache.addAll(offlineResources))
     .then(() => {
       log('installation complete!');
     });
 }
 
-////////
-// Fetch
-////////
-function onFetch(event) {
-  const request = event.request;
+function offlineResponse(request) {
+  log('(offline)', request.method, request.url);
 
-  if (shouldAlwaysFetch(request)) {
-    log('shouldAlwaysFetch', request.url)
-    return;
+  const url = new URL(request.url);
+  const path = url.pathname;
+
+  if (path.endsWith('.html') || path.endsWith('/') || !path.endsWith('.js')) {
+    return caches.match('/offline.html');
   }
-
-  if (shouldFetchAndCache(request)) {
-    log('shouldFetchAndCache', request.url)
-    event.respondWith(networkedOrCached(request));
-    return;
-  }
-
-  log('cachedOrNetworked', request.url)
-  event.respondWith(cachedOrNetworked(request));
+  return new Response('', { status: 503, statusText: 'Service Unavailable' });
 }
 
-function networkedOrCached(request) {
-  return networkedAndCache(request)
-    .catch(() => { return cachedOrOffline(request) });
+function removeOldCache() {
+  // We return a promise that settles when all outdated caches are deleted.
+  // Filter by keys that don't start with the latest version prefix.
+  // Return a promise that's fulfilled when each outdated cache is deleted.
+  return caches
+    .keys()
+    .then(keys => Promise.all(keys
+      .filter(key => !key.startsWith(version))
+      .map(key => caches.delete(key))))
+    .then(() => {
+      log('removeOldCache completed.');
+    });
+}
+
+function shouldAlwaysFetch(request) {
+  return __DEVELOPMENT__ ||
+    request.method !== 'GET' ||
+    ignoreFetch.some(regex => request.url.match(regex));
+}
+
+function shouldFetchAndCache(request) {
+  return ~request.headers.get('Accept').indexOf('text/html');
 }
 
 // Stash response in cache as side-effect of network request
 function networkedAndCache(request) {
   return fetch(request)
     .then((response) => {
-      var copy = response.clone();
+      const copy = response.clone();
       caches.open(cacheKey('resources'))
         .then((cache) => {
           if (request.url.match(/^https?:\/\//)) cache.put(request, copy);
         });
 
-      log("(network: cache write)", request.method, request.url);
+      log('(network: cache write)', request.method, request.url);
       return response;
     });
 }
@@ -87,88 +92,72 @@ function cachedOrNetworked(request) {
     .then((response) => {
       log(response ? '(cached)' : '(network: cache miss)', request.method, request.url);
       return response ||
-        networkedAndCache(request)
-          .catch(() => { return offlineResponse(request) });
+        networkedAndCache(request).catch(() => offlineResponse(request));
     });
 }
 
-function networkedOrOffline(request) {
-  return fetch(request)
-    .then((response) => {
-      log('(network)', request.method, request.url);
-      return response;
-    })
-    .catch(() => {
-      return offlineResponse(request);
-    });
-}
+// function networkedOrOffline(request) {
+//   return fetch(request)
+//     .then((response) => {
+//       log('(network)', request.method, request.url);
+//       return response;
+//     })
+//     .catch(() => offlineResponse(request));
+// }
 
 function cachedOrOffline(request) {
   return caches
     .match(request)
-    .then((response) => {
-      return response || offlineResponse(request);
-    });
+    .then(response => response || offlineResponse(request));
 }
 
-function offlineResponse(request) {
-  log('(offline)', request.method, request.url);
+function networkedOrCached(request) {
+  return networkedAndCache(request)
+    .catch(() => cachedOrOffline(request));
+}
 
-  let url = new URL(request.url);
-  let path = url.pathname;
+// ////////
+// Install
+// ////////
+function onInstall(event) {
+  log('install event in progress.');
 
-  if (path.endsWith(".html") || path.endsWith("/") || !path.endsWith(".js")) {
-    return caches.match('/offline.html');
-  } else {
-    return new Response('', { status: 503, statusText: 'Service Unavailable' });;
+  event.waitUntil(cacheOfflineResources());
+}
+
+// //////
+// Fetch
+// //////
+function onFetch(event) {
+  const { request } = event;
+
+  if (shouldAlwaysFetch(request)) {
+    log('shouldAlwaysFetch', request.url);
+    return;
   }
+
+  if (shouldFetchAndCache(request)) {
+    log('shouldFetchAndCache', request.url);
+    event.respondWith(networkedOrCached(request));
+    return;
+  }
+
+  log('cachedOrNetworked', request.url);
+  event.respondWith(cachedOrNetworked(request));
 }
 
-///////////
+// /////////
 // Activate
-///////////
+// /////////
 function onActivate(event) {
   log('activate event in progress.');
   event.waitUntil(removeOldCache());
 }
 
-function removeOldCache() {
-  return caches
-    .keys()
-    .then((keys) => {
-      return Promise.all( // We return a promise that settles when all outdated caches are deleted.
-        keys
-         .filter((key) => {
-           return !key.startsWith(version); // Filter by keys that don't start with the latest version prefix.
-         })
-         .map((key) => {
-           return caches.delete(key); // Return a promise that's fulfilled when each outdated cache is deleted.
-         })
-      );
-    })
-    .then(() => {
-      log('removeOldCache completed.');
-    });
-}
-
-function cacheKey() {
-  return [version, ...arguments].join(':');
-}
-
-function shouldAlwaysFetch(request) {
-  return __DEVELOPMENT__ ||
-    request.method !== 'GET' ||
-      ignoreFetch.some(regex => request.url.match(regex));
-}
-
-function shouldFetchAndCache(request) {
-  return ~request.headers.get('Accept').indexOf('text/html');
-}
-
-log("Hello from ServiceWorker land!", version);
+log('Hello from ServiceWorker land!', version);
 
 self.addEventListener('install', onInstall);
 
 self.addEventListener('fetch', onFetch);
 
-self.addEventListener("activate", onActivate);
+self.addEventListener('activate', onActivate);
