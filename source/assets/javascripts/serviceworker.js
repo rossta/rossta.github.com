@@ -74,7 +74,7 @@ function networkedAndCache(request) {
       var copy = response.clone();
       caches.open(cacheKey('resources'))
         .then((cache) => {
-          cache.put(request, copy);
+          if (request.url.match(/^https?:\/\//)) cache.put(request, copy);
         });
 
       log("(network: cache write)", request.method, request.url);
