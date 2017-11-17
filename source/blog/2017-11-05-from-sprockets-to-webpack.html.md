@@ -22,6 +22,27 @@ Though much of what follows may be generally relevant to other teams considering
 
 That said, if you're working in a legacy Rails application and considering Webpack, perhaps you can learn from our mistakes.
 
+## Table of Contents
+
+1. [Why](#why-switch-)
+1. [Webpack, the Rails Way](#webpack-the-rails-way)
+1. [Making a plan](#making-a-plan)
+1. [Setting up Webpack entries](#setting-up-webpack-entries)
+1. [Maintaining backwards compatibility](#maintaining-backwards-compatibility)
+1. [Migrating a JavaScript module](#migrating-a-javascript-module)
+1. [Exporting from Webpack](#exporting-from-webpack)
+1. [Resolving application modules](#resolving-application-modules)
+1. [Extending the Webpack configuration](#extending-the-webpack-configuration)
+1. [Importing libraries and global scope](#importing-libraries-and-global-scope)
+1. [Discovering Webpack chunks](#discovering-webpack-chunks)
+1. [Extracting common chunks](#extracting-common-chunks)
+1. [Adding predictable long-term caching](#adding-predictable-long-term-caching)
+1. [Third party stylesheets, images, and fonts](#third-party-stylesheets-images-and-fonts)
+1. [Deploying with Capistrano and Nginx](#deploying-with-capistrano-and-nginx)
+1. [Unit testing with Karma](#unit-testing-with-karma)
+1. [Local development with SSL](#local-development-with-ssl)
+1. [Wrapping up](#wrapping-up)
+
 ## Why switch?
 
 The asset pipeline was revolutionary in the Rails community when it was first introduced in Rails 3.1 and it has served our project well over the years. In the mean time, JavaScript has exploded in popularity and the collective efforts of the community have led to many improvements, including in the domain the Sprockets was originally created to solve.
@@ -558,7 +579,7 @@ The root problem (and solution) gets into the real meat of how Webpack works und
 
 Building on that primer, we followed the steps outlined in this [great article on predictable long term caching](https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31) to ensure Webpack generates the same fingerprinted output for our infrequently changing vendor bundle.
 
-## Third-party stylesheets, images, and font
+## Third-party stylesheets, images, and fonts
 
 Since we decided to leave stylesheets, images, and fonts in `app/assets` _under Sprockets compilation_, we needed to make Sprockets aware of asset sources we we now installing as NPM modules.
 
