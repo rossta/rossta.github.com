@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import debug from 'debug';
+const log = debug('app:zen');
 
 const isFunction = obj => typeof obj === 'function';
 
@@ -8,7 +10,12 @@ const cookie = (key, value, opts) => {
 };
 
 class Zen {
+  constructor() {
+    this.zen.bind(this);
+  }
+
   zen(callback) {
+    log('zen function', this);
     this.remind(callback) || this.retrieve(callback);
   }
 
@@ -43,6 +50,11 @@ class Zen {
   }
 }
 
+const zen = (callback) => {
+  const instance = new Zen();
+  return instance.zen(callback);
+}
+
 export default Zen;
 
-$.extend({ zen: new Zen().zen });
+$.extend({ zen });
