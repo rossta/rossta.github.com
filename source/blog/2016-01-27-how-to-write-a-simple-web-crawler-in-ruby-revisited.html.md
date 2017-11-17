@@ -16,10 +16,10 @@ to revisit [Alan Skorkin's How to Write a Simple Web Crawler in Ruby](http://www
 
 We'll adapt Skork's original goals and provide a few of our own:
 
-> * must be able to crawl just a single domain
-> * must be able to limit number of pages to crawl
-> * the results should be represented as structured data so we don't have an incomprehensible soup of content
-> * the results should be enumerable so we can have flexibility in how they're handled
+* must be able to crawl just a single domain
+* must be able to limit number of pages to crawl
+* the results should be represented as structured data so we don't have an incomprehensible soup of content
+* the results should be enumerable so we can have flexibility in how they're handled
 
 <aside class="callout panel">
 <p>
