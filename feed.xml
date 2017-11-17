@@ -27,6 +27,35 @@
 
 &lt;p&gt;That said, if you&amp;#39;re working in a legacy Rails application and considering Webpack, perhaps you can learn from our mistakes.&lt;/p&gt;
 
+      &lt;h2 id="table-of-contents" class="title"&gt;
+        &lt;a name="table-of-contents" class="anchor" href="#table-of-contents"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Table of Contents
+      &lt;/h2&gt;
+    
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="#why-switch-"&gt;Why&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#webpack-the-rails-way"&gt;Webpack, the Rails Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#making-a-plan"&gt;Making a plan&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#setting-up-webpack-entries"&gt;Setting up Webpack entries&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#maintaining-backwards-compatibility"&gt;Maintaining backwards compatibility&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#migrating-a-javascript-module"&gt;Migrating a JavaScript module&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#exporting-from-webpack"&gt;Exporting from Webpack&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#resolving-application-modules"&gt;Resolving application modules&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#extending-the-webpack-configuration"&gt;Extending the Webpack configuration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#importing-libraries-and-global-scope"&gt;Importing libraries and global scope&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#discovering-webpack-chunks"&gt;Discovering Webpack chunks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#extracting-common-chunks"&gt;Extracting common chunks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#adding-predictable-long-term-caching"&gt;Adding predictable long-term caching&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#third-party-stylesheets-images-and-fonts"&gt;Third party stylesheets, images, and fonts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#deploying-with-capistrano-and-nginx"&gt;Deploying with Capistrano and Nginx&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#unit-testing-with-karma"&gt;Unit testing with Karma&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#local-development-with-ssl"&gt;Local development with SSL&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#wrapping-up"&gt;Wrapping up&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
       &lt;h2 id="why-switch-" class="title"&gt;
         &lt;a name="why-switch-" class="anchor" href="#why-switch-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
@@ -647,12 +676,12 @@ application-80aab62cb2b8b0bfd6f3.js     4.5 kB       0  [emitted]         applic
 
 &lt;p&gt;Building on that primer, we followed the steps outlined in this &lt;a href="https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31"&gt;great article on predictable long term caching&lt;/a&gt; to ensure Webpack generates the same fingerprinted output for our infrequently changing vendor bundle.&lt;/p&gt;
 
-      &lt;h2 id="third-party-stylesheets-images-and-font" class="title"&gt;
-        &lt;a name="third-party-stylesheets-images-and-font" class="anchor" href="#third-party-stylesheets-images-and-font"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+      &lt;h2 id="third-party-stylesheets-images-and-fonts" class="title"&gt;
+        &lt;a name="third-party-stylesheets-images-and-fonts" class="anchor" href="#third-party-stylesheets-images-and-fonts"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
 &lt;/a&gt;
-        Third-party stylesheets, images, and font
+        Third-party stylesheets, images, and fonts
       &lt;/h2&gt;
     
 &lt;p&gt;Since we decided to leave stylesheets, images, and fonts in &lt;code&gt;app/assets&lt;/code&gt; &lt;em&gt;under Sprockets compilation&lt;/em&gt;, we needed to make Sprockets aware of asset sources we we now installing as NPM modules.&lt;/p&gt;

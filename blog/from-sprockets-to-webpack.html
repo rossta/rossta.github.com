@@ -81,6 +81,35 @@
 
 <p>That said, if you&#39;re working in a legacy Rails application and considering Webpack, perhaps you can learn from our mistakes.</p>
 
+      <h2 id="table-of-contents" class="title">
+        <a name="table-of-contents" class="anchor" href="#table-of-contents">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Table of Contents
+      </h2>
+    
+<ol>
+<li><a href="#why-switch-">Why</a></li>
+<li><a href="#webpack-the-rails-way">Webpack, the Rails Way</a></li>
+<li><a href="#making-a-plan">Making a plan</a></li>
+<li><a href="#setting-up-webpack-entries">Setting up Webpack entries</a></li>
+<li><a href="#maintaining-backwards-compatibility">Maintaining backwards compatibility</a></li>
+<li><a href="#migrating-a-javascript-module">Migrating a JavaScript module</a></li>
+<li><a href="#exporting-from-webpack">Exporting from Webpack</a></li>
+<li><a href="#resolving-application-modules">Resolving application modules</a></li>
+<li><a href="#extending-the-webpack-configuration">Extending the Webpack configuration</a></li>
+<li><a href="#importing-libraries-and-global-scope">Importing libraries and global scope</a></li>
+<li><a href="#discovering-webpack-chunks">Discovering Webpack chunks</a></li>
+<li><a href="#extracting-common-chunks">Extracting common chunks</a></li>
+<li><a href="#adding-predictable-long-term-caching">Adding predictable long-term caching</a></li>
+<li><a href="#third-party-stylesheets-images-and-fonts">Third party stylesheets, images, and fonts</a></li>
+<li><a href="#deploying-with-capistrano-and-nginx">Deploying with Capistrano and Nginx</a></li>
+<li><a href="#unit-testing-with-karma">Unit testing with Karma</a></li>
+<li><a href="#local-development-with-ssl">Local development with SSL</a></li>
+<li><a href="#wrapping-up">Wrapping up</a></li>
+</ol>
+
       <h2 id="why-switch-" class="title">
         <a name="why-switch-" class="anchor" href="#why-switch-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
@@ -701,12 +730,12 @@ application-80aab62cb2b8b0bfd6f3.js     4.5 kB       0  [emitted]         applic
 
 <p>Building on that primer, we followed the steps outlined in this <a href="https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31">great article on predictable long term caching</a> to ensure Webpack generates the same fingerprinted output for our infrequently changing vendor bundle.</p>
 
-      <h2 id="third-party-stylesheets-images-and-font" class="title">
-        <a name="third-party-stylesheets-images-and-font" class="anchor" href="#third-party-stylesheets-images-and-font">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+      <h2 id="third-party-stylesheets-images-and-fonts" class="title">
+        <a name="third-party-stylesheets-images-and-fonts" class="anchor" href="#third-party-stylesheets-images-and-fonts">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
 </a>
-        Third-party stylesheets, images, and font
+        Third-party stylesheets, images, and fonts
       </h2>
     
 <p>Since we decided to leave stylesheets, images, and fonts in <code>app/assets</code> <em>under Sprockets compilation</em>, we needed to make Sprockets aware of asset sources we we now installing as NPM modules.</p>
@@ -1042,7 +1071,7 @@ module.exports = function(config) {
   </p>
 </footer>
 
-    <script src="/assets/javascripts/runtime.bundle-a9c6ad20.js"></script><script src="/assets/javascripts/vendor.bundle-49a537a2.js"></script><script src="/assets/javascripts/app.bundle-495dd3f6.js"></script>
+    <script src="/assets/javascripts/runtime.bundle-a9c6ad20.js"></script><script src="/assets/javascripts/vendor.bundle-190c5e7c.js"></script><script src="/assets/javascripts/app.bundle-e087dca1.js"></script>
     
     <script type="text/javascript">
 !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
