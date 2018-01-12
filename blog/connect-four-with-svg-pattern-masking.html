@@ -192,6 +192,7 @@ to the pattern we created above.</p>
 the <code>&lt;mask&gt;</code> element by id.</p>
 
 <pre><code>  &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;cadetblue&quot; mask=&quot;url(#cell-mask)&quot;&gt;&lt;/rect&gt;
+
 </code></pre>
 
 <p>This punches a hole through the wall to reveal the checker underneath.</p>
@@ -204,14 +205,14 @@ the <code>&lt;mask&gt;</code> element by id.</p>
 
 <p><hr /></p>
 
-<p>A nice feature of the <code>&lt;pattern /&gt;</code> is that it is that it repeats itself based
-on the pattern we&#39;ve defined. This means we can extend the height of the view
-box and the height of our game wall <code>&lt;rect&gt;</code> 7x to reveal seven rows of holes a
-single column—we don&#39;t have to render each circular hole explicitly! To build
-multiple columns, we&#39;ll simply, for each column, add nested <code>&lt;svg&gt;</code> element at
-the correct x position to wrap each masked <code>&lt;rect&gt;</code>. This allows us to position
-each column relative to the container <code>&lt;svg&gt;</code> without needed to specify x
-coordinates for each child <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code>.</p>
+<p>A nice feature of the <code>&lt;pattern&gt;</code> element is that it repeats itself based
+on the height/width attributes we&#39;ve provided. This means we can extend the dimensions of the view
+box and our game wall <code>&lt;rect&gt;</code> to reveal the seven rows of a
+single column—we don&#39;t have to add each circular hole to the DOM explicitly! To
+build multiple columns, we&#39;ll simply, for each column, add a nested <code>&lt;svg&gt;</code>
+element at the correct x position to wrap each masked <code>&lt;rect&gt;</code>. This allows us
+to position each column relative to the container <code>&lt;svg&gt;</code> without needed to
+specify x coordinates for each child <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code>.</p>
 
 <p>Here&#39;s the full demo of a static Connect Four SVG game board on
 <a href="https://codepen.io/rossta/pen/eyrgJe">CodePen</a>:</p>

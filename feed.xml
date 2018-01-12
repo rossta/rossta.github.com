@@ -144,6 +144,7 @@ to the pattern we created above.&lt;/p&gt;
 the &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; element by id.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;  &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This punches a hole through the wall to reveal the checker underneath.&lt;/p&gt;
@@ -156,14 +157,14 @@ the &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; element by id.&lt;/p&gt;
 
 &lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
 
-&lt;p&gt;A nice feature of the &lt;code&gt;&amp;lt;pattern /&amp;gt;&lt;/code&gt; is that it is that it repeats itself based
-on the pattern we&amp;#39;ve defined. This means we can extend the height of the view
-box and the height of our game wall &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; 7x to reveal seven rows of holes a
-single column—we don&amp;#39;t have to render each circular hole explicitly! To build
-multiple columns, we&amp;#39;ll simply, for each column, add nested &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; element at
-the correct x position to wrap each masked &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt;. This allows us to position
-each column relative to the container &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; without needed to specify x
-coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;A nice feature of the &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; element is that it repeats itself based
+on the height/width attributes we&amp;#39;ve provided. This means we can extend the dimensions of the view
+box and our game wall &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; to reveal the seven rows of a
+single column—we don&amp;#39;t have to add each circular hole to the DOM explicitly! To
+build multiple columns, we&amp;#39;ll simply, for each column, add a nested &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt;
+element at the correct x position to wrap each masked &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt;. This allows us
+to position each column relative to the container &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; without needed to
+specify x coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#39;s the full demo of a static Connect Four SVG game board on
 &lt;a href="https://codepen.io/rossta/pen/eyrgJe"&gt;CodePen&lt;/a&gt;:&lt;/p&gt;
