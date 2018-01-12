@@ -13,7 +13,7 @@ tags:
 ---
 
 *This post is [part of a series on building Connect Four with SVG, Vue.js,
-Elixir, and the Phoenix framework].(/blog/series/connect-four.html)*
+Elixir, and the Phoenix framework](/blog/series/connect-four.html).*
 
 One of my recent side projects to learn new technologies
 has been to build a browser-based rendition of [Connect
