@@ -18,13 +18,15 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;em&gt;This post is [part of a series on building Connect Four with SVG, Vue.js,
-Elixir, and the Phoenix framework].(/blog/series/connect-four.html)&lt;/em&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with SVG, Vue.js,
+Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;One of my recent side projects to learn new technologies
-has been to build a browser-based rendition of &lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;em&gt;This post is [part of a series on building Connect Four with SVG, Vue.js,
-Elixir, and the Phoenix framework].(/blog/series/connect-four.html)&lt;/em&gt;&lt;/p&gt;
+has been to build a browser-based rendition of &lt;a href="https://en.wikipedia.org/wiki/Connect_Four"&gt;Connect
+Four&lt;/a&gt;.
+The fully-functional...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with SVG, Vue.js,
+Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;One of my recent side projects to learn new technologies
 has been to build a browser-based rendition of &lt;a href="https://en.wikipedia.org/wiki/Connect_Four"&gt;Connect
