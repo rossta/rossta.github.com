@@ -89,8 +89,9 @@ can't see the circle anymore.
 Now to create the hole with a pattern mask. To accomplish this, we use
 (surprise) both a `<pattern>` and `<mask>` elements. These elements are not
 graphical, meaning, they won't be directly rendered in the view box. Instead,
-we'll be adding the resulting mask as a `fill` for our `<rect>` game wall. We
-place them inside a `<defs>` element so they can be available for reuse.
+we'll later add the resulting mask as an attribute of our `<rect>` game wall—the
+element we want to see through. The `<pattern>` and `<mask>` elements are nested
+inside a `<defs>` element so they can be available for reuse.
 
 ```html
   <defs>
