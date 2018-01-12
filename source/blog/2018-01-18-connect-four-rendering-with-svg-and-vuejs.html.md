@@ -1,5 +1,5 @@
 ---
-title: Connect Four Rendering with SVG and Vue.js
+title: Connect Four with SVG and Vue.js
 author: Ross Kaffenberger
 published: false
 summary: Using pattern masks and animation to display falling checkers

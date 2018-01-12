@@ -120,6 +120,7 @@ the `<mask>` element by id.
 
 ```
   <rect width="100" height="100" fill="cadetblue" mask="url(#cell-mask)"></rect>
+
 ```
 
 This punches a hole through the wall to reveal the checker underneath.
@@ -131,14 +132,14 @@ Here's what we have so far on [CodePen](https://codepen.io/rossta/pen/NXMrLg):
 
 <hr />
 
-A nice feature of the `<pattern />` is that it is that it repeats itself based
-on the pattern we've defined. This means we can extend the height of the view
-box and the height of our game wall `<rect>` 7x to reveal seven rows of holes a
-single column—we don't have to render each circular hole explicitly! To build
-multiple columns, we'll simply, for each column, add nested `<svg>` element at
-the correct x position to wrap each masked `<rect>`. This allows us to position
-each column relative to the container `<svg>` without needed to specify x
-coordinates for each child `<rect>` and `<circle>`.
+A nice feature of the `<pattern>` element is that it repeats itself based
+on the height/width attributes we've provided. This means we can extend the dimensions of the view
+box and our game wall `<rect>` to reveal the seven rows of a
+single column—we don't have to add each circular hole to the DOM explicitly! To
+build multiple columns, we'll simply, for each column, add a nested `<svg>`
+element at the correct x position to wrap each masked `<rect>`. This allows us
+to position each column relative to the container `<svg>` without needed to
+specify x coordinates for each child `<rect>` and `<circle>`.
 
 Here's the full demo of a static Connect Four SVG game board on
 [CodePen](https://codepen.io/rossta/pen/eyrgJe):
