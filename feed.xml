@@ -5,10 +5,187 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2017-11-05T00:00:00+00:00</updated>
+  <updated>2018-01-10T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Connect Four with SVG pattern masking</title>
+    <link rel="alternate" href="/blog/connect-four-with-svg-pattern-masking.html"/>
+    <id>/blog/connect-four-with-svg-pattern-masking.html</id>
+    <published>2018-01-10T00:00:00+00:00</published>
+    <updated>2018-01-10T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;&lt;em&gt;This post is part of a series on building Connect Four with SVG, Vue.js,
+Elixir, and the Phoenix framework.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;One of my recent side projects to learn new technologies
+has been to build a browser-based rendition of &lt;a href="https://en.wikipedia.org/wiki/Connect_Four"&gt;Connect
+Four&lt;/a&gt;.
+The fully-functional...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;em&gt;This post is part of a series on building Connect Four with SVG, Vue.js,
+Elixir, and the Phoenix framework.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;One of my recent side projects to learn new technologies
+has been to build a browser-based rendition of &lt;a href="https://en.wikipedia.org/wiki/Connect_Four"&gt;Connect
+Four&lt;/a&gt;.
+The fully-functional version of the game will have both a backend and frontend
+component with some good challenges including animating checkers
+falling into place and connecting two players over the network.&lt;/p&gt;
+
+&lt;p&gt;In this post, we&amp;#39;ll demonstrate rendering the static board with SVG, including
+the use of pattern masking to emulate a game board wall with portholes through
+which to view the checkers.&lt;/p&gt;
+
+      &lt;h2 id="let-39-s-talk-about-svg" class="title"&gt;
+        &lt;a name="let-39-s-talk-about-svg" class="anchor" href="#let-39-s-talk-about-svg"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Let&amp;#39;s talk about SVG
+      &lt;/h2&gt;
+    
+&lt;p&gt;SVG feels scary and confusing to the uninitiated, myself included. The good news
+is that we can take a progressive approach to adopting SVG without understanding
+everything there is to know about it at first.&lt;/p&gt;
+
+&lt;p&gt;Here are a few reasons why using SVG is a good fit to render the elements of a
+Connect Four game board:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;SVG has shape elements like &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; that are better
+semantically than using divs to render columns and checkers using &lt;a href="https://davidwalsh.name/css-circles"&gt;the rounded
+border trick&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;SVG provides simple, declarative rules for positioning visual elements; no
+need to mess with picture-perfect pixels, absolute positioning, and z-indexing&lt;/li&gt;
+&lt;li&gt;SVG elements animate smoothly, which will allow us to render a dropped checker
+bouncing into place with a realistic touch and that it has a coordinate system&lt;/li&gt;
+&lt;li&gt;SVG provides &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; elements, so we can animate falling
+checkers behind &amp;quot;holes&amp;quot; in the game wall&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h2 id="pattern-masking" class="title"&gt;
+        &lt;a name="pattern-masking" class="anchor" href="#pattern-masking"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Pattern masking
+      &lt;/h2&gt;
+    
+&lt;p&gt;A first pass at the game board might be to explicitly render circles for all 42
+game cells (6 rows, 7 columns) and set their fill colors based on game state to
+red, black, or as the background color to fake an empty cell. What if, instead,
+we could render the game board with portholes punched into it? That way, the only
+&lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; elements we need to render explicitly are the checkers themselves.&lt;/p&gt;
+
+&lt;p&gt;This is where SVG pattern masking comes in. A powerful feature of desktop visual
+editing tools Adobe Photoshop/Illustrator is available on the web.
+&lt;a href="https://www.w3.org/TR/SVG/masking.html"&gt;Masking&lt;/a&gt; allows for a graphic (or set of
+graphics) to act as a transparent overlay to reveal background elements. Applied
+to our game, it provides a mechanism by which we can see checkers falling
+through holes in the game board wall. To my knowledge, there&amp;#39;s no (easy) way
+with typical HTML/CSS to accomplish this other than, perhaps, creating a
+transparent png, something we won&amp;#39;t be able to manipulate easily
+programmatically.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s start with a demonstration of pattern masking by rendering a single game
+board cell and checker.&lt;/p&gt;
+
+&lt;p&gt;Within a containing &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; element with a &lt;code&gt;viewBox&lt;/code&gt; of 100x100 units, we&amp;#39;ll
+start by adding a &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; to represent a checker positioned slightly
+offscreen to mimic it falling into place.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;svg viewBox=&amp;quot;0 0 100 100&amp;quot; xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
+  &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;25&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;#254689&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
+&amp;lt;/svg&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The game wall is simply a &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; positioned over the circle; once added, we
+can&amp;#39;t see the circle anymore.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;svg viewBox=&amp;quot;0 0 100 100&amp;quot; xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
+  &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;25&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;#254689&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
+  &amp;lt;rect col=&amp;quot;0&amp;quot; width=&amp;quot;100&amp;quot; height=&amp;quot;600&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+&amp;lt;/svg&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now to create the hole with a pattern mask. To accomplish this, we use
+(surprise) both a &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; elements. These elements are not
+graphical, meaning, they won&amp;#39;t be directly rendered in the view box. Instead,
+we&amp;#39;ll be adding the resulting mask as a &lt;code&gt;fill&lt;/code&gt; for our &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; game wall. We
+place them inside a &lt;code&gt;&amp;lt;defs&amp;gt;&lt;/code&gt; element so they can be available for reuse.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;  &amp;lt;defs&amp;gt;
+    &amp;lt;pattern id=&amp;quot;cell-pattern&amp;quot; patternUnits=&amp;quot;userSpaceOnUse&amp;quot; width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot;&amp;gt;
+      &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;50&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;black&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
+    &amp;lt;/pattern&amp;gt;
+    &amp;lt;mask id=&amp;quot;cell-mask&amp;quot;&amp;gt;
+      &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;white&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+      &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;url(#cell-pattern)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+    &amp;lt;/mask&amp;gt;
+  &amp;lt;/defs&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; is simply matches the size of a cell, 100x100, and it contains a
+&lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;, representing the hole, that matches the size of the checker. The
+&lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; gets a fill color of &amp;quot;black&amp;quot;; when applied the to &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt;, this
+this means the absence of space, or full transparency, as opposed to literal
+black.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; is composed of two &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; elements that match the game wall size;
+the first gets a fill color of &amp;quot;white&amp;quot; (opposite of &amp;quot;black&amp;quot; in a mask) to
+represent the part of the wall we want to be opaque. The second &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; sits on
+top of the first; here&amp;#39;s where set the fill to &lt;code&gt;url(#cell-pattern)&lt;/code&gt; which refers
+to the pattern we created above.&lt;/p&gt;
+
+&lt;p&gt;Now, we can set the &lt;code&gt;mask&lt;/code&gt; attribute for our game wall &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; by referencing
+the &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; element by id.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This punches a hole through the wall to reveal the checker underneath.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s what we have so far on &lt;a href="https://codepen.io/rossta/pen/NXMrLg"&gt;CodePen&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p data-height="265" data-theme-id="0" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/NXMrLg/"&gt;SVG mask demo&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
+
+&lt;p&gt;A nice feature of the &lt;code&gt;&amp;lt;pattern /&amp;gt;&lt;/code&gt; is that it is that it repeats itself based
+on the pattern we&amp;#39;ve defined. This means we can extend the height of the view
+box and the height of our game wall &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; 7x to reveal seven rows of holes a
+single column—we don&amp;#39;t have to render each circular hole explicitly! To build
+multiple columns, we&amp;#39;ll simply, for each column, add nested &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; element at
+the correct x position to wrap each masked &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt;. This allows us to position
+each column relative to the container &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; without needed to specify x
+coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s the full demo of a static Connect Four SVG game board on
+&lt;a href="https://codepen.io/rossta/pen/eyrgJe"&gt;CodePen&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p data-height="370" data-theme-id="0" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrgJe/"&gt;Connect Four board in SVG&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
+
+&lt;p&gt;For more related info, check out the following resources:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial"&gt;MDN SVG Tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;MDN docs for &lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg"&gt;&lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt;&lt;/a&gt;, &lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/pattern"&gt;&lt;code&gt;&amp;lt;pattern /&amp;gt;&lt;/code&gt;&lt;/a&gt;, &lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/mask"&gt;&lt;code&gt;&amp;lt;mask /&amp;gt;&lt;/code&gt;&lt;/a&gt;, and &lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs"&gt;&lt;code&gt;&amp;lt;defs /&amp;gt;&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Pretty much anything &lt;a href="https://twitter.com/sarah_edo"&gt;Sarah Drasner&lt;/a&gt; publishes, including &lt;a href="http://shop.oreilly.com/product/0636920045335.do"&gt;SVG Animations&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In the next post, we&amp;#39;ll take a look at using Vue.js to render the board
+dynamically and add checkers based on user interaction.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>How we switched from Sprockets to Webpack</title>
     <link rel="alternate" href="/blog/from-sprockets-to-webpack.html"/>
@@ -1972,168 +2149,6 @@ else if (Notification.permission !== &amp;#39;denied&amp;#39;) {
 &lt;p&gt;As this is still an emerging technology, things are rapidly changing. I&amp;#39;d be
 interested to hear how things are working out for folks integrating web push
 into their web apps.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Fill out Google Forms from the command line</title>
-    <link rel="alternate" href="/blog/fill-out-google-forms-from-the-command-line-with-casperjs.html"/>
-    <id>/blog/fill-out-google-forms-from-the-command-line-with-casperjs.html</id>
-    <published>2016-09-28T00:00:00+00:00</published>
-    <updated>2016-09-28T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the &lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, "what if I could automate that?" I happen to spend a lot of time in a terminal and thinking about webpage...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;To give you some idea about what a geek I am, when &lt;a href="https://twitter.com/saronyitbarek"&gt;Saron&lt;/a&gt; asked me to fill out a form to submit blog posts to the &lt;a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter"&gt;CodeNewbie Newsletter&lt;/a&gt;, I thought, &amp;quot;what if I could automate that?&amp;quot; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...&lt;/p&gt;
-
-&lt;p&gt;Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&amp;#39;s a &lt;a href="http://casperjs.org/"&gt;CasperJS&lt;/a&gt; script available as an npm package. It&amp;#39;s called &lt;a href="https://github.com/rossta/form-to-terminal"&gt;&lt;code&gt;form-to-terminal&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;To use &lt;code&gt;form-to-terminal&lt;/code&gt;, install it via npm and use the executable &lt;code&gt;ftt&lt;/code&gt; along with a url to a Google Form url:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;# Open a terminal and enter the following commands after the prompt ($):
-$ npm install -g form-to-terminal
-$ ftt [Google Form Url]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This assumes that you&amp;#39;ve already installed &lt;a href="https://nodejs.org/en/download/package-manager/"&gt;nodejs&lt;/a&gt;,  &lt;a href="http://docs.casperjs.org/en/latest/installation.html"&gt;CasperJS&lt;/a&gt;, and its pre-requisites.&lt;/p&gt;
-
-      &lt;h2 id="casper-the-friendly-ghost" class="title"&gt;
-        &lt;a name="casper-the-friendly-ghost" class="anchor" href="#casper-the-friendly-ghost"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Casper, the friendly ghost
-      &lt;/h2&gt;
-    
-&lt;p&gt;CasperJS is actually just a wrapper around &lt;a href="http://phantomjs.org/"&gt;PhantomJS&lt;/a&gt;, which provides
-fully-featured API for interacting with webpages from JavaScript.&lt;/p&gt;
-
-&lt;p&gt;CasperJS makes this scripting more pleasant by providing some syntactic sugar for dealing
-with multi-stage interactions and waiting for asynchronous actions. In other
-words, I could&amp;#39;ve done this with just using PhantomJS, but the code I needed to
-write got a whole lot easier by using the CasperJS module on top of it.&lt;/p&gt;
-
-      &lt;h2 id="a-closer-look" class="title"&gt;
-        &lt;a name="a-closer-look" class="anchor" href="#a-closer-look"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        A closer look
-      &lt;/h2&gt;
-    
-&lt;p&gt;Let&amp;#39;s look at some sample code. What follows are simplified excerpts from the &lt;code&gt;form-to-terminal&lt;/code&gt; CasperJS script.&lt;/p&gt;
-
-&lt;p&gt;Given a &lt;code&gt;url&lt;/code&gt; to a Google Form, first we &lt;code&gt;start&lt;/code&gt; the webpage interaction, which waits to complete
-before moving to the next step.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;var casper = require(&amp;quot;casper&amp;quot;).create();
-
-casper.start(url, function() {
-  this.waitForSelector(&amp;quot;form&amp;quot;);
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To provide the command line interface with some context, the script parses the
-page for the form title to display back to the command line.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;var formTitle;
-
-casper.then(function() {
-  formTitle = this.evaluate(getFormTitle);
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Next, we want to allow human interaction with each input one-by-one, so we parse
-the form for the text inputs and their labels so we can ask the user to enter answers back into the
-terminal using &lt;code&gt;readLine&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;var system = require(&amp;#39;system&amp;#39;);
-var answers;
-
-casper.then(function() {
-  var page = this;
-  page.echo(&amp;quot;Please fill out &amp;quot; + formTitle);
-  page.echo(&amp;quot;----------------&amp;quot; + formTitle.length);
-  answers = page.evaluate(getFormInputs)
-
-  answers.filter(function(input) {
-    return input.type == &amp;quot;text&amp;quot;;
-  }).map(function(input, i) {
-    page.echo(&amp;quot;&amp;quot;);
-    page.echo(&amp;quot;&amp;quot;+(i+1)+&amp;quot;) &amp;quot;+input.label+&amp;quot;:&amp;quot;);
-
-    input.value = system.stdin.readLine();
-t
-    return input;
-  });
-});m
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Awesome! Now we just need to pass the &lt;code&gt;answers&lt;/code&gt; back to the webpage and submit
-the form. CasperJS makes it easy to do this with additional args to
-&lt;code&gt;this.evaluate&lt;/code&gt; in the &lt;code&gt;casper&lt;/code&gt; context:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;casper.then(function() {
-  this.evaluate(submitAnswers, {answers: answers});
-  page.echo(&amp;quot;&amp;quot;);
-  this.echo(&amp;quot;Thanks!&amp;quot;);
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Check out the full &lt;a href="https://github.com/rossta/form-to-terminal/blob/96a4dd8be4b071b5bfb5adb50676a6383c685240/index.js"&gt;CasperJS script&lt;/a&gt; to see how &lt;code&gt;form-to-terminal&lt;/code&gt; interacts with Google Forms in more detail.&lt;/p&gt;
-
-      &lt;h2 id="command-line-node" class="title"&gt;
-        &lt;a name="command-line-node" class="anchor" href="#command-line-node"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Command line node
-      &lt;/h2&gt;
-    
-&lt;p&gt;I wanted to make this work for others on the command line as an npm package. To
-get this to work, we have to understand that &lt;code&gt;casperjs&lt;/code&gt; is already its own
-process. To make it work from &lt;code&gt;node&lt;/code&gt;, I needed to spawn the &lt;code&gt;casperjs&lt;/code&gt; while
-passing arguments from node. I also needed to make sure that the &lt;code&gt;stdin&lt;/code&gt;
-stream is piped from parent (node) to the child (casperjs) process so that we our answers
-for the form inputs end up on the web page.&lt;/p&gt;
-
-&lt;p&gt;The key pieces of the command line tool are shown below:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;const child = spawn(&amp;#39;casperjs&amp;#39;, [&amp;#39;index.js&amp;#39;].concat(urls));
-
-child.stdin.setEncoding(&amp;#39;utf-8&amp;#39;);
-child.stdout.pipe(process.stdout);
-process.stdin.pipe(child.stdin);
-child.on(&amp;#39;exit&amp;#39;, process.exit);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;urls&lt;/code&gt; represent the set of Google Form urls with which the CasperJS script
-will interact. The line &lt;code&gt;process.stdin.pipe(child.stdin);&lt;/code&gt; ensures the text we
-enter on the command line is passed to CasperJS.&lt;/p&gt;
-
-      &lt;h2 id="going-further" class="title"&gt;
-        &lt;a name="going-further" class="anchor" href="#going-further"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Going further
-      &lt;/h2&gt;
-    
-&lt;p&gt;&lt;code&gt;form-to-terminal&lt;/code&gt; (as of version 1.0.2) only supports Google Forms and only
-fully those with text inputs. It&amp;#39;s likely quite buggy - for example, it doesn&amp;#39;t
-currently check that you&amp;#39;ve filled out all required fields, nor does it check
-for validations errors after you&amp;#39;ve submitted the form - but, hey, it&amp;#39;s a start.
-Go ahead and &lt;a href="https://github.com/rossta/form-to-terminal"&gt;check it out on GitHub&lt;/a&gt; and contribute some improvements!&lt;/p&gt;
-
-&lt;p&gt;CasperJS is a fun tool for automating your workflow and worth a look for
-automated testing for web developers.&lt;/p&gt;
-
-&lt;p&gt;Of course, I submitted this post to the CodeNewbie Newsletter using
-&lt;code&gt;form-to-terminal&lt;/code&gt; - how meta? It comes with a built-in shortcut to the
-CodeNewbie Google Form, so you can try it too:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;$ ftt codenewbie
-&lt;/code&gt;&lt;/pre&gt;
 </content>
   </entry>
 </feed>

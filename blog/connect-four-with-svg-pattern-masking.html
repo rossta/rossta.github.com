@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Connect Four with SVG pattern masking - rossta.net</title>
+<meta name="description" content="Rendering transparent masks in HTML" />
+<meta name="keywords" content="SVG" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Rendering transparent masks in HTML" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/connect-four-splash-465505e8.png" />
+<meta name="twitter:title" content="Connect Four with SVG pattern masking" />
+<meta property="og:description" content="Rendering transparent masks in HTML" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/connect-four-splash-465505e8.png" />
+<meta property="og:title" content="Connect Four with SVG pattern masking" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"     href="/apple-touch-icon.png" />
+    <link rel="icon"                 href="/touch-icon-192x192.png" />
+    <link rel="icon" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" sizes="72x72"   href="/touch-icon-72x72.png" />
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app.bundle-6062734b.css" rel="stylesheet" />
+    <link href="/assets/images/turtle-favicon.ico" rel="icon" type="image/ico" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Connect Four with SVG pattern masking
+  </h1>
+    <h3>
+      Rendering transparent masks or making the impossible possible with SVG
+    </h3>
+</header>
+
+        <figure>
+          <img src="/assets/images/blog/connect-four-splash-465505e8.png" alt="Connect four splash" />
+            <figcaption>Background Photo by Matthew Kane on Unsplash</figcaption>
+        </figure>
+      <p><em>This post is part of a series on building Connect Four with SVG, Vue.js,
+Elixir, and the Phoenix framework.</em></p>
+
+<p>One of my recent side projects to learn new technologies
+has been to build a browser-based rendition of <a href="https://en.wikipedia.org/wiki/Connect_Four">Connect
+Four</a>.
+The fully-functional version of the game will have both a backend and frontend
+component with some good challenges including animating checkers
+falling into place and connecting two players over the network.</p>
+
+<p>In this post, we&#39;ll demonstrate rendering the static board with SVG, including
+the use of pattern masking to emulate a game board wall with portholes through
+which to view the checkers.</p>
+
+      <h2 id="let-39-s-talk-about-svg" class="title">
+        <a name="let-39-s-talk-about-svg" class="anchor" href="#let-39-s-talk-about-svg">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Let&#39;s talk about SVG
+      </h2>
+    
+<p>SVG feels scary and confusing to the uninitiated, myself included. The good news
+is that we can take a progressive approach to adopting SVG without understanding
+everything there is to know about it at first.</p>
+
+<p>Here are a few reasons why using SVG is a good fit to render the elements of a
+Connect Four game board:</p>
+
+<ul>
+<li>SVG has shape elements like <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code> that are better
+semantically than using divs to render columns and checkers using <a href="https://davidwalsh.name/css-circles">the rounded
+border trick</a></li>
+<li>SVG provides simple, declarative rules for positioning visual elements; no
+need to mess with picture-perfect pixels, absolute positioning, and z-indexing</li>
+<li>SVG elements animate smoothly, which will allow us to render a dropped checker
+bouncing into place with a realistic touch and that it has a coordinate system</li>
+<li>SVG provides <code>&lt;mask&gt;</code> and <code>&lt;pattern&gt;</code> elements, so we can animate falling
+checkers behind &quot;holes&quot; in the game wall</li>
+</ul>
+
+      <h2 id="pattern-masking" class="title">
+        <a name="pattern-masking" class="anchor" href="#pattern-masking">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Pattern masking
+      </h2>
+    
+<p>A first pass at the game board might be to explicitly render circles for all 42
+game cells (6 rows, 7 columns) and set their fill colors based on game state to
+red, black, or as the background color to fake an empty cell. What if, instead,
+we could render the game board with portholes punched into it? That way, the only
+<code>&lt;circle&gt;</code> elements we need to render explicitly are the checkers themselves.</p>
+
+<p>This is where SVG pattern masking comes in. A powerful feature of desktop visual
+editing tools Adobe Photoshop/Illustrator is available on the web.
+<a href="https://www.w3.org/TR/SVG/masking.html">Masking</a> allows for a graphic (or set of
+graphics) to act as a transparent overlay to reveal background elements. Applied
+to our game, it provides a mechanism by which we can see checkers falling
+through holes in the game board wall. To my knowledge, there&#39;s no (easy) way
+with typical HTML/CSS to accomplish this other than, perhaps, creating a
+transparent png, something we won&#39;t be able to manipulate easily
+programmatically.</p>
+
+<p>Let&#39;s start with a demonstration of pattern masking by rendering a single game
+board cell and checker.</p>
+
+<p>Within a containing <code>&lt;svg&gt;</code> element with a <code>viewBox</code> of 100x100 units, we&#39;ll
+start by adding a <code>&lt;circle&gt;</code> to represent a checker positioned slightly
+offscreen to mimic it falling into place.</p>
+
+<pre><code class="html">&lt;svg viewBox=&quot;0 0 100 100&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;circle cx=&quot;50&quot; cy=&quot;25&quot; r=&quot;45&quot; fill=&quot;#254689&quot;&gt;&lt;/circle&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The game wall is simply a <code>&lt;rect&gt;</code> positioned over the circle; once added, we
+can&#39;t see the circle anymore.</p>
+
+<pre><code class="html">&lt;svg viewBox=&quot;0 0 100 100&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;circle cx=&quot;50&quot; cy=&quot;25&quot; r=&quot;45&quot; fill=&quot;#254689&quot;&gt;&lt;/circle&gt;
+  &lt;rect col=&quot;0&quot; width=&quot;100&quot; height=&quot;600&quot; fill=&quot;cadetblue&quot; mask=&quot;url(#cell-mask)&quot;&gt;&lt;/rect&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>Now to create the hole with a pattern mask. To accomplish this, we use
+(surprise) both a <code>&lt;pattern&gt;</code> and <code>&lt;mask&gt;</code> elements. These elements are not
+graphical, meaning, they won&#39;t be directly rendered in the view box. Instead,
+we&#39;ll be adding the resulting mask as a <code>fill</code> for our <code>&lt;rect&gt;</code> game wall. We
+place them inside a <code>&lt;defs&gt;</code> element so they can be available for reuse.</p>
+
+<pre><code class="html">  &lt;defs&gt;
+    &lt;pattern id=&quot;cell-pattern&quot; patternUnits=&quot;userSpaceOnUse&quot; width=&quot;100&quot; height=&quot;100&quot;&gt;
+      &lt;circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;45&quot; fill=&quot;black&quot;&gt;&lt;/circle&gt;
+    &lt;/pattern&gt;
+    &lt;mask id=&quot;cell-mask&quot;&gt;
+      &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;white&quot;&gt;&lt;/rect&gt;
+      &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;url(#cell-pattern)&quot;&gt;&lt;/rect&gt;
+    &lt;/mask&gt;
+  &lt;/defs&gt;
+</code></pre>
+
+<p>The <code>&lt;pattern&gt;</code> is simply matches the size of a cell, 100x100, and it contains a
+<code>&lt;circle&gt;</code>, representing the hole, that matches the size of the checker. The
+<code>&lt;circle&gt;</code> gets a fill color of &quot;black&quot;; when applied the to <code>&lt;mask&gt;</code>, this
+this means the absence of space, or full transparency, as opposed to literal
+black.</p>
+
+<p>The <code>&lt;mask&gt;</code> is composed of two <code>&lt;rect&gt;</code> elements that match the game wall size;
+the first gets a fill color of &quot;white&quot; (opposite of &quot;black&quot; in a mask) to
+represent the part of the wall we want to be opaque. The second <code>&lt;rect&gt;</code> sits on
+top of the first; here&#39;s where set the fill to <code>url(#cell-pattern)</code> which refers
+to the pattern we created above.</p>
+
+<p>Now, we can set the <code>mask</code> attribute for our game wall <code>&lt;rect&gt;</code> by referencing
+the <code>&lt;mask&gt;</code> element by id.</p>
+
+<pre><code>  &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;cadetblue&quot; mask=&quot;url(#cell-mask)&quot;&gt;&lt;/rect&gt;
+</code></pre>
+
+<p>This punches a hole through the wall to reveal the checker underneath.</p>
+
+<p>Here&#39;s what we have so far on <a href="https://codepen.io/rossta/pen/NXMrLg">CodePen</a>:</p>
+
+<p data-height="265" data-theme-id="0" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/NXMrLg/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p><hr /></p>
+
+<p>A nice feature of the <code>&lt;pattern /&gt;</code> is that it is that it repeats itself based
+on the pattern we&#39;ve defined. This means we can extend the height of the view
+box and the height of our game wall <code>&lt;rect&gt;</code> 7x to reveal seven rows of holes a
+single column—we don&#39;t have to render each circular hole explicitly! To build
+multiple columns, we&#39;ll simply, for each column, add nested <code>&lt;svg&gt;</code> element at
+the correct x position to wrap each masked <code>&lt;rect&gt;</code>. This allows us to position
+each column relative to the container <code>&lt;svg&gt;</code> without needed to specify x
+coordinates for each child <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code>.</p>
+
+<p>Here&#39;s the full demo of a static Connect Four SVG game board on
+<a href="https://codepen.io/rossta/pen/eyrgJe">CodePen</a>:</p>
+
+<p data-height="370" data-theme-id="0" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyrgJe/">Connect Four board in SVG</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p><hr /></p>
+
+<p>For more related info, check out the following resources:</p>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial">MDN SVG Tutorial</a></li>
+<li>MDN docs for <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg"><code>&lt;svg&gt;</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/pattern"><code>&lt;pattern /&gt;</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/mask"><code>&lt;mask /&gt;</code></a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs"><code>&lt;defs /&gt;</code></a></li>
+<li>Pretty much anything <a href="https://twitter.com/sarah_edo">Sarah Drasner</a> publishes, including <a href="http://shop.oreilly.com/product/0636920045335.do">SVG Animations</a></li>
+</ul>
+
+<p>In the next post, we&#39;ll take a look at using Vue.js to render the board
+dynamically and add checkers based on user interaction.</p>
+
+    </article>
+    <section class="margin-bottom double">
+      <a href="https://twitter.com/intent/tweet?text=Connect%20Four%20with%20SVG%20pattern%20masking&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fconnect-four-with-svg-pattern-masking.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
+    </section>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP" value="https://rossta.net/blog/2018-01-10-connect-four-with-svg-pattern-masking.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2018-01-10-connect-four-with-svg-pattern-masking.html" />
+      <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="SVG" />
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <section class="margin-bottom double">
+      <p>
+          Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
+        Published on Jan 10, 2018
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "connect-four-with-svg-pattern-masking";
+    var disqus_title      = "Connect Four with SVG pattern masking";
+    var disqus_url        = "https://rossta.net/blog/connect-four-with-svg-pattern-masking.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/n+1-is-a-rails-feature.html">N+1 is a Rails feature</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+          <li><a href="/blog/tags/rspec.html">RSpec</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2018 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/runtime.bundle-a9c6ad20.js"></script><script src="/assets/javascripts/vendor.bundle-190c5e7c.js"></script><script src="/assets/javascripts/app.bundle-e087dca1.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>
