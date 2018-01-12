@@ -207,6 +207,11 @@ helpers do
   def blog_series
     [
       [
+        "Connect Four",
+        "Building Connect Four with Vue.js and Phoenix",
+        "Tackling multi-player game rendering, animation, and realtime interaction"
+      ],
+      [
         "Service Worker",
         "Progressive Web Apps on Rails",
         "Leveraging the powerful JavaScript API for Progressive Web Apps"
