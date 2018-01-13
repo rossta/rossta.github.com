@@ -113,8 +113,8 @@ black.
 The `<mask>` is composed of two `<rect>` elements that match the game wall size;
 the first gets a fill color of "white" (opposite of "black" in a mask) to
 represent the part of the wall we want to be opaque. The second `<rect>` sits on
-top of the first; here's where set the fill to `url(#cell-pattern)` which refers
-to the pattern we created above.
+top of the first and has a `fill` of `url(#cell-pattern)` which refers to the
+pattern we created above.
 
 Now, we can set the `mask` attribute for our game wall `<rect>` by referencing
 the `<mask>` element by id.
