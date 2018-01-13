@@ -114,8 +114,9 @@ can&amp;#39;t see the circle anymore.&lt;/p&gt;
 &lt;p&gt;Now to create the hole with a pattern mask. To accomplish this, we use
 (surprise) both a &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; elements. These elements are not
 graphical, meaning, they won&amp;#39;t be directly rendered in the view box. Instead,
-we&amp;#39;ll be adding the resulting mask as a &lt;code&gt;fill&lt;/code&gt; for our &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; game wall. We
-place them inside a &lt;code&gt;&amp;lt;defs&amp;gt;&lt;/code&gt; element so they can be available for reuse.&lt;/p&gt;
+we&amp;#39;ll later add the resulting mask as an attribute of our &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; game wall—the
+element we want to see through. The &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; elements are nested
+inside a &lt;code&gt;&amp;lt;defs&amp;gt;&lt;/code&gt; element so they can be available for reuse.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="html"&gt;  &amp;lt;defs&amp;gt;
     &amp;lt;pattern id=&amp;quot;cell-pattern&amp;quot; patternUnits=&amp;quot;userSpaceOnUse&amp;quot; width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot;&amp;gt;
@@ -137,8 +138,8 @@ black.&lt;/p&gt;
 &lt;p&gt;The &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; is composed of two &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; elements that match the game wall size;
 the first gets a fill color of &amp;quot;white&amp;quot; (opposite of &amp;quot;black&amp;quot; in a mask) to
 represent the part of the wall we want to be opaque. The second &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; sits on
-top of the first; here&amp;#39;s where set the fill to &lt;code&gt;url(#cell-pattern)&lt;/code&gt; which refers
-to the pattern we created above.&lt;/p&gt;
+top of the first and has a &lt;code&gt;fill&lt;/code&gt; of &lt;code&gt;url(#cell-pattern)&lt;/code&gt; which refers to the
+pattern we created above.&lt;/p&gt;
 
 &lt;p&gt;Now, we can set the &lt;code&gt;mask&lt;/code&gt; attribute for our game wall &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; by referencing
 the &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; element by id.&lt;/p&gt;

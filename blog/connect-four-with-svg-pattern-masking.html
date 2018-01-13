@@ -162,8 +162,9 @@ can&#39;t see the circle anymore.</p>
 <p>Now to create the hole with a pattern mask. To accomplish this, we use
 (surprise) both a <code>&lt;pattern&gt;</code> and <code>&lt;mask&gt;</code> elements. These elements are not
 graphical, meaning, they won&#39;t be directly rendered in the view box. Instead,
-we&#39;ll be adding the resulting mask as a <code>fill</code> for our <code>&lt;rect&gt;</code> game wall. We
-place them inside a <code>&lt;defs&gt;</code> element so they can be available for reuse.</p>
+we&#39;ll later add the resulting mask as an attribute of our <code>&lt;rect&gt;</code> game wall—the
+element we want to see through. The <code>&lt;pattern&gt;</code> and <code>&lt;mask&gt;</code> elements are nested
+inside a <code>&lt;defs&gt;</code> element so they can be available for reuse.</p>
 
 <pre><code class="html">  &lt;defs&gt;
     &lt;pattern id=&quot;cell-pattern&quot; patternUnits=&quot;userSpaceOnUse&quot; width=&quot;100&quot; height=&quot;100&quot;&gt;
@@ -185,8 +186,8 @@ black.</p>
 <p>The <code>&lt;mask&gt;</code> is composed of two <code>&lt;rect&gt;</code> elements that match the game wall size;
 the first gets a fill color of &quot;white&quot; (opposite of &quot;black&quot; in a mask) to
 represent the part of the wall we want to be opaque. The second <code>&lt;rect&gt;</code> sits on
-top of the first; here&#39;s where set the fill to <code>url(#cell-pattern)</code> which refers
-to the pattern we created above.</p>
+top of the first and has a <code>fill</code> of <code>url(#cell-pattern)</code> which refers to the
+pattern we created above.</p>
 
 <p>Now, we can set the <code>mask</code> attribute for our game wall <code>&lt;rect&gt;</code> by referencing
 the <code>&lt;mask&gt;</code> element by id.</p>
