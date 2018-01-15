@@ -3,7 +3,7 @@ title: Connect Four with SVG pattern masking
 author: Ross Kaffenberger
 published: true
 summary: Rendering transparent masks or making the impossible possible with SVG
-description: Rendering transparent masks in HTML
+description: An application of the technique of SVG pattern transparent to render a Connect Four board with transparent portholes.
 pull_image: 'blog/connect-four-splash.png'
 pull_image_caption: Background Photo by Matthew Kane on Unsplash
 series: 'Connect Four'
@@ -12,7 +12,7 @@ tags:
   - SVG
 ---
 
-*This post is [part of a series on building Connect Four with SVG, Vue.js,
+*This post is [part of a series on building Connect Four with Vue.js, SVG,
 Elixir, and the Phoenix framework](/blog/series/connect-four.html).*
 
 One of my recent side projects to learn new technologies
@@ -156,5 +156,6 @@ For more related info, check out the following resources:
 * MDN docs for [`<svg>`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg), [`<pattern />`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/pattern), [`<mask />`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/mask), and [`<defs />`](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs)
 * Pretty much anything [Sarah Drasner](https://twitter.com/sarah_edo) publishes, including [SVG Animations](http://shop.oreilly.com/product/0636920045335.do)
 
-In the next post, we'll take a look at using Vue.js to render the board
-dynamically and add checkers based on user interaction.
+In [the next post](/blog/building-basic-connect-four-with-vuejs.html), we'll
+take a look at using Vue.js to render the board dynamically and add checkers
+based on user interaction.
