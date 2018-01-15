@@ -18,14 +18,14 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with SVG, Vue.js,
+    <summary type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with Vue.js, SVG,
 Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;One of my recent side projects to learn new technologies
 has been to build a browser-based rendition of &lt;a href="https://en.wikipedia.org/wiki/Connect_Four"&gt;Connect
 Four&lt;/a&gt;.
 The fully-functional...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with SVG, Vue.js,
+    <content type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with Vue.js, SVG,
 Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;One of my recent side projects to learn new technologies
@@ -184,8 +184,9 @@ specify x coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&g
 &lt;li&gt;Pretty much anything &lt;a href="https://twitter.com/sarah_edo"&gt;Sarah Drasner&lt;/a&gt; publishes, including &lt;a href="http://shop.oreilly.com/product/0636920045335.do"&gt;SVG Animations&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;In the next post, we&amp;#39;ll take a look at using Vue.js to render the board
-dynamically and add checkers based on user interaction.&lt;/p&gt;
+&lt;p&gt;In &lt;a href="/blog/building-basic-connect-four-with-vuejs.html"&gt;the next post&lt;/a&gt;, we&amp;#39;ll
+take a look at using Vue.js to render the board dynamically and add checkers
+based on user interaction.&lt;/p&gt;
 </content>
   </entry>
   <entry>
