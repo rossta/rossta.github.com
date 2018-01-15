@@ -81,16 +81,7 @@ Components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7
 
 For our game, a `GameContainer` component will be to keep track of and manipulate the key
 game state, including adding checkers when a player selects a column, toggling
-the player turns, and, later, determine if a player has won the game. In
-practice, our presentation components will keep some of their own state and
-logic as well, but it will be very specfic to the local concerns of that
-component; when a presentation component needs to know about higher level
-state, it will be passed in as props from its parent. Any events triggered in
-the user interface will be passed back up the heirarchy, eventually reaching
-our container; "actions up, data down". For this first pass, the main action
-will be clicking a column in which to drop the next checker.
-
-Here's another view of our component hierarchy, this time in Vue/HTML pseudocode.
+the player turns, and, later, determine if a player has won the game. This gives us a sense now of our complete component hierarchy, this time visualize in Vue/HTML pseudocode:
 
 ```
 <game-container> <!-- state: checkers, current player -->
@@ -105,6 +96,14 @@ Here's another view of our component hierarchy, this time in Vue/HTML pseudocode
   </board>
 </game>
 ```
+
+In practice, our presentation components will keep some of their own state and
+logic as well, but it will be very specfic to the local concerns of that
+component; when a presentation component needs to know about higher level
+state, it will be passed in as props from its parent. Any events triggered in
+the user interface will be passed back up the heirarchy, eventually reaching
+our container; "actions up, data down". For this first pass, the main action
+will be clicking a column in which to drop the next checker.
 
 ## The container
 
