@@ -319,6 +319,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/2018-01-15-basic-connect-four-with-vuejs.html</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/index.html</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -571,6 +577,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/tags/vue.html</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/blog/2018.html</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -578,6 +590,12 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2018/01.html</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/blog/2018/01/15.html</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -1117,6 +1135,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/blog/page/3/index.html</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/page/2/index.html</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -1195,13 +1219,31 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/projects/page/3/index.html</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/series/page/2/index.html</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://rossta.net/series/page/3/index.html</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://rossta.net/talks/page/2/index.html</loc>
+    <lastmod>2018-01-15T00:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rossta.net/talks/page/3/index.html</loc>
     <lastmod>2018-01-15T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

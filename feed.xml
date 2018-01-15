@@ -5,10 +5,415 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-01-10T00:00:00+00:00</updated>
+  <updated>2018-01-15T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Building basic Connect Four with Vue.js</title>
+    <link rel="alternate" href="/blog/basic-connect-four-with-vuejs.html"/>
+    <id>/blog/basic-connect-four-with-vuejs.html</id>
+    <published>2018-01-15T00:00:00+00:00</published>
+    <updated>2018-01-15T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with Vue.js, SVG, Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Lately, I've gotten excited about the &lt;a href="https://vuejs.org/"&gt;Vue.js&lt;/a&gt; JavaScript
+framework view rendering due to its versatility, low barrier to entry, and
+community...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with Vue.js, SVG, Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Lately, I&amp;#39;ve gotten excited about the &lt;a href="https://vuejs.org/"&gt;Vue.js&lt;/a&gt; JavaScript
+framework view rendering due to its versatility, low barrier to entry, and
+community supported extensions for state management and routing.  In this post,
+we&amp;#39;ll use Vue.js 2 to dynamically render the Connect Four game board we started
+&lt;a href="/blog/connect-four-with-svg-pattern-masking.html"&gt;last time&lt;/a&gt;. This
+will not be a complete tutorial on Vue.js, but it hopefully will illustrate
+some of Vue&amp;#39;s basic concepts and its powerful and intuitive features.
+Check out the &lt;a href="https://vuejs.org/v2/guide/"&gt;excellent Vue.js guides&lt;/a&gt; for a
+thorough introduction to the framework.&lt;/p&gt;
+
+&lt;p&gt;To see where we&amp;#39;ll end up, here&amp;#39;s a pen of the first pass of our Vue.js version of Connect Four:&lt;/p&gt;
+
+&lt;p data-height="485" data-theme-id="0" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
+
+      &lt;h2 id="breaking-it-down" class="title"&gt;
+        &lt;a name="breaking-it-down" class="anchor" href="#breaking-it-down"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Breaking it down
+      &lt;/h2&gt;
+    
+&lt;p&gt;Starting from where we left off in the &lt;a href="/blog/connect-four-with-svg-pattern-masking.html"&gt;previous post&lt;/a&gt;, here&amp;#39;s an example of the static layout of the game board so far:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- board --&amp;gt;
+&amp;lt;svg viewBox=&amp;quot;0 0 700 600&amp;quot; xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
+  &amp;lt;!-- defs for svg pattern masking --&amp;gt;
+
+  &amp;lt;!-- column 0 --&amp;gt;
+  &amp;lt;svg x=&amp;quot;0&amp;quot; y=&amp;quot;0&amp;quot;&amp;gt;
+
+    &amp;lt;!-- checker --&amp;gt;
+    &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;550&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;#254689&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
+
+    &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;600&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+  &amp;lt;/svg&amp;gt;
+
+  &amp;lt;!-- column 1 --&amp;gt;
+  &amp;lt;svg x=&amp;quot;100&amp;quot; y=&amp;quot;0&amp;quot;&amp;gt;
+    &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;600&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+  &amp;lt;/svg&amp;gt;
+
+  &amp;lt;!-- and more columns... --&amp;gt;
+
+&amp;lt;/svg&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It&amp;#39;s easy to spot some repetition. There are a fixed number of columns of
+the same dimensions and appearance, each of which may contain checkers. As
+Vue.js is a component based framework, we&amp;#39;ll want to break these pieces into logical
+units: the game will be composed of a single Board component, which will render
+all the Column components, each of which will render their &amp;quot;stack&amp;quot; of Checker
+components. Here&amp;#39;s how we might visualize this breakdown:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/connect-four-components-442b46a4.png" style="width:70%;margin:2em auto;display:block;" alt="Connect four components" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Aside from this hierarchy, we also will make an informal distinction to describe
+the Board, Column, and Checker: they are &amp;quot;presentation&amp;quot; components.
+Notably, their main role is to determine how the app will look. We&amp;#39;ll wrap
+the Board in a &amp;quot;container&amp;quot; component, whose main role is to determine how the
+app will work. For more on this distinction, check out Dan Abramov&amp;#39;s React article on
+&lt;a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0"&gt;Presentational and Container
+Components&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;For our game, a &lt;code&gt;GameContainer&lt;/code&gt; component will be to keep track of and manipulate the key
+game state, including adding checkers when a player selects a column, toggling
+the player turns, and, later, determine if a player has won the game. This gives us a sense now of our complete component hierarchy, this time visualize in Vue/HTML pseudocode:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;game-container&amp;gt; &amp;lt;!-- state: checkers, current player --&amp;gt;
+  &amp;lt;game-board :checkers=&amp;quot;checkers&amp;quot;&amp;gt; &amp;lt;!-- state: board dimensions --&amp;gt;
+    &amp;lt;template v-for=&amp;quot;column in columns&amp;quot;&amp;gt;
+      &amp;lt;board-column :stack=&amp;quot;stack(column)&amp;quot;&amp;gt;
+        &amp;lt;template v-for=&amp;quot;checker in stack&amp;quot;&amp;gt;
+          &amp;lt;board-checker&amp;gt;&amp;lt;/board-checker&amp;gt;
+        &amp;lt;/template&amp;gt;
+      &amp;lt;/column&amp;gt;
+    &amp;lt;/template&amp;gt;
+  &amp;lt;/board&amp;gt;
+&amp;lt;/game&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In practice, our presentation components will keep some of their own state and
+logic as well, but it will be very specfic to the local concerns of that
+component; when a presentation component needs to know about higher level
+state, it will be passed in as props from its parent. Any events triggered in
+the user interface will be passed back up the heirarchy, eventually reaching
+our container; &amp;quot;actions up, data down&amp;quot;. For this first pass, the main action
+will be clicking a column in which to drop the next checker.&lt;/p&gt;
+
+      &lt;h2 id="the-container" class="title"&gt;
+        &lt;a name="the-container" class="anchor" href="#the-container"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The container
+      &lt;/h2&gt;
+    
+&lt;p&gt;The &lt;code&gt;GameContainer&lt;/code&gt; component be the source of truth for the key game-level
+concerns including an object to store the checkers that have been played and
+numbers representing row and column (abbreviated throughout the code as &lt;code&gt;col&lt;/code&gt;)
+counts. For now, we&amp;#39;ll also hardcode the first player to &amp;quot;red&amp;quot;. The
+&lt;code&gt;GameContainer&lt;/code&gt; markup is simply to render the &lt;code&gt;GameBoard&lt;/code&gt;, which will receive
+data from the container via props.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const GameContainer = Vue.component(&amp;#39;game-container&amp;#39;, {
+  data() {
+    return {
+      checkers: {},
+      playerColor: &amp;#39;red&amp;#39;,
+      rowCount: 6,
+      colCount: 7,
+      // ...
+    };
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- game-container-template --&amp;gt;
+&amp;lt;game-board :checkers=&amp;quot;checkers&amp;quot; :rowCount=&amp;quot;rowCount&amp;quot; :colCount=&amp;quot;colCount&amp;quot;&amp;gt;&amp;lt;/game-board&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that I&amp;#39;ve chosen to store checker data in an object, where each checker will be
+identified by a key based on its row and column number. Each value in the
+&lt;code&gt;checkers&lt;/code&gt; object will itself be an object with properties for row, column,
+color of a dropped checker, i.e., &lt;code&gt;{ row, col, color }&lt;/code&gt;. A common alternative for
+storing data in a grid-based game is to use an array of arrays; I personally
+have found it easier to represent the grid in a map-like data structure, such
+as a JavaScript object, to manipulate, search for, and perform transformations
+on game data. Either approach would work for the purpose of this demo—the
+mechanics of getting and setting checker data in the &lt;code&gt;GameContainer&lt;/code&gt; would just
+differ slightly.&lt;/p&gt;
+
+      &lt;h2 id="the-board" class="title"&gt;
+        &lt;a name="the-board" class="anchor" href="#the-board"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The board
+      &lt;/h2&gt;
+    
+&lt;p&gt;The &lt;code&gt;GameBoard&lt;/code&gt; has the primary responsibility of defining the dimensions of
+the board layout, based off the row and column counts it receives from the
+&lt;code&gt;GameContainer&lt;/code&gt; and the size of each cell, which will come from local data.
+From this data, the board computes board width and height and the radius of
+each checker. The &lt;code&gt;GameBoard&lt;/code&gt; will also be responsible for filtering the
+checkers specific to each column into the correct &lt;code&gt;BoardColumn&lt;/code&gt; children
+components, as shown in the &lt;code&gt;checkerStack(col)&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const GameBoard = Vue.component(&amp;#39;game-board&amp;#39;, {
+  data() {
+    return {
+      cellSize: 100,
+    };
+  },
+
+  computed: {
+    cols() { return range(this.colCount); },
+
+    boardWidth() { return this.colCount * this.cellSize; },
+    boardHeight() { return this.rowCount * this.cellSize; },
+    checkerRadius() { return this.cellSize * 0.45; },
+
+    // ...
+  },
+
+  methods: {
+    checkerStack(col) {
+      return Object.values(this.checkers).filter(c =&amp;gt; c.col === col);
+    },
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A neat trick here is to use a custom &lt;code&gt;range&lt;/code&gt; function that converts the
+&lt;code&gt;colCount&lt;/code&gt; into a list of &lt;code&gt;0..colCount-1&lt;/code&gt; to identify the columns, using the
+spread operator and the &lt;code&gt;Array.prototype.keys&lt;/code&gt; function:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const range = num =&amp;gt; [...Array(num).keys()];
+// range(7)
+// [0, 1, 2, 3, 4, 5, 6]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the &lt;code&gt;GameBoard&lt;/code&gt; template, we&amp;#39;re able convert the hard-coded width, height,
+, x, and y positions of our original SVG layout to dynamic properties. The
+&lt;code&gt;GameBoard&lt;/code&gt; also renders each of the &lt;code&gt;BoardColumn&lt;/code&gt; components using the &lt;code&gt;v-for&lt;/code&gt;
+directive on our &lt;code&gt;col&lt;/code&gt; range, again, passing key game state and checker data
+as props. The props also include the url to the pattern &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; that will
+give the columns the transparent portholes, as discussed in the &lt;a href="/blog/connect-four-with-svg-pattern-masking.html"&gt;previous
+post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- game-board-template --&amp;gt;
+&amp;lt;svg :viewBox=&amp;quot;`0 0 ${boardWidth} ${boardHeight}`&amp;quot;
+  xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
+  &amp;lt;defs&amp;gt;
+    &amp;lt;pattern :id=&amp;quot;patternId&amp;quot; :width=&amp;quot;cellSize&amp;quot; :height=&amp;quot;cellSize&amp;quot;
+      patternUnits=&amp;quot;userSpaceOnUse&amp;quot;&amp;gt;
+      &amp;lt;circle :cx=&amp;quot;cellSize / 2&amp;quot; :cy=&amp;quot;cellSize / 2&amp;quot; :r=&amp;quot;checkerRadius&amp;quot; fill=&amp;quot;black&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
+    &amp;lt;/pattern&amp;gt;
+    &amp;lt;mask :id=&amp;quot;maskId&amp;quot;&amp;gt;
+      &amp;lt;rect :width=&amp;quot;cellSize&amp;quot; :height=&amp;quot;boardHeight&amp;quot; fill=&amp;quot;white&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+      &amp;lt;rect :width=&amp;quot;cellSize&amp;quot; :height=&amp;quot;boardHeight&amp;quot; :fill=&amp;quot;pattern&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+    &amp;lt;/mask&amp;gt;
+  &amp;lt;/defs&amp;gt;
+  &amp;lt;template v-for=&amp;quot;col in cols&amp;quot;&amp;gt;
+    &amp;lt;board-column :checkers=&amp;quot;checkerStack(col)&amp;quot; :col=&amp;quot;col&amp;quot; :mask=&amp;quot;mask&amp;quot; ...  /&amp;gt;
+  &amp;lt;/template&amp;gt;
+&amp;lt;/svg&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For more on the &lt;code&gt;&amp;lt;defs&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt;, and &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; elements, see the previous
+article on &lt;a href="/blog/connect-four-with-svg-pattern-masking.html"&gt;SVG pattern
+masking&lt;/a&gt;. The &lt;code&gt;&amp;lt;template&amp;gt;&lt;/code&gt;
+tag allows us to add Vue directives, like &lt;code&gt;v-for&lt;/code&gt;, without adding unnecessary
+markup to the rendered HTML.&lt;/p&gt;
+
+      &lt;h2 id="the-columns" class="title"&gt;
+        &lt;a name="the-columns" class="anchor" href="#the-columns"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The columns
+      &lt;/h2&gt;
+    
+&lt;p&gt;Now on to the &lt;code&gt;BoardColumn&lt;/code&gt; component and its template. It is responsible for
+rendering the pattern-masked &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; and any checkers dropped in its column.
+By wrapping the &lt;code&gt;BoardColumn&lt;/code&gt; in a nested &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; element with an x value based
+off &lt;code&gt;col * cellSize&lt;/code&gt;, the rendered child elements of the &lt;code&gt;BoardColumn&lt;/code&gt; will be
+positioned relatively within. Note how straightforward it is to add a click listener to our template where we&amp;#39;ll trigger a &lt;code&gt;drop&lt;/code&gt; method on the &lt;code&gt;BoardColumn&lt;/code&gt; instance.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- board-column-template --&amp;gt;
+&amp;lt;svg :x=&amp;quot;col * cellSize&amp;quot; y=&amp;quot;0&amp;quot;&amp;gt;
+  &amp;lt;g @click=&amp;quot;drop&amp;quot; class=&amp;quot;column&amp;quot;&amp;gt;
+    &amp;lt;template v-for=&amp;quot;checker in checkers&amp;quot;&amp;gt;
+      &amp;lt;board-checker :checker=&amp;quot;checker&amp;quot; :cellSize=&amp;quot;cellSize&amp;quot; :rowCount=&amp;quot;rowCount&amp;quot; ...  /&amp;gt;
+    &amp;lt;/template&amp;gt;
+    &amp;lt;rect :width=&amp;quot;cellSize&amp;quot; :height=&amp;quot;boardHeight&amp;quot; :fill=&amp;quot;color&amp;quot; :mask=&amp;quot;mask&amp;quot; /&amp;gt;
+  &amp;lt;/g&amp;gt;
+&amp;lt;/svg&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;#39;s check out that &lt;code&gt;drop&lt;/code&gt; method on &lt;code&gt;BoardColumn&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const BoardColumn = Vue.component(&amp;#39;board-column&amp;#39;, {
+  computed: {
+    // Find the current max occupied row and add 1
+    nextOpenRow() {
+      return Math.max(...this.checkers.map(c =&amp;gt; c.row).concat(-1)) + 1;
+    },
+  },
+
+  methods: {
+    drop(col) {
+      const row = this.nextOpenRow;
+
+      if (row &amp;lt; this.rowCount) {
+        this.$emit(&amp;#39;drop&amp;#39;, { row, col });
+      } else {
+        console.log(&amp;#39;cannot drop&amp;#39;, { row, col });
+      }
+    },
+  },
+});
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The method&amp;#39;s responsibility is to trigger a &lt;code&gt;&amp;#39;drop&amp;#39;&lt;/code&gt; event up the component hierarchy
+with data for &lt;code&gt;{ row, col }&lt;/code&gt;. This will indicate an attempt has been made to drop
+a checker at that position. To accomplish this, it calculates the next
+available row in the &lt;code&gt;nextOpenRow&lt;/code&gt; function. If the next open row would be off
+the board, then the column is full and the attempt is swallowed. We calculate
+&lt;code&gt;nextOpenRow&lt;/code&gt; by finding the max row number in the stack and adding one. If the
+checker stack is empty in this column, then the result will be &lt;code&gt;0&lt;/code&gt;, which is
+where we&amp;#39;d want the first checker to land.&lt;/p&gt;
+
+      &lt;h2 id="updating-game-state" class="title"&gt;
+        &lt;a name="updating-game-state" class="anchor" href="#updating-game-state"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Updating game state
+      &lt;/h2&gt;
+    
+&lt;p&gt;Note this constitues some game logic so we&amp;#39;re cheating a little given our
+presentation/container distinction noted earlier; it may make more sense to
+push this logic to our &lt;code&gt;GameContainer&lt;/code&gt; later, but for now, it&amp;#39;s convenient to
+leave it here. As we&amp;#39;ll see later, the &lt;code&gt;GameContainer&lt;/code&gt; will respond to this
+event and do the work to update the &lt;code&gt;checkers&lt;/code&gt; map for the game.&lt;/p&gt;
+
+&lt;p&gt;Back in the &lt;code&gt;GameContainer&lt;/code&gt;, an emitted &lt;code&gt;drop&lt;/code&gt; event with &lt;code&gt;{ row, col }&lt;/code&gt; data is
+captured here, where the game will add the current player&amp;#39;s &lt;code&gt;color&lt;/code&gt; as
+property, update the &lt;code&gt;checkers&lt;/code&gt; object, and toggle the color for the next
+player.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const GameContainer = Vue.component(&amp;#39;game-container&amp;#39;, {
+  methods: {
+    toggleColor() {
+      if (this.playerColor === RED) {
+        this.playerColor = BLACK;
+      } else {
+        this.playerColor = RED;
+      }
+    },
+
+    drop({ col, row }) {
+      const color = this.playerColor;
+
+      console.log(&amp;#39;setting checker&amp;#39;, key(row, col), { row, col, color });
+      Vue.set(this.checkers, key(row, col), { row, col, color });
+      this.toggleColor();
+    },
+
+    // ...
+  },
+
+  // ...
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note an important gotcha when using &lt;code&gt;Vue.js&lt;/code&gt; demonstrated here: we need to use
+&lt;code&gt;Vue.set&lt;/code&gt; when adding a new checker to the &lt;code&gt;checkers&lt;/code&gt; object. Vue needs to hook
+into getters/setters to track dependencies and propagate data changes
+throughout the application. Unfortunately, because of how JavaScript works,
+&lt;em&gt;Vue can&amp;#39;t detect property addition or deletion&lt;/em&gt;. This affects how we
+adding checkers to the underlying data structure during game play. By using
+&lt;code&gt;Vue.set&lt;/code&gt;, we ensure the data change results in rendering the new checker
+on the game board.&lt;/p&gt;
+
+      &lt;h2 id="the-checkers" class="title"&gt;
+        &lt;a name="the-checkers" class="anchor" href="#the-checkers"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The checkers
+      &lt;/h2&gt;
+    
+&lt;p&gt;To render the checkers, we have a &lt;code&gt;BoardChecker&lt;/code&gt; component. It is simply a &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; element.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- board-checker-template --&amp;gt;
+&amp;lt;circle :cx=&amp;quot;centerX&amp;quot; :cy=&amp;quot;centerY&amp;quot; :r=&amp;quot;checkerRadius&amp;quot; :fill=&amp;quot;adjustedColor&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;cx&lt;/code&gt; and &lt;code&gt;cy&lt;/code&gt; properties are computed based on the &lt;code&gt;checker&lt;/code&gt; object&amp;#39;s &lt;code&gt;row&lt;/code&gt; and the &lt;code&gt;cellSize&lt;/code&gt; and &lt;code&gt;rowCount&lt;/code&gt; properties passed in from the parent column. We translate the canonical red/black color names to prettier hex colors to fill each &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
+  data() {
+    return {
+      colorHexes: {
+        red: &amp;#39;#FC7E69&amp;#39;,
+        black: &amp;#39;#254689&amp;#39;,
+      },
+    };
+  },
+
+  computed: {
+    row() { return this.checker.row; },
+    col() { return this.checker.col; },
+    color() { return this.checker.color; },
+
+    adjustedColor() {
+      return this.colorHexes[this.color];
+    },
+
+    centerX() {
+      return (this.cellSize / 2);
+    },
+
+    centerY() {
+      return (this.cellSize / 2) + (this.cellSize * (this.rowCount - 1 - this.row));
+    },
+  },
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Again, here&amp;#39;s a link to &lt;a href="https://codepen.io/rossta/pen/jYxxGv?editors=1010"&gt;the pen on
+codepen.io&lt;/a&gt; where you can
+see the full source code and try out the game for yourself.&lt;/p&gt;
+
+&lt;p&gt;This completes our first pass at using Vue.js to create a playable Connect Four
+game in the browser. We&amp;#39;re not yet detecting a game win or draw; that&amp;#39;s still
+to come. In the next post, we use Vue to animate each checker falling into
+place as they are added to the board.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Connect Four with SVG pattern masking</title>
     <link rel="alternate" href="/blog/connect-four-with-svg-pattern-masking.html"/>
@@ -1787,371 +2192,6 @@ will replace it with later. Something about that just feels right.&lt;/p&gt;
   If you're interested in Elixir and in New York City on Thursday, Oct 27 2016, please check out the &lt;a href="http://empex.co"&gt;Empire City Elixir Conference Halloween Lightning Talks&lt;/a&gt;. Registration is free and you'll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
 &lt;/p&gt;
 &lt;/div&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Using Web Push Notifications with VAPID</title>
-    <link rel="alternate" href="/blog/using-the-web-push-api-with-vapid.html"/>
-    <id>/blog/using-the-web-push-api-with-vapid.html</id>
-    <published>2016-10-21T00:00:00+00:00</published>
-    <updated>2016-10-21T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Push messages from mobile and desktop browsers are &lt;a href="http://caniuse.com/#feat=push-api"&gt;now a thing&lt;/a&gt; on the open web.&lt;/p&gt;
-
-&lt;p&gt;Why use the Push API? It allows us to use free, third-party services to notify our users
-of events, even when they're not actively engaged with our site. It's
-not meant...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Push messages from mobile and desktop browsers are &lt;a href="http://caniuse.com/#feat=push-api"&gt;now a thing&lt;/a&gt; on the open web.&lt;/p&gt;
-
-&lt;p&gt;Why use the Push API? It allows us to use free, third-party services to notify our users
-of events, even when they&amp;#39;re not actively engaged with our site. It&amp;#39;s
-not meant to replace other methods of pushing data to clients, like
-&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"&gt;WebSockets&lt;/a&gt; or &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"&gt;Server Sent Events&lt;/a&gt;, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&amp;#39;s
-common place on our smartphones from installed apps is now possible from the browser.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://serviceworker-rails.herokuapp.com/push-simple/"&gt;&lt;img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-3-36a167ad.jpg" alt="Push message in Chrome" /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Though only supported in Chrome and Firefox on the desktop and in Chrome on Android at the time of this writing, it&amp;#39;ll be more widespread soon enough. While I previously &lt;a href="/blog/web-push-notifications-from-rails.html"&gt;wrote about this topic&lt;/a&gt;, there have been recent changes in the Chrome implementation to make the API consistent with Firefox, which we&amp;#39;ll describe here.&lt;/p&gt;
-
-&lt;p&gt;In this post, we&amp;#39;ll walk through setting up a Ruby or Node.js web application to use the Push API with the &lt;a href="https://tools.ietf.org/html/draft-ietf-webpush-vapid-01"&gt;Voluntary Application server Identification (VAPID)&lt;/a&gt;. Use of VAPID for push requests is optional, but primarily a security benefit. Application servers use VAPID to identify themselves to the push servers so push subscriptions can be properly restricted to their origin app servers. In other words, VAPID could theoretically prevent an attacker from stealing a user &lt;code&gt;PushSubscription&lt;/code&gt; and sending push messages to that recipient from another server. Down the road, push services may be able to provide analytics and debugging assistance for app servers using the VAPID protocol. Another benefit: in Chrome, it is no longer necessary to register our web apps through the Google Developer Console and pass around Google app credentials in web push requests.&lt;/p&gt;
-
-      &lt;h2 id="overview" class="title"&gt;
-        &lt;a name="overview" class="anchor" href="#overview"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Overview
-      &lt;/h2&gt;
-    
-&lt;p&gt;There are three parties involved in delivering a push message.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Your application server&lt;/li&gt;
-&lt;li&gt;Your user&lt;/li&gt;
-&lt;li&gt;A push server, e.g., Google or Mozilla&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Before a push message can be delivered with VAPID, a few criteria should be satisfied:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Your application server has generated a set of VAPID keys that will be used to sign Push API requests. This is a one-time step (at least until we decide to reset the keys).&lt;/li&gt;
-&lt;li&gt;A &lt;code&gt;manifest.json&lt;/code&gt; file, linked from a page on our website, identifies our app settings.&lt;/li&gt;
-&lt;li&gt;In the user&amp;#39;s web browser, a service worker script is installed and activated. The &lt;code&gt;pushManager&lt;/code&gt; property of the &lt;code&gt;ServiceWorkerRegistration&lt;/code&gt; is subscribed to push events with our VAPID public key, with creates a &lt;code&gt;subscription&lt;/code&gt; JSON object on the client side.&lt;/li&gt;
-&lt;li&gt;Your server makes an API request to a push server (likely using a server-side library) to send a notification with the &lt;code&gt;subscription&lt;/code&gt; obtained from the client and an optional payload (the message).&lt;/li&gt;
-&lt;li&gt;Your service worker is set up to receive &lt;code&gt;&amp;#39;push&amp;#39;&lt;/code&gt; events. To trigger a desktop notification, the user has accepted the prompt to receive notifications from our site.&lt;/li&gt;
-&lt;/ol&gt;
-
-      &lt;h2 id="generating-vapid-keys" class="title"&gt;
-        &lt;a name="generating-vapid-keys" class="anchor" href="#generating-vapid-keys"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Generating VAPID keys
-      &lt;/h2&gt;
-    
-&lt;p&gt;To take advantage of the VAPID protocol, we would generate a public/private VAPID key pair to store on our server to be used for all user subscriptions.&lt;/p&gt;
-
-&lt;p&gt;In Ruby, we can use the &lt;code&gt;webpush&lt;/code&gt; gem to generate a VAPID key that has both a &lt;code&gt;public_key&lt;/code&gt; and &lt;code&gt;private_key&lt;/code&gt; attribute to be saved on the server side.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
-gem &amp;#39;webpush&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In a Ruby console:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;require &amp;#39;webpush&amp;#39;
-
-# One-time, on the server
-vapid_key = Webpush.generate_key
-
-# Save these in our application server settings
-vapid_key.public_key
-# =&amp;gt; &amp;quot;BC1mp...HQ=&amp;quot;
-
-vapid_key.private_key
-# =&amp;gt; &amp;quot;XhGUr...Kec&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In Node.js, we can use the &lt;code&gt;web-push&lt;/code&gt; package:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;npm install web-push --save
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In the node REPL:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;const webpush = require(&amp;#39;web-push&amp;#39;);
-
-const vapidKeys = webpush.generateVAPIDKeys()
-
-vapidKeys.publicKey
-&amp;#39;BDO0P...eoH&amp;#39;
-
-vapidKeys.privateKey
-&amp;#39;3J303..r4I&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The keys returned will both be Base64-encoded byte strings. Only the public key
-will be shared, both with the user&amp;#39;s browser and the push server as we&amp;#39;ll see
-later.&lt;/p&gt;
-
-      &lt;h2 id="declaring-manifest-json" class="title"&gt;
-        &lt;a name="declaring-manifest-json" class="anchor" href="#declaring-manifest-json"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Declaring manifest.json
-      &lt;/h2&gt;
-    
-&lt;p&gt;Add a &lt;code&gt;manifest.json&lt;/code&gt; file served at the scope of our app (or above), like at the root to describe our client application for use with the Push API.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;{
-  &amp;quot;name&amp;quot;: &amp;quot;My App&amp;quot;,
-    &amp;quot;short_name&amp;quot;: &amp;quot;my-app&amp;quot;,
-    &amp;quot;start_url&amp;quot;: &amp;quot;/&amp;quot;,
-    &amp;quot;icons&amp;quot;: [
-    {
-      &amp;quot;src&amp;quot;: &amp;quot;/images/my-push-logo-192x192.png&amp;quot;,
-      &amp;quot;sizes&amp;quot;: &amp;quot;192x192&amp;quot;,
-      &amp;quot;type&amp;quot;: &amp;quot;image/png&amp;quot;
-    }
-    ]
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Link to it somewhere in the &lt;code&gt;&amp;lt;head&amp;gt;&lt;/code&gt; tag:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- index.html --&amp;gt;
-&amp;lt;link rel=&amp;quot;manifest&amp;quot; href=&amp;quot;/manifest.json&amp;quot; /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h2 id="installing-a-service-worker" class="title"&gt;
-        &lt;a name="installing-a-service-worker" class="anchor" href="#installing-a-service-worker"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Installing a service worker
-      &lt;/h2&gt;
-    
-&lt;p&gt;Your application javascript must register a service worker script at an appropriate scope (we&amp;#39;re sticking with the root).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// application.js
-// Register the serviceWorker script at /serviceworker.js from our server if supported
-if (navigator.serviceWorker) {
-  navigator.serviceWorker.register(&amp;#39;/serviceworker.js&amp;#39;)
-  .then(function(reg) {
-    console.log(&amp;#39;Service worker change, registered the service worker&amp;#39;);
-  });
-}
-// Otherwise, no push notifications :(
-else {
-  console.error(&amp;#39;Service worker is not supported in this browser&amp;#39;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For Rails developers, we may want to look at the &lt;a href="https://github.com/rossta/serviceworker-rails"&gt;&lt;code&gt;serviceworker-rails&lt;/code&gt; gem&lt;/a&gt; and this &lt;a href="https://rossta.net/blog/service-worker-on-rails.html"&gt;helpful tutorial&lt;/a&gt; to integrate service worker scripts with the Rails asset pipeline.&lt;/p&gt;
-
-      &lt;h2 id="subscribing-to-push-notifications" class="title"&gt;
-        &lt;a name="subscribing-to-push-notifications" class="anchor" href="#subscribing-to-push-notifications"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Subscribing to push notifications
-      &lt;/h2&gt;
-    
-&lt;p&gt;The VAPID public key we generated earlier is made available to the client as a &lt;code&gt;Uint8Array&lt;/code&gt;. To do this, one way would be to expose the urlsafe-decoded bytes from Ruby to JavaScript when rendering the HTML template.&lt;/p&gt;
-
-&lt;p&gt;In Ruby, we might embed the key as raw bytes from the application &lt;code&gt;ENV&lt;/code&gt; or some other application settings mechanism into an HTML template with help from the &lt;code&gt;Base64&lt;/code&gt; module in the standard library. Global variables are used here for simplicity.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# server
-@decodedVapidPublicKey = Base64.urlsafe_decode64(ENV[&amp;#39;VAPID_PUBLIC_KEY&amp;#39;]).bytes
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- html template --&amp;gt;
-&amp;lt;script&amp;gt;
-window.vapidPublicKey = new Uint8Array(&amp;lt;%= @decodedVapidPublicKey %&amp;gt;);
-&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In Node.js, we could use the &lt;code&gt;urlsafe-base64&lt;/code&gt; package to decode the public key and convert it to raw bytes:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// server
-const urlsafeBase64 = require(&amp;#39;urlsafe-base64&amp;#39;);
-const decodedVapidPublicKey = urlsafeBase64.decode(process.env.VAPID_PUBLIC_KEY);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- html template --&amp;gt;
-&amp;lt;script&amp;gt;
-window.vapidPublicKey = new Uint8Array(&amp;lt;%= decodedVapidPublicKey %&amp;gt;);
-&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Your application javascript would then use the &lt;code&gt;pushManager&lt;/code&gt; property to subscribe to push notifications, passing the VAPID public key to the subscription settings.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// application.js
-// When serviceWorker is supported, installed, and activated,
-// subscribe the pushManager property with the vapidPublicKey
-navigator.serviceWorker.ready.then((serviceWorkerRegistration) =&amp;gt; {
-  serviceWorkerRegistration.pushManager
-  .subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: window.vapidPublicKey
-  });
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h2 id="triggering-a-web-push-notification" class="title"&gt;
-        &lt;a name="triggering-a-web-push-notification" class="anchor" href="#triggering-a-web-push-notification"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Triggering a web push notification
-      &lt;/h2&gt;
-    
-&lt;p&gt;The web push library we&amp;#39;re using on the backend will be responsible for
-packaging up the request to the subscription&amp;#39;s endpoint and handling encryption, so the user&amp;#39;s push subscription must be sent from the client to the application server at some point.&lt;/p&gt;
-
-&lt;p&gt;In the example below, we send the JSON generated subscription object to our backend with a message when a button on the page is clicked.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// application.js
-$(&amp;#39;.webpush-button&amp;#39;).on(&amp;#39;click&amp;#39;, (e) =&amp;gt; {
-  navigator.serviceWorker.ready
-  .then((serviceWorkerRegistration) =&amp;gt; {
-    serviceWorkerRegistration.pushManager.getSubscription()
-    .then((subscription) =&amp;gt; {
-      $.post(&amp;#39;/push&amp;#39;, {
-        subscription: subscription.toJSON(),
-        message: &amp;#39;You clicked a button!&amp;#39;
-      });
-    });
-  });
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The call to &lt;code&gt;pushManager.getSubscription()&lt;/code&gt; returns a Promise that provides the
-&lt;code&gt;PushSubscription&lt;/code&gt; instance with all the information the push service needs to
-send a push message to this user&amp;#39;s browser. This includes an &lt;code&gt;endpoint&lt;/code&gt;, the URL
-on the push server where we&amp;#39;ll send the push request, and a pair of &lt;code&gt;keys&lt;/code&gt;
-labelled as &lt;code&gt;p256dh&lt;/code&gt; and &lt;code&gt;auth&lt;/code&gt; required to encrypt the push message payload. If interested to learn more about how this encryption works, check out this detailed summary on &lt;a href="https://developers.google.com/web/updates/2016/03/web-push-encryption"&gt;web push payload encryption&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// subscription.toJSON();
-{
-  endpoint: &amp;quot;https://android.googleapis.com/gcm/send/a-subscription-id&amp;quot;,
-  keys: {
-    auth: &amp;#39;AEl35...7fG&amp;#39;,
-    p256dh: &amp;#39;Fg5t8...2rC&amp;#39;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Imagine a Ruby app endpoint that responds to the request by triggering notification through the &lt;code&gt;webpush&lt;/code&gt; gem. VAPID details include a URL or mailto address for our website and the Base64-encoded public/private VAPID key pair we generated earlier.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# app.rb
-post &amp;#39;/push&amp;#39; do
-  Webpush.payload_send(
-    message: params[:message]
-    endpoint: params[:subscription][:endpoint],
-    p256dh: params[:subscription][:keys][:p256dh],
-    auth: params[:subscription][:keys][:auth],
-    ttl: 24 * 60 * 60,
-    vapid: {
-      subject: &amp;#39;mailto:sender@example.com&amp;#39;,
-      public_key: ENV[&amp;#39;VAPID_PUBLIC_KEY&amp;#39;],
-      private_key: ENV[&amp;#39;VAPID_PRIVATE_KEY&amp;#39;]
-    }
-  )
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In Node.js, usage of the &lt;code&gt;web-push&lt;/code&gt; package might look like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;# index.js
-const webpush = require(&amp;#39;web-push&amp;#39;);
-
-// ...
-
-app.post(&amp;#39;/push&amp;#39;, function(request, response) {
-  const subscription = request.param(&amp;#39;subscription&amp;#39;);
-  const message = request.param(&amp;#39;message&amp;#39;);
-
-  setTimeout(() =&amp;gt; {
-    const options = {
-      TTL: 24 * 60 * 60,
-      vapidDetails: {
-        subject: &amp;#39;mailto:sender@example.com&amp;#39;,
-        publicKey: process.env.VAPID_PUBLIC_KEY,
-        privateKey: process.env.VAPID_PRIVATE_KEY
-      },
-    }
-
-    webpush.sendNotification(
-      subscription,
-      message,
-      options
-    );
-
-  }, 0);
-
-  response.send(&amp;#39;OK&amp;#39;);
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h2 id="receiving-the-push-event" class="title"&gt;
-        &lt;a name="receiving-the-push-event" class="anchor" href="#receiving-the-push-event"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Receiving the push event
-      &lt;/h2&gt;
-    
-&lt;p&gt;Your &lt;code&gt;/serviceworker.js&lt;/code&gt; script can respond to &lt;code&gt;&amp;#39;push&amp;#39;&lt;/code&gt; events to trigger desktop notifications by calling &lt;code&gt;showNotification&lt;/code&gt; on the &lt;code&gt;registration&lt;/code&gt; property.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// serviceworker.js
-// The serviceworker context can respond to &amp;#39;push&amp;#39; events and trigger
-// notifications on the registration property
-self.addEventListener(&amp;quot;push&amp;quot;, (event) =&amp;gt; {
-  let title = (event.data &amp;amp;&amp;amp; event.data.text()) || &amp;quot;Yay a message&amp;quot;;
-  let body = &amp;quot;We have received a push message&amp;quot;;
-  let tag = &amp;quot;push-simple-demo-notification-tag&amp;quot;;
-  let icon = &amp;#39;/assets/my-logo-120x120.png&amp;#39;;
-
-  event.waitUntil(
-    self.registration.showNotification(title, { body, icon, tag })
-  )
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Before the notifications can be displayed, the user must grant permission for &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/notification"&gt;notifications&lt;/a&gt; in a browser prompt, using something like the example below.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// application.js
-
-// Let&amp;#39;s check if the browser supports notifications
-if (!(&amp;quot;Notification&amp;quot; in window)) {
-  console.error(&amp;quot;This browser does not support desktop notification&amp;quot;);
-}
-
-// Let&amp;#39;s check whether notification permissions have already been granted
-else if (Notification.permission === &amp;quot;granted&amp;quot;) {
-  console.log(&amp;quot;Permission to receive notifications has been granted&amp;quot;);
-}
-
-// Otherwise, we need to ask the user for permission
-else if (Notification.permission !== &amp;#39;denied&amp;#39;) {
-  Notification.requestPermission(function (permission) {
-  // If the user accepts, let&amp;#39;s create a notification
-    if (permission === &amp;quot;granted&amp;quot;) {
-      console.log(&amp;quot;Permission to receive notifications has been granted&amp;quot;);
-    }
-  });
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;After all that setup, we should see a browser notification triggered via the Push API.&lt;/p&gt;
-
-&lt;p&gt;As this is still an emerging technology, things are rapidly changing. I&amp;#39;d be
-interested to hear how things are working out for folks integrating web push
-into their web apps.&lt;/p&gt;
 </content>
   </entry>
 </feed>
