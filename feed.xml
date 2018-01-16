@@ -35,7 +35,7 @@ some of Vue&amp;#39;s basic concepts and its powerful and intuitive features.
 Check out the &lt;a href="https://vuejs.org/v2/guide/"&gt;excellent Vue.js guides&lt;/a&gt; for a
 thorough introduction to the framework.&lt;/p&gt;
 
-&lt;p&gt;To see where we&amp;#39;ll end up, here&amp;#39;s a pen of the first pass of our Vue.js version of Connect Four:&lt;/p&gt;
+&lt;p&gt;To see where we&amp;#39;ll end up, here&amp;#39;s a pen:&lt;/p&gt;
 
 &lt;p data-height="485" data-theme-id="0" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
@@ -51,7 +51,7 @@ thorough introduction to the framework.&lt;/p&gt;
         Breaking it down
       &lt;/h2&gt;
     
-&lt;p&gt;Starting from where we left off in the &lt;a href="/blog/connect-four-with-svg-pattern-masking.html"&gt;previous post&lt;/a&gt;, here&amp;#39;s an example of the static layout of the game board so far:&lt;/p&gt;
+&lt;p&gt;We&amp;#39;ll use Vue.js to convert the static layout, which renders the Connect Four board in SVG with a few checkers in place as shown below:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- board --&amp;gt;
 &amp;lt;svg viewBox=&amp;quot;0 0 700 600&amp;quot; xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
