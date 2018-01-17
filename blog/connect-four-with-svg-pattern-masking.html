@@ -166,15 +166,15 @@ we&#39;ll later add the resulting mask as an attribute of our <code>&lt;rect&gt;
 element we want to see through. The <code>&lt;pattern&gt;</code> and <code>&lt;mask&gt;</code> elements are nested
 inside a <code>&lt;defs&gt;</code> element so they can be available for reuse.</p>
 
-<pre><code class="html">  &lt;defs&gt;
-    &lt;pattern id=&quot;cell-pattern&quot; patternUnits=&quot;userSpaceOnUse&quot; width=&quot;100&quot; height=&quot;100&quot;&gt;
-      &lt;circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;45&quot; fill=&quot;black&quot;&gt;&lt;/circle&gt;
-    &lt;/pattern&gt;
-    &lt;mask id=&quot;cell-mask&quot;&gt;
-      &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;white&quot;&gt;&lt;/rect&gt;
-      &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;url(#cell-pattern)&quot;&gt;&lt;/rect&gt;
-    &lt;/mask&gt;
-  &lt;/defs&gt;
+<pre><code class="html">&lt;defs&gt;
+  &lt;pattern id=&quot;cell-pattern&quot; patternUnits=&quot;userSpaceOnUse&quot; width=&quot;100&quot; height=&quot;100&quot;&gt;
+    &lt;circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;45&quot; fill=&quot;black&quot;&gt;&lt;/circle&gt;
+  &lt;/pattern&gt;
+  &lt;mask id=&quot;cell-mask&quot;&gt;
+    &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;white&quot;&gt;&lt;/rect&gt;
+    &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;url(#cell-pattern)&quot;&gt;&lt;/rect&gt;
+  &lt;/mask&gt;
+&lt;/defs&gt;
 </code></pre>
 
 <p>The <code>&lt;pattern&gt;</code> is simply matches the size of a cell, 100x100, and it contains a
@@ -192,8 +192,7 @@ pattern we created above.</p>
 <p>Now, we can set the <code>mask</code> attribute for our game wall <code>&lt;rect&gt;</code> by referencing
 the <code>&lt;mask&gt;</code> element by id.</p>
 
-<pre><code>  &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;cadetblue&quot; mask=&quot;url(#cell-mask)&quot;&gt;&lt;/rect&gt;
-
+<pre><code class="html">&lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;cadetblue&quot; mask=&quot;url(#cell-mask)&quot;&gt;&lt;/rect&gt;
 </code></pre>
 
 <p>This punches a hole through the wall to reveal the checker underneath.</p>
@@ -219,6 +218,15 @@ specify x coordinates for each child <code>&lt;rect&gt;</code> and <code>&lt;cir
 <a href="https://codepen.io/rossta/pen/eyrgJe">CodePen</a>:</p>
 
 <p data-height="370" data-theme-id="0" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyrgJe/">Connect Four board in SVG</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p><hr /></p>
+
+<p>As a sneak preview of the how the falling checker will look behind the pattern
+mask:</p>
+
+<p data-height="265" data-theme-id="0" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyPpog/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 

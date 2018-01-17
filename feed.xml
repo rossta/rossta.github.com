@@ -93,9 +93,10 @@ app will work. For more on this distinction, check out Dan Abramov&amp;#39;s Rea
 &lt;a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0"&gt;Presentational and Container
 Components&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;For our game, a &lt;code&gt;GameContainer&lt;/code&gt; component will be to keep track of and manipulate the key
+&lt;p&gt;For our game, a &lt;code&gt;GameContainer&lt;/code&gt; component will keep track of and manipulate the key
 game state, including adding checkers when a player selects a column, toggling
-the player turns, and, later, determine if a player has won the game. This gives us a sense now of our complete component hierarchy, this time visualize in Vue/HTML pseudocode:&lt;/p&gt;
+the player turns, and, later, determine if a player has won the game. Here&amp;#39;s
+the complete component hierarchy in Vue/HTML pseudocode:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;&amp;lt;game-container&amp;gt; &amp;lt;!-- state: checkers, current player --&amp;gt;
   &amp;lt;game-board :checkers=&amp;quot;checkers&amp;quot;&amp;gt; &amp;lt;!-- state: board dimensions --&amp;gt;
@@ -523,15 +524,15 @@ we&amp;#39;ll later add the resulting mask as an attribute of our &lt;code&gt;&a
 element we want to see through. The &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; elements are nested
 inside a &lt;code&gt;&amp;lt;defs&amp;gt;&lt;/code&gt; element so they can be available for reuse.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="html"&gt;  &amp;lt;defs&amp;gt;
-    &amp;lt;pattern id=&amp;quot;cell-pattern&amp;quot; patternUnits=&amp;quot;userSpaceOnUse&amp;quot; width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot;&amp;gt;
-      &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;50&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;black&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
-    &amp;lt;/pattern&amp;gt;
-    &amp;lt;mask id=&amp;quot;cell-mask&amp;quot;&amp;gt;
-      &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;white&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-      &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;url(#cell-pattern)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-    &amp;lt;/mask&amp;gt;
-  &amp;lt;/defs&amp;gt;
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;defs&amp;gt;
+  &amp;lt;pattern id=&amp;quot;cell-pattern&amp;quot; patternUnits=&amp;quot;userSpaceOnUse&amp;quot; width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot;&amp;gt;
+    &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;50&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;black&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
+  &amp;lt;/pattern&amp;gt;
+  &amp;lt;mask id=&amp;quot;cell-mask&amp;quot;&amp;gt;
+    &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;white&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+    &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;url(#cell-pattern)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
+  &amp;lt;/mask&amp;gt;
+&amp;lt;/defs&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; is simply matches the size of a cell, 100x100, and it contains a
@@ -549,8 +550,7 @@ pattern we created above.&lt;/p&gt;
 &lt;p&gt;Now, we can set the &lt;code&gt;mask&lt;/code&gt; attribute for our game wall &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; by referencing
 the &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; element by id.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;  &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This punches a hole through the wall to reveal the checker underneath.&lt;/p&gt;
@@ -576,6 +576,15 @@ specify x coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&g
 &lt;a href="https://codepen.io/rossta/pen/eyrgJe"&gt;CodePen&lt;/a&gt;:&lt;/p&gt;
 
 &lt;p data-height="370" data-theme-id="0" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrgJe/"&gt;Connect Four board in SVG&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
+
+&lt;p&gt;As a sneak preview of the how the falling checker will look behind the pattern
+mask:&lt;/p&gt;
+
+&lt;p data-height="265" data-theme-id="0" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyPpog/"&gt;SVG mask demo&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
