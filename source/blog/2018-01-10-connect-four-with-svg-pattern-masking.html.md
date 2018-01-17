@@ -94,15 +94,15 @@ element we want to see through. The `<pattern>` and `<mask>` elements are nested
 inside a `<defs>` element so they can be available for reuse.
 
 ```html
-  <defs>
-    <pattern id="cell-pattern" patternUnits="userSpaceOnUse" width="100" height="100">
-      <circle cx="50" cy="50" r="45" fill="black"></circle>
-    </pattern>
-    <mask id="cell-mask">
-      <rect width="100" height="100" fill="white"></rect>
-      <rect width="100" height="100" fill="url(#cell-pattern)"></rect>
-    </mask>
-  </defs>
+<defs>
+  <pattern id="cell-pattern" patternUnits="userSpaceOnUse" width="100" height="100">
+    <circle cx="50" cy="50" r="45" fill="black"></circle>
+  </pattern>
+  <mask id="cell-mask">
+    <rect width="100" height="100" fill="white"></rect>
+    <rect width="100" height="100" fill="url(#cell-pattern)"></rect>
+  </mask>
+</defs>
 ```
 The `<pattern>` is simply matches the size of a cell, 100x100, and it contains a
 `<circle>`, representing the hole, that matches the size of the checker. The
@@ -119,9 +119,8 @@ pattern we created above.
 Now, we can set the `mask` attribute for our game wall `<rect>` by referencing
 the `<mask>` element by id.
 
-```
-  <rect width="100" height="100" fill="cadetblue" mask="url(#cell-mask)"></rect>
-
+```html
+<rect width="100" height="100" fill="cadetblue" mask="url(#cell-mask)"></rect>
 ```
 
 This punches a hole through the wall to reveal the checker underneath.
@@ -146,6 +145,14 @@ Here's the full demo of a static Connect Four SVG game board on
 [CodePen](https://codepen.io/rossta/pen/eyrgJe):
 
 <p data-height="370" data-theme-id="0" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyrgJe/">Connect Four board in SVG</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<hr />
+
+As a sneak preview of the how the falling checker will look behind the pattern
+mask:
+
+<p data-height="265" data-theme-id="0" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyPpog/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 <hr />
