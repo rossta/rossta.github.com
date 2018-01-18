@@ -1,7 +1,7 @@
 ---
 title: Animating Connect Four checkers with Vue.js
 author: Ross Kaffenberger
-published: true
+published: false
 summary: How the Vue transition component "drops" things into place
 description: We'll use Vue transitions and a third party library to animate the SVG checkers falling and bouncing into place when added to the game board.
 pull_image: 'blog/connect-four-nightsky.png'
