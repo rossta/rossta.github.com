@@ -5,220 +5,10 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-01-18T00:00:00+00:00</updated>
+  <updated>2018-01-15T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
-  <entry>
-    <title>Animating Connect Four checkers with Vue.js</title>
-    <link rel="alternate" href="/blog/animating-connect-four-checkers-with-vue.js.html"/>
-    <id>/blog/animating-connect-four-checkers-with-vue.js.html</id>
-    <published>2018-01-18T00:00:00+00:00</published>
-    <updated>2018-01-18T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;When we left off our Connect Four game last, we used Vue.js components to
-convert a static HTML view of the Connect Four board into a playable interface.
-In this post, we'll animate the checkers falling and bouncing into place when
-added to the game...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;When we left off our Connect Four game last, we used Vue.js components to
-convert a static HTML view of the Connect Four board into a playable interface.
-In this post, we&amp;#39;ll animate the checkers falling and bouncing into place when
-added to the game board.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s how the game behaved at the end of &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;the previous post&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p data-height="481" data-theme-id="0" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
-
-&lt;p&gt;Clicking columns simply adds new checkers to the board in the first available
-slots. Though it works, it doesn&amp;#39;t quite &lt;em&gt;feel&lt;/em&gt; like Connect Four; we want
-checkers falling to the bottom of each column.&lt;/p&gt;
-
-&lt;p&gt;Vue.js can help us here. It provides a number of features to support
-&lt;em&gt;transitions&lt;/em&gt;, such as adding/removing single elements, adding/removing items in
-a list, and even between values in data itself. Vue provides a &lt;a href="https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components"&gt;&lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt;
-component, which can be leverage to animate elements as they enter and leave the DOM&lt;/a&gt;. This is what we&amp;#39;ll hook into to animate checkers as they are added to the board.&lt;/p&gt;
-
-&lt;p&gt;The Vue &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; element has mechanisms for either CSS or JavaScript
-animation. Since we&amp;#39;ll have exact coordinates as component properties
-representing the start and end points of the checker&amp;#39;s fall, we&amp;#39;ll want to reach
-for the component&amp;#39;s &lt;a href="https://vuejs.org/v2/guide/transitions.html#JavaScript-Hooks"&gt;JavaScript
-hooks&lt;/a&gt;, which
-include &lt;code&gt;before-enter&lt;/code&gt;, &lt;code&gt;enter&lt;/code&gt;, &lt;code&gt;after-enter&lt;/code&gt;, &lt;code&gt;before-leave&lt;/code&gt;, &lt;code&gt;leave&lt;/code&gt;, etc. To
-keep things short and sweet, we&amp;#39;ll simply animate checkers as they are added to
-the board—we may come back to animating of release of checkers from the
-board in a later post.&lt;/p&gt;
-
-&lt;p&gt;The template for our checker is simply a SVG &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; element with &lt;code&gt;cx&lt;/code&gt; and
-&lt;code&gt;cy&lt;/code&gt; properties to indicate its resting position in the column.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!-- board-checker-template --&amp;gt;
-&amp;lt;circle :cx=&amp;quot;centerX&amp;quot; :cy=&amp;quot;centerY&amp;quot; ... /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Each of these HTML properties is bound to component properties in the &lt;code&gt;BoardChecker&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
-  computed: {
-    centerX() {
-      return (this.cellSize / 2);
-    },
-
-    centerY() {
-      return (this.cellSize / 2) + (this.cellSize * (this.rowCount - 1 - this.row));
-    },
-
-    // ...
-  },
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To animate the arrival of this checker to the board, we need to wrap the
-&lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; in a &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; element.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;transition
-  @enter=&amp;quot;enter&amp;quot;
-  :css=&amp;quot;false&amp;quot;
-  &amp;gt;
-  &amp;lt;circle ... /&amp;gt;
-&amp;lt;/transition&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Vue recommends setting the &lt;code&gt;:css&lt;/code&gt; property of a &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; element to
-&lt;code&gt;false&lt;/code&gt; as an optimization if only JavaScript animation will be used.
-We also bind a callback named &amp;quot;enter&amp;quot; to the &lt;code&gt;@enter&lt;/code&gt; listener on the &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt;
-component. The definition of that callback will be a method on the
-&lt;code&gt;BoardChecker&lt;/code&gt; component:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
-  method: {
-    enter(element, done) {
-      // animate!
-
-      done();
-    },
-
-    // ...
-  },
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Vue expects that the &lt;code&gt;enter&lt;/code&gt; callback may be asynchronous, so the framework
-provides a &lt;code&gt;done&lt;/code&gt; parameter which is a function that must be called to indicate that the
-transition has completed.&lt;/p&gt;
-
-&lt;p&gt;So how to animate? We can lean on a third-party library to do the heavy-lifting;
-we just need to wire it up correctly to get the desired effect. I chose the
-&lt;code&gt;GSAP&lt;/code&gt; library from &lt;a href="https://greensock.com/"&gt;Greensock&lt;/a&gt; which is well-suited for
-SVG animation, though just about any popular animation library could work in its
-place. But don&amp;#39;t take it from me—here&amp;#39;s what expert, Sarah Drasner, has to say
-in her book &lt;a href="http://shop.oreilly.com/product/0636920045335.do"&gt;SVG Animations&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Due to the fact that GreenSock corrects some of SVG’s cross-browser quirks,
-and has thought of every different use case for animation, GreenSock is going
-to be the animation technology I recommend for production sites most
-frequently.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The GSAP ships with a number of utilities to support complex animation and
-synchronization. We&amp;#39;re going to use the
-&lt;a href="https://greensock.com/docs/TweenMax/static.fromTo"&gt;&lt;code&gt;TweenMax.fromTo&lt;/code&gt;&lt;/a&gt; function
-with an easing parameter to bounce the checker in to place. It needs a target
-element, a duration, &amp;quot;from params&amp;quot;, and &amp;quot;to params&amp;quot;, which describe the
-animation at the start and end—hence, &lt;code&gt;fromTo&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;TweenMax.fromTo(element, duration, { y: startPosition }, { y: endPosition });
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Since the checker&amp;#39;s path of motion will have only vertical motion, we will
-animate the &lt;code&gt;y&lt;/code&gt; position. The key insight is to understand that the
-&lt;code&gt;TweenMax&lt;/code&gt; start and end &lt;code&gt;y&lt;/code&gt; positions are relative to element&amp;#39;s
-static position; in this case, that is the &lt;code&gt;cy&lt;/code&gt; property of our &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;
-element. The start position will be a negative distance, which is above the
-checker&amp;#39;s &lt;code&gt;cy&lt;/code&gt; coordinate; in SVG land, the origin of the coordinate plane is in
-the top left. To start the animation outside the view box, we get the static &lt;code&gt;y&lt;/code&gt;
-position, the &lt;code&gt;centerY&lt;/code&gt; property and add, arbitrarily, the &lt;code&gt;cellSize&lt;/code&gt;, which is
-enough to start just barely outside the view box, and multiply by -1. The end
-position is simply 0.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;const fromParams = {
-  y: (-1 * (this.centerY + this.cellSize))
-};
-
-const toParams = {
-  y: 0,
-  ease: Bounce.easeOut,
-  onComplete: done,
-};
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;toParams&lt;/code&gt; also accept an &lt;code&gt;ease&lt;/code&gt; property, for which we&amp;#39;ll use GSAP&amp;#39;s
-&lt;code&gt;Bounce.easeOut&lt;/code&gt;, and an &lt;code&gt;onComplete&lt;/code&gt; callback property, which, for now, we can
-set as the &lt;code&gt;done&lt;/code&gt; argument we mentioned earlier.&lt;/p&gt;
-
-&lt;p&gt;We also can play with the &lt;code&gt;duration&lt;/code&gt; property. As we add more checkers to a
-single column, each checker will have a shorter distance to fall. If we otherwise
-kept the duration the same for all checkers, they would appear to fall more
-slowly as they had less distance to fall.&lt;/p&gt;
-
-&lt;p&gt;Finding a duration that feels right takes a little trial and error, but where we
-currently have it, the duration is an arbitrary constant multiplied by a
-percentage of the total column height based on where the checker will end up:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const percentage = (this.rowCount - this.row) / this.rowCount;
-const duration = return 0.2 + 0.4 * this.percentage;           // seconds
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Putting this altogether, our final &lt;code&gt;enter&lt;/code&gt; method looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
-  // ...
-
-  methods: {
-    enter(el, done) {
-      // start above board, outside the view box
-      const fromY = -1 * (this.centerY + this.cellSize);
-
-      // finish at the position given to
-      const toY = 0;
-
-      const fromParams = {
-        y: fromY
-      };
-
-      const toParams = {
-        y: toY,
-        ease: Bounce.easeOut,
-        onComplete: done,
-      };
-
-      const percentage = (this.rowCount - this.row) / this.rowCount;
-      const duration = return 0.2 + 0.4 * this.percentage; // arbitrary constants
-
-      return TweenMax.fromTo(el, this.duration, fromParams, destParams);
-    },
-  },
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Adding this to our game board, we now have some nicely animated checkers falling
-into place as we play! Note that, because we&amp;#39;re using SVG pattern masking, as
-described in &lt;a href="#"&gt;an earlier post&lt;/a&gt;, the checkers appear to fall behind the Connect
-Four wall, visible through the portholes.&lt;/p&gt;
-
-&lt;p data-height="483" data-theme-id="0" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/jYxxGv/"&gt;Connect Four in Vue.js, SVG: animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
-</content>
-  </entry>
   <entry>
     <title>Building basic Connect Four with Vue.js</title>
     <link rel="alternate" href="/blog/basic-connect-four-with-vuejs.html"/>
@@ -2246,6 +2036,173 @@ and demos from Mozilla&lt;/li&gt;
 &lt;p&gt;Nothing about Rails is incongruent with Progressive Web App technology so there&amp;#39;s no technical reason why we can&amp;#39;t start introducing these features today. It&amp;#39;s worth noting the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling.&lt;/p&gt;
 
 &lt;p&gt;In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Why I'm betting on Elixir</title>
+    <link rel="alternate" href="/blog/why-i-am-betting-on-elixir.html"/>
+    <id>/blog/why-i-am-betting-on-elixir.html</id>
+    <published>2016-10-23T00:00:00+00:00</published>
+    <updated>2016-10-23T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;While reading the first chapter of &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;em&gt;Elixir in
+Action&lt;/em&gt;&lt;/a&gt;, I had my "a-ha!"
+moment with Elixir; this table:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg" alt="Screenshot elixir in action table 1.1"&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I'd already been playing with Elixir for a few months before I picked up
+Sasha Juric's book introducing the Elixir language and its abstractions...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;While reading the first chapter of &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;em&gt;Elixir in
+Action&lt;/em&gt;&lt;/a&gt;, I had my &amp;quot;a-ha!&amp;quot;
+moment with Elixir; this table:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://www.manning.com/books/elixir-in-action"&gt;&lt;img src="/assets/images/screenshots/screenshot-elixir-in-action-table-1.1-dfcd6760.jpg" alt="Screenshot elixir in action table 1.1" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;d already been playing with Elixir for a few months before I picked up
+Sasha Juric&amp;#39;s book introducing the Elixir language and its abstractions for the
+Open Telecom Platform (OTP). If you&amp;#39;re interested in Elixir, &lt;a href="https://www.manning.com/books/elixir-in-action"&gt;please check out
+the book&lt;/a&gt;; no affiliate links, I
+just enjoyed it immensely.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://elixir-lang.org/"&gt;Elixir&lt;/a&gt; is a new programming language that targets the
+Erlang virtual machine.  Therefore, it comes with many of the benefits of
+&lt;a href="https://www.erlang.org/"&gt;Erlang&lt;/a&gt;, including fault tolerance, scalability,
+distribution, and concurrency, in a cleaner, more concise syntax. I knew all
+this but the graphic above revealed a new perspective, especially in regards to
+web development as we know it in the Rails community.&lt;/p&gt;
+
+      &lt;h2 id="using-your-tools" class="title"&gt;
+        &lt;a name="using-your-tools" class="anchor" href="#using-your-tools"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Using your tools
+      &lt;/h2&gt;
+    
+&lt;p&gt;Anyone who has built a non-trivial Ruby on Rails app (or Node.js, Django, PHP,
+etc.) knows the left-side of the table above well. When we deploy a Rails app,
+we don&amp;#39;t just set up the Rails process. We need a web server like Nginx, Apache,
+or Phusion Passenger, to queue requests and serve static content, neither of
+which Rails does well.&lt;/p&gt;
+
+&lt;p&gt;Running background jobs becomes an essential tool for moving intensive tasks out
+of the request/response process, typically requiring separate processes, e.g.
+Sidekiq, often deployed on other servers. Setting up additional caching
+processes in Redis or Memcached is also an assumed requirement for storing HTML
+fragments or other bits of precalculated data. See the theme? performance
+improvements in Ruby apps often mean avoiding Ruby.&lt;/p&gt;
+
+&lt;p&gt;Getting all these separate dependencies up and running for development often requires
+complicated setup or additional tools like Docker/Vagrant/Boxen, etc. Keeping
+them running in production means relying on a yet another service to
+act as a supervisor or monitor like &lt;a href="http://upstart.ubuntu.com/"&gt;Upstart&lt;/a&gt; or
+&lt;a href="https://mmonit.com/monit/"&gt;Monit&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In Elixir, all these features can be handled by the Erlang virtual machine
+(called BEAM) in a &lt;em&gt;single&lt;/em&gt; operating system process. The runtime itself is
+behaves like its own operating system that provides its lightweight processes
+and a scheduler. In a web application, this means responses to web requests and
+background jobs can run concurrently, all within the same BEAM process. Elixir
+and Erlang have built-in abstractions for supervising processes in your
+application, so you can provide fine-grained logic for monitoring and restarting
+failed tasks within your project as an integral part of your business logic.
+There are also built-in tools for persisting and sharing state in place of
+separate tools like Redis or Memcached.&lt;/p&gt;
+
+&lt;p&gt;Setting up the project on the development machine and deployment considerations
+all becomes much simpler when you&amp;#39;re concerned only with the requirements of
+managing a single OS process.&lt;/p&gt;
+
+&lt;p&gt;We&amp;#39;re obviously free to use these other tools (Redis, memcached, a separate jobs
+queue, a web server, etc.) but they no longer need to be the default in Elixir.
+If you&amp;#39;re building a web app in &lt;a href="http://www.phoenixframework.org/"&gt;Phoenix&lt;/a&gt;, you
+still may need a database, and you&amp;#39;ll probably still feel the need to pick
+a JavaScript framework. But you get the idea.&lt;/p&gt;
+
+&lt;p&gt;As I discovered this, I tweeted it out, imagining all the money saved on hosting
+costs. Here&amp;#39;s &lt;a href="https://twitter.com/sasajuric/status/750078059286556673"&gt;Sasha&amp;#39;s response&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;&lt;a
+href="https://twitter.com/rossta"&gt;@rossta&lt;/a&gt; That&amp;#39;s the smallest gain.
+Imagine all the money saved on not developing/maintaining overcomplex error
+prone solutions :-)&lt;/p&gt;&amp;mdash; Saša Jurić (@sasajuric) &lt;a
+href="https://twitter.com/sasajuric/status/750078059286556673"&gt;July 4,
+2016&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="//platform.twitter.com/widgets.js"
+charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;So Elixir has some measurable benefits.&lt;/p&gt;
+
+      &lt;h2 id="choosing-your-tools" class="title"&gt;
+        &lt;a name="choosing-your-tools" class="anchor" href="#choosing-your-tools"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Choosing your tools
+      &lt;/h2&gt;
+    
+&lt;p&gt;I&amp;#39;ve never much enjoyed the phrase &amp;quot;right tool for the job&amp;quot;. We programmers
+often fall back on this phrase as a way to justify our technology choices. In my
+experience, there are many possible languages/frameworks (the &amp;quot;tools&amp;quot;) that can
+serve the needs of a given business (the &amp;quot;job&amp;quot;). As my professional software experience
+is largely based on building web applications for startups, I don&amp;#39;t wish to
+speak for systems software, game programmers, or even mobile app developers. But
+on the web, there exist a great number of tools serving teams quite well,
+and it would difficult for me to call any of them &lt;em&gt;the&lt;/em&gt; right tool.&lt;/p&gt;
+
+&lt;p&gt;The trouble I have with &amp;quot;right tool for the job&amp;quot; is we tend to focus our
+arguments on technology features and capabilities, but very rarely do we
+consider factors such as our current constraints or the people involved in as
+part of the equation. The team has 25 years of experience building Node.js web
+apps? We&amp;#39;re probably going to be choosing Node.js for our next web app. The
+DevOps team invested months and thousands of dollars in shoring up our
+architecture for Ruby on Rails? I probably won&amp;#39;t be switching to Django for our
+next feature.&lt;/p&gt;
+
+&lt;p&gt;How about admitting we&amp;#39;d most often love to choose the tools we&amp;#39;d
+most enjoy using? This is a much more personal choice than &amp;quot;right tool&amp;quot;
+suggests. I don&amp;#39;t think there&amp;#39;s anything wrong with choosing tools you like -
+as long as you can still get the job done, of course!&lt;/p&gt;
+
+&lt;p&gt;Giles Bowkett wrote a &lt;a href="http://gilesbowkett.blogspot.com/2016/10/let-asset-pipeline-die.html"&gt;thoroughly entertaining essay on why the Rails asset
+pipeline should
+die&lt;/a&gt;,
+which is really an essay about the fundamental nature of Ruby and Rails. He
+reminds us that a big reason for the success of Ruby and of Rails is that they
+optimize for programmer happiness. Ruby isn&amp;#39;t successful for its performance
+benefits, (if anything, it&amp;#39;s successful in spite of performance), but because
+programmers really eff-ing love writing Ruby.&lt;/p&gt;
+
+&lt;p&gt;Which brings me to back to Elixir: writing Elixir is so darn fun. For a Rubyist
+getting introduced to Elixir for the first time, the surface area of the language feels
+familiar. We get new concepts, like pattern matching, guard clauses, and
+comprehensions. Working with OTP abstractions feels a bit foreign at first, but once this
+flavor starts to sink in, we may start to regain some of that feeling of how
+exciting it can be to play with new ideas (new, at least, to Rubyists).&lt;/p&gt;
+
+&lt;p&gt;With all abstractions and functionality provided by the Elixir language, and its
+ability to scale, handle fault tolerance, to be distributed - I can&amp;#39;t imagine a
+technology choice better suited for the web.  These traits alone may help
+convince engineering leads to go along with Elixir for the next web app, i.e.,
+&amp;quot;right tool for the job&amp;quot;.  Maybe our next web app doesn&amp;#39;t truly need the
+concurrency or scalability made possible by the BEAM virtual machine, but it&amp;#39;s
+sure fun to learn how to take advantage of it and be able to apply it when
+necessary.&lt;/p&gt;
+
+&lt;p&gt;I haven&amp;#39;t been this excited about a language and its primary web framework,
+since, well, Ruby on Rails came along.&lt;/p&gt;
+
+&lt;p&gt;With Elixir we get a tool that&amp;#39;s both fun to use and that can scale with the needs
+of the business. From the start, it&amp;#39;s like getting the best of Ruby and whatever you think you
+will replace it with later. Something about that just feels right.&lt;/p&gt;
+
+&lt;div class="callout panel"&gt;
+&lt;p&gt;
+  If you're interested in Elixir and in New York City on Thursday, Oct 27 2016, please check out the &lt;a href="http://empex.co"&gt;Empire City Elixir Conference Halloween Lightning Talks&lt;/a&gt;. Registration is free and you'll get to meet folks in the blossoming Elixir community in New York City at a really cool venue.
+&lt;/p&gt;
+&lt;/div&gt;
 </content>
   </entry>
 </feed>

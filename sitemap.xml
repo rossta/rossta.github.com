@@ -325,12 +325,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://rossta.net/blog/2018-01-18-animating-connect-four-checkers-with-vue.js.html</loc>
-    <lastmod>2018-01-18T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://rossta.net/blog/index.html</loc>
     <lastmod>2018-01-18T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
@@ -596,12 +590,6 @@
   </url>
   <url>
     <loc>https://rossta.net/blog/2018/01.html</loc>
-    <lastmod>2018-01-18T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://rossta.net/blog/2018/01/18.html</loc>
     <lastmod>2018-01-18T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
