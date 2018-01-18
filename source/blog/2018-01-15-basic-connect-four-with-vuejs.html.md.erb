@@ -86,15 +86,11 @@ the complete component hierarchy in Vue/HTML pseudocode:
 ```
 <game-container> <!-- state: checkers, current player -->
   <game-board :checkers="checkers"> <!-- state: board dimensions -->
-    <template v-for="column in columns">
-      <board-column :stack="stack(column)">
-        <template v-for="checker in stack">
-          <board-checker></board-checker>
-        </template>
-      </column>
-    </template>
-  </board>
-</game>
+    <board-column v-for="column in columns" :stack="stack(column)">
+      <board-checker v-for="checker in stack"></board-checker>
+    </board-column>
+  </game-board>
+</game-container>
 ```
 
 In practice, our presentation components will keep some of their own state and
@@ -213,17 +209,18 @@ post](/blog/connect-four-with-svg-pattern-masking.html).
       <rect :width="cellSize" :height="boardHeight" :fill="pattern"></rect>
     </mask>
   </defs>
-  <template v-for="col in cols">
-    <board-column :checkers="checkerStack(col)" :col="col" :mask="mask" ...  />
-  </template>
+  <board-column
+    v-for="col in cols"
+    :checkers="checkerStack(col)"
+    :col="col"
+    :mask="mask"
+    ...  />
 </svg>
 ```
 
 For more on the `<defs>`, `<pattern>`, and `<mask>` elements, see the previous
 article on [SVG pattern
-masking](/blog/connect-four-with-svg-pattern-masking.html). The `<template>`
-tag allows us to add Vue directives, like `v-for`, without adding unnecessary
-markup to the rendered HTML.
+masking](/blog/connect-four-with-svg-pattern-masking.html).
 
 ## The columns
 
@@ -231,15 +228,20 @@ Now on to the `BoardColumn` component and its template. It is responsible for
 rendering the pattern-masked `<rect>` and any checkers dropped in its column.
 By wrapping the `BoardColumn` in a nested `<svg>` element with an x value based
 off `col * cellSize`, the rendered child elements of the `BoardColumn` will be
-positioned relatively within. Note how straightforward it is to add a click listener to our template where we'll trigger a `drop` method on the `BoardColumn` instance.
+positioned relatively within. Note how straightforward it is to add a click
+listener to our template where we'll trigger a `drop` method on the
+`BoardColumn` instance.
 
 ```
 <!-- board-column-template -->
 <svg :x="col * cellSize" y="0">
   <g @click="drop" class="column">
-    <template v-for="checker in checkers">
-      <board-checker :checker="checker" :cellSize="cellSize" :rowCount="rowCount" ...  />
-    </template>
+    <board-checker
+      v-for="checker in checkers"
+      :checker="checker"
+      :cellSize="cellSize"
+      :rowCount="rowCount"
+      ...  />
     <rect :width="cellSize" :height="boardHeight" :fill="color" :mask="mask" />
   </g>
 </svg>
