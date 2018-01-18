@@ -150,15 +150,11 @@ the complete component hierarchy in Vue/HTML pseudocode:</p>
 
 <pre><code>&lt;game-container&gt; &lt;!-- state: checkers, current player --&gt;
   &lt;game-board :checkers=&quot;checkers&quot;&gt; &lt;!-- state: board dimensions --&gt;
-    &lt;template v-for=&quot;column in columns&quot;&gt;
-      &lt;board-column :stack=&quot;stack(column)&quot;&gt;
-        &lt;template v-for=&quot;checker in stack&quot;&gt;
-          &lt;board-checker&gt;&lt;/board-checker&gt;
-        &lt;/template&gt;
-      &lt;/column&gt;
-    &lt;/template&gt;
-  &lt;/board&gt;
-&lt;/game&gt;
+    &lt;board-column v-for=&quot;column in columns&quot; :stack=&quot;stack(column)&quot;&gt;
+      &lt;board-checker v-for=&quot;checker in stack&quot;&gt;&lt;/board-checker&gt;
+    &lt;/board-column&gt;
+  &lt;/game-board&gt;
+&lt;/game-container&gt;
 </code></pre>
 
 <p>In practice, our presentation components will keep some of their own state and
@@ -285,17 +281,18 @@ post</a>.</p>
       &lt;rect :width=&quot;cellSize&quot; :height=&quot;boardHeight&quot; :fill=&quot;pattern&quot;&gt;&lt;/rect&gt;
     &lt;/mask&gt;
   &lt;/defs&gt;
-  &lt;template v-for=&quot;col in cols&quot;&gt;
-    &lt;board-column :checkers=&quot;checkerStack(col)&quot; :col=&quot;col&quot; :mask=&quot;mask&quot; ...  /&gt;
-  &lt;/template&gt;
+  &lt;board-column
+    v-for=&quot;col in cols&quot;
+    :checkers=&quot;checkerStack(col)&quot;
+    :col=&quot;col&quot;
+    :mask=&quot;mask&quot;
+    ...  /&gt;
 &lt;/svg&gt;
 </code></pre>
 
 <p>For more on the <code>&lt;defs&gt;</code>, <code>&lt;pattern&gt;</code>, and <code>&lt;mask&gt;</code> elements, see the previous
 article on <a href="/blog/connect-four-with-svg-pattern-masking.html">SVG pattern
-masking</a>. The <code>&lt;template&gt;</code>
-tag allows us to add Vue directives, like <code>v-for</code>, without adding unnecessary
-markup to the rendered HTML.</p>
+masking</a>.</p>
 
       <h2 id="the-columns" class="title">
         <a name="the-columns" class="anchor" href="#the-columns">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -309,14 +306,19 @@ markup to the rendered HTML.</p>
 rendering the pattern-masked <code>&lt;rect&gt;</code> and any checkers dropped in its column.
 By wrapping the <code>BoardColumn</code> in a nested <code>&lt;svg&gt;</code> element with an x value based
 off <code>col * cellSize</code>, the rendered child elements of the <code>BoardColumn</code> will be
-positioned relatively within. Note how straightforward it is to add a click listener to our template where we&#39;ll trigger a <code>drop</code> method on the <code>BoardColumn</code> instance.</p>
+positioned relatively within. Note how straightforward it is to add a click
+listener to our template where we&#39;ll trigger a <code>drop</code> method on the
+<code>BoardColumn</code> instance.</p>
 
 <pre><code>&lt;!-- board-column-template --&gt;
 &lt;svg :x=&quot;col * cellSize&quot; y=&quot;0&quot;&gt;
   &lt;g @click=&quot;drop&quot; class=&quot;column&quot;&gt;
-    &lt;template v-for=&quot;checker in checkers&quot;&gt;
-      &lt;board-checker :checker=&quot;checker&quot; :cellSize=&quot;cellSize&quot; :rowCount=&quot;rowCount&quot; ...  /&gt;
-    &lt;/template&gt;
+    &lt;board-checker
+      v-for=&quot;checker in checkers&quot;
+      :checker=&quot;checker&quot;
+      :cellSize=&quot;cellSize&quot;
+      :rowCount=&quot;rowCount&quot;
+      ...  /&gt;
     &lt;rect :width=&quot;cellSize&quot; :height=&quot;boardHeight&quot; :fill=&quot;color&quot; :mask=&quot;mask&quot; /&gt;
   &lt;/g&gt;
 &lt;/svg&gt;
