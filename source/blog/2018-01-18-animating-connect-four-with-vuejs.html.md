@@ -29,6 +29,8 @@ Clicking columns simply adds new checkers to the board in the first available
 slots. Though it works, it doesn't quite *feel* like Connect Four; we want
 checkers falling to the bottom of each column.
 
+## Vue transitions
+
 Vue.js can help us here. It provides a number of features to support
 *transitions*, such as adding/removing single elements, adding/removing items in
 a list, and even between values in data itself. Vue provides a [`<transition>`
@@ -49,6 +51,8 @@ include `before-enter`, `enter`, `after-enter`, `before-leave`, `leave`, etc. To
 keep things short and sweet, we'll simply animate checkers as they are added to
 the board—we may come back to animating of release of checkers from the
 board in a later post.
+
+## Adding a checker transition
 
 The template for our checker is simply a SVG `<circle>` element with `cx` and
 `cy` properties to indicate its resting position in the column.
@@ -109,6 +113,8 @@ const BoardChecker = Vue.component('board-checker', {
 Vue expects that the `enter` callback may be asynchronous, so the framework
 provides a `done` parameter which is a function that must be called to indicate that the
 transition has completed.
+
+## Animating the transition
 
 So how to animate? We can lean on a third-party library to do the heavy-lifting;
 we just need to wire it up correctly to get the desired effect. I chose the
