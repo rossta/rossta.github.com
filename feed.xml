@@ -42,7 +42,12 @@ checkers falling to the bottom of each column.&lt;/p&gt;
 &lt;p&gt;Vue.js can help us here. It provides a number of features to support
 &lt;em&gt;transitions&lt;/em&gt;, such as adding/removing single elements, adding/removing items in
 a list, and even between values in data itself. Vue provides a &lt;a href="https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components"&gt;&lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt;
-component, which can be leverage to animate elements as they enter and leave the DOM&lt;/a&gt;. This is what we&amp;#39;ll hook into to animate checkers as they are added to the board.&lt;/p&gt;
+component, which can be leveraged to animate elements as they enter and leave the DOM&lt;/a&gt;. This is what we&amp;#39;ll use to animate checkers when they are added to the board.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;transition&amp;gt;
+  &amp;lt;!-- magic --&amp;gt;
+&amp;lt;/transition&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The Vue &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; element has mechanisms for either CSS or JavaScript
 animation. Since we&amp;#39;ll have exact coordinates as component properties
@@ -89,11 +94,10 @@ board in a later post.&lt;/p&gt;
 &amp;lt;/transition&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Vue recommends setting the &lt;code&gt;:css&lt;/code&gt; property of a &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; element to
-&lt;code&gt;false&lt;/code&gt; as an optimization if only JavaScript animation will be used.
-We also bind a callback named &amp;quot;enter&amp;quot; to the &lt;code&gt;@enter&lt;/code&gt; listener on the &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt;
-component. The definition of that callback will be a method on the
-&lt;code&gt;BoardChecker&lt;/code&gt; component:&lt;/p&gt;
+&lt;p&gt;As we&amp;#39;ll only JavaScript animation for the transition, Vue recommends setting
+the &lt;code&gt;:css&lt;/code&gt; property to &lt;code&gt;false&lt;/code&gt; as an optimization. We also bind a callback named
+&amp;quot;enter&amp;quot; to the &lt;code&gt;@enter&lt;/code&gt; listener on the &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; component. The definition
+of that callback will be a method on the &lt;code&gt;BoardChecker&lt;/code&gt; component:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
   method: {

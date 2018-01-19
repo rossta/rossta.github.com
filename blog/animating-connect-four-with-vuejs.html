@@ -93,7 +93,12 @@ checkers falling to the bottom of each column.</p>
 <p>Vue.js can help us here. It provides a number of features to support
 <em>transitions</em>, such as adding/removing single elements, adding/removing items in
 a list, and even between values in data itself. Vue provides a <a href="https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components"><code>&lt;transition&gt;</code>
-component, which can be leverage to animate elements as they enter and leave the DOM</a>. This is what we&#39;ll hook into to animate checkers as they are added to the board.</p>
+component, which can be leveraged to animate elements as they enter and leave the DOM</a>. This is what we&#39;ll use to animate checkers when they are added to the board.</p>
+
+<pre><code>&lt;transition&gt;
+  &lt;!-- magic --&gt;
+&lt;/transition&gt;
+</code></pre>
 
 <p>The Vue <code>&lt;transition&gt;</code> element has mechanisms for either CSS or JavaScript
 animation. Since we&#39;ll have exact coordinates as component properties
@@ -140,11 +145,10 @@ board in a later post.</p>
 &lt;/transition&gt;
 </code></pre>
 
-<p>Vue recommends setting the <code>:css</code> property of a <code>&lt;transition&gt;</code> element to
-<code>false</code> as an optimization if only JavaScript animation will be used.
-We also bind a callback named &quot;enter&quot; to the <code>@enter</code> listener on the <code>&lt;transition&gt;</code>
-component. The definition of that callback will be a method on the
-<code>BoardChecker</code> component:</p>
+<p>As we&#39;ll only JavaScript animation for the transition, Vue recommends setting
+the <code>:css</code> property to <code>false</code> as an optimization. We also bind a callback named
+&quot;enter&quot; to the <code>@enter</code> listener on the <code>&lt;transition&gt;</code> component. The definition
+of that callback will be a method on the <code>BoardChecker</code> component:</p>
 
 <pre><code>const BoardChecker = Vue.component(&#39;board-checker&#39;, {
   method: {
