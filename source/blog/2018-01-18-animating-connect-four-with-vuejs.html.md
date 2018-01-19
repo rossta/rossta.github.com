@@ -213,5 +213,8 @@ Four wall, visible through the portholes.
 
 <hr />
 
-In the next post, we'll introduce some additional game state so we can check for
-a win or draw.
+Cool!
+
+Notice though, that you can continue dropping checkers until the board fills up.
+In the next post, we'll fix that by introducing an algorithm to check for a win
+and display the results in the UI when the game ends.
