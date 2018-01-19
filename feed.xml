@@ -10,9 +10,9 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>Animating Connect Four checkers with Vue.js</title>
-    <link rel="alternate" href="/blog/animating-connect-four-checkers-with-vue.js.html"/>
-    <id>/blog/animating-connect-four-checkers-with-vue.js.html</id>
+    <title>Animating Connect Four with Vue.js</title>
+    <link rel="alternate" href="/blog/animating-connect-four-with-vue.js.html"/>
+    <id>/blog/animating-connect-four-with-vue.js.html</id>
     <published>2018-01-18T00:00:00+00:00</published>
     <updated>2018-01-18T00:00:00+00:00</updated>
     <author>
@@ -218,6 +218,9 @@ Four wall, visible through the portholes.&lt;/p&gt;
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
 &lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the next post, we&amp;#39;ll introduce some additional game state so we can check for
+a win or draw.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -624,7 +627,7 @@ see the full source code and try out the game for yourself.&lt;/p&gt;
 
 &lt;p&gt;This completes our first pass at using Vue.js to create a playable Connect Four
 game in the browser. We&amp;#39;re not yet detecting a game win or draw; that&amp;#39;s still
-to come. In the next post, we use Vue to animate each checker falling into
+to come. In &lt;a href="/blog/animating-connect-four-with-vue.js.html"&gt;the next post&lt;/a&gt;, we use Vue to animate each checker falling into
 place as they are added to the board.&lt;/p&gt;
 </content>
   </entry>
