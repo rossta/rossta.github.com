@@ -90,6 +90,14 @@ added to the game board.</p>
 slots. Though it works, it doesn&#39;t quite <em>feel</em> like Connect Four; we want
 checkers falling to the bottom of each column.</p>
 
+      <h2 id="vue-transitions" class="title">
+        <a name="vue-transitions" class="anchor" href="#vue-transitions">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Vue transitions
+      </h2>
+    
 <p>Vue.js can help us here. It provides a number of features to support
 <em>transitions</em>, such as adding/removing single elements, adding/removing items in
 a list, and even between values in data itself. Vue provides a <a href="https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components"><code>&lt;transition&gt;</code>
@@ -110,6 +118,14 @@ keep things short and sweet, we&#39;ll simply animate checkers as they are added
 the board—we may come back to animating of release of checkers from the
 board in a later post.</p>
 
+      <h2 id="adding-a-checker-transition" class="title">
+        <a name="adding-a-checker-transition" class="anchor" href="#adding-a-checker-transition">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Adding a checker transition
+      </h2>
+    
 <p>The template for our checker is simply a SVG <code>&lt;circle&gt;</code> element with <code>cx</code> and
 <code>cy</code> properties to indicate its resting position in the column.</p>
 
@@ -167,6 +183,14 @@ of that callback will be a method on the <code>BoardChecker</code> component:</p
 provides a <code>done</code> parameter which is a function that must be called to indicate that the
 transition has completed.</p>
 
+      <h2 id="animating-the-transition" class="title">
+        <a name="animating-the-transition" class="anchor" href="#animating-the-transition">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Animating the transition
+      </h2>
+    
 <p>So how to animate? We can lean on a third-party library to do the heavy-lifting;
 we just need to wire it up correctly to get the desired effect. I chose the
 <code>GSAP</code> library from <a href="https://greensock.com/">Greensock</a> which is well-suited for
