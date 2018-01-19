@@ -1,5 +1,5 @@
 ---
-title: Animating Connect Four checkers with Vue.js
+title: Animating Connect Four with Vue.js
 author: Ross Kaffenberger
 published: true
 summary: How the Vue transition component "drops" things into place
@@ -212,3 +212,6 @@ Four wall, visible through the portholes.
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 <hr />
+
+In the next post, we'll introduce some additional game state so we can check for
+a win or draw.
