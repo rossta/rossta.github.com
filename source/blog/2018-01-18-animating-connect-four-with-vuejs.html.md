@@ -32,7 +32,13 @@ checkers falling to the bottom of each column.
 Vue.js can help us here. It provides a number of features to support
 *transitions*, such as adding/removing single elements, adding/removing items in
 a list, and even between values in data itself. Vue provides a [`<transition>`
-component, which can be leverage to animate elements as they enter and leave the DOM](https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components). This is what we'll hook into to animate checkers as they are added to the board.
+component, which can be leveraged to animate elements as they enter and leave the DOM](https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components). This is what we'll use to animate checkers when they are added to the board.
+
+```
+<transition>
+  <!-- magic -->
+</transition>
+```
 
 The Vue `<transition>` element has mechanisms for either CSS or JavaScript
 animation. Since we'll have exact coordinates as component properties
@@ -81,11 +87,10 @@ To animate the arrival of this checker to the board, we need to wrap the
 </transition>
 ```
 
-Vue recommends setting the `:css` property of a `<transition>` element to
-`false` as an optimization if only JavaScript animation will be used.
-We also bind a callback named "enter" to the `@enter` listener on the `<transition>`
-component. The definition of that callback will be a method on the
-`BoardChecker` component:
+As we'll only JavaScript animation for the transition, Vue recommends setting
+the `:css` property to `false` as an optimization. We also bind a callback named
+"enter" to the `@enter` listener on the `<transition>` component. The definition
+of that callback will be a method on the `BoardChecker` component:
 
 ```
 const BoardChecker = Vue.component('board-checker', {
