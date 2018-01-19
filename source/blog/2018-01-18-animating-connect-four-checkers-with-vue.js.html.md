@@ -1,9 +1,9 @@
 ---
 title: Animating Connect Four checkers with Vue.js
 author: Ross Kaffenberger
-published: false
+published: true
 summary: How the Vue transition component "drops" things into place
-description: We'll use Vue transitions and a third party library to animate the SVG checkers falling and bouncing into place when added to the game board.
+description: Continuing our series on building Connect Four in Vue and Phoenix, we'll use Vue transitions and a third party library to animate the SVG checkers falling and bouncing into place when added to the game board.
 pull_image: 'blog/connect-four-nightsky.png'
 pull_image_caption: Background Photo by Andrew Preble on Unsplash
 series: 'Connect Four'
@@ -129,15 +129,15 @@ TweenMax.fromTo(element, duration, { y: startPosition }, { y: endPosition });
 ```
 
 Since the checker's path of motion will have only vertical motion, we will
-animate the `y` position. The key insight is to understand that the
-`TweenMax` start and end `y` positions are relative to element's
-static position; in this case, that is the `cy` property of our `<circle>`
-element. The start position will be a negative distance, which is above the
-checker's `cy` coordinate; in SVG land, the origin of the coordinate plane is in
-the top left. To start the animation outside the view box, we get the static `y`
-position, the `centerY` property and add, arbitrarily, the `cellSize`, which is
-enough to start just barely outside the view box, and multiply by -1. The end
-position is simply 0.
+animate the `y` position. The key insight is to understand that the `TweenMax`
+start and end `y` positions are relative to element's static position; in this
+case, that is the `cy` property of our `<circle>` element. The start position
+for the animiation must be above the checker's finish position, it's given `cy`
+coordinate; because the origin of the SVG view box is in the top left, the
+vertical start position must be a *negative* value with repect to the finish. To
+start the animation just barely outside the view box, we want the negative value
+of the static `cy` position and subtract the `cellSize`. The end position is
+simply 0—no change from the given `cy` coordinate.
 
 ```javascript
 const fromParams = {
@@ -152,13 +152,14 @@ const toParams = {
 ```
 
 The `toParams` also accept an `ease` property, for which we'll use GSAP's
-`Bounce.easeOut`, and an `onComplete` callback property, which, for now, we can
-set as the `done` argument we mentioned earlier.
+`Bounce.easeOut`, and an `onComplete` callback property, which will be the
+`done` callback provided by Vue transition's `enter` hook. This will allow us to
+prevent changes in game state until the checker has finished animating.
 
 We also can play with the `duration` property. As we add more checkers to a
-single column, each checker will have a shorter distance to fall. If we otherwise
-kept the duration the same for all checkers, they would appear to fall more
-slowly as they had less distance to fall.
+single column, each checker will have a shorter distance to fall. If we
+otherwise kept the duration the same for all checkers, they would appear to fall
+more slowly as they had less distance to fall.
 
 Finding a duration that feels right takes a little trial and error, but where we
 currently have it, the duration is an arbitrary constant multiplied by a
