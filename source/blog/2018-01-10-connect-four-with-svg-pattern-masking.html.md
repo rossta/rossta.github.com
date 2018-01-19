@@ -149,8 +149,7 @@ Here's the full demo of a static Connect Four SVG game board on
 
 <hr />
 
-As a sneak preview of the how the falling checker will look behind the pattern
-mask:
+Finally, here's a sneak preview of the how the falling checker will look behind the pattern mask:
 
 <p data-height="265" data-theme-id="0" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyPpog/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
