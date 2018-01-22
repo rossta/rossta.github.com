@@ -51,7 +51,7 @@
     "debug": "^3.1.0",
     "foundation-sites": "^5.5.3",
     "highlight.js": "^9.2.0",
-    "jquery": "^2.2.1",
+    "jquery": "^3",
     "react": "^0.14.7"
   },
   "engines": {
