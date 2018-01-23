@@ -181,6 +181,8 @@ const percentage = (this.rowCount - this.row) / this.rowCount;
 const duration = return 0.2 + 0.4 * this.percentage;           // seconds
 ```
 
+## Showtime
+
 Putting this altogether, our final `enter` method looks like this:
 
 ```
