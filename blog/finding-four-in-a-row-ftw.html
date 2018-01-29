@@ -306,7 +306,7 @@ land() {
 <p>The <code>gameOverMessage</code> is simply a computed property that switches on the winner state:</p>
 
 <pre><code class="javascript">// GameContainer computed
-overMessage() {
+gameOverMessage() {
   if (this.winner) {
     return `${titleize(this.winner.color)} wins!`;
   } else {
