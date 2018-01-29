@@ -13,10 +13,9 @@ tags:
   - Vue
 ---
 
-When we left off our Connect Four game last, we used Vue.js components to
-convert a static HTML view of the Connect Four board into a playable interface.
-In this post, we'll animate the checkers falling and bouncing into place when
-added to the game board.
+When we left off our [Connect Four game last](/blog/basic-connect-four-with-vuejs.html), we used Vue.js components to convert a static HTML view of the Connect Four board into a playable
+interface. In this post, we'll animate the checkers falling and bouncing into
+place when added to the game board.
 
 Here's how the game behaved at the end of [the previous post](/blog/basic-connect-four-with-vuejs.html):
 
@@ -228,6 +227,4 @@ Four wall, visible through the portholes.
 
 Cool!
 
-Notice though, that you can continue dropping checkers until the board fills up.
-In the next post, we'll fix that by introducing an algorithm to check for a win
-and display the results in the UI when the game ends.
+Notice though, that you can continue dropping checkers until the board fills up. In the [next post](/blog/finding-four-in-a-row-ftw.html), we'll fix that by introducing an algorithm to check for a win and display the results in the UI when the game ends.

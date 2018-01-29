@@ -83,3 +83,8 @@ ul.index {
     }
   }
 }
+
+p.float-images + img {
+  float: left;
+  width: 25%;
+}

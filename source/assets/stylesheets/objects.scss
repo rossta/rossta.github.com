@@ -3,6 +3,7 @@
 @import "objects/top-bar";
 @import "objects/video";
 
+.clear { clear: both; }
 .clearfix { overflow: auto; }
 .hidden { display: none; }
 .share { margin-top: 1em; }
