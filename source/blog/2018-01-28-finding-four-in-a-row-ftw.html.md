@@ -204,7 +204,7 @@ We can use the game status to display a message to the players and provide a "Pl
 The `gameOverMessage` is simply a computed property that switches on the winner state:
 ```javascript
 // GameContainer computed
-overMessage() {
+gameOverMessage() {
   if (this.winner) {
     return `${titleize(this.winner.color)} wins!`;
   } else {
