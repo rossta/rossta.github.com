@@ -9,8 +9,8 @@ Error: Undefined mixin 'base-font'.
 3: @import "objects/top-bar";
 4: @import "objects/video";
 5: 
-6: .clearfix { overflow: auto; }
-7: .hidden { display: none; }
+6: .clear { clear: both; }
+7: .clearfix { overflow: auto; }
 
 Backtrace:
 /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss:2:in `base-font'
@@ -156,4 +156,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: Undefined mixin 'base-font'.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss, in `base-font'\A         from line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects.scss\A \A 1: @import \"objects/article\";\A 2: @import \"objects/code\";\A 3: @import \"objects/top-bar\";\A 4: @import \"objects/video\";\A 5: \A 6: .clearfix { overflow: auto; }\A 7: .hidden { display: none; }"; }
+  content: "Error: Undefined mixin 'base-font'.\A         on line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss, in `base-font'\A         from line 2 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects/article.scss\A         from line 1 of /home/ubuntu/rossta.github.com/source/assets/stylesheets/objects.scss\A \A 1: @import \"objects/article\";\A 2: @import \"objects/code\";\A 3: @import \"objects/top-bar\";\A 4: @import \"objects/video\";\A 5: \A 6: .clear { clear: both; }\A 7: .clearfix { overflow: auto; }"; }

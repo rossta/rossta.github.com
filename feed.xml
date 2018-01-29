@@ -5,10 +5,277 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-01-18T00:00:00+00:00</updated>
+  <updated>2018-01-28T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Finding Four-in-a-Row for the Win</title>
+    <link rel="alternate" href="/blog/finding-four-in-a-row-ftw.html"/>
+    <id>/blog/finding-four-in-a-row-ftw.html</id>
+    <published>2018-01-28T00:00:00+00:00</published>
+    <updated>2018-01-28T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;With the Connect Four game we created in the previous post, we're able to use &lt;a href="https://vuejs.org/v2/guide/transitions.html"&gt;Vue transitions&lt;/a&gt; to animate checkers dropping into place on the game board. Though we're able to add checkers, we still weren't declaring the winner when four-in-a-row had...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;With the Connect Four game we created in the previous post, we&amp;#39;re able to use &lt;a href="https://vuejs.org/v2/guide/transitions.html"&gt;Vue transitions&lt;/a&gt; to animate checkers dropping into place on the game board. Though we&amp;#39;re able to add checkers, we still weren&amp;#39;t declaring the winner when four-in-a-row had been achieved—kind of the whole point of the game. We&amp;#39;ll tackle that in this post.&lt;/p&gt;
+
+&lt;p&gt;Before we dive in, here&amp;#39;s a pen of the game with the win logic we&amp;#39;ll be describing so you&amp;#39;ll see where we&amp;#39;ll end up:&lt;/p&gt;
+
+&lt;p data-height="529" data-theme-id="0" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/VydJKG/"&gt;Connect Four in Vue.js, SVG: detect winner and animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;When a player achieves four-in-a-row, we update the visual elements on the board to indicate the win and provide a &amp;quot;Play again&amp;quot; link to reset the game state.&lt;/p&gt;
+
+      &lt;h2 id="imagining-the-algorithm" class="title"&gt;
+        &lt;a name="imagining-the-algorithm" class="anchor" href="#imagining-the-algorithm"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Imagining the algorithm
+      &lt;/h2&gt;
+    
+&lt;p&gt;We want the game logic to evaluate the state of the board after each checker is played and before allowing the next player to drop their checker. If four-in-a-row is found, we&amp;#39;ll want to highlight the winning segment of checkers and declare the winner in the UI. We&amp;#39;ll also want to declare a draw if the board is full and no one has won.&lt;/p&gt;
+
+&lt;p&gt;The basic skeleton of the win algorithm will work as follow:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="bash"&gt;check all viable horizonal segments FOR THE WIN. Return the winner OR
+check all viable vertical segments FTW. Return the winner OR
+check all viable &amp;quot;forward slash&amp;quot; segments FTW. Return the winner OR
+check all viable &amp;quot;back slash&amp;quot; segments FTW. Return the winner OR
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We use the word &lt;em&gt;viable&lt;/em&gt; to mean that the segment must contain four &amp;quot;slots&amp;quot; that exist on the game board. In other words, since the game board has seven columns, indexed as 0-6, each row contains only four horizonal segments: 0-3, 1-4, 2-5, 3-6.&lt;/p&gt;
+
+&lt;p&gt;As described, it&amp;#39;s a bit wasteful to check every possible segment in the board. This is especially true at the outset, when few checkers are on the board, or near the end when many segments have already been checked on previous turns. Since we&amp;#39;re checking the board on each drop and we know the position of the last checker played, we can reduce the number of computations by treating the last checker as a focal point. So we update our definition of a &lt;em&gt;viable&lt;/em&gt; segment to mean segments of four on the board that intersect with the last checker played.&lt;/p&gt;
+
+&lt;p&gt;To figure out which segments over lap with the last checker played, we need a few values: &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the coordinates of the checker, the &amp;quot;focal point&amp;quot; of our collection of segments&lt;/li&gt;
+&lt;li&gt;the minimum viable row value, i.e., the greater of first row value (0) and the value of the farthest numerical segment point to the left (&lt;code&gt;focalRow&lt;/code&gt; - 3)&lt;/li&gt;
+&lt;li&gt;the minimum viable column value, i.e., the greater of first col value (0) and the value of the farthest numerical segment ponit from the bottom (&lt;code&gt;focalCol&lt;/code&gt; - 3)&lt;/li&gt;
+&lt;li&gt;the maximum viable row value, i.e., the lesser of (&lt;code&gt;focalRow&lt;/code&gt; + 3) and the top row (5)&lt;/li&gt;
+&lt;li&gt;the maximum viable column value, i.e., the lesser of (&lt;code&gt;focalCol&lt;/code&gt; + 3) and the last column (6)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Given an object &lt;code&gt;lastChecker&lt;/code&gt; of the form &lt;code&gt;{ row, col }&lt;/code&gt;, and the properites &lt;code&gt;rowCount&lt;/code&gt; and &lt;code&gt;colCount&lt;/code&gt; representing the total number of rows and columns respectively, we can determine these values as follows in JavaScript:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const min = num =&amp;gt; Math.max(num - 3, 0);
+const max = (num, max) =&amp;gt; Math.min(num + 3, max);
+
+const { row: focalRow, col: focalCol } = lastChecker;
+const minCol = min(focalCol);
+const maxCol = max(focalCol, this.colCount-1);
+const minRow = min(focalRow);
+const maxRow = max(focalRow, this.rowCount-1);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The min and max row and column values form the boundaries of the search space, which may be much smaller than the total number of segments on the board, especially when the last checker played is near the edges.&lt;/p&gt;
+
+      &lt;h2 id="checking-the-horizonal-segment" class="title"&gt;
+        &lt;a name="checking-the-horizonal-segment" class="anchor" href="#checking-the-horizonal-segment"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Checking the horizonal segment
+      &lt;/h2&gt;
+    
+&lt;p&gt;Using these values, we can select only the segments in the horizontal, vertical, and diagonal intersections with our last played checker. Let&amp;#39;s say the last checker ended up in row 3 and column 2. There are only three horizonal segments we need to check from this position. Here&amp;#39;s a visual:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/connect-four/check-horizontal-5fa1a3a4.png" alt="Check horizontal" /&gt;&lt;/p&gt;
+
+&lt;p&gt;In the context of our &lt;code&gt;GameContainer&lt;/code&gt; component, here&amp;#39;s one way of iterating through those segments and searching for a winner:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer method
+checkHorizontalSegments({ focalRow, minCol, maxCol }) {
+  for (let row = focalRow, col = minCol; col &amp;lt;= maxCol; col++) {
+
+    // the horizonal segment contains four neighboring coordinates across
+    const segment = [[row, col], [row, col+1], [row, col+2], [row, col+3]];
+
+    // this.getChecker returns the checker object { row, col, color } for a given position
+    const checkers = segment.map(([row, col]) =&amp;gt; this.getChecker({row, col}));
+
+    // If all colors are valid and match
+    if (checkers.reduce((a, b) =&amp;gt; a === b &amp;amp;&amp;amp; a !== EMPTY)) {
+      return { color: checkers[0].color, checkers };
+    }
+  }    
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If a win is detected, we&amp;#39;ll record the color and checker positions of the winning segment, which we can later use as data to show the winning state on the game board. Similar functions for checking the vertical and diagonal segments are left as an exercise for the reader... or you may inspect the &lt;a href="https://codepen.io/rossta/pen/VydJKG"&gt;source of the CodePen demo&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h2 id="updating-the-vue" class="title"&gt;
+        &lt;a name="updating-the-vue" class="anchor" href="#updating-the-vue"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Updating the Vue
+      &lt;/h2&gt;
+    
+&lt;p&gt;Putting this altogether, our win algorithm in JavaScript could be as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer method
+checkForWin(lastChecker) {
+  if (!lastChecker) return;
+
+  const min = num =&amp;gt; Math.max(num - 3, 0);
+  const max = (num, max) =&amp;gt; Math.min(num + 3, max);
+
+  const { row: focalRow, col: focalCol } = lastChecker;
+  const minCol = min(focalCol);
+  const maxCol = max(focalCol, this.colCount-1);
+  const minRow = min(focalRow);
+  const maxRow = max(focalRow, this.rowCount-1);
+  const coords = { focalRow, focalCol, minRow, minCol, maxRow, maxCol };
+
+  return this.checkHorizontalSegments(coords) ||
+    this.checkVerticalSegments(coords) ||
+    this.checkForwardSlashSegments(coords) ||
+    this.checkBackwardSlashSegments(coords);
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Recall from the &lt;a href="/blog/animating-connect-four-with-vuejs.html"&gt;previous post&lt;/a&gt;, once a checker is dropped, we emit two custom events, one to create the checker component, &lt;code&gt;&amp;#39;drop&amp;#39;&lt;/code&gt; and a second, &lt;code&gt;&amp;#39;land&amp;#39;&lt;/code&gt;, to indicate the falling checker animation has completed. We&amp;#39;re bubbling these events up to the &lt;code&gt;GameContainer&lt;/code&gt; where we can then check for the win. For the checker drop, we lock the game from additional moves while this processing is carried out and we obtain a reference to the last checker and pass to our &lt;code&gt;checkForWin&lt;/code&gt; method:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer method
+drop({ col, row }) {
+  if (this.isLocked) return;
+
+  this.isLocked = true;
+
+  const checker = { row, col, color };
+  this.checkForWin(checker);
+
+  // update the board
+  // switch turns
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When the animation completes, the &lt;code&gt;land&lt;/code&gt; callback is triggered on the &lt;code&gt;GameContainer&lt;/code&gt;. Here, we check for the win. If the winner was set by the &lt;code&gt;checkForWin&lt;/code&gt; method, we&amp;#39;ll display the win or unlock the game so the next player can play their turn.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer method
+land() {
+  if (this.winner) {
+    this.displayWin(winner);
+  } else {
+    this.isLocked = false;
+  }
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Display win simply sets the game status and sets a flag on each of checkers in the winner segment.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer method
+displayWin(winner) {
+  this.status = &amp;#39;OVER&amp;#39;;
+  this.winner.checkers.forEach((checker) =&amp;gt; {
+    this.setChecker(checker, {isWinner: true});
+  }); 
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Our components can react to this new state by updating various elements of the UI. One approach we&amp;#39;ve taken is to adjust the opacity of the non-winning checkers to accentuate the winners:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// BoardChecker computed
+opacity() {
+  return (this.status === OVER &amp;amp;&amp;amp; !this.isWinner) ? 0.25 : 1.0; 
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h2 id="checking-for-a-draw" class="title"&gt;
+        &lt;a name="checking-for-a-draw" class="anchor" href="#checking-for-a-draw"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Checking for a draw
+      &lt;/h2&gt;
+    
+&lt;p&gt;There&amp;#39;s one case we haven&amp;#39;t yet accounted for—what if no one wins?&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s possible for a game to reach a state where all the cells are filled with checkers, but neither player has acheived four-in-a-row. To account for this case, we&amp;#39;ll want to check a draw before checking for the win on each turn. A draw occurs when the number of checkers played equals the number of cells:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer method
+checkForDraw() {
+  this.isDraw = Object.keys(this.checkers).length === this.rowCount * this.colCount;
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;#39;ll update the &lt;code&gt;land&lt;/code&gt; method to short-circuit on a draw:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer method
+land() {
+  if (this.isDraw) return this.displayDraw();
+
+  if (this.winner) {
+    this.displayWin(winner);
+  } else {
+    this.isLocked = false;
+  }
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Highlighting the simplicity of our Vue-based reactive system, displaying the draw means simply setting the game state to &lt;code&gt;&amp;#39;OVER&amp;#39;&lt;/code&gt;;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;displayDraw() {
+  this.status = OVER;
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h2 id="resetting-the-game" class="title"&gt;
+        &lt;a name="resetting-the-game" class="anchor" href="#resetting-the-game"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Resetting the game
+      &lt;/h2&gt;
+    
+&lt;p&gt;We can use the game status to display a message to the players and provide a &amp;quot;Play again&amp;quot; link:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;p v-if=&amp;quot;status === &amp;#39;OVER&amp;#39;&amp;quot;&amp;gt;
+  {{ gameOverMessage }}
+  &amp;lt;a href=&amp;quot;#&amp;quot; @click=&amp;quot;reset&amp;quot;&amp;gt;Play again&amp;lt;/a&amp;gt;
+&amp;lt;/p&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;gameOverMessage&lt;/code&gt; is simply a computed property that switches on the winner state:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer computed
+overMessage() {
+  if (this.winner) {
+    return `${titleize(this.winner.color)} wins!`;
+  } else {
+    return `It&amp;#39;s a draw!`;
+  }
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the &amp;quot;Play again&amp;quot; link, we just add a function to reset the game state:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// GameContainer method
+reset() {
+  this.winner = undefined;
+  this.isLocked = false;
+  this.status = PLAY;
+  this.checkers = {};
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h2 id="summing-up" class="title"&gt;
+        &lt;a name="summing-up" class="anchor" href="#summing-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Summing up
+      &lt;/h2&gt;
+    
+&lt;p&gt;We&amp;#39;ve come a long way—we developed a basic algorithm to search the game board for a winner while ensuring we only traverse relevant segments. We also leveraged the simplicity of reactive Vue properties to trigger UI updates. We now have a decent version of Connect Four playable in the browser by individual(s) using the same browser. We&amp;#39;ve also lumped a ton of logic into the game container and have no mechanism to play opponents ver the network. There&amp;#39;s some exciting work to do ahead: we&amp;#39;ll work on introducing additional layers to our frontend design by building on Vue libraries like &lt;code&gt;vue-router&lt;/code&gt; for client-side routing and &lt;code&gt;vuex&lt;/code&gt; for state managment. This will set us up to make the game playable over the network by connecting our game to an Elixir/Phoenix backend.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Animating Connect Four with Vue.js</title>
     <link rel="alternate" href="/blog/animating-connect-four-with-vuejs.html"/>
@@ -18,14 +285,12 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;When we left off our Connect Four game last, we used Vue.js components to
-convert a static HTML view of the Connect Four board into a playable interface.
-In this post, we'll animate the checkers falling and bouncing into place when
-added to the game...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;When we left off our Connect Four game last, we used Vue.js components to
-convert a static HTML view of the Connect Four board into a playable interface.
-In this post, we&amp;#39;ll animate the checkers falling and bouncing into place when
-added to the game board.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;When we left off our &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;Connect Four game last&lt;/a&gt;, we used Vue.js components to convert a static HTML view of the Connect Four board into a playable
+interface. In this post, we'll animate the checkers falling and bouncing into
+place when added to the game...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;When we left off our &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;Connect Four game last&lt;/a&gt;, we used Vue.js components to convert a static HTML view of the Connect Four board into a playable
+interface. In this post, we&amp;#39;ll animate the checkers falling and bouncing into
+place when added to the game board.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#39;s how the game behaved at the end of &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;the previous post&lt;/a&gt;:&lt;/p&gt;
 
@@ -257,9 +522,7 @@ Four wall, visible through the portholes.&lt;/p&gt;
 
 &lt;p&gt;Cool!&lt;/p&gt;
 
-&lt;p&gt;Notice though, that you can continue dropping checkers until the board fills up.
-In the next post, we&amp;#39;ll fix that by introducing an algorithm to check for a win
-and display the results in the UI when the game ends.&lt;/p&gt;
+&lt;p&gt;Notice though, that you can continue dropping checkers until the board fills up. In the &lt;a href="/blog/finding-four-in-a-row-ftw.html"&gt;next post&lt;/a&gt;, we&amp;#39;ll fix that by introducing an algorithm to check for a win and display the results in the UI when the game ends.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -2078,216 +2341,6 @@ leveraging the behavior of Rails own &lt;code&gt;Rails::Generators::TestCase&lt;
 got a good feel for how I can test more generators moving forward.&lt;/p&gt;
 
 &lt;p&gt;Hopefully, you&amp;#39;ll find this useful when and if you decide to write a Rails generator yourself.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Your first Progressive Web App on Rails</title>
-    <link rel="alternate" href="/blog/make-your-rails-app-a-progressive-web-app.html"/>
-    <id>/blog/make-your-rails-app-a-progressive-web-app.html</id>
-    <published>2016-11-09T00:00:00+00:00</published>
-    <updated>2016-11-09T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Discussion of &lt;a href="https://developers.google.com/web/progressive-web-apps/"&gt;Progressive Web Apps&lt;/a&gt; (PWA) is &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;catching fire&lt;/a&gt; in the JavaScript community, but amongst Rails developers... not so much.&lt;/p&gt;
-
-&lt;p&gt;Progressive Web App technology is still very young and rapidly churning; perhaps there's more reluctance on Rails teams...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Discussion of &lt;a href="https://developers.google.com/web/progressive-web-apps/"&gt;Progressive Web Apps&lt;/a&gt; (PWA) is &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;catching fire&lt;/a&gt; in the JavaScript community, but amongst Rails developers... not so much.&lt;/p&gt;
-
-&lt;p&gt;Progressive Web App technology is still very young and rapidly churning; perhaps there&amp;#39;s more reluctance on Rails teams to get onboard with new JavaScript APIs until they become more stable. Also, the Rails community hasn&amp;#39;t had a clear path to integrating PWA technology&amp;mdash;until now. In this post, we&amp;#39;ll demonstrate how to turn your Rails app into a Progressive Web App using the &lt;code&gt;serviceworker-rails&lt;/code&gt; gem.&lt;/p&gt;
-
-&lt;p&gt;What are Progressive Web Apps? Simply put, they are web applications that deliver mobile
-app-like experiences. For example, open web technologies are now making it possible for browser-based web apps to be:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;installable&lt;/strong&gt; - add web apps to the Home Screen of a mobile device easily&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;more reliable&lt;/strong&gt; - provide a user experience when the device is offline or network responsiveness has degraded; sync user requests in the background when network capability is restored&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;more engaging&lt;/strong&gt; - notify users of activity even when they&amp;#39;re not using the site&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Sound good? Let&amp;#39;s get started.&lt;/p&gt;
-
-      &lt;h2 id="your-first-progressive-web-app-on-rails" class="title"&gt;
-        &lt;a name="your-first-progressive-web-app-on-rails" class="anchor" href="#your-first-progressive-web-app-on-rails"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Your first Progressive Web App on Rails
-      &lt;/h2&gt;
-    
-&lt;p&gt;Eric Elliot recently posted &lt;a href="https://medium.com/javascript-scene/native-apps-are-doomed-ac397148a2c0"&gt;a thorough overview of Progessive Web App
-requirements&lt;/a&gt;
-that&amp;#39;s worth a read. Here&amp;#39;s summary of what&amp;#39;s needed:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;HTTPS - any page that uses Progressive Web App technology needs to be served
-over SSL/TLS so &amp;quot;HTTPS everywhere&amp;quot; is recommended&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/Manifest"&gt;Web App Manifest&lt;/a&gt; - a
-text file with application metadata to support home screen installation&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"&gt;Service Worker&lt;/a&gt; - a client-side JavaScript worker that can intercept network requests, modify responses, interact with local caches, sync data in the background, and enable push notifications&lt;/li&gt;
-&lt;/ul&gt;
-
-      &lt;h3 id="set-up-https" class="title"&gt;
-        &lt;a name="set-up-https" class="anchor" href="#set-up-https"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Set up HTTPS
-      &lt;/h3&gt;
-    
-&lt;p&gt;To enable HTTPS on our website, we&amp;#39;ll need to decide for ourselves how to set up our web
-server depending on our hosting provider and deployment needs. Tutorials for setting up &lt;a href="https://devcenter.heroku.com/articles/ssl"&gt;Heroku&lt;/a&gt; and &lt;a href="https://www.digitalocean.com/community/tutorials/how-to-install-an-ssl-certificate-from-a-commercial-certificate-authority"&gt;Digital Ocean&lt;/a&gt; may be a good place to start.&lt;/p&gt;
-
-&lt;p&gt;We&amp;#39;ll also want to force SSL settings in our Rails application
-configuration for our remote environments, i.e., &lt;code&gt;production&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/environments/production.rb
-
-Rails.application.configure do
-  # ...
-
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
-
-  # ...
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We should be sure to test out this behavior on a secondary remote environment before going live in
-production as we&amp;#39;ll want to be aware of hiccups like mixed content warnings and
-hard-coded non-HTTPS urls in our application.&lt;/p&gt;
-
-      &lt;h3 id="add-a-manifest-and-service-worker" class="title"&gt;
-        &lt;a name="add-a-manifest-and-service-worker" class="anchor" href="#add-a-manifest-and-service-worker"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Add a manifest and Service Worker
-      &lt;/h3&gt;
-    
-&lt;p&gt;For this next step, we&amp;#39;ll assume we&amp;#39;re using the Rails asset pipeline. This is
-both helpful and presents a problem:&lt;/p&gt;
-
-&lt;p&gt;The Rails asset pipeline makes a number of assumptions about what&amp;#39;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &amp;quot;cacheability&amp;quot;. Rails also assumes a single parent directory, /public/assets, to make it easier to look up the file path for a given asset.&lt;/p&gt;
-
-&lt;p&gt;Service worker and manifest assets must play by different rules. Service workers may only be active from within the scope from which they are served. So if you try to register a service worker from a Rails asset pipeline path, like &lt;code&gt;/assets/serviceworker-abcd1234.js&lt;/code&gt;, it will only be able to interact with requests and responses within &lt;code&gt;/assets/**&lt;/code&gt;. This is not what we want.&lt;/p&gt;
-
-&lt;p&gt;To address this issue, I created the &lt;code&gt;serviceworker-rails&lt;/code&gt; gem (&lt;a href="https://github.com/rossta/serviceworker-rails"&gt;source&lt;/a&gt;). This Rails
-plugin makes it easier to set up your app to serve service worker
-scripts and web app manifests at canonical urls while taking advantage of the transpilation and
-interpolation features the asset pipeline provides.&lt;/p&gt;
-
-&lt;p&gt;To get started with &lt;code&gt;serviceworker-rails&lt;/code&gt;, we&amp;#39;ll bundle it with our Rails app.&lt;/p&gt;
-
-&lt;p&gt;Add the gem to the &lt;code&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
-
-gem &amp;quot;serviceworker-rails&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Bundle the app:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;$ bundle
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;#39;ll use the built-in generator from service worker rails to add some starter
-JavaScript files to our project and the proper configuration.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;$ rails g serviceworker:install
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The generator will create the following files:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;config/initializers/serviceworker.rb&lt;/code&gt; - for configuring your Rails app&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;app/assets/javascripts/serviceworker.js.erb&lt;/code&gt; - a blank Service Worker
-script with some example strategies&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;app/assets/javascripts/serviceworker-companion.js&lt;/code&gt; - a snippet of JavaScript
-necessary to register your Service Worker in the browser&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;app/assets/javascripts/manifest.json.erb&lt;/code&gt; - a starter web app manifest
-pointing to some default app icons provided by the gem&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;public/offline.html&lt;/code&gt; - a starter offline page&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;It will also make the following modifications to existing files:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Adds a sprockets directive to &lt;code&gt;application.js&lt;/code&gt; to require
-&lt;code&gt;serviceworker-companion.js&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Adds &lt;code&gt;serviceworker.js&lt;/code&gt; and &lt;code&gt;manifest.json&lt;/code&gt; to the list of compiled assets in
-&lt;code&gt;config/initializers/assets.rb&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Injects tags into the &lt;code&gt;head&lt;/code&gt; of &lt;code&gt;app/views/layouts/application.html.erb&lt;/code&gt; for
-linking to the web app manifest&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Of course, we could do this set up manually, but it may be helpful to run the
-automated install for our first attempt. If going manual, consult the &lt;code&gt;serviceworker-rails&lt;/code&gt;
-&lt;a href="https://github.com/rossta/serviceworker-rails"&gt;README&lt;/a&gt; and my previous &lt;a href="https://rossta.net/blog/service-worker-on-rails.html"&gt;blog
-post on configuring the gem&lt;/a&gt; for more help during setup.&lt;/p&gt;
-
-&lt;p&gt;At this point, we&amp;#39;ve got all the boilerplate in place in our Rails app to begin
-adding Progessive Web App functionality. The great part is, we can pick and
-choose which features we want to add.&lt;/p&gt;
-
-&lt;p&gt;Here are few things you can try:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://rossta.net/blog/offline-page-for-your-rails-application.html"&gt;Adding an offline page for your Rails app&lt;/a&gt; - by @rossta&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://rossta.net/blog/web-push-notifications-from-rails.html"&gt;Sending Web Push notifications from Rails&lt;/a&gt; - by @rossta&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://addyosmani.com/blog/application-shell/"&gt;Instant loading Web Apps with a Service Worker application shell architecture&lt;/a&gt; - by Addy Osmani
-*&lt;/li&gt;
-&lt;/ul&gt;
-
-      &lt;h2 id="going-further" class="title"&gt;
-        &lt;a name="going-further" class="anchor" href="#going-further"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Going further
-      &lt;/h2&gt;
-    
-&lt;p&gt;For more on grasping Service Worker fundamentals and developing offline solutions for the web, I highly recommend this free Udacity course:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://www.udacity.com/course/offline-web-applications--ud899"&gt;Offline Web Applications&lt;/a&gt; by Google&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;You&amp;#39;ll want to understand the Service Worker life cycle, which Jake Archibald
-treats in great detail:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://developers.google.com/web/fundamentals/instant-and-offline/service-worker/lifecycle"&gt;The Service Worker Lifecycle&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;For some open-source abstractions for implementing Service Worker fetching and
-caching strategies, checkout out &lt;a href="https://github.com/GoogleChrome/sw-toolbox"&gt;SW-Toolbox&lt;/a&gt; and &lt;a href="https://github.com/GoogleChrome/sw-precache"&gt;SW-Precache&lt;/a&gt; from the Google Chrome team.&lt;/p&gt;
-
-&lt;p&gt;Of course, we&amp;#39;ve only covered the getting started part of our journey with
-Progressive Web Apps. I&amp;#39;ve left out a lot of fun parts like decided how to implement
-caching strategies or send push notifications. Here are some resources to check
-out to take your PWA skills to the next level:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://serviceworke.rs/"&gt;ServiceWorke.rs&lt;/a&gt; - a set of Service Worker recipes
-and demos from Mozilla&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://jakearchibald.com/2014/offline-cookbook/"&gt;Offline Cookbook&lt;/a&gt; - a great rundown of Service Worker snippets, including a number of caching strategies, by Jake Archibald&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/rossta/serviceworker-rails-sandbox"&gt;Service Worker on Rails Sandbox&lt;/a&gt; - a demo Progressive Web App on Rails using the &lt;code&gt;serviceworker-rails&lt;/code&gt; gem by &lt;a href="https://github.com/rossta"&gt;@rossta&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/TalAter/awesome-progressive-web-apps"&gt;Awesome Progressive Web Apps&lt;/a&gt; - kitchen sink of PWA resources&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/TalAter/awesome-service-workers"&gt;Awesome Service Workers&lt;/a&gt; - kitchen sink of Service Worker resources&lt;/li&gt;
-&lt;/ul&gt;
-
-      &lt;h2 id="rails-pwa" class="title"&gt;
-        &lt;a name="rails-pwa" class="anchor" href="#rails-pwa"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Rails 💜 PWA
-      &lt;/h2&gt;
-    
-&lt;p&gt;Nothing about Rails is incongruent with Progressive Web App technology so there&amp;#39;s no technical reason why we can&amp;#39;t start introducing these features today. It&amp;#39;s worth noting the choice to transition to PWA is completely orthogonal to whatever JavaScript MVC framework/module bundler/turbolinks decision you might be otherwise already tackling.&lt;/p&gt;
-
-&lt;p&gt;In the coming years, I believe it will become increasingly important to adopt PWA features to keep up with demand as more and more site visits will shift to mobile web.&lt;/p&gt;
 </content>
   </entry>
 </feed>
