@@ -2,1285 +2,1285 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://rossta.net/404.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/about/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/assets/javascripts/html/offline-svg.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010-01-04-hello-world.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010-02-17-just-in-time-css.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010-05-17-mott-hall-iii-school-career-day.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010-07-20-delegate-and-custom-events.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010-09-08-step-up-to-the-soapbox.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010-12-25-heuristics.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010-12-27-behavior-driven-event-driven-eventmachine-rspec.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011-02-26-opt-in-xss-protection-for-rails-3-upgrade.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011-06-23-lean-startup-meetup-ignited.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011-09-30-when-your-fat-models-need-to-go-on-a-diet.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011-10-03-when-your-fat-models-need-to-go-on-a-diet-part-2.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011-12-22-how-to-test-features-with-rails-caching-in-rspec.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2012-02-09-presentation-intro-to-javascript-mvc.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013-03-01-create-and-deploy-an-ember-app-in-5-minutes.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013-03-25-why-i-ditched-wordpress-for-github.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013-03-26-configuring-rack-test-driver-in-capybara-2.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013-08-26-featured-post-for-speed-awareness-month.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2014-02-01-automatic-backups-to-amazon-s3-are-easy.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2014-02-05-ruby-you-autocomplete-me.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2014-02-25-three-steps-to-effective-code-reviews.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015-11-17-ruby-enumerable.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015-11-18-what-is-enumerator.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015-11-21-infinite-sequences-in-ruby.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015-11-30-pascals-triangle-with-rubys-enumerator.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015-12-02-use-inverse_of.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015-12-15-paginated-resources-in-ruby.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015-12-29-using-rspec-metadata.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-01-12-debugging-systemstackerror.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-01-18-whats-new-in-ruby-2-3-enumerable.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-01-27-how-to-write-a-simple-web-crawler-in-ruby-revisited.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-02-03-recurring-events-in-ruby.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-02-17-clojure-iterate-in-ruby.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-02-22-what-i-learned-about-hanami.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-03-02-a-ruby-antihero-thread-pool.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-04-12-ancient-city-snake-case.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-04-16-using-webpack-with-middleman.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-04-20-adding-serviceworker-to-a-simple-website.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-04-23-how-to-specify-local-ruby-gems-in-your-gemfile.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-05-03-service-worker-on-rails.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-05-09-offline-page-for-your-rails-application.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-05-13-web-push-notifications-from-rails.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-08-26-quiet-assets-in-rails-5.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-09-17-n+1-is-a-rails-feature.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-09-28-fill-out-google-forms-from-the-command-line-with-casperjs.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-10-21-using-the-web-push-api-with-vapid.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-10-23-why-i-am-betting-on-elixir.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-11-09-make-your-rails-app-a-progressive-web-app.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016-11-12-testing-rails-generators.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2017-11-05-from-sprockets-to-webpack.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018-01-10-connect-four-with-svg-pattern-masking.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018-01-15-basic-connect-four-with-vuejs.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018-01-18-animating-connect-four-with-vuejs.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018-01-28-finding-four-in-a-row-ftw.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/js-playground.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/offline.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2012-12-01-soapbox.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2013-09-01-terraling.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2013-10-01-runningontilt.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2013-11-01-sudokill.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2013-12-01-seymour.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2014-01-31-zenkaffe.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2014-02-01-lionel-richie.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2014-03-31-opensesame.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2015-11-01-pathfinder.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2015-12-01-tacokit.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2016-02-01-montrose.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/2016-09-20-serviceworker-rails.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/series/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/sitemap.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/2015-11-17-ruby-enumerable.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/2016-02-09-recurring-events-with-montrose.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/2016-03-30-ruby-enumerator.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/2016-06-25-ruby-enumerator-goruco.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/2016-09-21-progressive-web-apps-on-rails.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/2016-11-18-what-i-look-for-in-a-junior-developer.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/thanks/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/css.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/javascript.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/ruby.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/rspec.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/rails.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/github.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/performance.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/unix.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/process.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/clojure.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/webpack.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/service-worker.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/node.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/elixir.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/svg.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/vue.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018/01.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018/01/28.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018/01/18.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018/01/15.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2018/01/10.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2017.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2017/11.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2017/11/05.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/11.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/11/12.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/11/09.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/10.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/10/23.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/10/21.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/09.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/09/28.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/09/17.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/08.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/08/26.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/05.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/05/13.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/05/09.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/05/03.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/04.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/04/23.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/04/20.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/04/16.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/04/12.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/03.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/03/02.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/02.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/02/22.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/02/17.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/02/03.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/01.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/01/27.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/01/18.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2016/01/12.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/12.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/12/29.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/12/15.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/12/02.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/11.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/11/30.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/11/21.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/11/18.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2015/11/17.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2014.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2014/02.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2014/02/25.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2014/02/05.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2014/02/01.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013/08.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013/08/26.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013/03.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013/03/26.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013/03/25.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2013/03/01.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2012.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2012/02.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2012/02/09.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/12.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/12/22.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/10.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/10/03.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/09.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/09/30.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/06.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/06/23.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/02.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2011/02/26.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/12.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/12/27.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/12/25.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/09.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/09/08.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/07.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/07/20.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/05.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/05/17.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/02.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/02/17.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/01.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/2010/01/04.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/series/connect-four.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/series/service-worker.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/series/enumerable.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/page/2/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/page/3/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/2/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/3/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/4/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/5/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/6/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/7/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/8/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/9/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/10/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/11/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/12/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/13/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/page/14/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/page/2/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/projects/page/3/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/series/page/2/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/series/page/3/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/page/2/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/talks/page/3/index.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://rossta.net/blog/tags/ruby/page/2.html</loc>
-    <lastmod>2018-01-29T00:00:00+00:00</lastmod>
+    <lastmod>2018-02-05T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
