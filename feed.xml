@@ -80,7 +80,7 @@ Though there are big changes coming to &lt;i&gt;vue-cli&lt;/i&gt; in version 3, 
 
 &lt;p&gt;&lt;img src="/assets/images/blog/connect-four/s3/aws-static-website-properties-03528fa5.jpg" alt="Aws static website properties" /&gt;&lt;/p&gt;
 
-&lt;p&gt;This screen also reveals the public endpoint for the S3 bucket index page, which is what we&amp;#39;ll need to navigate to our deployed site in the browser. For this demo, my site is located at &lt;a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/"&gt;http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This screen also reveals the public endpoint for the S3 bucket index page, which is what we&amp;#39;ll need to navigate to our deployed site in the browser. The endpoint may be something like &lt;strong&gt;&lt;a href="http://bucket-name.s3-website-region-name.amazonaws.com"&gt;http://bucket-name.s3-website-region-name.amazonaws.com&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;p&gt;On the &lt;strong&gt;Permissions&lt;/strong&gt; tab, I added a bucket policy to provide public read permissions to everything in the bucket.&lt;/p&gt;
 
@@ -176,7 +176,7 @@ deployment:
       gzip: true
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;See the &lt;a href="https://github.com/bep/s3deploy"&gt;project&amp;#39;s Github page&lt;/a&gt; for more information on configuration options.&lt;/p&gt;
+&lt;p&gt;See the &lt;a href="https://github.com/bep/s3deploy"&gt;&lt;code&gt;s3deploy&lt;/code&gt; project page&lt;/a&gt; for more information on configuration options.&lt;/p&gt;
 
       &lt;h3 id="permissions-please" class="title"&gt;
         &lt;a name="permissions-please" class="anchor" href="#permissions-please"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;

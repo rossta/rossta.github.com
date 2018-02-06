@@ -141,7 +141,7 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
 
 <p><img src="/assets/images/blog/connect-four/s3/aws-static-website-properties-03528fa5.jpg" alt="Aws static website properties" /></p>
 
-<p>This screen also reveals the public endpoint for the S3 bucket index page, which is what we&#39;ll need to navigate to our deployed site in the browser. For this demo, my site is located at <a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/">http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/</a></p>
+<p>This screen also reveals the public endpoint for the S3 bucket index page, which is what we&#39;ll need to navigate to our deployed site in the browser. The endpoint may be something like <strong><a href="http://bucket-name.s3-website-region-name.amazonaws.com">http://bucket-name.s3-website-region-name.amazonaws.com</a></strong>.</p>
 
 <p>On the <strong>Permissions</strong> tab, I added a bucket policy to provide public read permissions to everything in the bucket.</p>
 
@@ -237,7 +237,7 @@ deployment:
       gzip: true
 </code></pre>
 
-<p>See the <a href="https://github.com/bep/s3deploy">project&#39;s Github page</a> for more information on configuration options.</p>
+<p>See the <a href="https://github.com/bep/s3deploy"><code>s3deploy</code> project page</a> for more information on configuration options.</p>
 
       <h3 id="permissions-please" class="title">
         <a name="permissions-please" class="anchor" href="#permissions-please">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
