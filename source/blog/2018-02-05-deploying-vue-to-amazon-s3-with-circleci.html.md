@@ -1,30 +1,32 @@
 ---
 title: Deploying a Vue.js website to Amazon S3 with CircleCI
 author: Ross Kaffenberger
-published: false
+published: true
 summary: A continuous deployment solution with Vue.js
 description: Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy
-pull_image: 'blog/purple-circles.jpg'
-pull_image_caption: Background Photo by Peter Clarkson on Unsplash
+pull_image: 'blog/stock/flower-tj-holowaychuk-unsplash.jpg'
+pull_image_caption: Background Photo by Tj Holowaychuk on Unsplash
 series: 'Connect Four'
 category: Code
 tags:
   - Vue
 ---
 
-In this post, we'll walkthrough how I set up continuous deployment for my Vue.js static web version of Connect Four. Every time I `git push` to the primary branch of my repository, an automated process will build the project then upload any new files to Amazon S3 with the appropriate caching headers.
+In this post, we'll walkthrough how I set up continuous deployment for my [Vue.js static website](http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/). Every time I `git push` to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.
+
+*This post is part of an ongoing series on [building Connect Four with Vue.js and Phoenix](/blog/basic-connect-four-with-vuejs.html).*
 
 Here's an overview of the tools involved:
 
 - a Github (or similar) account
-- vue-cli
+- `vue-cli`
 - an AWS account
 - an S3 bucket set up to host a static website
 - AWS credentials for reading and writing the S3 bucket
 - a CircleCI account
-- a circle.yml configured to build and deploy the site
+- a `circle.yml` configured to build and deploy the site
 
-### From CodePen to GitHub with vue-cli
+### From CodePen to Github
 
 Since my implementation of the Connect Four game was previously implemented and hosted entirely on CodePen.io, my first step was to move the source code to Github. I initialized the project with `vue-cli` (v2) using the Webpack template.
 
@@ -33,33 +35,36 @@ $ yarn global install vue-cli
 $ vue init webpack connect-four-vue
 ```
 
-With a working implementation of the game in place ([source code]()), the project can be built with
+With a working implementation of the game in place ([source code](https://github.com/rossta/connect-four-vue)), the project can be built with:
+
 ```shell
 $ yarn run build
 ```
 For `vue-cli` version 2, this command builds an index file and its associated assets to the `dist/` directory. This will be important when we set up the build for continuous deployment.
 
 <aside class="callout panel">
-Though there are big changes coming to `vue-cli` in version 3, it's still in alpha and the documentation is [still WIP](https://github.com/vuejs/vue-cli/tree/2c61d236d77dfcb22b4560afe4c957ddf45b4337/docs) as of this writing. Though the commands for initializing and building a Vue project, the workflow described in this post still applies.
+<p>
+Though there are big changes coming to <i>vue-cli</i> in version 3, it's still in alpha and the documentation is <a href="https://github.com/vuejs/vue-cli/tree/2c61d236d77dfcb22b4560afe4c957ddf45b4337/docs">still WIP</a> as of this writing. Though the commands for initializing and building a Vue project may differ in v3, the workflow described in this post still applies.
+</p>
 </aside>
 
 ### The host with the most
 
-To accomplish set up hosting on S3, I first needed to set up a new S3 bucket with the necessary permissions to make its contents available to the public for static website hosting. I'll detail the steps I took:
+To accomplish set up hosting on S3, I first needed to set up a new S3 bucket with the necessary permissions to make its contents available to the public for static website hosting.
 
 First, I created an S3 bucket by navigating to the S3 section on the [AWS console](https://aws.amazon.com).
 
-image
+![](blog/connect-four/s3/aws-create-bucket.jpg)
 
-I skipped through the other sections in the Create a Bucket wizard and navigated to the *Properties* pane on the bucket management page. Here I enabled *Static Website Hosting* and entered `index.html` as the name of the index document to match the output of the Vue build.
+On the **Properties** pane on the bucket management page, I enabled *Static Website Hosting* and entered `index.html` as the name of the index document to match the output of the Vue build.
 
-image
+![](blog/connect-four/s3/aws-static-website-properties.jpg)
 
 This screen also reveals the public endpoint for the S3 bucket index page, which is what we'll need to navigate to our deployed site in the browser. For this demo, my site is located at http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/
 
-Next, I added a bucket policy to provide public read permissions to everything in the bucket.
+On the **Permissions** tab, I added a bucket policy to provide public read permissions to everything in the bucket.
 
-image
+![](blog/connect-four/s3/aws-static-website-policy.jpg)
 
 The  AWS docs recommend the following policy for static website hosting. If setting this up for your own bucket, be sure to replace `bucket-name` in the *Resource* string with your bucket name:
 ```json
@@ -84,7 +89,9 @@ For continuous deployment, I chose CircleCI 1.0 since I'm most familiar with its
 
 With an account on CircleCI linked to my Github account, I added my Connect Four Github project to CircleCI from the *Projects* tab in the CircleCI dashboard.
 
-I then added a `circle.yml` file to my project similar to the following:
+![](blog/connect-four/s3/circle-add-projects.jpg)
+
+I also added a `circle.yml` file to my project similar to the following:
 
 ```yaml
 machine:
@@ -114,7 +121,7 @@ deployment:
   s3up:
     branch: develop
     commands:
-      - s3deploy -source=dist/ -region=us-west-2 -bucket=my-bucket-name
+      - s3deploy -source=dist/ -region=us-west-2 -bucket=connect-four-abcdefg
 ```
 The configuration above will do several things on each `git push`:
 
@@ -122,9 +129,10 @@ The configuration above will do several things on each `git push`:
 * build the project with `yarn run build`
 * upload new files to my S3 bucket (only on the `develop` branch) in the deploy step with `s3deploy`
 
-I also update some environment variables to add executables to the project `PATH`. Note that the `s3deploy` command receives a `-source=dist/` option to indicate that only files output by the build step will be synced with S3.
+Note that the `s3deploy` command receives a `-source=dist/` option to indicate that only files output by the build step will be synced with S3.
 
 I like `s3deploy` for its simplicity and speed (it's written in Go). It will only upload new files or files that have changed. It also provides a mechanism for configuring response headers on specific files or groups of files based on a separate `.s3deploy.yml` file. Here's what I used to add long-term caching to static assets in my bucket:
+
 ```yaml
 routes:
     - route: "^.+\\.(js|css|svg|ttf)$"
@@ -140,9 +148,14 @@ routes:
       gzip: true
 ```
 See the [project's Github page](https://github.com/bep/s3deploy) for more information on configuration options.
+
 ### Permissions please
 
-Not so fast! There's one more step. I needed to provide my `s3deploy` command with proper credentials to modify files in the S3 bucket. To do this, I created a new IAM user on Amazon S3 and added it to a policy group with the following policy:
+Not so fast! There's one more step. I needed to provide my `s3deploy` command with proper credentials to modify files in the S3 bucket. To do this, I created a new Amazon IAM user for programmatic access in the Security Credentials panel on AWS.
+
+![](blog/connect-four/s3/aws-add-user-1.jpg)
+
+I added this user to a security group with the following policy:
 
 ```json
 {
@@ -168,6 +181,30 @@ Not so fast! There's one more step. I needed to provide my `s3deploy` command wi
    ]
 }
 ```
-Note: don't confuse this policy with the one associated with your static website hosting policy!
+Note: don't confuse this policy with your static website hosting policy!
 
-Once the new IAM user is successfully added, an access key id and secret access key is created. CircleCI provides a project level configuration page in their web UI for making these AWS credentials available to the build environment. This approach is a more secure option over passing the credentials as plain text in the `circle.yml` file`.
+With my new IAM user, a fresh set of credentials, an AWS access key id and secret access key, are now available to control my S3 bucket programmatically.
+
+![](blog/connect-four/s3/aws-add-user-2.jpg)
+
+If you follow these steps, make sure to keep your credentials in a safe place. Anyone with these credentials would be able to modify the contents of your S3 bucket with the permissions we've used.
+
+<aside class="callout panel">
+<p>
+Check out <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.html">the docs</a> for more information on managing Amazon IAM users.
+</p>
+</aside>
+
+It's these credentials that I added to CircleCI through its project level configuration page in the web UI.
+
+![](blog/connect-four/s3/circle-aws.jpg)
+
+This step makes the AWS credentials available to the build environment and is a more secure option than adding credentials as plain text in the `circle.yml` file.
+
+### Liftoff
+
+Now, when we push to Github on our primary branch, the build process on CircleCI will fetch our dependencies, bundle the static assets and compile our Vue codebase to the `dist/` directory, which will then be synced to Amazon S3. As long as the build and sync steps succeed, we ensure that the latest code is always in production with minimal fuss from the command line.
+
+<hr />
+
+*Did you like this post?* Please share! Even better, sign up for my newsletter to hear about new posts in my ongoing series on [building Connect Four with Vue.js and Phoenix](/blog/basic-connect-four-with-vuejs.html).
