@@ -14,7 +14,7 @@ tags:
 
 In this post, we'll walkthrough how I set up continuous deployment for my [Vue.js static website](http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/). Every time I `git push` to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.
 
-*This post is part of an ongoing series on [building Connect Four with Vue.js and Phoenix](/blog/basic-connect-four-with-vuejs.html).*
+*This post is part of an ongoing series on [building Connect Four with Vue.js and Phoenix](/series/connect-four.html).*
 
 Here's an overview of the tools involved:
 
