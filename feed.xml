@@ -21,7 +21,7 @@
     <summary type="html">&lt;p&gt;In this post, we'll walkthrough how I set up continuous deployment for my &lt;a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/"&gt;Vue.js static website&lt;/a&gt;. Every time I &lt;code&gt;git push&lt;/code&gt; to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;In this post, we&amp;#39;ll walkthrough how I set up continuous deployment for my &lt;a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/"&gt;Vue.js static website&lt;/a&gt;. Every time I &lt;code&gt;git push&lt;/code&gt; to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;This post is part of an ongoing series on &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;building Connect Four with Vue.js and Phoenix&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;This post is part of an ongoing series on &lt;a href="/series/connect-four.html"&gt;building Connect Four with Vue.js and Phoenix&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#39;s an overview of the tools involved:&lt;/p&gt;
 
