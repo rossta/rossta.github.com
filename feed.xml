@@ -43,13 +43,13 @@
         From CodePen to Github
       &lt;/h3&gt;
     
-&lt;p&gt;Since my implementation of the Connect Four game was previously implemented and hosted entirely on CodePen.io, my first step was to move the source code to Github. I initialized the project with &lt;code&gt;vue-cli&lt;/code&gt; (v2) using the Webpack template.&lt;/p&gt;
+&lt;p&gt;Since version of Connect Four up to this point has been &lt;a href="https://codepen.io/rossta/pen/VydJKG"&gt;built and hosted entirely on CodePen&lt;/a&gt;, my first step was to move the source code to Github. I initialized a new &lt;code&gt;vue-cli&lt;/code&gt; (version 2) using the Webpack template.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="shell"&gt;$ yarn global install vue-cli
 $ vue init webpack connect-four-vue
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;With a working implementation of the game in place (&lt;a href="https://github.com/rossta/connect-four-vue"&gt;source code&lt;/a&gt;), the project can be built with:&lt;/p&gt;
+&lt;p&gt;With the game working and now backed by version control (&lt;a href="https://github.com/rossta/connect-four-vue"&gt;source code&lt;/a&gt;), I was able to bundle a set of static assets suitable for deployment to a provider like S3:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="shell"&gt;$ yarn run build
 &lt;/code&gt;&lt;/pre&gt;
@@ -70,9 +70,7 @@ Though there are big changes coming to &lt;i&gt;vue-cli&lt;/i&gt; in version 3, 
         The host with the most
       &lt;/h3&gt;
     
-&lt;p&gt;To accomplish set up hosting on S3, I first needed to set up a new S3 bucket with the necessary permissions to make its contents available to the public for static website hosting.&lt;/p&gt;
-
-&lt;p&gt;First, I created an S3 bucket by navigating to the S3 section on the &lt;a href="https://aws.amazon.com"&gt;AWS console&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To host on Amazon S3, I needed an S3 bucket with permissions to make its contents available to the public for static website hosting. This can be done from the &lt;a href="https://aws.amazon.com"&gt;AWS console&lt;/a&gt;:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/blog/connect-four/s3/aws-create-bucket-767a39de.jpg" alt="Aws create bucket" /&gt;&lt;/p&gt;
 
@@ -114,7 +112,7 @@ Though there are big changes coming to &lt;i&gt;vue-cli&lt;/i&gt; in version 3, 
     
 &lt;p&gt;For continuous deployment, I chose CircleCI 1.0 since I&amp;#39;m most familiar with its configuration options and it&amp;#39;s currently free for my needs.&lt;/p&gt;
 
-&lt;p&gt;With an account on CircleCI linked to my Github account, I added my Connect Four Github project to CircleCI from the &lt;em&gt;Projects&lt;/em&gt; tab in the CircleCI dashboard.&lt;/p&gt;
+&lt;p&gt;With my Github account linked to my CircleCI, I added my Connect Four Github project to CircleCI from the &lt;em&gt;Projects&lt;/em&gt; tab in the CircleCI dashboard.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/blog/connect-four/s3/circle-add-projects-922272d9.jpg" alt="Circle add projects" /&gt;&lt;/p&gt;
 
@@ -155,12 +153,12 @@ deployment:
 &lt;ul&gt;
 &lt;li&gt;install npm dependencies with &lt;code&gt;yarn&lt;/code&gt; and fetch the binary, &lt;code&gt;s3deploy&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;build the project with &lt;code&gt;yarn run build&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;upload new files to my S3 bucket (only on the &lt;code&gt;develop&lt;/code&gt; branch) in the deploy step with &lt;code&gt;s3deploy&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;sync build files to my S3 bucket with &lt;code&gt;s3deploy&lt;/code&gt; (only on the &lt;code&gt;develop&lt;/code&gt; branch)&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Note that the &lt;code&gt;s3deploy&lt;/code&gt; command receives a &lt;code&gt;-source=dist/&lt;/code&gt; option to indicate that only files output by the build step will be synced with S3.&lt;/p&gt;
 
-&lt;p&gt;I like &lt;code&gt;s3deploy&lt;/code&gt; for its simplicity and speed (it&amp;#39;s written in Go). It will only upload new files or files that have changed. It also provides a mechanism for configuring response headers on specific files or groups of files based on a separate &lt;code&gt;.s3deploy.yml&lt;/code&gt; file. Here&amp;#39;s what I used to add long-term caching to static assets in my bucket:&lt;/p&gt;
+&lt;p&gt;I like &lt;code&gt;s3deploy&lt;/code&gt; for its simplicity and speed (it&amp;#39;s written in Go). It will only upload new files or files that have changed. It also provides advanced configuration to fine tune response behavior on sets of files by route through a separate &lt;code&gt;.s3deploy.yml&lt;/code&gt; file. Here&amp;#39;s what I used to add long-term caching and gzipping for static assets in my bucket:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="yaml"&gt;routes:
     - route: &amp;quot;^.+\\.(js|css|svg|ttf)$&amp;quot;
@@ -186,7 +184,7 @@ deployment:
         Permissions please
       &lt;/h3&gt;
     
-&lt;p&gt;Not so fast! There&amp;#39;s one more step. I needed to provide my &lt;code&gt;s3deploy&lt;/code&gt; command with proper credentials to modify files in the S3 bucket. To do this, I created a new Amazon IAM user for programmatic access in the Security Credentials panel on AWS.&lt;/p&gt;
+&lt;p&gt;Almost done! To give the &lt;code&gt;s3deploy&lt;/code&gt; command permissionsto add and modify files in my S3 bucket, I needed a set of AWS credentials linked to another AWS authorization policy. To do this, I created a new Amazon IAM user for programmatic access in the Security Credentials panel on AWS.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/blog/connect-four/s3/aws-add-user-1-2b33e2f3.jpg" alt="Aws add user 1" /&gt;&lt;/p&gt;
 
@@ -230,18 +228,18 @@ Check out &lt;a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.
 &lt;/p&gt;
 &lt;/aside&gt;
 
-&lt;p&gt;It&amp;#39;s these credentials that I added to CircleCI through its project level configuration page in the web UI.&lt;/p&gt;
+&lt;p&gt;I added these credentials to CircleCI through its project level configuration page in the web UI.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/blog/connect-four/s3/circle-aws-ceee440d.jpg" alt="Circle aws" /&gt;&lt;/p&gt;
 
-&lt;p&gt;This step makes the AWS credentials available to the build environment and is a more secure option than adding credentials as plain text in the &lt;code&gt;circle.yml&lt;/code&gt; file.&lt;/p&gt;
+&lt;p&gt;This step makes the AWS credentials available to the build environment. It&amp;#39;s a more secure option than adding credentials as plain text in the &lt;code&gt;circle.yml&lt;/code&gt; file.&lt;/p&gt;
 
-      &lt;h3 id="liftoff" class="title"&gt;
-        &lt;a name="liftoff" class="anchor" href="#liftoff"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+      &lt;h3 id="liftoff-" class="title"&gt;
+        &lt;a name="liftoff-" class="anchor" href="#liftoff-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
 &lt;/a&gt;
-        Liftoff
+        Liftoff!
       &lt;/h3&gt;
     
 &lt;p&gt;Now, when we push to Github on our primary branch, the build process on CircleCI will fetch our dependencies, bundle the static assets and compile our Vue codebase to the &lt;code&gt;dist/&lt;/code&gt; directory, which will then be synced to Amazon S3. As long as the build and sync steps succeed, we ensure that the latest code is always in production with minimal fuss from the command line.&lt;/p&gt;
