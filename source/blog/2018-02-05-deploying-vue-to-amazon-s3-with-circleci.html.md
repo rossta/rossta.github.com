@@ -28,14 +28,14 @@ Here's an overview of the tools involved:
 
 ### From CodePen to Github
 
-Since my implementation of the Connect Four game was previously implemented and hosted entirely on CodePen.io, my first step was to move the source code to Github. I initialized the project with `vue-cli` (v2) using the Webpack template.
+Since version of Connect Four up to this point has been [built and hosted entirely on CodePen](https://codepen.io/rossta/pen/VydJKG), my first step was to move the source code to Github. I initialized a new `vue-cli` (version 2) using the Webpack template.
 
 ```shell
 $ yarn global install vue-cli
 $ vue init webpack connect-four-vue
 ```
 
-With a working implementation of the game in place ([source code](https://github.com/rossta/connect-four-vue)), the project can be built with:
+With the game working and now backed by version control ([source code](https://github.com/rossta/connect-four-vue)), I was able to bundle a set of static assets suitable for deployment to a provider like S3:
 
 ```shell
 $ yarn run build
@@ -50,9 +50,7 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
 
 ### The host with the most
 
-To accomplish set up hosting on S3, I first needed to set up a new S3 bucket with the necessary permissions to make its contents available to the public for static website hosting.
-
-First, I created an S3 bucket by navigating to the S3 section on the [AWS console](https://aws.amazon.com).
+To host on Amazon S3, I needed an S3 bucket with permissions to make its contents available to the public for static website hosting. This can be done from the [AWS console](https://aws.amazon.com):
 
 ![](blog/connect-four/s3/aws-create-bucket.jpg)
 
@@ -87,7 +85,7 @@ For more information on setting up static websites on Amazon S3, check out Kyle 
 
 For continuous deployment, I chose CircleCI 1.0 since I'm most familiar with its configuration options and it's currently free for my needs.
 
-With an account on CircleCI linked to my Github account, I added my Connect Four Github project to CircleCI from the *Projects* tab in the CircleCI dashboard.
+With my Github account linked to my CircleCI, I added my Connect Four Github project to CircleCI from the *Projects* tab in the CircleCI dashboard.
 
 ![](blog/connect-four/s3/circle-add-projects.jpg)
 
@@ -127,11 +125,11 @@ The configuration above will do several things on each `git push`:
 
 * install npm dependencies with `yarn` and fetch the binary, `s3deploy`
 * build the project with `yarn run build`
-* upload new files to my S3 bucket (only on the `develop` branch) in the deploy step with `s3deploy`
+* sync build files to my S3 bucket with `s3deploy` (only on the `develop` branch)
 
 Note that the `s3deploy` command receives a `-source=dist/` option to indicate that only files output by the build step will be synced with S3.
 
-I like `s3deploy` for its simplicity and speed (it's written in Go). It will only upload new files or files that have changed. It also provides a mechanism for configuring response headers on specific files or groups of files based on a separate `.s3deploy.yml` file. Here's what I used to add long-term caching to static assets in my bucket:
+I like `s3deploy` for its simplicity and speed (it's written in Go). It will only upload new files or files that have changed. It also provides advanced configuration to fine tune response behavior on sets of files by route through a separate `.s3deploy.yml` file. Here's what I used to add long-term caching and gzipping for static assets in my bucket:
 
 ```yaml
 routes:
@@ -151,7 +149,7 @@ See the [`s3deploy` project page](https://github.com/bep/s3deploy) for more info
 
 ### Permissions please
 
-Not so fast! There's one more step. I needed to provide my `s3deploy` command with proper credentials to modify files in the S3 bucket. To do this, I created a new Amazon IAM user for programmatic access in the Security Credentials panel on AWS.
+Almost done! To give the `s3deploy` command permissionsto add and modify files in my S3 bucket, I needed a set of AWS credentials linked to another AWS authorization policy. To do this, I created a new Amazon IAM user for programmatic access in the Security Credentials panel on AWS.
 
 ![](blog/connect-four/s3/aws-add-user-1.jpg)
 
@@ -195,13 +193,13 @@ Check out <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.htm
 </p>
 </aside>
 
-It's these credentials that I added to CircleCI through its project level configuration page in the web UI.
+I added these credentials to CircleCI through its project level configuration page in the web UI.
 
 ![](blog/connect-four/s3/circle-aws.jpg)
 
-This step makes the AWS credentials available to the build environment and is a more secure option than adding credentials as plain text in the `circle.yml` file.
+This step makes the AWS credentials available to the build environment. It's a more secure option than adding credentials as plain text in the `circle.yml` file.
 
-### Liftoff
+### Liftoff!
 
 Now, when we push to Github on our primary branch, the build process on CircleCI will fetch our dependencies, bundle the static assets and compile our Vue codebase to the `dist/` directory, which will then be synced to Amazon S3. As long as the build and sync steps succeed, we ensure that the latest code is always in production with minimal fuss from the command line.
 
