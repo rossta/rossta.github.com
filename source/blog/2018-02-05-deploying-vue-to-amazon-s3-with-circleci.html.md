@@ -60,7 +60,7 @@ On the **Properties** pane on the bucket management page, I enabled *Static Webs
 
 ![](blog/connect-four/s3/aws-static-website-properties.jpg)
 
-This screen also reveals the public endpoint for the S3 bucket index page, which is what we'll need to navigate to our deployed site in the browser. For this demo, my site is located at http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/
+This screen also reveals the public endpoint for the S3 bucket index page, which is what we'll need to navigate to our deployed site in the browser. The endpoint may be something like **http://bucket-name.s3-website-region-name.amazonaws.com**.
 
 On the **Permissions** tab, I added a bucket policy to provide public read permissions to everything in the bucket.
 
@@ -147,7 +147,7 @@ routes:
     - route: "^.+\\.(html|xml|json|js)$"
       gzip: true
 ```
-See the [project's Github page](https://github.com/bep/s3deploy) for more information on configuration options.
+See the [`s3deploy` project page](https://github.com/bep/s3deploy) for more information on configuration options.
 
 ### Permissions please
 
