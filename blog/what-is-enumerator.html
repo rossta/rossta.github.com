@@ -83,11 +83,11 @@
 Ruby&#39;s core collection classes like Array and Hash and provides a bunch of
 methods for traversal, searching and sorting, and that we can can introduce it
 to plain old ruby classes through inclusion and implementing the <code>#each</code> method.
-Check out this <a href="http://ruby.bastardsbook.com/chapters/enumerables/">dated - yet reliable - Enumerable primer</a> if you&#39;d like a refresher.</p>
+Check out this <a href="http://ruby.bastardsbook.com/chapters/enumerables/">Enumerable primer</a> if you&#39;d like a refresher.</p>
 
-<p><a href="http://ruby-doc.org/core-2.2.0/Enumerator.html">Enumerator</a> is like <code>Enumerable&#39;s</code> kid sister; while <code>Enumerable</code> is getting all the attention, <code>Enumerator</code>, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it&#39;s time you took notice, Ma.</p>
+<p><a href="http://ruby-doc.org/core-2.2.0/Enumerator.html">Enumerator</a> is like <code>Enumerable&#39;s</code> kid sister; while <code>Enumerable</code> is getting all the attention, <code>Enumerator</code> should get more credit for doing amazing things in her own way. Well, it&#39;s time you took notice, Ma.</p>
 
-<p>So what exactly is <code>Enumerator</code>?. For one, it&#39;s a class. You can instantiate an
+<p>So what exactly is <code>Enumerator</code>? For one, it&#39;s a class. You can instantiate an
 instance of <code>Enumerator</code> by calling certain <code>Enumerable</code> instance methods, like <code>Array#each</code>, without a block:</p>
 
 <pre><code class="ruby">[1, 2, 3].each
@@ -107,7 +107,7 @@ that expect a block:</p>
 LocalJumpError: no block given
 </code></pre>
 
-<p>Okay, big deal. What does this get us? Glad you asked.</p>
+<p>Okay, big deal. What does this get us?</p>
 
 <p>Instances of Enumerator are enumerable:</p>
 
@@ -121,11 +121,11 @@ e.each { |n| p n }
 
 <p>See what happened there? The expression printed out each digit, but returned <code>[nil, nil, nil]</code> instead of of <code>[1, 2, 3]</code>. The <code>Enumerator</code> implemented <code>map</code> in the context of <code>each</code>; since <code>p n</code> returns <code>nil</code>, we got three entries of <code>nil</code> in the return value. We chained the behavior of two enumerable methods.</p>
 
-<p>Here&#39;s another example. It&#39;s often useful to enumerate collection members along
-with the index. We can use <code>Enumerable#each_with_index</code>, we don&#39;t have
+<p>It&#39;s often useful to enumerate collection members along
+with the index. We can use <code>Enumerable#each_with_index</code>, but we don&#39;t have
 <code>Enumerable#map_with_index</code>. JavaScript <code>forEach</code> and <code>map</code> gets this right, but not Ruby... or does it?</p>
 
-<p>Almost - we can chain enumerators together to get effectively the same result:</p>
+<p>We can chain enumerators together to get effectively the same result:</p>
 
 <pre><code class="ruby">e = [1, 2, 3].map
 e.each_with_index { |n, i| n * i }
@@ -140,7 +140,7 @@ for each iteration. This usage is common enough, that <code>Enumerator</code> pr
 =&gt; [0, 2, 6]
 </code></pre>
 
-<p>Reads pretty well, eh? What&#39;s really interesting here is that enumerators package
+<p>Reads pretty well. What&#39;s really interesting here is that enumerators package
 up knowledge of a collection and a method with which we want to enumerate.</p>
 
 <p>We can combine several enumerators in different orders to get different
