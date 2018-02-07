@@ -15,11 +15,11 @@ Let's pretend we know about Ruby's [Enumerable](http://ruby-doc.org/core-2.2.3/E
 Ruby's core collection classes like Array and Hash and provides a bunch of
 methods for traversal, searching and sorting, and that we can can introduce it
 to plain old ruby classes through inclusion and implementing the `#each` method.
-Check out this [dated - yet reliable - Enumerable primer](http://ruby.bastardsbook.com/chapters/enumerables/) if you'd like a refresher.
+Check out this [Enumerable primer](http://ruby.bastardsbook.com/chapters/enumerables/) if you'd like a refresher.
 
-[Enumerator](http://ruby-doc.org/core-2.2.0/Enumerator.html) is like `Enumerable's` kid sister; while `Enumerable` is getting all the attention, `Enumerator`, having borrowed many traits of her sibling, can do lots of amazing things in her own way and really should get more credit. Well, it's time you took notice, Ma.
+[Enumerator](http://ruby-doc.org/core-2.2.0/Enumerator.html) is like `Enumerable's` kid sister; while `Enumerable` is getting all the attention, `Enumerator` should get more credit for doing amazing things in her own way. Well, it's time you took notice, Ma.
 
-So what exactly is `Enumerator`?. For one, it's a class. You can instantiate an
+So what exactly is `Enumerator`? For one, it's a class. You can instantiate an
 instance of `Enumerator` by calling certain `Enumerable` instance methods, like `Array#each`, without a block:
 
 ```ruby
@@ -41,7 +41,7 @@ that expect a block:
 LocalJumpError: no block given
 ```
 
-Okay, big deal. What does this get us? Glad you asked.
+Okay, big deal. What does this get us?
 
 Instances of Enumerator are enumerable:
 
@@ -56,11 +56,11 @@ e.each { |n| p n }
 
 See what happened there? The expression printed out each digit, but returned `[nil, nil, nil]` instead of of `[1, 2, 3]`. The `Enumerator` implemented `map` in the context of `each`; since `p n` returns `nil`, we got three entries of `nil` in the return value. We chained the behavior of two enumerable methods.
 
-Here's another example. It's often useful to enumerate collection members along
-with the index. We can use `Enumerable#each_with_index`, we don't have
+It's often useful to enumerate collection members along
+with the index. We can use `Enumerable#each_with_index`, but we don't have
 `Enumerable#map_with_index`. JavaScript `forEach` and `map` gets this right, but not Ruby... or does it?
 
-Almost - we can chain enumerators together to get effectively the same result:
+We can chain enumerators together to get effectively the same result:
 
 ```ruby
 e = [1, 2, 3].map
@@ -77,7 +77,7 @@ e = [1, 2, 3].map.with_index { |n, i| n * i }
 => [0, 2, 6]
 ```
 
-Reads pretty well, eh? What's really interesting here is that enumerators package
+Reads pretty well. What's really interesting here is that enumerators package
 up knowledge of a collection and a method with which we want to enumerate.
 
 We can combine several enumerators in different orders to get different
