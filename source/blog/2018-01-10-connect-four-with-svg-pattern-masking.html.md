@@ -127,7 +127,7 @@ This punches a hole through the wall to reveal the checker underneath.
 
 Here's what we have so far on [CodePen](https://codepen.io/rossta/pen/NXMrLg):
 
-<p data-height="265" data-theme-id="0" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/NXMrLg/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p data-height="265" data-theme-id="light" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/NXMrLg/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 <hr />
@@ -144,14 +144,14 @@ specify x coordinates for each child `<rect>` and `<circle>`.
 Here's the full demo of a static Connect Four SVG game board on
 [CodePen](https://codepen.io/rossta/pen/eyrgJe):
 
-<p data-height="370" data-theme-id="0" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyrgJe/">Connect Four board in SVG</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p data-height="370" data-theme-id="light" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyrgJe/">Connect Four board in SVG</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 <hr />
 
 Finally, here's a sneak preview of the how the falling checker will look behind the pattern mask:
 
-<p data-height="265" data-theme-id="0" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyPpog/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p data-height="265" data-theme-id="light" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyPpog/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 <hr />

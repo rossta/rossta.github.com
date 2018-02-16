@@ -16,7 +16,7 @@ With the Connect Four game we created in the previous post, we're able to use [V
 
 Before we dive in, here's a pen of the game with the win logic we'll be describing so you'll see where we'll end up:
 
-<p data-height="529" data-theme-id="0" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/VydJKG/">Connect Four in Vue.js, SVG: detect winner and animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p data-height="529" data-theme-id="light" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/VydJKG/">Connect Four in Vue.js, SVG: detect winner and animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 When a player achieves four-in-a-row, we update the visual elements on the board to indicate the win and provide a "Play again" link to reset the game state.
@@ -38,7 +38,7 @@ We use the word *viable* to mean that the segment must contain four "slots" that
 
 As described, it's a bit wasteful to check every possible segment in the board. This is especially true at the outset, when few checkers are on the board, or near the end when many segments have already been checked on previous turns. Since we're checking the board on each drop and we know the position of the last checker played, we can reduce the number of computations by treating the last checker as a focal point. So we update our definition of a *viable* segment to mean segments of four on the board that intersect with the last checker played.
 
-To figure out which segments over lap with the last checker played, we need a few values: 
+To figure out which segments over lap with the last checker played, we need a few values:
 
 * the coordinates of the checker, the "focal point" of our collection of segments
 * the minimum viable row value, i.e., the greater of first row value (0) and the value of the farthest numerical segment point to the left (`focalRow` - 3)
@@ -84,7 +84,7 @@ checkHorizontalSegments({ focalRow, minCol, maxCol }) {
     if (checkers.reduce((a, b) => a === b && a !== EMPTY)) {
       return { color: checkers[0].color, checkers };
     }
-  }    
+  }
 },
 ```
 
@@ -108,7 +108,7 @@ checkForWin(lastChecker) {
   const minRow = min(focalRow);
   const maxRow = max(focalRow, this.rowCount-1);
   const coords = { focalRow, focalCol, minRow, minCol, maxRow, maxCol };
-  
+
   return this.checkHorizontalSegments(coords) ||
     this.checkVerticalSegments(coords) ||
     this.checkForwardSlashSegments(coords) ||
@@ -122,7 +122,7 @@ Recall from the [previous post](/blog/animating-connect-four-with-vuejs.html), o
 // GameContainer method
 drop({ col, row }) {
   if (this.isLocked) return;
-  
+
   this.isLocked = true;
 
   const checker = { row, col, color };
@@ -150,14 +150,14 @@ displayWin(winner) {
   this.status = 'OVER';
   this.winner.checkers.forEach((checker) => {
     this.setChecker(checker, {isWinner: true});
-  }); 
+  });
 },
 ```
 Our components can react to this new state by updating various elements of the UI. One approach we've taken is to adjust the opacity of the non-winning checkers to accentuate the winners:
 ```javascript
 // BoardChecker computed
 opacity() {
-  return (this.status === OVER && !this.isWinner) ? 0.25 : 1.0; 
+  return (this.status === OVER && !this.isWinner) ? 0.25 : 1.0;
 },
 ```
 
