@@ -84,7 +84,7 @@
 
 <p>Before we dive in, here&#39;s a pen of the game with the win logic we&#39;ll be describing so you&#39;ll see where we&#39;ll end up:</p>
 
-<p data-height="529" data-theme-id="0" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/VydJKG/">Connect Four in Vue.js, SVG: detect winner and animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p data-height="529" data-theme-id="light" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/VydJKG/">Connect Four in Vue.js, SVG: detect winner and animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
@@ -112,7 +112,7 @@ check all viable &quot;back slash&quot; segments FTW. Return the winner OR
 
 <p>As described, it&#39;s a bit wasteful to check every possible segment in the board. This is especially true at the outset, when few checkers are on the board, or near the end when many segments have already been checked on previous turns. Since we&#39;re checking the board on each drop and we know the position of the last checker played, we can reduce the number of computations by treating the last checker as a focal point. So we update our definition of a <em>viable</em> segment to mean segments of four on the board that intersect with the last checker played.</p>
 
-<p>To figure out which segments over lap with the last checker played, we need a few values: </p>
+<p>To figure out which segments over lap with the last checker played, we need a few values:</p>
 
 <ul>
 <li>the coordinates of the checker, the &quot;focal point&quot; of our collection of segments</li>
@@ -164,7 +164,7 @@ checkHorizontalSegments({ focalRow, minCol, maxCol }) {
     if (checkers.reduce((a, b) =&gt; a === b &amp;&amp; a !== EMPTY)) {
       return { color: checkers[0].color, checkers };
     }
-  }    
+  }
 },
 </code></pre>
 
@@ -236,7 +236,7 @@ displayWin(winner) {
   this.status = &#39;OVER&#39;;
   this.winner.checkers.forEach((checker) =&gt; {
     this.setChecker(checker, {isWinner: true});
-  }); 
+  });
 },
 </code></pre>
 
@@ -244,7 +244,7 @@ displayWin(winner) {
 
 <pre><code class="javascript">// BoardChecker computed
 opacity() {
-  return (this.status === OVER &amp;&amp; !this.isWinner) ? 0.25 : 1.0; 
+  return (this.status === OVER &amp;&amp; !this.isWinner) ? 0.25 : 1.0;
 },
 </code></pre>
 

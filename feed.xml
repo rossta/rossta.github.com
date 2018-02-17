@@ -263,7 +263,7 @@ Check out &lt;a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.
 
 &lt;p&gt;Before we dive in, here&amp;#39;s a pen of the game with the win logic we&amp;#39;ll be describing so you&amp;#39;ll see where we&amp;#39;ll end up:&lt;/p&gt;
 
-&lt;p data-height="529" data-theme-id="0" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/VydJKG/"&gt;Connect Four in Vue.js, SVG: detect winner and animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="529" data-theme-id="light" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/VydJKG/"&gt;Connect Four in Vue.js, SVG: detect winner and animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
@@ -291,7 +291,7 @@ check all viable &amp;quot;back slash&amp;quot; segments FTW. Return the winner 
 
 &lt;p&gt;As described, it&amp;#39;s a bit wasteful to check every possible segment in the board. This is especially true at the outset, when few checkers are on the board, or near the end when many segments have already been checked on previous turns. Since we&amp;#39;re checking the board on each drop and we know the position of the last checker played, we can reduce the number of computations by treating the last checker as a focal point. So we update our definition of a &lt;em&gt;viable&lt;/em&gt; segment to mean segments of four on the board that intersect with the last checker played.&lt;/p&gt;
 
-&lt;p&gt;To figure out which segments over lap with the last checker played, we need a few values: &lt;/p&gt;
+&lt;p&gt;To figure out which segments over lap with the last checker played, we need a few values:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;the coordinates of the checker, the &amp;quot;focal point&amp;quot; of our collection of segments&lt;/li&gt;
@@ -343,7 +343,7 @@ checkHorizontalSegments({ focalRow, minCol, maxCol }) {
     if (checkers.reduce((a, b) =&amp;gt; a === b &amp;amp;&amp;amp; a !== EMPTY)) {
       return { color: checkers[0].color, checkers };
     }
-  }    
+  }
 },
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -415,7 +415,7 @@ displayWin(winner) {
   this.status = &amp;#39;OVER&amp;#39;;
   this.winner.checkers.forEach((checker) =&amp;gt; {
     this.setChecker(checker, {isWinner: true});
-  }); 
+  });
 },
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -423,7 +423,7 @@ displayWin(winner) {
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// BoardChecker computed
 opacity() {
-  return (this.status === OVER &amp;amp;&amp;amp; !this.isWinner) ? 0.25 : 1.0; 
+  return (this.status === OVER &amp;amp;&amp;amp; !this.isWinner) ? 0.25 : 1.0;
 },
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -534,7 +534,7 @@ place when added to the game board.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#39;s how the game behaved at the end of &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;the previous post&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p data-height="481" data-theme-id="0" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="485" data-theme-id="light" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
@@ -754,7 +754,7 @@ into place as we play! Note that, because we&amp;#39;re using SVG pattern maskin
 described in &lt;a href="#"&gt;an earlier post&lt;/a&gt;, the checkers appear to fall behind the Connect
 Four wall, visible through the portholes.&lt;/p&gt;
 
-&lt;p data-height="483" data-theme-id="0" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/jYxxGv/"&gt;Connect Four in Vue.js, SVG: animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="485" data-theme-id="light" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/jYxxGv/"&gt;Connect Four in Vue.js, SVG: animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
@@ -793,7 +793,7 @@ thorough introduction to the framework.&lt;/p&gt;
 
 &lt;p&gt;To see where we&amp;#39;ll end up, here&amp;#39;s a pen:&lt;/p&gt;
 
-&lt;p data-height="485" data-theme-id="0" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="485" data-theme-id="light" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
@@ -1315,7 +1315,7 @@ the &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; element by id.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#39;s what we have so far on &lt;a href="https://codepen.io/rossta/pen/NXMrLg"&gt;CodePen&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p data-height="265" data-theme-id="0" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/NXMrLg/"&gt;SVG mask demo&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="265" data-theme-id="light" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/NXMrLg/"&gt;SVG mask demo&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
@@ -1333,7 +1333,7 @@ specify x coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&g
 &lt;p&gt;Here&amp;#39;s the full demo of a static Connect Four SVG game board on
 &lt;a href="https://codepen.io/rossta/pen/eyrgJe"&gt;CodePen&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p data-height="370" data-theme-id="0" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrgJe/"&gt;Connect Four board in SVG&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="370" data-theme-id="light" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrgJe/"&gt;Connect Four board in SVG&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
@@ -1341,7 +1341,7 @@ specify x coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&g
 
 &lt;p&gt;Finally, here&amp;#39;s a sneak preview of the how the falling checker will look behind the pattern mask:&lt;/p&gt;
 
-&lt;p data-height="265" data-theme-id="0" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyPpog/"&gt;SVG mask demo&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="265" data-theme-id="light" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyPpog/"&gt;SVG mask demo&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
