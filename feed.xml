@@ -1884,7 +1884,7 @@ import &amp;#39;slick-carousel&amp;#39;;
 
 &lt;p&gt;Not expected! Clearly, there are some side effects from importing these packages in Webpack. Turns out, there were a couple issues here converging at once.&lt;/p&gt;
 
-&lt;p&gt;At this point, it would help to visualize what&amp;#39;s happening in our Webpack bundles. We can do this in development with &lt;a href="https://github.com/robertknight/webpack-bundle-size-analyzer"&gt;&lt;code&gt;webpack-bundler-analyzer&lt;/code&gt;&lt;/a&gt;. Adding this plugin to our Webpack config produces a separate local webserver that graphs the packages used in each bundle.&lt;/p&gt;
+&lt;p&gt;At this point, it would help to visualize what&amp;#39;s happening in our Webpack bundles. We can do this in development with &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer"&gt;&lt;code&gt;webpack-bundle-analyzer&lt;/code&gt;&lt;/a&gt;. Adding this plugin to our Webpack config produces a separate local webserver that graphs the packages used in each bundle.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#39;s what the analyzer produced before we added &lt;code&gt;slick-carousel&lt;/code&gt;:&lt;/p&gt;
 
