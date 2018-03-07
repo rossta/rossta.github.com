@@ -446,7 +446,7 @@ But something happened. The `chosen` plugin is missing:
 ```
 Not expected! Clearly, there are some side effects from importing these packages in Webpack. Turns out, there were a couple issues here converging at once.
 
-At this point, it would help to visualize what's happening in our Webpack bundles. We can do this in development with [`webpack-bundler-analyzer`](https://github.com/robertknight/webpack-bundle-size-analyzer). Adding this plugin to our Webpack config produces a separate local webserver that graphs the packages used in each bundle.
+At this point, it would help to visualize what's happening in our Webpack bundles. We can do this in development with [`webpack-bundle-analyzer`](https://github.com/webpack-contrib/webpack-bundle-analyzer). Adding this plugin to our Webpack config produces a separate local webserver that graphs the packages used in each bundle.
 
 Here's what the analyzer produced before we added `slick-carousel`:
 
