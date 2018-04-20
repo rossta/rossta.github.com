@@ -18,9 +18,7 @@ tags:
 
 I learned quite a bit (the hard way) helping my team switch our frontend JavaScript application [from the Rails asset pipeline to Webpack](/blog/from-sprockets-to-webpack.html). I decided to distill what I learned into a talk I would have wanted to see before I started. This is that talk.
 
-Presented on April 10, 2018 at [NYC.rb](https://www.meetup.com/NYC-rb/events/ztpmfpyxgbnb/).
-
-Upcoming: [RailsConf 2018](https://railsconf.com/program/sessions#session-549) in Pittsburgh on April 19.
+Presented at [RailsConf](https://railsconf.com/program/sessions#session-549) on April 19, 2018 and at [NYC.rb](https://www.meetup.com/NYC-rb/events/ztpmfpyxgbnb/) April 10, 2018.
 
 ### Resources
 For those interested to learn more about Webpack, here are some additional resources I've found helpful in my own learning.
