@@ -32,6 +32,7 @@ For those interested to learn more about Webpack, here are some additional resou
 * [Frontend Center: Webpack from First Principles](https://www.youtube.com/watch?v=WQue1AN93YU)
 * [Core Concepts](https://www.youtube.com/watch?v=AZPYL30ozCY)
 * [Understanding Webpack](https://www.youtube.com/watch?v=bm7RlNEcQM0)
+* [Webpack: It's Not Magic](https://www.youtube.com/watch?v=U_G7j-DnQCE)
 * [CSS Tricks: Let's talk about Webpack](https://css-tricks.com/video-screencasts/lets-talk-webpack/)
 * [What is Webpack How does it work?](https://www.youtube.com/watch?v=GU-2T7k9NfI)
 * [Everything is a Plugin, Mastering Webpack](https://www.youtube.com/watch?v=4tQiJaFzuJ8)
