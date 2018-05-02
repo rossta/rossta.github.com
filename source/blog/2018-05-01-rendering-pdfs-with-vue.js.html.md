@@ -17,33 +17,34 @@ I remember a time not too long ago when the possibility of rendering PDFs inline
 
 I was recently tasked with just this sort of project and I leveraged Vue.js and Webpack to put it all together. This post will demonstrate a simplified version of how I used Vue to render pages of existing PDFs to `<canvas>` elements. For a more full-featured implementation of PDF rendering in Vue, check out the [vue-pdf](https://github.com/FranckFreiburger/vue-pdf) package. For my project, I used with Vue.js `^2.5.0`, Webpack `^3.11.0`, and PDF.js `^1.10.0`; it may or may not work as described with different versions.
 
-### Using PDF.js
+### An incomplete intro to PDF.js
 
 Before we dive into the Vue implementation, a little introduction to the PDF.js api is useful. PDF.js is a JavaScript project by Mozilla that makes it easier to parse and render PDFs in HTML. It is comprised of three key pieces: Core, Display, and Viewer.
 
-The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. For our purposes, we won't need to interact with the Core layer api directly. It is worth knowing that this code is split out into a separate file, `pdf.worker.js` and Webpack does the heavy-lifting to load this file when needed.
+The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. For our purposes, we won't need to interact with the Core layer api directly. It is worth knowing that this code is split out into a separate file, `pdf.worker.js`, which is meant to run in its own web worker thread in the browser. Though it is quite possible to use another bundling strategy with PDF.js to make use of the worker script, it requires some configuration. In our case, using the Webpack distribution for PDF.js, this configuration step is handled for us behind the scenes and makes it much easier to get started.
 
-We also won't be using the Viewer layer, which is a basic user interface for viewing and paging through PDFs in Firefox (or other browsers with included extensions). This tutorial could be used as the basis for a Vue.js implementation of a more-sophisticated Viewer.
+The Viewer layer provides a basic user interface for viewing and paging through PDFs in Firefox (or other browsers with included extensions). We won't be using this piece; in fact, this tutorial could be used as the basis for a Vue.js implementation of alternative viewer.
 
 Most of our interaction with the PDF.js library will be at the Display layer, which provides the JavaScript API for retrieving and manipulating PDF document and page data. The API relies heavily on Promises, which we'll be incorporating into our Vue.js components. We'll also take advantage of dynamic imports to code split our use of PDF.js, since, at least for my purposes, I only want to load the PDF.js library on demand. Keeping it out of the main application Webpack bundle will help keep the initial page load time small.
+
+### Using PDF.js
 
 Here's a basic ES6 example of dynamically loading PDF.js to render an entire PDF document (without Vue):
 
 ```javascript
 import range from 'lodash/range'
 
-import('pdfjs/dist').then(pdfjs => {
+import('pdfjs-dist/webpack').then(pdfjs => {
   pdfjs
     .getDocument('wibble.pdf')
     .then(pdf => {
       const pagePromises = range(1, pdf.numPages).map(number => pdf.getPage(number))
       return Promise.all(pagePromises)
     })
-    .then(
-      pages => {
+    .then(pages => {
         const scale = 1.5
 
-        const canvases = pages.map(page => {
+        const canvases = pages.forEach(page => {
           const viewport = page.getViewport(scale)
 
           // Prepare canvas using PDF page dimensions
@@ -56,10 +57,8 @@ import('pdfjs/dist').then(pdfjs => {
           const renderContext = { canvasContext, viewport }
           page.render(renderContext).then(() => console.log('Page rendered'))
 
-          return canvas
+          document.body.appendChild(canvas)
         })
-
-        canvases.forEach(canvas => document.body.appendChild(canvas))
       },
       error => console.log('Error', error),
     )
@@ -73,21 +72,19 @@ Finally, for each page object, we create a separate `canvas` element and trigger
 
 ### Refactoring to Vue
 
-So far we have a pretty imperative snippet to render a PDF. While it works, we can imagine adding new features, like viewer controls, conditional page rendering on scroll, etc, could get unwieldy quickly. We can use Vue components to separate out the steps of PDF rendering, help make our code more declarative and easier to extend.
+So far we have a basic, imperative snippet to render a PDF. While it works, adding new features, like paging controls, zoom buttons, and conditional page rendering on scroll, could get unwieldy quickly. By refactoring to Vue components, we can get the benefit of reactivity and make our code more declarative and easier to extend.
 
-We'll start by wrapping the document and page objects.
+In pseudcode, our component architecture will resemble this:
 
-```javascript
-// PdfDocument.vue
-<template>
-  <div class="pdf-document">
-    <PDFPage
-      v-for="page in pages"
-      :key="page.pageNumber"
-      :page="page"
-      :scale="scale"
-      @rendered="pageRendered"
-    />
-  </div>
-</template>
+```html
+<PDFDocument>
+  <PDFPage :number="1" />
+  <PDFPage :number="2" />
+  <PDFPage :number="3" />
+  ...
+</PDFDocument>
 ```
+
+### The document component
+
+Since PDF.js will request data via an XMLHTTPRequest in JavaScript, typical crossdomain restrictions apply. For the purposes of this tutorial, we'll assume we have a URL to a PDF that can be retrieved either from our development server or from a server that allows Cross-Origin Resource Sharing (CORS) from our host.
