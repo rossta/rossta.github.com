@@ -21,7 +21,7 @@ I was recently tasked with just this sort of project and I leveraged Vue.js and 
 
 Before we dive into the Vue implementation, a little introduction to the PDF.js api is useful. PDF.js is a JavaScript project by Mozilla that makes it easier to parse and render PDFs in HTML. It is comprised of three key pieces: Core, Display, and Viewer.
 
-The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. For our purposes, we won't need to interact with the Core layer api directly. It is worth knowing that this code is split out into a separate file, `pdf.worker.js`, which is meant to run in its own web worker thread in the browser. Though it is quite possible to use another bundling strategy with PDF.js to make use of the worker script, it requires some configuration. In our case, using the Webpack distribution for PDF.js, this configuration step is handled for us behind the scenes and makes it much easier to get started.
+The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. This code is split out into a separate file, `pdf.worker.js`, which will run in its own web worker thread in the browser. Since we're using Webpack, it will handle bundling, fetching, and configuration of the worker script behind the scenes.
 
 The Viewer layer provides a basic user interface for viewing and paging through PDFs in Firefox (or other browsers with included extensions). We won't be using this piece; in fact, this tutorial could be used as the basis for a Vue.js implementation of alternative viewer.
 
