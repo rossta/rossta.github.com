@@ -43,9 +43,9 @@ jobs:
 
 workflows:
   version: 2
-  deploy:
+  deploy-site:
     jobs:
       - build:
-        filters:
-          branches:
-            only: develop
+          filters:
+            branches:
+              only: develop
