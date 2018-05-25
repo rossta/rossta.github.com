@@ -6,7 +6,7 @@
 1. Detecting a win in JS
 1. Deploying to S3
 
-# Proposed
+# Upcoming
 
 ## Vue
 
