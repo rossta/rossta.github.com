@@ -1,7 +1,7 @@
-@import "objects/article";
-@import "objects/code";
-@import "objects/top-bar";
-@import "objects/video";
+@import "article";
+@import "code";
+@import "top-bar";
+@import "video";
 
 .clear { clear: both; }
 .clearfix { overflow: auto; }
@@ -109,4 +109,3 @@ blockquote {
     font-size: inherit;
   }
 }
-
