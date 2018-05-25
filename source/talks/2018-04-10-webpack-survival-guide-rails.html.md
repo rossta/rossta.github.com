@@ -12,11 +12,17 @@ tags:
   - Webpack
 ---
 
+I learned quite a bit (the hard way) helping my team switch our frontend JavaScript application [from the Rails asset pipeline to Webpack](/blog/from-sprockets-to-webpack.html). I decided to distill what I learned into a talk I would have wanted to see before I started. This is that talk.
+
+<div class="video-container">
+  <iframe src="https://www.youtube.com/embed/fKOq5_2qj54" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<br />
+
 <script async class="speakerdeck-embed" data-id="5037cb0f063b425989d5287327d274e7" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
 [Star me on Speaker Deck!](https://speakerdeck.com/rossta/a-webpack-survival-guide-for-rails-developers)
-
-I learned quite a bit (the hard way) helping my team switch our frontend JavaScript application [from the Rails asset pipeline to Webpack](/blog/from-sprockets-to-webpack.html). I decided to distill what I learned into a talk I would have wanted to see before I started. This is that talk.
 
 Presented at [RailsConf](https://railsconf.com/program/sessions#session-549) on April 19, 2018 and at [NYC.rb](https://www.meetup.com/NYC-rb/events/ztpmfpyxgbnb/) April 10, 2018.
 
