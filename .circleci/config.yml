@@ -5,7 +5,7 @@ jobs:
       USER_NAME: rossta
       USER_EMAIL: ross@rossta.net
     docker:
-      - image: circleci/ruby:2.4.1-node
+      - image: circleci/ruby:2.4.2-node-browsers
 
     steps:
       - checkout
