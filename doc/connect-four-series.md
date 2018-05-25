@@ -1,15 +1,15 @@
 # Articles
 
 1. SVG pattern masking
-2. Introducing Vue.js
-3. Animating checkers
+1. Introducing Vue.js
+1. Animating checkers
+1. Detecting a win in JS
+1. Deploying to S3
 
 # Proposed
 
 ## Vue
 
-1. Detecting a win in JS
-1. Moving to vue-cli
 1. Using the vue-devtools
 1. Writing a Vue plugin
 1. Introducing vuex
