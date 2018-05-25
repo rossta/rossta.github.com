@@ -64,6 +64,7 @@ task :publish do |t, args|
       exit 1
     end
 
+    rm_r "dist"
     cp_r "build/.", "dist"
     rm_r "build"
   end
