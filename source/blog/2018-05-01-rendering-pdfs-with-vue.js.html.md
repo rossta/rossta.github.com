@@ -85,6 +85,207 @@ In pseudcode, our component architecture will resemble this:
 </PDFDocument>
 ```
 
+### Set up project
+
+Create vue project with vue-cli
+Add pdf.js library
+
 ### The document component
 
 Since PDF.js will request data via an XMLHTTPRequest in JavaScript, typical crossdomain restrictions apply. For the purposes of this tutorial, we'll assume we have a URL to a PDF that can be retrieved either from our development server or from a server that allows Cross-Origin Resource Sharing (CORS) from our host.
+
+### Rendering pages
+
+Render a document component starting with the app
+
+```html
+<template>
+  <div id="app">
+    <PDFDocument v-bind="{url, scale}" />
+  </div>
+</template>
+```
+```js
+export default {
+  // ...
+  data() {
+    return {
+      url: 'https://cdn.filestackcontent.com/5qOCEpKzQldoRsVatUPS',
+      scale: 2.5,
+    }
+  },
+}
+```
+
+The document component is responsible for fetching the pdf data through PDF.js and rendering the page components.
+
+```html
+<template>
+  <div class="pdf-document">
+    <PDFPage
+      v-for="page in pages"
+      v-bind="{scale}"
+      :key="page.pageNumber"
+      :page="page"
+    />
+  </div>
+</template>
+```
+```js
+import range from 'lodash/range';
+
+export default {
+  props: ['url', 'scale'],
+
+  data() {
+    return {
+      pdf: undefined,
+      pages: [],
+    };
+  },
+
+  mounted() {
+    this.fetchPDF();
+  },
+
+  methods: {
+    fetchPDF() {
+      import('pdfjs-dist/webpack').
+        then(pdfjs => pdfjs.getDocument(this.url)).
+        then(pdf => (this.pdf = pdf)).
+        then(() => log('pdf fetched'))
+    },
+  },
+
+  watch: {
+    pdf: {
+      handler(pdf) {
+        this.pages = [];
+        const promises = range(1, pdf.numPages).
+          map(number => pdf.getPage(number));
+
+        Promise.all(promises).
+          then(pages => (this.pages = pages)).
+          then(() => log('pages fetched'))
+      }
+    },
+  },
+};
+```
+### Page rendering
+
+Render page on to canvas
+
+Setting viewport on mount
+Building up canvas attributes
+* canvas size vs actual size
+* pixel ratio
+Page object render method
+Teardown
+
+```js
+const CSS_UNITS = 96.0  / 72.0;
+
+export default {
+  props: ['page', 'scale'],
+
+  computed: {
+    actualSizeViewport() {
+      return this.viewport.clone({scale: this.scale * CSS_UNITS});
+    },
+
+    canvasStyle() {
+      const {width: actualSizeWidth, height: actualSizeHeight} = this.actualSizeViewport;
+      const pixelRatio = window.devicePixelRatio || 1;
+      const [pixelWidth, pixelHeight] = [actualSizeWidth, actualSizeHeight].map(dim => Math.ceil(dim / pixelRatio));
+      return `width: ${pixelWidth}px; height: ${pixelHeight}px;`
+    },
+
+    canvasAttrs() {
+      let {width, height} = this.viewport;
+      [width, height] = [width, height].map(dim => Math.ceil(dim));
+
+      const style = this.canvasStyle;
+
+      return {
+        width,
+        height,
+        style,
+        class: 'pdf-page',
+      };
+    },
+
+    pageNumber() {
+      return this.page.pageNumber;
+    },
+  },
+
+  methods: {
+    renderPage() {
+      this.$nextTick(() => {
+        // PDFPageProxy#render
+        // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
+        this.renderTask = this.page.render(this.getRenderContext());
+        this.renderTask.
+          then(() => this.$emit('rendered', this.page)).
+          then(() => log(`Page ${this.pageNumber} rendered`));
+      });
+    },
+
+    destroyPage(page) {
+      if (!page) return;
+
+      // PDFPageProxy#_destroy
+      // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
+      page._destroy();
+
+      // RenderTask#cancel
+      // https://mozilla.github.io/pdf.js/api/draft/RenderTask.html
+      if (this.renderTask) this.renderTask.cancel();
+    },
+
+    getRenderContext() {
+      const {viewport} = this;
+      const canvasContext = this.$el.getContext('2d');
+
+      return {canvasContext, viewport};
+    },
+  },
+
+  watch: {
+    page(page, oldPage) {
+      this.destroyPage(oldPage);
+    },
+  },
+
+  created() {
+    // PDFPageProxy#getViewport
+    // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
+    this.viewport = this.page.getViewport(this.scale * CSS_UNITS);
+  },
+
+  mounted() {
+    log(`Page ${this.pageNumber} mounted`);
+    this.renderPage();
+  },
+
+  beforeDestroy() {
+    this.destroyPage(this.page);
+  },
+
+  render(h) {
+    const {canvasAttrs: attrs} = this;
+    return h('canvas', {attrs});
+  },
+};
+```
+
+### Adding controls
+
+```html
+<PDFViewer>
+  <PDFZoom />
+  <PDFPaginator />
+  <PDFDocument />
+</PDFViewer>
+```
