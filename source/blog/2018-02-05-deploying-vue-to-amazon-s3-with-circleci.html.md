@@ -117,7 +117,7 @@ test:
 
 deployment:
   s3up:
-    branch: develop
+    branch: master
     commands:
       - s3deploy -source=dist/ -region=us-west-2 -bucket=connect-four-abcdefg
 ```
