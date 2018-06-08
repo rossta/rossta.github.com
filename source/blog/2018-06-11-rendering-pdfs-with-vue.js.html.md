@@ -131,6 +131,8 @@ The document component is responsible for fetching the pdf data through PDF.js a
   </div>
 </template>
 ```
+
+
 ```js
 import range from 'lodash/range';
 
@@ -172,6 +174,7 @@ export default {
   },
 };
 ```
+
 ### Page rendering
 
 Render page on to canvas
