@@ -19,3 +19,4 @@ source/blog/.Ulysses-Group.plist
 /tmp
 /dist
 /.tmp
+/vendor
