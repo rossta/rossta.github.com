@@ -200,4 +200,5 @@ workflows:
             branches:
               only: master
 ```
-CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!
+
+By the way, this blog is also a static website built and published to Github pages via CircleCI. I recently upgraded to its config to 2.0, which you can [check out here](https://github.com/rossta/rossta.github.com/blob/develop/.circleci/config.yml) if you're interested. CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!
