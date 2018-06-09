@@ -2,7 +2,7 @@
 title: Deploying Vue with CircleCI 2.0
 author: Ross Kaffenberger
 published: true
-summary: A continuous deployment solution for Vue.js
+summary: An updated continuous deployment solution for Vue.js
 description: Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy
 pull_image: 'blog/stock/hieu-vu-minh-bridge-unsplash.jpg'
 pull_image_caption: Photo by Hieu Vu Minh on Unsplash
