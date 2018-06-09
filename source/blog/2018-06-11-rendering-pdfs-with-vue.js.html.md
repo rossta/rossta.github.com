@@ -155,7 +155,7 @@ export default {
       import('pdfjs-dist/webpack').
         then(pdfjs => pdfjs.getDocument(this.url)).
         then(pdf => (this.pdf = pdf)).
-        then(() => log('pdf fetched'))
+        then(() => log('pdf fetched'));
     },
   },
 
@@ -168,7 +168,7 @@ export default {
 
         Promise.all(promises).
           then(pages => (this.pages = pages)).
-          then(() => log('pages fetched'))
+          then(() => log('pages fetched'));
       }
     },
   },
