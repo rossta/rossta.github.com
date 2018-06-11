@@ -64,8 +64,10 @@ task :publish do |t, args|
       exit 1
     end
 
+    binding.pry
     rm_r "dist"
     cp_r "build/.", "dist"
+    binding.pry
     rm_r "build"
   end
 
