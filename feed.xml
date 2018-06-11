@@ -101,7 +101,7 @@ jobs:
           paths: dist
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This job will build from the &lt;code&gt;circleci/node:8.11.2&lt;/code&gt; base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needd for most builds. (&lt;a href="https://circleci.com/docs/2.0/circleci-images/"&gt;Here&amp;#39;s a list of pre-built CircleCI Docker images&lt;/a&gt;). The key entries here include &lt;code&gt;restore_cache&lt;/code&gt; and &lt;code&gt;save_cache&lt;/code&gt; keys that will help ensure the build doesn&amp;#39;t need to install node modules on each build when the &lt;code&gt;yarn.lock&lt;/code&gt; file hasn&amp;#39;t changed. More importantly, the &lt;code&gt;attach_workspace&lt;/code&gt; and &lt;code&gt;persist_to_workspace&lt;/code&gt; entries allow us to share the build output to the &lt;code&gt;dist/&lt;/code&gt; directory across jobs.&lt;/p&gt;
+&lt;p&gt;This job will build from the &lt;code&gt;circleci/node:8.11.2&lt;/code&gt; base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needed for most builds. (&lt;a href="https://circleci.com/docs/2.0/circleci-images/"&gt;Here&amp;#39;s a list of pre-built CircleCI Docker images&lt;/a&gt;). The key entries here include &lt;code&gt;restore_cache&lt;/code&gt; and &lt;code&gt;save_cache&lt;/code&gt;. These entries ensure the build preserve previously installed node modules when the &lt;code&gt;yarn.lock&lt;/code&gt; file hasn&amp;#39;t changed. More importantly, the &lt;code&gt;attach_workspace&lt;/code&gt; and &lt;code&gt;persist_to_workspace&lt;/code&gt; entries allow us to share the build output to the &lt;code&gt;dist/&lt;/code&gt; directory across jobs.&lt;/p&gt;
 
       &lt;h3 id="the-deploy-job" class="title"&gt;
         &lt;a name="the-deploy-job" class="anchor" href="#the-deploy-job"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -233,8 +233,6 @@ workflows:
             branches:
               only: master
 &lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It&amp;#39;s worth mentioning that this configuration could easily be adapted to deploy a Vue.js application to a different target by replacing the deploy job with a different set of applicable steps.&lt;/p&gt;
 
 &lt;p&gt;By the way, this blog is also a static website built and published to Github pages via CircleCI. I recently upgraded to its config to 2.0, which you can &lt;a href="https://github.com/rossta/rossta.github.com/blob/develop/.circleci/config.yml"&gt;check out here&lt;/a&gt; if you&amp;#39;re interested. CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!&lt;/p&gt;
 </content>

@@ -159,7 +159,7 @@ jobs:
           paths: dist
 </code></pre>
 
-<p>This job will build from the <code>circleci/node:8.11.2</code> base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needd for most builds. (<a href="https://circleci.com/docs/2.0/circleci-images/">Here&#39;s a list of pre-built CircleCI Docker images</a>). The key entries here include <code>restore_cache</code> and <code>save_cache</code> keys that will help ensure the build doesn&#39;t need to install node modules on each build when the <code>yarn.lock</code> file hasn&#39;t changed. More importantly, the <code>attach_workspace</code> and <code>persist_to_workspace</code> entries allow us to share the build output to the <code>dist/</code> directory across jobs.</p>
+<p>This job will build from the <code>circleci/node:8.11.2</code> base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needed for most builds. (<a href="https://circleci.com/docs/2.0/circleci-images/">Here&#39;s a list of pre-built CircleCI Docker images</a>). The key entries here include <code>restore_cache</code> and <code>save_cache</code>. These entries ensure the build preserve previously installed node modules when the <code>yarn.lock</code> file hasn&#39;t changed. More importantly, the <code>attach_workspace</code> and <code>persist_to_workspace</code> entries allow us to share the build output to the <code>dist/</code> directory across jobs.</p>
 
       <h3 id="the-deploy-job" class="title">
         <a name="the-deploy-job" class="anchor" href="#the-deploy-job">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -291,8 +291,6 @@ workflows:
             branches:
               only: master
 </code></pre>
-
-<p>It&#39;s worth mentioning that this configuration could easily be adapted to deploy a Vue.js application to a different target by replacing the deploy job with a different set of applicable steps.</p>
 
 <p>By the way, this blog is also a static website built and published to Github pages via CircleCI. I recently upgraded to its config to 2.0, which you can <a href="https://github.com/rossta/rossta.github.com/blob/develop/.circleci/config.yml">check out here</a> if you&#39;re interested. CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!</p>
 
