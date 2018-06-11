@@ -84,7 +84,7 @@ jobs:
           paths: dist
 ```
 
-This job will build from the `circleci/node:8.11.2` base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needd for most builds. ([Here's a list of pre-built CircleCI Docker images](https://circleci.com/docs/2.0/circleci-images/)). The key entries here include `restore_cache` and `save_cache` keys that will help ensure the build doesn't need to install node modules on each build when the `yarn.lock` file hasn't changed. More importantly, the `attach_workspace` and `persist_to_workspace` entries allow us to share the build output to the `dist/` directory across jobs.
+This job will build from the `circleci/node:8.11.2` base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needed for most builds. ([Here's a list of pre-built CircleCI Docker images](https://circleci.com/docs/2.0/circleci-images/)). The key entries here include `restore_cache` and `save_cache`. These entries ensure the build preserve previously installed node modules when the `yarn.lock` file hasn't changed. More importantly, the `attach_workspace` and `persist_to_workspace` entries allow us to share the build output to the `dist/` directory across jobs.
 
 ### The deploy job
 
@@ -202,6 +202,5 @@ workflows:
               only: master
 ```
 
-It's worth mentioning that this configuration could easily be adapted to deploy a Vue.js application to a different target by replacing the deploy job with a different set of applicable steps.
 
 By the way, this blog is also a static website built and published to Github pages via CircleCI. I recently upgraded to its config to 2.0, which you can [check out here](https://github.com/rossta/rossta.github.com/blob/develop/.circleci/config.yml) if you're interested. CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!
