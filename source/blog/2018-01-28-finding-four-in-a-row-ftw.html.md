@@ -10,6 +10,7 @@ series: 'Connect Four'
 category: Code
 tags:
   - Vue
+  - JavaScript
 ---
 
 With the Connect Four game we created in the previous post, we're able to use [Vue transitions](https://vuejs.org/v2/guide/transitions.html) to animate checkers dropping into place on the game board. Though we're able to add checkers, we still weren't declaring the winner when four-in-a-row had been achieved—kind of the whole point of the game. We'll tackle that in this post.

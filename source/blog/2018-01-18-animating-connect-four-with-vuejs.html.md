@@ -11,6 +11,7 @@ category: Code
 tags:
   - SVG
   - Vue
+  - JavaScript
 ---
 
 When we left off our [Connect Four game last](/blog/basic-connect-four-with-vuejs.html), we used Vue.js components to convert a static HTML view of the Connect Four board into a playable
