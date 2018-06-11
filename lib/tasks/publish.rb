@@ -52,8 +52,8 @@ task :publish do |t, args|
   message = "Site updated to #{head}"
 
   mkdir_p ".tmp"
-  mkdir_p "dist"
-  Dir.chdir "dist" do
+  mkdir_p "build"
+  Dir.chdir "build" do
     git_initialize
     git_update
   end
@@ -63,15 +63,9 @@ task :publish do |t, args|
       puts "The build failed, stopping deploy. Please fix build errors before re-deploying."
       exit 1
     end
-
-    binding.pry
-    rm_r "dist"
-    cp_r "build/.", "dist"
-    binding.pry
-    rm_r "build"
   end
 
-  Dir.chdir "dist" do
+  Dir.chdir "build" do
     system "git add -A"
     system "git commit -m '#{message.gsub("'", "\\'")}'"
     system "git push origin #{branch}"
