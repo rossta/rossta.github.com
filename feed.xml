@@ -19,9 +19,9 @@
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html">&lt;p&gt;I recently upgraded my &lt;a href="https://github.com/rossta/connect-four-vue"&gt;Connect Four&lt;/a&gt; Vue.js application to build on CircleCI 2.0 . In my &lt;a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"&gt;previous post&lt;/a&gt;, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;I recently upgraded my &lt;a href="https://github.com/rossta/connect-four-vue"&gt;Connect Four&lt;/a&gt; Vue.js application to build on CircleCI 2.0 . In my &lt;a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"&gt;previous post&lt;/a&gt;, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application as a static website. Now that &lt;a href="https://circleci.com/blog/sunsetting-1-0/"&gt;CircleCI is sunsetting 1.0&lt;/a&gt;, I revisit my configuration and update it for 2.0. Here&amp;#39;s how I did it.&lt;/p&gt;
+    <content type="html">&lt;p&gt;I recently upgraded my &lt;a href="https://github.com/rossta/connect-four-vue"&gt;Connect Four&lt;/a&gt; Vue.js application to build on CircleCI 2.0 . In my &lt;a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"&gt;previous post&lt;/a&gt;, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application as a static website. But now that config is only good for another few months: &lt;a href="https://circleci.com/blog/sunsetting-1-0/"&gt;CircleCI is sunsetting 1.0&lt;/a&gt;. Here&amp;#39;s how I upgraded.&lt;/p&gt;
 
-&lt;p&gt;The basic steps of the build are the same: once I push changes to GitHub, CircleCI will detect those changes and trigger a build. That build will bundle the app using the &lt;code&gt;vue-cli&lt;/code&gt; command mapped to &lt;code&gt;yarn run build&lt;/code&gt;. The assets output from that step will then be uploaded to S3 using the &lt;code&gt;s3deploy&lt;/code&gt; golang package only if the build is running against master.&lt;/p&gt;
+&lt;p&gt;The basic steps of the build are the same: once I push changes to GitHub, CircleCI will detect those changes and trigger a build. It will bundle the app using the &lt;code&gt;vue-cli&lt;/code&gt;. The assets output from that step will then be uploaded to S3 using the &lt;code&gt;s3deploy&lt;/code&gt; golang package only if the build is running against master.&lt;/p&gt;
 
       &lt;h3 id="the-old-config" class="title"&gt;
         &lt;a name="the-old-config" class="anchor" href="#the-old-config"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -54,7 +54,7 @@ dependencies:
 
 test:
   override:
-    - yarn run build
+    - yarn build
 
 deployment:
   s3up:
@@ -95,13 +95,13 @@ jobs:
           key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
           paths:
             - ./node_modules
-      - run: yarn run build
+      - run: yarn build
       - persist_to_workspace:
           root: .
           paths: dist
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This job will build from the &lt;code&gt;circleci/node:8.11.2&lt;/code&gt; base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needed for most builds. (&lt;a href="https://circleci.com/docs/2.0/circleci-images/"&gt;Here&amp;#39;s a list of pre-built CircleCI Docker images&lt;/a&gt;). The key entries here include &lt;code&gt;restore_cache&lt;/code&gt; and &lt;code&gt;save_cache&lt;/code&gt;. These entries ensure the build preserve previously installed node modules when the &lt;code&gt;yarn.lock&lt;/code&gt; file hasn&amp;#39;t changed. More importantly, the &lt;code&gt;attach_workspace&lt;/code&gt; and &lt;code&gt;persist_to_workspace&lt;/code&gt; entries allow us to share the build output to the &lt;code&gt;dist/&lt;/code&gt; directory across jobs.&lt;/p&gt;
+&lt;p&gt;This job will build from the &lt;code&gt;circleci/node:8.11.2&lt;/code&gt; base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needed for most builds. (&lt;a href="https://circleci.com/docs/2.0/circleci-images/"&gt;Here&amp;#39;s a list of pre-built CircleCI Docker images&lt;/a&gt;). Useful entries here include &lt;code&gt;restore_cache&lt;/code&gt; and &lt;code&gt;save_cache&lt;/code&gt;, which together ensure the build preserve previously installed node modules when the &lt;code&gt;yarn.lock&lt;/code&gt; file hasn&amp;#39;t changed. Most importantly, the &lt;code&gt;attach_workspace&lt;/code&gt; and &lt;code&gt;persist_to_workspace&lt;/code&gt; entries allow us to share the build output to the &lt;code&gt;dist/&lt;/code&gt; directory across jobs.&lt;/p&gt;
 
       &lt;h3 id="the-deploy-job" class="title"&gt;
         &lt;a name="the-deploy-job" class="anchor" href="#the-deploy-job"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -111,7 +111,7 @@ jobs:
         The deploy job
       &lt;/h3&gt;
     
-&lt;p&gt;Here&amp;#39;s the configuration used to upload assets to S3.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s the configuration for the deploy job used to upload assets to S3.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="yaml"&gt;version: 2
 jobs:
@@ -150,7 +150,7 @@ jobs:
         The workflow
       &lt;/h3&gt;
     
-&lt;p&gt;Finally, to tie these jobs together, I&amp;#39;m using a workflow as shown below:&lt;/p&gt;
+&lt;p&gt;Finally, to tie these jobs together to run the build on all branches and only deploy on &lt;code&gt;master&lt;/code&gt;, I&amp;#39;m using a workflow as shown below:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="yaml"&gt;version: 2
 # ...
@@ -195,7 +195,7 @@ jobs:
           key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
           paths:
             - ./node_modules
-      - run: yarn run build
+      - run: yarn build
       - persist_to_workspace:
           root: .
           paths: dist
