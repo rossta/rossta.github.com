@@ -1,0 +1,432 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Deploying Vue with CircleCI 2.0 - rossta.net</title>
+<meta name="description" content="Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy" />
+<meta name="keywords" content="Vue" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/hieu-vu-minh-bridge-unsplash-7e35343a.jpg" />
+<meta name="twitter:title" content="Deploying Vue with CircleCI 2.0" />
+<meta property="og:description" content="Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/hieu-vu-minh-bridge-unsplash-7e35343a.jpg" />
+<meta property="og:title" content="Deploying Vue with CircleCI 2.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" />
+    <link rel="icon"                                  href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
+
+    <link rel="mask-icon" href="/safari-pinned-tab-5cdca7ae.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app.bundle-3f3ff3db.css" rel="stylesheet" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Deploying Vue with CircleCI 2.0
+  </h1>
+    <h3>
+      An updated continuous deployment solution for Vue.js
+    </h3>
+</header>
+
+        <figure>
+          <img src="/assets/images/blog/stock/hieu-vu-minh-bridge-unsplash-7e35343a.jpg" alt="Hieu vu minh bridge unsplash" />
+            <figcaption>Photo by Hieu Vu Minh on Unsplash</figcaption>
+        </figure>
+      <p>I recently upgraded my <a href="https://github.com/rossta/connect-four-vue">Connect Four</a> Vue.js application to build on CircleCI 2.0 . In my <a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html">previous post</a>, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application as a static website. Now that <a href="https://circleci.com/blog/sunsetting-1-0/">CircleCI is sunsetting 1.0</a>, I revisit my configuration and update it for 2.0. Here&#39;s how I did it.</p>
+
+<p>The basic steps of the build are the same: once I push changes to GitHub, CircleCI will detect those changes and trigger a build. That build will bundle the app using the <code>vue-cli</code> command mapped to <code>yarn run build</code>. The assets output from that step will then be uploaded to S3 using the <code>s3deploy</code> golang package only if the build is running against master.</p>
+
+      <h3 id="the-old-config" class="title">
+        <a name="the-old-config" class="anchor" href="#the-old-config">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The old config
+      </h3>
+    
+<p>For reference, here is the old configuration I had been using to deploy the application on CircleCI 1.0.</p>
+
+<pre><code class="yaml">machine:
+  environment:
+    CIRCLE_BUILD_DIR: $HOME/$CIRCLE_PROJECT_REPONAME
+    PATH: $PATH:$CIRCLE_BUILD_DIR/bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin&quot;
+
+  post:
+    - mkdir -p $CIRCLE_BUILD_DIR/bin
+  node:
+    version: 8.9.1
+
+dependencies:
+  pre:
+    - go get -v github.com/bep/s3deploy
+  override:
+    - yarn
+  cache_directories:
+    - ~/.cache/yarn
+    - bin
+
+test:
+  override:
+    - yarn run build
+
+deployment:
+  s3up:
+    branch: master
+    commands:
+      - s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
+</code></pre>
+
+<p>CircleCI 2.0 offers a number of features to give developers more control and flexibility. This does mean that configuration is more complex than it was in 1.0. A couple of key improvements include <a href="https://circleci.com/blog/introducing-workflows-on-circleci-2-0/">workflows</a> and the ability to run builds Docker containers. We&#39;ll take advantage of both to deploy Vue.js to S3.</p>
+
+<p>Workflows are useful when you need to split a build up into a number of jobs. Those jobs may have different dependencies, or in some cases, may run in parallel. Since I want to bundle assets on all branches, but only deploy from the primary (<code>master</code>) branch, it makes sense for me to split my CircleCI 2.0 configuration into two jobs, which I&#39;ll call <code>build</code> and <code>deploy</code>. It&#39;s worth noting that, even though these jobs must share resources (the bundled assets), I can configure them to run from different Docker containers; this is necessary because the primary language dependency in the build step is node.js and in the deploy phase, it&#39;s golang.</p>
+
+      <h3 id="the-build-job" class="title">
+        <a name="the-build-job" class="anchor" href="#the-build-job">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The build job
+      </h3>
+    
+<p>Here&#39;s what the build step looks like in my new CircleCI 2.0 config:</p>
+
+<pre><code class="yaml">version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.11.2
+    parallelism: 1
+    working_directory: ~/rossta/connect-four-vue
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/rossta/connect-four-vue
+      - restore_cache:
+          key: v1-yarn-{{ checksum &quot;yarn.lock&quot; }}
+      - run: yarn install
+      - save_cache:
+          key: v1-yarn-{{ checksum &quot;yarn.lock&quot; }}
+          paths:
+            - ./node_modules
+      - run: yarn run build
+      - persist_to_workspace:
+          root: .
+          paths: dist
+</code></pre>
+
+<p>This job will build from the <code>circleci/node:8.11.2</code> base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needd for most builds. (<a href="https://circleci.com/docs/2.0/circleci-images/">Here&#39;s a list of pre-built CircleCI Docker images</a>). The key entries here include <code>restore_cache</code> and <code>save_cache</code> keys that will help ensure the build doesn&#39;t need to install node modules on each build when the <code>yarn.lock</code> file hasn&#39;t changed. More importantly, the <code>attach_workspace</code> and <code>persist_to_workspace</code> entries allow us to share the build output to the <code>dist/</code> directory across jobs.</p>
+
+      <h3 id="the-deploy-job" class="title">
+        <a name="the-deploy-job" class="anchor" href="#the-deploy-job">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The deploy job
+      </h3>
+    
+<p>Here&#39;s the configuration used to upload assets to S3.</p>
+
+<pre><code class="yaml">version: 2
+jobs:
+  # ...
+  deploy:
+    docker:
+      - image: circleci/golang:1.9.6
+    parallelism: 1
+    working_directory: ~/rossta/connect-four-vue
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/rossta/connect-four-vue
+      - restore_cache:
+          key: v1-pkg-cache
+      - run: go get -v github.com/bep/s3deploy
+      - save_cache:
+          key: v1-pkg-cache
+          paths:
+            - /go/pkg
+      - run:
+          name: Deploy to S3
+          command: |
+            s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
+</code></pre>
+
+<p>For the deploy, we need a golang base image to run the <code>s3deploy</code> command. A key step in this job is the <code>attach_workspace</code> entry, which will contain the <code>dist/</code> build output we persisted in the build job. That <code>dist/</code> directory is the source given to the <code>s3deploy</code> command. The deploy job also specifies <code>restore_cache</code> and <code>save_cache</code> for the <code>s3deploy</code> go package.</p>
+
+<p>One piece not shown in the config file are the AWS credentials needed to upload the assets to S3. The <code>s3deploy</code> command will implicitly look for the environment variables <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code>. Since I do not want to publish these credentials to Github, I added them through the CircleCI web interface using <a href="https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project">these instructions</a>.</p>
+
+      <h3 id="the-workflow" class="title">
+        <a name="the-workflow" class="anchor" href="#the-workflow">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The workflow
+      </h3>
+    
+<p>Finally, to tie these jobs together, I&#39;m using a workflow as shown below:</p>
+
+<pre><code class="yaml">version: 2
+# ...
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+</code></pre>
+
+      <h3 id="putting-it-all-together" class="title">
+        <a name="putting-it-all-together" class="anchor" href="#putting-it-all-together">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Putting it all together
+      </h3>
+    
+<p>Here&#39;s the complete configuration for CircleCI 2.0 at the time of this writing, located at <a href="https://github.com/rossta/connect-four-vue/blob/master/.circleci/config.yml"><code>.circleci/config.yml</code></a>.</p>
+
+<pre><code class="yaml">version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.11.2
+    parallelism: 1
+    working_directory: ~/rossta/connect-four-vue
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/rossta/connect-four-vue
+      - restore_cache:
+          key: v1-yarn-{{ checksum &quot;yarn.lock&quot; }}
+      - run: yarn install
+      - save_cache:
+          key: v1-yarn-{{ checksum &quot;yarn.lock&quot; }}
+          paths:
+            - ./node_modules
+      - run: yarn run build
+      - persist_to_workspace:
+          root: .
+          paths: dist
+
+  deploy:
+    docker:
+      - image: circleci/golang:1.9.6
+    parallelism: 1
+    working_directory: ~/rossta/connect-four-vue
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/rossta/connect-four-vue
+      - restore_cache:
+          key: v1-pkg-cache
+      - run: go get -v github.com/bep/s3deploy
+      - save_cache:
+          key: v1-pkg-cache
+          paths:
+            - /go/pkg
+      - run:
+          name: Deploy to S3
+          command: |
+            s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+</code></pre>
+
+<p>By the way, this blog is also a static website built and published to Github pages via CircleCI. I recently upgraded to its config to 2.0, which you can <a href="https://github.com/rossta/rossta.github.com/blob/develop/.circleci/config.yml">check out here</a> if you&#39;re interested. CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!</p>
+
+    </article>
+    <section class="margin-bottom double">
+      <a href="https://twitter.com/intent/tweet?text=Deploying%20Vue%20with%20CircleCI%202.0&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fdeploying-vue-with-circleci-2.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
+    </section>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP" value="https://rossta.net/blog/2018-06-07-deploying-vue-with-circleci-2.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2018-06-07-deploying-vue-with-circleci-2.html" />
+      <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Vue" />
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <section class="margin-bottom double">
+      <p>
+          Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
+        Published on Jun  7, 2018
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "deploying-vue-with-circleci-2";
+    var disqus_title      = "Deploying Vue with CircleCI 2.0";
+    var disqus_url        = "https://rossta.net/blog/deploying-vue-with-circleci-2.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/n-1-is-a-rails-feature.html">N+1 is a Rails feature</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/vue.html">Vue</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2018 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/runtime.bundle-2352c808.js"></script><script src="/assets/javascripts/vendor.bundle-755438f2.js"></script><script src="/assets/javascripts/app.bundle-efbfc6c9.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>

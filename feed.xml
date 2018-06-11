@@ -5,16 +5,244 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-02-05T00:00:00+00:00</updated>
+  <updated>2018-06-06T20:00:00-04:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
+    <title>Deploying Vue with CircleCI 2.0</title>
+    <link rel="alternate" href="/blog/deploying-vue-with-circleci-2.html"/>
+    <id>/blog/deploying-vue-with-circleci-2.html</id>
+    <published>2018-06-06T20:00:00-04:00</published>
+    <updated>2018-06-06T20:00:00-04:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;I recently upgraded my &lt;a href="https://github.com/rossta/connect-four-vue"&gt;Connect Four&lt;/a&gt; Vue.js application to build on CircleCI 2.0 . In my &lt;a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"&gt;previous post&lt;/a&gt;, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;I recently upgraded my &lt;a href="https://github.com/rossta/connect-four-vue"&gt;Connect Four&lt;/a&gt; Vue.js application to build on CircleCI 2.0 . In my &lt;a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"&gt;previous post&lt;/a&gt;, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application as a static website. Now that &lt;a href="https://circleci.com/blog/sunsetting-1-0/"&gt;CircleCI is sunsetting 1.0&lt;/a&gt;, I revisit my configuration and update it for 2.0. Here&amp;#39;s how I did it.&lt;/p&gt;
+
+&lt;p&gt;The basic steps of the build are the same: once I push changes to GitHub, CircleCI will detect those changes and trigger a build. That build will bundle the app using the &lt;code&gt;vue-cli&lt;/code&gt; command mapped to &lt;code&gt;yarn run build&lt;/code&gt;. The assets output from that step will then be uploaded to S3 using the &lt;code&gt;s3deploy&lt;/code&gt; golang package only if the build is running against master.&lt;/p&gt;
+
+      &lt;h3 id="the-old-config" class="title"&gt;
+        &lt;a name="the-old-config" class="anchor" href="#the-old-config"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The old config
+      &lt;/h3&gt;
+    
+&lt;p&gt;For reference, here is the old configuration I had been using to deploy the application on CircleCI 1.0.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="yaml"&gt;machine:
+  environment:
+    CIRCLE_BUILD_DIR: $HOME/$CIRCLE_PROJECT_REPONAME
+    PATH: $PATH:$CIRCLE_BUILD_DIR/bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin&amp;quot;
+
+  post:
+    - mkdir -p $CIRCLE_BUILD_DIR/bin
+  node:
+    version: 8.9.1
+
+dependencies:
+  pre:
+    - go get -v github.com/bep/s3deploy
+  override:
+    - yarn
+  cache_directories:
+    - ~/.cache/yarn
+    - bin
+
+test:
+  override:
+    - yarn run build
+
+deployment:
+  s3up:
+    branch: master
+    commands:
+      - s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;CircleCI 2.0 offers a number of features to give developers more control and flexibility. This does mean that configuration is more complex than it was in 1.0. A couple of key improvements include &lt;a href="https://circleci.com/blog/introducing-workflows-on-circleci-2-0/"&gt;workflows&lt;/a&gt; and the ability to run builds Docker containers. We&amp;#39;ll take advantage of both to deploy Vue.js to S3.&lt;/p&gt;
+
+&lt;p&gt;Workflows are useful when you need to split a build up into a number of jobs. Those jobs may have different dependencies, or in some cases, may run in parallel. Since I want to bundle assets on all branches, but only deploy from the primary (&lt;code&gt;master&lt;/code&gt;) branch, it makes sense for me to split my CircleCI 2.0 configuration into two jobs, which I&amp;#39;ll call &lt;code&gt;build&lt;/code&gt; and &lt;code&gt;deploy&lt;/code&gt;. It&amp;#39;s worth noting that, even though these jobs must share resources (the bundled assets), I can configure them to run from different Docker containers; this is necessary because the primary language dependency in the build step is node.js and in the deploy phase, it&amp;#39;s golang.&lt;/p&gt;
+
+      &lt;h3 id="the-build-job" class="title"&gt;
+        &lt;a name="the-build-job" class="anchor" href="#the-build-job"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The build job
+      &lt;/h3&gt;
+    
+&lt;p&gt;Here&amp;#39;s what the build step looks like in my new CircleCI 2.0 config:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="yaml"&gt;version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.11.2
+    parallelism: 1
+    working_directory: ~/rossta/connect-four-vue
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/rossta/connect-four-vue
+      - restore_cache:
+          key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
+      - run: yarn install
+      - save_cache:
+          key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
+          paths:
+            - ./node_modules
+      - run: yarn run build
+      - persist_to_workspace:
+          root: .
+          paths: dist
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This job will build from the &lt;code&gt;circleci/node:8.11.2&lt;/code&gt; base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needd for most builds. (&lt;a href="https://circleci.com/docs/2.0/circleci-images/"&gt;Here&amp;#39;s a list of pre-built CircleCI Docker images&lt;/a&gt;). The key entries here include &lt;code&gt;restore_cache&lt;/code&gt; and &lt;code&gt;save_cache&lt;/code&gt; keys that will help ensure the build doesn&amp;#39;t need to install node modules on each build when the &lt;code&gt;yarn.lock&lt;/code&gt; file hasn&amp;#39;t changed. More importantly, the &lt;code&gt;attach_workspace&lt;/code&gt; and &lt;code&gt;persist_to_workspace&lt;/code&gt; entries allow us to share the build output to the &lt;code&gt;dist/&lt;/code&gt; directory across jobs.&lt;/p&gt;
+
+      &lt;h3 id="the-deploy-job" class="title"&gt;
+        &lt;a name="the-deploy-job" class="anchor" href="#the-deploy-job"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The deploy job
+      &lt;/h3&gt;
+    
+&lt;p&gt;Here&amp;#39;s the configuration used to upload assets to S3.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="yaml"&gt;version: 2
+jobs:
+  # ...
+  deploy:
+    docker:
+      - image: circleci/golang:1.9.6
+    parallelism: 1
+    working_directory: ~/rossta/connect-four-vue
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/rossta/connect-four-vue
+      - restore_cache:
+          key: v1-pkg-cache
+      - run: go get -v github.com/bep/s3deploy
+      - save_cache:
+          key: v1-pkg-cache
+          paths:
+            - /go/pkg
+      - run:
+          name: Deploy to S3
+          command: |
+            s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the deploy, we need a golang base image to run the &lt;code&gt;s3deploy&lt;/code&gt; command. A key step in this job is the &lt;code&gt;attach_workspace&lt;/code&gt; entry, which will contain the &lt;code&gt;dist/&lt;/code&gt; build output we persisted in the build job. That &lt;code&gt;dist/&lt;/code&gt; directory is the source given to the &lt;code&gt;s3deploy&lt;/code&gt; command. The deploy job also specifies &lt;code&gt;restore_cache&lt;/code&gt; and &lt;code&gt;save_cache&lt;/code&gt; for the &lt;code&gt;s3deploy&lt;/code&gt; go package.&lt;/p&gt;
+
+&lt;p&gt;One piece not shown in the config file are the AWS credentials needed to upload the assets to S3. The &lt;code&gt;s3deploy&lt;/code&gt; command will implicitly look for the environment variables &lt;code&gt;AWS_ACCESS_KEY_ID&lt;/code&gt; and &lt;code&gt;AWS_SECRET_ACCESS_KEY&lt;/code&gt;. Since I do not want to publish these credentials to Github, I added them through the CircleCI web interface using &lt;a href="https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project"&gt;these instructions&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h3 id="the-workflow" class="title"&gt;
+        &lt;a name="the-workflow" class="anchor" href="#the-workflow"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The workflow
+      &lt;/h3&gt;
+    
+&lt;p&gt;Finally, to tie these jobs together, I&amp;#39;m using a workflow as shown below:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="yaml"&gt;version: 2
+# ...
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="putting-it-all-together" class="title"&gt;
+        &lt;a name="putting-it-all-together" class="anchor" href="#putting-it-all-together"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Putting it all together
+      &lt;/h3&gt;
+    
+&lt;p&gt;Here&amp;#39;s the complete configuration for CircleCI 2.0 at the time of this writing, located at &lt;a href="https://github.com/rossta/connect-four-vue/blob/master/.circleci/config.yml"&gt;&lt;code&gt;.circleci/config.yml&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="yaml"&gt;version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.11.2
+    parallelism: 1
+    working_directory: ~/rossta/connect-four-vue
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/rossta/connect-four-vue
+      - restore_cache:
+          key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
+      - run: yarn install
+      - save_cache:
+          key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
+          paths:
+            - ./node_modules
+      - run: yarn run build
+      - persist_to_workspace:
+          root: .
+          paths: dist
+
+  deploy:
+    docker:
+      - image: circleci/golang:1.9.6
+    parallelism: 1
+    working_directory: ~/rossta/connect-four-vue
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/rossta/connect-four-vue
+      - restore_cache:
+          key: v1-pkg-cache
+      - run: go get -v github.com/bep/s3deploy
+      - save_cache:
+          key: v1-pkg-cache
+          paths:
+            - /go/pkg
+      - run:
+          name: Deploy to S3
+          command: |
+            s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By the way, this blog is also a static website built and published to Github pages via CircleCI. I recently upgraded to its config to 2.0, which you can &lt;a href="https://github.com/rossta/rossta.github.com/blob/develop/.circleci/config.yml"&gt;check out here&lt;/a&gt; if you&amp;#39;re interested. CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
     <title>Deploying a Vue.js website to Amazon S3 with CircleCI</title>
     <link rel="alternate" href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"/>
     <id>/blog/deploying-vue-to-amazon-s3-with-circleci.html</id>
-    <published>2018-02-05T00:00:00+00:00</published>
-    <updated>2018-02-05T00:00:00+00:00</updated>
+    <published>2018-02-04T19:00:00-05:00</published>
+    <updated>2018-02-04T19:00:00-05:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -143,7 +371,7 @@ test:
 
 deployment:
   s3up:
-    branch: develop
+    branch: master
     commands:
       - s3deploy -source=dist/ -region=us-west-2 -bucket=connect-four-abcdefg
 &lt;/code&gt;&lt;/pre&gt;
@@ -253,8 +481,8 @@ Check out &lt;a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.
     <title>Finding Four-in-a-Row for the Win</title>
     <link rel="alternate" href="/blog/finding-four-in-a-row-ftw.html"/>
     <id>/blog/finding-four-in-a-row-ftw.html</id>
-    <published>2018-01-28T00:00:00+00:00</published>
-    <updated>2018-01-28T00:00:00+00:00</updated>
+    <published>2018-01-27T19:00:00-05:00</published>
+    <updated>2018-01-27T19:00:00-05:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -520,8 +748,8 @@ reset() {
     <title>Animating Connect Four with Vue.js</title>
     <link rel="alternate" href="/blog/animating-connect-four-with-vuejs.html"/>
     <id>/blog/animating-connect-four-with-vuejs.html</id>
-    <published>2018-01-18T00:00:00+00:00</published>
-    <updated>2018-01-18T00:00:00+00:00</updated>
+    <published>2018-01-17T19:00:00-05:00</published>
+    <updated>2018-01-17T19:00:00-05:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -769,8 +997,8 @@ Four wall, visible through the portholes.&lt;/p&gt;
     <title>Building basic Connect Four with Vue.js</title>
     <link rel="alternate" href="/blog/basic-connect-four-with-vuejs.html"/>
     <id>/blog/basic-connect-four-with-vuejs.html</id>
-    <published>2018-01-15T00:00:00+00:00</published>
-    <updated>2018-01-15T00:00:00+00:00</updated>
+    <published>2018-01-14T19:00:00-05:00</published>
+    <updated>2018-01-14T19:00:00-05:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -1177,8 +1405,8 @@ place as they are added to the board.&lt;/p&gt;
     <title>Connect Four with SVG pattern masking</title>
     <link rel="alternate" href="/blog/connect-four-with-svg-pattern-masking.html"/>
     <id>/blog/connect-four-with-svg-pattern-masking.html</id>
-    <published>2018-01-10T00:00:00+00:00</published>
-    <updated>2018-01-10T00:00:00+00:00</updated>
+    <published>2018-01-09T19:00:00-05:00</published>
+    <updated>2018-01-09T19:00:00-05:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -1358,892 +1586,6 @@ specify x coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&g
 &lt;p&gt;In &lt;a href="/blog/building-basic-connect-four-with-vuejs.html"&gt;the next post&lt;/a&gt;, we&amp;#39;ll
 take a look at using Vue.js to render the board dynamically and add checkers
 based on user interaction.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>How we switched from Sprockets to Webpack</title>
-    <link rel="alternate" href="/blog/from-sprockets-to-webpack.html"/>
-    <id>/blog/from-sprockets-to-webpack.html</id>
-    <published>2017-11-05T00:00:00+00:00</published>
-    <updated>2017-11-05T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;In case you missed the news, &lt;a href="http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/"&gt;Rails is loving JavaScript&lt;/a&gt; and Rails 5.1 ships with the option to compile JavaScript with &lt;a href="https://webpack.js.org"&gt;Webpack&lt;/a&gt; via the &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker gem&lt;/a&gt;. This is a big change after years of the Rails asset pipeline running on Sprockets. My team at &lt;a href="https://learnzillion.com"&gt;LearnZillion&lt;/a&gt;&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;In case you missed the news, &lt;a href="http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/"&gt;Rails is loving JavaScript&lt;/a&gt; and Rails 5.1 ships with the option to compile JavaScript with &lt;a href="https://webpack.js.org"&gt;Webpack&lt;/a&gt; via the &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker gem&lt;/a&gt;. This is a big change after years of the Rails asset pipeline running on Sprockets. My team at &lt;a href="https://learnzillion.com"&gt;LearnZillion&lt;/a&gt; recently decided to embrace this change and make the switch to Webpack with Webpacker to compile our clientside JavasScript for our Rails 4.2 application. &lt;em&gt;Gulp!&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;This post describes the challenges we encountered while switching from Sprockets to Webpack, how we solved those issues, and what we learned along the way.&lt;/p&gt;
-
-&lt;p&gt;Though much of what follows may be generally relevant to other teams considering a similar change, this post is not intended to be a step-by-step guide for replacing the Rails asset pipeline with Webpack. This post also won&amp;#39;t help you integrate with of the currently popular frameworks like React, Angular, Vue, or Ember (we use Knockout.js).&lt;/p&gt;
-
-&lt;p&gt;That said, if you&amp;#39;re working in a legacy Rails application and considering Webpack, perhaps you can learn from our mistakes.&lt;/p&gt;
-
-      &lt;h2 id="table-of-contents" class="title"&gt;
-        &lt;a name="table-of-contents" class="anchor" href="#table-of-contents"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Table of Contents
-      &lt;/h2&gt;
-    
-&lt;ol&gt;
-&lt;li&gt;&lt;a href="#why-switch-"&gt;Why&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#webpack-the-rails-way"&gt;Webpack, the Rails Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#making-a-plan"&gt;Making a plan&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#setting-up-webpack-entries"&gt;Setting up Webpack entries&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#maintaining-backwards-compatibility"&gt;Maintaining backwards compatibility&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#migrating-a-javascript-module"&gt;Migrating a JavaScript module&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#exporting-from-webpack"&gt;Exporting from Webpack&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#resolving-application-modules"&gt;Resolving application modules&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#extending-the-webpack-configuration"&gt;Extending the Webpack configuration&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#importing-libraries-and-global-scope"&gt;Importing libraries and global scope&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#discovering-webpack-chunks"&gt;Discovering Webpack chunks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#extracting-common-chunks"&gt;Extracting common chunks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#adding-predictable-long-term-caching"&gt;Adding predictable long-term caching&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#third-party-stylesheets-images-and-fonts"&gt;Third party stylesheets, images, and fonts&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#deploying-with-capistrano-and-nginx"&gt;Deploying with Capistrano and Nginx&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#unit-testing-with-karma"&gt;Unit testing with Karma&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#local-development-with-ssl"&gt;Local development with SSL&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#wrapping-up"&gt;Wrapping up&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-      &lt;h2 id="why-switch-" class="title"&gt;
-        &lt;a name="why-switch-" class="anchor" href="#why-switch-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Why switch?
-      &lt;/h2&gt;
-    
-&lt;p&gt;The asset pipeline was revolutionary in the Rails community when it was first introduced in Rails 3.1 and it has served our project well over the years. In the mean time, JavaScript has exploded in popularity and the collective efforts of the community have led to many improvements, including in the domain the Sprockets was originally created to solve.&lt;/p&gt;
-
-&lt;p&gt;Given this context, here are a few reasons we decided to switch (paraphrasing):&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Sprockets is too slow, i.e., in development, we don&amp;#39;t want to run JavaScript compilation through our Rails process&lt;/li&gt;
-&lt;li&gt;To adopt ES6 syntax and &lt;a href="https://github.com/TannerRogalsky/sprockets-es6#sprockets-es6"&gt;Sprockets support for ES6 is experimental&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;For advanced features not available in Sprockets (or without extra effort), i.e., modularity, tree-shaking, live-reload, configurable source-maps, etc.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Though there are number of JavaScript tools that we could have chosen instead Webpack, our decision here was pretty simple. As a team policy, we aim to stick with Rails conventions where possible. Given the official support in Rails and the general momentum in the Webpack community, this was the appropriate choice for our team.&lt;/p&gt;
-
-      &lt;h2 id="webpack-the-rails-way" class="title"&gt;
-        &lt;a name="webpack-the-rails-way" class="anchor" href="#webpack-the-rails-way"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Webpack, the Rails Way
-      &lt;/h2&gt;
-    
-&lt;p&gt;&lt;a href="https://github.com/rails/webpacker"&gt;Webpacker&lt;/a&gt; is the official Rails gem for integrating Webpack with Rails. &lt;a href="https://medium.com/@gauravtiwari"&gt;Guarav Tiwari&lt;/a&gt; recently wrote a &lt;a href="https://medium.com/statuscode/introducing-webpacker-7136d66cddfb"&gt;detailed introduction to Webpacker&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Why does Webpacker exist?&lt;/p&gt;
-
-&lt;p&gt;First, Webpacker helps make Webpack &lt;em&gt;Rails-friendly&lt;/em&gt;. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes &lt;em&gt;convention over configuration&lt;/em&gt;. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through integration with &lt;a href="https://babeljs.io/"&gt;Babel&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Also, Webpacker helps form the bridge between the Webpack build and the Rails application. Rails needs to be able to render &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; tags for Webpack assets in views. Webpacker provides helpers, including &lt;code&gt;javascript_pack_tag&lt;/code&gt;, for this purpose.&lt;/p&gt;
-
-&lt;p&gt;By Webpacker convention, Webpack will build JavaScript from source files located in &lt;code&gt;app/javascript&lt;/code&gt; (a new addition to the traditional Rails directory structure) and from &lt;code&gt;node_modules&lt;/code&gt; installed via &lt;code&gt;yarn&lt;/code&gt;. To determine what dependencies to build, Webpack is configured by Webpacker to treat each file in &lt;code&gt;app/javascript/packs&lt;/code&gt; as a separate &lt;a href="https://webpack.js.org/concepts/#entry"&gt;entry&lt;/a&gt; point. Entries in Webpack are analogous to JavaScript assets configured for Sprockets compilation via &lt;code&gt;Rails.configuration.assets.precompile&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;For deployment, the precompile task, &lt;code&gt;rake assets:precompile&lt;/code&gt;, runs both Sprockets and Webpack build steps. By default, each Webpack entry will correspond to an output file that will be compiled to the &lt;code&gt;public/packs&lt;/code&gt; directory in production, analogous to the &lt;code&gt;public/assets&lt;/code&gt; directory for Sprockets builds. Webpack generates a &lt;code&gt;manifest.json&lt;/code&gt; in &lt;code&gt;public/packs&lt;/code&gt; that maps asset names to their locations. Rails will read the manifest to determine the urls for Webpack assets.&lt;/p&gt;
-
-&lt;p&gt;In development, there is the option to run the Webpack dev server alongside the Rails server. The benefit is the Webpack dev server will listen for JavaScript source file changes, recompile, and reload the browser automatically. To help make setup easier, Webpacker inserts a Rails middleware in development to proxy Webpack asset requests to the dev server.&lt;/p&gt;
-
-      &lt;h2 id="making-a-plan" class="title"&gt;
-        &lt;a name="making-a-plan" class="anchor" href="#making-a-plan"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Making a plan
-      &lt;/h2&gt;
-    
-&lt;p&gt;The key feature of Webpacker critical to our decision to making the switch is this:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Webpacker allows Webpack and Sprockets to be used side-by-side.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The ability to compile &lt;code&gt;some_module.js&lt;/code&gt; via Webpack and &lt;code&gt;another_module.js&lt;/code&gt; via Sprockets allowed us to move dependencies over to Webpack gradually, in small changesets. With any upgrade, our primary goal is &lt;em&gt;Don&amp;#39;t break the site.&lt;/em&gt; and the incremental adoption of Webpack allowed us to more easily address issues through our continuous integration and QA process.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s a high level overview of how we broke down the move to Webpack from Sprockets:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;&lt;em&gt;Prep phase&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Add Webpacker and setup dependencies in development and remote servers (upgrade &lt;code&gt;node.js&lt;/code&gt;, install &lt;code&gt;yarn&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;Deploy a small Webpack bundle (with no critical code) to iron out deployment concerns, including Nginx and capistrano configuration&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;em&gt;Migration phase&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Move our third-party dependencies from Rails asset gems to NPM packages via Webpack&lt;/li&gt;
-&lt;li&gt;Move our application code to Webpack&lt;/li&gt;
-&lt;li&gt;Modify Webpack configuration as needed to support new dependencies&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;em&gt;Cleanup phase&lt;/em&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Remove Rails assets gems and redundant Sprockets configuration&lt;/li&gt;
-&lt;li&gt;Optimize our Webpack bundles&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Our gradual approach to the migration had its downsides:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;We needed to figure out how to reference modules across two scopes&lt;/li&gt;
-&lt;li&gt;We had a large suite of JavaScript unit tests to support in two separate testing environments&lt;/li&gt;
-&lt;li&gt;We assumed global variables our in Sprockets-based JavaScript, so any module bundled by Webpack would need to be exposed to the global scope somehow&lt;/li&gt;
-&lt;li&gt;We had a learning curve with Webpack such that simply moving a dependency from a Sprockets bundle to a Webpack bundle was not always straightforward&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Supporting both Sprockets or Webpack while we rolled out incremental changes required more effort and time. Given the rapid development cycle of Webpacker, Webpack, and its various plugins and utilities, we were continually upgrading and smoothing wrinkles throughout the process. Ultimately, this approach worked for us as it allowed time to wade into the Webpack waters while adopting new conventions along the way.&lt;/p&gt;
-
-      &lt;h2 id="setting-up-webpack-entries" class="title"&gt;
-        &lt;a name="setting-up-webpack-entries" class="anchor" href="#setting-up-webpack-entries"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Setting up Webpack entries
-      &lt;/h2&gt;
-    
-&lt;p&gt;Our team traditionally has compiled two Sprockets bundles for the browser: let&amp;#39;s call them &lt;code&gt;vendor.js&lt;/code&gt; and &lt;code&gt;application.js&lt;/code&gt;. The &lt;code&gt;vendor&lt;/code&gt; bundle is for our main bundle third party, infrequently changing libraries like &lt;code&gt;jQuery&lt;/code&gt;, &lt;code&gt;knockout.js&lt;/code&gt;, and &lt;code&gt;lodash&lt;/code&gt;. The &lt;code&gt;application&lt;/code&gt; bundle, which changes more often, is for smaller third party plugins and our application code.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s an overview of what that looked like in our codebase:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;app/assets/javascript
-|-- vendor.js
-|-- application.js
-|-- some_module.js
-|-- another_module.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We rendered script tags for the vendor and application bundle respectively in the Rails application layout.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;!-- application.html.erb --&amp;gt;
-
-&amp;lt;html&amp;gt;
-    &amp;lt;body&amp;gt;
-        &amp;lt;!-- ... --&amp;gt;
-
-        &amp;lt;%= javascript_include_tag &amp;#39;vendor&amp;#39; %&amp;gt;
-        &amp;lt;%= javascript_include_tag &amp;#39;application&amp;#39; %&amp;gt;
-    &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To move dependencies to Webpack, we first created counterpart &amp;quot;packs&amp;quot; for &lt;code&gt;vendor.js&lt;/code&gt; and &lt;code&gt;application.js&lt;/code&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Webpacker convention: each file in the packs directory serves as a separate entry point in Webpack&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;app/assets/javascript
-|-- vendor.js
-|-- application.js
-|-- another_module.js
-|-- some_module.js
-app/javascript
-|-- packs
-    |-- vendor.js
-    |-- application.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We added script tags to the application layout using the helper provided by Webpacker &lt;code&gt;javascript_pack_tag&lt;/code&gt; to render Webpack bundles.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;!-- application.html.erb --&amp;gt;
-
-&amp;lt;html&amp;gt;
-    &amp;lt;body&amp;gt;
-        &amp;lt;!-- ... --&amp;gt;
-        &amp;lt;%= javascript_pack_tag &amp;#39;vendor&amp;#39; %&amp;gt;
-        &amp;lt;%= javascript_include_tag &amp;#39;vendor&amp;#39; %&amp;gt;
-
-        &amp;lt;%= javascript_pack_tag &amp;#39;application&amp;#39; %&amp;gt;
-        &amp;lt;%= javascript_include_tag &amp;#39;application&amp;#39; %&amp;gt;
-    &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The idea was that we could port dependencies from &lt;code&gt;app/assets/javascripts&lt;/code&gt; to &lt;code&gt;app/javascript&lt;/code&gt; one-by-one. So, we&amp;#39;d move &lt;code&gt;some_module.js&lt;/code&gt; from &lt;code&gt;app/assets/javascripts&lt;/code&gt; to &lt;code&gt;app/javascript&lt;/code&gt;, update its syntax to ES6.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;app/assets/javascript
-|-- vendor.js
-|-- application.js
-|-- another_module.js
-app/javascript
-|-- some_module.js
-|-- packs
-    |-- vendor.js
-    |-- application.js
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h2 id="maintaining-backwards-compatibility" class="title"&gt;
-        &lt;a name="maintaining-backwards-compatibility" class="anchor" href="#maintaining-backwards-compatibility"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Maintaining backwards compatibility
-      &lt;/h2&gt;
-    
-&lt;p&gt;As we moved libraries and individual components from the asset pipeline to Webpack, we needed to maintain backwards compatibility with our legacy JavaScript—-the un-migrated portion of our codebase.&lt;/p&gt;
-
-&lt;p&gt;As mentioned earlier, our legacy JavaScript relied heavily on the global scope. We have references to jQuery, lodash, knockout littered throughout our compiled code, Rails views, and Knockout templates. To minimize the risk in this migration, we weren&amp;#39;t going to change that.&lt;/p&gt;
-
-&lt;p&gt;But why was this an issue?&lt;/p&gt;
-
-&lt;p&gt;It helps to understand that Sprockets and Webpack are two completely different paradigms of bundling JavaScript for the browser. The differences get to the heart of &lt;a href="https://what-problem-does-it-solve.com/webpack/intro.html#what-problem-does-webpack-solve"&gt;how Webpack works&lt;/a&gt;. Instead of concatenating all your JavaScript into the global scope, as Sprockets does, Webpack provides a runtime that compartmentalizes each JavaScript module into separate scopes via closures so that access between modules must be declared via imports. By default, none of these modules are exposed to the global scope.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;
-&lt;h3&gt;What problem does Webpack solve?&lt;/h3&gt;
-&lt;p&gt;
-For more background on this topic, checkout &lt;a href="https://twitter.com/davetron5000"&gt;David Copeland's&lt;/a&gt; recent book, &lt;a href="https://what-problem-does-it-solve.com/webpack/intro.html"&gt;Webpack from Nothing&lt;/a&gt;. It may also help to understand the code that Webpack generates to form the runtime, which &lt;a href="https://twitter.com/seanlandsman"&gt;Sean Landsman&lt;/a&gt; nicely explains in &lt;a href="https://www.ag-grid.com/ag-grid-understanding-webpack/"&gt;Understanding How Webpack Works&lt;/a&gt;.
-&lt;/p&gt;
-&lt;/aside&gt;
-
-&lt;p&gt;We decided, as a policy. we did not want our Webpack modules to depend on global variables. This meant we would have no references to Sprockets-compiled code in our Webpack pipeline. Therefore, to migrate an individual file, &lt;code&gt;some_module.js&lt;/code&gt;, we needed to answer two questions first:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;can we import all third party dependencies of &lt;code&gt;some_module.js&lt;/code&gt; from Webpack?&lt;/li&gt;
-&lt;li&gt;can we import all application dependencies of &lt;code&gt;some_module.js&lt;/code&gt; from Webpack?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;In reality, we had to compromise in some cases. While most of our third party JavaScript could be moved to &lt;code&gt;node_modules&lt;/code&gt;, we also relied on a number of vendor JavaScript APIs loaded via script tags in the browser. For example, since we don&amp;#39;t compile our Google Analytics script via Webpack and instead load this script from Google&amp;#39;s servers, we left global references to &lt;code&gt;window.ga&lt;/code&gt; in our codebase.&lt;/p&gt;
-
-      &lt;h2 id="migrating-a-javascript-module" class="title"&gt;
-        &lt;a name="migrating-a-javascript-module" class="anchor" href="#migrating-a-javascript-module"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Migrating a Javascript Module
-      &lt;/h2&gt;
-    
-&lt;p&gt;Our legacy JavaScript application consistently followed a pattern of defining and accessing properties on a global JavaScript object: &lt;code&gt;window.App&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/assets/javascripts/some_module.js
-
-App = App || {};
-
-App.SomeModule = (function() {
-  someMethod: function() {
-    var timestamp = moment();
-    return App.AnotherModule.method(timestamp);
-  }
-}();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As we moved them over to Webpack, the new version of the file above might look like the example below as we converted to ES6 syntax and replaced global references with imports:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/some_module.js
-
-import moment from &amp;#39;moment&amp;#39;;
-import AnotherModule from &amp;#39;./another_module&amp;#39;;
-
-const SomeModule = {
-  someMethod() {
-    const timestamp = moment();
-    return AnotherModule.method(timestamp);
-  }
-};
-
-export default SomeModule;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There&amp;#39;s a problem though. Once &lt;code&gt;SomeModule&lt;/code&gt; moved to Webpack, it was no longer available in the global scope as a property of &lt;code&gt;App&lt;/code&gt;. References to &lt;code&gt;App.SomeModule&lt;/code&gt; in Sprockets would be &lt;code&gt;undefined&lt;/code&gt;. To maintain backwards compatibility, we had to find a way to make &lt;code&gt;SomeModule&lt;/code&gt; available in both Webpack and Sprockets.&lt;/p&gt;
-
-&lt;p&gt;Practically, this meant &lt;code&gt;SomeModule&lt;/code&gt; could be available both as an import in Webpack...&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;import SomeModule from &amp;#39;../some_module&amp;#39;;
-
-SomeModule.someMethod();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;...and in the global scope as a property the global &lt;code&gt;App&lt;/code&gt; instance:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;App.SomeModule.someMethod();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In other words, we wanted to have our ES6 module cake and eat it too. Luckily, Webpack provides a mechanism to do this.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;
-&lt;h3&gt;Guest appearance by TSort&lt;/h3&gt;
-&lt;p&gt;
-To ensure we selected modules to migrate in the right order, we wrote a short script using &lt;a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/tsort/rdoc/TSort.html"&gt;Ruby's &lt;code&gt;TSort&lt;/code&gt; module&lt;/a&gt;. &lt;code&gt;TSort&lt;/code&gt; is for topological sorting, which is to say, given a list of dependencies, sort them in a valid order such that all the dependencies of a given item are satisfied before processing that item. I'll go into more detail about how we did this in another post.
-&lt;/p&gt;
-&lt;/aside&gt;
-
-      &lt;h2 id="exporting-from-webpack" class="title"&gt;
-        &lt;a name="exporting-from-webpack" class="anchor" href="#exporting-from-webpack"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Exporting from Webpack
-      &lt;/h2&gt;
-    
-&lt;p&gt;Webpack provides for a use case that met our needs: that of library authors. This entails &lt;a href="https://webpack.js.org/configuration/output/#output-library"&gt;configuring the Webpack output to export a variable&lt;/a&gt; to its receiving scope�—in our case, the browser &lt;code&gt;window&lt;/code&gt;. That meant we would package our Webpack modules into a library for our Sprockets code!&lt;/p&gt;
-
-&lt;p&gt;To do this, we modified our Webpack config:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/shared.js
-
-output: {
-  // Makes exports from entry packs available to global scope, e.g.
-  library: [&amp;#39;Packs&amp;#39;, &amp;#39;[name]&amp;#39;],
-  libraryTarget: &amp;#39;var&amp;#39;
-},
-
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With the above configuration, Webpack will export a module called &lt;code&gt;Packs&lt;/code&gt; to the global scope. The &lt;code&gt;Packs&lt;/code&gt; variable will have a property corresponding to each &lt;code&gt;entry&lt;/code&gt; by name. In our case, this means Webpack exports a &lt;code&gt;Packs.vendor&lt;/code&gt; and &lt;code&gt;Packs.application&lt;/code&gt; properties.&lt;/p&gt;
-
-&lt;p&gt;To add modules to the library, we export them from our entry files. For example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-export { default as SomeModule } from &amp;#39;./some_module`;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Webpack would then make &lt;code&gt;SomeModule&lt;/code&gt; a property of the &lt;code&gt;Packs.application&lt;/code&gt; module, i.e., &lt;code&gt;Packs.application.SomeModule&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;This &lt;code&gt;Packs&lt;/code&gt; variable gets exported to the global scope. We added some glue code to merge our &lt;code&gt;Packs&lt;/code&gt; modules into the &lt;code&gt;App&lt;/code&gt; namespace as below:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/assets/javascripts/application.js
-
-App = App || {};
-_.assign(App, Packs.application);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Boom! Now, we&amp;#39;d be able to use our Webpack-compiled module as &lt;code&gt;App.SomeModule&lt;/code&gt; in Sprockets without making any other changes to our legacy JavaScript.&lt;/p&gt;
-
-      &lt;h2 id="resolving-application-modules" class="title"&gt;
-        &lt;a name="resolving-application-modules" class="anchor" href="#resolving-application-modules"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Resolving application modules
-      &lt;/h2&gt;
-    
-&lt;p&gt;As a convenience, we learned to resolve modules in our application as &lt;code&gt;import &amp;#39;some_module&amp;#39;&lt;/code&gt; instead of via relative paths like &lt;code&gt;import &amp;#39;../some_module&lt;/code&gt;. To do this, we set up an alias in &lt;code&gt;.babelrc&lt;/code&gt;. Webpacker installs &lt;code&gt;.babelrc&lt;/code&gt; as a separate configuration file for Babel. We added the &lt;code&gt;babel-plugin-module-resolver&lt;/code&gt; and updated the relevant section in our &lt;code&gt;.babelrc&lt;/code&gt; in the plugins section:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// .babelrc
-
-{
-  // ...
-  &amp;quot;plugins&amp;quot;: [
-    // ...
-    [&amp;quot;module-resolver&amp;quot;, { &amp;quot;root&amp;quot;: [&amp;quot;./app/javascript&amp;quot;], &amp;quot;alias&amp;quot;: {} }]
-  ],
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h2 id="extending-the-webpack-configuration" class="title"&gt;
-        &lt;a name="extending-the-webpack-configuration" class="anchor" href="#extending-the-webpack-configuration"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Extending the Webpack configuration
-      &lt;/h2&gt;
-    
-&lt;p&gt;Though Webpacker&amp;#39;s default configuration made it easy to get started, we soon ran into the need to modify it to fit our needs. The configuration is extracted away in the &lt;code&gt;@rails/webpacker&lt;/code&gt; NPM package, so we often revisit the source and debug it in the node REPL.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;$ NODE_ENV=development node
-&amp;gt; let config = require(&amp;#39;./config/webpack/development&amp;#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We now have a shared file in the &lt;code&gt;config/webpack&lt;/code&gt; directory that imports the Webpack configuration through its API and exports the modified config object for the enviornment-specific config files to consume.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;// config/webpack/environment.js
-
-const {environment} = require(&amp;#39;@rails/webpacker&amp;#39;);
-module.exports = environment;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;// config/webpack/shared.js
-
-const merge = require(&amp;#39;webpack-merge&amp;#39;);
-const environment = require(&amp;#39;./environment&amp;#39;);
-
-// make changes
-environment.loaders.set(&amp;#39;ChosenJSLoader&amp;#39;, {
-    test: require.resolve(&amp;quot;chosen-js&amp;quot;),
-    use: [&amp;quot;script-loader&amp;quot;],
-  },
-);
-
-environment.plugins.set(&amp;#39;CommonsChunkPlugin&amp;#39;
-    new webpack.optimize.CommonsChunkPlugin({ options });
-
-const config = environment.toWebpackConfig();
-
-const additionalConfig = {
-  // stuff to add
-};
-
-module.exports = merge(config, additionalConfig);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;// config/webpack/development.js
-
-module.exports = require(&amp;#39;./shared&amp;#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The Webpacker docs also provide &lt;a href="https://github.com/rails/webpacker/blob/05bf821ce983a2ad88fba0da476023e67f8efe43/docs/webpack.md#configuration"&gt;some helpful tips&lt;/a&gt; on how to extend the default configuration.&lt;/p&gt;
-
-      &lt;h2 id="importing-libraries-and-global-scope" class="title"&gt;
-        &lt;a name="importing-libraries-and-global-scope" class="anchor" href="#importing-libraries-and-global-scope"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Importing libraries and global scope
-      &lt;/h2&gt;
-    
-&lt;p&gt;Though Webpack tries hard to encourage you to avoid exporting your dependencies to the global scope. Recall this wasn&amp;#39;t an option for us.&lt;/p&gt;
-
-&lt;p&gt;To make our third party JavaScript libraries, like jQuery and knockout, available in the global scope, we added special &lt;a href="https://webpack.js.org/concepts/loaders/"&gt;loader&lt;/a&gt; to the Webpack pipeline. A Webpack loader generally describes a type of transformation for a given file type. For example, &lt;a href="https://github.com/rails/webpacker/blob/b2d899b25fb9f1cb11426b1b5e2d699c680bdcf6/package/loaders/babel.js"&gt;Babel integrates with Webpack via a loader&lt;/a&gt; in Webpacker to transform any JavaScript file from ES6 to ES5 syntax.&lt;/p&gt;
-
-&lt;p&gt;One way to instruct Webpack to expose variables exported by a given library to the global scope is via the official &lt;a href="https://github.com/webpack-contrib/expose-loader"&gt;&lt;code&gt;expose-loader&lt;/code&gt;&lt;/a&gt;. To use this loader, we updated the default Webpack config provided by Webpacker to ensure that our Webpack-compiled &lt;code&gt;jQuery&lt;/code&gt; package is made available in the global scope for our legacy JavaScript:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/shared.js
-
-module: {
-  rules: [
-   {
-      test: require.resolve(&amp;#39;jquery&amp;#39;),
-      use: [{
-        loader: &amp;#39;expose-loader&amp;#39;,
-        options: &amp;#39;$&amp;#39;,
-      }, {
-        loader: &amp;#39;expose-loader&amp;#39;,
-        options: &amp;#39;jQuery&amp;#39;,
-      }],
-    },
-
-    // ... other custom loader rules
-  ],
-},
-
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We have similar &lt;code&gt;expose-loader&lt;/code&gt; rules for each of our commonly-used libraries such as &lt;code&gt;knockout&lt;/code&gt; and &lt;code&gt;lodash&lt;/code&gt;.&lt;/p&gt;
-
-      &lt;h2 id="discovering-webpack-chunks" class="title"&gt;
-        &lt;a name="discovering-webpack-chunks" class="anchor" href="#discovering-webpack-chunks"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Discovering Webpack chunks
-      &lt;/h2&gt;
-    
-&lt;p&gt;However, after adding &lt;code&gt;expose-loader&lt;/code&gt; for jQuery, not everything worked as we expected in the early going.&lt;/p&gt;
-
-&lt;p&gt;Consider the following where we import jQuery in &lt;code&gt;vendor.js&lt;/code&gt;. Then we&amp;#39;ve added the &lt;code&gt;chosen-js&lt;/code&gt; package and import it in &lt;code&gt;application.js&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/vendor.js
-
-import &amp;#39;jquery&amp;#39;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-import &amp;#39;chosen-js&amp;#39;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can show that this works on the Dev Tools console:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;&amp;gt; typeof $.fn.chosen
-&amp;quot;function&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then, we installed another jQuery plugin, like &lt;code&gt;slick-carousel&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/vendor.js
-
-import &amp;#39;jquery&amp;#39;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-import &amp;#39;chosen-js&amp;#39;;
-import &amp;#39;slick-carousel&amp;#39;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;On the Dev Tools console, we can test for the new plugin:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;&amp;gt; typeof $.fn.slick
-&amp;quot;function&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;But something happened. The &lt;code&gt;chosen&lt;/code&gt; plugin is missing:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;&amp;gt; typeof $.fn.chosen
-&amp;quot;undefined&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Not expected! Clearly, there are some side effects from importing these packages in Webpack. Turns out, there were a couple issues here converging at once.&lt;/p&gt;
-
-&lt;p&gt;At this point, it would help to visualize what&amp;#39;s happening in our Webpack bundles. We can do this in development with &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer"&gt;&lt;code&gt;webpack-bundle-analyzer&lt;/code&gt;&lt;/a&gt;. Adding this plugin to our Webpack config produces a separate local webserver that graphs the packages used in each bundle.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s what the analyzer produced before we added &lt;code&gt;slick-carousel&lt;/code&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack-bundle-analyzer-one-jquery-73ee3547.png" alt="Webpack bundle analyzer one jquery" /&gt;&lt;/p&gt;
-
-&lt;p&gt;And after we added &lt;code&gt;slick-carousel&lt;/code&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack-bundle-analyzer-two-jquerys-b74a1ea8.png" alt="Webpack bundle analyzer two jquerys" /&gt;&lt;/p&gt;
-
-&lt;p&gt;Two jQuerys! (You may have noticed some other modules are duplicated as well.)&lt;/p&gt;
-
-&lt;p&gt;It turns out that &lt;code&gt;slick-carousel&lt;/code&gt; employs a common pattern in modern JavaScript packages to detect the presence of a JavaScript module loader API, such as Asynchronous Module Definition (AMD) or CommonJS. The pattern looks something like this, &lt;a href="https://github.com/kenwheeler/slick/blob/ee7d37faeb92c4619ffeefeba2cc4c733f39b1b3/slick/slick.js#L18"&gt;excerpted from the &lt;code&gt;slick-carousel&lt;/code&gt; source&lt;/a&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;;(function(factory) {
-    &amp;#39;use strict&amp;#39;;
-    if (typeof define === &amp;#39;function&amp;#39; &amp;amp;&amp;amp; define.amd) {
-        define([&amp;#39;jquery&amp;#39;], factory);
-    } else if (typeof exports !== &amp;#39;undefined&amp;#39;) {
-        module.exports = factory(require(&amp;#39;jquery&amp;#39;));
-    } else {
-        factory(jQuery);
-    }
-
-}(function($) {
-  // library code
-  // ...
-}));
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Webpack recognizes both AMD &lt;code&gt;define&lt;/code&gt; and CommonJs style &lt;code&gt;require&lt;/code&gt; to resolve modules. Since &lt;code&gt;slick-carousel&lt;/code&gt; imports &lt;code&gt;jQuery&lt;/code&gt;, as seen in the except above, it&amp;#39;s now included in the &lt;code&gt;application.js&lt;/code&gt; bundle. Webpack knows nothing about how we&amp;#39;re including both &lt;code&gt;vendor.js&lt;/code&gt; and &lt;code&gt;application.js&lt;/code&gt; in the same HTML page, so it happily includes &lt;code&gt;jQuery&lt;/code&gt; in both bundles—exactly as it&amp;#39;s been instructed to do.&lt;/p&gt;
-
-&lt;p&gt;Ok, but why didn&amp;#39;t we see two jQuerys when we included &lt;code&gt;chosen-js&lt;/code&gt;?&lt;/p&gt;
-
-&lt;p&gt;The reason is that the Chosen jQuery plugin only works with browser globals, as described by &lt;a href="https://github.com/harvesthq/chosen/issues/2215"&gt;this issue on the chosen-js GitHub repository&lt;/a&gt;. It doesn&amp;#39;t use a module loader pattern, so if we hadn&amp;#39;t exported &lt;code&gt;jQuery&lt;/code&gt; to global scope in the first place, it wouldn&amp;#39;t have worked at all. In that case, we would have followed &lt;a href="http://reactkungfu.com/2015/10/integrating-jquery-chosen-with-webpack-using-imports-loader/"&gt;this post that describes how to integrate Chosen with Webpack using the &lt;code&gt;imports-loader&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;When we import &lt;code&gt;chosen-js&lt;/code&gt; in the &lt;code&gt;application.js&lt;/code&gt; bundle, it attaches itself to the global &lt;code&gt;jQuery&lt;/code&gt; instance we imported in &lt;code&gt;vendor.js&lt;/code&gt;. When we then import &lt;code&gt;slick-carousel&lt;/code&gt;, it subsequently imports &lt;code&gt;jQuery&lt;/code&gt; again, which is represented by a separate &amp;quot;chunk&amp;quot; in Webpack. This new instance of &lt;code&gt;jQuery&lt;/code&gt; clobbers the original instance in the global. Since the original instance is the one to which the Chosen plugin attached itself, no &lt;code&gt;$.fn.chosen&lt;/code&gt; function appears in the browser.&lt;/p&gt;
-
-&lt;p&gt;Luckily, you don&amp;#39;t have to resort to global variables just to use Chosen or most other packages that fail to employ the module loader pattern. In most cases, there&amp;#39;s a loader (or plugin) for that! The Webpack documentation devotes an entire &lt;a href="https://webpack.js.org/guides/shimming/"&gt;guide to shimming modules&lt;/a&gt; that&amp;#39;s worth your time.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;#39;re not able to shim a module, you can always resort to the &lt;a href="https://webpack.js.org/loaders/script-loader/"&gt;&lt;code&gt;script-loader&lt;/code&gt;&lt;/a&gt;, which will evaluate the module in the global context. The main takeaway here is you may have to roll up your sleeves and dig into the source of your dependencies to understand whether they&amp;#39;ll work in the Webpack context and/or whether you&amp;#39;ll need to integrate with a loader or plugin.&lt;/p&gt;
-
-&lt;p&gt;Through our debugging sessions we came to learn a good lesson the hard way:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Importing a new Webpack dependency may have side effects you did not anticipate&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;To avoid any misunderstanding about the affects of adding new dependencies to Wepback, it helps to have a visual model of the Webpack &amp;quot;chunks&amp;quot;. The &lt;code&gt;webpack-bundle-analyzer&lt;/code&gt; is a good place to start.&lt;/p&gt;
-
-      &lt;h2 id="extracting-common-chunks" class="title"&gt;
-        &lt;a name="extracting-common-chunks" class="anchor" href="#extracting-common-chunks"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Extracting common chunks
-      &lt;/h2&gt;
-    
-&lt;p&gt;We fixed the &amp;quot;two jQuerys&amp;quot; problem with some additional Webpack configuration. We essentially have to instruct Webpack to pull jQuery (or just about any module) into only one bundle.&lt;/p&gt;
-
-&lt;p&gt;Two promising strategies of note include use of community supported Webpack plugins. One of these is the &lt;a href="https://webpack.js.org/plugins/dll-plugin/"&gt;&lt;code&gt;DllPlugin&lt;/code&gt;&lt;/a&gt;, which is a powerful way to split bundles and drastically improve build performance. It&amp;#39;s also a bit more complex to setup and requires an extra build step.&lt;/p&gt;
-
-&lt;p&gt;We decided to use the &lt;a href="https://webpack.js.org/plugins/commons-chunk-plugin/"&gt;CommonsChunkPlugin&lt;/a&gt; instead as this was bit easier to setup in Webpacker. (If you&amp;#39;re interested in setting up the DllPlugin with Webpacker, &lt;a href="https://github.com/rails/webpacker/issues/702"&gt;check out this thread on GitHub&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;To ensure jQuery and any other package from &lt;code&gt;node_modules&lt;/code&gt; ends up in the &lt;code&gt;vendor.js&lt;/code&gt; bundle only, we add something like this to our Webpack plugins configuration:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;new webpack.optimize.CommonsChunkPlugin({
-  name: &amp;#39;vendor&amp;#39;,
-  chunks: [&amp;#39;vendor&amp;#39;, &amp;#39;application&amp;#39;],
-  minChunks(module) {
-    return module.context &amp;amp;&amp;amp; module.context.indexOf(&amp;#39;node_modules&amp;#39;) &amp;gt;= 0;
-  },
-}),
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This basic config basically says, take any &amp;quot;chunk&amp;quot; (effectively, a module) that is loaded from &lt;code&gt;node_modules&lt;/code&gt; and occurs in both &lt;code&gt;vendor.js&lt;/code&gt; and &lt;code&gt;application.js&lt;/code&gt;, and extract it only to &lt;code&gt;vendor.js&lt;/code&gt; in a way that can be shared by both modules. Rebuilding with this setup fixed our jQuery plugin issue (among other side effects of clobbering global variables).&lt;/p&gt;
-
-      &lt;h2 id="adding-predictable-long-term-caching" class="title"&gt;
-        &lt;a name="adding-predictable-long-term-caching" class="anchor" href="#adding-predictable-long-term-caching"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Adding predictable long term caching
-      &lt;/h2&gt;
-    
-&lt;p&gt;We learned though that we had a problem with our initial &lt;code&gt;CommonsChunkPlugin&lt;/code&gt; configuration.&lt;/p&gt;
-
-&lt;p&gt;Without prior knowledge of how Webpack works, one might expect that making a change only to a module imported by &lt;code&gt;application.js&lt;/code&gt; would only affect only the application bundle output during a deploy. While using the &lt;code&gt;CommonsChunkPlugin&lt;/code&gt; configuration as shown in the previous section this is, in fact, not the case.&lt;/p&gt;
-
-&lt;p&gt;To demonstrate, let&amp;#39;s say all we did was import jQuery in our vendor bundle and &lt;code&gt;./some_module&lt;/code&gt; in our application bundle:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/vendor.js
-
-import &amp;#39;jquery&amp;#39;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-import SomeModule from &amp;#39;../some_module&amp;#39;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here&amp;#39;s the output of the Webpack build, using the &lt;code&gt;CommonsChunkPlugin&lt;/code&gt; setup as described in the previous section:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;$ bin/webpack
-Hash: 6331dfce0c27b4723c58
-Version: webpack 3.8.1
-Time: 779ms
-                              Asset       Size  Chunks                    Chunk Names
-application-5b435b20467ae799d8e6.js    3.42 kB       0  [emitted]         application
-     vendor-282477ba5e90974e92cb.js     789 kB       1  [emitted]  [big]  vendor
-                      manifest.json  124 bytes          [emitted]
-# ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note the digest of the application and vendor bundles under &amp;quot;Asset&amp;quot;: &lt;code&gt;application-5b435b20467ae799d8e6.js&lt;/code&gt; and &lt;code&gt;vendor-282477ba5e90974e92cb.js&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now let&amp;#39;s make only a change to &lt;code&gt;application.js&lt;/code&gt; as below. &lt;code&gt;AnotherModule&lt;/code&gt; brings in no new dependencies:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-import SomeModule from &amp;#39;../some_module&amp;#39;;
-import AnotherModule from &amp;#39;../another_module&amp;#39;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Rebuilding now, we might expect only the digest for &lt;code&gt;application.js&lt;/code&gt; would change:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;$ bin/webpack
-Hash: 7a033d5c3c2dffec095b
-Version: webpack 3.8.1
-Time: 758ms
-                              Asset       Size  Chunks                    Chunk Names
-application-80aab62cb2b8b0bfd6f3.js     4.5 kB       0  [emitted]         application
-     vendor-a5762b269bc7170f5a51.js     789 kB       1  [emitted]  [big]  vendor
-                      manifest.json  124 bytes          [emitted]
-# ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Instead, you&amp;#39;ll notice both the application and vendor digests changed. Again, not expected!&lt;/p&gt;
-
-&lt;p&gt;The root problem (and solution) gets into the real meat of how Webpack works under the hood. First, here is &lt;a href="https://www.ag-grid.com/ag-grid-understanding-webpack/"&gt;an article that has helped us better understand how Webpack works&lt;/a&gt; including its use of module ids to link modules in the Webpack runtime.&lt;/p&gt;
-
-&lt;p&gt;Building on that primer, we followed the steps outlined in this &lt;a href="https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31"&gt;great article on predictable long term caching&lt;/a&gt; to ensure Webpack generates the same fingerprinted output for our infrequently changing vendor bundle.&lt;/p&gt;
-
-      &lt;h2 id="third-party-stylesheets-images-and-fonts" class="title"&gt;
-        &lt;a name="third-party-stylesheets-images-and-fonts" class="anchor" href="#third-party-stylesheets-images-and-fonts"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Third-party stylesheets, images, and fonts
-      &lt;/h2&gt;
-    
-&lt;p&gt;Since we decided to leave stylesheets, images, and fonts in &lt;code&gt;app/assets&lt;/code&gt; &lt;em&gt;under Sprockets compilation&lt;/em&gt;, we needed to make Sprockets aware of asset sources we we now installing as NPM modules.&lt;/p&gt;
-
-&lt;p&gt;In most cases, we&amp;#39;d replace the corresponding Rails asset gem and add the appropriate &lt;code&gt;node_modules&lt;/code&gt; directory to the Sprockets load path. For example, for &lt;code&gt;foundation&lt;/code&gt;, here&amp;#39;s how we did it:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# Gemfile
-
-- gem &amp;quot;foundation-rails&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// package.json
-
-&amp;quot;dependencies&amp;quot;: {
-   // ...
-+ &amp;quot;foundation-sites&amp;quot;: &amp;quot;~6.3.0&amp;quot;,
-   // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/initializers/assets.rb
-
-+ Rails.application.config.assets.paths &amp;lt;&amp;lt; Rails.root.join(&amp;quot;node_modules&amp;quot;, &amp;quot;foundation-sites&amp;quot;, &amp;quot;scss&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Of course, Webpack can bundle stylesheets as well and we&amp;#39;ll likely investigate
-this on a future iteration when we&amp;#39;re ready to remove Sprockets entirely.&lt;/p&gt;
-
-      &lt;h2 id="deploying-with-capistrano-and-nginx" class="title"&gt;
-        &lt;a name="deploying-with-capistrano-and-nginx" class="anchor" href="#deploying-with-capistrano-and-nginx"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Deploying with Capistrano and Nginx
-      &lt;/h2&gt;
-    
-&lt;p&gt;We use Capistrano to deploy our Rails application. The &lt;code&gt;capistrano/rails&lt;/code&gt; plugin adds some deployment configuration for the Rails asset pipeline, but we needed to make some changes to support Webpack properly.&lt;/p&gt;
-
-&lt;p&gt;Webpack compilation happens automatically with each deploy because Webpacker hooks into the &lt;code&gt;rake assets:precompile&lt;/code&gt; task. This task relies on a Webpacker binstub, &lt;code&gt;bin/webpack&lt;/code&gt;, which needs to be checked into version control.&lt;/p&gt;
-
-&lt;p&gt;We also needed to set &lt;code&gt;public/packs&lt;/code&gt; and &lt;code&gt;node_modules&lt;/code&gt; as shared directories to ensure Webpack build output and NPM package installation via &lt;code&gt;yarn&lt;/code&gt; are shared across deploys.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/deploy.rb
-
-set :linked_dirs, fetch(:linked_dirs, []).push(&amp;#39;public/packs&amp;#39;, &amp;#39;node_modules&amp;#39;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It also helps to be aware of that Webpacker uses the &lt;code&gt;NODE_ENV&lt;/code&gt; environment variable to select the right Webpack configuration. If &lt;code&gt;NODE_ENV&lt;/code&gt; is not set, it will infer its value from &lt;code&gt;RAILS_ENV&lt;/code&gt;. We also have a staging environment where we use the environment variable &lt;code&gt;RAILS_ENV=staging&lt;/code&gt;. Our initial Webpack deploy to staging failed because we did not have a Webpack config for staging. Since our Webpack configuration for staging would be identical to production, we simply set &lt;code&gt;NODE_ENV=production&lt;/code&gt; on our staging environments:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;# config/deploy.rb
-
-set :default_env, { &amp;#39;NODE_ENV&amp;#39; =&amp;gt; &amp;#39;production&amp;#39; }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Finally, since we use Nginx as a reverse proxy to our Rails application, we want to be sure the proper HTTP response headers are added for anything Webpack compiles to &lt;code&gt;public/packs&lt;/code&gt; to improve cacheability. So we added &amp;quot;packs&amp;quot; to our Nginx location block for assets, similar to below:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="nginx"&gt;server {
-  listen 443;
-  server_name example.com;
-  root /path/to/application/current/public;
-
-  location ^~ /assets|packs/ {
-    gzip_static on;
-    expires max;
-    add_header Cache-Control public;
-  }
-
-  # ...
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h2 id="unit-testing-with-karma" class="title"&gt;
-        &lt;a name="unit-testing-with-karma" class="anchor" href="#unit-testing-with-karma"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Unit Testing with Karma
-      &lt;/h2&gt;
-    
-&lt;p&gt;For unit testing our JavaScript with the Rails asset pipeline, we used &lt;a href="https://github.com/searls/jasmine-rails"&gt;jasmine-rails&lt;/a&gt;. That gem has allowed us to run JS unit tests either in the browser or on the command line. Given its tight coupling to the Rails asset pipeline, we would also have to replace our test runner. After trying out a few options, we liked the features of &lt;a href="https://karma-runner.github.io/1.0/index.html"&gt;Karma&lt;/a&gt; and that a) it was easy to setup with Webpack, and b) supports the Jasmine assertion syntax. That meant we could port our existing tests to Karma + Webpack with minimal changes.&lt;/p&gt;
-
-&lt;p&gt;There are plenty of tutorials and tips out there for Karma + Webpack, including &lt;a href="https://github.com/rails/webpacker/blob/master/docs/testing.md#karma-setup-for-typescript"&gt;Karma setup instructions in the Webpacker docs&lt;/a&gt;. Here&amp;#39;s a brief overview of what we did:&lt;/p&gt;
-
-&lt;p&gt;First we added several packages.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;yarn add --dev karma karma-cli karma-sourcemap-loader karma-webpack karma-jasmine karma-chrome-launcher
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To make Karma work with our Webpacker setup, we started with the default &lt;code&gt;karma.config.js&lt;/code&gt; configuration file and made some modifications as shown below:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// karma.conf.js
-
-// Require our Webpack test configuration
-const webpackConfig = require(&amp;#39;./config/webpack/test.js&amp;#39;);
-
-// Remove the plugins to workaround for several issues
-// https://github.com/webpack-contrib/karma-webpack/issues/22
-// https://github.com/rails/webpacker/issues/435
-const {assign} = require(&amp;#39;lodash&amp;#39;);
-assign(webpackConfig, { plugins: [] });
-
-module.exports = function(config) {
-  config.set({
-    frameworks: [&amp;#39;jasmine&amp;#39;],
-
-    // list of files / patterns to load in the browser
-    files: [
-      { pattern: &amp;#39;spec/javascript/**/*.js&amp;#39;, watched: false },
-    ],
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      &amp;#39;spec/javascript/**/*.js&amp;#39;: [&amp;#39;webpack&amp;#39;, &amp;#39;sourcemap&amp;#39;],
-    },
-
-    // For karma-webpack extension
-    webpack: webpackConfig,
-  });
-};
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We ran into few problems using Karma with certain Webpack plugins, including &lt;a href="https://github.com/webpack-contrib/karma-webpack/issues/22"&gt;this issue&lt;/a&gt; with &lt;code&gt;karma-webpack&lt;/code&gt; plus the &lt;code&gt;CommonsChunkPlugin&lt;/code&gt; and &lt;a href="https://github.com/rails/webpacker/issues/435"&gt;this issue&lt;/a&gt; with Webpacker&amp;#39;s use of the &lt;code&gt;ManifestPlugin&lt;/code&gt;. Turns out, to run unit tests in the Karma context, our Webpack plugins are irrelevant, so we&amp;#39;ve opted to remove them altogether in the Karma configuration for now. The downside is that our unit testing setup does not exercise our Webpack plugin configuration, but any issue there would be caught by our integration testing workflow.&lt;/p&gt;
-
-&lt;p&gt;Another problem we needed to solve was to keep our legacy specs in jasmine-rails passing during the transition. As soon as we moved our first critical dependency from the asset pipeline to Webpack, all of our jasmine-rails specs broke. This is because jasmine-rails assumes you&amp;#39;re just using Sprockets and knows nothing about our Webpack output.&lt;/p&gt;
-
-&lt;p&gt;Fortunately, jasmine-rails allowed us to override the Rails template &lt;code&gt;spec_runner.html.erb&lt;/code&gt; that gets rendered when jasmine-rails executes the test suite in the browser. We just copied the default jasmine-rails ERB layout into our project and added our Webpack &amp;quot;packs&amp;quot; in the right place.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- app/views/layouts/jasmine_rails/spec_runner.html.erb --&amp;gt;
-
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta content=&amp;quot;text/html;charset=UTF-8&amp;quot; http-equiv=&amp;quot;Content-Type&amp;quot;/&amp;gt;
-    &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;IE=edge&amp;quot;/&amp;gt;
-    &amp;lt;title&amp;gt;Jasmine Specs&amp;lt;/title&amp;gt;
-
-    &amp;lt;%= stylesheet_link_tag *jasmine_css_files %&amp;gt;
-
-    &amp;lt;!-- add the packs! --&amp;gt;
-    &amp;lt;%= javascript_pack_tag &amp;quot;vendor&amp;quot;, &amp;quot;application&amp;quot; %&amp;gt;
-
-    &amp;lt;%= javascript_include_tag *jasmine_js_files, :defer =&amp;gt; &amp;quot;defer&amp;quot; %&amp;gt;
-  &amp;lt;/head&amp;gt;
-  &amp;lt;body data-no-turbolink&amp;gt;
-    &amp;lt;div id=&amp;quot;jasmine_content&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;%= yield %&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Once all our unit test were ported over to Karma, we were able to remove &lt;code&gt;jasmine-rails&lt;/code&gt; from our application.&lt;/p&gt;
-
-      &lt;h2 id="local-development-with-ssl" class="title"&gt;
-        &lt;a name="local-development-with-ssl" class="anchor" href="#local-development-with-ssl"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Local development with SSL
-      &lt;/h2&gt;
-    
-&lt;p&gt;Our team also strives for dev/prod parity as much as possible, from the 12 factor app methodology. This includes using a non-localhost domain, like &lt;code&gt;myapp.dev&lt;/code&gt;, Nginx as a reverse proxy, and enforcing SSL in development. Fortunately, the Webpack dev server supports SSL, but we needed to do a few things to make it work properly, including submitting a few patches to Webpacker.&lt;/p&gt;
-
-&lt;p&gt;Webpack assets are proxied to the Webpack dev server by the Webpacker middleware, but after enabling &lt;code&gt;https&lt;/code&gt; for the dev server, autoreload wasn&amp;#39;t working. This is because Webpack inserts a script that opens up a websocket connection to the dev server over the endpoint &lt;code&gt;/sockjs-node&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;We needed to provide the hostname to webpack dev server so it can initiate the websocket connection for live reloading (&lt;a href="https://webpack.js.org/configuration/dev-server/#devserver-public"&gt;Webpack docs&lt;/a&gt;). To do so, we set the &lt;code&gt;public&lt;/code&gt; option in &lt;code&gt;config/webpacker.yml&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;development:
-  # ...
-  dev_server:
-    # ...
-    public: myapp.dev
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We also add the following location block to development Nginx server configuration to allow the websocket connection to proxy through Nginx.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="nginx"&gt;server {
-    listen 80;
-    server_name myapp.dev
-
-    # Proxy webpack dev server websocket requests
-    location /sockjs-node {
-        proxy_redirect off;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection &amp;quot;upgrade&amp;quot;;
-        proxy_pass http://127.0.0.1:3035; # change to match your webpack-dev-server host
-    }
-
-    # ...
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h2 id="wrapping-up" class="title"&gt;
-        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Wrapping up
-      &lt;/h2&gt;
-    
-&lt;p&gt;Wow, you made it this far!&lt;/p&gt;
-
-&lt;p&gt;Perhaps the most important lesson we learned throughout this process is this:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Choosing Webpack means investing time in understanding how it works and how to get the most out of it.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Gone are the days when we could &amp;quot;set it and forget it&amp;quot; for most of our dependencies under Sprockets. Despite the ease with which Webpacker let us get Webpack running in our Rails application, it has required effort to experiment with configuration, optimize bundles, integrate with third-party modules, set up predictable, long-term caching, and stay up-to-date with rapidly changing dependencies, like Webpack itself.&lt;/p&gt;
-
-&lt;p&gt;As of this writing, all of our clientside application JavaScript now runs through Webpack in development and for deployment. So far, our team has been delighted by results and we&amp;#39;re glad we invested in upgrading from the asset pipeline.&lt;/p&gt;
 </content>
   </entry>
 </feed>
