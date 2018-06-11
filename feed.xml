@@ -238,7 +238,7 @@ workflows:
 </content>
   </entry>
   <entry>
-    <title>Deploying a Vue.js website to Amazon S3 with CircleCI</title>
+    <title>Deploying a Vue.js website to AWS S3 with CircleCI 1.0</title>
     <link rel="alternate" href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"/>
     <id>/blog/deploying-vue-to-amazon-s3-with-circleci.html</id>
     <published>2018-02-05T00:00:00+00:00</published>
