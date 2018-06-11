@@ -12,6 +12,8 @@ tags:
   - Vue
 ---
 
+*__Update__: for configuring CircleCI 2.0 to deploy Vue applications to S3, see [my follow up post](https://rossta.net/blog/deploying-vue-with-circleci-2.html).*
+
 In this post, we'll walkthrough how I set up continuous deployment for my [Vue.js static website](http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/). Every time I `git push` to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.
 
 *This post is part of an ongoing series on [building Connect Four with Vue.js and Phoenix](/series/connect-four.html).*
@@ -41,6 +43,8 @@ With the game working and now backed by version control ([source code](https://g
 $ yarn run build
 ```
 For `vue-cli` version 2, this command builds an index file and its associated assets to the `dist/` directory. This will be important when we set up the build for continuous deployment.
+
+*For users of `vue-cli` version 3, the above command would be simply `yarn build`.*
 
 <aside class="callout panel">
 <p>
@@ -82,6 +86,8 @@ The  AWS docs recommend the following policy for static website hosting. If sett
 For more information on setting up static websites on Amazon S3, check out Kyle Galbraith's [How to host a website on S3 with getting lost in the sea](https://medium.freecodecamp.org/how-to-host-a-website-on-s3-without-getting-lost-in-the-sea-e2b82aa6cd38), which also touches on costs and custom domain setup. Connor Leech wrote a nice post on [hosting a Vue.js website on Amazon S3](https://medium.com/@connorleech/host-a-vue-js-website-on-amazon-s3-for-the-best-hosting-solution-ever-%EF%B8%8F-eee2a28b2506) with manual file upload, which I used as my starting point. The AWS documentation provides a [general walkthrough](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html) as well.
 
 ### Automatic for the people
+
+*__Update__: for configuring CircleCI 2.0 to deploy Vue applications to S3, see [my follow up post](https://rossta.net/blog/deploying-vue-with-circleci-2.html).*
 
 For continuous deployment, I chose CircleCI 1.0 since I'm most familiar with its configuration options and it's currently free for my needs.
 
