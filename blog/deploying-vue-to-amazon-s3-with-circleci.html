@@ -77,7 +77,9 @@
           <img src="/assets/images/blog/stock/flower-tj-holowaychuk-unsplash-c2c7a416.jpg" alt="Flower tj holowaychuk unsplash" />
             <figcaption>Background Photo by Tj Holowaychuk on Unsplash</figcaption>
         </figure>
-      <p>In this post, we&#39;ll walkthrough how I set up continuous deployment for my <a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/">Vue.js static website</a>. Every time I <code>git push</code> to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.</p>
+      <p><em><strong>Update</strong>: for configuring CircleCI 2.0 to deploy Vue applications to S3, see <a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html">my follow up post</a>.</em></p>
+
+<p>In this post, we&#39;ll walkthrough how I set up continuous deployment for my <a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/">Vue.js static website</a>. Every time I <code>git push</code> to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.</p>
 
 <p><em>This post is part of an ongoing series on <a href="/series/connect-four.html">building Connect Four with Vue.js and Phoenix</a>.</em></p>
 
@@ -113,6 +115,8 @@ $ vue init webpack connect-four-vue
 </code></pre>
 
 <p>For <code>vue-cli</code> version 2, this command builds an index file and its associated assets to the <code>dist/</code> directory. This will be important when we set up the build for continuous deployment.</p>
+
+<p><em>For users of <code>vue-cli</code> version 3, the above command would be simply <code>yarn build</code>.</em></p>
 
 <aside class="callout panel">
 <p>
@@ -168,6 +172,8 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
         Automatic for the people
       </h3>
     
+<p><em><strong>Update</strong>: for configuring CircleCI 2.0 to deploy Vue applications to S3, see <a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html">my follow up post</a>.</em></p>
+
 <p>For continuous deployment, I chose CircleCI 1.0 since I&#39;m most familiar with its configuration options and it&#39;s currently free for my needs.</p>
 
 <p>With my Github account linked to my CircleCI, I added my Connect Four Github project to CircleCI from the <em>Projects</em> tab in the CircleCI dashboard.</p>

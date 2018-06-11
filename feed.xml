@@ -5,7 +5,7 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-06-06T20:00:00-04:00</updated>
+  <updated>2018-06-07T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
@@ -13,8 +13,8 @@
     <title>Deploying Vue with CircleCI 2.0</title>
     <link rel="alternate" href="/blog/deploying-vue-with-circleci-2.html"/>
     <id>/blog/deploying-vue-with-circleci-2.html</id>
-    <published>2018-06-06T20:00:00-04:00</published>
-    <updated>2018-06-06T20:00:00-04:00</updated>
+    <published>2018-06-07T00:00:00+00:00</published>
+    <updated>2018-06-07T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -234,6 +234,8 @@ workflows:
               only: master
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;It&amp;#39;s worth mentioning that this configuration could easily be adapted to deploy a Vue.js application to a different target by replacing the deploy job with a different set of applicable steps.&lt;/p&gt;
+
 &lt;p&gt;By the way, this blog is also a static website built and published to Github pages via CircleCI. I recently upgraded to its config to 2.0, which you can &lt;a href="https://github.com/rossta/rossta.github.com/blob/develop/.circleci/config.yml"&gt;check out here&lt;/a&gt; if you&amp;#39;re interested. CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!&lt;/p&gt;
 </content>
   </entry>
@@ -241,13 +243,17 @@ workflows:
     <title>Deploying a Vue.js website to Amazon S3 with CircleCI</title>
     <link rel="alternate" href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"/>
     <id>/blog/deploying-vue-to-amazon-s3-with-circleci.html</id>
-    <published>2018-02-04T19:00:00-05:00</published>
-    <updated>2018-02-04T19:00:00-05:00</updated>
+    <published>2018-02-05T00:00:00+00:00</published>
+    <updated>2018-02-05T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;In this post, we'll walkthrough how I set up continuous deployment for my &lt;a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/"&gt;Vue.js static website&lt;/a&gt;. Every time I &lt;code&gt;git push&lt;/code&gt; to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;In this post, we&amp;#39;ll walkthrough how I set up continuous deployment for my &lt;a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/"&gt;Vue.js static website&lt;/a&gt;. Every time I &lt;code&gt;git push&lt;/code&gt; to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;&lt;em&gt;&lt;strong&gt;Update&lt;/strong&gt;: for configuring CircleCI 2.0 to deploy Vue applications to S3, see &lt;a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html"&gt;my follow up post&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this post, we'll walkthrough how I set up continuous deployment for my &lt;a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/"&gt;Vue.js static website&lt;/a&gt;. Every time I &lt;code&gt;git push&lt;/code&gt; to the primary branch of my repository...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;em&gt;&lt;strong&gt;Update&lt;/strong&gt;: for configuring CircleCI 2.0 to deploy Vue applications to S3, see &lt;a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html"&gt;my follow up post&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this post, we&amp;#39;ll walkthrough how I set up continuous deployment for my &lt;a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/"&gt;Vue.js static website&lt;/a&gt;. Every time I &lt;code&gt;git push&lt;/code&gt; to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;This post is part of an ongoing series on &lt;a href="/series/connect-four.html"&gt;building Connect Four with Vue.js and Phoenix&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
@@ -283,6 +289,8 @@ $ vue init webpack connect-four-vue
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;For &lt;code&gt;vue-cli&lt;/code&gt; version 2, this command builds an index file and its associated assets to the &lt;code&gt;dist/&lt;/code&gt; directory. This will be important when we set up the build for continuous deployment.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;For users of &lt;code&gt;vue-cli&lt;/code&gt; version 3, the above command would be simply &lt;code&gt;yarn build&lt;/code&gt;.&lt;/em&gt;&lt;/p&gt;
 
 &lt;aside class="callout panel"&gt;
 &lt;p&gt;
@@ -338,6 +346,8 @@ Though there are big changes coming to &lt;i&gt;vue-cli&lt;/i&gt; in version 3, 
         Automatic for the people
       &lt;/h3&gt;
     
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Update&lt;/strong&gt;: for configuring CircleCI 2.0 to deploy Vue applications to S3, see &lt;a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html"&gt;my follow up post&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
 &lt;p&gt;For continuous deployment, I chose CircleCI 1.0 since I&amp;#39;m most familiar with its configuration options and it&amp;#39;s currently free for my needs.&lt;/p&gt;
 
 &lt;p&gt;With my Github account linked to my CircleCI, I added my Connect Four Github project to CircleCI from the &lt;em&gt;Projects&lt;/em&gt; tab in the CircleCI dashboard.&lt;/p&gt;
@@ -481,8 +491,8 @@ Check out &lt;a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.
     <title>Finding Four-in-a-Row for the Win</title>
     <link rel="alternate" href="/blog/finding-four-in-a-row-ftw.html"/>
     <id>/blog/finding-four-in-a-row-ftw.html</id>
-    <published>2018-01-27T19:00:00-05:00</published>
-    <updated>2018-01-27T19:00:00-05:00</updated>
+    <published>2018-01-28T00:00:00+00:00</published>
+    <updated>2018-01-28T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -748,8 +758,8 @@ reset() {
     <title>Animating Connect Four with Vue.js</title>
     <link rel="alternate" href="/blog/animating-connect-four-with-vuejs.html"/>
     <id>/blog/animating-connect-four-with-vuejs.html</id>
-    <published>2018-01-17T19:00:00-05:00</published>
-    <updated>2018-01-17T19:00:00-05:00</updated>
+    <published>2018-01-18T00:00:00+00:00</published>
+    <updated>2018-01-18T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -997,8 +1007,8 @@ Four wall, visible through the portholes.&lt;/p&gt;
     <title>Building basic Connect Four with Vue.js</title>
     <link rel="alternate" href="/blog/basic-connect-four-with-vuejs.html"/>
     <id>/blog/basic-connect-four-with-vuejs.html</id>
-    <published>2018-01-14T19:00:00-05:00</published>
-    <updated>2018-01-14T19:00:00-05:00</updated>
+    <published>2018-01-15T00:00:00+00:00</published>
+    <updated>2018-01-15T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -1405,8 +1415,8 @@ place as they are added to the board.&lt;/p&gt;
     <title>Connect Four with SVG pattern masking</title>
     <link rel="alternate" href="/blog/connect-four-with-svg-pattern-masking.html"/>
     <id>/blog/connect-four-with-svg-pattern-masking.html</id>
-    <published>2018-01-09T19:00:00-05:00</published>
-    <updated>2018-01-09T19:00:00-05:00</updated>
+    <published>2018-01-10T00:00:00+00:00</published>
+    <updated>2018-01-10T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>

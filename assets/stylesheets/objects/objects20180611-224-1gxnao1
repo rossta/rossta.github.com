@@ -1,24 +1,37 @@
 /*
-Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.
-        on line 2 of /home/circleci/project/source/assets/stylesheets/_settings.scss
-        from line 1 of /home/circleci/project/source/assets/stylesheets/layout.scss
+Error: Undefined mixin 'base-font'.
+        on line 2 of /home/circleci/project/source/assets/stylesheets/article.scss, in `base-font'
+        from line 2 of /home/circleci/project/source/assets/stylesheets/article.scss
+        from line 1 of /home/circleci/project/source/assets/stylesheets/objects.scss
 
-1: @import 'settings';
-2: @import 'mixins';
-3: 
-4: body {
-5:   background: alicewhite;
-6:   padding: 0 0 2em;
-7:   @include base-font;
+1: @import "article";
+2: @import "code";
+3: @import "top-bar";
+4: @import "video";
+5: 
+6: .clear { clear: both; }
+7: .clearfix { overflow: auto; }
 
 Backtrace:
-/home/circleci/project/source/assets/stylesheets/_settings.scss:2
-/home/circleci/project/source/assets/stylesheets/layout.scss:1
-/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/import_node.rb:67:in `rescue in import'
-/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/import_node.rb:45:in `import'
-/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/import_node.rb:28:in `imported_file'
-/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/import_node.rb:37:in `css_import?'
-/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:314:in `visit_import'
+/home/circleci/project/source/assets/stylesheets/article.scss:2:in `base-font'
+/home/circleci/project/source/assets/stylesheets/article.scss:2
+/home/circleci/project/source/assets/stylesheets/objects.scss:1
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:352:in `block in visit_mixin'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/stack.rb:98:in `block in with_mixin'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/stack.rb:115:in `with_frame'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/stack.rb:98:in `with_mixin'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:350:in `visit_mixin'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/base.rb:36:in `visit'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:162:in `block in visit'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/stack.rb:79:in `block in with_base'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/stack.rb:115:in `with_frame'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/stack.rb:79:in `with_base'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:162:in `visit'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:434:in `block (2 levels) in visit_rule'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:434:in `map'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:434:in `block in visit_rule'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:183:in `with_environment'
+/home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:432:in `visit_rule'
 /home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/base.rb:36:in `visit'
 /home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/tree/visitors/perform.rb:162:in `block in visit'
 /home/circleci/project/vendor/bundle/ruby/2.4.0/gems/sass-3.4.25/lib/sass/stack.rb:79:in `block in with_base'
@@ -156,4 +169,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~foundation-sites/scss/foundation/components/global.\A         on line 2 of /home/circleci/project/source/assets/stylesheets/_settings.scss\A         from line 1 of /home/circleci/project/source/assets/stylesheets/layout.scss\A \A 1: @import 'settings';\A 2: @import 'mixins';\A 3: \A 4: body {\A 5:   background: alicewhite;\A 6:   padding: 0 0 2em;\A 7:   @include base-font;"; }
+  content: "Error: Undefined mixin 'base-font'.\A         on line 2 of /home/circleci/project/source/assets/stylesheets/article.scss, in `base-font'\A         from line 2 of /home/circleci/project/source/assets/stylesheets/article.scss\A         from line 1 of /home/circleci/project/source/assets/stylesheets/objects.scss\A \A 1: @import \"article\";\A 2: @import \"code\";\A 3: @import \"top-bar\";\A 4: @import \"video\";\A 5: \A 6: .clear { clear: both; }\A 7: .clearfix { overflow: auto; }"; }
