@@ -1,5 +1,5 @@
 ---
-title: Building a Simple PDF Viewer with Vue.js
+title: Building a Simple PDF Viewer with Vue.js (Part 1)
 author: Ross Kaffenberger
 published: false
 summary: A look at Portable Document Format rendering with PDF.js and Vue
@@ -99,7 +99,7 @@ I would expect it to be straightforward to adapt the code for other relatively r
 Since PDF.js will request data via an XMLHTTPRequest in JavaScript, typical crossdomain restrictions apply. For the purposes of this tutorial, we'll assume we have a URL to a PDF that can be retrieved either from our development server or from a server that allows Cross-Origin Resource Sharing (CORS) from our host.
 </p></aside>
 
-### Rendering pages
+### Fetching the pdf
 
 Our `<App>` component will hard-code default values for a PDF url and a rendering scale which will be passed to a `<PDFDocument>` component.
 
@@ -128,7 +128,7 @@ The document component is responsible for fetching the pdf data through PDF.js a
 
 Its `data` will track the `pdf` object and a list of `page` object in `pages`.
 
-```js
+```javascript
 // src/components/PDFDocument.vue
 
 export default {
@@ -144,7 +144,7 @@ export default {
 ```
 When the component is mounted, it will fetch the PDF data using the `pdfjs.getDocument` function.
 
-```js
+```javascript
 // src/components/PDFDocument.vue
 
 export default {
@@ -166,7 +166,7 @@ export default {
 ```
 We'll use a watch callback for the `pdf` attribute to fetch all the pages via the `pdf.getPage` function provided by PDF.js. Since the return value of `getPage` behaves like a promise, we can use `Promise.all` to determine when all the `page` objects have been fetched and set the resolved collection as the `pages` data:
 
-```js
+```javascript
 // src/components/PDFDocument.vue
 
 import range from 'lodash/range';
@@ -202,13 +202,13 @@ Its template simply renders a `<PDFPage>` child component for each `page` object
 </template>
 ```
 
-### Page rendering
+### Rendering pages to canvas
 
 Here's where things get a little more complex. The `<PDFPage>` component is responsible for calling the `PDFPageProxy#render` method to draw the data to a `<canvas>` element.
 
 We don't even need a template; we simply will use a Vue `render` function to create a `<canvas>` element with computed attributes, `canvasAttrs` (shown further below).
 
-```js
+```javascript
 export default {
   props: ['page', 'scale'],
 
@@ -223,11 +223,11 @@ To render a PDF to `<canvas>` with an acceptable resolution, we can take advanta
 
 In our component, we stash a (non-reactive) `viewport` property return by `PDFPageProxy#getViewport` for our given `scale` prop. This `viewport` tells us the expect pixel width and height of the PDF. We'll set these values as width and height attributes of the `<canvas>` element. For the actual size of the `<canvas>`, we'll use CSS attributes instead.
 
-Since the `scale` prop is reactive, defining `canvasAttrs` as a computed property based of the scale means our PDF pages will automatically re-render when the scale changes. Future iterations will allow to the change `scale` prop (using future zoom controls, for example). We'll simply calculate the width and height via CSS to update the rendered size of the canvas to avoid redrawing the canvas data from the `page` object each time. For this, we use a clone of the original viewport, given via the `actualSizeViewport` computed property, and the `devicePixelRatio` to calculate the target width and height style attributes for the `<canvas>`.
+Since the `scale` prop is reactive and our `render` function depends on `canvasAttrs`, defining `canvasAttrs` as a computed property based off the scale means our PDF pages will automatically re-render when the scale changes. Future iterations will allow to the change `scale` prop (using future zoom controls, for example). We'll simply calculate the width and height via CSS to update the rendered size of the canvas to avoid redrawing the canvas data from the `page` object each time. For this, we use a clone of the original viewport, given via the `actualSizeViewport` computed property, and the `devicePixelRatio` to calculate the target width and height style attributes for the `<canvas>`.
 
 Here's the code that puts all that together:
 
-```js
+```javascript
 export default {
   created() {
     // PDFPageProxy#getViewport
@@ -266,17 +266,16 @@ export default {
 
   // ...
 ```
+Now that we're creating the `<canvas>` with the attributes we want, we can leverage the PDF.js API to draw the page data to element. Adapting from the imperative code we started with, we'll pass the `viewport` and `canvasContext` to the `PDFPageProxy#render` method. Since that call returns a promise, we can be notified when it's complete.
 
 ```js
 export default {
-  created() {
-    // PDFPageProxy#getViewport
-    // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
-    this.viewport = this.page.getViewport(this.scale);
+  mounted() {
+    this.drawPage();
   },
 
   methods: {
-    renderPage() {
+    drawPage() {
       if (this.renderTask) return;
 
       const {viewport} = this;
@@ -290,63 +289,26 @@ export default {
         then(() => this.$emit('rendered', this.page)).
         then(() => log(`Page ${this.pageNumber} rendered`));
     },
-
     // ...
   },
-
   // ...
 ```
 
-```js
+### Cleaning up after ourselves
+
+Since we're working with JavaScript objects that keep state outside of Vue's control, we should be mindful to clean up after ourselves. The PDF document and page objects provide `destroy` methods to be called on teardown, such as, when our render promise fails, the `page` object is replaced, or the Vue component itself is destroyed.
+
+```javascript
 export default {
-  props: ['page', 'scale'],
-
-  computed: {
-    actualSizeViewport() {
-      return this.viewport.clone({scale: this.scale});
-    },
-
-    canvasStyle() {
-      const {width: actualSizeWidth, height: actualSizeHeight} = this.actualSizeViewport;
-      const pixelRatio = window.devicePixelRatio || 1;
-      const [pixelWidth, pixelHeight] = [actualSizeWidth, actualSizeHeight]
-        .map(dim => Math.ceil(dim / pixelRatio));
-      return `width: ${pixelWidth}px; height: ${pixelHeight}px;`
-    },
-
-    canvasAttrs() {
-      let {width, height} = this.viewport;
-      [width, height] = [width, height].map(dim => Math.ceil(dim));
-
-      const style = this.canvasStyle;
-
-      return {
-        width,
-        height,
-        style,
-        class: 'pdf-page',
-      };
-    },
-
-    pageNumber() {
-      return this.page.pageNumber;
-    },
+  beforeDestroy() {
+    this.destroyPage(this.page);
   },
 
   methods: {
-    renderPage() {
-      if (this.renderTask) return;
-
-      const {viewport} = this;
-      const canvasContext = this.$el.getContext('2d');
-      const renderContext = {canvasContext, viewport};
-
-      // PDFPageProxy#render
-      // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
-      this.renderTask = this.page.render(renderContext);
+    drawPage() {
+      // ...
       this.renderTask.
-        then(() => this.$emit('rendered', this.page)).
-        then(() => log(`Page ${this.pageNumber} rendered`)).
+        then(/* */).
         catch(this.destroyRenderTask);
     },
 
@@ -377,38 +339,12 @@ export default {
       this.destroyPage(oldPage);
     },
   },
-
-  created() {
-    // PDFPageProxy#getViewport
-    // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
-    this.viewport = this.page.getViewport(this.scale);
-  },
-
-  mounted() {
-    log(`Page ${this.pageNumber} mounted`);
-    this.renderPage();
-  },
-
-  beforeDestroy() {
-    this.destroyPage(this.page);
-  },
-
-  render(h) {
-    const {canvasAttrs: attrs} = this;
-    return h('canvas', {attrs});
-  },
 };
 ```
 
-### Adding controls
+### Up next
 
-```html
-<PDFViewer>
-  <PDFZoom />
-  <PDFPaginator />
-  <PDFDocument />
-</PDFViewer>
-```
+In the next post, we'll look at adding some conditional rendering; since all pages aren't visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.
 
 ## Similar projects
 
