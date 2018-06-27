@@ -164,7 +164,7 @@ export default {
   },
   //...
 ```
-We'll use a watch callback for the `pdf` attribute to fetch all the pages via the `pdf.getPage` function provided by PDF.js. Since the return value of `getPage` behaves like a promise, we can use `Promise.all` to determine when all the `page` objects have been fetched and set the resolved collection as the `pages` data.
+We'll use a watch callback for the `pdf` attribute to fetch all the pages via the `pdf.getPage` function provided by PDF.js. Since the return value of `getPage` behaves like a promise, we can use `Promise.all` to determine when all the `page` objects have been fetched and set the resolved collection as the `pages` data:
 
 ```js
 // src/components/PDFDocument.vue
@@ -187,7 +187,7 @@ export default {
 };
 ```
 
-Its template simply renders a `<PDFPage>` child component for each `page` object. Each page component also needs the `scale` prop for rendering the page data to `<canvas>`. Once the `pages`
+Its template simply renders a `<PDFPage>` child component for each `page` object. Each page component also needs the `scale` prop for rendering the page data to `<canvas>`:
 
 ```html
 <!-- src/components/PDFDocument.vue -->
@@ -220,6 +220,12 @@ export default {
   // ...
 ```
 To render a PDF to `<canvas>` with an acceptable resolution, we can take advantage of a browser property called [`window.devicePixelRatio`](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio). This value represents the ratio of screen pixels to CSS pixels. Given a hi-resolution display with a `devicePixelRatio` of `2`, rendering our PDF pixels to canvas may appear blurry; we'll use the `page` viewport to give the `<canvas>` a width and height at the required `scale` property, while also providing CSS width and height attributes to half the size of the canvas.
+
+In our component, we stash a (non-reactive) `viewport` property return by `PDFPageProxy#getViewport` for our given `scale` prop. This `viewport` tells us the expect pixel width and height of the PDF. We'll set these values as width and height attributes of the `<canvas>` element. For the actual size of the `<canvas>`, we'll use CSS attributes instead.
+
+Since the `scale` prop is reactive, defining `canvasAttrs` as a computed property based of the scale means our PDF pages will automatically re-render when the scale changes. Future iterations will allow to the change `scale` prop (using future zoom controls, for example). We'll simply calculate the width and height via CSS to update the rendered size of the canvas to avoid redrawing the canvas data from the `page` object each time. For this, we use a clone of the original viewport, given via the `actualSizeViewport` computed property, and the `devicePixelRatio` to calculate the target width and height style attributes for the `<canvas>`.
+
+Here's the code that puts all that together:
 
 ```js
 export default {
@@ -255,7 +261,6 @@ export default {
     actualSizeViewport() {
       return this.viewport.clone({scale: this.scale});
     },
-
     //...
   },
 
