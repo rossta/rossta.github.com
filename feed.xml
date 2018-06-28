@@ -37,7 +37,7 @@
         Similar projects
       &lt;/h3&gt;
     
-&lt;p&gt;Mozilla&amp;#39;s PDF.js package ships with its own web viewer (&lt;a href="https://mozilla.github.io/pdf.js/web/viewer.html"&gt;demo&lt;/a&gt;) For an alternative approach to PDF rendering in Vue, check out the &lt;a href="https://github.com/FranckFreiburger/vue-pdf"&gt;vue-pdf&lt;/a&gt; package.&lt;/p&gt;
+&lt;p&gt;Mozilla&amp;#39;s PDF.js package ships with its own web viewer (&lt;a href="https://mozilla.github.io/pdf.js/web/viewer.html"&gt;demo&lt;/a&gt;) For an alternative approach to PDF rendering with Vue, check out the &lt;a href="https://github.com/FranckFreiburger/vue-pdf"&gt;vue-pdf&lt;/a&gt; package.&lt;/p&gt;
 
       &lt;h3 id="an-incomplete-intro-to-pdf-js" class="title"&gt;
         &lt;a name="an-incomplete-intro-to-pdf-js" class="anchor" href="#an-incomplete-intro-to-pdf-js"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -428,7 +428,8 @@ export default {
     
 &lt;p&gt;We&amp;#39;ve now converted our original, imperative PDF rendering script with a declarative Vue component hierarchy. We&amp;#39;ve certainly added a lot of code to make this work, but with working knowledge of Vue, we&amp;#39;ve made it easier to reason about, easier to extend, and easier to add features to give our PDF viewer more functionality.&lt;/p&gt;
 
-&lt;p&gt;In the next post, we&amp;#39;ll look at adding some conditional rendering; since all pages aren&amp;#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.&lt;/p&gt;
+&lt;p&gt;In the next post, we&amp;#39;ll look at adding some conditional rendering; since all pages aren&amp;#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.
+F&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -921,7 +922,7 @@ Check out &lt;a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.
 
 &lt;p&gt;Before we dive in, here&amp;#39;s a pen of the game with the win logic we&amp;#39;ll be describing so you&amp;#39;ll see where we&amp;#39;ll end up:&lt;/p&gt;
 
-&lt;p data-height="529" data-theme-id="light" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/VydJKG/"&gt;Connect Four in Vue.js, SVG: detect winner and animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="529" data-theme-id="light" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four with Vue.js, SVG: detect winner and animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/VydJKG/"&gt;Connect Four with Vue.js, SVG: detect winner and animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
@@ -1412,7 +1413,7 @@ into place as we play! Note that, because we&amp;#39;re using SVG pattern maskin
 described in &lt;a href="#"&gt;an earlier post&lt;/a&gt;, the checkers appear to fall behind the Connect
 Four wall, visible through the portholes.&lt;/p&gt;
 
-&lt;p data-height="485" data-theme-id="light" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/jYxxGv/"&gt;Connect Four in Vue.js, SVG: animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
+&lt;p data-height="485" data-theme-id="light" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four with Vue.js, SVG: animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/jYxxGv/"&gt;Connect Four with Vue.js, SVG: animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
 
 &lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
 
