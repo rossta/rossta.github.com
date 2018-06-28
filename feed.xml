@@ -5,10 +5,432 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-06-07T00:00:00+00:00</updated>
+  <updated>2018-06-11T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Building a PDF Viewer with Vue (Part 1)</title>
+    <link rel="alternate" href="/blog/building-a-pdf-viewer-with-vue-part-1.html"/>
+    <id>/blog/building-a-pdf-viewer-with-vue-part-1.html</id>
+    <published>2018-06-11T00:00:00+00:00</published>
+    <updated>2018-06-11T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;I remember a time not too long ago when the possibility of rendering PDFs inline on a web page would have sounded crazy. Then &lt;a href="https://mozilla.github.io/pdf.js/"&gt;PDF.js&lt;/a&gt; came along and changed all that.&lt;/p&gt;
+
+&lt;p&gt;I was recently tasked with just this sort of project and I leveraged PDF.js, &lt;a href="https://vuejs.org/"&gt;Vue&lt;/a&gt;&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;I remember a time not too long ago when the possibility of rendering PDFs inline on a web page would have sounded crazy. Then &lt;a href="https://mozilla.github.io/pdf.js/"&gt;PDF.js&lt;/a&gt; came along and changed all that.&lt;/p&gt;
+
+&lt;p&gt;I was recently tasked with just this sort of project and I leveraged PDF.js, &lt;a href="https://vuejs.org/"&gt;Vue&lt;/a&gt; and &lt;a href="https://webpack.js.org"&gt;Webpack&lt;/a&gt; to put it all together. This post is the first in a series which will demonstrate how I used Vue to render PDF pages to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements. Later we&amp;#39;ll explore conditional rendering and adding paging and zoom controls.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s a &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-61e237fc.png" alt="Screenshot pdf viewer" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+      &lt;h3 id="similar-projects" class="title"&gt;
+        &lt;a name="similar-projects" class="anchor" href="#similar-projects"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Similar projects
+      &lt;/h3&gt;
+    
+&lt;p&gt;Mozilla&amp;#39;s PDF.js package ships with its own web viewer (&lt;a href="https://mozilla.github.io/pdf.js/web/viewer.html"&gt;demo&lt;/a&gt;) For an alternative approach to PDF rendering in Vue, check out the &lt;a href="https://github.com/FranckFreiburger/vue-pdf"&gt;vue-pdf&lt;/a&gt; package.&lt;/p&gt;
+
+      &lt;h3 id="an-incomplete-intro-to-pdf-js" class="title"&gt;
+        &lt;a name="an-incomplete-intro-to-pdf-js" class="anchor" href="#an-incomplete-intro-to-pdf-js"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        An incomplete intro to PDF.js
+      &lt;/h3&gt;
+    
+&lt;p&gt;PDF.js is a JavaScript project by Mozilla that makes it easier to parse and render PDFs in HTML. It is comprised of three key pieces: Core, Display, and Viewer.&lt;/p&gt;
+
+&lt;p&gt;The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. This code is split out into a separate file, &lt;code&gt;pdf.worker.js&lt;/code&gt;, which will run in its own web worker thread in the browser. Since we&amp;#39;re using Webpack, it will handle bundling, fetching, and configuration of the worker script behind the scenes.&lt;/p&gt;
+
+&lt;p&gt;The Viewer layer, as I mentioned earlier, provides a basic user interface for viewing and paging through PDFs in Firefox (or other browsers with included extensions). We won&amp;#39;t be using this piece; in fact, this tutorial could be used as the basis for a Vue.js implementation of alternative viewer.&lt;/p&gt;
+
+&lt;p&gt;Most of our interaction with the PDF.js library will be at the Display layer, which provides the JavaScript API for retrieving and manipulating PDF document and page data. The API relies heavily on Promises, which we&amp;#39;ll be incorporating into our Vue.js components. We&amp;#39;ll also take advantage of dynamic imports to code split our use of PDF.js, since, at least for my purposes, I only want to load the PDF.js library on demand. Keeping it out of the main application Webpack bundle will help keep the initial page load time small.&lt;/p&gt;
+
+      &lt;h3 id="using-pdf-js" class="title"&gt;
+        &lt;a name="using-pdf-js" class="anchor" href="#using-pdf-js"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Using PDF.js
+      &lt;/h3&gt;
+    
+&lt;p&gt;Here&amp;#39;s a basic ES6 example of dynamically loading PDF.js to render an entire PDF document (without Vue):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import range from &amp;#39;lodash/range&amp;#39;
+
+import(&amp;#39;pdfjs-dist/webpack&amp;#39;).then(pdfjs =&amp;gt; {
+  pdfjs
+    .getDocument(&amp;#39;wibble.pdf&amp;#39;)
+    .then(pdf =&amp;gt; {
+      const pagePromises = range(1, pdf.numPages).map(number =&amp;gt; pdf.getPage(number))
+      return Promise.all(pagePromises)
+    })
+    .then(pages =&amp;gt; {
+        const scale = 2
+
+        const canvases = pages.forEach(page =&amp;gt; {
+          const viewport = page.getViewport(scale)
+
+          // Prepare canvas using PDF page dimensions
+          const canvas = document.createElement(&amp;#39;canvas&amp;#39;)
+          canvas.height = viewport.height
+          canvas.width = viewport.width
+
+          // Render PDF page into canvas context
+          const canvasContext = canvas.getContext(&amp;#39;2d&amp;#39;)
+          const renderContext = { canvasContext, viewport }
+          page.render(renderContext).then(() =&amp;gt; console.log(&amp;#39;Page rendered&amp;#39;))
+
+          document.body.appendChild(canvas)
+        })
+      },
+      error =&amp;gt; console.log(&amp;#39;Error&amp;#39;, error),
+    )
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The code above dynamically imports the PDF.js distribution with &lt;code&gt;import(&amp;#39;pdfjs/dist&amp;#39;)&lt;/code&gt;. Webpack will split the PDF.js code out into its own bundle and load it asynchronously only when that line is executed in the browser. This expression returns a promise that resolves with the PDF.js module when the bundle is successfully loaded and evaluated. With a reference to the modules, &lt;code&gt;pdfjs&lt;/code&gt; we can now exercise the PDF.js document API.&lt;/p&gt;
+
+&lt;p&gt;The expression &lt;code&gt;pdjs.getDocument(&amp;#39;url-to-pdf&amp;#39;)&lt;/code&gt; also returns a promise which resolves when the the document is loaded and parsed by the PDF.js core layer. This promise resolves to an instance of &lt;a href="https://mozilla.github.io/pdf.js/api/draft/PDFDocumentProxy.html"&gt;&lt;code&gt;PDFDocumentProxy&lt;/code&gt;&lt;/a&gt;, which we can use to retrieve additional data from the PDF document. We used the &lt;code&gt;PDFDocumentProxy#numPages&lt;/code&gt; attribute to build a number range of all the pages (using lodash &lt;code&gt;range&lt;/code&gt;) and build an array of promises representing requests for each of the documents pages returned by &lt;code&gt;PDFDocumentProxy#getPage(pageNumber)&lt;/code&gt;. The key here to loading all pages at once is using &lt;code&gt;Promise.all&lt;/code&gt; to resolve when all pages are retrieved as &lt;a href="https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html"&gt;PDFPageProxy&lt;/a&gt; objects.&lt;/p&gt;
+
+&lt;p&gt;Finally, for each page object, we create a separate &lt;code&gt;canvas&lt;/code&gt; element and trigger the &lt;code&gt;PDFPageProxy#render&lt;/code&gt; method, which returns another promise and accepts options for a canvas context and viewport. This render method is responsible for drawing the PDF data into the canvas element asynchronously while we append the canvas elements to &lt;code&gt;document.body&lt;/code&gt;.&lt;/p&gt;
+
+      &lt;h3 id="refactoring-to-vue" class="title"&gt;
+        &lt;a name="refactoring-to-vue" class="anchor" href="#refactoring-to-vue"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Refactoring to Vue
+      &lt;/h3&gt;
+    
+&lt;p&gt;Our little script works, and for some applications, this may implementaiton may be sufficient. But let&amp;#39;s say we need some interaction, like paging controls, zoom buttons, conditional page fetching and rendering while scrolling, etc. Adding complexity could get unwieldy quickly. For this next stage, we&amp;#39;ll refactor to Vue components, so we can get the benefit of reactivity and make our code more declarative and easier to extend.&lt;/p&gt;
+
+&lt;p&gt;In pseudocode, our component architecture will resemble this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFDocument&amp;gt;
+  &amp;lt;PDFPage :number=&amp;quot;1&amp;quot; /&amp;gt;
+  &amp;lt;PDFPage :number=&amp;quot;2&amp;quot; /&amp;gt;
+  &amp;lt;PDFPage :number=&amp;quot;3&amp;quot; /&amp;gt;
+  ...
+&amp;lt;/PDFDocument&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="requirements" class="title"&gt;
+        &lt;a name="requirements" class="anchor" href="#requirements"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Requirements
+      &lt;/h3&gt;
+    
+&lt;p&gt;For my project, I used the following npm packages (installed using &lt;code&gt;yarn&lt;/code&gt;).&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@vue/cli&lt;/code&gt;: &lt;code&gt;^3.0.0-beta.15&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vue&lt;/code&gt;: &lt;code&gt;^2.5.16&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pdfjs-dist&lt;/code&gt;: &lt;code&gt;^2.0.489&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I would expect it to be straightforward to adapt the code for other relatively recent versions of these packages.&lt;/p&gt;
+
+&lt;aside class="callout panel"&gt;&lt;p&gt;
+Since PDF.js will request data via an XMLHTTPRequest in JavaScript, typical crossdomain restrictions apply. For the purposes of this tutorial, we'll assume we have a URL to a PDF that can be retrieved either from our development server or from a server that allows Cross-Origin Resource Sharing (CORS) from our host.
+&lt;/p&gt;&lt;/aside&gt;
+
+      &lt;h3 id="fetching-the-pdf" class="title"&gt;
+        &lt;a name="fetching-the-pdf" class="anchor" href="#fetching-the-pdf"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Fetching the PDF
+      &lt;/h3&gt;
+    
+&lt;p&gt;Our &lt;code&gt;&amp;lt;App&amp;gt;&lt;/code&gt; component will hard-code default values for a PDF url and a rendering scale which will be passed to a &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; component.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- src/App.vue --&amp;gt;
+
+&amp;lt;template&amp;gt;
+  &amp;lt;div id=&amp;quot;app&amp;quot;&amp;gt;
+    &amp;lt;PDFDocument v-bind=&amp;quot;{url, scale}&amp;quot; /&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/template&amp;gt;
+
+&amp;lt;script&amp;gt;
+export default {
+  // ...
+  data() {
+    return {
+      url: &amp;#39;https://cdn.filestackcontent.com/5qOCEpKzQldoRsVatUPS&amp;#39;, // a PDF
+      scale: 2,
+    }
+  },
+}
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The document component is responsible for fetching the PDF data through PDF.js and rendering  a &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; component for each &lt;code&gt;page&lt;/code&gt; object returned by the API.&lt;/p&gt;
+
+&lt;p&gt;Its &lt;code&gt;data&lt;/code&gt; will track the &lt;code&gt;pdf&lt;/code&gt; object and a list of &lt;code&gt;page&lt;/code&gt; object in &lt;code&gt;pages&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+export default {
+  props: [&amp;#39;url&amp;#39;, &amp;#39;scale&amp;#39;],
+
+  data() {
+    return {
+      pdf: undefined,
+      pages: [],
+    };
+  },
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When the component is mounted, it will fetch the PDF data using the &lt;code&gt;pdfjs.getDocument&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+export default {
+  //...
+
+  created() {
+    this.fetchPDF();
+  },
+
+  methods: {
+    fetchPDF() {
+      import(&amp;#39;pdfjs-dist/webpack&amp;#39;).
+        then(pdfjs =&amp;gt; pdfjs.getDocument(this.url)).
+        then(pdf =&amp;gt; (this.pdf = pdf)).
+        then(() =&amp;gt; log(&amp;#39;pdf fetched&amp;#39;));
+    },
+  },
+  //...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;#39;ll use a watch callback for the &lt;code&gt;pdf&lt;/code&gt; attribute to fetch all the pages via the &lt;code&gt;pdf.getPage&lt;/code&gt; function provided by PDF.js. Since the return value of &lt;code&gt;getPage&lt;/code&gt; behaves like a promise, we can use &lt;code&gt;Promise.all&lt;/code&gt; to determine when all the &lt;code&gt;page&lt;/code&gt; objects have been fetched and set the resolved collection as the &lt;code&gt;pages&lt;/code&gt; data:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+import range from &amp;#39;lodash/range&amp;#39;;
+
+export default {
+  // ...
+  watch: {
+    pdf(pdf) {
+      this.pages = [];
+      const promises = range(1, pdf.numPages).
+        map(number =&amp;gt; pdf.getPage(number));
+
+      Promise.all(promises).
+        then(pages =&amp;gt; (this.pages = pages)).
+        then(() =&amp;gt; log(&amp;#39;pages fetched&amp;#39;));
+    },
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The template simply renders a &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; child component for each &lt;code&gt;page&lt;/code&gt; object. Each page component also needs the &lt;code&gt;scale&lt;/code&gt; prop for rendering the page data to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- src/components/PDFDocument.vue --&amp;gt;
+
+&amp;lt;template&amp;gt;
+  &amp;lt;div class=&amp;quot;pdf-document&amp;quot;&amp;gt;
+    &amp;lt;PDFPage
+      v-for=&amp;quot;page in pages&amp;quot;
+      v-bind=&amp;quot;{page, scale}&amp;quot;
+      :key=&amp;quot;page.pageNumber&amp;quot;
+    /&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/template&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="setting-up-the-canvas" class="title"&gt;
+        &lt;a name="setting-up-the-canvas" class="anchor" href="#setting-up-the-canvas"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Setting up the canvas
+      &lt;/h3&gt;
+    
+&lt;p&gt;Now we can build out the &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; element. We&amp;#39;ll simply will use a Vue &lt;code&gt;render&lt;/code&gt; function to create a &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element with computed attributes, &lt;code&gt;canvasAttrs&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
+
+export default {
+  props: [&amp;#39;page&amp;#39;, &amp;#39;scale&amp;#39;],
+
+  render(h) {
+    const {canvasAttrs: attrs} = this;
+    return h(&amp;#39;canvas&amp;#39;, {attrs});
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To render a PDF to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; with an acceptable resolution, we can take advantage of a browser property called &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio"&gt;&lt;code&gt;window.devicePixelRatio&lt;/code&gt;&lt;/a&gt;. This value represents the ratio of screen pixels to CSS pixels. Given a hi-resolution display with a &lt;code&gt;devicePixelRatio&lt;/code&gt; of &lt;code&gt;2&lt;/code&gt;, we&amp;#39;d want to give the canvas initial width and height attributes that are two times greater than its corresponding width and height in CSS. Otherwise, rendering our PDF pixels to canvas may appear blurry.&lt;/p&gt;
+
+&lt;p&gt;When the &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; component is created, we can access the &lt;code&gt;viewport&lt;/code&gt; property of the &lt;code&gt;page&lt;/code&gt; object, via &lt;code&gt;PDFPageProxy#getViewport&lt;/code&gt;, to obtain the pixel width and height of the PDF. These are the width and height attributes of the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element. For the actual size of the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;, we&amp;#39;ll use CSS attributes.&lt;/p&gt;
+
+&lt;p&gt;Since the &lt;code&gt;scale&lt;/code&gt; prop is reactive and our &lt;code&gt;render&lt;/code&gt; function depends on &lt;code&gt;canvasAttrs&lt;/code&gt;, defining &lt;code&gt;canvasAttrs&lt;/code&gt; as a computed property based off the scale means our PDF pages will automatically re-render when the scale changes. Future iterations will allow to the change &lt;code&gt;scale&lt;/code&gt; prop (using future zoom controls, for example). We&amp;#39;ll simply calculate the width and height via CSS to update the rendered size of the canvas to avoid redrawing the canvas data from the &lt;code&gt;page&lt;/code&gt; object each time. For this, we use a clone of the original viewport, given via the &lt;code&gt;actualSizeViewport&lt;/code&gt; computed property, and the &lt;code&gt;devicePixelRatio&lt;/code&gt; to calculate the target width and height style attributes for the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s the code that puts all that together:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
+
+export default {
+  created() {
+    // PDFPageProxy#getViewport
+    // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
+    this.viewport = this.page.getViewport(this.scale);
+  },
+
+  computed: {
+    canvasAttrs() {
+      let {width, height} = this.viewport;
+      [width, height] = [width, height].map(dim =&amp;gt; Math.ceil(dim));
+
+      const style = this.canvasStyle;
+
+      return {
+        width,
+        height,
+        style,
+        class: &amp;#39;pdf-page&amp;#39;,
+      };
+    },
+
+    canvasStyle() {
+      const {width: actualSizeWidth, height: actualSizeHeight} = this.actualSizeViewport;
+      const pixelRatio = window.devicePixelRatio || 1;
+      const [pixelWidth, pixelHeight] = [actualSizeWidth, actualSizeHeight]
+        .map(dim =&amp;gt; Math.ceil(dim / pixelRatio));
+      return `width: ${pixelWidth}px; height: ${pixelHeight}px;`
+    },
+
+    actualSizeViewport() {
+      return this.viewport.clone({scale: this.scale});
+    },
+    //...
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="rendering-the-page" class="title"&gt;
+        &lt;a name="rendering-the-page" class="anchor" href="#rendering-the-page"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Rendering the page
+      &lt;/h3&gt;
+    
+&lt;p&gt;When the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element mounts, we can draw the PDF page data to it using the &lt;code&gt;PDFPageProxy#render&lt;/code&gt; method. It needs context from the &lt;code&gt;viewport&lt;/code&gt; and &lt;code&gt;canvasContext&lt;/code&gt; as arguments. Since that returns a promise, we can be notified when it&amp;#39;s complete.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
+
+export default {
+  mounted() {
+    this.drawPage();
+  },
+
+  methods: {
+    drawPage() {
+      if (this.renderTask) return;
+
+      const {viewport} = this;
+      const canvasContext = this.$el.getContext(&amp;#39;2d&amp;#39;);
+      const renderContext = {canvasContext, viewport};
+
+      // PDFPageProxy#render
+      // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
+      this.renderTask = this.page.render(renderContext);
+      this.renderTask.
+        then(() =&amp;gt; this.$emit(&amp;#39;rendered&amp;#39;, this.page)).
+        then(() =&amp;gt; log(`Page ${this.pageNumber} rendered`));
+    },
+    // ...
+  },
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="cleaning-up-after-ourselves" class="title"&gt;
+        &lt;a name="cleaning-up-after-ourselves" class="anchor" href="#cleaning-up-after-ourselves"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Cleaning up after ourselves
+      &lt;/h3&gt;
+    
+&lt;p&gt;As we&amp;#39;re working with JavaScript objects that keep state outside of Vue&amp;#39;s control, we should be mindful to call provided teardown methods. The PDF document and page objects provide &lt;code&gt;destroy&lt;/code&gt; methods to be called on teardown, such as, when our render promise fails, the &lt;code&gt;page&lt;/code&gt; object is replaced, or the Vue component itself is destroyed.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
+
+export default {
+  beforeDestroy() {
+    this.destroyPage(this.page);
+  },
+
+  methods: {
+    drawPage() {
+      // ...
+      this.renderTask.
+        then(/* */).
+        catch(this.destroyRenderTask);
+    },
+
+    destroyPage(page) {
+      if (!page) return;
+
+      // PDFPageProxy#_destroy
+      // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
+      page._destroy();
+
+      // RenderTask#cancel
+      // https://mozilla.github.io/pdf.js/api/draft/RenderTask.html
+      if (this.renderTask) this.renderTask.cancel();
+    },
+
+    destroyRenderTask() {
+      if (!this.renderTask) return;
+
+      // RenderTask#cancel
+      // https://mozilla.github.io/pdf.js/api/draft/RenderTask.html
+      this.renderTask.cancel();
+      delete this.renderTask;
+    },
+  },
+
+  watch: {
+    page(page, oldPage) {
+      this.destroyPage(oldPage);
+    },
+  },
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="wrapping-up" class="title"&gt;
+        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Wrapping up
+      &lt;/h3&gt;
+    
+&lt;p&gt;We&amp;#39;ve now converted our original, imperative PDF rendering script with a declarative Vue component hierarchy. We&amp;#39;ve certainly added a lot of code to make this work, but with working knowledge of Vue, we&amp;#39;ve made it easier to reason about, easier to extend, and easier to add features to give our PDF viewer more functionality.&lt;/p&gt;
+
+&lt;p&gt;In the next post, we&amp;#39;ll look at adding some conditional rendering; since all pages aren&amp;#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Deploying Vue with CircleCI 2.0</title>
     <link rel="alternate" href="/blog/deploying-vue-with-circleci-2.html"/>
@@ -1407,193 +1829,6 @@ see the full source code and try out the game for yourself.&lt;/p&gt;
 game in the browser. We&amp;#39;re not yet detecting a game win or draw; that&amp;#39;s still
 to come. In &lt;a href="/blog/animating-connect-four-with-vuejs.html"&gt;the next post&lt;/a&gt;, we use Vue to animate each checker falling into
 place as they are added to the board.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Connect Four with SVG pattern masking</title>
-    <link rel="alternate" href="/blog/connect-four-with-svg-pattern-masking.html"/>
-    <id>/blog/connect-four-with-svg-pattern-masking.html</id>
-    <published>2018-01-10T00:00:00+00:00</published>
-    <updated>2018-01-10T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with Vue.js, SVG,
-Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;One of my recent side projects to learn new technologies
-has been to build a browser-based rendition of &lt;a href="https://en.wikipedia.org/wiki/Connect_Four"&gt;Connect
-Four&lt;/a&gt;.
-The fully-functional...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with Vue.js, SVG,
-Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;One of my recent side projects to learn new technologies
-has been to build a browser-based rendition of &lt;a href="https://en.wikipedia.org/wiki/Connect_Four"&gt;Connect
-Four&lt;/a&gt;.
-The fully-functional version of the game will have both a backend and frontend
-component with some good challenges including animating checkers
-falling into place and connecting two players over the network.&lt;/p&gt;
-
-&lt;p&gt;In this post, we&amp;#39;ll demonstrate rendering the static board with SVG, including
-the use of pattern masking to emulate a game board wall with portholes through
-which to view the checkers.&lt;/p&gt;
-
-      &lt;h2 id="let-39-s-talk-about-svg" class="title"&gt;
-        &lt;a name="let-39-s-talk-about-svg" class="anchor" href="#let-39-s-talk-about-svg"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Let&amp;#39;s talk about SVG
-      &lt;/h2&gt;
-    
-&lt;p&gt;SVG feels scary and confusing to the uninitiated, myself included. The good news
-is that we can take a progressive approach to adopting SVG without understanding
-everything there is to know about it at first.&lt;/p&gt;
-
-&lt;p&gt;Here are a few reasons why using SVG is a good fit to render the elements of a
-Connect Four game board:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;SVG has shape elements like &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; that are better
-semantically than using divs to render columns and checkers using &lt;a href="https://davidwalsh.name/css-circles"&gt;the rounded
-border trick&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;SVG provides simple, declarative rules for positioning visual elements; no
-need to mess with picture-perfect pixels, absolute positioning, and z-indexing&lt;/li&gt;
-&lt;li&gt;SVG elements animate smoothly, which will allow us to render a dropped checker
-bouncing into place with a realistic touch and that it has a coordinate system&lt;/li&gt;
-&lt;li&gt;SVG provides &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; elements, so we can animate falling
-checkers behind &amp;quot;holes&amp;quot; in the game wall&lt;/li&gt;
-&lt;/ul&gt;
-
-      &lt;h2 id="pattern-masking" class="title"&gt;
-        &lt;a name="pattern-masking" class="anchor" href="#pattern-masking"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Pattern masking
-      &lt;/h2&gt;
-    
-&lt;p&gt;A first pass at the game board might be to explicitly render circles for all 42
-game cells (6 rows, 7 columns) and set their fill colors based on game state to
-red, black, or as the background color to fake an empty cell. What if, instead,
-we could render the game board with portholes punched into it? That way, the only
-&lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; elements we need to render explicitly are the checkers themselves.&lt;/p&gt;
-
-&lt;p&gt;This is where SVG pattern masking comes in. A powerful feature of desktop visual
-editing tools Adobe Photoshop/Illustrator is available on the web.
-&lt;a href="https://www.w3.org/TR/SVG/masking.html"&gt;Masking&lt;/a&gt; allows for a graphic (or set of
-graphics) to act as a transparent overlay to reveal background elements. Applied
-to our game, it provides a mechanism by which we can see checkers falling
-through holes in the game board wall. To my knowledge, there&amp;#39;s no (easy) way
-with typical HTML/CSS to accomplish this other than, perhaps, creating a
-transparent png, something we won&amp;#39;t be able to manipulate easily
-programmatically.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;#39;s start with a demonstration of pattern masking by rendering a single game
-board cell and checker.&lt;/p&gt;
-
-&lt;p&gt;Within a containing &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; element with a &lt;code&gt;viewBox&lt;/code&gt; of 100x100 units, we&amp;#39;ll
-start by adding a &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; to represent a checker positioned slightly
-offscreen to mimic it falling into place.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;svg viewBox=&amp;quot;0 0 100 100&amp;quot; xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
-  &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;25&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;#254689&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
-&amp;lt;/svg&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The game wall is simply a &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; positioned over the circle; once added, we
-can&amp;#39;t see the circle anymore.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;svg viewBox=&amp;quot;0 0 100 100&amp;quot; xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
-  &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;25&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;#254689&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
-  &amp;lt;rect col=&amp;quot;0&amp;quot; width=&amp;quot;100&amp;quot; height=&amp;quot;600&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-&amp;lt;/svg&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now to create the hole with a pattern mask. To accomplish this, we use
-(surprise) both a &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; elements. These elements are not
-graphical, meaning, they won&amp;#39;t be directly rendered in the view box. Instead,
-we&amp;#39;ll later add the resulting mask as an attribute of our &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; game wall—the
-element we want to see through. The &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; elements are nested
-inside a &lt;code&gt;&amp;lt;defs&amp;gt;&lt;/code&gt; element so they can be available for reuse.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;defs&amp;gt;
-  &amp;lt;pattern id=&amp;quot;cell-pattern&amp;quot; patternUnits=&amp;quot;userSpaceOnUse&amp;quot; width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot;&amp;gt;
-    &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;50&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;black&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
-  &amp;lt;/pattern&amp;gt;
-  &amp;lt;mask id=&amp;quot;cell-mask&amp;quot;&amp;gt;
-    &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;white&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-    &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;url(#cell-pattern)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-  &amp;lt;/mask&amp;gt;
-&amp;lt;/defs&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; is simply matches the size of a cell, 100x100, and it contains a
-&lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;, representing the hole, that matches the size of the checker. The
-&lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; gets a fill color of &amp;quot;black&amp;quot;; when applied the to &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt;, this
-this means the absence of space, or full transparency, as opposed to literal
-black.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; is composed of two &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; elements that match the game wall size;
-the first gets a fill color of &amp;quot;white&amp;quot; (opposite of &amp;quot;black&amp;quot; in a mask) to
-represent the part of the wall we want to be opaque. The second &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; sits on
-top of the first and has a &lt;code&gt;fill&lt;/code&gt; of &lt;code&gt;url(#cell-pattern)&lt;/code&gt; which refers to the
-pattern we created above.&lt;/p&gt;
-
-&lt;p&gt;Now, we can set the &lt;code&gt;mask&lt;/code&gt; attribute for our game wall &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; by referencing
-the &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; element by id.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;100&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This punches a hole through the wall to reveal the checker underneath.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s what we have so far on &lt;a href="https://codepen.io/rossta/pen/NXMrLg"&gt;CodePen&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p data-height="265" data-theme-id="light" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/NXMrLg/"&gt;SVG mask demo&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
-
-&lt;p&gt;A nice feature of the &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt; element is that it repeats itself based
-on the height/width attributes we&amp;#39;ve provided. This means we can extend the dimensions of the view
-box and our game wall &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; to reveal the seven rows of a
-single column—we don&amp;#39;t have to add each circular hole to the DOM explicitly! To
-build multiple columns, we&amp;#39;ll simply, for each column, add a nested &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt;
-element at the correct x position to wrap each masked &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt;. This allows us
-to position each column relative to the container &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; without needed to
-specify x coordinates for each child &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s the full demo of a static Connect Four SVG game board on
-&lt;a href="https://codepen.io/rossta/pen/eyrgJe"&gt;CodePen&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p data-height="370" data-theme-id="light" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrgJe/"&gt;Connect Four board in SVG&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
-
-&lt;p&gt;Finally, here&amp;#39;s a sneak preview of the how the falling checker will look behind the pattern mask:&lt;/p&gt;
-
-&lt;p data-height="265" data-theme-id="light" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyPpog/"&gt;SVG mask demo&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
-
-&lt;p&gt;For more related info, check out the following resources:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial"&gt;MDN SVG Tutorial&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;MDN docs for &lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg"&gt;&lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt;&lt;/a&gt;, &lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/pattern"&gt;&lt;code&gt;&amp;lt;pattern /&amp;gt;&lt;/code&gt;&lt;/a&gt;, &lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/mask"&gt;&lt;code&gt;&amp;lt;mask /&amp;gt;&lt;/code&gt;&lt;/a&gt;, and &lt;a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs"&gt;&lt;code&gt;&amp;lt;defs /&amp;gt;&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Pretty much anything &lt;a href="https://twitter.com/sarah_edo"&gt;Sarah Drasner&lt;/a&gt; publishes, including &lt;a href="http://shop.oreilly.com/product/0636920045335.do"&gt;SVG Animations&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;In &lt;a href="/blog/building-basic-connect-four-with-vuejs.html"&gt;the next post&lt;/a&gt;, we&amp;#39;ll
-take a look at using Vue.js to render the board dynamically and add checkers
-based on user interaction.&lt;/p&gt;
 </content>
   </entry>
 </feed>
