@@ -25,7 +25,7 @@
 
 &lt;p&gt;I was recently tasked with just this sort of project and I leveraged PDF.js, &lt;a href="https://vuejs.org/"&gt;Vue&lt;/a&gt; and &lt;a href="https://webpack.js.org"&gt;Webpack&lt;/a&gt; to put it all together. This post is the first in a series which will demonstrate how I used Vue to render PDF pages to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements. Later we&amp;#39;ll explore conditional rendering and adding paging and zoom controls.&lt;/p&gt;
 
-&lt;p&gt;Here&amp;#39;s a &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The latest source code for this project is on Github at &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;rossta/vue-pdfjs-demo&lt;/a&gt;. To see the version of the project described in this post, checkout the &lt;a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-1-simple-document"&gt;&lt;code&gt;part-1&lt;/code&gt; branch&lt;/a&gt;. Finally, here&amp;#39;s a link to the &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-61e237fc.png" alt="Screenshot pdf viewer" /&gt;&lt;/a&gt;&lt;/p&gt;
 
