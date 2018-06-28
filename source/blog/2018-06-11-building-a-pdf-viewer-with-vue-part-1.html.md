@@ -23,8 +23,7 @@ Here's a [project demo](https://rossta.net/vue-pdfjs-demo/).
 
 ### Similar projects
 
-Mozilla's PDF.js package ships with its own web viewer ([demo](https://mozilla.github.io/pdf.js/web/viewer.html)) For an alternative approach to PDF rendering in Vue, check out the [vue-pdf](https://github.com/FranckFreiburger/vue-pdf) package.
-
+Mozilla's PDF.js package ships with its own web viewer ([demo](https://mozilla.github.io/pdf.js/web/viewer.html)) For an alternative approach to PDF rendering with Vue, check out the [vue-pdf](https://github.com/FranckFreiburger/vue-pdf) package.
 
 ### An incomplete intro to PDF.js
 
@@ -366,3 +365,4 @@ export default {
 We've now converted our original, imperative PDF rendering script with a declarative Vue component hierarchy. We've certainly added a lot of code to make this work, but with working knowledge of Vue, we've made it easier to reason about, easier to extend, and easier to add features to give our PDF viewer more functionality.
 
 In the next post, we'll look at adding some conditional rendering; since all pages aren't visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.
+F

@@ -208,7 +208,7 @@ helpers do
     [
       [
         "PDF Viewer",
-        "Building a PDF Viewer in Vue",
+        "Building a PDF Viewer with Vue",
         "A demo app to render PDFs using PDF.js, Vue, Webpack, and the canvas element"
       ],
       [

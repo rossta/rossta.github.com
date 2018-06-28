@@ -3,7 +3,7 @@ title: Animating Connect Four with Vue.js
 author: Ross Kaffenberger
 published: true
 summary: How the Vue transition component "drops" things into place
-description: Continuing our series on building Connect Four in Vue and Phoenix, we'll use Vue transitions and a third party library to animate the SVG checkers falling and bouncing into place when added to the game board.
+description: Continuing our series on building Connect Four with Vue and Phoenix, we'll use Vue transitions and a third party library to animate the SVG checkers falling and bouncing into place when added to the game board.
 pull_image: 'blog/connect-four-nightsky.png'
 pull_image_caption: Background Photo by Andrew Preble on Unsplash
 series: 'Connect Four'
@@ -221,7 +221,7 @@ into place as we play! Note that, because we're using SVG pattern masking, as
 described in [an earlier post](), the checkers appear to fall behind the Connect
 Four wall, visible through the portholes.
 
-<p data-height="485" data-theme-id="light" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/jYxxGv/">Connect Four in Vue.js, SVG: animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p data-height="485" data-theme-id="light" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four with Vue.js, SVG: animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/jYxxGv/">Connect Four with Vue.js, SVG: animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 <hr />

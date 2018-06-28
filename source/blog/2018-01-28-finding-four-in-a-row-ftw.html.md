@@ -3,7 +3,7 @@ title: Finding Four-in-a-Row for the Win
 author: Ross Kaffenberger
 published: true
 summary: A win algorithm for Vue.js Connect Four
-description: In this post for the Building Connect Four in Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components.
+description: In this post for the Building Connect Four with Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components.
 pull_image: 'blog/purple-circles.jpg'
 pull_image_caption: Background Photo by Peter Clarkson on Unsplash
 series: 'Connect Four'
@@ -17,7 +17,7 @@ With the Connect Four game we created in the [previous post](/blog/animating-con
 
 Before we dive in, here's a pen of the game with the win logic we'll be describing so you'll see where we'll end up:
 
-<p data-height="529" data-theme-id="light" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four in Vue.js, SVG: detect winner and animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/VydJKG/">Connect Four in Vue.js, SVG: detect winner and animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p data-height="529" data-theme-id="light" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four with Vue.js, SVG: detect winner and animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/VydJKG/">Connect Four with Vue.js, SVG: detect winner and animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 
 When a player achieves four-in-a-row, we update the visual elements on the board to indicate the win and provide a "Play again" link to reset the game state.
