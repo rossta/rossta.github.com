@@ -916,8 +916,8 @@ Check out &lt;a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;With the Connect Four game we created in the previous post, we're able to use &lt;a href="https://vuejs.org/v2/guide/transitions.html"&gt;Vue transitions&lt;/a&gt; to animate checkers dropping into place on the game board. Though we're able to add checkers, we still weren't declaring the winner when four-in-a-row had...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;With the Connect Four game we created in the previous post, we&amp;#39;re able to use &lt;a href="https://vuejs.org/v2/guide/transitions.html"&gt;Vue transitions&lt;/a&gt; to animate checkers dropping into place on the game board. Though we&amp;#39;re able to add checkers, we still weren&amp;#39;t declaring the winner when four-in-a-row had been achieved—kind of the whole point of the game. We&amp;#39;ll tackle that in this post.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;With the Connect Four game we created in the &lt;a href="/blog/animating-connect-four-with-vuejs.html"&gt;previous post&lt;/a&gt;, we're able to use &lt;a href="https://vuejs.org/v2/guide/transitions.html"&gt;Vue transitions&lt;/a&gt; to animate checkers dropping into place on the game board. Though we're able to add checkers, we still weren't declaring the winner when four-in-a-row had...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;With the Connect Four game we created in the &lt;a href="/blog/animating-connect-four-with-vuejs.html"&gt;previous post&lt;/a&gt;, we&amp;#39;re able to use &lt;a href="https://vuejs.org/v2/guide/transitions.html"&gt;Vue transitions&lt;/a&gt; to animate checkers dropping into place on the game board. Though we&amp;#39;re able to add checkers, we still weren&amp;#39;t declaring the winner when four-in-a-row had been achieved—kind of the whole point of the game. We&amp;#39;ll tackle that in this post.&lt;/p&gt;
 
 &lt;p&gt;Before we dive in, here&amp;#39;s a pen of the game with the win logic we&amp;#39;ll be describing so you&amp;#39;ll see where we&amp;#39;ll end up:&lt;/p&gt;
 
