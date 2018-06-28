@@ -1,12 +1,12 @@
 ---
-title: Building a Simple PDF Viewer with Vue.js (Part 1)
+title: Building a PDF Viewer with Vue (Part 1)
 author: Ross Kaffenberger
-published: false
-summary: A look at Portable Document Format rendering with PDF.js and Vue
+published: true
+summary: A look at rendering PDF pages in HTML with PDF.js and Vue
 description: This tutorial demonstrates how to create Vue.js components that can render PDFs along with tools like Webpack, PDF.js, and the canvas element.
 pull_image: 'blog/stock/rafaela-biazi-typewriter-unsplash.jpg'
 pull_image_caption: Photo by Rafaela Biazi on Unsplash
-series: 'Vue PDF Viewer'
+series: 'PDF Viewer'
 category: Code
 tags:
   - Vue
@@ -15,15 +15,24 @@ tags:
 
 I remember a time not too long ago when the possibility of rendering PDFs inline on a web page would have sounded crazy. Then [PDF.js](https://mozilla.github.io/pdf.js/) came along and changed all that.
 
-I was recently tasked with just this sort of project and I leveraged Vue.js and Webpack to put it all together. This post will demonstrate a simplified version of how I used Vue to render pages of existing PDFs to `<canvas>` elements.
+I was recently tasked with just this sort of project and I leveraged PDF.js, [Vue](https://vuejs.org/) and [Webpack](https://webpack.js.org) to put it all together. This post is the first in a series which will demonstrate how I used Vue to render PDF pages to `<canvas>` elements. Later we'll explore conditional rendering and adding paging and zoom controls.
+
+Here's a [project demo](https://rossta.net/vue-pdfjs-demo/).
+
+[![](screenshots/screenshot-pdf-viewer.png)](https://rossta.net/vue-pdfjs-demo/)
+
+### Similar projects
+
+Mozilla's PDF.js package ships with its own web viewer ([demo](https://mozilla.github.io/pdf.js/web/viewer.html)) For an alternative approach to PDF rendering in Vue, check out the [vue-pdf](https://github.com/FranckFreiburger/vue-pdf) package.
+
 
 ### An incomplete intro to PDF.js
 
-Before we dive into the Vue implementation, a little introduction to the PDF.js api is useful. PDF.js is a JavaScript project by Mozilla that makes it easier to parse and render PDFs in HTML. It is comprised of three key pieces: Core, Display, and Viewer.
+PDF.js is a JavaScript project by Mozilla that makes it easier to parse and render PDFs in HTML. It is comprised of three key pieces: Core, Display, and Viewer.
 
 The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. This code is split out into a separate file, `pdf.worker.js`, which will run in its own web worker thread in the browser. Since we're using Webpack, it will handle bundling, fetching, and configuration of the worker script behind the scenes.
 
-The Viewer layer provides a basic user interface for viewing and paging through PDFs in Firefox (or other browsers with included extensions). We won't be using this piece; in fact, this tutorial could be used as the basis for a Vue.js implementation of alternative viewer.
+The Viewer layer, as I mentioned earlier, provides a basic user interface for viewing and paging through PDFs in Firefox (or other browsers with included extensions). We won't be using this piece; in fact, this tutorial could be used as the basis for a Vue.js implementation of alternative viewer.
 
 Most of our interaction with the PDF.js library will be at the Display layer, which provides the JavaScript API for retrieving and manipulating PDF document and page data. The API relies heavily on Promises, which we'll be incorporating into our Vue.js components. We'll also take advantage of dynamic imports to code split our use of PDF.js, since, at least for my purposes, I only want to load the PDF.js library on demand. Keeping it out of the main application Webpack bundle will help keep the initial page load time small.
 
@@ -42,7 +51,7 @@ import('pdfjs-dist/webpack').then(pdfjs => {
       return Promise.all(pagePromises)
     })
     .then(pages => {
-        const scale = 1.5
+        const scale = 2
 
         const canvases = pages.forEach(page => {
           const viewport = page.getViewport(scale)
@@ -72,7 +81,7 @@ Finally, for each page object, we create a separate `canvas` element and trigger
 
 ### Refactoring to Vue
 
-So far we have a basic, imperative snippet to render a PDF. It works, and for some applications, this may implementaiton may be sufficient. But let's say we need some interaction, like paging controls, zoom buttons, conditional page fetching and rendering while scrolling, etc. Adding complexity could get unwieldy quickly. For this next stage, we'll refactor to Vue components, so we can get the benefit of reactivity and make our code more declarative and easier to extend.
+Our little script works, and for some applications, this may implementaiton may be sufficient. But let's say we need some interaction, like paging controls, zoom buttons, conditional page fetching and rendering while scrolling, etc. Adding complexity could get unwieldy quickly. For this next stage, we'll refactor to Vue components, so we can get the benefit of reactivity and make our code more declarative and easier to extend.
 
 In pseudocode, our component architecture will resemble this:
 
@@ -85,7 +94,7 @@ In pseudocode, our component architecture will resemble this:
 </PDFDocument>
 ```
 
-### Setting up project
+### Requirements
 
 For my project, I used the following npm packages (installed using `yarn`).
 
@@ -99,12 +108,13 @@ I would expect it to be straightforward to adapt the code for other relatively r
 Since PDF.js will request data via an XMLHTTPRequest in JavaScript, typical crossdomain restrictions apply. For the purposes of this tutorial, we'll assume we have a URL to a PDF that can be retrieved either from our development server or from a server that allows Cross-Origin Resource Sharing (CORS) from our host.
 </p></aside>
 
-### Fetching the pdf
+### Fetching the PDF
 
 Our `<App>` component will hard-code default values for a PDF url and a rendering scale which will be passed to a `<PDFDocument>` component.
 
 ```html
 <!-- src/App.vue -->
+
 <template>
   <div id="app">
     <PDFDocument v-bind="{url, scale}" />
@@ -116,7 +126,7 @@ export default {
   // ...
   data() {
     return {
-      url: 'https://cdn.filestackcontent.com/5qOCEpKzQldoRsVatUPS',
+      url: 'https://cdn.filestackcontent.com/5qOCEpKzQldoRsVatUPS', // a PDF
       scale: 2,
     }
   },
@@ -124,7 +134,7 @@ export default {
 </script>
 ```
 
-The document component is responsible for fetching the pdf data through PDF.js and rendering  a `<PDFPage>` component for each `page` object returned by the API.
+The document component is responsible for fetching the PDF data through PDF.js and rendering  a `<PDFPage>` component for each `page` object returned by the API.
 
 Its `data` will track the `pdf` object and a list of `page` object in `pages`.
 
@@ -187,10 +197,11 @@ export default {
 };
 ```
 
-Its template simply renders a `<PDFPage>` child component for each `page` object. Each page component also needs the `scale` prop for rendering the page data to `<canvas>`:
+The template simply renders a `<PDFPage>` child component for each `page` object. Each page component also needs the `scale` prop for rendering the page data to `<canvas>`:
 
 ```html
 <!-- src/components/PDFDocument.vue -->
+
 <template>
   <div class="pdf-document">
     <PDFPage
@@ -202,13 +213,13 @@ Its template simply renders a `<PDFPage>` child component for each `page` object
 </template>
 ```
 
-### Rendering pages to canvas
+### Setting up the canvas
 
-Here's where things get a little more complex. The `<PDFPage>` component is responsible for calling the `PDFPageProxy#render` method to draw the data to a `<canvas>` element.
-
-We don't even need a template; we simply will use a Vue `render` function to create a `<canvas>` element with computed attributes, `canvasAttrs` (shown further below).
+Now we can build out the `<PDFPage>` element. We'll simply will use a Vue `render` function to create a `<canvas>` element with computed attributes, `canvasAttrs`.
 
 ```javascript
+// src/components/PDFPage.vue
+
 export default {
   props: ['page', 'scale'],
 
@@ -219,15 +230,17 @@ export default {
 
   // ...
 ```
-To render a PDF to `<canvas>` with an acceptable resolution, we can take advantage of a browser property called [`window.devicePixelRatio`](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio). This value represents the ratio of screen pixels to CSS pixels. Given a hi-resolution display with a `devicePixelRatio` of `2`, rendering our PDF pixels to canvas may appear blurry; we'll use the `page` viewport to give the `<canvas>` a width and height at the required `scale` property, while also providing CSS width and height attributes to half the size of the canvas.
+To render a PDF to `<canvas>` with an acceptable resolution, we can take advantage of a browser property called [`window.devicePixelRatio`](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio). This value represents the ratio of screen pixels to CSS pixels. Given a hi-resolution display with a `devicePixelRatio` of `2`, we'd want to give the canvas initial width and height attributes that are two times greater than its corresponding width and height in CSS. Otherwise, rendering our PDF pixels to canvas may appear blurry.
 
-In our component, we stash a (non-reactive) `viewport` property return by `PDFPageProxy#getViewport` for our given `scale` prop. This `viewport` tells us the expect pixel width and height of the PDF. We'll set these values as width and height attributes of the `<canvas>` element. For the actual size of the `<canvas>`, we'll use CSS attributes instead.
+When the `<PDFPage>` component is created, we can access the `viewport` property of the `page` object, via `PDFPageProxy#getViewport`, to obtain the pixel width and height of the PDF. These are the width and height attributes of the `<canvas>` element. For the actual size of the `<canvas>`, we'll use CSS attributes.
 
 Since the `scale` prop is reactive and our `render` function depends on `canvasAttrs`, defining `canvasAttrs` as a computed property based off the scale means our PDF pages will automatically re-render when the scale changes. Future iterations will allow to the change `scale` prop (using future zoom controls, for example). We'll simply calculate the width and height via CSS to update the rendered size of the canvas to avoid redrawing the canvas data from the `page` object each time. For this, we use a clone of the original viewport, given via the `actualSizeViewport` computed property, and the `devicePixelRatio` to calculate the target width and height style attributes for the `<canvas>`.
 
 Here's the code that puts all that together:
 
 ```javascript
+// src/components/PDFPage.vue
+
 export default {
   created() {
     // PDFPageProxy#getViewport
@@ -266,9 +279,13 @@ export default {
 
   // ...
 ```
-Now that we're creating the `<canvas>` with the attributes we want, we can leverage the PDF.js API to draw the page data to element. Adapting from the imperative code we started with, we'll pass the `viewport` and `canvasContext` to the `PDFPageProxy#render` method. Since that call returns a promise, we can be notified when it's complete.
+### Rendering the page
 
-```js
+When the `<canvas>` element mounts, we can draw the PDF page data to it using the `PDFPageProxy#render` method. It needs context from the `viewport` and `canvasContext` as arguments. Since that returns a promise, we can be notified when it's complete.
+
+```javascript
+// src/components/PDFPage.vue
+
 export default {
   mounted() {
     this.drawPage();
@@ -296,9 +313,11 @@ export default {
 
 ### Cleaning up after ourselves
 
-Since we're working with JavaScript objects that keep state outside of Vue's control, we should be mindful to clean up after ourselves. The PDF document and page objects provide `destroy` methods to be called on teardown, such as, when our render promise fails, the `page` object is replaced, or the Vue component itself is destroyed.
+As we're working with JavaScript objects that keep state outside of Vue's control, we should be mindful to call provided teardown methods. The PDF document and page objects provide `destroy` methods to be called on teardown, such as, when our render promise fails, the `page` object is replaced, or the Vue component itself is destroyed.
 
 ```javascript
+// src/components/PDFPage.vue
+
 export default {
   beforeDestroy() {
     this.destroyPage(this.page);
@@ -342,10 +361,8 @@ export default {
 };
 ```
 
-### Up next
+### Wrapping up
+
+We've now converted our original, imperative PDF rendering script with a declarative Vue component hierarchy. We've certainly added a lot of code to make this work, but with working knowledge of Vue, we've made it easier to reason about, easier to extend, and easier to add features to give our PDF viewer more functionality.
 
 In the next post, we'll look at adding some conditional rendering; since all pages aren't visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.
-
-## Similar projects
-
-As I mentioned earlier, Mozilla's PDF.js package ships with its own web viewer ([demo](https://mozilla.github.io/pdf.js/web/viewer.html)) For an alternative approach to PDF rendering in Vue, check out the [vue-pdf](https://github.com/FranckFreiburger/vue-pdf) package.

@@ -207,6 +207,11 @@ helpers do
   def blog_series
     [
       [
+        "PDF Viewer",
+        "Building a PDF Viewer in Vue",
+        "A demo app to render PDFs using PDF.js, Vue, Webpack, and the canvas element"
+      ],
+      [
         "Connect Four",
         "Building Connect Four with Vue.js and Phoenix",
         "Tackling multi-player game rendering, animation, and realtime interaction"
