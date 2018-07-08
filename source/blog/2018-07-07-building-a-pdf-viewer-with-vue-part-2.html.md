@@ -142,6 +142,8 @@ Since we can pass the scroll data of the parent component to the child page comp
 ```
 We'll use a computed property `isElementVisible` which will update whenever either the `scrollBounds` or `elementBounds` change. It will simply check if the top of the element is above the bottom of the scroll area (`top < scrollBottom`) and the bottom of the element is below the top of the scroll area (`bottom > scrollTop`). Note that the `y` dimension increases moving down the screen.
 
+For another approach to detecting visibility in Vue, checkout the [Akryum/vue-observe-visibility](https://github.com/Akryum/vue-observe-visibility) on Github, which is also available as an NPM package.
+
 ### Lazy rendering pages
 
 Previously, we called the `drawPage` method (described in the [previous post](https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-1.html#rendering-the-page)) when the page component mounted. To make the page render lazily, now we call the method only when the element becomes visible, using a watcher.
