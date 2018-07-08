@@ -14,9 +14,16 @@ tags:
 
 As we demonstrated in the [previous post](/blog/building-a-pdf-viewer-with-vue-part-1.html), we can render pages of a PDF to `<canvas>` elements using PDF.js and Vue. We were able to use a simple Vue component hierarchy to separate the responsibilities of data fetching and page rendering. We used the PDF.js library to fetch the page data and hand off the work of drawing the data onto `<canvas>` elements.
 
+The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the version of the project described in this post, checkout the [`part-2-scrolling` branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-2-scrolling). Finally, here's a link to the [project demo](https://rossta.net/vue-pdfjs-demo/).
+
+[![Demo](screenshots/screenshot-pdf-viewer.png)](https://rossta.net/vue-pdfjs-demo/)
+
 In this post, we'll add a new requirement: we should only render pages when they are visible, i.e., as they are scrolled into the viewport. Previously, we were rendering all pages eagerly, regardless of whether they were appearing in the client browser. For a large PDF, this could mean valuable resources are used to render many pages offscreen and may never be viewed. Let's see how we can fix that using Vue.
 
 ### Adding scroll behavior
+
+To review, once a `<PDFPage>` component mounts, it calls the `page.render` method to draw the PDF data to the `<canvas>` element. To defer page rendering, only want to call this method once the `<canvas>` element has become visible in the scroll window of the document. We'll need to keep track of some boundaries in the parent component, `<PDFDocument>`, and the child `<PDFPage>` components.
+
 
 First, a CSS change to make our document scrollable within a relatively positioned parent element.
 
@@ -31,9 +38,6 @@ First, a CSS change to make our document scrollable within a relatively position
   right: 0;
 }
 ```
-
-To review, once a `<PDFPage>` component mounts, it calls the `page.render` method to draw the PDF data to the `<canvas>` element. To defer page rendering, only want to call this method once the `<canvas>` element has become visible in the scroll window of the document. To do so, we need to keep track of some boundaries in the parent component, `<PDFDocument>`, and the child `<PDFPage>` components.
-
 The `<PDFDocument>` will track its visible boundaries using the `scrollTop` and `clientHeight` properties of its element. The `scrollTop` property represents the distance from the top of the element to the top of the area within which it is scrolling. The `clientHeight` represents the height of the portion of the element that is visible within the scroll area. We'll record these boundaries when the component mounts.
 
 ```javascript
@@ -42,7 +46,7 @@ The `<PDFDocument>` will track its visible boundaries using the `scrollTop` and 
   data() {
     return {
       scrollTop: 0,
-      scrollHeight: 0,
+      clientHeight: 0,
       // ...
     };
   },
@@ -51,14 +55,14 @@ The `<PDFDocument>` will track its visible boundaries using the `scrollTop` and 
     updateScrollBounds() {
       const {scrollTop, clientHeight} = this.$el;
       this.scrollTop = scrollTop;
-      this.scrollHeight = clientHeight;
+      this.clientHeight = clientHeight;
     },
 
     // ...
   },
 
   mounted() {
-    this.updateElementBounds();
+    this.updateScrollBounds();
   },
 
   // ...
@@ -66,7 +70,7 @@ The `<PDFDocument>` will track its visible boundaries using the `scrollTop` and 
 ```
 ### Detecting page visibility
 
-The `<PDFPage>` component will track the boundaries of its underlying canvas element, whose dimensions we demonstrated how to calculate in the previous post. The element's `offsetTop` property will represent the distance from its top boundary to that of the containing document element `div`. As with the document component, we'll trigger the update of this data property when the page component mounts:
+The `<PDFPage>` component will track the boundaries of its underlying canvas element, whose dimensions we demonstrated how to calculate in the previous post. As with the document component, we'll trigger the update of this data property when the page component mounts:
 
 ```javascript
 // src/components/PDFPage.vue
@@ -95,8 +99,11 @@ The `<PDFPage>` component will track the boundaries of its underlying canvas ele
 
   // ...
 ```
-Since we can pass the scroll data of the parent component to the child page components as props, we now have what we need to determine if a given page is visible in the scroll area of the document. We'll use a computed property `isElementVisible` which will update whenever either the `scrollBounds` or `elementBounds` change. It will simply check if the top of the element is above the bottom of the scroll area (`top < scrollBottom`) and the bottom of the element is below the top of the scroll area (`bottom > scrollTop`). Note that the `y` dimension increases moving down the screen.
+The element's `offsetTop` property will represent the distance from its top boundary to that of the containing document element `div`. Recording its `offsetHeight` enables us to determine how far the bottom of the element is from the top of the container.
 
+Note that the `updateElementBounds` and `updateScrollBounds` methods are necessary because properties of DOM elements are outside of Vue's control, i.e., they are not reactive. These methods exist to maintain reactive copies of these properties in Vue and we must trigger them somehow when scrolling or resizing the window so that the changes will propagate.
+
+Since we can pass the scroll data of the parent component to the child page components as props, we now have what we need to determine if a given page is visible in the scroll area of the document.
 ```javascript
 // src/components/PDFPage.vue
 
@@ -105,7 +112,7 @@ Since we can pass the scroll data of the parent component to the child page comp
       type: Number,
       default: 0
     },
-    scrollHeight: {
+    clientHeight: {
       type: Number,
       default: 0
     },
@@ -121,15 +128,23 @@ Since we can pass the scroll data of the parent component to the child page comp
       return elementTop < scrollBottom && elementBottom > scrollTop;
     },
 
+    elementBottom() {
+      return this.elementTop + this.elementHeight;
+    },
+
+    scrollBottom() {
+      return this.scrollTop + this.clientHeight;
+    },
     // ...
   },
 
   // ...
 ```
+We'll use a computed property `isElementVisible` which will update whenever either the `scrollBounds` or `elementBounds` change. It will simply check if the top of the element is above the bottom of the scroll area (`top < scrollBottom`) and the bottom of the element is below the top of the scroll area (`bottom > scrollTop`). Note that the `y` dimension increases moving down the screen.
 
 ### Lazy rendering pages
 
-Previously, we called the `drawPage` method (described in the [previous post](https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-1.html#rendering-the-page)) when the page component mounted. To make the page render lazily, now we call the method only when the element becomes visible, using a watcher. We've defined `drawPage` such that it will only render once when called repeatedly should this watcher trigger more than once.
+Previously, we called the `drawPage` method (described in the [previous post](https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-1.html#rendering-the-page)) when the page component mounted. To make the page render lazily, now we call the method only when the element becomes visible, using a watcher.
 ```javascript
 // src/components/PDFPage.vue
 
@@ -141,7 +156,7 @@ Previously, we called the `drawPage` method (described in the [previous post](ht
 
   // ...
 ```
-The `updateElementBounds` and `updateScrollBounds` methods are necessary because properties of DOM elements are outside of Vue's control, i.e., they are not reactive. These methods exist to maintain reactive copies of these properties in Vue and we must trigger them somehow when scrolling or resizing the window so that the changes will propagate.
+We've defined `drawPage` such that it will only render once when called repeatedly should this watcher trigger more than once.
 
 In the page components, we can simply watch for changes in scroll boundaries and scale—changes to these props may cause a previously "hidden" page to become visible in the browser.
 
@@ -151,7 +166,7 @@ In the page components, we can simply watch for changes in scroll boundaries and
   watch: {
     scale: 'updateElementBounds',
     scrollTop: 'updateElementBounds',
-    scrollHeight: 'updateElementBounds',
+    clientHeight: 'updateElementBounds',
     // ...
   },
 
@@ -189,11 +204,13 @@ For a great explanation of throttling (and its cousin, debouncing) event callbac
 
 So far we have deferred rendering individual pages to mounted canvas elements until scrolled into view. This allows us to spare CPU cycles at the cost of the brief visual delay as newly visible pages are drawn. However, we are still creating the `<PDFPage>` components for every PDF page, regardless of whether they are visible. This results in `n - visible` blank `<canvas>` elements below the fold.
 
-We can go one step further. Instead of fetching all the pages up front, we'll fetch pages in batches as the user scrolls to the bottom of the document. In other words, we'll implement "infinite scrolling" for PDF pages (though most PDFs of which I'm aware are finite in length). To keeps things simple for this tutorial, we'll be adding this functionality directly to the `<PDFDocument>` component, though in a future post, we'll be moving towards extracting this information to other parts of our application.
+We can go one step further. Instead of fetching all the pages up front, we'll fetch pages in batches as the user scrolls to the bottom of the document. In other words, we'll implement "infinite scrolling" for PDF pages (though most PDFs of which I'm aware are finite in length). Fetching in batches is a compromise between eagerly loading all pages and fetching one at a time.
+
+To keep things simple for this tutorial, we'll add batching directly to the `<PDFDocument>` component; in a future post, we'll extract this information to other parts of our application.
 
 ### Batched fetching
 
-Recall in our document component, we're tracking a `pdf` property and an array of `pages`. We're now adding a `cursor` to represent the highest page number in the document we've attempted to fetch. We also will track the expected `pageCount` using a property provided by the `pdf` object.
+Recall in our document component, we're tracking a `pdf` property and an array of `pages`. We now add a `cursor` to represent the highest page number in the document we've attempted to fetch. We also will track the expected `pageCount` using a property provided by the `pdf` object.
 
 ```javascript
 // src/components/PDFDocument.vue
@@ -317,7 +334,7 @@ We'll call this method during `updateScrollBounds` method and record a tracked a
     updateScrollBounds() {
       const {scrollTop, clientHeight} = this.$el;
       this.scrollTop = scrollTop;
-      this.scrollHeight = clientHeight;
+      this.clientHeight = clientHeight;
       this.didReachBottom = this.isBottomVisible();
     },
 

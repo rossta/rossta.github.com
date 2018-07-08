@@ -17,9 +17,9 @@ I remember a time not too long ago when the possibility of rendering PDFs inline
 
 I was recently tasked with just this sort of project and I leveraged PDF.js, [Vue](https://vuejs.org/) and [Webpack](https://webpack.js.org) to put it all together. This post is the first in a series which will demonstrate how I used Vue to render PDF pages to `<canvas>` elements. Later we'll explore conditional rendering and adding paging and zoom controls.
 
-The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the version of the project described in this post, checkout the [`part-1` branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-1-simple-document). Finally, here's a link to the [project demo](https://rossta.net/vue-pdfjs-demo/).
+The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the version of the project described in this post, checkout the [`part-1-simple-document` branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-1-simple-document). Finally, here's a link to the [project demo](https://rossta.net/vue-pdfjs-demo/).
 
-[![](screenshots/screenshot-pdf-viewer.png)](https://rossta.net/vue-pdfjs-demo/)
+[![Demo](screenshots/screenshot-pdf-viewer.png)](https://rossta.net/vue-pdfjs-demo/)
 
 ### Similar projects
 
