@@ -240,7 +240,7 @@
   // ...
 </code></pre>
 
-<p>We&#39;ve defined <code>drawPage</code> such that it will only render once when called repeatedly should this watcher trigger more than once.</p>
+<p>We&#39;ve defined <code>drawPage</code> such that it will only render once if called multiple times.</p>
 
 <p>In the page components, we can simply watch for changes in scroll boundaries and scale—changes to these props may cause a previously &quot;hidden&quot; page to become visible in the browser.</p>
 
@@ -395,7 +395,7 @@ export default {
   // ...
 </code></pre>
 
-<p>The added complexity in <code>fetchPages</code> allows us to request small batches of pages with each subsequent call. The <code>currentCount</code> represents the total number of pages that have already been fetched. The <code>startPage</code> is simply the next page number of the next would-be page in the array, and the <code>endPage</code> of the batch is the lesser of an arbitrarily small batch of pages (<code>BATCH_COUNT</code>) and the remaining pages. We&#39;re able to insert these pages in the correct location in the tracked pages array with <code>this.pages.splice(currentCount, 0, ...pages)</code>. We also use the <code>this.cursor</code> property to track the most recently request <code>endPage</code> to ensure the same batch is not requested more than once.</p>
+<p>The added complexity in <code>fetchPages</code> allows us to request small batches of pages with each subsequent call. The <code>currentCount</code> represents the total number of pages that have already been fetched. The <code>startPage</code> is simply the next page number of the next would-be page in the array, and the <code>endPage</code> of the batch is the lesser of an arbitrarily small batch of pages (<code>BATCH_COUNT</code>) and the remaining pages. We&#39;re able to insert these pages in the correct location in the tracked pages array with <code>this.pages.splice(currentCount, 0, ...pages)</code>. We also use the <code>this.cursor</code> property to track the most recently request <code>endPage</code> to ensure the same batch is only requested once.</p>
 
       <h3 id="why-splice-" class="title">
         <a name="why-splice-" class="anchor" href="#why-splice-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">

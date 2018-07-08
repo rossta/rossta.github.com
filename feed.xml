@@ -182,7 +182,7 @@
   // ...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;We&amp;#39;ve defined &lt;code&gt;drawPage&lt;/code&gt; such that it will only render once when called repeatedly should this watcher trigger more than once.&lt;/p&gt;
+&lt;p&gt;We&amp;#39;ve defined &lt;code&gt;drawPage&lt;/code&gt; such that it will only render once if called multiple times.&lt;/p&gt;
 
 &lt;p&gt;In the page components, we can simply watch for changes in scroll boundaries and scale—changes to these props may cause a previously &amp;quot;hidden&amp;quot; page to become visible in the browser.&lt;/p&gt;
 
@@ -337,7 +337,7 @@ export default {
   // ...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The added complexity in &lt;code&gt;fetchPages&lt;/code&gt; allows us to request small batches of pages with each subsequent call. The &lt;code&gt;currentCount&lt;/code&gt; represents the total number of pages that have already been fetched. The &lt;code&gt;startPage&lt;/code&gt; is simply the next page number of the next would-be page in the array, and the &lt;code&gt;endPage&lt;/code&gt; of the batch is the lesser of an arbitrarily small batch of pages (&lt;code&gt;BATCH_COUNT&lt;/code&gt;) and the remaining pages. We&amp;#39;re able to insert these pages in the correct location in the tracked pages array with &lt;code&gt;this.pages.splice(currentCount, 0, ...pages)&lt;/code&gt;. We also use the &lt;code&gt;this.cursor&lt;/code&gt; property to track the most recently request &lt;code&gt;endPage&lt;/code&gt; to ensure the same batch is not requested more than once.&lt;/p&gt;
+&lt;p&gt;The added complexity in &lt;code&gt;fetchPages&lt;/code&gt; allows us to request small batches of pages with each subsequent call. The &lt;code&gt;currentCount&lt;/code&gt; represents the total number of pages that have already been fetched. The &lt;code&gt;startPage&lt;/code&gt; is simply the next page number of the next would-be page in the array, and the &lt;code&gt;endPage&lt;/code&gt; of the batch is the lesser of an arbitrarily small batch of pages (&lt;code&gt;BATCH_COUNT&lt;/code&gt;) and the remaining pages. We&amp;#39;re able to insert these pages in the correct location in the tracked pages array with &lt;code&gt;this.pages.splice(currentCount, 0, ...pages)&lt;/code&gt;. We also use the &lt;code&gt;this.cursor&lt;/code&gt; property to track the most recently request &lt;code&gt;endPage&lt;/code&gt; to ensure the same batch is only requested once.&lt;/p&gt;
 
       &lt;h3 id="why-splice-" class="title"&gt;
         &lt;a name="why-splice-" class="anchor" href="#why-splice-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
