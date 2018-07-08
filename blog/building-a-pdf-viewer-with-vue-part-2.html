@@ -1,0 +1,604 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Displaying PDFs lazily with Vue - rossta.net</title>
+<meta name="description" content="This tutorial demonstrates how to use Vue to defer fetching and rendering of PDF page data until elements are scrolled into the client browser." />
+<meta name="keywords" content="Vue" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="This tutorial demonstrates how to use Vue to defer fetching and rendering of PDF page data until elements are scrolled into the client browser." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/rawpixel-typewriter-unsplash-aca2ff88.jpg" />
+<meta name="twitter:title" content="Displaying PDFs lazily with Vue" />
+<meta property="og:description" content="This tutorial demonstrates how to use Vue to defer fetching and rendering of PDF page data until elements are scrolled into the client browser." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/rawpixel-typewriter-unsplash-aca2ff88.jpg" />
+<meta property="og:title" content="Displaying PDFs lazily with Vue" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" />
+    <link rel="icon"                                  href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
+
+    <link rel="mask-icon" href="/safari-pinned-tab-5cdca7ae.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app.bundle-3f3ff3db.css" rel="stylesheet" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Displaying PDFs lazily with Vue
+  </h1>
+    <h3>
+      Building a PDF Viewer with Vue - Part 2
+    </h3>
+</header>
+
+        <figure>
+          <img src="/assets/images/blog/stock/rawpixel-typewriter-unsplash-aca2ff88.jpg" alt="Rawpixel typewriter unsplash" />
+            <figcaption>Photo by rawpixel on Unsplash</figcaption>
+        </figure>
+      <p>As we demonstrated in the <a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">previous post</a>, we can render pages of a PDF to <code>&lt;canvas&gt;</code> elements using PDF.js and Vue. We were able to use a simple Vue component hierarchy to separate the responsibilities of data fetching and page rendering. We used the PDF.js library to fetch the page data and hand off the work of drawing the data onto <code>&lt;canvas&gt;</code> elements.</p>
+
+<p>In this post, we&#39;ll add a new requirement: we should only render pages when they are visible, i.e., as they are scrolled into the viewport. Previously, we were rendering all pages eagerly, regardless of whether they were appearing in the client browser. For a large PDF, this could mean valuable resources are used to render many pages offscreen and may never be viewed. Let&#39;s see how we can fix that using Vue.</p>
+
+      <h3 id="adding-scroll-behavior" class="title">
+        <a name="adding-scroll-behavior" class="anchor" href="#adding-scroll-behavior">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Adding scroll behavior
+      </h3>
+    
+<p>First, a CSS change to make our document scrollable within a relatively positioned parent element.</p>
+
+<pre><code class="css">.pdf-document {
+  position: absolute;
+  overflow: auto;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+</code></pre>
+
+<p>To review, once a <code>&lt;PDFPage&gt;</code> component mounts, it calls the <code>page.render</code> method to draw the PDF data to the <code>&lt;canvas&gt;</code> element. To defer page rendering, only want to call this method once the <code>&lt;canvas&gt;</code> element has become visible in the scroll window of the document. To do so, we need to keep track of some boundaries in the parent component, <code>&lt;PDFDocument&gt;</code>, and the child <code>&lt;PDFPage&gt;</code> components.</p>
+
+<p>The <code>&lt;PDFDocument&gt;</code> will track its visible boundaries using the <code>scrollTop</code> and <code>clientHeight</code> properties of its element. The <code>scrollTop</code> property represents the distance from the top of the element to the top of the area within which it is scrolling. The <code>clientHeight</code> represents the height of the portion of the element that is visible within the scroll area. We&#39;ll record these boundaries when the component mounts.</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+
+  data() {
+    return {
+      scrollTop: 0,
+      scrollHeight: 0,
+      // ...
+    };
+  },
+
+  methods: {
+    updateScrollBounds() {
+      const {scrollTop, clientHeight} = this.$el;
+      this.scrollTop = scrollTop;
+      this.scrollHeight = clientHeight;
+    },
+
+    // ...
+  },
+
+  mounted() {
+    this.updateElementBounds();
+  },
+
+  // ...
+}
+</code></pre>
+
+      <h3 id="detecting-page-visibility" class="title">
+        <a name="detecting-page-visibility" class="anchor" href="#detecting-page-visibility">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Detecting page visibility
+      </h3>
+    
+<p>The <code>&lt;PDFPage&gt;</code> component will track the boundaries of its underlying canvas element, whose dimensions we demonstrated how to calculate in the previous post. The element&#39;s <code>offsetTop</code> property will represent the distance from its top boundary to that of the containing document element <code>div</code>. As with the document component, we&#39;ll trigger the update of this data property when the page component mounts:</p>
+
+<pre><code class="javascript">// src/components/PDFPage.vue
+
+  data() {
+    return {
+      elementTop: 0,
+      elementHeight: 0,
+      // ...
+    };
+  },
+
+  methods: {
+    updateElementBounds() {
+      const {offsetTop, offsetHeight} = this.$el;
+      this.elementTop = offsetTop;
+      this.elementHeight = offsetHeight;
+    },
+
+    // ...
+  },
+
+  mounted() {
+    this.updateElementBounds();
+  },
+
+  // ...
+</code></pre>
+
+<p>Since we can pass the scroll data of the parent component to the child page components as props, we now have what we need to determine if a given page is visible in the scroll area of the document. We&#39;ll use a computed property <code>isElementVisible</code> which will update whenever either the <code>scrollBounds</code> or <code>elementBounds</code> change. It will simply check if the top of the element is above the bottom of the scroll area (<code>top &lt; scrollBottom</code>) and the bottom of the element is below the top of the scroll area (<code>bottom &gt; scrollTop</code>). Note that the <code>y</code> dimension increases moving down the screen.</p>
+
+<pre><code class="javascript">// src/components/PDFPage.vue
+
+  props: {
+    scrollTop: {
+      type: Number,
+      default: 0
+    },
+    scrollHeight: {
+      type: Number,
+      default: 0
+    },
+
+    // ...
+  },
+
+  computed: {
+    isElementVisible() {
+      const {elementTop, elementBottom, scrollTop, scrollBottom} = this;
+      if (!elementBottom) return;
+
+      return elementTop &lt; scrollBottom &amp;&amp; elementBottom &gt; scrollTop;
+    },
+
+    // ...
+  },
+
+  // ...
+</code></pre>
+
+      <h3 id="lazy-rendering-pages" class="title">
+        <a name="lazy-rendering-pages" class="anchor" href="#lazy-rendering-pages">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Lazy rendering pages
+      </h3>
+    
+<p>Previously, we called the <code>drawPage</code> method (described in the <a href="https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-1.html#rendering-the-page">previous post</a>) when the page component mounted. To make the page render lazily, now we call the method only when the element becomes visible, using a watcher. We&#39;ve defined <code>drawPage</code> such that it will only render once when called repeatedly should this watcher trigger more than once.</p>
+
+<pre><code class="javascript">// src/components/PDFPage.vue
+
+  watch: {
+    isElementVisible(isElementVisible) {
+      if (isElementVisible) this.drawPage();
+    },
+  },
+
+  // ...
+</code></pre>
+
+<p>The <code>updateElementBounds</code> and <code>updateScrollBounds</code> methods are necessary because properties of DOM elements are outside of Vue&#39;s control, i.e., they are not reactive. These methods exist to maintain reactive copies of these properties in Vue and we must trigger them somehow when scrolling or resizing the window so that the changes will propagate.</p>
+
+<p>In the page components, we can simply watch for changes in scroll boundaries and scale—changes to these props may cause a previously &quot;hidden&quot; page to become visible in the browser.</p>
+
+<pre><code class="javascript">// src/components/PDFPage.vue
+
+  watch: {
+    scale: &#39;updateElementBounds&#39;,
+    scrollTop: &#39;updateElementBounds&#39;,
+    scrollHeight: &#39;updateElementBounds&#39;,
+    // ...
+  },
+
+  // ...
+</code></pre>
+
+<p>For the document component, we add listeners to DOM events to trigger the <code>updateScrollBounds</code> method within the <code>mounted</code> hook.</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+import throttle from &#39;lodash/throttle&#39;;
+
+export default {
+  // ...
+
+  mounted() {
+    this.updateScrollBounds();
+    const throttledCallback = throttle(this.updateScrollBounds, 300);
+
+    this.$el.addEventListener(&#39;scroll&#39;, throttledCallback, true);
+    window.addEventListener(&#39;resize&#39;, throttledCallback, true);
+
+    this.throttledOnResize = throttledCallback;
+  },
+
+  beforeDestroy() {
+    window.removeEventListener(&#39;resize&#39;, this.throttledOnResize, true);
+  },
+
+  // ...
+</code></pre>
+
+<p>A few notes about the implementation above: we use lodash&#39;s <code>throttle</code> function to ensure our callback is only triggered once every 300ms; otherwise, we&#39;d be making this update potentially dozens of times a second, which for our purposes is unnecessary and could potentially be a performance bottleneck. Since we can attach our <code>throttledCallback</code> to the <code>&#39;scroll&#39;</code> event listener of <code>this.$el</code>, we will also be cleaned up nicely during Vue teardown phase. However, since the <code>&#39;resize&#39;</code> event will currently only work on the <code>window</code>, we&#39;ll need to store a reference to the throttled callback as <code>this.throttledOnResize</code> so we can remove the event listener in Vue&#39;s <code>beforeDestroy</code> hook.</p>
+
+<p>For a great explanation of throttling (and its cousin, debouncing) event callbacks, check out <a href="https://css-tricks.com/debouncing-throttling-explained-examples/">this post on CSS tricks</a>.</p>
+
+      <h3 id="adding-quot-infinite-quot-scrolling" class="title">
+        <a name="adding-quot-infinite-quot-scrolling" class="anchor" href="#adding-quot-infinite-quot-scrolling">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Adding &quot;infinite&quot; scrolling
+      </h3>
+    
+<p>So far we have deferred rendering individual pages to mounted canvas elements until scrolled into view. This allows us to spare CPU cycles at the cost of the brief visual delay as newly visible pages are drawn. However, we are still creating the <code>&lt;PDFPage&gt;</code> components for every PDF page, regardless of whether they are visible. This results in <code>n - visible</code> blank <code>&lt;canvas&gt;</code> elements below the fold.</p>
+
+<p>We can go one step further. Instead of fetching all the pages up front, we&#39;ll fetch pages in batches as the user scrolls to the bottom of the document. In other words, we&#39;ll implement &quot;infinite scrolling&quot; for PDF pages (though most PDFs of which I&#39;m aware are finite in length). To keeps things simple for this tutorial, we&#39;ll be adding this functionality directly to the <code>&lt;PDFDocument&gt;</code> component, though in a future post, we&#39;ll be moving towards extracting this information to other parts of our application.</p>
+
+      <h3 id="batched-fetching" class="title">
+        <a name="batched-fetching" class="anchor" href="#batched-fetching">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Batched fetching
+      </h3>
+    
+<p>Recall in our document component, we&#39;re tracking a <code>pdf</code> property and an array of <code>pages</code>. We&#39;re now adding a <code>cursor</code> to represent the highest page number in the document we&#39;ve attempted to fetch. We also will track the expected <code>pageCount</code> using a property provided by the <code>pdf</code> object.</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+  data() {
+    return {
+      pdf: undefined,
+      pages: [],
+      cursor: 0,
+      // ...
+    };
+  },
+
+  computed: {
+    pageCount() {
+      return this.pdf ? this.pdf.numPages : 0;
+    },
+
+    // ...
+  },
+
+  // ...
+</code></pre>
+
+<p>We also previously added a watcher for the <code>pdf</code> property to fetch all pages:</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+
+  watch: {
+    pdf(pdf) {
+      this.pages = [];
+      const promises = range(1, pdf.numPages).
+        map(number =&gt; pdf.getPage(number));
+
+      Promise.all(promises).
+        then(pages =&gt; (this.pages = pages));
+    },
+  },
+</code></pre>
+
+<p>We&#39;ll modify this watcher by extracting a method to fetch pages in batches:</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+
+  watch: {
+    pdf(pdf) {
+      this.pages = [];
+      this.fetchPages();
+    },
+  },
+</code></pre>
+
+<p>Here is our new <code>fetchPages</code> implementation:</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+
+const BATCH_COUNT = 10;
+
+export default {
+  // ...
+
+  methods: {
+    fetchPages() {
+      if (!this.pdf) return;
+
+      const currentCount = this.pages.length;
+      if (this.pageCount &gt; 0 &amp;&amp; currentCount === this.pageCount) return;
+      if (this.cursor &gt; currentCount) return;
+
+      const startPage = currentCount + 1; // PDF page numbering starts at 1
+      const endPage = Math.min(currentCount + BATCH_COUNT, this.pageCount);
+      this.cursor = endPage;
+
+      getPages(this.pdf, startPage, endPage)
+        .then((pages) =&gt; {
+          this.pages.splice(currentCount, 0, ...pages);
+          return this.pages;
+        })
+        .catch((response) =&gt; {
+          this.$emit(&#39;document-errored&#39;);
+        });
+    },
+
+    // ...
+  }
+
+  // ...
+</code></pre>
+
+<p>The added complexity in <code>fetchPages</code> allows us to request small batches of pages with each subsequent call. The <code>currentCount</code> represents the total number of pages that have already been fetched. The <code>startPage</code> is simply the next page number of the next would-be page in the array, and the <code>endPage</code> of the batch is the lesser of an arbitrarily small batch of pages (<code>BATCH_COUNT</code>) and the remaining pages. We&#39;re able to insert these pages in the correct location in the tracked pages array with <code>this.pages.splice(currentCount, 0, ...pages)</code>. We also use the <code>this.cursor</code> property to track the most recently request <code>endPage</code> to ensure the same batch is not requested more than once.</p>
+
+      <h3 id="why-splice-" class="title">
+        <a name="why-splice-" class="anchor" href="#why-splice-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Why splice?
+      </h3>
+    
+<p>You may ask, why not simply add the new pages on to the end of the <code>this.pages</code> array instead? You could imagine using an expression like <code>this.pages.push.apply(this.pages, pages)</code> to modify the array in place or replacing the array altogether with <code>this.pages = [...this.pages, ...pages]</code> or <code>concat</code>. The reason is that <code>getPages</code> is asynchronous—it returns a promise that fulfills when all pages in the batch have been fetched. It is safer to assume this method can be called in rapid succession where multiple batch requests may be in flight simultaneously. Using <code>splice</code> to add new pages at the expected position will ensure our batches are inserted into the <code>this.pages</code> array in the correct order.</p>
+
+      <h3 id="finding-the-bottom" class="title">
+        <a name="finding-the-bottom" class="anchor" href="#finding-the-bottom">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Finding the bottom
+      </h3>
+    
+<p>To determine whether the user has scrolled to the bottom of the last of the fetched pages, we will again lean on properties of <code>this.$el</code>. We can ask if the sum of the <code>scrollTop</code> of the document and its visible height, <code>clientHeight</code>, has equalled its total <code>scrollHeight</code>.</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+
+  methods: {
+    isBottomVisible() {
+      const {scrollTop, clientHeight, scrollHeight} = this.$el;
+      return scrollTop + clientHeight &gt;= scrollHeight;
+    },
+
+    // ...
+  },
+</code></pre>
+
+<p>We&#39;ll call this method during <code>updateScrollBounds</code> method and record a tracked a true/false property, <code>didReachBottom</code>.</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+
+  data() {
+    return {
+      didReachBottom: false,
+      // ...
+    };
+  },
+
+  methods: {
+    updateScrollBounds() {
+      const {scrollTop, clientHeight} = this.$el;
+      this.scrollTop = scrollTop;
+      this.scrollHeight = clientHeight;
+      this.didReachBottom = this.isBottomVisible();
+    },
+
+    // ...
+  },
+
+  // ...
+</code></pre>
+
+<p>We can then use a watcher to call <code>fetchPages</code> if this property flips from <code>false</code> to <code>true</code>. This watcher would fire continuously in a cycle as the user scrolls to the bottom and more pages are fetched.</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+
+  watch: {
+    didReachBottom(didReachBottom) {
+      if (didReachBottom) this.fetchPages();
+    },
+
+    // ...
+  },
+
+  // ...
+</code></pre>
+
+<p>For another in-depth look at adding infinite scrolling for Vue, check out Chris Nwamba&#39;s <a href="https://scotch.io/tutorials/simple-asynchronous-infinite-scroll-with-vue-watchers">post on Scotch.io</a>. There are also a number of packages that abstract infinite scrolling if you&#39;d prefer to lean on open source, including <a href="https://github.com/Akryum/vue-virtual-scroller">Akryum/vue-virtual-scroller</a> and <a href="https://github.com/ElemeFE/vue-infinite-scroll">ElemeFE/vue-infinite-scroll</a>.</p>
+
+      <h3 id="wrapping-up" class="title">
+        <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Wrapping up
+      </h3>
+    
+<p>We&#39;ve succeeded in making our documents more lazy; now we can defer both data fetching and page rendering until necessary, potentially improving performance of the initial page load and avoiding waste, especially for large documents.</p>
+
+<p>We&#39;ve been adding quite a bit of complexity though to our existing <code>&lt;PDFDocument&gt;</code> and <code>&lt;PDFPage&gt;</code> components; they now both are responsible for making API requests, calculating element boundaries, lazy behavior, etc. Ideally, we&#39;ll want to limit the responsibility of a given component to make our application less resistant to change. In the next post, we&#39;ll refactor our PDF viewer to to separate out data fetching and scrolling behavior into separate &quot;renderless components&quot;. These changes will subsequently allow us to share code and add a new feature: a preview pane.</p>
+
+<p>And now you&#39;ve reached the bottom of this post!</p>
+
+    </article>
+    <section class="margin-bottom double">
+      <a href="https://twitter.com/intent/tweet?text=Displaying%20PDFs%20lazily%20with%20Vue&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fbuilding-a-pdf-viewer-with-vue-part-2.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
+    </section>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP" value="https://rossta.net/blog/2018-07-07-building-a-pdf-viewer-with-vue-part-2.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2018-07-07-building-a-pdf-viewer-with-vue-part-2.html" />
+      <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Vue" />
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <section class="margin-bottom double">
+      <p>
+          Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
+        Published on Jul  7, 2018
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "building-a-pdf-viewer-with-vue-part-2";
+    var disqus_title      = "Displaying PDFs lazily with Vue";
+    var disqus_url        = "https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-2.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/n-1-is-a-rails-feature.html">N+1 is a Rails feature</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/vue.html">Vue</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2018 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/runtime.bundle-2352c808.js"></script><script src="/assets/javascripts/vendor.bundle-0116f3b0.js"></script><script src="/assets/javascripts/app.bundle-ed1e4144.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>

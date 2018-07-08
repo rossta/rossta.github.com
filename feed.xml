@@ -5,10 +5,410 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-06-28T00:00:00+00:00</updated>
+  <updated>2018-07-07T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Displaying PDFs lazily with Vue</title>
+    <link rel="alternate" href="/blog/building-a-pdf-viewer-with-vue-part-2.html"/>
+    <id>/blog/building-a-pdf-viewer-with-vue-part-2.html</id>
+    <published>2018-07-07T00:00:00+00:00</published>
+    <updated>2018-07-07T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;As we demonstrated in the &lt;a href="/blog/building-a-pdf-viewer-with-vue-part-1.html"&gt;previous post&lt;/a&gt;, we can render pages of a PDF to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements using PDF.js and Vue. We were able to use a simple Vue component hierarchy to separate the responsibilities of data fetching and page rendering. We used the...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;As we demonstrated in the &lt;a href="/blog/building-a-pdf-viewer-with-vue-part-1.html"&gt;previous post&lt;/a&gt;, we can render pages of a PDF to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements using PDF.js and Vue. We were able to use a simple Vue component hierarchy to separate the responsibilities of data fetching and page rendering. We used the PDF.js library to fetch the page data and hand off the work of drawing the data onto &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements.&lt;/p&gt;
+
+&lt;p&gt;In this post, we&amp;#39;ll add a new requirement: we should only render pages when they are visible, i.e., as they are scrolled into the viewport. Previously, we were rendering all pages eagerly, regardless of whether they were appearing in the client browser. For a large PDF, this could mean valuable resources are used to render many pages offscreen and may never be viewed. Let&amp;#39;s see how we can fix that using Vue.&lt;/p&gt;
+
+      &lt;h3 id="adding-scroll-behavior" class="title"&gt;
+        &lt;a name="adding-scroll-behavior" class="anchor" href="#adding-scroll-behavior"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Adding scroll behavior
+      &lt;/h3&gt;
+    
+&lt;p&gt;First, a CSS change to make our document scrollable within a relatively positioned parent element.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="css"&gt;.pdf-document {
+  position: absolute;
+  overflow: auto;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To review, once a &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; component mounts, it calls the &lt;code&gt;page.render&lt;/code&gt; method to draw the PDF data to the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element. To defer page rendering, only want to call this method once the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element has become visible in the scroll window of the document. To do so, we need to keep track of some boundaries in the parent component, &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt;, and the child &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; will track its visible boundaries using the &lt;code&gt;scrollTop&lt;/code&gt; and &lt;code&gt;clientHeight&lt;/code&gt; properties of its element. The &lt;code&gt;scrollTop&lt;/code&gt; property represents the distance from the top of the element to the top of the area within which it is scrolling. The &lt;code&gt;clientHeight&lt;/code&gt; represents the height of the portion of the element that is visible within the scroll area. We&amp;#39;ll record these boundaries when the component mounts.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+  data() {
+    return {
+      scrollTop: 0,
+      scrollHeight: 0,
+      // ...
+    };
+  },
+
+  methods: {
+    updateScrollBounds() {
+      const {scrollTop, clientHeight} = this.$el;
+      this.scrollTop = scrollTop;
+      this.scrollHeight = clientHeight;
+    },
+
+    // ...
+  },
+
+  mounted() {
+    this.updateElementBounds();
+  },
+
+  // ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="detecting-page-visibility" class="title"&gt;
+        &lt;a name="detecting-page-visibility" class="anchor" href="#detecting-page-visibility"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Detecting page visibility
+      &lt;/h3&gt;
+    
+&lt;p&gt;The &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; component will track the boundaries of its underlying canvas element, whose dimensions we demonstrated how to calculate in the previous post. The element&amp;#39;s &lt;code&gt;offsetTop&lt;/code&gt; property will represent the distance from its top boundary to that of the containing document element &lt;code&gt;div&lt;/code&gt;. As with the document component, we&amp;#39;ll trigger the update of this data property when the page component mounts:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
+
+  data() {
+    return {
+      elementTop: 0,
+      elementHeight: 0,
+      // ...
+    };
+  },
+
+  methods: {
+    updateElementBounds() {
+      const {offsetTop, offsetHeight} = this.$el;
+      this.elementTop = offsetTop;
+      this.elementHeight = offsetHeight;
+    },
+
+    // ...
+  },
+
+  mounted() {
+    this.updateElementBounds();
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since we can pass the scroll data of the parent component to the child page components as props, we now have what we need to determine if a given page is visible in the scroll area of the document. We&amp;#39;ll use a computed property &lt;code&gt;isElementVisible&lt;/code&gt; which will update whenever either the &lt;code&gt;scrollBounds&lt;/code&gt; or &lt;code&gt;elementBounds&lt;/code&gt; change. It will simply check if the top of the element is above the bottom of the scroll area (&lt;code&gt;top &amp;lt; scrollBottom&lt;/code&gt;) and the bottom of the element is below the top of the scroll area (&lt;code&gt;bottom &amp;gt; scrollTop&lt;/code&gt;). Note that the &lt;code&gt;y&lt;/code&gt; dimension increases moving down the screen.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
+
+  props: {
+    scrollTop: {
+      type: Number,
+      default: 0
+    },
+    scrollHeight: {
+      type: Number,
+      default: 0
+    },
+
+    // ...
+  },
+
+  computed: {
+    isElementVisible() {
+      const {elementTop, elementBottom, scrollTop, scrollBottom} = this;
+      if (!elementBottom) return;
+
+      return elementTop &amp;lt; scrollBottom &amp;amp;&amp;amp; elementBottom &amp;gt; scrollTop;
+    },
+
+    // ...
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="lazy-rendering-pages" class="title"&gt;
+        &lt;a name="lazy-rendering-pages" class="anchor" href="#lazy-rendering-pages"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Lazy rendering pages
+      &lt;/h3&gt;
+    
+&lt;p&gt;Previously, we called the &lt;code&gt;drawPage&lt;/code&gt; method (described in the &lt;a href="https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-1.html#rendering-the-page"&gt;previous post&lt;/a&gt;) when the page component mounted. To make the page render lazily, now we call the method only when the element becomes visible, using a watcher. We&amp;#39;ve defined &lt;code&gt;drawPage&lt;/code&gt; such that it will only render once when called repeatedly should this watcher trigger more than once.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
+
+  watch: {
+    isElementVisible(isElementVisible) {
+      if (isElementVisible) this.drawPage();
+    },
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;updateElementBounds&lt;/code&gt; and &lt;code&gt;updateScrollBounds&lt;/code&gt; methods are necessary because properties of DOM elements are outside of Vue&amp;#39;s control, i.e., they are not reactive. These methods exist to maintain reactive copies of these properties in Vue and we must trigger them somehow when scrolling or resizing the window so that the changes will propagate.&lt;/p&gt;
+
+&lt;p&gt;In the page components, we can simply watch for changes in scroll boundaries and scale—changes to these props may cause a previously &amp;quot;hidden&amp;quot; page to become visible in the browser.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
+
+  watch: {
+    scale: &amp;#39;updateElementBounds&amp;#39;,
+    scrollTop: &amp;#39;updateElementBounds&amp;#39;,
+    scrollHeight: &amp;#39;updateElementBounds&amp;#39;,
+    // ...
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the document component, we add listeners to DOM events to trigger the &lt;code&gt;updateScrollBounds&lt;/code&gt; method within the &lt;code&gt;mounted&lt;/code&gt; hook.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+import throttle from &amp;#39;lodash/throttle&amp;#39;;
+
+export default {
+  // ...
+
+  mounted() {
+    this.updateScrollBounds();
+    const throttledCallback = throttle(this.updateScrollBounds, 300);
+
+    this.$el.addEventListener(&amp;#39;scroll&amp;#39;, throttledCallback, true);
+    window.addEventListener(&amp;#39;resize&amp;#39;, throttledCallback, true);
+
+    this.throttledOnResize = throttledCallback;
+  },
+
+  beforeDestroy() {
+    window.removeEventListener(&amp;#39;resize&amp;#39;, this.throttledOnResize, true);
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A few notes about the implementation above: we use lodash&amp;#39;s &lt;code&gt;throttle&lt;/code&gt; function to ensure our callback is only triggered once every 300ms; otherwise, we&amp;#39;d be making this update potentially dozens of times a second, which for our purposes is unnecessary and could potentially be a performance bottleneck. Since we can attach our &lt;code&gt;throttledCallback&lt;/code&gt; to the &lt;code&gt;&amp;#39;scroll&amp;#39;&lt;/code&gt; event listener of &lt;code&gt;this.$el&lt;/code&gt;, we will also be cleaned up nicely during Vue teardown phase. However, since the &lt;code&gt;&amp;#39;resize&amp;#39;&lt;/code&gt; event will currently only work on the &lt;code&gt;window&lt;/code&gt;, we&amp;#39;ll need to store a reference to the throttled callback as &lt;code&gt;this.throttledOnResize&lt;/code&gt; so we can remove the event listener in Vue&amp;#39;s &lt;code&gt;beforeDestroy&lt;/code&gt; hook.&lt;/p&gt;
+
+&lt;p&gt;For a great explanation of throttling (and its cousin, debouncing) event callbacks, check out &lt;a href="https://css-tricks.com/debouncing-throttling-explained-examples/"&gt;this post on CSS tricks&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h3 id="adding-quot-infinite-quot-scrolling" class="title"&gt;
+        &lt;a name="adding-quot-infinite-quot-scrolling" class="anchor" href="#adding-quot-infinite-quot-scrolling"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Adding &amp;quot;infinite&amp;quot; scrolling
+      &lt;/h3&gt;
+    
+&lt;p&gt;So far we have deferred rendering individual pages to mounted canvas elements until scrolled into view. This allows us to spare CPU cycles at the cost of the brief visual delay as newly visible pages are drawn. However, we are still creating the &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components for every PDF page, regardless of whether they are visible. This results in &lt;code&gt;n - visible&lt;/code&gt; blank &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements below the fold.&lt;/p&gt;
+
+&lt;p&gt;We can go one step further. Instead of fetching all the pages up front, we&amp;#39;ll fetch pages in batches as the user scrolls to the bottom of the document. In other words, we&amp;#39;ll implement &amp;quot;infinite scrolling&amp;quot; for PDF pages (though most PDFs of which I&amp;#39;m aware are finite in length). To keeps things simple for this tutorial, we&amp;#39;ll be adding this functionality directly to the &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; component, though in a future post, we&amp;#39;ll be moving towards extracting this information to other parts of our application.&lt;/p&gt;
+
+      &lt;h3 id="batched-fetching" class="title"&gt;
+        &lt;a name="batched-fetching" class="anchor" href="#batched-fetching"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Batched fetching
+      &lt;/h3&gt;
+    
+&lt;p&gt;Recall in our document component, we&amp;#39;re tracking a &lt;code&gt;pdf&lt;/code&gt; property and an array of &lt;code&gt;pages&lt;/code&gt;. We&amp;#39;re now adding a &lt;code&gt;cursor&lt;/code&gt; to represent the highest page number in the document we&amp;#39;ve attempted to fetch. We also will track the expected &lt;code&gt;pageCount&lt;/code&gt; using a property provided by the &lt;code&gt;pdf&lt;/code&gt; object.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+  data() {
+    return {
+      pdf: undefined,
+      pages: [],
+      cursor: 0,
+      // ...
+    };
+  },
+
+  computed: {
+    pageCount() {
+      return this.pdf ? this.pdf.numPages : 0;
+    },
+
+    // ...
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We also previously added a watcher for the &lt;code&gt;pdf&lt;/code&gt; property to fetch all pages:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+  watch: {
+    pdf(pdf) {
+      this.pages = [];
+      const promises = range(1, pdf.numPages).
+        map(number =&amp;gt; pdf.getPage(number));
+
+      Promise.all(promises).
+        then(pages =&amp;gt; (this.pages = pages));
+    },
+  },
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;#39;ll modify this watcher by extracting a method to fetch pages in batches:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+  watch: {
+    pdf(pdf) {
+      this.pages = [];
+      this.fetchPages();
+    },
+  },
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is our new &lt;code&gt;fetchPages&lt;/code&gt; implementation:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+const BATCH_COUNT = 10;
+
+export default {
+  // ...
+
+  methods: {
+    fetchPages() {
+      if (!this.pdf) return;
+
+      const currentCount = this.pages.length;
+      if (this.pageCount &amp;gt; 0 &amp;amp;&amp;amp; currentCount === this.pageCount) return;
+      if (this.cursor &amp;gt; currentCount) return;
+
+      const startPage = currentCount + 1; // PDF page numbering starts at 1
+      const endPage = Math.min(currentCount + BATCH_COUNT, this.pageCount);
+      this.cursor = endPage;
+
+      getPages(this.pdf, startPage, endPage)
+        .then((pages) =&amp;gt; {
+          this.pages.splice(currentCount, 0, ...pages);
+          return this.pages;
+        })
+        .catch((response) =&amp;gt; {
+          this.$emit(&amp;#39;document-errored&amp;#39;);
+        });
+    },
+
+    // ...
+  }
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The added complexity in &lt;code&gt;fetchPages&lt;/code&gt; allows us to request small batches of pages with each subsequent call. The &lt;code&gt;currentCount&lt;/code&gt; represents the total number of pages that have already been fetched. The &lt;code&gt;startPage&lt;/code&gt; is simply the next page number of the next would-be page in the array, and the &lt;code&gt;endPage&lt;/code&gt; of the batch is the lesser of an arbitrarily small batch of pages (&lt;code&gt;BATCH_COUNT&lt;/code&gt;) and the remaining pages. We&amp;#39;re able to insert these pages in the correct location in the tracked pages array with &lt;code&gt;this.pages.splice(currentCount, 0, ...pages)&lt;/code&gt;. We also use the &lt;code&gt;this.cursor&lt;/code&gt; property to track the most recently request &lt;code&gt;endPage&lt;/code&gt; to ensure the same batch is not requested more than once.&lt;/p&gt;
+
+      &lt;h3 id="why-splice-" class="title"&gt;
+        &lt;a name="why-splice-" class="anchor" href="#why-splice-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Why splice?
+      &lt;/h3&gt;
+    
+&lt;p&gt;You may ask, why not simply add the new pages on to the end of the &lt;code&gt;this.pages&lt;/code&gt; array instead? You could imagine using an expression like &lt;code&gt;this.pages.push.apply(this.pages, pages)&lt;/code&gt; to modify the array in place or replacing the array altogether with &lt;code&gt;this.pages = [...this.pages, ...pages]&lt;/code&gt; or &lt;code&gt;concat&lt;/code&gt;. The reason is that &lt;code&gt;getPages&lt;/code&gt; is asynchronous—it returns a promise that fulfills when all pages in the batch have been fetched. It is safer to assume this method can be called in rapid succession where multiple batch requests may be in flight simultaneously. Using &lt;code&gt;splice&lt;/code&gt; to add new pages at the expected position will ensure our batches are inserted into the &lt;code&gt;this.pages&lt;/code&gt; array in the correct order.&lt;/p&gt;
+
+      &lt;h3 id="finding-the-bottom" class="title"&gt;
+        &lt;a name="finding-the-bottom" class="anchor" href="#finding-the-bottom"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Finding the bottom
+      &lt;/h3&gt;
+    
+&lt;p&gt;To determine whether the user has scrolled to the bottom of the last of the fetched pages, we will again lean on properties of &lt;code&gt;this.$el&lt;/code&gt;. We can ask if the sum of the &lt;code&gt;scrollTop&lt;/code&gt; of the document and its visible height, &lt;code&gt;clientHeight&lt;/code&gt;, has equalled its total &lt;code&gt;scrollHeight&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+  methods: {
+    isBottomVisible() {
+      const {scrollTop, clientHeight, scrollHeight} = this.$el;
+      return scrollTop + clientHeight &amp;gt;= scrollHeight;
+    },
+
+    // ...
+  },
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;#39;ll call this method during &lt;code&gt;updateScrollBounds&lt;/code&gt; method and record a tracked a true/false property, &lt;code&gt;didReachBottom&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+  data() {
+    return {
+      didReachBottom: false,
+      // ...
+    };
+  },
+
+  methods: {
+    updateScrollBounds() {
+      const {scrollTop, clientHeight} = this.$el;
+      this.scrollTop = scrollTop;
+      this.scrollHeight = clientHeight;
+      this.didReachBottom = this.isBottomVisible();
+    },
+
+    // ...
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can then use a watcher to call &lt;code&gt;fetchPages&lt;/code&gt; if this property flips from &lt;code&gt;false&lt;/code&gt; to &lt;code&gt;true&lt;/code&gt;. This watcher would fire continuously in a cycle as the user scrolls to the bottom and more pages are fetched.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
+  watch: {
+    didReachBottom(didReachBottom) {
+      if (didReachBottom) this.fetchPages();
+    },
+
+    // ...
+  },
+
+  // ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For another in-depth look at adding infinite scrolling for Vue, check out Chris Nwamba&amp;#39;s &lt;a href="https://scotch.io/tutorials/simple-asynchronous-infinite-scroll-with-vue-watchers"&gt;post on Scotch.io&lt;/a&gt;. There are also a number of packages that abstract infinite scrolling if you&amp;#39;d prefer to lean on open source, including &lt;a href="https://github.com/Akryum/vue-virtual-scroller"&gt;Akryum/vue-virtual-scroller&lt;/a&gt; and &lt;a href="https://github.com/ElemeFE/vue-infinite-scroll"&gt;ElemeFE/vue-infinite-scroll&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h3 id="wrapping-up" class="title"&gt;
+        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Wrapping up
+      &lt;/h3&gt;
+    
+&lt;p&gt;We&amp;#39;ve succeeded in making our documents more lazy; now we can defer both data fetching and page rendering until necessary, potentially improving performance of the initial page load and avoiding waste, especially for large documents.&lt;/p&gt;
+
+&lt;p&gt;We&amp;#39;ve been adding quite a bit of complexity though to our existing &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components; they now both are responsible for making API requests, calculating element boundaries, lazy behavior, etc. Ideally, we&amp;#39;ll want to limit the responsibility of a given component to make our application less resistant to change. In the next post, we&amp;#39;ll refactor our PDF viewer to to separate out data fetching and scrolling behavior into separate &amp;quot;renderless components&amp;quot;. These changes will subsequently allow us to share code and add a new feature: a preview pane.&lt;/p&gt;
+
+&lt;p&gt;And now you&amp;#39;ve reached the bottom of this post!&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Rendering PDF pages with PDF.js and Vue</title>
     <link rel="alternate" href="/blog/building-a-pdf-viewer-with-vue-part-1.html"/>
@@ -1418,414 +1818,6 @@ Four wall, visible through the portholes.&lt;/p&gt;
 &lt;p&gt;Cool!&lt;/p&gt;
 
 &lt;p&gt;Notice though, that you can continue dropping checkers until the board fills up. In the &lt;a href="/blog/finding-four-in-a-row-ftw.html"&gt;next post&lt;/a&gt;, we&amp;#39;ll fix that by introducing an algorithm to check for a win and display the results in the UI when the game ends.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Building basic Connect Four with Vue.js</title>
-    <link rel="alternate" href="/blog/basic-connect-four-with-vuejs.html"/>
-    <id>/blog/basic-connect-four-with-vuejs.html</id>
-    <published>2018-01-15T00:00:00+00:00</published>
-    <updated>2018-01-15T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with Vue.js, SVG, Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Lately, I've gotten excited about the &lt;a href="https://vuejs.org/"&gt;Vue.js&lt;/a&gt; JavaScript
-framework view rendering due to its versatility, low barrier to entry, and
-community...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;em&gt;This post is &lt;a href="/blog/series/connect-four.html"&gt;part of a series on building Connect Four with Vue.js, SVG, Elixir, and the Phoenix framework&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Lately, I&amp;#39;ve gotten excited about the &lt;a href="https://vuejs.org/"&gt;Vue.js&lt;/a&gt; JavaScript
-framework view rendering due to its versatility, low barrier to entry, and
-community supported extensions for state management and routing.  In this post,
-we&amp;#39;ll use Vue.js 2 to dynamically render the Connect Four game board we started
-&lt;a href="/blog/connect-four-with-svg-pattern-masking.html"&gt;last time&lt;/a&gt;. This
-will not be a complete tutorial on Vue.js, but it hopefully will illustrate
-some of Vue&amp;#39;s basic concepts and its powerful and intuitive features.
-Check out the &lt;a href="https://vuejs.org/v2/guide/"&gt;excellent Vue.js guides&lt;/a&gt; for a
-thorough introduction to the framework.&lt;/p&gt;
-
-&lt;p&gt;To see where we&amp;#39;ll end up, here&amp;#39;s a pen:&lt;/p&gt;
-
-&lt;p data-height="485" data-theme-id="light" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
-
-      &lt;h2 id="breaking-it-down" class="title"&gt;
-        &lt;a name="breaking-it-down" class="anchor" href="#breaking-it-down"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Breaking it down
-      &lt;/h2&gt;
-    
-&lt;p&gt;We&amp;#39;ll use Vue.js to convert the static layout, which renders the Connect Four board in SVG with a few checkers in place as shown below:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- board --&amp;gt;
-&amp;lt;svg viewBox=&amp;quot;0 0 700 600&amp;quot; xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
-  &amp;lt;!-- defs for svg pattern masking --&amp;gt;
-
-  &amp;lt;!-- column 0 --&amp;gt;
-  &amp;lt;svg x=&amp;quot;0&amp;quot; y=&amp;quot;0&amp;quot;&amp;gt;
-
-    &amp;lt;!-- checker --&amp;gt;
-    &amp;lt;circle cx=&amp;quot;50&amp;quot; cy=&amp;quot;550&amp;quot; r=&amp;quot;45&amp;quot; fill=&amp;quot;#254689&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
-
-    &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;600&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-  &amp;lt;/svg&amp;gt;
-
-  &amp;lt;!-- column 1 --&amp;gt;
-  &amp;lt;svg x=&amp;quot;100&amp;quot; y=&amp;quot;0&amp;quot;&amp;gt;
-    &amp;lt;rect width=&amp;quot;100&amp;quot; height=&amp;quot;600&amp;quot; fill=&amp;quot;cadetblue&amp;quot; mask=&amp;quot;url(#cell-mask)&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-  &amp;lt;/svg&amp;gt;
-
-  &amp;lt;!-- and more columns... --&amp;gt;
-
-&amp;lt;/svg&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It&amp;#39;s easy to spot some repetition. There are a fixed number of columns of
-the same dimensions and appearance, each of which may contain checkers. As
-Vue.js is a component based framework, we&amp;#39;ll want to break these pieces into logical
-units: the game will be composed of a single Board component, which will render
-all the Column components, each of which will render their &amp;quot;stack&amp;quot; of Checker
-components. Here&amp;#39;s how we might visualize this breakdown:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/connect-four-components-442b46a4.png" style="width:70%;margin:2em auto;display:block;" alt="Connect four components" /&gt;&lt;/p&gt;
-
-&lt;p&gt;Aside from this hierarchy, we also will make an informal distinction to describe
-the Board, Column, and Checker: they are &amp;quot;presentation&amp;quot; components.
-Notably, their main role is to determine how the app will look. We&amp;#39;ll wrap
-the Board in a &amp;quot;container&amp;quot; component, whose main role is to determine how the
-app will work. For more on this distinction, check out Dan Abramov&amp;#39;s React article on
-&lt;a href="https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0"&gt;Presentational and Container
-Components&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;For our game, a &lt;code&gt;GameContainer&lt;/code&gt; component will keep track of and manipulate the key
-game state, including adding checkers when a player selects a column, toggling
-the player turns, and, later, determine if a player has won the game. Here&amp;#39;s
-the complete component hierarchy in Vue/HTML pseudocode:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;game-container&amp;gt; &amp;lt;!-- state: checkers, current player --&amp;gt;
-  &amp;lt;game-board :checkers=&amp;quot;checkers&amp;quot;&amp;gt; &amp;lt;!-- state: board dimensions --&amp;gt;
-    &amp;lt;board-column v-for=&amp;quot;column in columns&amp;quot; :stack=&amp;quot;stack(column)&amp;quot;&amp;gt;
-      &amp;lt;board-checker v-for=&amp;quot;checker in stack&amp;quot;&amp;gt;&amp;lt;/board-checker&amp;gt;
-    &amp;lt;/board-column&amp;gt;
-  &amp;lt;/game-board&amp;gt;
-&amp;lt;/game-container&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In practice, our presentation components will keep some of their own state and
-logic as well, but it will be very specfic to the local concerns of that
-component; when a presentation component needs to know about higher level
-state, it will be passed in as props from its parent. Any events triggered in
-the user interface will be passed back up the heirarchy, eventually reaching
-our container; &amp;quot;actions up, data down&amp;quot;. For this first pass, the main action
-will be clicking a column in which to drop the next checker.&lt;/p&gt;
-
-      &lt;h2 id="the-container" class="title"&gt;
-        &lt;a name="the-container" class="anchor" href="#the-container"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The container
-      &lt;/h2&gt;
-    
-&lt;p&gt;The &lt;code&gt;GameContainer&lt;/code&gt; component be the source of truth for the key game-level
-concerns including an object to store the checkers that have been played and
-numbers representing row and column (abbreviated throughout the code as &lt;code&gt;col&lt;/code&gt;)
-counts. For now, we&amp;#39;ll also hardcode the first player to &amp;quot;red&amp;quot;. The
-&lt;code&gt;GameContainer&lt;/code&gt; markup is simply to render the &lt;code&gt;GameBoard&lt;/code&gt;, which will receive
-data from the container via props.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;const GameContainer = Vue.component(&amp;#39;game-container&amp;#39;, {
-  data() {
-    return {
-      checkers: {},
-      playerColor: &amp;#39;red&amp;#39;,
-      rowCount: 6,
-      colCount: 7,
-      // ...
-    };
-  },
-
-  // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- game-container-template --&amp;gt;
-&amp;lt;game-board :checkers=&amp;quot;checkers&amp;quot; :rowCount=&amp;quot;rowCount&amp;quot; :colCount=&amp;quot;colCount&amp;quot;&amp;gt;&amp;lt;/game-board&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note that I&amp;#39;ve chosen to store checker data in an object, where each checker will be
-identified by a key based on its row and column number. Each value in the
-&lt;code&gt;checkers&lt;/code&gt; object will itself be an object with properties for row, column,
-color of a dropped checker, i.e., &lt;code&gt;{ row, col, color }&lt;/code&gt;. A common alternative for
-storing data in a grid-based game is to use an array of arrays; I personally
-have found it easier to represent the grid in a map-like data structure, such
-as a JavaScript object, to manipulate, search for, and perform transformations
-on game data. Either approach would work for the purpose of this demo—the
-mechanics of getting and setting checker data in the &lt;code&gt;GameContainer&lt;/code&gt; would just
-differ slightly.&lt;/p&gt;
-
-      &lt;h2 id="the-board" class="title"&gt;
-        &lt;a name="the-board" class="anchor" href="#the-board"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The board
-      &lt;/h2&gt;
-    
-&lt;p&gt;The &lt;code&gt;GameBoard&lt;/code&gt; has the primary responsibility of defining the dimensions of
-the board layout, based off the row and column counts it receives from the
-&lt;code&gt;GameContainer&lt;/code&gt; and the size of each cell, which will come from local data.
-From this data, the board computes board width and height and the radius of
-each checker. The &lt;code&gt;GameBoard&lt;/code&gt; will also be responsible for filtering the
-checkers specific to each column into the correct &lt;code&gt;BoardColumn&lt;/code&gt; children
-components, as shown in the &lt;code&gt;checkerStack(col)&lt;/code&gt; function.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;const GameBoard = Vue.component(&amp;#39;game-board&amp;#39;, {
-  data() {
-    return {
-      cellSize: 100,
-    };
-  },
-
-  computed: {
-    cols() { return range(this.colCount); },
-
-    boardWidth() { return this.colCount * this.cellSize; },
-    boardHeight() { return this.rowCount * this.cellSize; },
-    checkerRadius() { return this.cellSize * 0.45; },
-
-    // ...
-  },
-
-  methods: {
-    checkerStack(col) {
-      return Object.values(this.checkers).filter(c =&amp;gt; c.col === col);
-    },
-  },
-
-  // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A neat trick here is to use a custom &lt;code&gt;range&lt;/code&gt; function that converts the
-&lt;code&gt;colCount&lt;/code&gt; into a list of &lt;code&gt;0..colCount-1&lt;/code&gt; to identify the columns, using the
-spread operator and the &lt;code&gt;Array.prototype.keys&lt;/code&gt; function:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const range = num =&amp;gt; [...Array(num).keys()];
-// range(7)
-// [0, 1, 2, 3, 4, 5, 6]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In the &lt;code&gt;GameBoard&lt;/code&gt; template, we&amp;#39;re able convert the hard-coded width, height,
-, x, and y positions of our original SVG layout to dynamic properties. The
-&lt;code&gt;GameBoard&lt;/code&gt; also renders each of the &lt;code&gt;BoardColumn&lt;/code&gt; components using the &lt;code&gt;v-for&lt;/code&gt;
-directive on our &lt;code&gt;col&lt;/code&gt; range, again, passing key game state and checker data
-as props. The props also include the url to the pattern &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; that will
-give the columns the transparent portholes, as discussed in the &lt;a href="/blog/connect-four-with-svg-pattern-masking.html"&gt;previous
-post&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!-- game-board-template --&amp;gt;
-&amp;lt;svg :viewBox=&amp;quot;`0 0 ${boardWidth} ${boardHeight}`&amp;quot;
-  xmlns=&amp;quot;http://www.w3.org/2000/svg&amp;quot;&amp;gt;
-  &amp;lt;defs&amp;gt;
-    &amp;lt;pattern :id=&amp;quot;patternId&amp;quot; :width=&amp;quot;cellSize&amp;quot; :height=&amp;quot;cellSize&amp;quot;
-      patternUnits=&amp;quot;userSpaceOnUse&amp;quot;&amp;gt;
-      &amp;lt;circle :cx=&amp;quot;cellSize / 2&amp;quot; :cy=&amp;quot;cellSize / 2&amp;quot; :r=&amp;quot;checkerRadius&amp;quot; fill=&amp;quot;black&amp;quot;&amp;gt;&amp;lt;/circle&amp;gt;
-    &amp;lt;/pattern&amp;gt;
-    &amp;lt;mask :id=&amp;quot;maskId&amp;quot;&amp;gt;
-      &amp;lt;rect :width=&amp;quot;cellSize&amp;quot; :height=&amp;quot;boardHeight&amp;quot; fill=&amp;quot;white&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-      &amp;lt;rect :width=&amp;quot;cellSize&amp;quot; :height=&amp;quot;boardHeight&amp;quot; :fill=&amp;quot;pattern&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;
-    &amp;lt;/mask&amp;gt;
-  &amp;lt;/defs&amp;gt;
-  &amp;lt;board-column
-    v-for=&amp;quot;col in cols&amp;quot;
-    :checkers=&amp;quot;checkerStack(col)&amp;quot;
-    :col=&amp;quot;col&amp;quot;
-    :mask=&amp;quot;mask&amp;quot;
-    ...  /&amp;gt;
-&amp;lt;/svg&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For more on the &lt;code&gt;&amp;lt;defs&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;pattern&amp;gt;&lt;/code&gt;, and &lt;code&gt;&amp;lt;mask&amp;gt;&lt;/code&gt; elements, see the previous
-article on &lt;a href="/blog/connect-four-with-svg-pattern-masking.html"&gt;SVG pattern
-masking&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h2 id="the-columns" class="title"&gt;
-        &lt;a name="the-columns" class="anchor" href="#the-columns"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The columns
-      &lt;/h2&gt;
-    
-&lt;p&gt;Now on to the &lt;code&gt;BoardColumn&lt;/code&gt; component and its template. It is responsible for
-rendering the pattern-masked &lt;code&gt;&amp;lt;rect&amp;gt;&lt;/code&gt; and any checkers dropped in its column.
-By wrapping the &lt;code&gt;BoardColumn&lt;/code&gt; in a nested &lt;code&gt;&amp;lt;svg&amp;gt;&lt;/code&gt; element with an x value based
-off &lt;code&gt;col * cellSize&lt;/code&gt;, the rendered child elements of the &lt;code&gt;BoardColumn&lt;/code&gt; will be
-positioned relatively within. Note how straightforward it is to add a click
-listener to our template where we&amp;#39;ll trigger a &lt;code&gt;drop&lt;/code&gt; method on the
-&lt;code&gt;BoardColumn&lt;/code&gt; instance.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!-- board-column-template --&amp;gt;
-&amp;lt;svg :x=&amp;quot;col * cellSize&amp;quot; y=&amp;quot;0&amp;quot;&amp;gt;
-  &amp;lt;g @click=&amp;quot;drop&amp;quot; class=&amp;quot;column&amp;quot;&amp;gt;
-    &amp;lt;board-checker
-      v-for=&amp;quot;checker in checkers&amp;quot;
-      :checker=&amp;quot;checker&amp;quot;
-      :cellSize=&amp;quot;cellSize&amp;quot;
-      :rowCount=&amp;quot;rowCount&amp;quot;
-      ...  /&amp;gt;
-    &amp;lt;rect :width=&amp;quot;cellSize&amp;quot; :height=&amp;quot;boardHeight&amp;quot; :fill=&amp;quot;color&amp;quot; :mask=&amp;quot;mask&amp;quot; /&amp;gt;
-  &amp;lt;/g&amp;gt;
-&amp;lt;/svg&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;#39;s check out that &lt;code&gt;drop&lt;/code&gt; method on &lt;code&gt;BoardColumn&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;const BoardColumn = Vue.component(&amp;#39;board-column&amp;#39;, {
-  computed: {
-    // Find the current max occupied row and add 1
-    nextOpenRow() {
-      return Math.max(...this.checkers.map(c =&amp;gt; c.row).concat(-1)) + 1;
-    },
-  },
-
-  methods: {
-    drop(col) {
-      const row = this.nextOpenRow;
-
-      if (row &amp;lt; this.rowCount) {
-        this.$emit(&amp;#39;drop&amp;#39;, { row, col });
-      } else {
-        console.log(&amp;#39;cannot drop&amp;#39;, { row, col });
-      }
-    },
-  },
-});
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The method&amp;#39;s responsibility is to trigger a &lt;code&gt;&amp;#39;drop&amp;#39;&lt;/code&gt; event up the component hierarchy
-with data for &lt;code&gt;{ row, col }&lt;/code&gt;. This will indicate an attempt has been made to drop
-a checker at that position. To accomplish this, it calculates the next
-available row in the &lt;code&gt;nextOpenRow&lt;/code&gt; function. If the next open row would be off
-the board, then the column is full and the attempt is swallowed. We calculate
-&lt;code&gt;nextOpenRow&lt;/code&gt; by finding the max row number in the stack and adding one. If the
-checker stack is empty in this column, then the result will be &lt;code&gt;0&lt;/code&gt;, which is
-where we&amp;#39;d want the first checker to land.&lt;/p&gt;
-
-      &lt;h2 id="updating-game-state" class="title"&gt;
-        &lt;a name="updating-game-state" class="anchor" href="#updating-game-state"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Updating game state
-      &lt;/h2&gt;
-    
-&lt;p&gt;Note this constitues some game logic so we&amp;#39;re cheating a little given our
-presentation/container distinction noted earlier; it may make more sense to
-push this logic to our &lt;code&gt;GameContainer&lt;/code&gt; later, but for now, it&amp;#39;s convenient to
-leave it here. As we&amp;#39;ll see later, the &lt;code&gt;GameContainer&lt;/code&gt; will respond to this
-event and do the work to update the &lt;code&gt;checkers&lt;/code&gt; map for the game.&lt;/p&gt;
-
-&lt;p&gt;Back in the &lt;code&gt;GameContainer&lt;/code&gt;, an emitted &lt;code&gt;drop&lt;/code&gt; event with &lt;code&gt;{ row, col }&lt;/code&gt; data is
-captured here, where the game will add the current player&amp;#39;s &lt;code&gt;color&lt;/code&gt; as
-property, update the &lt;code&gt;checkers&lt;/code&gt; object, and toggle the color for the next
-player.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;const GameContainer = Vue.component(&amp;#39;game-container&amp;#39;, {
-  methods: {
-    toggleColor() {
-      if (this.playerColor === RED) {
-        this.playerColor = BLACK;
-      } else {
-        this.playerColor = RED;
-      }
-    },
-
-    drop({ col, row }) {
-      const color = this.playerColor;
-
-      console.log(&amp;#39;setting checker&amp;#39;, key(row, col), { row, col, color });
-      Vue.set(this.checkers, key(row, col), { row, col, color });
-      this.toggleColor();
-    },
-
-    // ...
-  },
-
-  // ...
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note an important gotcha when using &lt;code&gt;Vue.js&lt;/code&gt; demonstrated here: we need to use
-&lt;code&gt;Vue.set&lt;/code&gt; when adding a new checker to the &lt;code&gt;checkers&lt;/code&gt; object. Vue needs to hook
-into getters/setters to track dependencies and propagate data changes
-throughout the application. Unfortunately, because of how JavaScript works,
-&lt;em&gt;Vue can&amp;#39;t detect property addition or deletion&lt;/em&gt;. This affects how we
-adding checkers to the underlying data structure during game play. By using
-&lt;code&gt;Vue.set&lt;/code&gt;, we ensure the data change results in rendering the new checker
-on the game board.&lt;/p&gt;
-
-      &lt;h2 id="the-checkers" class="title"&gt;
-        &lt;a name="the-checkers" class="anchor" href="#the-checkers"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The checkers
-      &lt;/h2&gt;
-    
-&lt;p&gt;To render the checkers, we have a &lt;code&gt;BoardChecker&lt;/code&gt; component. It is simply a &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; element.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!-- board-checker-template --&amp;gt;
-&amp;lt;circle :cx=&amp;quot;centerX&amp;quot; :cy=&amp;quot;centerY&amp;quot; :r=&amp;quot;checkerRadius&amp;quot; :fill=&amp;quot;adjustedColor&amp;quot; /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;cx&lt;/code&gt; and &lt;code&gt;cy&lt;/code&gt; properties are computed based on the &lt;code&gt;checker&lt;/code&gt; object&amp;#39;s &lt;code&gt;row&lt;/code&gt; and the &lt;code&gt;cellSize&lt;/code&gt; and &lt;code&gt;rowCount&lt;/code&gt; properties passed in from the parent column. We translate the canonical red/black color names to prettier hex colors to fill each &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
-  data() {
-    return {
-      colorHexes: {
-        red: &amp;#39;#FC7E69&amp;#39;,
-        black: &amp;#39;#254689&amp;#39;,
-      },
-    };
-  },
-
-  computed: {
-    row() { return this.checker.row; },
-    col() { return this.checker.col; },
-    color() { return this.checker.color; },
-
-    adjustedColor() {
-      return this.colorHexes[this.color];
-    },
-
-    centerX() {
-      return (this.cellSize / 2);
-    },
-
-    centerY() {
-      return (this.cellSize / 2) + (this.cellSize * (this.rowCount - 1 - this.row));
-    },
-  },
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Again, here&amp;#39;s a link to &lt;a href="https://codepen.io/rossta/pen/jYxxGv?editors=1010"&gt;the pen on
-codepen.io&lt;/a&gt; where you can
-see the full source code and try out the game for yourself.&lt;/p&gt;
-
-&lt;p&gt;This completes our first pass at using Vue.js to create a playable Connect Four
-game in the browser. We&amp;#39;re not yet detecting a game win or draw; that&amp;#39;s still
-to come. In &lt;a href="/blog/animating-connect-four-with-vuejs.html"&gt;the next post&lt;/a&gt;, we use Vue to animate each checker falling into
-place as they are added to the board.&lt;/p&gt;
 </content>
   </entry>
 </feed>
