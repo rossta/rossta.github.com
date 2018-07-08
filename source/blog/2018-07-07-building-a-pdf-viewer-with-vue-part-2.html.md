@@ -14,11 +14,11 @@ tags:
 
 As we demonstrated in the [previous post](/blog/building-a-pdf-viewer-with-vue-part-1.html), we can render pages of a PDF to `<canvas>` elements using PDF.js and Vue. We were able to use a simple Vue component hierarchy to separate the responsibilities of data fetching and page rendering. We used the PDF.js library to fetch the page data and hand off the work of drawing the data onto `<canvas>` elements.
 
-The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the version of the project described in this post, checkout the [`part-2-scrolling` branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-2-scrolling). Finally, here's a link to the [project demo](https://rossta.net/vue-pdfjs-demo/).
+In this post, we'll add a new requirement: we should only render pages when they are visible, i.e., as they are scrolled into the viewport. Previously, we were rendering all pages eagerly, regardless of whether they were appearing in the client browser. For a large PDF, this could mean valuable resources are used to render many pages offscreen and may never be viewed. Let's see how we can fix that using Vue.
+
+The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the version of the project described in this post, [checkout the `part-2-scrolling` branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-2-scrolling). Finally, here's a link to the [project demo](https://rossta.net/vue-pdfjs-demo/).
 
 [![Demo](screenshots/screenshot-pdf-viewer.png)](https://rossta.net/vue-pdfjs-demo/)
-
-In this post, we'll add a new requirement: we should only render pages when they are visible, i.e., as they are scrolled into the viewport. Previously, we were rendering all pages eagerly, regardless of whether they were appearing in the client browser. For a large PDF, this could mean valuable resources are used to render many pages offscreen and may never be viewed. Let's see how we can fix that using Vue.
 
 ### Adding scroll behavior
 
