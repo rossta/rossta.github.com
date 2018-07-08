@@ -5,16 +5,16 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-06-11T00:00:00+00:00</updated>
+  <updated>2018-06-28T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>Building a PDF Viewer with Vue (Part 1)</title>
+    <title>Rendering PDF pages with PDF.js and Vue</title>
     <link rel="alternate" href="/blog/building-a-pdf-viewer-with-vue-part-1.html"/>
     <id>/blog/building-a-pdf-viewer-with-vue-part-1.html</id>
-    <published>2018-06-11T00:00:00+00:00</published>
-    <updated>2018-06-11T00:00:00+00:00</updated>
+    <published>2018-06-28T00:00:00+00:00</published>
+    <updated>2018-06-28T00:00:00+00:00</updated>
     <author>
       <name>Ross Kaffenberger</name>
     </author>
@@ -210,8 +210,7 @@ export default {
     fetchPDF() {
       import(&amp;#39;pdfjs-dist/webpack&amp;#39;).
         then(pdfjs =&amp;gt; pdfjs.getDocument(this.url)).
-        then(pdf =&amp;gt; (this.pdf = pdf)).
-        then(() =&amp;gt; log(&amp;#39;pdf fetched&amp;#39;));
+        then(pdf =&amp;gt; (this.pdf = pdf));
     },
   },
   //...
@@ -232,8 +231,7 @@ export default {
         map(number =&amp;gt; pdf.getPage(number));
 
       Promise.all(promises).
-        then(pages =&amp;gt; (this.pages = pages)).
-        then(() =&amp;gt; log(&amp;#39;pages fetched&amp;#39;));
+        then(pages =&amp;gt; (this.pages = pages));
     },
   },
 };
@@ -355,8 +353,7 @@ export default {
       // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
       this.renderTask = this.page.render(renderContext);
       this.renderTask.
-        then(() =&amp;gt; this.$emit(&amp;#39;rendered&amp;#39;, this.page)).
-        then(() =&amp;gt; log(`Page ${this.pageNumber} rendered`));
+        then(() =&amp;gt; this.$emit(&amp;#39;rendered&amp;#39;, this.page));
     },
     // ...
   },
@@ -428,8 +425,7 @@ export default {
     
 &lt;p&gt;We&amp;#39;ve now converted our original, imperative PDF rendering script with a declarative Vue component hierarchy. We&amp;#39;ve certainly added a lot of code to make this work, but with working knowledge of Vue, we&amp;#39;ve made it easier to reason about, easier to extend, and easier to add features to give our PDF viewer more functionality.&lt;/p&gt;
 
-&lt;p&gt;In the next post, we&amp;#39;ll look at adding some conditional rendering; since all pages aren&amp;#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.
-F&lt;/p&gt;
+&lt;p&gt;In the next post, we&amp;#39;ll look at adding some conditional rendering; since all pages aren&amp;#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.&lt;/p&gt;
 </content>
   </entry>
   <entry>
