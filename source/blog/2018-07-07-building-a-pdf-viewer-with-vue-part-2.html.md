@@ -156,7 +156,7 @@ Previously, we called the `drawPage` method (described in the [previous post](ht
 
   // ...
 ```
-We've defined `drawPage` such that it will only render once when called repeatedly should this watcher trigger more than once.
+We've defined `drawPage` such that it will only render once if called multiple times.
 
 In the page components, we can simply watch for changes in scroll boundaries and scale—changes to these props may cause a previously "hidden" page to become visible in the browser.
 
@@ -297,7 +297,7 @@ export default {
 
   // ...
 ```
-The added complexity in `fetchPages` allows us to request small batches of pages with each subsequent call. The `currentCount` represents the total number of pages that have already been fetched. The `startPage` is simply the next page number of the next would-be page in the array, and the `endPage` of the batch is the lesser of an arbitrarily small batch of pages (`BATCH_COUNT`) and the remaining pages. We're able to insert these pages in the correct location in the tracked pages array with `this.pages.splice(currentCount, 0, ...pages)`. We also use the `this.cursor` property to track the most recently request `endPage` to ensure the same batch is not requested more than once.
+The added complexity in `fetchPages` allows us to request small batches of pages with each subsequent call. The `currentCount` represents the total number of pages that have already been fetched. The `startPage` is simply the next page number of the next would-be page in the array, and the `endPage` of the batch is the lesser of an arbitrarily small batch of pages (`BATCH_COUNT`) and the remaining pages. We're able to insert these pages in the correct location in the tracked pages array with `this.pages.splice(currentCount, 0, ...pages)`. We also use the `this.cursor` property to track the most recently request `endPage` to ensure the same batch is only requested once.
 
 ### Why splice?
 
