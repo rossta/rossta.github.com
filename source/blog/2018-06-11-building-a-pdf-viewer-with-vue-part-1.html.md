@@ -1,8 +1,8 @@
 ---
-title: Building a PDF Viewer with Vue (Part 1)
+title: Rendering PDF pages with PDF.js and Vue
 author: Ross Kaffenberger
 published: true
-summary: A look at rendering PDF pages in HTML with PDF.js and Vue
+summary: Building a PDF Viewer with Vue - Part 1
 description: This tutorial demonstrates how to create Vue.js components that can render PDFs along with tools like Webpack, PDF.js, and the canvas element.
 pull_image: 'blog/stock/rafaela-biazi-typewriter-unsplash.jpg'
 pull_image_caption: Photo by Rafaela Biazi on Unsplash
@@ -167,8 +167,7 @@ export default {
     fetchPDF() {
       import('pdfjs-dist/webpack').
         then(pdfjs => pdfjs.getDocument(this.url)).
-        then(pdf => (this.pdf = pdf)).
-        then(() => log('pdf fetched'));
+        then(pdf => (this.pdf = pdf));
     },
   },
   //...
@@ -189,8 +188,7 @@ export default {
         map(number => pdf.getPage(number));
 
       Promise.all(promises).
-        then(pages => (this.pages = pages)).
-        then(() => log('pages fetched'));
+        then(pages => (this.pages = pages));
     },
   },
 };
@@ -302,8 +300,7 @@ export default {
       // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
       this.renderTask = this.page.render(renderContext);
       this.renderTask.
-        then(() => this.$emit('rendered', this.page)).
-        then(() => log(`Page ${this.pageNumber} rendered`));
+        then(() => this.$emit('rendered', this.page));
     },
     // ...
   },
@@ -365,4 +362,3 @@ export default {
 We've now converted our original, imperative PDF rendering script with a declarative Vue component hierarchy. We've certainly added a lot of code to make this work, but with working knowledge of Vue, we've made it easier to reason about, easier to extend, and easier to add features to give our PDF viewer more functionality.
 
 In the next post, we'll look at adding some conditional rendering; since all pages aren't visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.
-F
