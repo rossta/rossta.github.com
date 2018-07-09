@@ -93,7 +93,7 @@
         Adding scroll behavior
       </h3>
     
-<p>To review, once a <code>&lt;PDFPage&gt;</code> component mounts, it calls the <code>page.render</code> method to draw the PDF data to the <code>&lt;canvas&gt;</code> element. To defer page rendering, only want to call this method once the <code>&lt;canvas&gt;</code> element has become visible in the scroll window of the document. We&#39;ll need to keep track of some boundaries in the parent component, <code>&lt;PDFDocument&gt;</code>, and the child <code>&lt;PDFPage&gt;</code> components.</p>
+<p>To review, once a <code>&lt;PDFPage&gt;</code> component mounts, it calls the <code>page.render</code> method to draw the PDF data to the <code>&lt;canvas&gt;</code> element. To defer page rendering, this method should only be called once the <code>&lt;canvas&gt;</code> element has become visible in the scroll window of the document. We&#39;ll detect visibility of the page by inferring from the scroll boundaries or the parent component, <code>&lt;PDFDocument&gt;</code> along with the position and dimensions of the child <code>&lt;PDFPage&gt;</code> components.</p>
 
 <p>First, a CSS change to make our document scrollable within a relatively positioned parent element.</p>
 
@@ -108,7 +108,7 @@
 }
 </code></pre>
 
-<p>The <code>&lt;PDFDocument&gt;</code> will track its visible boundaries using the <code>scrollTop</code> and <code>clientHeight</code> properties of its element. The <code>scrollTop</code> property represents the distance from the top of the element to the top of the area within which it is scrolling. The <code>clientHeight</code> represents the height of the portion of the element that is visible within the scroll area. We&#39;ll record these boundaries when the component mounts.</p>
+<p>The <code>&lt;PDFDocument&gt;</code> will track its visible boundaries using the <code>scrollTop</code> and <code>clientHeight</code> properties of its element. We&#39;ll record these boundaries when the component mounts.</p>
 
 <pre><code class="javascript">// src/components/PDFDocument.vue
 
@@ -137,6 +137,20 @@
   // ...
 }
 </code></pre>
+
+<p>The <code>scrollTop</code> according to <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop">MDN</a>:</p>
+
+<blockquote>
+<p>An element&#39;s <code>scrollTop</code> value is a measurement of the distance from the element&#39;s top to its topmost <em>visible</em> content.</p>
+</blockquote>
+
+<p>The <code>clientHeight</code> according to <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight">MDN</a>:</p>
+
+<blockquote>
+<p>The <code>clientHeight</code> read-only property is zero for elements with no CSS or inline layout boxes, otherwise it&#39;s the inner height of an element in pixels, including padding but not the horizontal scrollbar height, border, or margin.</p>
+</blockquote>
+
+<p>Used together, we can determine what portion of the document is visible to the user.</p>
 
       <h3 id="detecting-page-visibility" class="title">
         <a name="detecting-page-visibility" class="anchor" href="#detecting-page-visibility">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
