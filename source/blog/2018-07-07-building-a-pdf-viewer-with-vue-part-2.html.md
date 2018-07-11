@@ -22,7 +22,7 @@ The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](
 
 ### Adding scroll behavior
 
-To review, once a `<PDFPage>` component mounts, it calls the `page.render` method to draw the PDF data to the `<canvas>` element. To defer page rendering, only want to call this method once the `<canvas>` element has become visible in the scroll window of the document. We'll need to keep track of some boundaries in the parent component, `<PDFDocument>`, and the child `<PDFPage>` components.
+To review, once a `<PDFPage>` component mounts, it calls the `page.render` method to draw the PDF data to the `<canvas>` element. To defer page rendering, this method should only be called once the `<canvas>` element has become visible in the scroll window of the document. We'll detect visibility of the page by inferring from the scroll boundaries or the parent component, `<PDFDocument>` along with the position and dimensions of the child `<PDFPage>` components.
 
 
 First, a CSS change to make our document scrollable within a relatively positioned parent element.
@@ -38,8 +38,7 @@ First, a CSS change to make our document scrollable within a relatively position
   right: 0;
 }
 ```
-The `<PDFDocument>` will track its visible boundaries using the `scrollTop` and `clientHeight` properties of its element. The `scrollTop` property represents the distance from the top of the element to the top of the area within which it is scrolling. The `clientHeight` represents the height of the portion of the element that is visible within the scroll area. We'll record these boundaries when the component mounts.
-
+The `<PDFDocument>` will track its visible boundaries using the `scrollTop` and `clientHeight` properties of its element. We'll record these boundaries when the component mounts.
 ```javascript
 // src/components/PDFDocument.vue
 
@@ -68,6 +67,14 @@ The `<PDFDocument>` will track its visible boundaries using the `scrollTop` and 
   // ...
 }
 ```
+The `scrollTop` according to [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop):
+> An element's `scrollTop` value is a measurement of the distance from the element's top to its topmost *visible* content.
+
+The `clientHeight` according to [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight):
+> The `clientHeight` read-only property is zero for elements with no CSS or inline layout boxes, otherwise it's the inner height of an element in pixels, including padding but not the horizontal scrollbar height, border, or margin.
+
+Used together, we can determine what portion of the document is visible to the user.
+
 ### Detecting page visibility
 
 The `<PDFPage>` component will track the boundaries of its underlying canvas element, whose dimensions we demonstrated how to calculate in the previous post. As with the document component, we'll trigger the update of this data property when the page component mounts:
