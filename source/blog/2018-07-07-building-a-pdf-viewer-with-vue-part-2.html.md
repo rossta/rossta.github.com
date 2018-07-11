@@ -16,7 +16,7 @@ As we demonstrated in the [previous post](/blog/building-a-pdf-viewer-with-vue-p
 
 In this post, we'll add a new requirement: we should only render pages when they are visible, i.e., as they are scrolled into the viewport. Previously, we were rendering all pages eagerly, regardless of whether they were appearing in the client browser. For a large PDF, this could mean valuable resources are used to render many pages offscreen and may never be viewed. Let's see how we can fix that using Vue.
 
-The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the version of the project described in this post, [checkout the `part-2-scrolling` branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-2-scrolling). Finally, here's a link to the [project demo](https://rossta.net/vue-pdfjs-demo/).
+The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the version of the project described in this post, [checkout the `part-2-scrolling` branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-2-scrolling). Here's the [project demo](https://rossta.net/vue-pdfjs-demo/):
 
 [![Demo](screenshots/screenshot-pdf-viewer.png)](https://rossta.net/vue-pdfjs-demo/)
 
