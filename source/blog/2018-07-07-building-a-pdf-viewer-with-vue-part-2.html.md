@@ -4,8 +4,6 @@ author: Ross Kaffenberger
 published: true
 summary: Building a PDF Viewer with Vue - Part 2
 description: This tutorial demonstrates how to use Vue to defer fetching and rendering of PDF page data until elements are scrolled into the client browser.
-pull_image: 'blog/stock/rawpixel-typewriter-unsplash.jpg'
-pull_image_caption: Photo by rawpixel on Unsplash
 series: 'PDF Viewer'
 category: Code
 tags:
