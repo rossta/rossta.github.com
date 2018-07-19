@@ -9,7 +9,6 @@ pull_image_caption: Background Photo by Andrew Preble on Unsplash
 series: 'Connect Four'
 category: Code
 tags:
-  - SVG
   - Vue
   - JavaScript
 ---
