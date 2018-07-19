@@ -9,10 +9,10 @@
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy" />
-<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/hieu-vu-minh-bridge-unsplash-7e35343a.jpg" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
 <meta name="twitter:title" content="Deploying Vue with CircleCI 2.0" />
 <meta property="og:description" content="Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy" />
-<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/hieu-vu-minh-bridge-unsplash-7e35343a.jpg" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.png" />
 <meta property="og:title" content="Deploying Vue with CircleCI 2.0" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
@@ -73,10 +73,6 @@
     </h3>
 </header>
 
-        <figure>
-          <img src="/assets/images/blog/stock/hieu-vu-minh-bridge-unsplash-7e35343a.jpg" alt="Hieu vu minh bridge unsplash" />
-            <figcaption>Photo by Hieu Vu Minh on Unsplash</figcaption>
-        </figure>
       <p>I recently upgraded my <a href="https://github.com/rossta/connect-four-vue">Connect Four</a> Vue.js application to build on CircleCI 2.0 . In my <a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html">previous post</a>, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application as a static website. But now that config is only good for another few months: <a href="https://circleci.com/blog/sunsetting-1-0/">CircleCI is sunsetting 1.0</a>. Here&#39;s how I upgraded.</p>
 
 <p>The basic steps of the build are the same: once I push changes to GitHub, CircleCI will detect those changes and trigger a build. It will bundle the app using the <code>vue-cli</code>. The assets output from that step will then be uploaded to S3 using the <code>s3deploy</code> golang package only if the build is running against master.</p>
