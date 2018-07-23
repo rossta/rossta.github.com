@@ -164,4 +164,24 @@ methods: {
 ### Adding scrolling components
 At this point, we've extracted logic for fetching and paging PDF data to a component that will pass `pages` props to its children, the `<PDFDocument>` and our soon-to-be `<PDFPreview>` components. For the next phase, we're going to move the functionality related to scrolling to another set of components. This functionality includes detecting when to fetch additional pages, determining whether a page is visible based on its scroll position, and determining whether or not a page is "in focus" within the view port.
 
-Extracting this functionality presents an interesting challenge because it is currently split between the `<PDFDocument>` and `<PDFPage>`. This means that we'll be moving the behavior to two separate generalized components, both of which we will use to compose the updated document component and new preview component.
+Extracting this functionality presents an interesting challenge because it is currently split between the `<PDFDocument>` and `<PDFPage>` components. This means that we'll be moving the behavior to two separate generalized components, both of which we will use to compose the updated document component and new preview component.
+
+The `<PDFDocument>` currently keeps track of several properties which it passes to the `<PDFPage>` as props:
+
+```html
+<!-- src/components/PDFDocument.vue -->
+<template>
+    <div
+    class="pdf-document scrolling-document"
+    >
+    <PDFPage
+      v-for="page in pages"
+      v-bind="{scale, page, scrollTop, clientHeight}"
+      :key="page.pageNumber"
+      class="scrolling-page"
+      @page-rendered="onPageRendered"
+      @page-errored="onPageErrored"
+    />
+  </div>
+</template>
+```
