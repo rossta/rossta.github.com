@@ -105,7 +105,7 @@ render(h) {
 // ...
 ```
 
-(*Technically, this component isn't "renderless"—it inserts an additional `div` as a root its scoped slots children. Otherwise, as of Vue `2.5.16`, the error `Multiple root nodes returned from render function. Render function should return a single root node.` is raised.)
+*Technically, this component isn't "renderless"—it inserts an additional `div` as a root to its scoped slots children. Otherwise, the error `Multiple root nodes returned from render function. Render function should return a single root node.` is raised in the current version of Vue I'm using (`2.5.16`). The main point is that we can use components in our component hierarchy that add functionality but handoff display responsibility to its children.
 
 In the `<PDFViewer>` we can use the `slot` attribute to render the children in the correct place and `slot-scope` to receive the `pages` property from the `<PDFData>` component. Though we haven't created the `<PDFPreview>` components, here's our template for the `<PDFViewer>` responsible for gluing everything together.
 ```html
@@ -136,7 +136,7 @@ created() {
 
 // ...
 ```
-We also must update `<PDFDocument` to accept `pages` as props now that it is now longer responsible for fetching this data. Its `fetchPages` method, called when the component mounts or during scrolling, we'll leave in place but change its implementation (now owned by its parent `<PDFData>` component) to simply emit the `pages-fetch` event, for which `<PDFData>` is listening.
+Now we need to set up our `<PDFDocument>` to communicate with the `<PDFData>` component. We update `<PDFDocument` to accept `pages` as props now that it is now longer responsible for fetching this data. Its `fetchPages` method, called when the component mounts or during scrolling, we'll leave in place but change its implementation (now owned by its parent `<PDFData>` component) to simply emit the `pages-fetch` event, for which `<PDFData>` is listening.
 ```javascript
 // src/components/PDFDocument.vue
 props: {
@@ -162,3 +162,6 @@ methods: {
 }
 ```
 ### Adding scrolling components
+At this point, we've extracted logic for fetching and paging PDF data to a component that will pass `pages` props to its children, the `<PDFDocument>` and our soon-to-be `<PDFPreview>` components. For the next phase, we're going to move the functionality related to scrolling to another set of components. This functionality includes detecting when to fetch additional pages, determining whether a page is visible based on its scroll position, and determining whether or not a page is "in focus" within the view port.
+
+Extracting this functionality presents an interesting challenge because it is currently split between the `<PDFDocument>` and `<PDFPage>`. This means that we'll be moving the behavior to two separate generalized components, both of which we will use to compose the updated document component and new preview component.
