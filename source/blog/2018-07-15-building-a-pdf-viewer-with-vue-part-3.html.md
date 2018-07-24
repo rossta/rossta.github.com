@@ -166,22 +166,44 @@ At this point, we've extracted logic for fetching and paging PDF data to a compo
 
 Extracting this functionality presents an interesting challenge because it is currently split between the `<PDFDocument>` and `<PDFPage>` components. This means that we'll be moving the behavior to two separate generalized components, both of which we will use to compose the updated document component and new preview component.
 
-The `<PDFDocument>` currently keeps track of several properties which it passes to the `<PDFPage>` as props:
+The `<PDFDocument>` currently keeps track of the `scrollTop` and the `clientHeight` properties of its containing element within which the pages while `didReachBottom` is updated as the bottom of the document is scrolled into the viewport.
+```javascript
+// src/components/PDFDocument.vue
 
+data() {
+  return {
+    scrollTop: 0,
+    clientHeight: 0,
+    didReachBottom: false,
+    // ...
+  };
+},
+// ...
+```
+Of course, Vue can't natively watch properties of the DOM, so we must set up a 'scroll' event listener to update this data periodically.
+```javascript
+// src/components/PDFDocument.vue
+
+data() {
+  return {
+    scrollTop: 0,
+    clientHeight: 0,
+    didReachBottom: false,
+    // ...
+  };
+},
+// ...
+```
+
+The `scrollTop` and `clientHeight` data is passed to the `<PDFPage>` as props:
 ```html
 <!-- src/components/PDFDocument.vue -->
 <template>
-    <div
-    class="pdf-document scrolling-document"
-    >
+  <div class="pdf-document">
     <PDFPage
       v-for="page in pages"
       v-bind="{scale, page, scrollTop, clientHeight}"
       :key="page.pageNumber"
-      class="scrolling-page"
-      @page-rendered="onPageRendered"
-      @page-errored="onPageErrored"
-    />
   </div>
 </template>
 ```
