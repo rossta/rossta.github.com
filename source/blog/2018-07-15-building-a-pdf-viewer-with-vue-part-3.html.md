@@ -168,7 +168,9 @@ Extracting this functionality presents an interesting challenge because it is cu
 
 The `<PDFDocument>` currently keeps track of the `scrollTop` and the `clientHeight` properties of its containing element within which the pages while `didReachBottom` is updated as the bottom of the document is scrolled into the viewport.
 ```javascript
-// src/components/PDFDocument.vue
+// src/components/ScrollingDocument.vue
+
+props: ['pages'],
 
 data() {
   return {
@@ -178,32 +180,96 @@ data() {
     // ...
   };
 },
+
 // ...
 ```
-Of course, Vue can't natively watch properties of the DOM, so we must set up a 'scroll' event listener to update this data periodically.
+
+Since Vue can't natively watch properties of the DOM, we also add behavior to update the component data through a `scroll` event listener on the component's element, which we attach in the `mounted` hook. We now move this functionality new component, `<ScrollingDocument>`, which we will use to compose our `<PDFDocument>`.
 ```javascript
-// src/components/PDFDocument.vue
+// src/components/ScrollingDocument.vue
 
-data() {
-  return {
-    scrollTop: 0,
-    clientHeight: 0,
-    didReachBottom: false,
-    // ...
-  };
+import throttle from 'lodash/throttle';
+
+export default {
+  // ...
+
+  methods: {
+    updateScrollBounds() {
+      const {scrollTop, clientHeight} = this.$el;
+      this.scrollTop = scrollTop;
+      this.clientHeight = clientHeight;
+      this.didReachBottom = this.isBottomVisible();
+    },
+
+    isBottomVisible() {
+      const {scrollTop, clientHeight, scrollHeight} = this.$el;
+      return scrollTop + clientHeight >= scrollHeight;
+    },
+  },
+
+  mounted() {
+    this.updateScrollBounds();
+    this.$el.addEventListener('scroll', throttle(this.updateScrollBounds, 300), true);
+  },
+
+// ...
+```
+We also have watchers to trigger additional behavior:
+```javascript
+// src/components/ScrollingDocument
+methods: {
+  // ...
+
+  fetchPages() {
+    this.$emit('pages-fetch');
+  },
+},
+
+watch: {
+  didReachBottom(didReachBottom) {
+    if (didReachBottom) this.fetchPages();
+  },
+  // ...
 },
 // ...
 ```
-
-The `scrollTop` and `clientHeight` data is passed to the `<PDFPage>` as props:
+We'll start with a simple template that passes the `scrollTop` and `clientHeight` data to a `<slot>` component as props; these are required for the `<PDFPage>` component to determine if it's relationship to the viewport.
 ```html
-<!-- src/components/PDFDocument.vue -->
+<!-- src/components/ScrollingDocument.vue -->
 <template>
-  <div class="pdf-document">
-    <PDFPage
-      v-for="page in pages"
-      v-bind="{scale, page, scrollTop, clientHeight}"
-      :key="page.pageNumber"
+  <div class="scrolling-document">
+    <slot v-bind="{scrollTop, clientHeight}" />
   </div>
 </template>
 ```
+We remove the scrolling functionality from the `<PDFDocument>` since it is now recreated in the `<ScrollingDocument>` and import the component instead.
+```javascript
+// src/components/PDFDocument
+
+import ScrollingDocument from './ScrollingDocument';
+
+export default {
+  components: {
+    ScrollingDocument,
+  },
+
+  // removed scrolling functionality ...
+};
+```
+The in-progress template for `<PDFDocument>` now would look like this:
+```html
+<template>
+  <ScrollingDocument
+    class="pdf-document scrolling-document"
+    v-bind="{pages}"
+    >
+    <PDFPage
+      slot-scope="{scrollTop, clientHeight}"
+      v-for="page in pages"
+      v-bind="{scale, page, scrollTop, clientHeight}"
+      :key="page.pageNumber"
+    />
+  </ScrollingDocument>
+</template>
+```
+Note the contrast in this approach with extracting a mixin. While we could accomplish the goal of code-sharing, it comes at the cost of implicit dependencies, potential name clashes, and other aspects of mounting complexity we noted earlier.
