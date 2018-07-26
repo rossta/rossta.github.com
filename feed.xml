@@ -10,9 +10,9 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>Extracting a data component in Vue.js</title>
-    <link rel="alternate" href="/blog/extracting-a-data-component-in-vuejs.html"/>
-    <id>/blog/extracting-a-data-component-in-vuejs.html</id>
+    <title>Extracting a data component in Vue</title>
+    <link rel="alternate" href="/blog/extracting-a-data-component-in-vue.html"/>
+    <id>/blog/extracting-a-data-component-in-vue.html</id>
     <published>2018-07-15T00:00:00+00:00</published>
     <updated>2018-07-15T00:00:00+00:00</updated>
     <author>
