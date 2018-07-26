@@ -45,7 +45,7 @@
 
 &lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3-28bad22b.jpg" alt="Preview of the preview" /&gt;&lt;/p&gt;
 
-&lt;p&gt;This preview pane will display the entire document (as smaller, clickable thumbnails), be independently-scrollable, and render PDF pages lazily—in other words. In other words, it will behave a lot like our current &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt;. First, we&amp;#39;d like to make some of our current code reusable.&lt;/p&gt;
+&lt;p&gt;This preview pane will display the entire document (as smaller, clickable thumbnails), be independently-scrollable, and render PDF pages lazily, i.e., it will behave a lot like our current &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt;. First, we&amp;#39;d like to make some of our current code reusable.&lt;/p&gt;
 
       &lt;h3 id="the-why" class="title"&gt;
         &lt;a name="the-why" class="anchor" href="#the-why"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
