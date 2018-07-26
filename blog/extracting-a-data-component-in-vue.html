@@ -123,7 +123,7 @@
         Bird&#39;s eye view
       </h3>
     
-<p>Let&#39;s take a look at where we are and where we want to go. Prior to adding our feature, our component hierarchy looks like the following pseudcode:</p>
+<p>Let&#39;s take a look at where we are and where we want to go. Prior to adding our feature, our component hierarchy looks like the following pseudocode:</p>
 
 <pre><code class="html">&lt;PDFDocument&gt;
   &lt;PDFPage /&gt;
@@ -311,7 +311,7 @@ methods: {
         Wrapping up
       </h3>
     
-<p>That does it! We&#39;ve extracted data fetching logic completely out of the <code>&lt;PDFDocument&gt;</code> into the <code>&lt;PDFData&gt;</code>. Though we have more components now, we&#39;ve avoided the drawbacks of introducing mixins to share behavior. Our new data component will show up separately in the Vue dev tools extensio so our application will be easier to debug if we have issues. The app is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative for the time being to introducing a new depenendency, Vuex, to managing poart of application state.</p>
+<p>That does it! We&#39;ve extracted data fetching logic completely out of the <code>&lt;PDFDocument&gt;</code> into the <code>&lt;PDFData&gt;</code>. We&#39;ve avoided the <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html">drawbacks of introducing mixins</a> to share behavior. Our new data component will show up separately in the Vue dev tools extension for better debugging. The application is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative to Vuex, which would be a new dependency, to managing a portion of our application state.</p>
 
 <p>In the next post, we&#39;ll look at extracting shared behavior so that both our preview and document components can be independently scrollable and either can trigger additional data-fetching when the scrolled to the bottom.</p>
 
