@@ -80,8 +80,9 @@ Currently, the data fetching logic resides in our `<PDFDocument>` component. The
 
 props: {
   url: {
-  type: String,
-  required: true,
+    type: String,
+    required: true,
+  },
 },
 
 data() {
@@ -164,6 +165,7 @@ created() {
 Now we need to set up our `<PDFDocument>` to communicate with the `<PDFData>` component. We update `<PDFDocument` to accept `pages` as props now that it is now longer responsible for fetching this data. Its `fetchPages` method, called when the component mounts or during scrolling, we'll leave in place but change its implementation (now owned by its parent `<PDFData>` component) to simply emit the `pages-fetch` event, for which `<PDFData>` is listening.
 ```javascript
 // src/components/PDFDocument.vue
+
 props: {
   pages: {
     type: Array,
