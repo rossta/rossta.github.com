@@ -59,17 +59,21 @@ Our `<PDFPreview>` needs access to the same PDF data as our `<PDFDocument>`. Whi
 
 While this may be desired for some applications, we'd prefer to only fetch the PDF page data once. To achieve this, we're going to wrap both the `<PDFPreview>` and `<PDFThumbnail>` in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.
 
-That means our heirarchy will eventually look like this:
+So our heirarchy will eventually look like this:
 ```html
-<PDFData>
-  <PDFPreview>
+<PDFData> <!-- passes page data to children -->
+
+  <PDFPreview> <!-- emits events to request more pages -->
     ...
   </PDFPreview>
-  <PDFDocument>
+  <PDFDocument> <!-- emits events to request more pages -->
     ...
   </PDFDocument>
+
 </PDFData>
 ```
+Here we will have decoupled the logic for batching and requesting page data over the wire from the interactions and events that will trigger that behavior. For our viewer, either our document or future preview components can trigger data fetching. The data component needs to know nothing about the scrolling behavior or the logic that determines when additional pages are needed.
+
 Next we'll take a look at how this data component is constructed and how it will pass data to the child components.
 
 ### Extracting the data component
