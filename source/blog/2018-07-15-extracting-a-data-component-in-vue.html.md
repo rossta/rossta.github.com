@@ -31,7 +31,7 @@ Why composition? This topic deserves a separate post. For one, it's my preferenc
 It's also worth noting that we're not currently using [Vuex](https://vuex.vuejs.org) to manage application state in the project. It may be wise, as an alternative to what's described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It's also simply a worthy exercise to consider data components.
 
 ### Bird's eye view
-Let's take a look at where we are and where we want to go. Prior to adding our feature, our component hierarchy looks like the following pseudcode:
+Let's take a look at where we are and where we want to go. Prior to adding our feature, our component hierarchy looks like the following pseudocode:
 ```html
 <PDFDocument>
   <PDFPage />
@@ -193,6 +193,6 @@ methods: {
 }
 ```
 ### Wrapping up
-That does it! We've extracted data fetching logic completely out of the `<PDFDocument>` into the `<PDFData>`. Though we have more components now, we've avoided the drawbacks of introducing mixins to share behavior. Our new data component will show up separately in the Vue dev tools extensio so our application will be easier to debug if we have issues. The app is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative for the time being to introducing a new depenendency, Vuex, to managing poart of application state.
+That does it! We've extracted data fetching logic completely out of the `<PDFDocument>` into the `<PDFData>`. We've avoided the [drawbacks of introducing mixins](https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html) to share behavior. Our new data component will show up separately in the Vue dev tools extension for better debugging. The application is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative to Vuex, which would be a new dependency, to managing a portion of our application state.
 
 In the next post, we'll look at extracting shared behavior so that both our preview and document components can be independently scrollable and either can trigger additional data-fetching when the scrolled to the bottom.
