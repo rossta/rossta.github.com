@@ -5,10 +5,264 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-07-07T00:00:00+00:00</updated>
+  <updated>2018-07-15T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Extracting a data component in Vue.js</title>
+    <link rel="alternate" href="/blog/extracting-a-data-component-in-vuejs.html"/>
+    <id>/blog/extracting-a-data-component-in-vuejs.html</id>
+    <published>2018-07-15T00:00:00+00:00</published>
+    <updated>2018-07-15T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Vue components don't have to just be about displaying information and user interaction. In this post, we'll show how to build a component whose main job is to simply fetch data for other components.&lt;/p&gt;
+
+      &lt;h3 id="the-project" class="title"&gt;
+        &lt;a name="the-project" class="anchor" href="#the-project"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+       ...&lt;/h3&gt;</summary>
+    <content type="html">&lt;p&gt;Vue components don&amp;#39;t have to just be about displaying information and user interaction. In this post, we&amp;#39;ll show how to build a component whose main job is to simply fetch data for other components.&lt;/p&gt;
+
+      &lt;h3 id="the-project" class="title"&gt;
+        &lt;a name="the-project" class="anchor" href="#the-project"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The project
+      &lt;/h3&gt;
+    
+&lt;p&gt;This post is part of ongoing series, &lt;a href="/blog/series/pdf-viewer.html"&gt;Building a PDF Viewer with Vue.js&lt;/a&gt;. The source code for this project is on Github at &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;rossta/vue-pdfjs-demo&lt;/a&gt;. To see the source described in this post, &lt;a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-3-renderless-components"&gt;checkout the branch&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s the latest &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h3 id="catching-up-from-last-time" class="title"&gt;
+        &lt;a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Catching up from last time
+      &lt;/h3&gt;
+    
+&lt;p&gt;So far in &lt;a href="/blog/series/pdf-viewer.html"&gt;this series&lt;/a&gt;, we have built a simple PDF viewer to render the pages of PDF document to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements with Vue. We have also updated our components to fetch and render PDF pages lazily as they are scrolled into the viewport. For the next feature, we want to build a preview pane into the left-hand side of the viewer.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3-28bad22b.jpg" alt="Preview of the preview" /&gt;&lt;/p&gt;
+
+&lt;p&gt;This preview pane will display the entire document (as smaller, clickable thumbnails), be independently-scrollable, and render PDF pages lazily—in other words. In other words, it will behave a lot like our current &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt;. First, we&amp;#39;d like to make some of our current code reusable.&lt;/p&gt;
+
+      &lt;h3 id="the-why" class="title"&gt;
+        &lt;a name="the-why" class="anchor" href="#the-why"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The why
+      &lt;/h3&gt;
+    
+&lt;p&gt;The Vue docs provide helpful examples for using &lt;a href="https://vuejs.org/v2/guide/mixins.html"&gt;mixins&lt;/a&gt;, &lt;a href="https://vuejs.org/v2/guide/custom-directive.html"&gt;custom directives&lt;/a&gt;, and more. My preferred approach for sharing component functionality is &lt;em&gt;composition&lt;/em&gt;, which means extracting shared code into separate components. In this post, we&amp;#39;ll be using composition to reuse data fetching.&lt;/p&gt;
+
+&lt;p&gt;Why composition? This topic deserves a separate post. For one, it&amp;#39;s my preference, along the lines of general object-oriented programming advice, for &amp;quot;composition over inheritance&amp;quot;. Practically, in Vue, this means I&amp;#39;d like to think &amp;quot;component-first&amp;quot;, before reaching for mixins or &lt;code&gt;extends&lt;/code&gt; (these are basically forms of inheritance). I also agree with the drawbacks Dan Abramov enumerates in &lt;a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html"&gt;Mixins Considered Harmful&lt;/a&gt;; though the context for his post is React, most of his points are relevant to Vue as well.&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s also worth noting that we&amp;#39;re not currently using &lt;a href="https://vuex.vuejs.org"&gt;Vuex&lt;/a&gt; to manage application state in the project. It may be wise, as an alternative to what&amp;#39;s described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It&amp;#39;s also simply a worthy exercise to consider data components.&lt;/p&gt;
+
+      &lt;h3 id="bird-39-s-eye-view" class="title"&gt;
+        &lt;a name="bird-39-s-eye-view" class="anchor" href="#bird-39-s-eye-view"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Bird&amp;#39;s eye view
+      &lt;/h3&gt;
+    
+&lt;p&gt;Let&amp;#39;s take a look at where we are and where we want to go. Prior to adding our feature, our component hierarchy looks like the following pseudcode:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFDocument&amp;gt;
+  &amp;lt;PDFPage /&amp;gt;
+  &amp;lt;PDFPage /&amp;gt;
+  &amp;lt;PDFPage /&amp;gt;
+  ...
+&amp;lt;/PDFDocument&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For our new preview feature, our preview and document components will live side-by-side.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFPreview&amp;gt;
+  &amp;lt;PDFThumbnail /&amp;gt;
+  &amp;lt;PDFThumbnail /&amp;gt;
+  &amp;lt;PDFThumbnail /&amp;gt;
+  ...
+&amp;lt;/PDFPreview&amp;gt;
+&amp;lt;PDFDocument&amp;gt;
+  &amp;lt;PDFPage /&amp;gt;
+  &amp;lt;PDFPage /&amp;gt;
+  &amp;lt;PDFPage /&amp;gt;
+  ...
+&amp;lt;/PDFDocument&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Our &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; needs access to the same PDF data as our &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt;. While we could reuse the data fetching code we wrote previously as a mixin, there&amp;#39;s a clear problem with that approach. It would mean the components would fetch the same data independently—which is potentially some wasted work.&lt;/p&gt;
+
+&lt;p&gt;While this may be desired for some applications, we&amp;#39;d prefer to only fetch the PDF page data once. To achieve this, we&amp;#39;re going to wrap both the &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFThumbnail&amp;gt;&lt;/code&gt; in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.&lt;/p&gt;
+
+&lt;p&gt;That means our heirarchy will eventually look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt;
+  &amp;lt;PDFPreview&amp;gt;
+    ...
+  &amp;lt;/PDFPreview&amp;gt;
+  &amp;lt;PDFDocument&amp;gt;
+    ...
+  &amp;lt;/PDFDocument&amp;gt;
+&amp;lt;/PDFData&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next we&amp;#39;ll take a look at how this data component is constructed and how it will pass data to the child components.&lt;/p&gt;
+
+      &lt;h3 id="extracting-the-data-component" class="title"&gt;
+        &lt;a name="extracting-the-data-component" class="anchor" href="#extracting-the-data-component"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Extracting the data component
+      &lt;/h3&gt;
+    
+&lt;p&gt;Currently, the data fetching logic resides in our &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; component. There is a method that encapsulates the logic for &lt;a href="https://github.com/rossta/vue-pdfjs-demo/blob/4be84574ce6837379dd90b4d68194ea19b172734/src/components/PDFDocument.vue#L145"&gt;fetching pages in batches&lt;/a&gt;, &lt;a href="https://github.com/rossta/vue-pdfjs-demo/blob/4be84574ce6837379dd90b4d68194ea19b172734/src/components/PDFDocument.vue#L177"&gt;watchers&lt;/a&gt; for responding to changes in the given &lt;code&gt;url&lt;/code&gt; prop and &lt;code&gt;pdf&lt;/code&gt; proxy object, and relevant &lt;code&gt;data&lt;/code&gt; and &lt;code&gt;computed&lt;/code&gt; properties for maintaining the state of PDF data. You can see &lt;a href="https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-2.html"&gt;the previous post&lt;/a&gt; for more info on the implementation details. We&amp;#39;ll move this functionality to a new &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFData.vue
+
+props: {
+  url: {
+  type: String,
+  required: true,
+},
+
+data() {
+  return {
+    pages: undefined,
+    pages: [],
+    cursor: 0,
+    // ...
+  };
+},
+
+methods: {
+  fetchPages() {
+    // fetches next batch and appends to this.pages
+  },
+},
+
+computed: {
+  pageCount() {
+    return this.pdf ? this.pdf.numPages : 0;
+  },
+},
+
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This component will be &amp;quot;renderless&amp;quot;* (almost), meaning it will delegate rendering to its children. We&amp;#39;ll use scoped slots to pass the &lt;code&gt;this.pages&lt;/code&gt; data to the preview and document components. The &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; needs to nothing about its children, only that it will pass data to its named children, &lt;code&gt;preview&lt;/code&gt; and &lt;code&gt;document&lt;/code&gt;, in its own render function:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFData.vue
+
+render(h) {
+  return h(&amp;#39;div&amp;#39;, [
+    this.$scopedSlots.preview({
+      pages: this.pages,
+    }),
+    this.$scopedSlots.document({
+      pages: this.pages,
+    }),
+  ]);
+},
+
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;*Technically, this component isn&amp;#39;t &amp;quot;renderless&amp;quot;—it inserts an additional &lt;code&gt;div&lt;/code&gt; as a root to its scoped slots children. Otherwise, the error &lt;code&gt;Multiple root nodes returned from render function. Render function should return a single root node.&lt;/code&gt; is raised in the current version of Vue I&amp;#39;m using (&lt;code&gt;2.5.16&lt;/code&gt;). The main point is that we can use components in our component hierarchy that add functionality but handoff display responsibility to its children.&lt;/p&gt;
+
+      &lt;h3 id="communicating-with-the-children" class="title"&gt;
+        &lt;a name="communicating-with-the-children" class="anchor" href="#communicating-with-the-children"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Communicating with the children
+      &lt;/h3&gt;
+    
+&lt;p&gt;In the &lt;code&gt;&amp;lt;PDFViewer&amp;gt;&lt;/code&gt; we can use the &lt;code&gt;slot&lt;/code&gt; attribute to render the children in the correct place and &lt;code&gt;slot-scope&lt;/code&gt; to receive the &lt;code&gt;pages&lt;/code&gt; property from the &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component. Though we haven&amp;#39;t created the &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; components, here&amp;#39;s our template for the &lt;code&gt;&amp;lt;PDFViewer&amp;gt;&lt;/code&gt; responsible for gluing everything together.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- src/components/PDFViewer.vue --&amp;gt;
+
+&amp;lt;template&amp;gt;
+  &amp;lt;PDFData&amp;gt;
+    &amp;lt;!-- At this point in the tutorial, PDFPreview
+    doesn&amp;#39;t exist, but this is where it will go. --&amp;gt;
+    &amp;lt;PDFPreview
+      slot=&amp;quot;preview&amp;quot;
+      slot-scope=&amp;quot;{pages}&amp;quot;
+      v-bind=&amp;quot;{pages}&amp;quot;
+      /&amp;gt;
+
+    &amp;lt;PDFDocument
+      slot=&amp;quot;document&amp;quot;
+      slot-scope=&amp;quot;{pages}&amp;quot;
+      v-bind=&amp;quot;{pages}&amp;quot;
+      /&amp;gt;
+  &amp;lt;/PDFData&amp;gt;
+&amp;lt;/template&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To trigger data fetching, the &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component will listen for the &lt;code&gt;pages-fetch&lt;/code&gt; event. Since we&amp;#39;re using a render function, we won&amp;#39;t be able to use the template syntax for binding to events. Instead, we&amp;#39;ll attach the event listener using &lt;code&gt;this.$on&lt;/code&gt; in the &lt;code&gt;created&lt;/code&gt; hook:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFData.vue
+
+created() {
+  this.$on(&amp;#39;pages-fetch&amp;#39;, this.fetchPages);
+},
+
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we need to set up our &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; to communicate with the &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component. We update &lt;code&gt;&amp;lt;PDFDocument&lt;/code&gt; to accept &lt;code&gt;pages&lt;/code&gt; as props now that it is now longer responsible for fetching this data. Its &lt;code&gt;fetchPages&lt;/code&gt; method, called when the component mounts or during scrolling, we&amp;#39;ll leave in place but change its implementation (now owned by its parent &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component) to simply emit the &lt;code&gt;pages-fetch&lt;/code&gt; event, for which &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; is listening.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+props: {
+  pages: {
+    type: Array,
+    required: true,
+  },
+},
+
+data() {
+  return {
+    // removed pages and pdf properties
+    // ...
+  };
+},
+
+methods: {
+  fetchPages() {
+    this.$emit(&amp;#39;pages-fetch&amp;#39;);
+  },
+
+  // ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="wrapping-up" class="title"&gt;
+        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Wrapping up
+      &lt;/h3&gt;
+    
+&lt;p&gt;That does it! We&amp;#39;ve extracted data fetching logic completely out of the &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; into the &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt;. Though we have more components now, we&amp;#39;ve avoided the drawbacks of introducing mixins to share behavior. Our new data component will show up separately in the Vue dev tools extensio so our application will be easier to debug if we have issues. The app is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative for the time being to introducing a new depenendency, Vuex, to managing poart of application state.&lt;/p&gt;
+
+&lt;p&gt;In the next post, we&amp;#39;ll look at extracting shared behavior so that both our preview and document components can be independently scrollable and either can trigger additional data-fetching when the scrolled to the bottom.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Displaying PDFs lazily with Vue</title>
     <link rel="alternate" href="/blog/building-a-pdf-viewer-with-vue-part-2.html"/>
@@ -1604,255 +1858,6 @@ reset() {
       &lt;/h2&gt;
     
 &lt;p&gt;We&amp;#39;ve come a long way—we developed a basic algorithm to search the game board for a winner while ensuring we only traverse relevant segments. We also leveraged the simplicity of reactive Vue properties to trigger UI updates. We now have a decent version of Connect Four playable in the browser by individual(s) using the same browser. We&amp;#39;ve also lumped a ton of logic into the game container and have no mechanism to play opponents ver the network. There&amp;#39;s some exciting work to do ahead: we&amp;#39;ll work on introducing additional layers to our frontend design by building on Vue libraries like &lt;code&gt;vue-router&lt;/code&gt; for client-side routing and &lt;code&gt;vuex&lt;/code&gt; for state managment. This will set us up to make the game playable over the network by connecting our game to an Elixir/Phoenix backend.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Animating Connect Four with Vue.js</title>
-    <link rel="alternate" href="/blog/animating-connect-four-with-vuejs.html"/>
-    <id>/blog/animating-connect-four-with-vuejs.html</id>
-    <published>2018-01-18T00:00:00+00:00</published>
-    <updated>2018-01-18T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;When we left off our &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;Connect Four game last&lt;/a&gt;, we used Vue.js components to convert a static HTML view of the Connect Four board into a playable
-interface. In this post, we'll animate the checkers falling and bouncing into
-place when added to the game...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;When we left off our &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;Connect Four game last&lt;/a&gt;, we used Vue.js components to convert a static HTML view of the Connect Four board into a playable
-interface. In this post, we&amp;#39;ll animate the checkers falling and bouncing into
-place when added to the game board.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s how the game behaved at the end of &lt;a href="/blog/basic-connect-four-with-vuejs.html"&gt;the previous post&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p data-height="485" data-theme-id="light" data-slug-hash="eyrMBy" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four Vue.js, SVG: first pass" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/eyrMBy/"&gt;Connect Four Vue.js, SVG: first pass&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
-
-&lt;p&gt;Clicking columns simply adds new checkers to the board in the first available
-slots. Though it works, it doesn&amp;#39;t quite &lt;em&gt;feel&lt;/em&gt; like Connect Four; we want
-checkers falling to the bottom of each column.&lt;/p&gt;
-
-      &lt;h2 id="vue-transitions" class="title"&gt;
-        &lt;a name="vue-transitions" class="anchor" href="#vue-transitions"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Vue transitions
-      &lt;/h2&gt;
-    
-&lt;p&gt;Vue.js can help us here. It provides a number of features to support
-&lt;em&gt;transitions&lt;/em&gt;, such as adding/removing single elements, adding/removing items in
-a list, and even between values in data itself. Vue provides a &lt;a href="https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components"&gt;&lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt;
-component, which can be leveraged to animate elements as they enter and leave the DOM&lt;/a&gt;. This is what we&amp;#39;ll use to animate checkers when they are added to the board.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;transition&amp;gt;
-  &amp;lt;!-- magic --&amp;gt;
-&amp;lt;/transition&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The Vue &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; element has mechanisms for either CSS or JavaScript
-animation. Since we&amp;#39;ll have exact coordinates as component properties
-representing the start and end points of the checker&amp;#39;s fall, we&amp;#39;ll want to reach
-for the component&amp;#39;s &lt;a href="https://vuejs.org/v2/guide/transitions.html#JavaScript-Hooks"&gt;JavaScript
-hooks&lt;/a&gt;, which
-include &lt;code&gt;before-enter&lt;/code&gt;, &lt;code&gt;enter&lt;/code&gt;, &lt;code&gt;after-enter&lt;/code&gt;, &lt;code&gt;before-leave&lt;/code&gt;, &lt;code&gt;leave&lt;/code&gt;, etc. To
-keep things short and sweet, we&amp;#39;ll simply animate checkers as they are added to
-the board—we may come back to animating of release of checkers from the
-board in a later post.&lt;/p&gt;
-
-      &lt;h2 id="adding-a-checker-transition" class="title"&gt;
-        &lt;a name="adding-a-checker-transition" class="anchor" href="#adding-a-checker-transition"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Adding a checker transition
-      &lt;/h2&gt;
-    
-&lt;p&gt;The template for our checker is simply a SVG &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; element with &lt;code&gt;cx&lt;/code&gt; and
-&lt;code&gt;cy&lt;/code&gt; properties to indicate its resting position in the column.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!-- board-checker-template --&amp;gt;
-&amp;lt;circle :cx=&amp;quot;centerX&amp;quot; :cy=&amp;quot;centerY&amp;quot; ... /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Each of these HTML properties is bound to component properties in the &lt;code&gt;BoardChecker&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
-  computed: {
-    centerX() {
-      return (this.cellSize / 2);
-    },
-
-    centerY() {
-      return (this.cellSize / 2) + (this.cellSize * (this.rowCount - 1 - this.row));
-    },
-
-    // ...
-  },
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To animate the arrival of this checker to the board, we need to wrap the
-&lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; in a &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; element.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;transition
-  @enter=&amp;quot;enter&amp;quot;
-  :css=&amp;quot;false&amp;quot;
-  &amp;gt;
-  &amp;lt;circle ... /&amp;gt;
-&amp;lt;/transition&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As we&amp;#39;ll only JavaScript animation for the transition, Vue recommends setting
-the &lt;code&gt;:css&lt;/code&gt; property to &lt;code&gt;false&lt;/code&gt; as an optimization. We also bind a callback named
-&amp;quot;enter&amp;quot; to the &lt;code&gt;@enter&lt;/code&gt; listener on the &lt;code&gt;&amp;lt;transition&amp;gt;&lt;/code&gt; component. The definition
-of that callback will be a method on the &lt;code&gt;BoardChecker&lt;/code&gt; component:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
-  method: {
-    enter(element, done) {
-      // animate!
-
-      done();
-    },
-
-    // ...
-  },
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Vue expects that the &lt;code&gt;enter&lt;/code&gt; callback may be asynchronous, so the framework
-provides a &lt;code&gt;done&lt;/code&gt; parameter which is a function that must be called to indicate that the
-transition has completed.&lt;/p&gt;
-
-      &lt;h2 id="animating-the-transition" class="title"&gt;
-        &lt;a name="animating-the-transition" class="anchor" href="#animating-the-transition"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Animating the transition
-      &lt;/h2&gt;
-    
-&lt;p&gt;So how to animate? We can lean on a third-party library to do the heavy-lifting;
-we just need to wire it up correctly to get the desired effect. I chose the
-&lt;code&gt;GSAP&lt;/code&gt; library from &lt;a href="https://greensock.com/"&gt;Greensock&lt;/a&gt; which is well-suited for
-SVG animation, though just about any popular animation library could work in its
-place. But don&amp;#39;t take it from me—here&amp;#39;s what expert, Sarah Drasner, has to say
-in her book &lt;a href="http://shop.oreilly.com/product/0636920045335.do"&gt;SVG Animations&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Due to the fact that GreenSock corrects some of SVG’s cross-browser quirks,
-and has thought of every different use case for animation, GreenSock is going
-to be the animation technology I recommend for production sites most
-frequently.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The GSAP ships with a number of utilities to support complex animation and
-synchronization. We&amp;#39;re going to use the
-&lt;a href="https://greensock.com/docs/TweenMax/static.fromTo"&gt;&lt;code&gt;TweenMax.fromTo&lt;/code&gt;&lt;/a&gt; function
-with an easing parameter to bounce the checker in to place. It needs a target
-element, a duration, &amp;quot;from params&amp;quot;, and &amp;quot;to params&amp;quot;, which describe the
-animation at the start and end—hence, &lt;code&gt;fromTo&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;TweenMax.fromTo(element, duration, { y: startPosition }, { y: endPosition });
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Since the checker&amp;#39;s path of motion will have only vertical motion, we will
-animate the &lt;code&gt;y&lt;/code&gt; position. The key insight is to understand that the &lt;code&gt;TweenMax&lt;/code&gt;
-start and end &lt;code&gt;y&lt;/code&gt; positions are relative to element&amp;#39;s static position; in this
-case, that is the &lt;code&gt;cy&lt;/code&gt; property of our &lt;code&gt;&amp;lt;circle&amp;gt;&lt;/code&gt; element. The start position
-for the animiation must be above the checker&amp;#39;s finish position, it&amp;#39;s given &lt;code&gt;cy&lt;/code&gt;
-coordinate; because the origin of the SVG view box is in the top left, the
-vertical start position must be a &lt;em&gt;negative&lt;/em&gt; value with repect to the finish. To
-start the animation just barely outside the view box, we want the negative value
-of the static &lt;code&gt;cy&lt;/code&gt; position and subtract the &lt;code&gt;cellSize&lt;/code&gt;. The end position is
-simply 0—no change from the given &lt;code&gt;cy&lt;/code&gt; coordinate.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;const fromParams = {
-  y: (-1 * (this.centerY + this.cellSize))
-};
-
-const toParams = {
-  y: 0,
-  ease: Bounce.easeOut,
-  onComplete: done,
-};
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;toParams&lt;/code&gt; also accept an &lt;code&gt;ease&lt;/code&gt; property, for which we&amp;#39;ll use GSAP&amp;#39;s
-&lt;code&gt;Bounce.easeOut&lt;/code&gt;, and an &lt;code&gt;onComplete&lt;/code&gt; callback property, which will be the
-&lt;code&gt;done&lt;/code&gt; callback provided by Vue transition&amp;#39;s &lt;code&gt;enter&lt;/code&gt; hook. This will allow us to
-prevent changes in game state until the checker has finished animating.&lt;/p&gt;
-
-&lt;p&gt;We also can play with the &lt;code&gt;duration&lt;/code&gt; property. As we add more checkers to a
-single column, each checker will have a shorter distance to fall. If we
-otherwise kept the duration the same for all checkers, they would appear to fall
-more slowly as they had less distance to fall.&lt;/p&gt;
-
-&lt;p&gt;Finding a duration that feels right takes a little trial and error, but where we
-currently have it, the duration is an arbitrary constant multiplied by a
-percentage of the total column height based on where the checker will end up:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const percentage = (this.rowCount - this.row) / this.rowCount;
-const duration = return 0.2 + 0.4 * this.percentage;           // seconds
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h2 id="showtime" class="title"&gt;
-        &lt;a name="showtime" class="anchor" href="#showtime"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Showtime
-      &lt;/h2&gt;
-    
-&lt;p&gt;Putting this altogether, our final &lt;code&gt;enter&lt;/code&gt; method looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const BoardChecker = Vue.component(&amp;#39;board-checker&amp;#39;, {
-  // ...
-
-  methods: {
-    enter(el, done) {
-      // start above board, outside the view box
-      const fromY = -1 * (this.centerY + this.cellSize);
-
-      // finish at the position given to
-      const toY = 0;
-
-      const fromParams = {
-        y: fromY
-      };
-
-      const toParams = {
-        y: toY,
-        ease: Bounce.easeOut,
-        onComplete: done,
-      };
-
-      const percentage = (this.rowCount - this.row) / this.rowCount;
-      const duration = return 0.2 + 0.4 * this.percentage; // arbitrary constants
-
-      return TweenMax.fromTo(el, this.duration, fromParams, destParams);
-    },
-  },
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Adding this to our game board, we now have some nicely animated checkers falling
-into place as we play! Note that, because we&amp;#39;re using SVG pattern masking, as
-described in &lt;a href="#"&gt;an earlier post&lt;/a&gt;, the checkers appear to fall behind the Connect
-Four wall, visible through the portholes.&lt;/p&gt;
-
-&lt;p data-height="485" data-theme-id="light" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four with Vue.js, SVG: animated checkers" class="codepen"&gt;See the Pen &lt;a href="https://codepen.io/rossta/pen/jYxxGv/"&gt;Connect Four with Vue.js, SVG: animated checkers&lt;/a&gt; by Ross Kaffenberger (&lt;a href="https://codepen.io/rossta"&gt;@rossta&lt;/a&gt;) on &lt;a href="https://codepen.io"&gt;CodePen&lt;/a&gt;.&lt;/p&gt;
-
-&lt;script async src="https://production-assets.codepen.io/assets/embed/ei.js"&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;hr /&gt;&lt;/p&gt;
-
-&lt;p&gt;Cool!&lt;/p&gt;
-
-&lt;p&gt;Notice though, that you can continue dropping checkers until the board fills up. In the &lt;a href="/blog/finding-four-in-a-row-ftw.html"&gt;next post&lt;/a&gt;, we&amp;#39;ll fix that by introducing an algorithm to check for a win and display the results in the UI when the game ends.&lt;/p&gt;
 </content>
   </entry>
 </feed>
