@@ -134,8 +134,9 @@
 
 props: {
   url: {
-  type: String,
-  required: true,
+    type: String,
+    required: true,
+  },
 },
 
 data() {
@@ -227,6 +228,7 @@ created() {
 &lt;p&gt;Now we need to set up our &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; to communicate with the &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component. We update &lt;code&gt;&amp;lt;PDFDocument&lt;/code&gt; to accept &lt;code&gt;pages&lt;/code&gt; as props now that it is now longer responsible for fetching this data. Its &lt;code&gt;fetchPages&lt;/code&gt; method, called when the component mounts or during scrolling, we&amp;#39;ll leave in place but change its implementation (now owned by its parent &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component) to simply emit the &lt;code&gt;pages-fetch&lt;/code&gt; event, for which &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; is listening.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
+
 props: {
   pages: {
     type: Array,
