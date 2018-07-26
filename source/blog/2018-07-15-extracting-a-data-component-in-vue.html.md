@@ -9,7 +9,7 @@ category: Code
 tags:
   - Vue
 ---
-Vue components don't have to just be about displaying information and user interaction. In this post, we'll show how to build a component whose main job is to simply fetch data for other components.
+Vue components don't have to just be about displaying information and user interaction. In this post, we'll show how to build a component whose main job is to simply fetch data for other components. We'll use props, events, and scoped-slots to tie the pieces together.
 
 ### The project
 This post is part of ongoing series, [Building a PDF Viewer with Vue.js](/blog/series/pdf-viewer.html). The source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the source described in this post, [checkout the branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-3-renderless-components).
