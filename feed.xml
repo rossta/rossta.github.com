@@ -18,15 +18,8 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Vue components don't have to just be about displaying information and user interaction. In this post, we'll show how to build a component whose main job is to simply fetch data for other components.&lt;/p&gt;
-
-      &lt;h3 id="the-project" class="title"&gt;
-        &lt;a name="the-project" class="anchor" href="#the-project"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-       ...&lt;/h3&gt;</summary>
-    <content type="html">&lt;p&gt;Vue components don&amp;#39;t have to just be about displaying information and user interaction. In this post, we&amp;#39;ll show how to build a component whose main job is to simply fetch data for other components.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;Vue components don't have to just be about displaying information and user interaction. In this post, we'll show how to build a component whose main job is to simply fetch data for other components. We'll use props, events, and scoped-slots to tie...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Vue components don&amp;#39;t have to just be about displaying information and user interaction. In this post, we&amp;#39;ll show how to build a component whose main job is to simply fetch data for other components. We&amp;#39;ll use props, events, and scoped-slots to tie the pieces together.&lt;/p&gt;
 
       &lt;h3 id="the-project" class="title"&gt;
         &lt;a name="the-project" class="anchor" href="#the-project"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
