@@ -1,5 +1,5 @@
 ---
-title: Extracting a data component in Vue.js
+title: Extracting a data component in Vue
 author: Ross Kaffenberger
 published: true
 summary: Building a PDF Viewer with Vue - Part 3
