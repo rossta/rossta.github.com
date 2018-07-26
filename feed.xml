@@ -99,17 +99,21 @@
 
 &lt;p&gt;While this may be desired for some applications, we&amp;#39;d prefer to only fetch the PDF page data once. To achieve this, we&amp;#39;re going to wrap both the &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFThumbnail&amp;gt;&lt;/code&gt; in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.&lt;/p&gt;
 
-&lt;p&gt;That means our heirarchy will eventually look like this:&lt;/p&gt;
+&lt;p&gt;So our heirarchy will eventually look like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt;
-  &amp;lt;PDFPreview&amp;gt;
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt; &amp;lt;!-- passes page data to children --&amp;gt;
+
+  &amp;lt;PDFPreview&amp;gt; &amp;lt;!-- emits events to request more pages --&amp;gt;
     ...
   &amp;lt;/PDFPreview&amp;gt;
-  &amp;lt;PDFDocument&amp;gt;
+  &amp;lt;PDFDocument&amp;gt; &amp;lt;!-- emits events to request more pages --&amp;gt;
     ...
   &amp;lt;/PDFDocument&amp;gt;
+
 &amp;lt;/PDFData&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here we will have decoupled the logic for batching and requesting page data over the wire from the interactions and events that will trigger that behavior. For our viewer, either our document or future preview components can trigger data fetching. The data component needs to know nothing about the scrolling behavior or the logic that determines when additional pages are needed.&lt;/p&gt;
 
 &lt;p&gt;Next we&amp;#39;ll take a look at how this data component is constructed and how it will pass data to the child components.&lt;/p&gt;
 
