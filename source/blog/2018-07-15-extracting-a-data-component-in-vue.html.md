@@ -21,7 +21,7 @@ So far in [this series](/blog/series/pdf-viewer.html), we have built a simple PD
 
 ![Preview of the preview](screenshots/screenshot-pdf-viewer-part-3.jpg)
 
-This preview pane will display the entire document (as smaller, clickable thumbnails), be independently-scrollable, and render PDF pages lazily—in other words. In other words, it will behave a lot like our current `<PDFDocument>`. First, we'd like to make some of our current code reusable.
+This preview pane will display the entire document (as smaller, clickable thumbnails), be independently-scrollable, and render PDF pages lazily, i.e., it will behave a lot like our current `<PDFDocument>`. First, we'd like to make some of our current code reusable.
 
 ### The why
 The Vue docs provide helpful examples for using [mixins](https://vuejs.org/v2/guide/mixins.html), [custom directives](https://vuejs.org/v2/guide/custom-directive.html), and more. My preferred approach for sharing component functionality is *composition*, which means extracting shared code into separate components. In this post, we'll be using composition to reuse data fetching.
