@@ -1,7 +1,7 @@
 ---
 title: Extracting a data component in Vue.js
 author: Ross Kaffenberger
-published: false
+published: true
 summary: Building a PDF Viewer with Vue - Part 3
 description: In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PDF page data.
 series: 'PDF Viewer'
