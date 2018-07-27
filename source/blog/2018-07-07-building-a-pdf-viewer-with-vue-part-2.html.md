@@ -40,30 +40,27 @@ The `<PDFDocument>` will track its visible boundaries using the `scrollTop` and 
 ```javascript
 // src/components/PDFDocument.vue
 
-  data() {
-    return {
-      scrollTop: 0,
-      clientHeight: 0,
-      // ...
-    };
-  },
-
-  methods: {
-    updateScrollBounds() {
-      const {scrollTop, clientHeight} = this.$el;
-      this.scrollTop = scrollTop;
-      this.clientHeight = clientHeight;
-    },
-
+data() {
+  return {
+    scrollTop: 0,
+    clientHeight: 0,
     // ...
-  },
+  };
+},
 
-  mounted() {
-    this.updateScrollBounds();
+methods: {
+  updateScrollBounds() {
+    const {scrollTop, clientHeight} = this.$el;
+    this.scrollTop = scrollTop;
+    this.clientHeight = clientHeight;
   },
-
   // ...
-}
+},
+
+mounted() {
+  this.updateScrollBounds();
+},
+// ...
 ```
 The `scrollTop` according to [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop):
 > An element's `scrollTop` value is a measurement of the distance from the element's top to its topmost *visible* content.
@@ -80,29 +77,27 @@ The `<PDFPage>` component will track the boundaries of its underlying canvas ele
 ```javascript
 // src/components/PDFPage.vue
 
-  data() {
-    return {
-      elementTop: 0,
-      elementHeight: 0,
-      // ...
-    };
-  },
-
-  methods: {
-    updateElementBounds() {
-      const {offsetTop, offsetHeight} = this.$el;
-      this.elementTop = offsetTop;
-      this.elementHeight = offsetHeight;
-    },
-
+data() {
+  return {
+    elementTop: 0,
+    elementHeight: 0,
     // ...
-  },
+  };
+},
 
-  mounted() {
-    this.updateElementBounds();
+methods: {
+  updateElementBounds() {
+    const {offsetTop, offsetHeight} = this.$el;
+    this.elementTop = offsetTop;
+    this.elementHeight = offsetHeight;
   },
-
   // ...
+},
+
+mounted() {
+  this.updateElementBounds();
+},
+// ...
 ```
 The element's `offsetTop` property will represent the distance from its top boundary to that of the containing document element `div`. Recording its `offsetHeight` enables us to determine how far the bottom of the element is from the top of the container.
 
@@ -112,38 +107,36 @@ Since we can pass the scroll data of the parent component to the child page comp
 ```javascript
 // src/components/PDFPage.vue
 
-  props: {
-    scrollTop: {
-      type: Number,
-      default: 0
-    },
-    clientHeight: {
-      type: Number,
-      default: 0
-    },
-
-    // ...
+props: {
+  scrollTop: {
+    type: Number,
+    default: 0
   },
-
-  computed: {
-    isElementVisible() {
-      const {elementTop, elementBottom, scrollTop, scrollBottom} = this;
-      if (!elementBottom) return;
-
-      return elementTop < scrollBottom && elementBottom > scrollTop;
-    },
-
-    elementBottom() {
-      return this.elementTop + this.elementHeight;
-    },
-
-    scrollBottom() {
-      return this.scrollTop + this.clientHeight;
-    },
-    // ...
+  clientHeight: {
+    type: Number,
+    default: 0
   },
-
   // ...
+},
+
+computed: {
+  isElementVisible() {
+    const {elementTop, elementBottom, scrollTop, scrollBottom} = this;
+    if (!elementBottom) return;
+
+    return elementTop < scrollBottom && elementBottom > scrollTop;
+  },
+
+  elementBottom() {
+    return this.elementTop + this.elementHeight;
+  },
+
+  scrollBottom() {
+    return this.scrollTop + this.clientHeight;
+  },
+  // ...
+},
+// ...
 ```
 We'll use a computed property `isElementVisible` which will update whenever either the `scrollBounds` or `elementBounds` change. It will simply check if the top of the element is above the bottom of the scroll area (`top < scrollBottom`) and the bottom of the element is below the top of the scroll area (`bottom > scrollTop`). Note that the `y` dimension increases moving down the screen.
 
@@ -155,13 +148,13 @@ Previously, we called the `drawPage` method (described in the [previous post](ht
 ```javascript
 // src/components/PDFPage.vue
 
-  watch: {
-    isElementVisible(isElementVisible) {
-      if (isElementVisible) this.drawPage();
-    },
+watch: {
+  isElementVisible(isElementVisible) {
+    if (isElementVisible) this.drawPage();
   },
-
   // ...
+},
+// ...
 ```
 We've defined `drawPage` such that it will only render once if called multiple times.
 
@@ -170,14 +163,13 @@ In the page components, we can simply watch for changes in scroll boundaries and
 ```javascript
 // src/components/PDFPage.vue
 
-  watch: {
-    scale: 'updateElementBounds',
-    scrollTop: 'updateElementBounds',
-    clientHeight: 'updateElementBounds',
-    // ...
-  },
-
+watch: {
+  scale: 'updateElementBounds',
+  scrollTop: 'updateElementBounds',
+  clientHeight: 'updateElementBounds',
   // ...
+},
+// ...
 ```
 For the document component, we add listeners to DOM events to trigger the `updateScrollBounds` method within the `mounted` hook.
 ```javascript
@@ -186,7 +178,6 @@ import throttle from 'lodash/throttle';
 
 export default {
   // ...
-
   mounted() {
     this.updateScrollBounds();
     const throttledCallback = throttle(this.updateScrollBounds, 300);
@@ -200,7 +191,6 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.throttledOnResize, true);
   },
-
   // ...
 ```
 A few notes about the implementation above: we use lodash's `throttle` function to ensure our callback is only triggered once every 300ms; otherwise, we'd be making this update potentially dozens of times a second, which for our purposes is unnecessary and could potentially be a performance bottleneck. Since we can attach our `throttledCallback` to the `'scroll'` event listener of `this.$el`, we will also be cleaned up nicely during Vue teardown phase. However, since the `'resize'` event will currently only work on the `window`, we'll need to store a reference to the throttled callback as `this.throttledOnResize` so we can remove the event listener in Vue's `beforeDestroy` hook.
@@ -221,24 +211,23 @@ Recall in our document component, we're tracking a `pdf` property and an array o
 
 ```javascript
 // src/components/PDFDocument.vue
-  data() {
-    return {
-      pdf: undefined,
-      pages: [],
-      cursor: 0,
-      // ...
-    };
-  },
 
-  computed: {
-    pageCount() {
-      return this.pdf ? this.pdf.numPages : 0;
-    },
-
+data() {
+  return {
+    pdf: undefined,
+    pages: [],
+    cursor: 0,
     // ...
-  },
+  };
+},
 
+computed: {
+  pageCount() {
+    return this.pdf ? this.pdf.numPages : 0;
+  },
   // ...
+},
+// ...
 ```
 
 We also previously added a watcher for the `pdf` property to fetch all pages:
@@ -246,27 +235,31 @@ We also previously added a watcher for the `pdf` property to fetch all pages:
 ```javascript
 // src/components/PDFDocument.vue
 
-  watch: {
-    pdf(pdf) {
-      this.pages = [];
-      const promises = range(1, pdf.numPages).
-        map(number => pdf.getPage(number));
+watch: {
+  pdf(pdf) {
+    this.pages = [];
+    const promises = range(1, pdf.numPages).
+      map(number => pdf.getPage(number));
 
-      Promise.all(promises).
-        then(pages => (this.pages = pages));
-    },
+    Promise.all(promises).
+      then(pages => (this.pages = pages));
   },
+  // ...
+},
+// ...
 ```
 We'll modify this watcher by extracting a method to fetch pages in batches:
 ```javascript
 // src/components/PDFDocument.vue
 
-  watch: {
-    pdf(pdf) {
-      this.pages = [];
-      this.fetchPages();
-    },
+watch: {
+  pdf(pdf) {
+    this.pages = [];
+    this.fetchPages();
   },
+  // ...
+},
+// ...
 ```
 Here is our new `fetchPages` implementation:
 ```javascript
@@ -298,10 +291,8 @@ export default {
           this.$emit('document-errored');
         });
     },
-
     // ...
   }
-
   // ...
 ```
 The added complexity in `fetchPages` allows us to request small batches of pages with each subsequent call. The `currentCount` represents the total number of pages that have already been fetched. The `startPage` is simply the next page number of the next would-be page in the array, and the `endPage` of the batch is the lesser of an arbitrarily small batch of pages (`BATCH_COUNT`) and the remaining pages. We're able to insert these pages in the correct location in the tracked pages array with `this.pages.splice(currentCount, 0, ...pages)`. We also use the `this.cursor` property to track the most recently request `endPage` to ensure the same batch is only requested once.
@@ -317,52 +308,48 @@ To determine whether the user has scrolled to the bottom of the last of the fetc
 ```javascript
 // src/components/PDFDocument.vue
 
-  methods: {
-    isBottomVisible() {
-      const {scrollTop, clientHeight, scrollHeight} = this.$el;
-      return scrollTop + clientHeight >= scrollHeight;
-    },
-
-    // ...
+methods: {
+  isBottomVisible() {
+    const {scrollTop, clientHeight, scrollHeight} = this.$el;
+    return scrollTop + clientHeight >= scrollHeight;
   },
+  // ...
+},
+// ...
 ```
 We'll call this method during `updateScrollBounds` method and record a tracked a true/false property, `didReachBottom`.
 ```javascript
 // src/components/PDFDocument.vue
 
-  data() {
-    return {
-      didReachBottom: false,
-      // ...
-    };
-  },
-
-  methods: {
-    updateScrollBounds() {
-      const {scrollTop, clientHeight} = this.$el;
-      this.scrollTop = scrollTop;
-      this.clientHeight = clientHeight;
-      this.didReachBottom = this.isBottomVisible();
-    },
-
+data() {
+  return {
+    didReachBottom: false,
     // ...
-  },
+  };
+},
 
+methods: {
+  updateScrollBounds() {
+    const {scrollTop, clientHeight} = this.$el;
+    this.scrollTop = scrollTop;
+    this.clientHeight = clientHeight;
+    this.didReachBottom = this.isBottomVisible();
+  },
   // ...
+},
+// ...
 ```
 We can then use a watcher to call `fetchPages` if this property flips from `false` to `true`. This watcher would fire continuously in a cycle as the user scrolls to the bottom and more pages are fetched.
 ```javascript
 // src/components/PDFDocument.vue
 
-  watch: {
-    didReachBottom(didReachBottom) {
-      if (didReachBottom) this.fetchPages();
-    },
-
-    // ...
+watch: {
+  didReachBottom(didReachBottom) {
+    if (didReachBottom) this.fetchPages();
   },
-
   // ...
+},
+// ...
 ```
 
 For another in-depth look at adding infinite scrolling for Vue, check out Chris Nwamba's [post on Scotch.io](https://scotch.io/tutorials/simple-asynchronous-infinite-scroll-with-vue-watchers). There are also a number of packages that abstract infinite scrolling if you'd prefer to lean on open source, including [Akryum/vue-virtual-scroller](https://github.com/Akryum/vue-virtual-scroller) and [ElemeFE/vue-infinite-scroll](https://github.com/ElemeFE/vue-infinite-scroll).
