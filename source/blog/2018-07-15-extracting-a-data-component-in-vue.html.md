@@ -26,7 +26,11 @@ This preview pane will display the entire document (as smaller, clickable thumbn
 ### The why
 The Vue docs provide helpful examples for using [mixins](https://vuejs.org/v2/guide/mixins.html), [custom directives](https://vuejs.org/v2/guide/custom-directive.html), and more. My preferred approach for sharing component functionality is *composition*, which means extracting shared code into separate components. In this post, we'll be using composition to reuse data fetching.
 
-Why composition? This topic deserves a separate post. For one, it's my preference, along the lines of general object-oriented programming advice, for "composition over inheritance". Practically, in Vue, this means I'd like to think "component-first", before reaching for mixins or `extends` (these are basically forms of inheritance). I also agree with the drawbacks Dan Abramov enumerates in [Mixins Considered Harmful](https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html); though the context for his post is React, most of his points are relevant to Vue as well.
+Why composition? This topic deserves a separate post, but as a start, it's my preference. Borrowing from general object-oriented programming advice, I gravitate towards "composition over inheritance". Practically, in Vue, this means I'd like to think "component-first", before reaching for mixins or `extends` (these are basically forms of inheritance).
+
+I also happen to agree with the drawbacks Dan Abramov enumerates in [Mixins Considered Harmful](https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html); though the context for his post is React, most of his points are relevant to Vue as well.
+
+As for this particular use case, we could reuse the data fetching code we wrote previously as a mixin, there's a clear problem with that approach. It would mean the components that make use of the mixin would fetch the same data independently (without extracting some other mechanism to share the data source)—which is potentially some wasted work. This may be desired for some applications, we'd prefer to only fetch the PDF page data once.
 
 It's also worth noting that we're not currently using [Vuex](https://vuex.vuejs.org) to manage application state in the project. It may be wise, as an alternative to what's described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It's also simply a worthy exercise to consider data components.
 
@@ -55,9 +59,9 @@ For our new preview feature, our preview and document components will live side-
   ...
 </PDFDocument>
 ```
-Our `<PDFPreview>` needs access to the same PDF data as our `<PDFDocument>`. While we could reuse the data fetching code we wrote previously as a mixin, there's a clear problem with that approach. It would mean the components would fetch the same data independently—which is potentially some wasted work.
+Our `<PDFPreview>` needs access to the same PDF data as our `<PDFDocument>`.
 
-While this may be desired for some applications, we'd prefer to only fetch the PDF page data once. To achieve this, we're going to wrap both the `<PDFPreview>` and `<PDFThumbnail>` in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.
+To achieve this, we're going to wrap both the `<PDFPreview>` and `<PDFThumbnail>` in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.
 
 So our heirarchy will eventually look like this:
 ```html
