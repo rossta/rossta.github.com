@@ -108,30 +108,27 @@
 
 <pre><code class="javascript">// src/components/PDFDocument.vue
 
-  data() {
-    return {
-      scrollTop: 0,
-      clientHeight: 0,
-      // ...
-    };
-  },
-
-  methods: {
-    updateScrollBounds() {
-      const {scrollTop, clientHeight} = this.$el;
-      this.scrollTop = scrollTop;
-      this.clientHeight = clientHeight;
-    },
-
+data() {
+  return {
+    scrollTop: 0,
+    clientHeight: 0,
     // ...
-  },
+  };
+},
 
-  mounted() {
-    this.updateScrollBounds();
+methods: {
+  updateScrollBounds() {
+    const {scrollTop, clientHeight} = this.$el;
+    this.scrollTop = scrollTop;
+    this.clientHeight = clientHeight;
   },
-
   // ...
-}
+},
+
+mounted() {
+  this.updateScrollBounds();
+},
+// ...
 </code></pre>
 
 <p>The <code>scrollTop</code> according to <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop">MDN</a>:</p>
@@ -160,29 +157,27 @@
 
 <pre><code class="javascript">// src/components/PDFPage.vue
 
-  data() {
-    return {
-      elementTop: 0,
-      elementHeight: 0,
-      // ...
-    };
-  },
-
-  methods: {
-    updateElementBounds() {
-      const {offsetTop, offsetHeight} = this.$el;
-      this.elementTop = offsetTop;
-      this.elementHeight = offsetHeight;
-    },
-
+data() {
+  return {
+    elementTop: 0,
+    elementHeight: 0,
     // ...
-  },
+  };
+},
 
-  mounted() {
-    this.updateElementBounds();
+methods: {
+  updateElementBounds() {
+    const {offsetTop, offsetHeight} = this.$el;
+    this.elementTop = offsetTop;
+    this.elementHeight = offsetHeight;
   },
-
   // ...
+},
+
+mounted() {
+  this.updateElementBounds();
+},
+// ...
 </code></pre>
 
 <p>The element&#39;s <code>offsetTop</code> property will represent the distance from its top boundary to that of the containing document element <code>div</code>. Recording its <code>offsetHeight</code> enables us to determine how far the bottom of the element is from the top of the container.</p>
@@ -193,38 +188,36 @@
 
 <pre><code class="javascript">// src/components/PDFPage.vue
 
-  props: {
-    scrollTop: {
-      type: Number,
-      default: 0
-    },
-    clientHeight: {
-      type: Number,
-      default: 0
-    },
-
-    // ...
+props: {
+  scrollTop: {
+    type: Number,
+    default: 0
   },
-
-  computed: {
-    isElementVisible() {
-      const {elementTop, elementBottom, scrollTop, scrollBottom} = this;
-      if (!elementBottom) return;
-
-      return elementTop &lt; scrollBottom &amp;&amp; elementBottom &gt; scrollTop;
-    },
-
-    elementBottom() {
-      return this.elementTop + this.elementHeight;
-    },
-
-    scrollBottom() {
-      return this.scrollTop + this.clientHeight;
-    },
-    // ...
+  clientHeight: {
+    type: Number,
+    default: 0
   },
-
   // ...
+},
+
+computed: {
+  isElementVisible() {
+    const {elementTop, elementBottom, scrollTop, scrollBottom} = this;
+    if (!elementBottom) return;
+
+    return elementTop &lt; scrollBottom &amp;&amp; elementBottom &gt; scrollTop;
+  },
+
+  elementBottom() {
+    return this.elementTop + this.elementHeight;
+  },
+
+  scrollBottom() {
+    return this.scrollTop + this.clientHeight;
+  },
+  // ...
+},
+// ...
 </code></pre>
 
 <p>We&#39;ll use a computed property <code>isElementVisible</code> which will update whenever either the <code>scrollBounds</code> or <code>elementBounds</code> change. It will simply check if the top of the element is above the bottom of the scroll area (<code>top &lt; scrollBottom</code>) and the bottom of the element is below the top of the scroll area (<code>bottom &gt; scrollTop</code>). Note that the <code>y</code> dimension increases moving down the screen.</p>
@@ -243,13 +236,13 @@
 
 <pre><code class="javascript">// src/components/PDFPage.vue
 
-  watch: {
-    isElementVisible(isElementVisible) {
-      if (isElementVisible) this.drawPage();
-    },
+watch: {
+  isElementVisible(isElementVisible) {
+    if (isElementVisible) this.drawPage();
   },
-
   // ...
+},
+// ...
 </code></pre>
 
 <p>We&#39;ve defined <code>drawPage</code> such that it will only render once if called multiple times.</p>
@@ -258,14 +251,13 @@
 
 <pre><code class="javascript">// src/components/PDFPage.vue
 
-  watch: {
-    scale: &#39;updateElementBounds&#39;,
-    scrollTop: &#39;updateElementBounds&#39;,
-    clientHeight: &#39;updateElementBounds&#39;,
-    // ...
-  },
-
+watch: {
+  scale: &#39;updateElementBounds&#39;,
+  scrollTop: &#39;updateElementBounds&#39;,
+  clientHeight: &#39;updateElementBounds&#39;,
   // ...
+},
+// ...
 </code></pre>
 
 <p>For the document component, we add listeners to DOM events to trigger the <code>updateScrollBounds</code> method within the <code>mounted</code> hook.</p>
@@ -275,7 +267,6 @@ import throttle from &#39;lodash/throttle&#39;;
 
 export default {
   // ...
-
   mounted() {
     this.updateScrollBounds();
     const throttledCallback = throttle(this.updateScrollBounds, 300);
@@ -289,7 +280,6 @@ export default {
   beforeDestroy() {
     window.removeEventListener(&#39;resize&#39;, this.throttledOnResize, true);
   },
-
   // ...
 </code></pre>
 
@@ -322,52 +312,55 @@ export default {
 <p>Recall in our document component, we&#39;re tracking a <code>pdf</code> property and an array of <code>pages</code>. We now add a <code>cursor</code> to represent the highest page number in the document we&#39;ve attempted to fetch. We also will track the expected <code>pageCount</code> using a property provided by the <code>pdf</code> object.</p>
 
 <pre><code class="javascript">// src/components/PDFDocument.vue
-  data() {
-    return {
-      pdf: undefined,
-      pages: [],
-      cursor: 0,
-      // ...
-    };
-  },
 
-  computed: {
-    pageCount() {
-      return this.pdf ? this.pdf.numPages : 0;
-    },
-
+data() {
+  return {
+    pdf: undefined,
+    pages: [],
+    cursor: 0,
     // ...
-  },
+  };
+},
 
+computed: {
+  pageCount() {
+    return this.pdf ? this.pdf.numPages : 0;
+  },
   // ...
+},
+// ...
 </code></pre>
 
 <p>We also previously added a watcher for the <code>pdf</code> property to fetch all pages:</p>
 
 <pre><code class="javascript">// src/components/PDFDocument.vue
 
-  watch: {
-    pdf(pdf) {
-      this.pages = [];
-      const promises = range(1, pdf.numPages).
-        map(number =&gt; pdf.getPage(number));
+watch: {
+  pdf(pdf) {
+    this.pages = [];
+    const promises = range(1, pdf.numPages).
+      map(number =&gt; pdf.getPage(number));
 
-      Promise.all(promises).
-        then(pages =&gt; (this.pages = pages));
-    },
+    Promise.all(promises).
+      then(pages =&gt; (this.pages = pages));
   },
+  // ...
+},
+// ...
 </code></pre>
 
 <p>We&#39;ll modify this watcher by extracting a method to fetch pages in batches:</p>
 
 <pre><code class="javascript">// src/components/PDFDocument.vue
 
-  watch: {
-    pdf(pdf) {
-      this.pages = [];
-      this.fetchPages();
-    },
+watch: {
+  pdf(pdf) {
+    this.pages = [];
+    this.fetchPages();
   },
+  // ...
+},
+// ...
 </code></pre>
 
 <p>Here is our new <code>fetchPages</code> implementation:</p>
@@ -400,10 +393,8 @@ export default {
           this.$emit(&#39;document-errored&#39;);
         });
     },
-
     // ...
   }
-
   // ...
 </code></pre>
 
@@ -431,54 +422,50 @@ export default {
 
 <pre><code class="javascript">// src/components/PDFDocument.vue
 
-  methods: {
-    isBottomVisible() {
-      const {scrollTop, clientHeight, scrollHeight} = this.$el;
-      return scrollTop + clientHeight &gt;= scrollHeight;
-    },
-
-    // ...
+methods: {
+  isBottomVisible() {
+    const {scrollTop, clientHeight, scrollHeight} = this.$el;
+    return scrollTop + clientHeight &gt;= scrollHeight;
   },
+  // ...
+},
+// ...
 </code></pre>
 
 <p>We&#39;ll call this method during <code>updateScrollBounds</code> method and record a tracked a true/false property, <code>didReachBottom</code>.</p>
 
 <pre><code class="javascript">// src/components/PDFDocument.vue
 
-  data() {
-    return {
-      didReachBottom: false,
-      // ...
-    };
-  },
-
-  methods: {
-    updateScrollBounds() {
-      const {scrollTop, clientHeight} = this.$el;
-      this.scrollTop = scrollTop;
-      this.clientHeight = clientHeight;
-      this.didReachBottom = this.isBottomVisible();
-    },
-
+data() {
+  return {
+    didReachBottom: false,
     // ...
-  },
+  };
+},
 
+methods: {
+  updateScrollBounds() {
+    const {scrollTop, clientHeight} = this.$el;
+    this.scrollTop = scrollTop;
+    this.clientHeight = clientHeight;
+    this.didReachBottom = this.isBottomVisible();
+  },
   // ...
+},
+// ...
 </code></pre>
 
 <p>We can then use a watcher to call <code>fetchPages</code> if this property flips from <code>false</code> to <code>true</code>. This watcher would fire continuously in a cycle as the user scrolls to the bottom and more pages are fetched.</p>
 
 <pre><code class="javascript">// src/components/PDFDocument.vue
 
-  watch: {
-    didReachBottom(didReachBottom) {
-      if (didReachBottom) this.fetchPages();
-    },
-
-    // ...
+watch: {
+  didReachBottom(didReachBottom) {
+    if (didReachBottom) this.fetchPages();
   },
-
   // ...
+},
+// ...
 </code></pre>
 
 <p>For another in-depth look at adding infinite scrolling for Vue, check out Chris Nwamba&#39;s <a href="https://scotch.io/tutorials/simple-asynchronous-infinite-scroll-with-vue-watchers">post on Scotch.io</a>. There are also a number of packages that abstract infinite scrolling if you&#39;d prefer to lean on open source, including <a href="https://github.com/Akryum/vue-virtual-scroller">Akryum/vue-virtual-scroller</a> and <a href="https://github.com/ElemeFE/vue-infinite-scroll">ElemeFE/vue-infinite-scroll</a>.</p>
