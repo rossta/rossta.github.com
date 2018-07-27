@@ -57,7 +57,11 @@
     
 &lt;p&gt;The Vue docs provide helpful examples for using &lt;a href="https://vuejs.org/v2/guide/mixins.html"&gt;mixins&lt;/a&gt;, &lt;a href="https://vuejs.org/v2/guide/custom-directive.html"&gt;custom directives&lt;/a&gt;, and more. My preferred approach for sharing component functionality is &lt;em&gt;composition&lt;/em&gt;, which means extracting shared code into separate components. In this post, we&amp;#39;ll be using composition to reuse data fetching.&lt;/p&gt;
 
-&lt;p&gt;Why composition? This topic deserves a separate post. For one, it&amp;#39;s my preference, along the lines of general object-oriented programming advice, for &amp;quot;composition over inheritance&amp;quot;. Practically, in Vue, this means I&amp;#39;d like to think &amp;quot;component-first&amp;quot;, before reaching for mixins or &lt;code&gt;extends&lt;/code&gt; (these are basically forms of inheritance). I also agree with the drawbacks Dan Abramov enumerates in &lt;a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html"&gt;Mixins Considered Harmful&lt;/a&gt;; though the context for his post is React, most of his points are relevant to Vue as well.&lt;/p&gt;
+&lt;p&gt;Why composition? This topic deserves a separate post, but as a start, it&amp;#39;s my preference. Borrowing from general object-oriented programming advice, I gravitate towards &amp;quot;composition over inheritance&amp;quot;. Practically, in Vue, this means I&amp;#39;d like to think &amp;quot;component-first&amp;quot;, before reaching for mixins or &lt;code&gt;extends&lt;/code&gt; (these are basically forms of inheritance).&lt;/p&gt;
+
+&lt;p&gt;I also happen to agree with the drawbacks Dan Abramov enumerates in &lt;a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html"&gt;Mixins Considered Harmful&lt;/a&gt;; though the context for his post is React, most of his points are relevant to Vue as well.&lt;/p&gt;
+
+&lt;p&gt;As for this particular use case, we could reuse the data fetching code we wrote previously as a mixin, there&amp;#39;s a clear problem with that approach. It would mean the components that make use of the mixin would fetch the same data independently (without extracting some other mechanism to share the data source)—which is potentially some wasted work. This may be desired for some applications, we&amp;#39;d prefer to only fetch the PDF page data once.&lt;/p&gt;
 
 &lt;p&gt;It&amp;#39;s also worth noting that we&amp;#39;re not currently using &lt;a href="https://vuex.vuejs.org"&gt;Vuex&lt;/a&gt; to manage application state in the project. It may be wise, as an alternative to what&amp;#39;s described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It&amp;#39;s also simply a worthy exercise to consider data components.&lt;/p&gt;
 
@@ -95,9 +99,9 @@
 &amp;lt;/PDFDocument&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Our &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; needs access to the same PDF data as our &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt;. While we could reuse the data fetching code we wrote previously as a mixin, there&amp;#39;s a clear problem with that approach. It would mean the components would fetch the same data independently—which is potentially some wasted work.&lt;/p&gt;
+&lt;p&gt;Our &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; needs access to the same PDF data as our &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;While this may be desired for some applications, we&amp;#39;d prefer to only fetch the PDF page data once. To achieve this, we&amp;#39;re going to wrap both the &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFThumbnail&amp;gt;&lt;/code&gt; in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.&lt;/p&gt;
+&lt;p&gt;To achieve this, we&amp;#39;re going to wrap both the &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFThumbnail&amp;gt;&lt;/code&gt; in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.&lt;/p&gt;
 
 &lt;p&gt;So our heirarchy will eventually look like this:&lt;/p&gt;
 

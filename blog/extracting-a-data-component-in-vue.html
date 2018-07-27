@@ -111,7 +111,11 @@
     
 <p>The Vue docs provide helpful examples for using <a href="https://vuejs.org/v2/guide/mixins.html">mixins</a>, <a href="https://vuejs.org/v2/guide/custom-directive.html">custom directives</a>, and more. My preferred approach for sharing component functionality is <em>composition</em>, which means extracting shared code into separate components. In this post, we&#39;ll be using composition to reuse data fetching.</p>
 
-<p>Why composition? This topic deserves a separate post. For one, it&#39;s my preference, along the lines of general object-oriented programming advice, for &quot;composition over inheritance&quot;. Practically, in Vue, this means I&#39;d like to think &quot;component-first&quot;, before reaching for mixins or <code>extends</code> (these are basically forms of inheritance). I also agree with the drawbacks Dan Abramov enumerates in <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html">Mixins Considered Harmful</a>; though the context for his post is React, most of his points are relevant to Vue as well.</p>
+<p>Why composition? This topic deserves a separate post, but as a start, it&#39;s my preference. Borrowing from general object-oriented programming advice, I gravitate towards &quot;composition over inheritance&quot;. Practically, in Vue, this means I&#39;d like to think &quot;component-first&quot;, before reaching for mixins or <code>extends</code> (these are basically forms of inheritance).</p>
+
+<p>I also happen to agree with the drawbacks Dan Abramov enumerates in <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html">Mixins Considered Harmful</a>; though the context for his post is React, most of his points are relevant to Vue as well.</p>
+
+<p>As for this particular use case, we could reuse the data fetching code we wrote previously as a mixin, there&#39;s a clear problem with that approach. It would mean the components that make use of the mixin would fetch the same data independently (without extracting some other mechanism to share the data source)—which is potentially some wasted work. This may be desired for some applications, we&#39;d prefer to only fetch the PDF page data once.</p>
 
 <p>It&#39;s also worth noting that we&#39;re not currently using <a href="https://vuex.vuejs.org">Vuex</a> to manage application state in the project. It may be wise, as an alternative to what&#39;s described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It&#39;s also simply a worthy exercise to consider data components.</p>
 
@@ -149,9 +153,9 @@
 &lt;/PDFDocument&gt;
 </code></pre>
 
-<p>Our <code>&lt;PDFPreview&gt;</code> needs access to the same PDF data as our <code>&lt;PDFDocument&gt;</code>. While we could reuse the data fetching code we wrote previously as a mixin, there&#39;s a clear problem with that approach. It would mean the components would fetch the same data independently—which is potentially some wasted work.</p>
+<p>Our <code>&lt;PDFPreview&gt;</code> needs access to the same PDF data as our <code>&lt;PDFDocument&gt;</code>.</p>
 
-<p>While this may be desired for some applications, we&#39;d prefer to only fetch the PDF page data once. To achieve this, we&#39;re going to wrap both the <code>&lt;PDFPreview&gt;</code> and <code>&lt;PDFThumbnail&gt;</code> in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.</p>
+<p>To achieve this, we&#39;re going to wrap both the <code>&lt;PDFPreview&gt;</code> and <code>&lt;PDFThumbnail&gt;</code> in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.</p>
 
 <p>So our heirarchy will eventually look like this:</p>
 
