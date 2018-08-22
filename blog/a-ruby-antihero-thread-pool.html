@@ -114,7 +114,7 @@ pool in test-driven fashion.</p>
   The code samples in this post are run on <code>rubinius-3.14</code> to take advantage of
   parallel processing. As you may know, MRI's
 <a href="http://www.jstorimer.com/blogs/workingwithcode/8085491-nobody-understands-the-gil">global interpreter lock</a>
-ensures only one code can execute Ruby code at any one time.
+ensures only one thread can execute Ruby code at any one time.
 </p>
 </aside>
 
@@ -354,7 +354,7 @@ new thread, we&#39;ll add them to a <code>Queue</code>. We&#39;ll separately cre
 limited number of threads whose responsibility will be to pop new &quot;jobs&quot; off the
 queue and execute them when available.</p>
 
-<p>The beauty of <code>Queue</code> is that it is thread-safe; multiple threads in the thread pool an access this resource without corrupting its contents.</p>
+<p>The beauty of <code>Queue</code> is that it is thread-safe; multiple threads in the thread pool can access this resource without corrupting its contents.</p>
 
 <p>Here&#39;s the revised implementation:</p>
 
