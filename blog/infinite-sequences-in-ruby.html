@@ -73,9 +73,7 @@
     </h3>
 </header>
 
-        <figure>
-          <img src="/assets/images/blog/enumerator-1-2-3-b7cfed08.jpg" alt="Enumerator 1 2 3" />
-        </figure>
+
       <p>Functional languages like Clojure have <a href="http://clojure.org/sequences">sequences</a>. Sequences are pretty amazing: they let us treat algorithms as data structures. We can call functions on the data as it is produced, allowing us to interact with the results like a collection even when the sequence is infinite.</p>
 
 <p>The Ruby standard library doesn’t have an official sequence class or module, but we can get pretty far with the <code>Enumerable</code> module. Rubyists are typically introduced to <code>Enumerable</code> through methods on <code>Array</code>,  like <code>#map</code> and <code>#select</code>. Arrays like <code>[1,2,3,4]</code> may be thought of as finite, eagerly loaded sequences; they already contains all the members we want to enumerate with methods. We can also extend this API to sequences like “give me multiples of 5” in Ruby.</p>
@@ -265,6 +263,11 @@ end
 </div>
 
     </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/enumerator-1-2-3-b7cfed08.jpg" alt="Enumerator 1 2 3" />
+        </figure>
+    </article>
     <section class="margin-bottom double">
       <p>
           Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.

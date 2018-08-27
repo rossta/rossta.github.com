@@ -73,9 +73,7 @@
     </h3>
 </header>
 
-        <figure>
-          <img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" alt="Logs pexels photo" />
-        </figure>
+
       <p>Most Rails apps I’ve worked on have followed the pattern “<a href="http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model" title="the buckblogs here">skinny controllers, fat models</a>.” The controller shouldn’t have know what attributes and joins to make when asking for data from the models; one line methods calls in controller actions are a thing of beauty. Controller specs are simplified and the complexity of business logic and database access can be stuffed into the models. Fatten’ up those models!</p>
 
 <p>But what happens when your models grow too large? It’s common to have one or two models (Users and Groups, anyone?) carry a large burden. Over time, we see Ruby files approaching and surpassing thousands of lines and their associated tables accumulating column excess. Before you know it, it’s time to put your models on a diet. It’s useful to have some patterns in your tool-belt to start trimming the fat.</p>
@@ -130,6 +128,11 @@
 </div>
 
     </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" alt="Logs pexels photo" />
+        </figure>
+    </article>
     <section class="margin-bottom double">
       <p>
         Published on Sep 30, 2011

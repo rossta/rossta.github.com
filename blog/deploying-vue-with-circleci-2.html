@@ -73,6 +73,7 @@
     </h3>
 </header>
 
+
       <p>I recently upgraded my <a href="https://github.com/rossta/connect-four-vue">Connect Four</a> Vue.js application to build on CircleCI 2.0 . In my <a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html">previous post</a>, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application as a static website. But now that config is only good for another few months: <a href="https://circleci.com/blog/sunsetting-1-0/">CircleCI is sunsetting 1.0</a>. Here&#39;s how I upgraded.</p>
 
 <p>The basic steps of the build are the same: once I push changes to GitHub, CircleCI will detect those changes and trigger a build. It will bundle the app using the <code>vue-cli</code>. The assets output from that step will then be uploaded to S3 using the <code>s3deploy</code> golang package only if the build is running against master.</p>
@@ -334,6 +335,8 @@ workflows:
 </div>
 
     </section>
+    <article>
+    </article>
     <section class="margin-bottom double">
       <p>
           Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.

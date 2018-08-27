@@ -73,9 +73,7 @@
     </h3>
 </header>
 
-        <figure>
-          <img src="/assets/images/blog/stock/clock-pexels-photo-160981e8.jpg" alt="Clock pexels photo" />
-        </figure>
+
       <p>I was considering recently how I&#39;d build an <a href="http://meetedgar.com/">Edgar</a> clone to post updates about <a href="/">rossta.net</a> on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.</p>
 
 <p>For scheduling tasks, we have <a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html">cron</a> at the system level and even such options as the <a href="https://github.com/javan/whenever"><code>whenever</code></a> gem to setup cron from Rails and Sinatra applications. Rubyists can also take advantage of fantastic background job schedulers like <a href="https://github.com/jmettraux/rufus-scheduler"><code>rufus-scheduler</code></a> to run recurring tasks from a separate process or even an API for defining repeating <a href="https://github.com/mperham/sidekiq"><code>Sidekiq</code></a> jobs with <a href="https://github.com/tobiassvn/sidetiq"><code>Sidetiq</code></a>.</p>
@@ -284,6 +282,11 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
 </div>
 
     </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/clock-pexels-photo-160981e8.jpg" alt="Clock pexels photo" />
+        </figure>
+    </article>
     <section class="margin-bottom double">
       <p>
           Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.

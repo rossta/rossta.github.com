@@ -73,9 +73,7 @@
     </h3>
 </header>
 
-        <figure>
-          <img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" alt="Logs pexels photo" />
-        </figure>
+
       <p>In <a href="/when-your-fat-models-need-to-go-on-a-diet">part 1</a> of this post, I talked about using modules to help break source code of large models into smaller, comprehensible pieces. As <a href="http://blog.arielvalentin.com/" title="XP in Anger">Ariel Valentin</a> pointed out, we need to do more to lighten up the runtime memory footprint when large models are instantiated.</p>
 
 <p>Let’s imagine we have an application with a <code>User</code> model (might not be a stretch) and we’re building a page that loads a bunch of user gravatars. Our <code>User</code> model has accumulated a ton of attributes, but we may only need a limited set to render the gravatar properly. We might add a line like this in the controller action to select only the needed attributes:</p>
@@ -155,6 +153,11 @@ scope :select\_gravatar\_attributes, select(%w[ id name gravatar\_id ])
 </div>
 
     </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/logs-pexels-photo-d2559811.jpg" alt="Logs pexels photo" />
+        </figure>
+    </article>
     <section class="margin-bottom double">
       <p>
         Published on Oct  3, 2011
