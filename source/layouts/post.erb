@@ -8,14 +8,7 @@
   <section id="blog" class="margin-bottom double">
     <article class="post margin-bottom double">
       <%= page_header current_article.title, current_page.data.summary %>
-      <% if current_page.data.pull_image %>
-        <figure>
-          <%= image_tag current_page.data.pull_image if current_page.data.pull_image %>
-          <% if current_page.data.pull_image_caption %>
-            <figcaption><%= current_page.data.pull_image_caption %></figcaption>
-          <% end %>
-        </figure>
-      <% end %>
+
       <%= yield %>
     </article>
     <section class="margin-bottom double">
@@ -27,6 +20,16 @@
     <section class="signup-form-standalone margin-bottom quadruple">
       <%= partial "partials/signup", locals: { title: "Did you like this post?" } %>
     </section>
+    <article>
+      <% if current_page.data.pull_image %>
+        <figure>
+          <%= image_tag current_page.data.pull_image if current_page.data.pull_image %>
+          <% if current_page.data.pull_image_caption %>
+            <figcaption><%= current_page.data.pull_image_caption %></figcaption>
+          <% end %>
+        </figure>
+      <% end %>
+    </article>
     <section class="margin-bottom double">
       <p>
         <% if current_page.data.series %>
