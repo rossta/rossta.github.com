@@ -59,7 +59,7 @@ Alternatively, if you're using Nginx to proxy local requests, you can [set up yo
 
 <aside class="callout panel">
   <p>
-  I should mention an alternative to this workflow is run <a href="https://ngrok.com">ngrok</a> which is a zero-configuration service for running your localhost server over a secure URL. Learn more on setting up ngrok from <a href="https://www.remotesynthesis.com/blog/running-ssl-localhost">this post by Brian Rinaldi</a>.
+  An alternative to this workflow <a href="https://ngrok.com">ngrok</a>, a hosted, zero-configuration service for running your localhost server over a secure URL. Learn more on setting up ngrok from <a href="https://www.remotesynthesis.com/blog/running-ssl-localhost">this post by Brian Rinaldi</a>.
   </p>
 </aside>
 
@@ -162,9 +162,14 @@ group :test do
   gem 'rspec-rails', '~> 3.8.0' # optional
 end
 ```
-Other versions of these tools may work fine. For example, Puma server configuration was added to Capybara as of `3.1.0` and `chromedriver` added support for the `acceptInsecureCerts` flag in 2.35/Chrome 65. Just be aware that possible issues may arise otherwise, as [I found out](https://stackoverflow.com/questions/51881206/using-acceptinsecurecerts-with-headless-chrome-and-selenium-webdriver-macos-ra) by inadvertently using an older version of `chromedriver`.
 
-I recommend the `webdrivers` gem as it will install the lastest driver binaries as needed on your behalf, including `chromedriver` for Chrome and `geckodriver` for Firefox. Many other posts may instruct you to install `chromedriver` with Homebrew or point to the `chromedriver-helper` gem; these may work just fine for you, though it will be up to you to keep the drivers updated.
+Rails system tests have been in place since version `rails '5.1.0'` though I recommend upgrading to at least `5.1.5` to take advantage of running puma in process for database connection-sharing. See these Rails pull requests for more info: [rails#30638](https://github.com/rails/rails/pull/30638), [rails#30712](https://github.com/rails/rails/pull/30712)
+
+RSpec system test integration was added to `rspec-rails` in version `'3.7.0'` via [rspec-rails#1813](https://github.com/rspec/rspec-rails/pull/1813).
+
+If you want to use headless Chrome with SSL, be aware that `chromedriver` only recently added support for the `acceptInsecureCerts` flag in 2.35/Chrome 65. I'd been following [this Chromium issue](https://bugs.chromium.org/p/chromium/issues/detail?id=721739) for nearly a year hoping for this update. [I still managed to get it wrong](https://stackoverflow.com/questions/51881206/using-acceptinsecurecerts-with-headless-chrome-and-selenium-webdriver-macos-ra) while configuring my system tests—shout out to [Thomas Walpole](https://github.com/twalpole), who's been spearheading improvements to Capybara of late).
+
+He recommends the `webdrivers` gem as it will install the lastest driver binaries as needed on your behalf, including `chromedriver` for Chrome and `geckodriver` for Firefox. A common alternative is the `chromedriver-helper` gem (just for Chrome)—it may work just fine for you, though it requires you to run a separate command to keep the drivers updated (i.e., easy to forget).
 
 ### Wrapping up
 
