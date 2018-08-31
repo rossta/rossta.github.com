@@ -1,5 +1,5 @@
 ---
-title: Stress-free SSL for Rails 5 system tests
+title: Local SSL for Rails 5 development and system tests
 author: Ross Kaffenberger
 published: false
 summary: New Article
@@ -29,39 +29,118 @@ As [@getify](https://twitter.com/getify) goes on to describe, there are a variet
 1. To use web platform features that require SSL (or will eventually)
 1. To use secure websockets (wss) as the upgrade from https
 1. Secure cookies, which behave very differently across http vs https boundaries
-1. To test certain https-specific headers like HSTS or CORS allow-*
+1. To test certain https-specific headers like HSTS or CORS `allow-*`
 1. To enable third-party integrations, possibly OAuth-based, that require SSL
 
 ### How does it work?
 
-The general workflow I use for setting up my Rails applications for local development over SSL is borrowed from Jed Schmidt's [How to set up stress-free SSL on an OSX development machine](https://gist.github.com/jed/6147872):
+The general workflow I use for setting up my Rails applications for local development and tests over SSL is as follows:
 
-1. [Resolve a top-level domain to localhost, using `dnsmasq`](https://gist.github.com/jed/6147872#resolve-a-top-level-domain-for-all-development-work)
-1. [Create a wildcard self-signed SSL certificate for each project](https://gist.github.com/jed/6147872#create-a-wildcard-ssl-certificate-for-each-project)
-1. [Instruct browsers to trust the certificates](https://gist.github.com/jed/6147872#avoid-https-warnings-by-telling-os-x-to-trust-the-certificate)
-1. [Configure a web server (e.g Nginx) or app server (e.g. Puma) to use the certificate](https://gist.github.com/jed/6147872#bask-in-easy-https)
+1. Resolve a domain to localhost
+1. Create a self-signed SSL certificate
+1. Instruct browsers to trust the certificate
+1. Configure the server to use the cerficate
 
-Jed uses a Node.js example to configure a server for SSL; here's a couple of ways to do it for a Rails app:
+For another resource on this workflow that is updated regularly, checkout Jed Schmidt's [How to set up stress-free SSL on an OSX development machine](https://gist.github.com/jed/6147872)
 
-If you're using the Puma app server for Ruby, you can bind the server to an SSL url on startup by providing paths to the key/certificate pair generated in step 1 above.
+An alternative to this workflow is to use [ngrok](https://ngrok.com), a zero-configuration service for running your localhost server over a secure URL. While this approach may work well for local development, I don't know of anyone using it for test or CI environments. Learn more on setting up ngrok from [this post by Brian Rinaldi](https://www.remotesynthesis.com/blog/running-ssl-localhost).
 
-```bash
-puma -b 'ssl://127.0.0.1:3000?key=path_to_key&cert=path_to_cert'
+### Resolve a domain name to localhost
+To use SSL locally, you may want to use something besides `localhost`, otherwise you could skip this section.
+
+Here are three alternatives for using a standard domain name for local development and tests.
+#### Manual configuration
+The simplest approach is to add an entry for each domain you want to use to your `/etc/hosts` file.
+
 ```
-I actually prefer to pass this binding to the Rails server command, which will forward it to Puma:
+# /etc/hosts
 
+127.0.0.1     localhost.ross
+```
+
+#### Dynamic local domains
+If you prefer a more flexible approach, need to resolve arbitrary subdomains, or have many local projects, you may want to use `dnsmasq`.
+
+The following script (borrowed from Jed) will install and configure dnsmasq. The dnsmasw server will resolve all requests to the top level domain `.ross` on my local machine back to `127.0.0.1`. (Replace `$(whomai)` with your preferred top-level domain).
+```
+brew install dnsmasq
+mkdir -pv $(brew --prefix)/etc
+sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
+sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+sudo mkdir -pv /etc/resolver
+echo "address=/.$(whoami)/127.0.0.1" | sudo tee -a $(brew --prefix)/etc/dnsmasq.conf
+echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/$(whoami)
+```
+
+#### Use a registered domain name
+An alternative to dnsmasq is to use an registered domain name with A records to resolve the appex and wildcard subdomains to `127.0.0.1`. You can purchase your own or rely on a known localhost domain name like `lvh.me` or `xip.io`.
+
+### Create a self-signed certificate
+
+The following script (adapted from Jed) will generate a self-signed certificate for `localhost.ross` on my machine.
+```
+name=localhost.$(whoami)
+openssl req \
+  -new \
+  -newkey rsa:2048 \
+  -sha256 \
+  -days 3650 \
+  -nodes \
+  -x509 \
+  -keyout $name.key \
+  -out $name.crt \
+  -config <(cat <<-EOF
+  [req]
+  distinguished_name = req_distinguished_name
+  x509_extensions = v3_req
+  prompt = no
+  [req_distinguished_name]
+  CN = $name
+  [v3_req]
+  keyUsage = keyEncipherment, dataEncipherment
+  extendedKeyUsage = serverAuth
+  subjectAltName = @alt_names
+  [alt_names]
+  DNS.1 = $name
+  DNS.2 = *.$name
+EOF
+)
+```
+On my machine, this script will generate a pair files, a key and certificate named `localhost.ross.key` and `localhost.ross.crt`. We'll need both to configure the server.
+
+For Rails projects, I typically generate a separate key/pairs using different domain names for each project. You can do this by changing the value of `name=` to your own desired domain name. You can omit the line `DNS.2 = *.$name` if you don't need wildcard subdomains.
+
+### Trust the certificate
+
+On macOS, we can trust the certificate in the System Keychain with this one-liner.
+```
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain private.crt
+```
+There are a variety of blog posts out there that demonstrate how to do this manually through the Keychain application; that should work as an alternative.
+
+### Server setup
+
+If you're using Nginx to proxy local requests, you can [set up your Nginx config with your SSL certificate](http://nginx.org/en/docs/http/configuring_https_servers.html). I often use Nginx for development but almost never for running tests, so I'll instead demonstrate how to configure Puma to terminate SSL, which will work for both environments.
+
+First, I'll typically move my self-signed certificates in the Rails project.
+```
+cd path/to/my/rails/app
+mkdir config/ssl
+mv path/to/localhost.ross.{key,crt} config.ssl
+```
+With puma, we can bind the server to an SSL url on startup by providing paths to the key/certificate pair generated in the previous step.
+
+Now, when starting the rails server from the root of the project for local development, I'll specify the ssl binding as follows:
 ```bash
-rails s -b 'ssl://127.0.0.1:3000?key=path_to_key&cert=path_to_cert'
+rails s -b 'ssl://127.0.0.1:3000?key=config/ssl/localhost.ross.key&cert=config/ssl/localhost.ross.crt'
+```
+Using `foreman`? Place this command in the `Procfile` and modify the port to your choosing or to the $PORT variable.
+
+The `-b` option is forwarded to the underlying puma server, so the command could alternatively work as:
+```bash
+puma -b 'ssl://127.0.0.1:3000?key=config/ssl/localhost.ross.key&cert=config/ssl/localhost.ross.crt'
 ```
 Puma also provides a hook to [set this binding in the config file](https://github.com/puma/puma/blob/395337df4a3b27cc14eeab048016fb1ee85d2f83/examples/config.rb#L79).
-
-Alternatively, if you're using Nginx to proxy local requests, you can [set up your Nginx config with your SSL certificate](http://nginx.org/en/docs/http/configuring_https_servers.html).
-
-<aside class="callout panel">
-  <p>
-  An alternative to this workflow <a href="https://ngrok.com">ngrok</a>, a hosted, zero-configuration service for running your localhost server over a secure URL. Learn more on setting up ngrok from <a href="https://www.remotesynthesis.com/blog/running-ssl-localhost">this post by Brian Rinaldi</a>.
-  </p>
-</aside>
 
 ---
 Capybara
@@ -72,58 +151,14 @@ Capybara
 DNS trick or lvh.me
 ---
 
-### Resolve a top-level domain to localhost
+### Configuring the test environment
 
-Install and configure dnsmasq
+### Upgrading from prior versions
 
-brew install dnsmasq
-mkdir -pv $(brew --prefix)/etc
-sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
-sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
-sudo mkdir -pv /etc/resolver
-echo "address=/.$(whoami)/127.0.0.1" | sudo tee -a $(brew --prefix)/etc/dnsmasq.conf
-echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/$(whoami)
+Upgrading an existing app
+* https://stackoverflow.com/questions/49246124/is-databasecleaner-still-necessafry-with-rails-system-specs
 
-1. Generate wildcard certficate with the subject alt name extension
-
-```
-cat > openssl.cnf <<-EOF
-  [req]
-  distinguished_name = req_distinguished_name
-  x509_extensions = v3_req
-  prompt = no
-  [req_distinguished_name]
-  CN = *.localhost.ssl
-  [v3_req]
-  keyUsage = keyEncipherment, dataEncipherment
-  extendedKeyUsage = serverAuth
-  subjectAltName = @alt_names
-  [alt_names]
-  DNS.1 = *.localhost.ssl
-  DNS.2 = localhost.ssl
-EOF
-
-openssl req \
-  -new \
-  -newkey rsa:2048 \
-  -sha1 \
-  -days 3650 \
-  -nodes \
-  -x509 \
-  -keyout ssl.key \
-  -out ssl.crt \
-  -config openssl.cnf
-
-rm openssl.cnf
-```
-
-1. Trust the certificate through Keychain and/or browser
-
-```
-sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain private.crt
-```
-
-### Notes
+---
 
 ### What do I need?
 
@@ -162,14 +197,9 @@ group :test do
   gem 'rspec-rails', '~> 3.8.0' # optional
 end
 ```
+Other versions of these tools may work fine. For example, Puma server configuration was added to Capybara as of `3.1.0` and `chromedriver` added support for the `acceptInsecureCerts` flag in 2.35/Chrome 65. Just be aware that possible issues may arise otherwise, as [I found out](https://stackoverflow.com/questions/51881206/using-acceptinsecurecerts-with-headless-chrome-and-selenium-webdriver-macos-ra) by inadvertently using an older version of `chromedriver`.
 
-Rails system tests have been in place since version `rails '5.1.0'` though I recommend upgrading to at least `5.1.5` to take advantage of running puma in process for database connection-sharing. See these Rails pull requests for more info: [rails#30638](https://github.com/rails/rails/pull/30638), [rails#30712](https://github.com/rails/rails/pull/30712)
-
-RSpec system test integration was added to `rspec-rails` in version `'3.7.0'` via [rspec-rails#1813](https://github.com/rspec/rspec-rails/pull/1813).
-
-If you want to use headless Chrome with SSL, be aware that `chromedriver` only recently added support for the `acceptInsecureCerts` flag in 2.35/Chrome 65. I'd been following [this Chromium issue](https://bugs.chromium.org/p/chromium/issues/detail?id=721739) for nearly a year hoping for this update. [I still managed to get it wrong](https://stackoverflow.com/questions/51881206/using-acceptinsecurecerts-with-headless-chrome-and-selenium-webdriver-macos-ra) while configuring my system tests—shout out to [Thomas Walpole](https://github.com/twalpole), who's been spearheading improvements to Capybara of late).
-
-He recommends the `webdrivers` gem as it will install the lastest driver binaries as needed on your behalf, including `chromedriver` for Chrome and `geckodriver` for Firefox. A common alternative is the `chromedriver-helper` gem (just for Chrome)—it may work just fine for you, though it requires you to run a separate command to keep the drivers updated (i.e., easy to forget).
+I recommend the `webdrivers` gem as it will install the lastest driver binaries as needed on your behalf, including `chromedriver` for Chrome and `geckodriver` for Firefox. Many other posts may instruct you to install `chromedriver` with Homebrew or point to the `chromedriver-helper` gem; these may work just fine for you, though it will be up to you to keep the drivers updated.
 
 ### Wrapping up
 
