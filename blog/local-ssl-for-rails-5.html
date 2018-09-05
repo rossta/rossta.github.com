@@ -1,0 +1,581 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Local SSL for Rails 5 development and tests - rossta.net</title>
+<meta name="description" content="Is your Rails app on SSL in production? It may be a good idea to use SSL locally too. It's just that it's typically been a pain to set up. Using SSL for Rails acceptance tests with Capybara has tra..." />
+<meta name="keywords" content="Rails" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Is your Rails app on SSL in production? It may be a good idea to use SSL locally too. It's just that it's typically been a pain to set up. Using SSL for Rails acceptance tests with Capybara has traditionally been even more challenging— until now." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/james-sutton-padlock-unsplash-47fe1a1f.jpg" />
+<meta name="twitter:title" content="Local SSL for Rails 5 development and tests" />
+<meta property="og:description" content="Is your Rails app on SSL in production? It may be a good idea to use SSL locally too. It's just that it's typically been a pain to set up. Using SSL for Rails acceptance tests with Capybara has traditionally been even more challenging— until now." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/james-sutton-padlock-unsplash-47fe1a1f.jpg" />
+<meta property="og:title" content="Local SSL for Rails 5 development and tests" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" />
+    <link rel="icon"                                  href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
+
+    <link rel="mask-icon" href="/safari-pinned-tab-5cdca7ae.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app.bundle-3f3ff3db.css" rel="stylesheet" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Local SSL for Rails 5 development and tests
+  </h1>
+    <h3>
+      Self-signed certificates, wildcard domains, Pumas, and Capybaras—oh my!
+    </h3>
+</header>
+
+
+      <p>Is your Rails app on SSL in production? It may be a good idea to use SSL locally too. It&#39;s just that it&#39;s typically been a pain to set up for development. Using SSL with Capybara for acceptance tests has traditionally been even more challenging— until now.</p>
+
+<p>In this post I&#39;ll demonstrate how I set up my Rails 5 app for local development and system tests over SSL with wildcard domains.</p>
+
+<p><a href="https://github.com/rossta/local-ssl-demo-rails"><img src="/assets/images/screenshots/screenshot-local-ssl-demo-4e7a7ffe.png" alt="Local Rails SSL Demo" /></a></p>
+
+      <h3 id="why-local-ssl-" class="title">
+        <a name="why-local-ssl-" class="anchor" href="#why-local-ssl-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Why local SSL?
+      </h3>
+    
+<p>First, a tweet.</p>
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I so often get re-explaining from others that &quot;localhost doesn&#39;t need local https&quot;. eyeroll.<br><br>this is not universally true. this tweet thread is the last time i&#39;m gonna explain. henceforth it will just be linked to.</p>&mdash; getify (@getify) <a href="https://twitter.com/getify/status/1023202051902373888?ref_src=twsrc%5Etfw">July 28, 2018</a></blockquote>
+
+<p><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script><p></p></p>
+
+<p>To summarize Kyle Simpson&#39;s Twitter rant, if your production app is on SSL, you want to develop on local SSL as well to test:</p>
+
+<ol>
+<li>URL logic (routing, history, redirects, enforcing https)</li>
+<li>No mixed content warnings</li>
+<li>CORS across http or https boundaries</li>
+<li>Web platform features (e.g., geolocation) that require SSL (or will eventually)</li>
+<li>Secure websockets (wss) as the upgrade from https</li>
+<li>Secure cookies, which behave very differently across http vs https boundaries</li>
+<li>Https-specific headers like HSTS or CORS <code>allow-*</code></li>
+<li>Third-party integrations, possibly OAuth-based, that require SSL</li>
+</ol>
+
+<p>One knock against local SSL is that it has been considered a pain to set up for Rails development, not to mention for tests. This post and the companion gitub repo, <a href="https://github.com/rossta/local-ssl-demo-rails">rossta/local-ssl-demo-rails</a>, is intended to help make that task a little easier.</p>
+
+      <h3 id="how-does-it-work-" class="title">
+        <a name="how-does-it-work-" class="anchor" href="#how-does-it-work-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        How does it work?
+      </h3>
+    
+<p>The general workflow I use for setting up my Rails applications for local development and tests over SSL is as follows:</p>
+
+<ol>
+<li><a href="#resolve-a-domain-name-to-localhost">Resolve a domain to localhost</a></li>
+<li><a href="#create-a-self-signed-certificate">Create a self-signed SSL certificate</a></li>
+<li><a href="#trust-the-certificate">Instruct browsers to trust the certificate</a></li>
+<li><a href="#configure-the-local-server">Configure the local server to use the cerficate</a></li>
+</ol>
+
+<p>There are plenty of reasonable alternatives to this workflow.</p>
+
+<p>Jed Schmidt&#39;s excellent <a href="https://gist.github.com/jed/6147872">How to set up stress-free SSL on an OSX development machine</a> is also worth checking out; it walks through a similar setup for a Node.js server.</p>
+
+<p>You could, instead of trusting certificates for each app you develop, create your own <a href="https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/">SSL certificate authority</a>. The setup steps are more invovled, but once your local CA is trusted by browsers, you can skip the process of manually trusting each cert.</p>
+
+<p>Or, use <a href="https://ngrok.com">ngrok</a>, a zero-configuration service for running your localhost server over a secure URL. While this approach may work well for local development, I currently don&#39;t know of anyone using it for tests or CI environments. Learn more on setting up ngrok from <a href="https://www.remotesynthesis.com/blog/running-ssl-localhost">this post by Brian Rinaldi</a>.</p>
+
+      <h3 id="resolve-a-domain-name-to-localhost" class="title">
+        <a name="resolve-a-domain-name-to-localhost" class="anchor" href="#resolve-a-domain-name-to-localhost">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Resolve a domain name to localhost
+      </h3>
+    
+<p>To use SSL locally for a custom domain, i.e., something besides <code>localhost</code>, you&#39;ll need to find a way to route requests for that domain back to your local IP; for this post we&#39;ll assume the IP is <code>127.0.0.1</code>. It may be something else if you&#39;re developing on a separate VM such as through Vagrant.</p>
+
+<p>Here are a few alternatives for using a custom domain name for local development and tests.</p>
+
+      <h4 id="manual-configuration" class="title">
+        <a name="manual-configuration" class="anchor" href="#manual-configuration">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Manual configuration
+      </h4>
+    
+<p>The simplest approach is to add an entry for each domain you want to use to your <code>/etc/hosts</code> file.</p>
+
+<pre><code># /etc/hosts
+
+127.0.0.1     localhost.ross
+</code></pre>
+
+<p>The disadvantage is that <code>/etc/hosts</code> does not support wildcard domains, so you would need to add an entry for every unique domain you plan to use.</p>
+
+      <h4 id="dynamic-local-domains" class="title">
+        <a name="dynamic-local-domains" class="anchor" href="#dynamic-local-domains">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Dynamic local domains
+      </h4>
+    
+<p>For more flexible approach, you may want to use <code>dnsmasq</code> to route arbitrary domain names wherever you want. In our case, we can use it to send all traffic on a custom tld back to our local machine.</p>
+
+<p>The following script (adapted from Jed) will install and configure dnsmasq. The dnsmasq server will resolve all requests to the top level domain <code>.ross</code> on my local machine back to <code>127.0.0.1</code>. (Replace <code>$(whoami)</code> with your preferred top-level domain):</p>
+
+<pre><code>local_tld=$(whoami)
+brew install dnsmasq
+mkdir -pv $(brew --prefix)/etc
+sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
+sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
+sudo mkdir -pv /etc/resolver
+echo &quot;address=/.$local_tld/127.0.0.1&quot; | sudo tee -a $(brew --prefix)/etc/dnsmasq.conf
+echo &quot;nameserver 127.0.0.1&quot; | sudo tee /etc/resolver/$local_tld
+</code></pre>
+
+      <h4 id="use-a-registered-domain-name" class="title">
+        <a name="use-a-registered-domain-name" class="anchor" href="#use-a-registered-domain-name">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Use a registered domain name
+      </h4>
+    
+<p>Or, purchase a domain and add A records to resolve the appex and wildcard subdomains to <code>127.0.0.1</code>. This is the approach used by known &quot;localhost&quot; domains like <code>lvh.me</code> or <code>xip.io</code>.</p>
+
+      <h3 id="create-a-self-signed-certificate" class="title">
+        <a name="create-a-self-signed-certificate" class="anchor" href="#create-a-self-signed-certificate">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Create a self-signed certificate
+      </h3>
+    
+<p>The following script (adapted from Jed) will generate a self-signed certificate and private key for <code>localhost.ross</code> on my machine.</p>
+
+<pre><code class="bash">name=localhost.$(whoami)
+openssl req \
+  -new \
+  -newkey rsa:2048 \
+  -sha256 \
+  -days 3650 \
+  -nodes \
+  -x509 \
+  -keyout $name.key \
+  -out $name.crt \
+  -config &lt;(cat &lt;&lt;-EOF
+  [req]
+  distinguished_name = req_distinguished_name
+  x509_extensions = v3_req
+  prompt = no
+  [req_distinguished_name]
+  CN = $name
+  [v3_req]
+  keyUsage = keyEncipherment, dataEncipherment
+  extendedKeyUsage = serverAuth
+  subjectAltName = @alt_names
+  [alt_names]
+  DNS.1 = $name
+  DNS.2 = *.$name
+EOF
+)
+</code></pre>
+
+<p>The key/certificate files generated on my machine would be named <code>localhost.ross.key</code> and <code>localhost.ross.crt</code>.</p>
+
+<p>To generate a tld for a different domain, change <code>localhost.$(whoami)</code> to your own desired domain name. You can omit the line <code>DNS.2 = *.$name</code> if you don&#39;t need wildcard subdomains or if you&#39;re simply setting up SSL for <code>localhost</code>.</p>
+
+<p>For Rails projects, I typically generate separate key/pairs using different domain names for each project and move  each file pair to my Rails <code>config</code> directory:</p>
+
+<pre><code class="bash">mkdir -p config/ssl
+mv localhost.ross.key localhost.ross.crt config/ssl
+</code></pre>
+
+      <h3 id="trust-the-certificate" class="title">
+        <a name="trust-the-certificate" class="anchor" href="#trust-the-certificate">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Trust the certificate
+      </h3>
+    
+<p>On macOS, we can trust the certificate in the System Keychain with this one-liner.</p>
+
+<pre><code>sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/localhost.ross.crt
+</code></pre>
+
+<p>There are a variety of blog posts out there that demonstrate how to do this manually through the Keychain application; that should work too.</p>
+
+      <h3 id="configure-the-local-server" class="title">
+        <a name="configure-the-local-server" class="anchor" href="#configure-the-local-server">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Configure the local server
+      </h3>
+    
+<p>Now that we have a trusted certificate, we can configure Puma with our key/certificate pair to serve local SSL requests for both <code>development</code> and <code>test</code> on our custom domain. (You could also use Nginx to proxy local requests and <a href="http://nginx.org/en/docs/http/configuring_https_servers.html">set up your Nginx config with your SSL certificate</a>).</p>
+
+      <h4 id="in-development" class="title">
+        <a name="in-development" class="anchor" href="#in-development">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        In development
+      </h4>
+    
+<p>First, I&#39;ll typically move my self-signed key and certificate into the Rails project directory.</p>
+
+<pre><code class="sh">cd path/to/my/rails/app
+mkdir config/ssl
+mv path/to/localhost.ross.{key,crt} config.ssl
+</code></pre>
+
+<p>With puma, we can bind the server to an SSL url on startup by providing paths to the key/certificate pair generated in the previous step.</p>
+
+<p>Now, when starting the rails server from the root of the project for local development, I&#39;ll specify the ssl binding as follows:</p>
+
+<pre><code class="bash">rails s -b &#39;ssl://127.0.0.1:3000?key=config/ssl/localhost.ross.key&amp;cert=config/ssl/localhost.ross.crt&#39;
+</code></pre>
+
+<p>Since I use <code>foreman</code> to run my application locally, I&#39;ll place the command in the <code>Procfile.dev</code> file and substitute the port number with the <code>$PORT</code> variable:</p>
+
+<pre><code class="bash">rails s -b &#39;ssl://127.0.0.1:$PORT?key=config/ssl/localhost.ross.key&amp;cert=config/ssl/localhost.ross.crt&#39;
+</code></pre>
+
+<p>Puma also provides a hook to <a href="https://github.com/puma/puma/blob/395337df4a3b27cc14eeab048016fb1ee85d2f83/examples/config.rb#L79">set this binding in the config file</a>.</p>
+
+<p>If you&#39;re using Webpack with the <code>webpacker</code> gem to bundle javascript and other static assets, you will want to connect to the <code>webpack-dev-server</code> in development over SSL. This can be done in the <code>config/webpacker.yml</code> file:</p>
+
+<pre><code class="yml"># config/webpacker.yml
+development:
+  &lt;&lt;: *default
+  # ...
+  dev_server:
+    https: true
+</code></pre>
+
+<p>In recent versions of <code>webpacker-dev-server</code>, the SSL certificate is generated on your behalf; you may have to trust this certificate manually in Keychain separately to avoid invalid certificate errors in the browser.</p>
+
+      <h4 id="in-tests" class="title">
+        <a name="in-tests" class="anchor" href="#in-tests">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        In tests
+      </h4>
+    
+<p>Using our SSL certificates for local Rails testing is mostly relevant for system tests (aka acceptance or feature tests) where we would typically use Capybara to launch a real app server. Setting up Capybara to handle SSL requests has been painful, possibly involving some <a href="https://gist.github.com/Papierkorb/1787d28874443ec760d1">server monkeypatching</a> to wire everything up.</p>
+
+<p>As of Capybara <code>&gt;= 3.1.0</code>, it&#39;s much easier to pass configuration to the underlying Puma server to include our SSL certificates (<a href="https://github.com/teamcapybara/capybara/pull/2028">commit</a>) using a binding similar to our startup command in development:</p>
+
+<pre><code class="ruby">Capybara.server = :puma, server: {
+  Host: &quot;ssl://#{Capybara.server_host}?key=config/ssl/localhost.ross.key&amp;cert=config/ssl/localhost.ross.crt&quot;
+}
+</code></pre>
+
+<p>System tests also rely on a web driver to control the browser; in most cases, these web drivers will ignore the invalid certificate warnings. To get the newer headless versions of Chrome and Firefox to play nicely with SSL, I&#39;ve found that some extra configuration is required.</p>
+
+<p>First, let&#39;s use the <code>webdrivers</code> gem to make sure we have the latest binaries for <code>chromedriver</code> and <code>geckodriver</code> to test against Chrome and Firefox respectively.</p>
+
+<p>Previously invalid SSL certificates could not work in headless Chrome so system tests under SSL were not possible in this mode. But with the recent release of Chrome 65, this changed. We can now set up headless Chrome driver with capabilities to accept invalid SSL certificates like so:</p>
+
+<pre><code class="ruby">Capybara.register_driver(:headless_chrome_ssl) do |app|
+  options = Selenium::WebDriver::Chrome::Options.new(
+    args: %w[--headless --disable-gpu --no-sandbox --disable-web-security],
+  )
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    acceptInsecureCerts: true,
+  )
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    options: options,
+    desired_capabilities: capabilities
+  )
+end
+</code></pre>
+
+<p>We can switch to our new driver in RSpec with a hook like the following:</p>
+
+<pre><code class="ruby">RSpec.configure do |config|
+  config.before(:each, type: :system, js: true) do
+    driven_by :headless_chrome_ssl
+  end
+end
+</code></pre>
+
+<p>For Firefox, the driver configuration is similar:</p>
+
+<pre><code class="ruby">Capybara.register_driver(:headless_firefox_ssl) do |app|
+  options = Selenium::WebDriver::Firefox::Options.new(args: %w[--headless])
+
+  capabilities = Selenium::WebDriver::Remote::Capabilities.firefox(
+    acceptInsecureCerts: true,
+  )
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :firefox,
+    options: options,
+    desired_capabilities: capabilities
+  )
+end
+</code></pre>
+
+<p>With our server and drivers configured, we set our default Capybara app host with our custom domain on https:</p>
+
+<pre><code class="ruby">Capybara.app_host = &quot;https://www.localhost.ross&quot;
+</code></pre>
+
+<p>Now we&#39;re set up to run system tests over SSL!</p>
+
+      <h3 id="requirements" class="title">
+        <a name="requirements" class="anchor" href="#requirements">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Requirements
+      </h3>
+    
+<p>Below is a list of binaries and gems with the versions used in for the <a href="https://github.com/rossta/local-ssl-demo-rails">demo app</a>. It may be possible to make this work with other relatively recent versions of these tools, though your mileage may vary.</p>
+
+<pre><code>$ openssl version
+LibreSSL 2.2.7
+
+$ ruby -v
+ruby 2.4.1p111 (2017-03-22 revision 58053) [x86_64-darwin16]
+
+$ /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version
+Google Chrome 68.0.3440.106
+
+$ /Applications/Firefox.app/Contents/MacOS/firefox --version
+Mozilla Firefox 60.0.1
+
+$ ~/.webdrivers/chromedriver -v
+ChromeDriver 2.41.578706 (5f725d1b4f0a4acbf5259df887244095596231db)
+
+$ ~/.webdrivers/geckodriver --version
+geckodriver 0.21.0
+</code></pre>
+
+<p>And selected Ruby gems in the <code>Gemfile</code>:</p>
+
+<pre><code class="ruby">gem &#39;rails&#39;, &#39;~&gt; 5.2.1&#39;
+gem &#39;puma&#39;, &#39;~&gt; 3.12&#39;
+gem &#39;webpacker&#39;, &#39;~&gt; 3.5.5&#39; # optional
+
+group :test do
+  gem &#39;capybara&#39;, &#39;~&gt; 3.5.1&#39;
+  gem &#39;selenium-webdriver&#39;, &#39;~&gt; 3.14.0&#39;
+  gem &#39;webdrivers&#39;, &#39;~&gt; 3.3.3&#39;
+  gem &#39;rspec-rails&#39;, &#39;~&gt; 3.8.0&#39; # optional
+end
+</code></pre>
+
+<p>Other versions of these tools may work fine. For example, Puma server configuration was added to Capybara as of <code>3.1.0</code> and <code>chromedriver</code> added support for the <code>acceptInsecureCerts</code> flag in 2.35/Chrome 65. Just be aware that possible issues may arise otherwise, as <a href="https://stackoverflow.com/questions/51881206/using-acceptinsecurecerts-with-headless-chrome-and-selenium-webdriver-macos-ra">I found out</a> by inadvertently using an older version of <code>chromedriver</code>.</p>
+
+<p>I recommend the <code>webdrivers</code> gem as it will install the lastest driver binaries as needed on your behalf, including <code>chromedriver</code> for Chrome and <code>geckodriver</code> for Firefox. Many other posts may instruct you to install <code>chromedriver</code> with Homebrew or point to the <code>chromedriver-helper</code> gem; these may work just fine for you, though it will be up to you to keep the drivers updated.</p>
+
+      <h3 id="wrapping-up" class="title">
+        <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Wrapping up
+      </h3>
+    
+<p>If you&#39;re onboard with &quot;SSL everywhere&quot;, let that include <code>localhost</code> as well. Getting SSL set up for Rails development and test requires a bit of effort, but it&#39;s easier than ever before with the introduction of Rails system tests and recent improvements to Puma, Capybara, Selenium, and the Chrome and Firefox web drivers.</p>
+
+    </article>
+    <section class="margin-bottom double">
+      <a href="https://twitter.com/intent/tweet?text=Local%20SSL%20for%20Rails%205%20development%20and%20tests&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Flocal-ssl-for-rails-5.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
+    </section>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP" value="https://rossta.net/blog/2018-09-05-local-ssl-for-rails-5.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2018-09-05-local-ssl-for-rails-5.html" />
+      <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Rails" />
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/james-sutton-padlock-unsplash-47fe1a1f.jpg" alt="James sutton padlock unsplash" />
+            <figcaption>Photo by James Sutton on Unsplash</figcaption>
+        </figure>
+    </article>
+    <section class="margin-bottom double">
+      <p>
+        Published on Sep  5, 2018
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "local-ssl-for-rails-5";
+    var disqus_title      = "Local SSL for Rails 5 development and tests";
+    var disqus_url        = "https://rossta.net/blog/local-ssl-for-rails-5.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/n-1-is-a-rails-feature.html">N+1 is a Rails feature</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/vue.html">Vue</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2018 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/runtime.bundle-2352c808.js"></script><script src="/assets/javascripts/vendor.bundle-0116f3b0.js"></script><script src="/assets/javascripts/app.bundle-ed1e4144.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>
