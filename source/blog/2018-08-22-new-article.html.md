@@ -61,15 +61,16 @@ The simplest approach is to add an entry for each domain you want to use to your
 #### Dynamic local domains
 If you prefer a more flexible approach, need to resolve arbitrary subdomains, or have many local projects, you may want to use `dnsmasq`.
 
-The following script (borrowed from Jed) will install and configure dnsmasq. The dnsmasw server will resolve all requests to the top level domain `.ross` on my local machine back to `127.0.0.1`. (Replace `$(whomai)` with your preferred top-level domain).
+The following script (borrowed from Jed) will install and configure dnsmasq. The dnsmasw server will resolve all requests to the top level domain `.ross` on my local machine back to `127.0.0.1`. (Replace `$(whoami)` with your preferred top-level domain).
 ```
+local_tld=$(whoami)
 brew install dnsmasq
 mkdir -pv $(brew --prefix)/etc
 sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
 sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
 sudo mkdir -pv /etc/resolver
-echo "address=/.$(whoami)/127.0.0.1" | sudo tee -a $(brew --prefix)/etc/dnsmasq.conf
-echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/$(whoami)
+echo "address=/.$local_tld/127.0.0.1" | sudo tee -a $(brew --prefix)/etc/dnsmasq.conf
+echo "nameserver 127.0.0.1" | sudo tee /etc/resolver/$local_tld
 ```
 
 #### Use a registered domain name
@@ -77,8 +78,8 @@ An alternative to dnsmasq is to use an registered domain name with A records to 
 
 ### Create a self-signed certificate
 
-The following script (adapted from Jed) will generate a self-signed certificate for `localhost.ross` on my machine.
-```
+The following script (adapted from Jed) will generate a self-signed certificate and private key for `localhost.ross` on my machine.
+```bash
 name=localhost.$(whoami)
 openssl req \
   -new \
@@ -106,24 +107,24 @@ openssl req \
 EOF
 )
 ```
-On my machine, this script will generate a pair files, a key and certificate named `localhost.ross.key` and `localhost.ross.crt`. We'll need both to configure the server.
+A key/certificate files are named `localhost.ross.key` and `localhost.ross.crt`. We'll need both to configure the server.
 
-For Rails projects, I typically generate a separate key/pairs using different domain names for each project. You can do this by changing the value of `name=` to your own desired domain name. You can omit the line `DNS.2 = *.$name` if you don't need wildcard subdomains.
+For Rails projects, I typically generate separate key/pairs using different domain names for each project. You can do this by changing the value of `name=localhost.ross` to your own desired domain name. You can omit the line `DNS.2 = *.$name` if you don't need wildcard subdomains.
 
 ### Trust the certificate
 
 On macOS, we can trust the certificate in the System Keychain with this one-liner.
 ```
-sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain private.crt
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/localhost.ross.crt
 ```
-There are a variety of blog posts out there that demonstrate how to do this manually through the Keychain application; that should work as an alternative.
+There are a variety of blog posts out there that demonstrate how to do this manually through the Keychain application; that should work too.
 
 ### Server setup
 
 If you're using Nginx to proxy local requests, you can [set up your Nginx config with your SSL certificate](http://nginx.org/en/docs/http/configuring_https_servers.html). I often use Nginx for development but almost never for running tests, so I'll instead demonstrate how to configure Puma to terminate SSL, which will work for both environments.
 
-First, I'll typically move my self-signed certificates in the Rails project.
-```
+First, I'll typically move my self-signed certificates into the Rails project directory.
+```sh
 cd path/to/my/rails/app
 mkdir config/ssl
 mv path/to/localhost.ross.{key,crt} config.ssl
@@ -134,7 +135,7 @@ Now, when starting the rails server from the root of the project for local devel
 ```bash
 rails s -b 'ssl://127.0.0.1:3000?key=config/ssl/localhost.ross.key&cert=config/ssl/localhost.ross.crt'
 ```
-Using `foreman`? Place this command in the `Procfile` and modify the port to your choosing or to the $PORT variable.
+Since I use `foreman` to run my application locally, I'll place this command in the `Procfile.dev` file. You can modify the port to your choosing or reference the $PORT variable.
 
 The `-b` option is forwarded to the underlying puma server, so the command could alternatively work as:
 ```bash
@@ -142,14 +143,7 @@ puma -b 'ssl://127.0.0.1:3000?key=config/ssl/localhost.ross.key&cert=config/ssl/
 ```
 Puma also provides a hook to [set this binding in the config file](https://github.com/puma/puma/blob/395337df4a3b27cc14eeab048016fb1ee85d2f83/examples/config.rb#L79).
 
----
-Capybara
-* server configuration
-* headless chrome
-* headless firefox
-
-DNS trick or lvh.me
----
+With
 
 ### Configuring the test environment
 
