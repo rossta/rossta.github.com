@@ -34,7 +34,7 @@ To summarize Kyle Simpson's Twitter rant, if your production app is on SSL, you 
 1. Https-specific headers like HSTS or CORS `allow-*`
 1. Third-party integrations, possibly OAuth-based, that require SSL
 
-One knock against local SSL is that it has been considered a pain to set up for Rails development, not to mention for tests. This post and the companion gitub repo, [rossta/local-ssl-demo-rails](https://github.com/rossta/local-ssl-demo-rails), is intended to help make that task a little easier.
+One knock against local SSL is that it has been considered a pain to set up. This post and the companion gitub repo, [rossta/local-ssl-demo-rails](https://github.com/rossta/local-ssl-demo-rails), is intended to help make that task a little easier for Rails apps.
 
 ### How does it work?
 
