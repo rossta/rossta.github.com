@@ -52,7 +52,7 @@
 &lt;li&gt;Third-party integrations, possibly OAuth-based, that require SSL&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;One knock against local SSL is that it has been considered a pain to set up for Rails development, not to mention for tests. This post and the companion gitub repo, &lt;a href="https://github.com/rossta/local-ssl-demo-rails"&gt;rossta/local-ssl-demo-rails&lt;/a&gt;, is intended to help make that task a little easier.&lt;/p&gt;
+&lt;p&gt;One knock against local SSL is that it has been considered a pain to set up. This post and the companion gitub repo, &lt;a href="https://github.com/rossta/local-ssl-demo-rails"&gt;rossta/local-ssl-demo-rails&lt;/a&gt;, is intended to help make that task a little easier for Rails apps.&lt;/p&gt;
 
       &lt;h3 id="how-does-it-work-" class="title"&gt;
         &lt;a name="how-does-it-work-" class="anchor" href="#how-does-it-work-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
