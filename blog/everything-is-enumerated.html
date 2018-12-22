@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Everything is Enumerated - rossta.net</title>
+<meta name="description" content="This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful." />
+<meta name="keywords" content="Rails, Ruby" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo-e2bd64cb.jpg" />
+<meta name="twitter:title" content="Everything is Enumerated" />
+<meta property="og:description" content="This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo-e2bd64cb.jpg" />
+<meta property="og:title" content="Everything is Enumerated" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" />
+    <link rel="icon"                                  href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
+
+    <link rel="mask-icon" href="/safari-pinned-tab-5cdca7ae.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app.bundle-3f3ff3db.css" rel="stylesheet" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Everything is Enumerated
+  </h1>
+    <h3>
+      Using to_enum with block methods
+    </h3>
+</header>
+
+
+      <p>In Ruby, some methods expect a block as a callback yielding elements of some internal data structure.</p>
+
+<p>Imagine a method <code>paginated_results</code> on some <code>client</code> object that yields individual pages.</p>
+
+<pre><code class="ruby">client.paginated_results(params) { |page| puts page.contents }
+</code></pre>
+
+<p>The method may hide away some complexity in retrieving pages.</p>
+
+<pre><code class="ruby">def paginated_results(params = {})
+  before  = nil
+  max     = 1000
+  limit   = 50
+  results = []
+
+  loop do
+    page = fetch_page(params.merge(before: before, limit: limit)) # imaginary request
+
+    results += page
+
+    yield page
+
+    break if results.length &gt;= max
+
+    before = page.last[&quot;id&quot;]
+  end
+end
+</code></pre>
+
+<p>To callers of this method, there is an implicit data structure. Being Ruby, we may expect to be able to call <code>Enumerable</code> methods on this data to inspect, slice, or augment the contents in a convenient way.</p>
+
+<p>But we may not have access to method&#39;s internals and the underlying data structure, especially if we&#39;re using a method from an external library. This is the case with our <code>paginated_results</code> example; the <code>results</code> array is not exposed to the method caller.</p>
+
+<p>Callers of the method are forced to build up state from the outside. Here&#39;s a contrived example:</p>
+
+<pre><code class="ruby">table_of_contents = []
+index = 0
+
+client.paginated_results(order: :asc) do |p|
+  table_of_contents &lt;&lt; [index+1, p.title] if p.title_page?
+end
+
+puts table_of_contents
+</code></pre>
+
+<p>There&#39;s another way in Ruby! We can &quot;enumeratorize&quot; it!</p>
+
+<p>Ruby&#39;s <code>to_enum</code> method is defined on all objects. Quite simply, it can convert a method into <code>Enumerator</code>:</p>
+
+<pre><code class="ruby">client.to_enum(:paginated_results, params)
+# =&gt; &lt;Enumerator ...&gt;
+</code></pre>
+
+<p>What this gives us is an enumerable object that behaves as if we built up that array ourselves, which means we can call methods from the <code>Enumerable</code> module, chain other enumerators to augment the block arguments, use <code>lazy</code>, etc.</p>
+
+<pre><code class="ruby">client.to_enum(:paginated_results, params).
+  filter(:title_page?).
+  map.with_index { |p, i| [i+i, p.title] }
+</code></pre>
+
+<p>I love this type of expression because it&#39;s more direct, flexible, and intention revealing. Authors need be less concerned with building up state with local variables.</p>
+
+<p>In fact, this pattern is so useful that many authors have started building in <code>to_enum</code> to such methods for when the caller omits the block. The implementation for <code>paginated_results</code> might look like this:</p>
+
+<pre><code class="ruby">def paginated_results(params = {})
+  return to_enum(__method__, params) unless block_given?
+
+  # rest unchanged
+end
+</code></pre>
+
+<p>While you are free to stick with the imperative approach, I hope this post demonstrates how <code>to_enum</code> offers Rubyists a more declarative and functionally-flavored alternative.</p>
+
+      <h3 id="wrapping-up" class="title">
+        <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Wrapping up
+      </h3>
+    
+<p>When you&#39;re in a punch, you can use <code>to_enum</code> to wrap iterative methods to add otherwise missing <code>Enumerable</code> properties. And, when designing your classes, consider adopting the <code>return to_enum(__method__) unless block_given?</code> pattern in method definitions to enhance iterative methods.</p>
+
+    </article>
+    <section class="margin-bottom double">
+      <a href="https://twitter.com/intent/tweet?text=Everything%20is%20Enumerated&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Feverything-is-enumerated.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
+    </section>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP" value="https://rossta.net/blog/2018-12-21-everything-is-enumerated.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2018-12-21-everything-is-enumerated.html" />
+      <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Rails,Ruby" />
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/louvre-pexels-photo-e2bd64cb.jpg" alt="Louvre pexels photo" />
+            <figcaption>Photo by chuttersnap on Unsplash</figcaption>
+        </figure>
+    </article>
+    <section class="margin-bottom double">
+      <p>
+          Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Dec 21, 2018
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "everything-is-enumerated";
+    var disqus_title      = "Everything is Enumerated";
+    var disqus_url        = "https://rossta.net/blog/everything-is-enumerated.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/n-1-is-a-rails-feature.html">N+1 is a Rails feature</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/vue.html">Vue</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2018 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/runtime.bundle-2352c808.js"></script><script src="/assets/javascripts/vendor.bundle-0116f3b0.js"></script><script src="/assets/javascripts/app.bundle-ed1e4144.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>
