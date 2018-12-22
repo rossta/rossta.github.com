@@ -38,7 +38,7 @@ One knock against local SSL is that it has been considered a pain to set up. Thi
 
 ### How does it work?
 
-The general workflow I use for setting up my Rails applications for local development and tests over SSL is as follows:
+The general workflow I use for setting up my Rails applications for local SSL is as follows:
 
 1. [Resolve a domain to localhost](#resolve-a-domain-name-to-localhost)
 1. [Create a self-signed SSL certificate](#create-a-self-signed-certificate)
