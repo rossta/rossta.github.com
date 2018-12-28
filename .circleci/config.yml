@@ -10,6 +10,9 @@ jobs:
     steps:
       - checkout
 
+      - run: ruby --version
+      - run: node --version
+
       - restore_cache:
           keys:
             - gem-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
