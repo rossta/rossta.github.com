@@ -54,7 +54,7 @@ The result: faster rollback, no multiprocess confusion, no need to manage the da
 
 ### In closing
 
-My public service announcment to RSpec users: Make the switch to system tests. Yes, they are a big deal. For most applications, I suspect [adopting system tests from existing feature tests](https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6) should be straightforward. You’ll still need to fix those flaky tests yourself though.
+To my RSpec friends: Make the switch to system tests. Yes, they are a big deal. For most applications, I suspect [adopting system tests from existing feature tests](https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6) should be straightforward. You’ll still need to fix those flaky scenarios yourself though.
 
 ### Resources
 
