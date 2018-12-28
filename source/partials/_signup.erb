@@ -31,7 +31,9 @@
       <input type="hidden" name="SIGNUP" value="<%= current_url %>" />
       <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
       <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="<%= current_page.path %>" />
-      <input type="hidden" name="SIGNUP_TAG" id="signup_tags" value="<%= current_page_tags.join(',') %>" />
+      <% current_page_tags.each_with_index do |tag, i| %>
+        <input type="hidden" name="group[17961][<%= i+1 %>]" id="signup_technology" value="<%= tag %>" />
+      <% end %>
     </form>
   </div>
   <!--End mc_embed_signup-->
