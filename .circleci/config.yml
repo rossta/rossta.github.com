@@ -32,6 +32,7 @@ jobs:
             - yarn-cache-{{ .Branch }}
             - yarn-cache
 
+      - run: npm rebuild node-sass
       - run: yarn install
 
       - save_cache:
