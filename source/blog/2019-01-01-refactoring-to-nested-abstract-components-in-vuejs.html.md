@@ -140,6 +140,23 @@ The new `<PDFDocument>` template below show how this slot is used. It inserts `<
   </ScrollingDocument>
 </template>
 ```
+The `<PDFPreview>` is almost identical and demonstrates why we went to the trouble of using scoped slots:
+```html
+<template>
+  <ScrollingDocument
+    class="pdf-document"
+    v-bind="{pages, pageCount, currentPage}"
+    @pages-fetch="onPagesFetch"
+    >
+    <PDFThumbnail
+      slot-scope="{page, isElementVisible}"
+      v-bind="{scale, page, isElementVisible}"
+    />
+  </ScrollingDocument>
+</template>
+```
+We can render a different experience in this part of the component hierachy with a just small change while also getting the benefits of the shared behavior.
+
 ### Stepping back
 Note the contrast in this approach with mixins. It would have been arguably much more straight forward easier to move required props, methods, and hooks into separate mixins for the preview and document panes. While we could accomplish the goal of code-sharing, it comes at the cost of implicit dependencies, potential name clashes, and other aspects of mounting complexity we noted earlier.
 
