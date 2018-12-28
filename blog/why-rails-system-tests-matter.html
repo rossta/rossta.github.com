@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Why RSpec users should care about Rails system tests - rossta.net</title>
+<meta name="description" content="This post explains why RSpec/Rails users should switch from feature tests to system tests." />
+<meta name="keywords" content="Rails" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="This post explains why RSpec/Rails users should switch from feature tests to system tests." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/paola-galimberti-mountains-unsplash-caa09b54.jpg" />
+<meta name="twitter:title" content="Why RSpec users should care about Rails system tests" />
+<meta property="og:description" content="This post explains why RSpec/Rails users should switch from feature tests to system tests." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/paola-galimberti-mountains-unsplash-caa09b54.jpg" />
+<meta property="og:title" content="Why RSpec users should care about Rails system tests" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" />
+    <link rel="icon"                                  href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
+
+    <link rel="mask-icon" href="/safari-pinned-tab-5cdca7ae.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app.bundle-3f3ff3db.css" rel="stylesheet" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Why RSpec users should care about Rails system tests
+  </h1>
+    <h3>
+      Level up your feature tests
+    </h3>
+</header>
+
+
+      <p>I get the feeling a lot of RSpec users don’t know about the advantages of Rails system tests. RSpec has had &quot;feature&quot; tests for a long time, so same thing right? What’s the big deal?</p>
+
+      <h3 id="background" class="title">
+        <a name="background" class="anchor" href="#background">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Background
+      </h3>
+    
+<p>For context, RSpec has supported high level testing through <a href="https://relishapp.com/rspec/rspec-rails/docs/feature-specs/feature-spec">feature tests</a> for many years. Like Cucumber, feature tests are designed to exercise application functionality through the user interface. There are many merits to feature tests as a way to document core business logic and catch regressions. There are drawbacks as well, including the fact that they can be very expensive, i.e., slow, to maintain and execute. I&#39;m going to ignore this for now.</p>
+
+<p>I&#39;ll also altogether ignore interesting alternatives for UI and fullstack testing, like <a href="https://www.cypress.io/">cypress.io</a>. This post is aimed at folks working on Rails apps that have accumulated month or years worth of RSpec feature tests.</p>
+
+<p>For a long time, Rails has resisted first class support for this kind of testing, so much of RSpec&#39;s integration with Rails is bolted on. It has mostly worked well, though there have been some gotchas which I&#39;ll get to.</p>
+
+<p>Last year, that all changed when Rails released system tests in Rails 5.1. On the surface, Rails system tests have pretty much the same usage and goals as RSpec feature tests, including integration with Capybara, the Ruby interface to interacting with numerous webdrivers like headless Chrome, Gecko for Firefox, PhantomJS, etc. So basically everything we&#39;ve had in RSpec for ages. RSpec developers collectively yawned.</p>
+
+      <h3 id="but-wait-there-39-s-more" class="title">
+        <a name="but-wait-there-39-s-more" class="anchor" href="#but-wait-there-39-s-more">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        But wait, there&#39;s more
+      </h3>
+    
+<p>The RSpec team responded by adding first class integration with Rails system tests to RSpec 3.7. So, for the time being, it supports both system tests and feature tests to allow time for developers to switch over. I imagine feature tests will be deprecated in the not-too-distant future.</p>
+
+<p>Why switch? Didn&#39;t we just establish system tests and feature tests are basically the same thing? Here&#39;s where we get to the key differences.</p>
+
+<p>I&#39;ve seen a lot of focus in other posts in mechanics of switching, how it&#39;s a little easier to setup Capybara configuration, e.g. <code>driven_by :headless_chrome</code>. That’s all good, but it&#39;s not a big deal.</p>
+
+<p>The real win with system tests is what&#39;s happening under the surface. The Rails team made key changes to internals, stuff RSpec alone couldn’t provide.</p>
+
+      <h3 id="why-system-tests-are-better" class="title">
+        <a name="why-system-tests-are-better" class="anchor" href="#why-system-tests-are-better">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Why system tests are better
+      </h3>
+    
+<p>Awhile back, RSpec feature tests, through Capybara, enabled developers to test UI interactions enabled by JavaScript. With so much logic in our apps going to the frontend, this was a huge improvement over standard Rails testing support, which previously stopped well short of that.</p>
+
+<p>Though this helped increase testing confidence (let’s ignore flaky JS tests for now), this approach also came with a catch: developers had to think about managing the database in their end-to-end JS-enabled acceptance tests.</p>
+
+<p>Backing up a step, RSpec tests are typically individually wrapped in database transactions. This makes rolling back DB changes that occur within each test really fast and easy. But in RSpec acceptance tests against a JavaScript-enabled webdriver like Chrome, wrapping tests in transactions doesn’t work!</p>
+
+<p>The reason is the underlying test implementation is forced to start the Rails server in a separate process from the test itself; any data created in a transaction in the test isn’t committed to the DB, so the Rails server doesn’t have access to the data! Missing data in the JS acceptance tests is really confusing to lots of Rails developers, myself included. To this day, this “gotcha” has tripped me up on new projects.</p>
+
+<p>The workaround, for years, has been to disable transaction mode—the very feature that makes database-backed test faster and easier to rollback for successive tests. To replace this, most RSpec-based Rails projects lean on another gem, DatabaseCleaner, plus some extra configuration, to switch modes just for JS-enabled acceptance tests. The alternative modes are usually either truncate the whole DB or delete all the rows; both slower and sometime problematic when switching back-and-forth. All this instead of just having RSpec rollback transactions without us having to think about it while developing our tests.</p>
+
+<p>Not to mention, having the Rails server run in a separate process makes it a lot harder to debug. If you like using a debugger like pry in your application code, good luck making it work with traditional RSpec acceptance tests.</p>
+
+<p>Rails system tests solves the database problem. <a href="https://github.com/eileencodes">Eileen Uchitelle</a> on the Rails team made the changes necessary to run ensure test threads and the Rails server can run in the same process by sharing the database connection (<a href="https://github.com/rails/rails/pull/28083">pull request</a>). This made it possible to wrap system tests in database transactions.</p>
+
+<p>The result: faster rollback, no multiprocess confusion, no need to manage the database with DatabaseCleaner, debugging the server in process is possible, etc. A better solution all around.</p>
+
+      <h3 id="in-closing" class="title">
+        <a name="in-closing" class="anchor" href="#in-closing">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        In closing
+      </h3>
+    
+<p>To my RSpec friends: Make the switch to system tests. Yes, they are a big deal. For most applications, I suspect <a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6">adopting system tests from existing feature tests</a> should be straightforward. You’ll still need to fix those flaky scenarios yourself though.</p>
+
+      <h3 id="resources" class="title">
+        <a name="resources" class="anchor" href="#resources">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Resources
+      </h3>
+    
+<ul>
+<li><a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6">https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6</a></li>
+<li><a href="https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html">https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html</a></li>
+<li><a href="https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/">https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/</a></li>
+<li><a href="https://github.com/rails/rails/pull/28083">https://github.com/rails/rails/pull/28083</a></li>
+<li><a href="https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec">https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec</a></li>
+</ul>
+
+    </article>
+    <section class="margin-bottom double">
+      <a href="https://twitter.com/intent/tweet?text=Why%20RSpec%20users%20should%20care%20about%20Rails%20system%20tests&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fwhy-rails-system-tests-matter.html" class="button" target="_blank" rel="noopener">Share this post on Twitter</a>
+    </section>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP" value="https://rossta.net/blog/2018-12-27-why-rails-system-tests-matter.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2018-12-27-why-rails-system-tests-matter.html" />
+      <input type="hidden" name="SIGNUP_TAGS" id="signup_tags" value="Rails" />
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/paola-galimberti-mountains-unsplash-caa09b54.jpg" alt="Paola galimberti mountains unsplash" />
+            <figcaption>Photo by Paola Galimberti on Unsplash</figcaption>
+        </figure>
+    </article>
+    <section class="margin-bottom double">
+      <p>
+        Published on Dec 27, 2018
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "why-rails-system-tests-matter";
+    var disqus_title      = "Why RSpec users should care about Rails system tests";
+    var disqus_url        = "https://rossta.net/blog/why-rails-system-tests-matter.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/n-1-is-a-rails-feature.html">N+1 is a Rails feature</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/vue.html">Vue</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2018 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/runtime.bundle-2352c808.js"></script><script src="/assets/javascripts/vendor.bundle-0116f3b0.js"></script><script src="/assets/javascripts/app.bundle-ed1e4144.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>

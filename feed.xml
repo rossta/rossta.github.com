@@ -5,10 +5,113 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-12-21T00:00:00+00:00</updated>
+  <updated>2018-12-27T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Why RSpec users should care about Rails system tests</title>
+    <link rel="alternate" href="/blog/why-rails-system-tests-matter.html"/>
+    <id>/blog/why-rails-system-tests-matter.html</id>
+    <published>2018-12-27T00:00:00+00:00</published>
+    <updated>2018-12-27T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;I get the feeling a lot of RSpec users don’t know about the advantages of Rails system tests. RSpec has had "feature" tests for a long time, so same thing right? What’s the big deal?&lt;/p&gt;
+
+      &lt;h3 id="background" class="title"&gt;
+        &lt;a name="background" class="anchor" href="#background"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Background
+    ...&lt;/h3&gt;</summary>
+    <content type="html">&lt;p&gt;I get the feeling a lot of RSpec users don’t know about the advantages of Rails system tests. RSpec has had &amp;quot;feature&amp;quot; tests for a long time, so same thing right? What’s the big deal?&lt;/p&gt;
+
+      &lt;h3 id="background" class="title"&gt;
+        &lt;a name="background" class="anchor" href="#background"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Background
+      &lt;/h3&gt;
+    
+&lt;p&gt;For context, RSpec has supported high level testing through &lt;a href="https://relishapp.com/rspec/rspec-rails/docs/feature-specs/feature-spec"&gt;feature tests&lt;/a&gt; for many years. Like Cucumber, feature tests are designed to exercise application functionality through the user interface. There are many merits to feature tests as a way to document core business logic and catch regressions. There are drawbacks as well, including the fact that they can be very expensive, i.e., slow, to maintain and execute. I&amp;#39;m going to ignore this for now.&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;ll also altogether ignore interesting alternatives for UI and fullstack testing, like &lt;a href="https://www.cypress.io/"&gt;cypress.io&lt;/a&gt;. This post is aimed at folks working on Rails apps that have accumulated month or years worth of RSpec feature tests.&lt;/p&gt;
+
+&lt;p&gt;For a long time, Rails has resisted first class support for this kind of testing, so much of RSpec&amp;#39;s integration with Rails is bolted on. It has mostly worked well, though there have been some gotchas which I&amp;#39;ll get to.&lt;/p&gt;
+
+&lt;p&gt;Last year, that all changed when Rails released system tests in Rails 5.1. On the surface, Rails system tests have pretty much the same usage and goals as RSpec feature tests, including integration with Capybara, the Ruby interface to interacting with numerous webdrivers like headless Chrome, Gecko for Firefox, PhantomJS, etc. So basically everything we&amp;#39;ve had in RSpec for ages. RSpec developers collectively yawned.&lt;/p&gt;
+
+      &lt;h3 id="but-wait-there-39-s-more" class="title"&gt;
+        &lt;a name="but-wait-there-39-s-more" class="anchor" href="#but-wait-there-39-s-more"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        But wait, there&amp;#39;s more
+      &lt;/h3&gt;
+    
+&lt;p&gt;The RSpec team responded by adding first class integration with Rails system tests to RSpec 3.7. So, for the time being, it supports both system tests and feature tests to allow time for developers to switch over. I imagine feature tests will be deprecated in the not-too-distant future.&lt;/p&gt;
+
+&lt;p&gt;Why switch? Didn&amp;#39;t we just establish system tests and feature tests are basically the same thing? Here&amp;#39;s where we get to the key differences.&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;ve seen a lot of focus in other posts in mechanics of switching, how it&amp;#39;s a little easier to setup Capybara configuration, e.g. &lt;code&gt;driven_by :headless_chrome&lt;/code&gt;. That’s all good, but it&amp;#39;s not a big deal.&lt;/p&gt;
+
+&lt;p&gt;The real win with system tests is what&amp;#39;s happening under the surface. The Rails team made key changes to internals, stuff RSpec alone couldn’t provide.&lt;/p&gt;
+
+      &lt;h3 id="why-system-tests-are-better" class="title"&gt;
+        &lt;a name="why-system-tests-are-better" class="anchor" href="#why-system-tests-are-better"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Why system tests are better
+      &lt;/h3&gt;
+    
+&lt;p&gt;Awhile back, RSpec feature tests, through Capybara, enabled developers to test UI interactions enabled by JavaScript. With so much logic in our apps going to the frontend, this was a huge improvement over standard Rails testing support, which previously stopped well short of that.&lt;/p&gt;
+
+&lt;p&gt;Though this helped increase testing confidence (let’s ignore flaky JS tests for now), this approach also came with a catch: developers had to think about managing the database in their end-to-end JS-enabled acceptance tests.&lt;/p&gt;
+
+&lt;p&gt;Backing up a step, RSpec tests are typically individually wrapped in database transactions. This makes rolling back DB changes that occur within each test really fast and easy. But in RSpec acceptance tests against a JavaScript-enabled webdriver like Chrome, wrapping tests in transactions doesn’t work!&lt;/p&gt;
+
+&lt;p&gt;The reason is the underlying test implementation is forced to start the Rails server in a separate process from the test itself; any data created in a transaction in the test isn’t committed to the DB, so the Rails server doesn’t have access to the data! Missing data in the JS acceptance tests is really confusing to lots of Rails developers, myself included. To this day, this “gotcha” has tripped me up on new projects.&lt;/p&gt;
+
+&lt;p&gt;The workaround, for years, has been to disable transaction mode—the very feature that makes database-backed test faster and easier to rollback for successive tests. To replace this, most RSpec-based Rails projects lean on another gem, DatabaseCleaner, plus some extra configuration, to switch modes just for JS-enabled acceptance tests. The alternative modes are usually either truncate the whole DB or delete all the rows; both slower and sometime problematic when switching back-and-forth. All this instead of just having RSpec rollback transactions without us having to think about it while developing our tests.&lt;/p&gt;
+
+&lt;p&gt;Not to mention, having the Rails server run in a separate process makes it a lot harder to debug. If you like using a debugger like pry in your application code, good luck making it work with traditional RSpec acceptance tests.&lt;/p&gt;
+
+&lt;p&gt;Rails system tests solves the database problem. &lt;a href="https://github.com/eileencodes"&gt;Eileen Uchitelle&lt;/a&gt; on the Rails team made the changes necessary to run ensure test threads and the Rails server can run in the same process by sharing the database connection (&lt;a href="https://github.com/rails/rails/pull/28083"&gt;pull request&lt;/a&gt;). This made it possible to wrap system tests in database transactions.&lt;/p&gt;
+
+&lt;p&gt;The result: faster rollback, no multiprocess confusion, no need to manage the database with DatabaseCleaner, debugging the server in process is possible, etc. A better solution all around.&lt;/p&gt;
+
+      &lt;h3 id="in-closing" class="title"&gt;
+        &lt;a name="in-closing" class="anchor" href="#in-closing"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        In closing
+      &lt;/h3&gt;
+    
+&lt;p&gt;To my RSpec friends: Make the switch to system tests. Yes, they are a big deal. For most applications, I suspect &lt;a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6"&gt;adopting system tests from existing feature tests&lt;/a&gt; should be straightforward. You’ll still need to fix those flaky scenarios yourself though.&lt;/p&gt;
+
+      &lt;h3 id="resources" class="title"&gt;
+        &lt;a name="resources" class="anchor" href="#resources"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Resources
+      &lt;/h3&gt;
+    
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6"&gt;https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html"&gt;https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/"&gt;https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/rails/rails/pull/28083"&gt;https://github.com/rails/rails/pull/28083&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec"&gt;https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
   <entry>
     <title>Everything is Enumerated</title>
     <link rel="alternate" href="/blog/everything-is-enumerated.html"/>
@@ -1578,234 +1681,6 @@ export default {
 &lt;p&gt;We&amp;#39;ve now converted our original, imperative PDF rendering script with a declarative Vue component hierarchy. We&amp;#39;ve certainly added a lot of code to make this work, but with working knowledge of Vue, we&amp;#39;ve made it easier to reason about, easier to extend, and easier to add features to give our PDF viewer more functionality.&lt;/p&gt;
 
 &lt;p&gt;In the next post, we&amp;#39;ll look at adding some conditional rendering; since all pages aren&amp;#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Deploying Vue with CircleCI 2.0</title>
-    <link rel="alternate" href="/blog/deploying-vue-with-circleci-2.html"/>
-    <id>/blog/deploying-vue-with-circleci-2.html</id>
-    <published>2018-06-07T00:00:00+00:00</published>
-    <updated>2018-06-07T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;I recently upgraded my &lt;a href="https://github.com/rossta/connect-four-vue"&gt;Connect Four&lt;/a&gt; Vue.js application to build on CircleCI 2.0 . In my &lt;a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"&gt;previous post&lt;/a&gt;, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;I recently upgraded my &lt;a href="https://github.com/rossta/connect-four-vue"&gt;Connect Four&lt;/a&gt; Vue.js application to build on CircleCI 2.0 . In my &lt;a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html"&gt;previous post&lt;/a&gt;, I showed how I used continuous integration on CircleCI 1.0 to bundle Vue.js assets and upload them to an S3 bucket configured to serve the application as a static website. But now that config is only good for another few months: &lt;a href="https://circleci.com/blog/sunsetting-1-0/"&gt;CircleCI is sunsetting 1.0&lt;/a&gt;. Here&amp;#39;s how I upgraded.&lt;/p&gt;
-
-&lt;p&gt;The basic steps of the build are the same: once I push changes to GitHub, CircleCI will detect those changes and trigger a build. It will bundle the app using the &lt;code&gt;vue-cli&lt;/code&gt;. The assets output from that step will then be uploaded to S3 using the &lt;code&gt;s3deploy&lt;/code&gt; golang package only if the build is running against master.&lt;/p&gt;
-
-      &lt;h3 id="the-old-config" class="title"&gt;
-        &lt;a name="the-old-config" class="anchor" href="#the-old-config"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The old config
-      &lt;/h3&gt;
-    
-&lt;p&gt;For reference, here is the old configuration I had been using to deploy the application on CircleCI 1.0.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;machine:
-  environment:
-    CIRCLE_BUILD_DIR: $HOME/$CIRCLE_PROJECT_REPONAME
-    PATH: $PATH:$CIRCLE_BUILD_DIR/bin:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin&amp;quot;
-
-  post:
-    - mkdir -p $CIRCLE_BUILD_DIR/bin
-  node:
-    version: 8.9.1
-
-dependencies:
-  pre:
-    - go get -v github.com/bep/s3deploy
-  override:
-    - yarn
-  cache_directories:
-    - ~/.cache/yarn
-    - bin
-
-test:
-  override:
-    - yarn build
-
-deployment:
-  s3up:
-    branch: master
-    commands:
-      - s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;CircleCI 2.0 offers a number of features to give developers more control and flexibility. This does mean that configuration is more complex than it was in 1.0. A couple of key improvements include &lt;a href="https://circleci.com/blog/introducing-workflows-on-circleci-2-0/"&gt;workflows&lt;/a&gt; and the ability to run builds Docker containers. We&amp;#39;ll take advantage of both to deploy Vue.js to S3.&lt;/p&gt;
-
-&lt;p&gt;Workflows are useful when you need to split a build up into a number of jobs. Those jobs may have different dependencies, or in some cases, may run in parallel. Since I want to bundle assets on all branches, but only deploy from the primary (&lt;code&gt;master&lt;/code&gt;) branch, it makes sense for me to split my CircleCI 2.0 configuration into two jobs, which I&amp;#39;ll call &lt;code&gt;build&lt;/code&gt; and &lt;code&gt;deploy&lt;/code&gt;. It&amp;#39;s worth noting that, even though these jobs must share resources (the bundled assets), I can configure them to run from different Docker containers; this is necessary because the primary language dependency in the build step is node.js and in the deploy phase, it&amp;#39;s golang.&lt;/p&gt;
-
-      &lt;h3 id="the-build-job" class="title"&gt;
-        &lt;a name="the-build-job" class="anchor" href="#the-build-job"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The build job
-      &lt;/h3&gt;
-    
-&lt;p&gt;Here&amp;#39;s what the build step looks like in my new CircleCI 2.0 config:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/node:8.11.2
-    parallelism: 1
-    working_directory: ~/rossta/connect-four-vue
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/rossta/connect-four-vue
-      - restore_cache:
-          key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
-      - run: yarn install
-      - save_cache:
-          key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
-          paths:
-            - ./node_modules
-      - run: yarn build
-      - persist_to_workspace:
-          root: .
-          paths: dist
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This job will build from the &lt;code&gt;circleci/node:8.11.2&lt;/code&gt; base Docker image. Though any Docker image can be used, CircleCI-supported images are prepared with tools that are typically needed for most builds. (&lt;a href="https://circleci.com/docs/2.0/circleci-images/"&gt;Here&amp;#39;s a list of pre-built CircleCI Docker images&lt;/a&gt;). Useful entries here include &lt;code&gt;restore_cache&lt;/code&gt; and &lt;code&gt;save_cache&lt;/code&gt;, which together ensure the build preserve previously installed node modules when the &lt;code&gt;yarn.lock&lt;/code&gt; file hasn&amp;#39;t changed. Most importantly, the &lt;code&gt;attach_workspace&lt;/code&gt; and &lt;code&gt;persist_to_workspace&lt;/code&gt; entries allow us to share the build output to the &lt;code&gt;dist/&lt;/code&gt; directory across jobs.&lt;/p&gt;
-
-      &lt;h3 id="the-deploy-job" class="title"&gt;
-        &lt;a name="the-deploy-job" class="anchor" href="#the-deploy-job"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The deploy job
-      &lt;/h3&gt;
-    
-&lt;p&gt;Here&amp;#39;s the configuration for the deploy job used to upload assets to S3.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;version: 2
-jobs:
-  # ...
-  deploy:
-    docker:
-      - image: circleci/golang:1.9.6
-    parallelism: 1
-    working_directory: ~/rossta/connect-four-vue
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/rossta/connect-four-vue
-      - restore_cache:
-          key: v1-pkg-cache
-      - run: go get -v github.com/bep/s3deploy
-      - save_cache:
-          key: v1-pkg-cache
-          paths:
-            - /go/pkg
-      - run:
-          name: Deploy to S3
-          command: |
-            s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For the deploy, we need a golang base image to run the &lt;code&gt;s3deploy&lt;/code&gt; command. A key step in this job is the &lt;code&gt;attach_workspace&lt;/code&gt; entry, which will contain the &lt;code&gt;dist/&lt;/code&gt; build output we persisted in the build job. That &lt;code&gt;dist/&lt;/code&gt; directory is the source given to the &lt;code&gt;s3deploy&lt;/code&gt; command. The deploy job also specifies &lt;code&gt;restore_cache&lt;/code&gt; and &lt;code&gt;save_cache&lt;/code&gt; for the &lt;code&gt;s3deploy&lt;/code&gt; go package.&lt;/p&gt;
-
-&lt;p&gt;One piece not shown in the config file are the AWS credentials needed to upload the assets to S3. The &lt;code&gt;s3deploy&lt;/code&gt; command will implicitly look for the environment variables &lt;code&gt;AWS_ACCESS_KEY_ID&lt;/code&gt; and &lt;code&gt;AWS_SECRET_ACCESS_KEY&lt;/code&gt;. Since I do not want to publish these credentials to Github, I added them through the CircleCI web interface using &lt;a href="https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project"&gt;these instructions&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h3 id="the-workflow" class="title"&gt;
-        &lt;a name="the-workflow" class="anchor" href="#the-workflow"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The workflow
-      &lt;/h3&gt;
-    
-&lt;p&gt;Finally, to tie these jobs together to run the build on all branches and only deploy on &lt;code&gt;master&lt;/code&gt;, I&amp;#39;m using a workflow as shown below:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;version: 2
-# ...
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="putting-it-all-together" class="title"&gt;
-        &lt;a name="putting-it-all-together" class="anchor" href="#putting-it-all-together"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Putting it all together
-      &lt;/h3&gt;
-    
-&lt;p&gt;Here&amp;#39;s the complete configuration for CircleCI 2.0 at the time of this writing, located at &lt;a href="https://github.com/rossta/connect-four-vue/blob/master/.circleci/config.yml"&gt;&lt;code&gt;.circleci/config.yml&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/node:8.11.2
-    parallelism: 1
-    working_directory: ~/rossta/connect-four-vue
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/rossta/connect-four-vue
-      - restore_cache:
-          key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
-      - run: yarn install
-      - save_cache:
-          key: v1-yarn-{{ checksum &amp;quot;yarn.lock&amp;quot; }}
-          paths:
-            - ./node_modules
-      - run: yarn build
-      - persist_to_workspace:
-          root: .
-          paths: dist
-
-  deploy:
-    docker:
-      - image: circleci/golang:1.9.6
-    parallelism: 1
-    working_directory: ~/rossta/connect-four-vue
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/rossta/connect-four-vue
-      - restore_cache:
-          key: v1-pkg-cache
-      - run: go get -v github.com/bep/s3deploy
-      - save_cache:
-          key: v1-pkg-cache
-          paths:
-            - /go/pkg
-      - run:
-          name: Deploy to S3
-          command: |
-            s3deploy -source=dist/ -region=us-west-2 -bucket=rossta-connect-four
-
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;By the way, this blog is also a static website built and published to Github pages via CircleCI. I recently upgraded to its config to 2.0, which you can &lt;a href="https://github.com/rossta/rossta.github.com/blob/develop/.circleci/config.yml"&gt;check out here&lt;/a&gt; if you&amp;#39;re interested. CircleCI 1.0 goes dark at the end of August, 2018, so upgrade your configurations soon!&lt;/p&gt;
 </content>
   </entry>
 </feed>
