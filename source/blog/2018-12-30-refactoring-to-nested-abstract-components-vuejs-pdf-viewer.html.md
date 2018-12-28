@@ -140,7 +140,7 @@ The new `<PDFDocument>` template below show how this slot is used. It inserts `<
   </ScrollingDocument>
 </template>
 ```
-The `<PDFPreview>` is almost identical and demonstrates why we went to the trouble of using scoped slots:
+The `<PDFPreview>` is almost identical and demonstrates why we went to the trouble of using scoped slots
 ```html
 <template>
   <ScrollingDocument
