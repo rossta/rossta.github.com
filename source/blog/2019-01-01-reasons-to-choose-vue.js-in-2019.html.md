@@ -1,9 +1,9 @@
 ---
-title: Reasons to choose Vue.js in 2019
+title: Eight reasons to choose Vue.js in 2019
 author: Ross Kaffenberger
 published: false
-summary: Reasons to choose Vue.js in 2019
-description: Reasons to choose Vue.js in 2019
+summary: i.e., Because it's so darn fun
+description: This post describes a bunch of reasons why developers might enjoy choosing Vue.js as the next JavaScript framework to learn in the coming year.
 pull_image: 'blog/stock/john-moeses-bauan-skyline-unsplash.jpg'
 pull_image_caption: Photo by John Moeses Bauan on Unsplash
 series:
@@ -88,3 +88,7 @@ Since I've started using Vue, I've been fortunate to learn from a variety of Vue
 I got my start in web development just as the Ruby and Rail framework was taking off. One thing I was struck by while learning Ruby was the creator's explicit (and dare I say, audacious) goal of creating a language that was optimized for developer happiness. While learning Vue.js, I recalled a lot of these same feelings. I was spending less time wrestling with configuration and APIs and more time building and having fun doing it.
 
 While I don't know that Vue.js was created so explicitly in the name of developer happiness, for, it has and continues to be fulfilling to that end. It's something I hear from many others who've taken time to learn the framework and probably the most important reason I'll recommend developers try Vue.js in 2019.
+
+---
+
+So what are you waiting for? Best of luck with your Vue.js journey in the coming year.
