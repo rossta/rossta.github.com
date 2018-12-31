@@ -91,7 +91,7 @@ The hierarchy becomes:
   </PDFDocument>
 </PDFData>
 ```
-I won't go into much detail about all the changes, but I'll highlight some key takeaways about how I fit it altogether.
+Rather than detailing all the changes, but I'll highlight some key takeaways about how I fit the pieces together.
 
 First, these changes are made possible by Vue `slots` and `slot-scope`.
 
@@ -106,7 +106,7 @@ render() {
   });
 },
 ```
-The `<ScrollingDocument>` uses a `v-for` loop to render each of the fetched pages as `<ScrollingPage>` components since the `<ScrollingPage>` needs properties from the `<ScrollingDocument>` to perform its calculations. Here is a simplified version of the `<ScrollingDocument>` template.
+The `<ScrollingDocument>` uses a `v-for` loop to render each of the fetched pages as `<ScrollingPage>` components passing in properties the `<ScrollingPage>` needs to perform its calculations. Here is a simplified version of the `<ScrollingDocument>` template.
 ```html
 <template>
   <ScrollingPage
@@ -125,7 +125,7 @@ The `<ScrollingDocument>` uses a `v-for` loop to render each of the fetched page
 ```
 Note the use of the `slot-scope` to receive the `isElementVisible` prop passed in from the `<ScrollingPage>` scoped slot. This and the individual `page` prop, provided by the `v-for` loop, are passed on to the `slot`.
 
-The new `<PDFDocument>` template below show how this slot is used. It inserts `<PDFPage>` as a child of `<ScrollingDocument>` and extracts the key props with another usage of `slot-scope` (a `slot-scope` within a `slot-scope` if you will) while merging in an additional prop, `scale` from `<PDFDocument>`.
+The new `<PDFDocument>` template below shows how this slot is used. It inserts `<PDFPage>` as a child of `<ScrollingDocument>` and extracts the key props with another usage of `slot-scope` (a `slot-scope` within a `slot-scope`!) while merging in an additional prop, `scale`.
 ```html
 <template>
   <ScrollingDocument
@@ -155,7 +155,7 @@ The `<PDFPreview>` is almost identical and demonstrates why we went to the troub
   </ScrollingDocument>
 </template>
 ```
-We can render a different experience in this part of the component hierachy with a just small change while also getting the benefits of the shared behavior.
+We can render a different experience in this part of the component hierachy by changing the component we give to the slot (the `<PDFThumbnail>`) while also getting the benefits of the shared behavior.
 
 ### Stepping back
 Note the contrast in this approach with mixins. It would have been arguably much more straight forward easier to move required props, methods, and hooks into separate mixins for the preview and document panes. While we could accomplish the goal of code-sharing, it comes at the cost of implicit dependencies, potential name clashes, and other aspects of mounting complexity we noted earlier.
