@@ -5,10 +5,226 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-12-27T00:00:00+00:00</updated>
+  <updated>2018-12-30T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Refactoring to nested abstract components</title>
+    <link rel="alternate" href="/blog/refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html"/>
+    <id>/blog/refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html</id>
+    <published>2018-12-30T00:00:00+00:00</published>
+    <updated>2018-12-30T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;To add a preview pane to the Vue.js PDF viewer, I wanted it to have very similar behavior to the document pane. In this post, I'll demonstrate how I extracted this behavior with a set of components, as opposed to alternatives, like a mixin.&lt;/p&gt;
+
+     ...</summary>
+    <content type="html">&lt;p&gt;To add a preview pane to the Vue.js PDF viewer, I wanted it to have very similar behavior to the document pane. In this post, I&amp;#39;ll demonstrate how I extracted this behavior with a set of components, as opposed to alternatives, like a mixin.&lt;/p&gt;
+
+      &lt;h3 id="the-project" class="title"&gt;
+        &lt;a name="the-project" class="anchor" href="#the-project"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The project
+      &lt;/h3&gt;
+    
+&lt;p&gt;This post is part of ongoing series, &lt;a href="/blog/series/pdf-viewer.html"&gt;Building a PDF Viewer with Vue.js&lt;/a&gt;. The source code for this project is on Github at &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;rossta/vue-pdfjs-demo&lt;/a&gt;. The source code for the behavior described in this post can be found in the &lt;a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-4-shared-behavior-components"&gt;&lt;code&gt;tutorial/part-4-shared-behavior-components&lt;/code&gt; branch on Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s the latest &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h3 id="catching-up-from-last-time" class="title"&gt;
+        &lt;a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Catching up from last time
+      &lt;/h3&gt;
+    
+&lt;p&gt;So far in &lt;a href="/blog/series/pdf-viewer.html"&gt;this series&lt;/a&gt;, we have built a simple PDF viewer to render the pages of PDF document to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements with Vue. We have also updated our components to fetch and render PDF pages lazily as they are scrolled into the viewport and we have extracted this behavior into a &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3-28bad22b.jpg" alt="Preview of the preview" /&gt;&lt;/p&gt;
+
+      &lt;h3 id="the-problem" class="title"&gt;
+        &lt;a name="the-problem" class="anchor" href="#the-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The problem
+      &lt;/h3&gt;
+    
+&lt;p&gt;At a high level, both the preview and document panes must:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Be independently scrollable&lt;/li&gt;
+&lt;li&gt;Trigger events, received by the &lt;a href="/blog/extracting-a-data-component-in-vue.html"&gt;data source, the &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component&lt;/a&gt;, to fetch more page data as they are scrolled.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The new preview pane will have a similar layout to the document. Given the following component hierarchy for the current document viewer:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt;
+  &amp;lt;PDFDocument&amp;gt;
+    &amp;lt;PDFPage /&amp;gt;
+    &amp;lt;PDFPage /&amp;gt;
+    &amp;lt;PDFPage /&amp;gt;
+    ...
+  &amp;lt;/PDFDocument&amp;gt;
+&amp;lt;/PDFData&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That of the preview pane will be nearly identical:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt;
+  &amp;lt;PDFPreview&amp;gt;
+    &amp;lt;PDFThumbnail /&amp;gt;
+    &amp;lt;PDFThumbnail /&amp;gt;
+    &amp;lt;PDFThumbnail /&amp;gt;
+    ...
+  &amp;lt;/PDFPreview&amp;gt;
+&amp;lt;/PDFData&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Extracting the scroll-and-fetch functionality presents an interesting challenge because it is currently split between the &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components.&lt;/p&gt;
+
+&lt;p&gt;Among other things, the &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; is responsible for determining when:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;the scrollable &amp;quot;boundary&amp;quot;, i.e., where in the document the viewport is located&lt;/li&gt;
+&lt;li&gt;the last fetched page has entered the viewport, i.e., when to fetch additional pages&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; is responsible for determining when it is visible by determining whether its boundaries overlap with the viewport.&lt;/p&gt;
+
+      &lt;h3 id="the-component-based-solution" class="title"&gt;
+        &lt;a name="the-component-based-solution" class="anchor" href="#the-component-based-solution"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The component-based solution
+      &lt;/h3&gt;
+    
+&lt;p&gt;To share this behavior with the preview pane hierarchy, we&amp;#39;ll create two abstract components, a &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; to take the responsibility of determing page visibility and a &lt;code&gt;&amp;lt;ScrollingDocument&amp;gt;&lt;/code&gt; to absorb the properties and methods for determining the scroll boundaries and when the request more pages. We&amp;#39;ll compose both the document and new preview panes from these new components.&lt;/p&gt;
+
+&lt;p&gt;The hierarchy becomes:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt;
+  &amp;lt;PDFPreview&amp;gt;
+    &amp;lt;ScrollingDocument&amp;gt;
+      &amp;lt;ScrollingPage&amp;gt;
+        &amp;lt;PDFThumbnail /&amp;gt;
+      &amp;lt;/ScrollingPage&amp;gt;
+      &amp;lt;ScrollingPage&amp;gt;
+        &amp;lt;PDFThumbnail /&amp;gt;
+      &amp;lt;/ScrollingPage&amp;gt;
+      ...
+    &amp;lt;/ScrollingDocument&amp;gt;
+  &amp;lt;/PDFPreview&amp;gt;
+  &amp;lt;PDFDocument&amp;gt;
+    &amp;lt;ScrollingDocument&amp;gt;
+      &amp;lt;ScrollingPage&amp;gt;
+        &amp;lt;PDFPage /&amp;gt;
+      &amp;lt;/ScrollingPage&amp;gt;
+      &amp;lt;ScrollingPage&amp;gt;
+        &amp;lt;PDFPage /&amp;gt;
+      &amp;lt;/ScrollingPage&amp;gt;
+      ...
+    &amp;lt;/ScrollingDocument&amp;gt;
+  &amp;lt;/PDFDocument&amp;gt;
+&amp;lt;/PDFData&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Rather than detailing all the changes, but I&amp;#39;ll highlight some key takeaways about how I fit the pieces together.&lt;/p&gt;
+
+&lt;p&gt;First, these changes are made possible by Vue &lt;code&gt;slots&lt;/code&gt; and &lt;code&gt;slot-scope&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; component is abstract, meaning it does not render any html itself. Instead, it delegates to its children, which, for our app, is a single &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt;, through its &lt;code&gt;render&lt;/code&gt; function while passing in additional properties via &lt;code&gt;this.$scopedSlots&lt;/code&gt;. This is akin to calling the child component with arguments.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/ScrollingPage.vue
+
+render() {
+  return this.$scopedSlots.default({
+    isElementVisible: this.isElementVisible,
+  });
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;ScrollingDocument&amp;gt;&lt;/code&gt; uses a &lt;code&gt;v-for&lt;/code&gt; loop to render each of the fetched pages as &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; components passing in properties the &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; needs to perform its calculations. Here is a simplified version of the &lt;code&gt;&amp;lt;ScrollingDocument&amp;gt;&lt;/code&gt; template.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;template&amp;gt;
+  &amp;lt;ScrollingPage
+    v-for=&amp;quot;page in pages&amp;quot;
+    :key=&amp;quot;page.pageNumber&amp;quot;
+    v-bind=&amp;quot;{page, scrollTop, clientHeight}&amp;quot;
+    &amp;gt;
+    &amp;lt;div
+      class=&amp;quot;scrolling-page&amp;quot;
+      slot-scope=&amp;quot;{isElementVisible}&amp;quot;
+      &amp;gt;
+      &amp;lt;slot v-bind=&amp;quot;{page, isElementVisible}&amp;quot;&amp;gt;&amp;lt;/slot&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/ScrollingPage&amp;gt;
+&amp;lt;/template&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note the use of the &lt;code&gt;slot-scope&lt;/code&gt; to receive the &lt;code&gt;isElementVisible&lt;/code&gt; prop passed in from the &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; scoped slot. This and the individual &lt;code&gt;page&lt;/code&gt; prop, provided by the &lt;code&gt;v-for&lt;/code&gt; loop, are passed on to the &lt;code&gt;slot&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The new &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; template below shows how this slot is used. It inserts &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; as a child of &lt;code&gt;&amp;lt;ScrollingDocument&amp;gt;&lt;/code&gt; and extracts the key props with another usage of &lt;code&gt;slot-scope&lt;/code&gt; (a &lt;code&gt;slot-scope&lt;/code&gt; within a &lt;code&gt;slot-scope&lt;/code&gt;!) while merging in an additional prop, &lt;code&gt;scale&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;template&amp;gt;
+  &amp;lt;ScrollingDocument
+    class=&amp;quot;pdf-document&amp;quot;
+    v-bind=&amp;quot;{pages, pageCount, currentPage}&amp;quot;
+    @pages-fetch=&amp;quot;onPagesFetch&amp;quot;
+    &amp;gt;
+    &amp;lt;PDFPage
+      slot-scope=&amp;quot;{page, isElementVisible}&amp;quot;
+      v-bind=&amp;quot;{scale, page, isElementVisible}&amp;quot;
+    /&amp;gt;
+  &amp;lt;/ScrollingDocument&amp;gt;
+&amp;lt;/template&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; is almost identical and demonstrates why we went to the trouble of using scoped slots&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;template&amp;gt;
+  &amp;lt;ScrollingDocument
+    class=&amp;quot;pdf-document&amp;quot;
+    v-bind=&amp;quot;{pages, pageCount, currentPage}&amp;quot;
+    @pages-fetch=&amp;quot;onPagesFetch&amp;quot;
+    &amp;gt;
+    &amp;lt;PDFThumbnail
+      slot-scope=&amp;quot;{page, isElementVisible}&amp;quot;
+      v-bind=&amp;quot;{scale, page, isElementVisible}&amp;quot;
+    /&amp;gt;
+  &amp;lt;/ScrollingDocument&amp;gt;
+&amp;lt;/template&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can render a different experience in this part of the component hierachy by changing the component we give to the slot (the &lt;code&gt;&amp;lt;PDFThumbnail&amp;gt;&lt;/code&gt;) while also getting the benefits of the shared behavior.&lt;/p&gt;
+
+      &lt;h3 id="stepping-back" class="title"&gt;
+        &lt;a name="stepping-back" class="anchor" href="#stepping-back"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Stepping back
+      &lt;/h3&gt;
+    
+&lt;p&gt;Note the contrast in this approach with mixins. It would have been arguably much more straight forward easier to move required props, methods, and hooks into separate mixins for the preview and document panes. While we could accomplish the goal of code-sharing, it comes at the cost of implicit dependencies, potential name clashes, and other aspects of mounting complexity we noted earlier.&lt;/p&gt;
+
+&lt;p&gt;Refactoring to components has a higher barrier to entry; it requires some extra thought and a grasp of &lt;code&gt;slots&lt;/code&gt; and &lt;code&gt;slot-scope&lt;/code&gt; (yes, it can get confusing).&lt;/p&gt;
+
+&lt;p&gt;One practical advantage is we can troubleshoot the scrolling behavior with a clear picture of where the behavior is located in our component tree with Vue devtools:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/vue-pdf-viewer/part-4-shared-behavior-devtools-c2fb2d8e.jpg" alt="scrolling components in Vue devtools" /&gt;&lt;/p&gt;
+
+&lt;p&gt;In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.&lt;/p&gt;
+
+&lt;p&gt;As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the &lt;a href="https://githbub.com/rossta/vue-pdfjs-demo"&gt;source code on Github&lt;/a&gt;. Make a pull request or let me know how I could improve things by &lt;a href="https://twitter.com/rossta"&gt;reaching out on Twitter&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Why RSpec users should care about Rails system tests</title>
     <link rel="alternate" href="/blog/why-rails-system-tests-matter.html"/>
@@ -1262,425 +1478,6 @@ watch: {
 &lt;p&gt;We&amp;#39;ve been adding quite a bit of complexity though to our existing &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components; they now both are responsible for making API requests, calculating element boundaries, lazy behavior, etc. Ideally, we&amp;#39;ll want to limit the responsibility of a given component to make our application less resistant to change. In the next post, we&amp;#39;ll refactor our PDF viewer to to separate out data fetching and scrolling behavior into separate &amp;quot;renderless components&amp;quot;. These changes will subsequently allow us to share code and add a new feature: a preview pane.&lt;/p&gt;
 
 &lt;p&gt;And now you&amp;#39;ve reached the bottom of this post!&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Rendering PDF pages with PDF.js and Vue</title>
-    <link rel="alternate" href="/blog/building-a-pdf-viewer-with-vue-part-1.html"/>
-    <id>/blog/building-a-pdf-viewer-with-vue-part-1.html</id>
-    <published>2018-06-28T00:00:00+00:00</published>
-    <updated>2018-06-28T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;I remember a time not too long ago when the possibility of rendering PDFs inline on a web page would have sounded crazy. Then &lt;a href="https://mozilla.github.io/pdf.js/"&gt;PDF.js&lt;/a&gt; came along and changed all that.&lt;/p&gt;
-
-&lt;p&gt;I was recently tasked with just this sort of project and I leveraged PDF.js, &lt;a href="https://vuejs.org/"&gt;Vue&lt;/a&gt;&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;I remember a time not too long ago when the possibility of rendering PDFs inline on a web page would have sounded crazy. Then &lt;a href="https://mozilla.github.io/pdf.js/"&gt;PDF.js&lt;/a&gt; came along and changed all that.&lt;/p&gt;
-
-&lt;p&gt;I was recently tasked with just this sort of project and I leveraged PDF.js, &lt;a href="https://vuejs.org/"&gt;Vue&lt;/a&gt; and &lt;a href="https://webpack.js.org"&gt;Webpack&lt;/a&gt; to put it all together. This post is the first in a series which will demonstrate how I used Vue to render PDF pages to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements. Later we&amp;#39;ll explore conditional rendering and adding paging and zoom controls.&lt;/p&gt;
-
-&lt;p&gt;The latest source code for this project is on Github at &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;rossta/vue-pdfjs-demo&lt;/a&gt;. To see the version of the project described in this post, checkout the &lt;a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-1-simple-document"&gt;&lt;code&gt;part-1-simple-document&lt;/code&gt; branch&lt;/a&gt;. Finally, here&amp;#39;s a link to the &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-61e237fc.png" alt="Demo" /&gt;&lt;/a&gt;&lt;/p&gt;
-
-      &lt;h3 id="similar-projects" class="title"&gt;
-        &lt;a name="similar-projects" class="anchor" href="#similar-projects"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Similar projects
-      &lt;/h3&gt;
-    
-&lt;p&gt;Mozilla&amp;#39;s PDF.js package ships with its own web viewer (&lt;a href="https://mozilla.github.io/pdf.js/web/viewer.html"&gt;demo&lt;/a&gt;) For an alternative approach to PDF rendering with Vue, check out the &lt;a href="https://github.com/FranckFreiburger/vue-pdf"&gt;vue-pdf&lt;/a&gt; package.&lt;/p&gt;
-
-      &lt;h3 id="an-incomplete-intro-to-pdf-js" class="title"&gt;
-        &lt;a name="an-incomplete-intro-to-pdf-js" class="anchor" href="#an-incomplete-intro-to-pdf-js"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        An incomplete intro to PDF.js
-      &lt;/h3&gt;
-    
-&lt;p&gt;PDF.js is a JavaScript project by Mozilla that makes it easier to parse and render PDFs in HTML. It is comprised of three key pieces: Core, Display, and Viewer.&lt;/p&gt;
-
-&lt;p&gt;The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. This code is split out into a separate file, &lt;code&gt;pdf.worker.js&lt;/code&gt;, which will run in its own web worker thread in the browser. Since we&amp;#39;re using Webpack, it will handle bundling, fetching, and configuration of the worker script behind the scenes.&lt;/p&gt;
-
-&lt;p&gt;The Viewer layer, as I mentioned earlier, provides a basic user interface for viewing and paging through PDFs in Firefox (or other browsers with included extensions). We won&amp;#39;t be using this piece; in fact, this tutorial could be used as the basis for a Vue.js implementation of alternative viewer.&lt;/p&gt;
-
-&lt;p&gt;Most of our interaction with the PDF.js library will be at the Display layer, which provides the JavaScript API for retrieving and manipulating PDF document and page data. The API relies heavily on Promises, which we&amp;#39;ll be incorporating into our Vue.js components. We&amp;#39;ll also take advantage of dynamic imports to code split our use of PDF.js, since, at least for my purposes, I only want to load the PDF.js library on demand. Keeping it out of the main application Webpack bundle will help keep the initial page load time small.&lt;/p&gt;
-
-      &lt;h3 id="using-pdf-js" class="title"&gt;
-        &lt;a name="using-pdf-js" class="anchor" href="#using-pdf-js"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Using PDF.js
-      &lt;/h3&gt;
-    
-&lt;p&gt;Here&amp;#39;s a basic ES6 example of dynamically loading PDF.js to render an entire PDF document (without Vue):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;import range from &amp;#39;lodash/range&amp;#39;
-
-import(&amp;#39;pdfjs-dist/webpack&amp;#39;).then(pdfjs =&amp;gt; {
-  pdfjs
-    .getDocument(&amp;#39;wibble.pdf&amp;#39;)
-    .then(pdf =&amp;gt; {
-      const pagePromises = range(1, pdf.numPages).map(number =&amp;gt; pdf.getPage(number))
-      return Promise.all(pagePromises)
-    })
-    .then(pages =&amp;gt; {
-        const scale = 2
-
-        const canvases = pages.forEach(page =&amp;gt; {
-          const viewport = page.getViewport(scale)
-
-          // Prepare canvas using PDF page dimensions
-          const canvas = document.createElement(&amp;#39;canvas&amp;#39;)
-          canvas.height = viewport.height
-          canvas.width = viewport.width
-
-          // Render PDF page into canvas context
-          const canvasContext = canvas.getContext(&amp;#39;2d&amp;#39;)
-          const renderContext = { canvasContext, viewport }
-          page.render(renderContext).then(() =&amp;gt; console.log(&amp;#39;Page rendered&amp;#39;))
-
-          document.body.appendChild(canvas)
-        })
-      },
-      error =&amp;gt; console.log(&amp;#39;Error&amp;#39;, error),
-    )
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The code above dynamically imports the PDF.js distribution with &lt;code&gt;import(&amp;#39;pdfjs/dist&amp;#39;)&lt;/code&gt;. Webpack will split the PDF.js code out into its own bundle and load it asynchronously only when that line is executed in the browser. This expression returns a promise that resolves with the PDF.js module when the bundle is successfully loaded and evaluated. With a reference to the modules, &lt;code&gt;pdfjs&lt;/code&gt; we can now exercise the PDF.js document API.&lt;/p&gt;
-
-&lt;p&gt;The expression &lt;code&gt;pdjs.getDocument(&amp;#39;url-to-pdf&amp;#39;)&lt;/code&gt; also returns a promise which resolves when the the document is loaded and parsed by the PDF.js core layer. This promise resolves to an instance of &lt;a href="https://mozilla.github.io/pdf.js/api/draft/PDFDocumentProxy.html"&gt;&lt;code&gt;PDFDocumentProxy&lt;/code&gt;&lt;/a&gt;, which we can use to retrieve additional data from the PDF document. We used the &lt;code&gt;PDFDocumentProxy#numPages&lt;/code&gt; attribute to build a number range of all the pages (using lodash &lt;code&gt;range&lt;/code&gt;) and build an array of promises representing requests for each of the documents pages returned by &lt;code&gt;PDFDocumentProxy#getPage(pageNumber)&lt;/code&gt;. The key here to loading all pages at once is using &lt;code&gt;Promise.all&lt;/code&gt; to resolve when all pages are retrieved as &lt;a href="https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html"&gt;PDFPageProxy&lt;/a&gt; objects.&lt;/p&gt;
-
-&lt;p&gt;Finally, for each page object, we create a separate &lt;code&gt;canvas&lt;/code&gt; element and trigger the &lt;code&gt;PDFPageProxy#render&lt;/code&gt; method, which returns another promise and accepts options for a canvas context and viewport. This render method is responsible for drawing the PDF data into the canvas element asynchronously while we append the canvas elements to &lt;code&gt;document.body&lt;/code&gt;.&lt;/p&gt;
-
-      &lt;h3 id="refactoring-to-vue" class="title"&gt;
-        &lt;a name="refactoring-to-vue" class="anchor" href="#refactoring-to-vue"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Refactoring to Vue
-      &lt;/h3&gt;
-    
-&lt;p&gt;Our little script works, and for some applications, this may implementaiton may be sufficient. But let&amp;#39;s say we need some interaction, like paging controls, zoom buttons, conditional page fetching and rendering while scrolling, etc. Adding complexity could get unwieldy quickly. For this next stage, we&amp;#39;ll refactor to Vue components, so we can get the benefit of reactivity and make our code more declarative and easier to extend.&lt;/p&gt;
-
-&lt;p&gt;In pseudocode, our component architecture will resemble this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFDocument&amp;gt;
-  &amp;lt;PDFPage :number=&amp;quot;1&amp;quot; /&amp;gt;
-  &amp;lt;PDFPage :number=&amp;quot;2&amp;quot; /&amp;gt;
-  &amp;lt;PDFPage :number=&amp;quot;3&amp;quot; /&amp;gt;
-  ...
-&amp;lt;/PDFDocument&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="requirements" class="title"&gt;
-        &lt;a name="requirements" class="anchor" href="#requirements"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Requirements
-      &lt;/h3&gt;
-    
-&lt;p&gt;For my project, I used the following npm packages (installed using &lt;code&gt;yarn&lt;/code&gt;).&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;@vue/cli&lt;/code&gt;: &lt;code&gt;^3.0.0-beta.15&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;vue&lt;/code&gt;: &lt;code&gt;^2.5.16&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;pdfjs-dist&lt;/code&gt;: &lt;code&gt;^2.0.489&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I would expect it to be straightforward to adapt the code for other relatively recent versions of these packages.&lt;/p&gt;
-
-&lt;aside class="callout panel"&gt;&lt;p&gt;
-Since PDF.js will request data via an XMLHTTPRequest in JavaScript, typical crossdomain restrictions apply. For the purposes of this tutorial, we'll assume we have a URL to a PDF that can be retrieved either from our development server or from a server that allows Cross-Origin Resource Sharing (CORS) from our host.
-&lt;/p&gt;&lt;/aside&gt;
-
-      &lt;h3 id="fetching-the-pdf" class="title"&gt;
-        &lt;a name="fetching-the-pdf" class="anchor" href="#fetching-the-pdf"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Fetching the PDF
-      &lt;/h3&gt;
-    
-&lt;p&gt;Our &lt;code&gt;&amp;lt;App&amp;gt;&lt;/code&gt; component will hard-code default values for a PDF url and a rendering scale which will be passed to a &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; component.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- src/App.vue --&amp;gt;
-
-&amp;lt;template&amp;gt;
-  &amp;lt;div id=&amp;quot;app&amp;quot;&amp;gt;
-    &amp;lt;PDFDocument v-bind=&amp;quot;{url, scale}&amp;quot; /&amp;gt;
-  &amp;lt;/div&amp;gt;
-&amp;lt;/template&amp;gt;
-
-&amp;lt;script&amp;gt;
-export default {
-  // ...
-  data() {
-    return {
-      url: &amp;#39;https://cdn.filestackcontent.com/5qOCEpKzQldoRsVatUPS&amp;#39;, // a PDF
-      scale: 2,
-    }
-  },
-}
-&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The document component is responsible for fetching the PDF data through PDF.js and rendering  a &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; component for each &lt;code&gt;page&lt;/code&gt; object returned by the API.&lt;/p&gt;
-
-&lt;p&gt;Its &lt;code&gt;data&lt;/code&gt; will track the &lt;code&gt;pdf&lt;/code&gt; object and a list of &lt;code&gt;page&lt;/code&gt; object in &lt;code&gt;pages&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-export default {
-  props: [&amp;#39;url&amp;#39;, &amp;#39;scale&amp;#39;],
-
-  data() {
-    return {
-      pdf: undefined,
-      pages: [],
-    };
-  },
-  // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;When the component is mounted, it will fetch the PDF data using the &lt;code&gt;pdfjs.getDocument&lt;/code&gt; function.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-export default {
-  //...
-
-  created() {
-    this.fetchPDF();
-  },
-
-  methods: {
-    fetchPDF() {
-      import(&amp;#39;pdfjs-dist/webpack&amp;#39;).
-        then(pdfjs =&amp;gt; pdfjs.getDocument(this.url)).
-        then(pdf =&amp;gt; (this.pdf = pdf));
-    },
-  },
-  //...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;#39;ll use a watch callback for the &lt;code&gt;pdf&lt;/code&gt; attribute to fetch all the pages via the &lt;code&gt;pdf.getPage&lt;/code&gt; function provided by PDF.js. Since the return value of &lt;code&gt;getPage&lt;/code&gt; behaves like a promise, we can use &lt;code&gt;Promise.all&lt;/code&gt; to determine when all the &lt;code&gt;page&lt;/code&gt; objects have been fetched and set the resolved collection as the &lt;code&gt;pages&lt;/code&gt; data:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-import range from &amp;#39;lodash/range&amp;#39;;
-
-export default {
-  // ...
-  watch: {
-    pdf(pdf) {
-      this.pages = [];
-      const promises = range(1, pdf.numPages).
-        map(number =&amp;gt; pdf.getPage(number));
-
-      Promise.all(promises).
-        then(pages =&amp;gt; (this.pages = pages));
-    },
-  },
-};
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The template simply renders a &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; child component for each &lt;code&gt;page&lt;/code&gt; object. Each page component also needs the &lt;code&gt;scale&lt;/code&gt; prop for rendering the page data to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- src/components/PDFDocument.vue --&amp;gt;
-
-&amp;lt;template&amp;gt;
-  &amp;lt;div class=&amp;quot;pdf-document&amp;quot;&amp;gt;
-    &amp;lt;PDFPage
-      v-for=&amp;quot;page in pages&amp;quot;
-      v-bind=&amp;quot;{page, scale}&amp;quot;
-      :key=&amp;quot;page.pageNumber&amp;quot;
-    /&amp;gt;
-  &amp;lt;/div&amp;gt;
-&amp;lt;/template&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="setting-up-the-canvas" class="title"&gt;
-        &lt;a name="setting-up-the-canvas" class="anchor" href="#setting-up-the-canvas"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Setting up the canvas
-      &lt;/h3&gt;
-    
-&lt;p&gt;Now we can build out the &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; element. We&amp;#39;ll simply will use a Vue &lt;code&gt;render&lt;/code&gt; function to create a &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element with computed attributes, &lt;code&gt;canvasAttrs&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
-
-export default {
-  props: [&amp;#39;page&amp;#39;, &amp;#39;scale&amp;#39;],
-
-  render(h) {
-    const {canvasAttrs: attrs} = this;
-    return h(&amp;#39;canvas&amp;#39;, {attrs});
-  },
-
-  // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To render a PDF to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; with an acceptable resolution, we can take advantage of a browser property called &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio"&gt;&lt;code&gt;window.devicePixelRatio&lt;/code&gt;&lt;/a&gt;. This value represents the ratio of screen pixels to CSS pixels. Given a hi-resolution display with a &lt;code&gt;devicePixelRatio&lt;/code&gt; of &lt;code&gt;2&lt;/code&gt;, we&amp;#39;d want to give the canvas initial width and height attributes that are two times greater than its corresponding width and height in CSS. Otherwise, rendering our PDF pixels to canvas may appear blurry.&lt;/p&gt;
-
-&lt;p&gt;When the &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; component is created, we can access the &lt;code&gt;viewport&lt;/code&gt; property of the &lt;code&gt;page&lt;/code&gt; object, via &lt;code&gt;PDFPageProxy#getViewport&lt;/code&gt;, to obtain the pixel width and height of the PDF. These are the width and height attributes of the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element. For the actual size of the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;, we&amp;#39;ll use CSS attributes.&lt;/p&gt;
-
-&lt;p&gt;Since the &lt;code&gt;scale&lt;/code&gt; prop is reactive and our &lt;code&gt;render&lt;/code&gt; function depends on &lt;code&gt;canvasAttrs&lt;/code&gt;, defining &lt;code&gt;canvasAttrs&lt;/code&gt; as a computed property based off the scale means our PDF pages will automatically re-render when the scale changes. Future iterations will allow to the change &lt;code&gt;scale&lt;/code&gt; prop (using future zoom controls, for example). We&amp;#39;ll simply calculate the width and height via CSS to update the rendered size of the canvas to avoid redrawing the canvas data from the &lt;code&gt;page&lt;/code&gt; object each time. For this, we use a clone of the original viewport, given via the &lt;code&gt;actualSizeViewport&lt;/code&gt; computed property, and the &lt;code&gt;devicePixelRatio&lt;/code&gt; to calculate the target width and height style attributes for the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s the code that puts all that together:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
-
-export default {
-  created() {
-    // PDFPageProxy#getViewport
-    // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
-    this.viewport = this.page.getViewport(this.scale);
-  },
-
-  computed: {
-    canvasAttrs() {
-      let {width, height} = this.viewport;
-      [width, height] = [width, height].map(dim =&amp;gt; Math.ceil(dim));
-
-      const style = this.canvasStyle;
-
-      return {
-        width,
-        height,
-        style,
-        class: &amp;#39;pdf-page&amp;#39;,
-      };
-    },
-
-    canvasStyle() {
-      const {width: actualSizeWidth, height: actualSizeHeight} = this.actualSizeViewport;
-      const pixelRatio = window.devicePixelRatio || 1;
-      const [pixelWidth, pixelHeight] = [actualSizeWidth, actualSizeHeight]
-        .map(dim =&amp;gt; Math.ceil(dim / pixelRatio));
-      return `width: ${pixelWidth}px; height: ${pixelHeight}px;`
-    },
-
-    actualSizeViewport() {
-      return this.viewport.clone({scale: this.scale});
-    },
-    //...
-  },
-
-  // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="rendering-the-page" class="title"&gt;
-        &lt;a name="rendering-the-page" class="anchor" href="#rendering-the-page"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Rendering the page
-      &lt;/h3&gt;
-    
-&lt;p&gt;When the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element mounts, we can draw the PDF page data to it using the &lt;code&gt;PDFPageProxy#render&lt;/code&gt; method. It needs context from the &lt;code&gt;viewport&lt;/code&gt; and &lt;code&gt;canvasContext&lt;/code&gt; as arguments. Since that returns a promise, we can be notified when it&amp;#39;s complete.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
-
-export default {
-  mounted() {
-    this.drawPage();
-  },
-
-  methods: {
-    drawPage() {
-      if (this.renderTask) return;
-
-      const {viewport} = this;
-      const canvasContext = this.$el.getContext(&amp;#39;2d&amp;#39;);
-      const renderContext = {canvasContext, viewport};
-
-      // PDFPageProxy#render
-      // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
-      this.renderTask = this.page.render(renderContext);
-      this.renderTask.
-        then(() =&amp;gt; this.$emit(&amp;#39;rendered&amp;#39;, this.page));
-    },
-    // ...
-  },
-  // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="cleaning-up-after-ourselves" class="title"&gt;
-        &lt;a name="cleaning-up-after-ourselves" class="anchor" href="#cleaning-up-after-ourselves"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Cleaning up after ourselves
-      &lt;/h3&gt;
-    
-&lt;p&gt;As we&amp;#39;re working with JavaScript objects that keep state outside of Vue&amp;#39;s control, we should be mindful to call provided teardown methods. The PDF document and page objects provide &lt;code&gt;destroy&lt;/code&gt; methods to be called on teardown, such as, when our render promise fails, the &lt;code&gt;page&lt;/code&gt; object is replaced, or the Vue component itself is destroyed.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
-
-export default {
-  beforeDestroy() {
-    this.destroyPage(this.page);
-  },
-
-  methods: {
-    drawPage() {
-      // ...
-      this.renderTask.
-        then(/* */).
-        catch(this.destroyRenderTask);
-    },
-
-    destroyPage(page) {
-      if (!page) return;
-
-      // PDFPageProxy#_destroy
-      // https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html
-      page._destroy();
-
-      // RenderTask#cancel
-      // https://mozilla.github.io/pdf.js/api/draft/RenderTask.html
-      if (this.renderTask) this.renderTask.cancel();
-    },
-
-    destroyRenderTask() {
-      if (!this.renderTask) return;
-
-      // RenderTask#cancel
-      // https://mozilla.github.io/pdf.js/api/draft/RenderTask.html
-      this.renderTask.cancel();
-      delete this.renderTask;
-    },
-  },
-
-  watch: {
-    page(page, oldPage) {
-      this.destroyPage(oldPage);
-    },
-  },
-};
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="wrapping-up" class="title"&gt;
-        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Wrapping up
-      &lt;/h3&gt;
-    
-&lt;p&gt;We&amp;#39;ve now converted our original, imperative PDF rendering script with a declarative Vue component hierarchy. We&amp;#39;ve certainly added a lot of code to make this work, but with working knowledge of Vue, we&amp;#39;ve made it easier to reason about, easier to extend, and easier to add features to give our PDF viewer more functionality.&lt;/p&gt;
-
-&lt;p&gt;In the next post, we&amp;#39;ll look at adding some conditional rendering; since all pages aren&amp;#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.&lt;/p&gt;
 </content>
   </entry>
 </feed>

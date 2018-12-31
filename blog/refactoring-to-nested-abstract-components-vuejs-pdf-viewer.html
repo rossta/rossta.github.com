@@ -1,0 +1,421 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Refactoring to nested abstract components - rossta.net</title>
+<meta name="description" content="Though it's often more easier to extract shared behavior as mixins to be used across components in Vue.js, this post describes at a high level how I used abstract components to achieve the same goa..." />
+<meta name="keywords" content="Vue" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Though it's often more easier to extract shared behavior as mixins to be used across components in Vue.js, this post describes at a high level how I used abstract components to achieve the same goal and the advantages of doing so." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/ak-n-cakiner-tree-branch-unsplash-d3b63885.jpg" />
+<meta name="twitter:title" content="Refactoring to nested abstract components" />
+<meta property="og:description" content="Though it's often more easier to extract shared behavior as mixins to be used across components in Vue.js, this post describes at a high level how I used abstract components to achieve the same goal and the advantages of doing so." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/ak-n-cakiner-tree-branch-unsplash-d3b63885.jpg" />
+<meta property="og:title" content="Refactoring to nested abstract components" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" />
+    <link rel="icon"                                  href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
+
+    <link rel="mask-icon" href="/safari-pinned-tab-5cdca7ae.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app.bundle-c18d8c85.css" rel="stylesheet" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Refactoring to nested abstract components
+  </h1>
+    <h3>
+      Building a PDF Viewer with Vue - Part 4
+    </h3>
+</header>
+
+
+      <p>To add a preview pane to the Vue.js PDF viewer, I wanted it to have very similar behavior to the document pane. In this post, I&#39;ll demonstrate how I extracted this behavior with a set of components, as opposed to alternatives, like a mixin.</p>
+
+      <h3 id="the-project" class="title">
+        <a name="the-project" class="anchor" href="#the-project">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The project
+      </h3>
+    
+<p>This post is part of ongoing series, <a href="/blog/series/pdf-viewer.html">Building a PDF Viewer with Vue.js</a>. The source code for this project is on Github at <a href="https://github.com/rossta/vue-pdfjs-demo">rossta/vue-pdfjs-demo</a>. The source code for the behavior described in this post can be found in the <a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-4-shared-behavior-components"><code>tutorial/part-4-shared-behavior-components</code> branch on Github</a>.</p>
+
+<p>Here&#39;s the latest <a href="https://rossta.net/vue-pdfjs-demo/">project demo</a>.</p>
+
+      <h3 id="catching-up-from-last-time" class="title">
+        <a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Catching up from last time
+      </h3>
+    
+<p>So far in <a href="/blog/series/pdf-viewer.html">this series</a>, we have built a simple PDF viewer to render the pages of PDF document to <code>&lt;canvas&gt;</code> elements with Vue. We have also updated our components to fetch and render PDF pages lazily as they are scrolled into the viewport and we have extracted this behavior into a <code>&lt;PDFData&gt;</code> component.</p>
+
+<p><img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3-28bad22b.jpg" alt="Preview of the preview" /></p>
+
+      <h3 id="the-problem" class="title">
+        <a name="the-problem" class="anchor" href="#the-problem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The problem
+      </h3>
+    
+<p>At a high level, both the preview and document panes must:</p>
+
+<ol>
+<li>Be independently scrollable</li>
+<li>Trigger events, received by the <a href="/blog/extracting-a-data-component-in-vue.html">data source, the <code>&lt;PDFData&gt;</code> component</a>, to fetch more page data as they are scrolled.</li>
+</ol>
+
+<p>The new preview pane will have a similar layout to the document. Given the following component hierarchy for the current document viewer:</p>
+
+<pre><code class="html">&lt;PDFData&gt;
+  &lt;PDFDocument&gt;
+    &lt;PDFPage /&gt;
+    &lt;PDFPage /&gt;
+    &lt;PDFPage /&gt;
+    ...
+  &lt;/PDFDocument&gt;
+&lt;/PDFData&gt;
+</code></pre>
+
+<p>That of the preview pane will be nearly identical:</p>
+
+<pre><code class="html">&lt;PDFData&gt;
+  &lt;PDFPreview&gt;
+    &lt;PDFThumbnail /&gt;
+    &lt;PDFThumbnail /&gt;
+    &lt;PDFThumbnail /&gt;
+    ...
+  &lt;/PDFPreview&gt;
+&lt;/PDFData&gt;
+</code></pre>
+
+<p>Extracting the scroll-and-fetch functionality presents an interesting challenge because it is currently split between the <code>&lt;PDFDocument&gt;</code> and <code>&lt;PDFPage&gt;</code> components.</p>
+
+<p>Among other things, the <code>&lt;PDFDocument&gt;</code> is responsible for determining when:</p>
+
+<ol>
+<li>the scrollable &quot;boundary&quot;, i.e., where in the document the viewport is located</li>
+<li>the last fetched page has entered the viewport, i.e., when to fetch additional pages</li>
+</ol>
+
+<p>The <code>&lt;PDFPage&gt;</code> is responsible for determining when it is visible by determining whether its boundaries overlap with the viewport.</p>
+
+      <h3 id="the-component-based-solution" class="title">
+        <a name="the-component-based-solution" class="anchor" href="#the-component-based-solution">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The component-based solution
+      </h3>
+    
+<p>To share this behavior with the preview pane hierarchy, we&#39;ll create two abstract components, a <code>&lt;ScrollingPage&gt;</code> to take the responsibility of determing page visibility and a <code>&lt;ScrollingDocument&gt;</code> to absorb the properties and methods for determining the scroll boundaries and when the request more pages. We&#39;ll compose both the document and new preview panes from these new components.</p>
+
+<p>The hierarchy becomes:</p>
+
+<pre><code class="html">&lt;PDFData&gt;
+  &lt;PDFPreview&gt;
+    &lt;ScrollingDocument&gt;
+      &lt;ScrollingPage&gt;
+        &lt;PDFThumbnail /&gt;
+      &lt;/ScrollingPage&gt;
+      &lt;ScrollingPage&gt;
+        &lt;PDFThumbnail /&gt;
+      &lt;/ScrollingPage&gt;
+      ...
+    &lt;/ScrollingDocument&gt;
+  &lt;/PDFPreview&gt;
+  &lt;PDFDocument&gt;
+    &lt;ScrollingDocument&gt;
+      &lt;ScrollingPage&gt;
+        &lt;PDFPage /&gt;
+      &lt;/ScrollingPage&gt;
+      &lt;ScrollingPage&gt;
+        &lt;PDFPage /&gt;
+      &lt;/ScrollingPage&gt;
+      ...
+    &lt;/ScrollingDocument&gt;
+  &lt;/PDFDocument&gt;
+&lt;/PDFData&gt;
+</code></pre>
+
+<p>Rather than detailing all the changes, but I&#39;ll highlight some key takeaways about how I fit the pieces together.</p>
+
+<p>First, these changes are made possible by Vue <code>slots</code> and <code>slot-scope</code>.</p>
+
+<p>The <code>&lt;ScrollingPage&gt;</code> component is abstract, meaning it does not render any html itself. Instead, it delegates to its children, which, for our app, is a single <code>&lt;PDFPage&gt;</code>, through its <code>render</code> function while passing in additional properties via <code>this.$scopedSlots</code>. This is akin to calling the child component with arguments.</p>
+
+<pre><code class="javascript">// src/components/ScrollingPage.vue
+
+render() {
+  return this.$scopedSlots.default({
+    isElementVisible: this.isElementVisible,
+  });
+},
+</code></pre>
+
+<p>The <code>&lt;ScrollingDocument&gt;</code> uses a <code>v-for</code> loop to render each of the fetched pages as <code>&lt;ScrollingPage&gt;</code> components passing in properties the <code>&lt;ScrollingPage&gt;</code> needs to perform its calculations. Here is a simplified version of the <code>&lt;ScrollingDocument&gt;</code> template.</p>
+
+<pre><code class="html">&lt;template&gt;
+  &lt;ScrollingPage
+    v-for=&quot;page in pages&quot;
+    :key=&quot;page.pageNumber&quot;
+    v-bind=&quot;{page, scrollTop, clientHeight}&quot;
+    &gt;
+    &lt;div
+      class=&quot;scrolling-page&quot;
+      slot-scope=&quot;{isElementVisible}&quot;
+      &gt;
+      &lt;slot v-bind=&quot;{page, isElementVisible}&quot;&gt;&lt;/slot&gt;
+    &lt;/div&gt;
+  &lt;/ScrollingPage&gt;
+&lt;/template&gt;
+</code></pre>
+
+<p>Note the use of the <code>slot-scope</code> to receive the <code>isElementVisible</code> prop passed in from the <code>&lt;ScrollingPage&gt;</code> scoped slot. This and the individual <code>page</code> prop, provided by the <code>v-for</code> loop, are passed on to the <code>slot</code>.</p>
+
+<p>The new <code>&lt;PDFDocument&gt;</code> template below shows how this slot is used. It inserts <code>&lt;PDFPage&gt;</code> as a child of <code>&lt;ScrollingDocument&gt;</code> and extracts the key props with another usage of <code>slot-scope</code> (a <code>slot-scope</code> within a <code>slot-scope</code>!) while merging in an additional prop, <code>scale</code>.</p>
+
+<pre><code class="html">&lt;template&gt;
+  &lt;ScrollingDocument
+    class=&quot;pdf-document&quot;
+    v-bind=&quot;{pages, pageCount, currentPage}&quot;
+    @pages-fetch=&quot;onPagesFetch&quot;
+    &gt;
+    &lt;PDFPage
+      slot-scope=&quot;{page, isElementVisible}&quot;
+      v-bind=&quot;{scale, page, isElementVisible}&quot;
+    /&gt;
+  &lt;/ScrollingDocument&gt;
+&lt;/template&gt;
+</code></pre>
+
+<p>The <code>&lt;PDFPreview&gt;</code> is almost identical and demonstrates why we went to the trouble of using scoped slots</p>
+
+<pre><code class="html">&lt;template&gt;
+  &lt;ScrollingDocument
+    class=&quot;pdf-document&quot;
+    v-bind=&quot;{pages, pageCount, currentPage}&quot;
+    @pages-fetch=&quot;onPagesFetch&quot;
+    &gt;
+    &lt;PDFThumbnail
+      slot-scope=&quot;{page, isElementVisible}&quot;
+      v-bind=&quot;{scale, page, isElementVisible}&quot;
+    /&gt;
+  &lt;/ScrollingDocument&gt;
+&lt;/template&gt;
+</code></pre>
+
+<p>We can render a different experience in this part of the component hierachy by changing the component we give to the slot (the <code>&lt;PDFThumbnail&gt;</code>) while also getting the benefits of the shared behavior.</p>
+
+      <h3 id="stepping-back" class="title">
+        <a name="stepping-back" class="anchor" href="#stepping-back">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Stepping back
+      </h3>
+    
+<p>Note the contrast in this approach with mixins. It would have been arguably much more straight forward easier to move required props, methods, and hooks into separate mixins for the preview and document panes. While we could accomplish the goal of code-sharing, it comes at the cost of implicit dependencies, potential name clashes, and other aspects of mounting complexity we noted earlier.</p>
+
+<p>Refactoring to components has a higher barrier to entry; it requires some extra thought and a grasp of <code>slots</code> and <code>slot-scope</code> (yes, it can get confusing).</p>
+
+<p>One practical advantage is we can troubleshoot the scrolling behavior with a clear picture of where the behavior is located in our component tree with Vue devtools:</p>
+
+<p><img src="/assets/images/blog/vue-pdf-viewer/part-4-shared-behavior-devtools-c2fb2d8e.jpg" alt="scrolling components in Vue devtools" /></p>
+
+<p>In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.</p>
+
+<p>As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the <a href="https://githbub.com/rossta/vue-pdfjs-demo">source code on Github</a>. Make a pull request or let me know how I could improve things by <a href="https://twitter.com/rossta">reaching out on Twitter</a>.</p>
+
+    </article>
+    <section class="margin-bottom double">
+      <a href="https://twitter.com/intent/tweet?text=Refactoring%20to%20nested%20abstract%20components&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Frefactoring-to-nested-abstract-components-vuejs-pdf-viewer.html" class="button bg-twitter-blue" target="_blank" rel="noopener">Share this post on Twitter</a>
+    </section>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP" value="https://rossta.net/blog/2018-12-30-refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2018-12-30-refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html" />
+        <input type="hidden" name="group[17961][1]" id="signup_technology" value="Vue" />
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/ak-n-cakiner-tree-branch-unsplash-d3b63885.jpg" alt="Ak n cakiner tree branch unsplash" />
+            <figcaption>Photo by AK¥N Cakiner on Unsplash</figcaption>
+        </figure>
+    </article>
+    <section class="margin-bottom double">
+      <p>
+          Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
+        Published on Dec 30, 2018
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "refactoring-to-nested-abstract-components-vuejs-pdf-viewer";
+    var disqus_title      = "Refactoring to nested abstract components";
+    var disqus_url        = "https://rossta.net/blog/refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/n-1-is-a-rails-feature.html">N+1 is a Rails feature</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/vue.html">Vue</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2018 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/runtime.bundle-2352c808.js"></script><script src="/assets/javascripts/vendor.bundle-0116f3b0.js"></script><script src="/assets/javascripts/app.bundle-ed1e4144.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>
