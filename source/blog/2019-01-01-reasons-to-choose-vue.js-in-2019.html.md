@@ -12,7 +12,7 @@ tags:
   - Vue
 ---
 
-I love building applications in Vue.js and here's why I think the future is looking bright for the framework and its community
+I love building applications in Vue.js and here's why I think the future is looking bright for the framework and its community.
 
 ### 1. No build step required
 
