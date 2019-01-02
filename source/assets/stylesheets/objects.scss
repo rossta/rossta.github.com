@@ -116,15 +116,19 @@ blockquote {
   list-style: none;
 }
 
-.hero .icon-list {
+.icon-list {
   margin: 0;
-
   li {
-    margin-right: 10px;
-    height: 64px;
+    margin-right: .75em;
   }
   img {
     width: 32px;
+  }
+}
+
+.hero .icon-list {
+  li {
+    height: 64px;
   }
 }
 
