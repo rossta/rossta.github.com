@@ -6,10 +6,17 @@ per_page: 4
 <% content_for(:title) { } %>
 <% content_for(:section) { 'I make things' } %>
 
-<section id="hero">
-  <header>
-    <h1>Hello! I'm Ross. I build web apps.</h1>
-  </header>
+<section id="hero" class="hero">
+  <section class="flex align-center space-between">
+    <header>
+      <h1>Hello! I'm Ross. I build web apps.</h1>
+    </header>
+    <ul class="icon-list flex">
+      <li><%= link_to(image_tag("icons/twitter-64x.png"), "https://twitter.com/rossta", class: "header-icon icon", target: "_blank", rel: "no-follow") %></li>
+      <li><%= link_to(image_tag("icons/github-64x.png"), "https://github.com/rossta", class: "header-icon icon", target: "_blank", rel: "no-follow") %></li>
+      <li><%= link_to(image_tag("icons/medium-64x.png"), "https://medium.com/rossta", class: "header-icon icon", target: "_blank", rel: "no-follow") %></li>
+    </ul>
+  </section>
   <section>
     <p>Building applications for the web is HARD.
       Here's where I share what I've learned.
