@@ -4,7 +4,7 @@
   <h3><%= title || prompt %></h3>
   <p>
     <% if current_article.present? %>
-      <%= tweet_link_to "Do me a favor and share this post on Twitter", {
+      <%= tweet_link_to "Please share this post on Twitter", {
         text: current_article.title,
         url: to_url(path: current_article.url)
       } %>
