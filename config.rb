@@ -230,7 +230,8 @@ helpers do
   end
 
   def current_page_tags
-    Array(current_page.data[:tags])
+    tags = Array(current_page.data[:tags])
+    tags.present? ? tags : %w[JavaScript Ruby]
   end
 
   def nozen?

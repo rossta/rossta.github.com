@@ -11,12 +11,7 @@
 
       <%= yield %>
     </article>
-    <section class="margin-bottom double">
-      <%= tweet_link_to "Share this post on Twitter", {
-        text: current_article.title,
-        url: to_url(path: current_article.url)
-      }, class: "button bg-twitter-blue" %>
-    </section>
+
     <section class="signup-form-standalone margin-bottom quadruple">
       <%= partial "partials/signup", locals: { title: "Did you like this post?" } %>
     </section>
