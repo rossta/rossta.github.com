@@ -8,6 +8,11 @@
   "background_color": "#f8f8ff",
   "icons": [
     {
+      "src": "/touch-icon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
       "src": "/touch-icon-36x36.png",
       "sizes": "36x36",
       "type": "image/png"

@@ -26,6 +26,9 @@
     <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
     <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="48x48"   href="/touch-icon-48x48.png">
+    <link rel="icon" type="image/png" sizes="36x36"   href="/touch-icon-36x36.png">
+    <link rel="icon" type="image/png" sizes="36x36"   href="/touch-icon-36x36.png">
     <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
 
@@ -37,7 +40,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <link href="/assets/stylesheets/app.bundle-c18d8c85.css" rel="stylesheet" />
+    <link href="/assets/stylesheets/app-f753d24c.css" rel="stylesheet" />
   </head>
   <body id="application" class="typekit">
     <nav id="welcome-nav" class="top-bar" data-topbar>
@@ -63,10 +66,17 @@
     <div class="row">
       <section id="main" role="main" class="large-12 small-12 columns">
         
-<section id="hero">
-  <header>
-    <h1>Hello! I'm Ross. I build web apps.</h1>
-  </header>
+<section id="hero" class="hero">
+  <section class="flex align-center space-between">
+    <header>
+      <h1>Hello! I'm Ross. I build web apps.</h1>
+    </header>
+    <ul class="icon-list flex">
+      <li><a href="https://twitter.com/rossta" class="header-icon icon" target="_blank" rel="no-follow"><img src="/assets/images/icons/twitter-64x-4c037d0c.png" alt="Twitter 64x" /></a></li>
+      <li><a href="https://github.com/rossta" class="header-icon icon" target="_blank" rel="no-follow"><img src="/assets/images/icons/github-64x-b00f47d7.png" alt="Github 64x" /></a></li>
+      <li><a href="https://medium.com/rossta" class="header-icon icon" target="_blank" rel="no-follow"><img src="/assets/images/icons/medium-64x-43e6c63e.png" alt="Medium 64x" /></a></li>
+    </ul>
+  </section>
   <section>
     <p>Building applications for the web is HARD.
       Here's where I share what I've learned.
@@ -226,7 +236,7 @@
   </p>
 </footer>
 
-    <script src="/assets/javascripts/runtime.bundle-2352c808.js"></script><script src="/assets/javascripts/vendor.bundle-0116f3b0.js"></script><script src="/assets/javascripts/app.bundle-ed1e4144.js"></script>
+    <script src="/runtime-3fa7456e.js"></script><script src="/vendor-0116f3b0.js"></script><script src="/app-ed1e4144.js"></script>
     
     <script type="text/javascript">
 !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
