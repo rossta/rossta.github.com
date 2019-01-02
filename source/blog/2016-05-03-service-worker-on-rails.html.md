@@ -7,7 +7,6 @@ description: This blog post describes how to integrate JavasScript for the new S
 pull_image: 'blog/stock/blue-buildings-pexels-photo.jpeg'
 series: Service Worker
 category: Code
-popular: 5
 tags:
   - Rails
   - JavaScript

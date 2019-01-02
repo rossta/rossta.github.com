@@ -5,7 +5,6 @@ published: true
 summary: A lightweight alternative to Rails
 description: Hanami (formerly Lotus) is a newish Ruby framework for building web applications. Here's a few things I learned about it coming from Rails.
 pull_image: 'blog/stock/fall-leaves-pexels-photo.jpg'
-popular: 3
 category: Code
 tags:
   - Ruby

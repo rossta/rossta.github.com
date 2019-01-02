@@ -4,6 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: Building a PDF Viewer with Vue - Part 1
 description: This tutorial demonstrates how to create Vue.js components that can render PDFs along with tools like Webpack, PDF.js, and the canvas element.
+popular: 1
 series: 'PDF Viewer'
 category: Code
 tags:
