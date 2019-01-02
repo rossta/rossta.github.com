@@ -5,10 +5,164 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2018-12-30T00:00:00+00:00</updated>
+  <updated>2019-01-01T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Seven reasons choose Vue.js in 2019</title>
+    <link rel="alternate" href="/blog/reasons-to-choose-vue-js-in-2019.html"/>
+    <id>/blog/reasons-to-choose-vue-js-in-2019.html</id>
+    <published>2019-01-01T00:00:00+00:00</published>
+    <updated>2019-01-01T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;I love building applications in Vue.js and here's why I think the future is looking bright for the framework and its community.&lt;/p&gt;
+
+      &lt;h3 id="1-no-build-step-required" class="title"&gt;
+        &lt;a name="1-no-build-step-required" class="anchor" href="#1-no-build-step-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        1. No build step required
+      &lt;/h3&gt;
+    
+&lt;p&gt;A critical aspect of the Vue philosophy...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;I love building applications in Vue.js and here&amp;#39;s why I think the future is looking bright for the framework and its community.&lt;/p&gt;
+
+      &lt;h3 id="1-no-build-step-required" class="title"&gt;
+        &lt;a name="1-no-build-step-required" class="anchor" href="#1-no-build-step-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        1. No build step required
+      &lt;/h3&gt;
+    
+&lt;p&gt;A critical aspect of the Vue philosophy is it be easy to get started. Unlike some other popular frameworks, it&amp;#39;s not necessary to use a complex build tool like Webpack to build an application with it. Just include a script tag pointing to the &lt;a href="https://vuejs.org/v2/guide/installation.html#Direct-lt-script-gt-Include"&gt;latest release for development or production&lt;/a&gt;, and you have access to the Vue runtime.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;&amp;lt;script src=&amp;quot;https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Having a low barrier to entry makes Vue a worthy consideration as a first JS framework to learn.&lt;/p&gt;
+
+      &lt;h3 id="2-a-world-class-command-line-interface" class="title"&gt;
+        &lt;a name="2-a-world-class-command-line-interface" class="anchor" href="#2-a-world-class-command-line-interface"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        2. A world-class command line interface
+      &lt;/h3&gt;
+    
+&lt;p&gt;Of course, many developers are looking for advanced development features like ES or TypeScript transpilation, hot module replacement, and tree-shaking, made possible by build tools. Vue has you covered there as well.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install -g @vue/cli
+vue create my-project
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This past year, the Vue core team re-wrote their command line interface from the ground up, resulting in Vue CLI 3. It&amp;#39;s designed in such a way to promote best practices and a full-featured default Webpack configuration that should be easier to extend without making it difficult to upgrade, i.e., &amp;quot;no need to eject.&amp;quot; Vue CLI provides a ton of useful additional features, including an interactive project initialization wizard (available through the terminal or a web-based UI), a plugin system to support generators and configuration for community add-ons, and the ability to specify alternative build targets, like web components or as libraries.&lt;/p&gt;
+
+      &lt;h3 id="3-friendly-learning-curve" class="title"&gt;
+        &lt;a name="3-friendly-learning-curve" class="anchor" href="#3-friendly-learning-curve"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        3. Friendly learning curve
+      &lt;/h3&gt;
+    
+&lt;p&gt;A common criticism I hear about Vue is that its API has a larger surface area than some other popular frameworks and I agree up to a point (depending on the framework). Ironically, one thing I hear &lt;a href="https://hackernoon.com/should-you-learn-react-or-vue-first-7dc0d4dd8c04"&gt;over&lt;/a&gt; and &lt;a href="https://www.quora.com/How-does-Vue-js-compare-to-React-js"&gt;over&lt;/a&gt; in some of these comparisons are Vue is easy to learn. Though this point is subjective and anecdotal, this has held for folks I&amp;#39;ve heard from regardless of previous experience with JavaScript frameworks and JavaScript in general.&lt;/p&gt;
+
+&lt;p&gt;One reason for this, I believe, is that Vue is a &amp;quot;progressive JavaScript framework.&amp;quot;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/vue/vuejs.org-homepage-ba6768c6.png" alt="Vue is a Progressive JavaScript Framework" /&gt;&lt;/p&gt;
+
+&lt;p&gt;No need to learn the whole API to get started with Vue, no need to learn a new syntax like JSX; only basic HTML, CSS, and JS knowledge is required to get started.&lt;/p&gt;
+
+      &lt;h3 id="4-a-solid-ecosystem" class="title"&gt;
+        &lt;a name="4-a-solid-ecosystem" class="anchor" href="#4-a-solid-ecosystem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        4. A solid ecosystem
+      &lt;/h3&gt;
+    
+&lt;p&gt;Before Vue, I&amp;#39;ve gotten frustrated with the fractured nature of learning best practices beyond the basics. What client-side router should I use? Which data management/Flux implementation should I use? How do I test my components? How should I configure my build system? Over time, answering these questions has gotten easier, depending on the community, but I&amp;#39;ve like Vue&amp;#39;s approach since the start.&lt;/p&gt;
+
+&lt;p&gt;Vue provides official support for several essential add-ons, including &lt;code&gt;vue-router&lt;/code&gt; for client-side routing, &lt;code&gt;vuex&lt;/code&gt; for managing state, &lt;code&gt;vue-test-utils&lt;/code&gt; for unit testing components, the &lt;code&gt;vue-devtools&lt;/code&gt; browser extension for debugging, Vue CLI as described earlier. None of these tools are required Vue can work quite well with alternatives for these libraries, like &lt;code&gt;redux&lt;/code&gt; or &lt;code&gt;mobx&lt;/code&gt; instead of &lt;code&gt;vuex&lt;/code&gt;, or another router. The critical point is that the community assists developers by supporting a set of very good recommended defaults, something that a backend framework like Ruby on Rails has traditionally done very well.&lt;/p&gt;
+
+      &lt;h3 id="5-the-vue-instance" class="title"&gt;
+        &lt;a name="5-the-vue-instance" class="anchor" href="#5-the-vue-instance"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        5. The Vue instance
+      &lt;/h3&gt;
+    
+&lt;p&gt;The most potent aspect Vue is its &lt;a href="https://codingexplained.com/coding/front-end/vue-js/understanding-vue-js-reactivity"&gt;reactivity system&lt;/a&gt;. We can tap into it through &lt;a href="https://vuejs.org/v2/guide/instance.html"&gt;the &lt;code&gt;Vue&lt;/code&gt; instance&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;new Vue({
+  el: &amp;quot;#app&amp;quot;,
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This invocation is how every Vue application is initialized. It also creates a fully-reactive root component of the application. A Vue instance can also be used as an event bus or for tracking dependency changes separately from the application component tree, say, as an implementation detail of a Vue plugin.&lt;/p&gt;
+
+&lt;p&gt;Vue&amp;#39;s reactivity system is beautiful in its simplicity. Playing with the Vue instance is an excellent way to understanding how the reactivity system works and level up one&amp;#39;s Vue, and JavaScript, skills in general.&lt;/p&gt;
+
+      &lt;h3 id="6-vue-3-lands-this-year" class="title"&gt;
+        &lt;a name="6-vue-3-lands-this-year" class="anchor" href="#6-vue-3-lands-this-year"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        6. Vue 3 lands this year
+      &lt;/h3&gt;
+    
+&lt;p&gt;Speaking of Vue&amp;#39;s reactivity system, &lt;a href="https://medium.com/the-vue-point/plans-for-the-next-iteration-of-vue-js-777ffea6fabf"&gt;Vue 3 is expected to ship this year&lt;/a&gt;. Among some architectural and performance improvements and minor API changes, Vue 3 provides a new Proxy-based implementation of its reactivity system.&lt;/p&gt;
+
+&lt;p&gt;The Proxy-based system solves &lt;a href="https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats"&gt;some of the known caveats with Vue change detection&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;In Vue 2, Vue cannot:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Detect property addition, e.g., &lt;code&gt;vm.b = 2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Detect array modification through indexing or modifying length, e.g., &lt;code&gt;arr[0] = 2&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The workound: use &lt;code&gt;Vue.set&lt;/code&gt;, e.g., &lt;code&gt;Vue.set(vm, &amp;#39;b&amp;#39;, 2)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Vue 3 Proxy-based reactivity makes these annoying issues go away.&lt;/p&gt;
+
+      &lt;h3 id="7-an-amazing-community" class="title"&gt;
+        &lt;a name="7-an-amazing-community" class="anchor" href="#7-an-amazing-community"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        7. An amazing community
+      &lt;/h3&gt;
+    
+&lt;p&gt;Since I&amp;#39;ve started using Vue, I&amp;#39;ve been fortunate to learn from a variety of Vue developers through forums, on Twitter and GitHub, and at local meetups. Vue has a distributed, hard-working core team, who are continually improving the framework without over-burdening developers with a bunch of fringe features or painful upgrades. The &lt;a href="https://forum.vuejs.org/"&gt;Vue forums&lt;/a&gt; is a great way to get insight from experts on tricky issues. Vue conferences, like &lt;a href="https://vueconf.us/"&gt;VueConf.us&lt;/a&gt; and &lt;a href="https://www.vuejs.amsterdam/"&gt;Vue Amsterdam&lt;/a&gt;, a great way to connect with other members of the community and attend more in-depth workshops, are already taking place all over the world. There&amp;#39;s also &lt;a href="https://vuevixens.org/"&gt;Vue Vixens&lt;/a&gt;, an organization that provides safe environments for people who identify as women to learn Vue.js.&lt;/p&gt;
+
+      &lt;h3 id="bonus-it-39-s-just-plain-fun" class="title"&gt;
+        &lt;a name="bonus-it-39-s-just-plain-fun" class="anchor" href="#bonus-it-39-s-just-plain-fun"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Bonus. It&amp;#39;s just plain fun
+      &lt;/h3&gt;
+    
+&lt;p&gt;I got my start in web development just as the Ruby and the Rails framework was taking off. One thing I have always loved about Ruby is creator Yukihiro Matsumoto&amp;#39;s explicit (and, dare I say, audacious) goal of inventing a language optimized for developer happiness.&lt;/p&gt;
+
+&lt;p&gt;I get these same feelings when I build interfaces with Vue.js. I was spending less time wrestling with configuration and APIs and more time building and having fun doing it.&lt;/p&gt;
+
+&lt;p&gt;While I don&amp;#39;t know that Vue.js was created so explicitly in the name of developer happiness, for, it has and continues to be fulfilling to that end. It&amp;#39;s something I hear from many others who&amp;#39;ve taken time to learn the framework and probably the most important reason I&amp;#39;ll recommend Vue.js in 2019.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;So what are you waiting for? Best of luck with your Vue.js journey in the coming year.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Refactoring to nested abstract components</title>
     <link rel="alternate" href="/blog/refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html"/>
@@ -1056,428 +1210,6 @@ methods: {
 &lt;p&gt;That does it! We&amp;#39;ve extracted data fetching logic completely out of the &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; into the &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt;. We&amp;#39;ve avoided the &lt;a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html"&gt;drawbacks of introducing mixins&lt;/a&gt; to share behavior. Our new data component will show up separately in the Vue dev tools extension for better debugging. The application is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative to Vuex, which would be a new dependency, to managing a portion of our application state.&lt;/p&gt;
 
 &lt;p&gt;In the next post, we&amp;#39;ll look at extracting shared behavior so that both our preview and document components can be independently scrollable and either can trigger additional data-fetching when the scrolled to the bottom.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Displaying PDFs lazily with Vue</title>
-    <link rel="alternate" href="/blog/building-a-pdf-viewer-with-vue-part-2.html"/>
-    <id>/blog/building-a-pdf-viewer-with-vue-part-2.html</id>
-    <published>2018-07-07T00:00:00+00:00</published>
-    <updated>2018-07-07T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;As we demonstrated in the &lt;a href="/blog/building-a-pdf-viewer-with-vue-part-1.html"&gt;previous post&lt;/a&gt;, we can render pages of a PDF to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements using PDF.js and Vue. We were able to use a simple Vue component hierarchy to separate the responsibilities of data fetching and page rendering. We used the...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;As we demonstrated in the &lt;a href="/blog/building-a-pdf-viewer-with-vue-part-1.html"&gt;previous post&lt;/a&gt;, we can render pages of a PDF to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements using PDF.js and Vue. We were able to use a simple Vue component hierarchy to separate the responsibilities of data fetching and page rendering. We used the PDF.js library to fetch the page data and hand off the work of drawing the data onto &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements.&lt;/p&gt;
-
-&lt;p&gt;In this post, we&amp;#39;ll add a new requirement: we should only render pages when they are visible, i.e., as they are scrolled into the viewport. Previously, we were rendering all pages eagerly, regardless of whether they were appearing in the client browser. For a large PDF, this could mean valuable resources are used to render many pages offscreen and may never be viewed. Let&amp;#39;s see how we can fix that using Vue.&lt;/p&gt;
-
-&lt;p&gt;The latest source code for this project is on Github at &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;rossta/vue-pdfjs-demo&lt;/a&gt;. To see the version of the project described in this post, &lt;a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-2-scrolling"&gt;checkout the &lt;code&gt;part-2-scrolling&lt;/code&gt; branch&lt;/a&gt;. Here&amp;#39;s the &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-61e237fc.png" alt="Demo" /&gt;&lt;/a&gt;&lt;/p&gt;
-
-      &lt;h3 id="adding-scroll-behavior" class="title"&gt;
-        &lt;a name="adding-scroll-behavior" class="anchor" href="#adding-scroll-behavior"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Adding scroll behavior
-      &lt;/h3&gt;
-    
-&lt;p&gt;To review, once a &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; component mounts, it calls the &lt;code&gt;page.render&lt;/code&gt; method to draw the PDF data to the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element. To defer page rendering, this method should only be called once the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; element has become visible in the scroll window of the document. We&amp;#39;ll detect visibility of the page by inferring from the scroll boundaries or the parent component, &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; along with the position and dimensions of the child &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components.&lt;/p&gt;
-
-&lt;p&gt;First, a CSS change to make our document scrollable within a relatively positioned parent element.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="css"&gt;.pdf-document {
-  position: absolute;
-  overflow: auto;
-  width: 100%;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; will track its visible boundaries using the &lt;code&gt;scrollTop&lt;/code&gt; and &lt;code&gt;clientHeight&lt;/code&gt; properties of its element. We&amp;#39;ll record these boundaries when the component mounts.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-data() {
-  return {
-    scrollTop: 0,
-    clientHeight: 0,
-    // ...
-  };
-},
-
-methods: {
-  updateScrollBounds() {
-    const {scrollTop, clientHeight} = this.$el;
-    this.scrollTop = scrollTop;
-    this.clientHeight = clientHeight;
-  },
-  // ...
-},
-
-mounted() {
-  this.updateScrollBounds();
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;scrollTop&lt;/code&gt; according to &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop"&gt;MDN&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;An element&amp;#39;s &lt;code&gt;scrollTop&lt;/code&gt; value is a measurement of the distance from the element&amp;#39;s top to its topmost &lt;em&gt;visible&lt;/em&gt; content.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The &lt;code&gt;clientHeight&lt;/code&gt; according to &lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight"&gt;MDN&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;The &lt;code&gt;clientHeight&lt;/code&gt; read-only property is zero for elements with no CSS or inline layout boxes, otherwise it&amp;#39;s the inner height of an element in pixels, including padding but not the horizontal scrollbar height, border, or margin.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Used together, we can determine what portion of the document is visible to the user.&lt;/p&gt;
-
-      &lt;h3 id="detecting-page-visibility" class="title"&gt;
-        &lt;a name="detecting-page-visibility" class="anchor" href="#detecting-page-visibility"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Detecting page visibility
-      &lt;/h3&gt;
-    
-&lt;p&gt;The &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; component will track the boundaries of its underlying canvas element, whose dimensions we demonstrated how to calculate in the previous post. As with the document component, we&amp;#39;ll trigger the update of this data property when the page component mounts:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
-
-data() {
-  return {
-    elementTop: 0,
-    elementHeight: 0,
-    // ...
-  };
-},
-
-methods: {
-  updateElementBounds() {
-    const {offsetTop, offsetHeight} = this.$el;
-    this.elementTop = offsetTop;
-    this.elementHeight = offsetHeight;
-  },
-  // ...
-},
-
-mounted() {
-  this.updateElementBounds();
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The element&amp;#39;s &lt;code&gt;offsetTop&lt;/code&gt; property will represent the distance from its top boundary to that of the containing document element &lt;code&gt;div&lt;/code&gt;. Recording its &lt;code&gt;offsetHeight&lt;/code&gt; enables us to determine how far the bottom of the element is from the top of the container.&lt;/p&gt;
-
-&lt;p&gt;Note that the &lt;code&gt;updateElementBounds&lt;/code&gt; and &lt;code&gt;updateScrollBounds&lt;/code&gt; methods are necessary because properties of DOM elements are outside of Vue&amp;#39;s control, i.e., they are not reactive. These methods exist to maintain reactive copies of these properties in Vue and we must trigger them somehow when scrolling or resizing the window so that the changes will propagate.&lt;/p&gt;
-
-&lt;p&gt;Since we can pass the scroll data of the parent component to the child page components as props, we now have what we need to determine if a given page is visible in the scroll area of the document.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
-
-props: {
-  scrollTop: {
-    type: Number,
-    default: 0
-  },
-  clientHeight: {
-    type: Number,
-    default: 0
-  },
-  // ...
-},
-
-computed: {
-  isElementVisible() {
-    const {elementTop, elementBottom, scrollTop, scrollBottom} = this;
-    if (!elementBottom) return;
-
-    return elementTop &amp;lt; scrollBottom &amp;amp;&amp;amp; elementBottom &amp;gt; scrollTop;
-  },
-
-  elementBottom() {
-    return this.elementTop + this.elementHeight;
-  },
-
-  scrollBottom() {
-    return this.scrollTop + this.clientHeight;
-  },
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;#39;ll use a computed property &lt;code&gt;isElementVisible&lt;/code&gt; which will update whenever either the &lt;code&gt;scrollBounds&lt;/code&gt; or &lt;code&gt;elementBounds&lt;/code&gt; change. It will simply check if the top of the element is above the bottom of the scroll area (&lt;code&gt;top &amp;lt; scrollBottom&lt;/code&gt;) and the bottom of the element is below the top of the scroll area (&lt;code&gt;bottom &amp;gt; scrollTop&lt;/code&gt;). Note that the &lt;code&gt;y&lt;/code&gt; dimension increases moving down the screen.&lt;/p&gt;
-
-&lt;p&gt;For another approach to detecting visibility in Vue, checkout the &lt;a href="https://github.com/Akryum/vue-observe-visibility"&gt;Akryum/vue-observe-visibility&lt;/a&gt; on Github, which is also available as an NPM package.&lt;/p&gt;
-
-      &lt;h3 id="lazy-rendering-pages" class="title"&gt;
-        &lt;a name="lazy-rendering-pages" class="anchor" href="#lazy-rendering-pages"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Lazy rendering pages
-      &lt;/h3&gt;
-    
-&lt;p&gt;Previously, we called the &lt;code&gt;drawPage&lt;/code&gt; method (described in the &lt;a href="https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-1.html#rendering-the-page"&gt;previous post&lt;/a&gt;) when the page component mounted. To make the page render lazily, now we call the method only when the element becomes visible, using a watcher.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
-
-watch: {
-  isElementVisible(isElementVisible) {
-    if (isElementVisible) this.drawPage();
-  },
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;#39;ve defined &lt;code&gt;drawPage&lt;/code&gt; such that it will only render once if called multiple times.&lt;/p&gt;
-
-&lt;p&gt;In the page components, we can simply watch for changes in scroll boundaries and scale—changes to these props may cause a previously &amp;quot;hidden&amp;quot; page to become visible in the browser.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFPage.vue
-
-watch: {
-  scale: &amp;#39;updateElementBounds&amp;#39;,
-  scrollTop: &amp;#39;updateElementBounds&amp;#39;,
-  clientHeight: &amp;#39;updateElementBounds&amp;#39;,
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For the document component, we add listeners to DOM events to trigger the &lt;code&gt;updateScrollBounds&lt;/code&gt; method within the &lt;code&gt;mounted&lt;/code&gt; hook.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-import throttle from &amp;#39;lodash/throttle&amp;#39;;
-
-export default {
-  // ...
-  mounted() {
-    this.updateScrollBounds();
-    const throttledCallback = throttle(this.updateScrollBounds, 300);
-
-    this.$el.addEventListener(&amp;#39;scroll&amp;#39;, throttledCallback, true);
-    window.addEventListener(&amp;#39;resize&amp;#39;, throttledCallback, true);
-
-    this.throttledOnResize = throttledCallback;
-  },
-
-  beforeDestroy() {
-    window.removeEventListener(&amp;#39;resize&amp;#39;, this.throttledOnResize, true);
-  },
-  // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A few notes about the implementation above: we use lodash&amp;#39;s &lt;code&gt;throttle&lt;/code&gt; function to ensure our callback is only triggered once every 300ms; otherwise, we&amp;#39;d be making this update potentially dozens of times a second, which for our purposes is unnecessary and could potentially be a performance bottleneck. Since we can attach our &lt;code&gt;throttledCallback&lt;/code&gt; to the &lt;code&gt;&amp;#39;scroll&amp;#39;&lt;/code&gt; event listener of &lt;code&gt;this.$el&lt;/code&gt;, we will also be cleaned up nicely during Vue teardown phase. However, since the &lt;code&gt;&amp;#39;resize&amp;#39;&lt;/code&gt; event will currently only work on the &lt;code&gt;window&lt;/code&gt;, we&amp;#39;ll need to store a reference to the throttled callback as &lt;code&gt;this.throttledOnResize&lt;/code&gt; so we can remove the event listener in Vue&amp;#39;s &lt;code&gt;beforeDestroy&lt;/code&gt; hook.&lt;/p&gt;
-
-&lt;p&gt;For a great explanation of throttling (and its cousin, debouncing) event callbacks, check out &lt;a href="https://css-tricks.com/debouncing-throttling-explained-examples/"&gt;this post on CSS tricks&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h3 id="adding-quot-infinite-quot-scrolling" class="title"&gt;
-        &lt;a name="adding-quot-infinite-quot-scrolling" class="anchor" href="#adding-quot-infinite-quot-scrolling"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Adding &amp;quot;infinite&amp;quot; scrolling
-      &lt;/h3&gt;
-    
-&lt;p&gt;So far we have deferred rendering individual pages to mounted canvas elements until scrolled into view. This allows us to spare CPU cycles at the cost of the brief visual delay as newly visible pages are drawn. However, we are still creating the &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components for every PDF page, regardless of whether they are visible. This results in &lt;code&gt;n - visible&lt;/code&gt; blank &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements below the fold.&lt;/p&gt;
-
-&lt;p&gt;We can go one step further. Instead of fetching all the pages up front, we&amp;#39;ll fetch pages in batches as the user scrolls to the bottom of the document. In other words, we&amp;#39;ll implement &amp;quot;infinite scrolling&amp;quot; for PDF pages (though most PDFs of which I&amp;#39;m aware are finite in length). Fetching in batches is a compromise between eagerly loading all pages and fetching one at a time.&lt;/p&gt;
-
-&lt;p&gt;To keep things simple for this tutorial, we&amp;#39;ll add batching directly to the &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; component; in a future post, we&amp;#39;ll extract this information to other parts of our application.&lt;/p&gt;
-
-      &lt;h3 id="batched-fetching" class="title"&gt;
-        &lt;a name="batched-fetching" class="anchor" href="#batched-fetching"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Batched fetching
-      &lt;/h3&gt;
-    
-&lt;p&gt;Recall in our document component, we&amp;#39;re tracking a &lt;code&gt;pdf&lt;/code&gt; property and an array of &lt;code&gt;pages&lt;/code&gt;. We now add a &lt;code&gt;cursor&lt;/code&gt; to represent the highest page number in the document we&amp;#39;ve attempted to fetch. We also will track the expected &lt;code&gt;pageCount&lt;/code&gt; using a property provided by the &lt;code&gt;pdf&lt;/code&gt; object.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-data() {
-  return {
-    pdf: undefined,
-    pages: [],
-    cursor: 0,
-    // ...
-  };
-},
-
-computed: {
-  pageCount() {
-    return this.pdf ? this.pdf.numPages : 0;
-  },
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We also previously added a watcher for the &lt;code&gt;pdf&lt;/code&gt; property to fetch all pages:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-watch: {
-  pdf(pdf) {
-    this.pages = [];
-    const promises = range(1, pdf.numPages).
-      map(number =&amp;gt; pdf.getPage(number));
-
-    Promise.all(promises).
-      then(pages =&amp;gt; (this.pages = pages));
-  },
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;#39;ll modify this watcher by extracting a method to fetch pages in batches:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-watch: {
-  pdf(pdf) {
-    this.pages = [];
-    this.fetchPages();
-  },
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here is our new &lt;code&gt;fetchPages&lt;/code&gt; implementation:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-const BATCH_COUNT = 10;
-
-export default {
-  // ...
-
-  methods: {
-    fetchPages() {
-      if (!this.pdf) return;
-
-      const currentCount = this.pages.length;
-      if (this.pageCount &amp;gt; 0 &amp;amp;&amp;amp; currentCount === this.pageCount) return;
-      if (this.cursor &amp;gt; currentCount) return;
-
-      const startPage = currentCount + 1; // PDF page numbering starts at 1
-      const endPage = Math.min(currentCount + BATCH_COUNT, this.pageCount);
-      this.cursor = endPage;
-
-      getPages(this.pdf, startPage, endPage)
-        .then((pages) =&amp;gt; {
-          this.pages.splice(currentCount, 0, ...pages);
-          return this.pages;
-        })
-        .catch((response) =&amp;gt; {
-          this.$emit(&amp;#39;document-errored&amp;#39;);
-        });
-    },
-    // ...
-  }
-  // ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The added complexity in &lt;code&gt;fetchPages&lt;/code&gt; allows us to request small batches of pages with each subsequent call. The &lt;code&gt;currentCount&lt;/code&gt; represents the total number of pages that have already been fetched. The &lt;code&gt;startPage&lt;/code&gt; is simply the next page number of the next would-be page in the array, and the &lt;code&gt;endPage&lt;/code&gt; of the batch is the lesser of an arbitrarily small batch of pages (&lt;code&gt;BATCH_COUNT&lt;/code&gt;) and the remaining pages. We&amp;#39;re able to insert these pages in the correct location in the tracked pages array with &lt;code&gt;this.pages.splice(currentCount, 0, ...pages)&lt;/code&gt;. We also use the &lt;code&gt;this.cursor&lt;/code&gt; property to track the most recently request &lt;code&gt;endPage&lt;/code&gt; to ensure the same batch is only requested once.&lt;/p&gt;
-
-      &lt;h3 id="why-splice-" class="title"&gt;
-        &lt;a name="why-splice-" class="anchor" href="#why-splice-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Why splice?
-      &lt;/h3&gt;
-    
-&lt;p&gt;You may ask, why not simply add the new pages on to the end of the &lt;code&gt;this.pages&lt;/code&gt; array instead? You could imagine using an expression like &lt;code&gt;this.pages.push.apply(this.pages, pages)&lt;/code&gt; to modify the array in place or replacing the array altogether with &lt;code&gt;this.pages = [...this.pages, ...pages]&lt;/code&gt; or &lt;code&gt;concat&lt;/code&gt;. The reason is that &lt;code&gt;getPages&lt;/code&gt; is asynchronous—it returns a promise that fulfills when all pages in the batch have been fetched. It is safer to assume this method can be called in rapid succession where multiple batch requests may be in flight simultaneously. Using &lt;code&gt;splice&lt;/code&gt; to add new pages at the expected position will ensure our batches are inserted into the &lt;code&gt;this.pages&lt;/code&gt; array in the correct order.&lt;/p&gt;
-
-      &lt;h3 id="finding-the-bottom" class="title"&gt;
-        &lt;a name="finding-the-bottom" class="anchor" href="#finding-the-bottom"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Finding the bottom
-      &lt;/h3&gt;
-    
-&lt;p&gt;To determine whether the user has scrolled to the bottom of the last of the fetched pages, we will again lean on properties of &lt;code&gt;this.$el&lt;/code&gt;. We can ask if the sum of the &lt;code&gt;scrollTop&lt;/code&gt; of the document and its visible height, &lt;code&gt;clientHeight&lt;/code&gt;, has equalled its total &lt;code&gt;scrollHeight&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-methods: {
-  isBottomVisible() {
-    const {scrollTop, clientHeight, scrollHeight} = this.$el;
-    return scrollTop + clientHeight &amp;gt;= scrollHeight;
-  },
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;#39;ll call this method during &lt;code&gt;updateScrollBounds&lt;/code&gt; method and record a tracked a true/false property, &lt;code&gt;didReachBottom&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-data() {
-  return {
-    didReachBottom: false,
-    // ...
-  };
-},
-
-methods: {
-  updateScrollBounds() {
-    const {scrollTop, clientHeight} = this.$el;
-    this.scrollTop = scrollTop;
-    this.clientHeight = clientHeight;
-    this.didReachBottom = this.isBottomVisible();
-  },
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can then use a watcher to call &lt;code&gt;fetchPages&lt;/code&gt; if this property flips from &lt;code&gt;false&lt;/code&gt; to &lt;code&gt;true&lt;/code&gt;. This watcher would fire continuously in a cycle as the user scrolls to the bottom and more pages are fetched.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/PDFDocument.vue
-
-watch: {
-  didReachBottom(didReachBottom) {
-    if (didReachBottom) this.fetchPages();
-  },
-  // ...
-},
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For another in-depth look at adding infinite scrolling for Vue, check out Chris Nwamba&amp;#39;s &lt;a href="https://scotch.io/tutorials/simple-asynchronous-infinite-scroll-with-vue-watchers"&gt;post on Scotch.io&lt;/a&gt;. There are also a number of packages that abstract infinite scrolling if you&amp;#39;d prefer to lean on open source, including &lt;a href="https://github.com/Akryum/vue-virtual-scroller"&gt;Akryum/vue-virtual-scroller&lt;/a&gt; and &lt;a href="https://github.com/ElemeFE/vue-infinite-scroll"&gt;ElemeFE/vue-infinite-scroll&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h3 id="wrapping-up" class="title"&gt;
-        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Wrapping up
-      &lt;/h3&gt;
-    
-&lt;p&gt;We&amp;#39;ve succeeded in making our documents more lazy; now we can defer both data fetching and page rendering until necessary, potentially improving performance of the initial page load and avoiding waste, especially for large documents.&lt;/p&gt;
-
-&lt;p&gt;We&amp;#39;ve been adding quite a bit of complexity though to our existing &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components; they now both are responsible for making API requests, calculating element boundaries, lazy behavior, etc. Ideally, we&amp;#39;ll want to limit the responsibility of a given component to make our application less resistant to change. In the next post, we&amp;#39;ll refactor our PDF viewer to to separate out data fetching and scrolling behavior into separate &amp;quot;renderless components&amp;quot;. These changes will subsequently allow us to share code and add a new feature: a preview pane.&lt;/p&gt;
-
-&lt;p&gt;And now you&amp;#39;ve reached the bottom of this post!&lt;/p&gt;
 </content>
   </entry>
 </feed>

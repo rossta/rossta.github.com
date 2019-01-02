@@ -1,0 +1,350 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Seven reasons choose Vue.js in 2019 - rossta.net</title>
+<meta name="description" content="This post describes a bunch of reasons why developers might enjoy choosing Vue.js as the next JavaScript framework to learn in the coming year." />
+<meta name="keywords" content="Vue" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="This post describes a bunch of reasons why developers might enjoy choosing Vue.js as the next JavaScript framework to learn in the coming year." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/john-moeses-bauan-skyline-unsplash-90169b52.jpg" />
+<meta name="twitter:title" content="Seven reasons choose Vue.js in 2019" />
+<meta property="og:description" content="This post describes a bunch of reasons why developers might enjoy choosing Vue.js as the next JavaScript framework to learn in the coming year." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/john-moeses-bauan-skyline-unsplash-90169b52.jpg" />
+<meta property="og:title" content="Seven reasons choose Vue.js in 2019" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" />
+    <link rel="icon"                                  href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
+
+    <link rel="mask-icon" href="/safari-pinned-tab-5cdca7ae.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app.bundle-c18d8c85.css" rel="stylesheet" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Seven reasons choose Vue.js in 2019
+  </h1>
+    <h3>
+      i.e., Because it's so darn fun
+    </h3>
+</header>
+
+
+      <p>I love building applications in Vue.js and here&#39;s why I think the future is looking bright for the framework and its community.</p>
+
+      <h3 id="1-no-build-step-required" class="title">
+        <a name="1-no-build-step-required" class="anchor" href="#1-no-build-step-required">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        1. No build step required
+      </h3>
+    
+<p>A critical aspect of the Vue philosophy is it be easy to get started. Unlike some other popular frameworks, it&#39;s not necessary to use a complex build tool like Webpack to build an application with it. Just include a script tag pointing to the <a href="https://vuejs.org/v2/guide/installation.html#Direct-lt-script-gt-Include">latest release for development or production</a>, and you have access to the Vue runtime.</p>
+
+<pre><code class="javascript">&lt;script src=&quot;https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<p>Having a low barrier to entry makes Vue a worthy consideration as a first JS framework to learn.</p>
+
+      <h3 id="2-a-world-class-command-line-interface" class="title">
+        <a name="2-a-world-class-command-line-interface" class="anchor" href="#2-a-world-class-command-line-interface">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        2. A world-class command line interface
+      </h3>
+    
+<p>Of course, many developers are looking for advanced development features like ES or TypeScript transpilation, hot module replacement, and tree-shaking, made possible by build tools. Vue has you covered there as well.</p>
+
+<pre><code>npm install -g @vue/cli
+vue create my-project
+</code></pre>
+
+<p>This past year, the Vue core team re-wrote their command line interface from the ground up, resulting in Vue CLI 3. It&#39;s designed in such a way to promote best practices and a full-featured default Webpack configuration that should be easier to extend without making it difficult to upgrade, i.e., &quot;no need to eject.&quot; Vue CLI provides a ton of useful additional features, including an interactive project initialization wizard (available through the terminal or a web-based UI), a plugin system to support generators and configuration for community add-ons, and the ability to specify alternative build targets, like web components or as libraries.</p>
+
+      <h3 id="3-friendly-learning-curve" class="title">
+        <a name="3-friendly-learning-curve" class="anchor" href="#3-friendly-learning-curve">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        3. Friendly learning curve
+      </h3>
+    
+<p>A common criticism I hear about Vue is that its API has a larger surface area than some other popular frameworks and I agree up to a point (depending on the framework). Ironically, one thing I hear <a href="https://hackernoon.com/should-you-learn-react-or-vue-first-7dc0d4dd8c04">over</a> and <a href="https://www.quora.com/How-does-Vue-js-compare-to-React-js">over</a> in some of these comparisons are Vue is easy to learn. Though this point is subjective and anecdotal, this has held for folks I&#39;ve heard from regardless of previous experience with JavaScript frameworks and JavaScript in general.</p>
+
+<p>One reason for this, I believe, is that Vue is a &quot;progressive JavaScript framework.&quot;</p>
+
+<p><img src="/assets/images/blog/vue/vuejs.org-homepage-ba6768c6.png" alt="Vue is a Progressive JavaScript Framework" /></p>
+
+<p>No need to learn the whole API to get started with Vue, no need to learn a new syntax like JSX; only basic HTML, CSS, and JS knowledge is required to get started.</p>
+
+      <h3 id="4-a-solid-ecosystem" class="title">
+        <a name="4-a-solid-ecosystem" class="anchor" href="#4-a-solid-ecosystem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        4. A solid ecosystem
+      </h3>
+    
+<p>Before Vue, I&#39;ve gotten frustrated with the fractured nature of learning best practices beyond the basics. What client-side router should I use? Which data management/Flux implementation should I use? How do I test my components? How should I configure my build system? Over time, answering these questions has gotten easier, depending on the community, but I&#39;ve like Vue&#39;s approach since the start.</p>
+
+<p>Vue provides official support for several essential add-ons, including <code>vue-router</code> for client-side routing, <code>vuex</code> for managing state, <code>vue-test-utils</code> for unit testing components, the <code>vue-devtools</code> browser extension for debugging, Vue CLI as described earlier. None of these tools are required Vue can work quite well with alternatives for these libraries, like <code>redux</code> or <code>mobx</code> instead of <code>vuex</code>, or another router. The critical point is that the community assists developers by supporting a set of very good recommended defaults, something that a backend framework like Ruby on Rails has traditionally done very well.</p>
+
+      <h3 id="5-the-vue-instance" class="title">
+        <a name="5-the-vue-instance" class="anchor" href="#5-the-vue-instance">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        5. The Vue instance
+      </h3>
+    
+<p>The most potent aspect Vue is its <a href="https://codingexplained.com/coding/front-end/vue-js/understanding-vue-js-reactivity">reactivity system</a>. We can tap into it through <a href="https://vuejs.org/v2/guide/instance.html">the <code>Vue</code> instance</a>.</p>
+
+<pre><code class="javascript">new Vue({
+  el: &quot;#app&quot;,
+})
+</code></pre>
+
+<p>This invocation is how every Vue application is initialized. It also creates a fully-reactive root component of the application. A Vue instance can also be used as an event bus or for tracking dependency changes separately from the application component tree, say, as an implementation detail of a Vue plugin.</p>
+
+<p>Vue&#39;s reactivity system is beautiful in its simplicity. Playing with the Vue instance is an excellent way to understanding how the reactivity system works and level up one&#39;s Vue, and JavaScript, skills in general.</p>
+
+      <h3 id="6-vue-3-lands-this-year" class="title">
+        <a name="6-vue-3-lands-this-year" class="anchor" href="#6-vue-3-lands-this-year">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        6. Vue 3 lands this year
+      </h3>
+    
+<p>Speaking of Vue&#39;s reactivity system, <a href="https://medium.com/the-vue-point/plans-for-the-next-iteration-of-vue-js-777ffea6fabf">Vue 3 is expected to ship this year</a>. Among some architectural and performance improvements and minor API changes, Vue 3 provides a new Proxy-based implementation of its reactivity system.</p>
+
+<p>The Proxy-based system solves <a href="https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats">some of the known caveats with Vue change detection</a>:</p>
+
+<p>In Vue 2, Vue cannot:</p>
+
+<ol>
+<li>Detect property addition, e.g., <code>vm.b = 2</code></li>
+<li>Detect array modification through indexing or modifying length, e.g., <code>arr[0] = 2</code></li>
+</ol>
+
+<ul>
+<li>The workound: use <code>Vue.set</code>, e.g., <code>Vue.set(vm, &#39;b&#39;, 2)</code></li>
+</ul>
+
+<p>Vue 3 Proxy-based reactivity makes these annoying issues go away.</p>
+
+      <h3 id="7-an-amazing-community" class="title">
+        <a name="7-an-amazing-community" class="anchor" href="#7-an-amazing-community">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        7. An amazing community
+      </h3>
+    
+<p>Since I&#39;ve started using Vue, I&#39;ve been fortunate to learn from a variety of Vue developers through forums, on Twitter and GitHub, and at local meetups. Vue has a distributed, hard-working core team, who are continually improving the framework without over-burdening developers with a bunch of fringe features or painful upgrades. The <a href="https://forum.vuejs.org/">Vue forums</a> is a great way to get insight from experts on tricky issues. Vue conferences, like <a href="https://vueconf.us/">VueConf.us</a> and <a href="https://www.vuejs.amsterdam/">Vue Amsterdam</a>, a great way to connect with other members of the community and attend more in-depth workshops, are already taking place all over the world. There&#39;s also <a href="https://vuevixens.org/">Vue Vixens</a>, an organization that provides safe environments for people who identify as women to learn Vue.js.</p>
+
+      <h3 id="bonus-it-39-s-just-plain-fun" class="title">
+        <a name="bonus-it-39-s-just-plain-fun" class="anchor" href="#bonus-it-39-s-just-plain-fun">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Bonus. It&#39;s just plain fun
+      </h3>
+    
+<p>I got my start in web development just as the Ruby and the Rails framework was taking off. One thing I have always loved about Ruby is creator Yukihiro Matsumoto&#39;s explicit (and, dare I say, audacious) goal of inventing a language optimized for developer happiness.</p>
+
+<p>I get these same feelings when I build interfaces with Vue.js. I was spending less time wrestling with configuration and APIs and more time building and having fun doing it.</p>
+
+<p>While I don&#39;t know that Vue.js was created so explicitly in the name of developer happiness, for, it has and continues to be fulfilling to that end. It&#39;s something I hear from many others who&#39;ve taken time to learn the framework and probably the most important reason I&#39;ll recommend Vue.js in 2019.</p>
+
+<hr>
+
+<p>So what are you waiting for? Best of luck with your Vue.js journey in the coming year.</p>
+
+    </article>
+    <section class="margin-bottom double">
+      <a href="https://twitter.com/intent/tweet?text=Seven%20reasons%20choose%20Vue.js%20in%202019&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Freasons-to-choose-vue-js-in-2019.html" class="button bg-twitter-blue" target="_blank" rel="noopener">Share this post on Twitter</a>
+    </section>
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <!-- Begin MailChimp Signup Form -->
+<div class="signup-form">
+  <h3>Did you like this post?</h3>
+  <p>Stay in the LOOP! Leave your email and I'll send you an occasional email on Ruby, Javascript, or Elixir for the web.</p>
+  <div id="mc_embed_signup">
+    <form action="//rossta.us6.list-manage.com/subscribe/post?id=96030b0bda&u=8ce159842b5c98cecb4ebdf16" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+
+        <div class="row">
+          <div class="large-10 columns">
+            <div class="row collapse">
+              <div class="large-8 small-7 columns">
+                <input type="email" placeholder="Your email..." value="" name="EMAIL" class="required email" id="mce-EMAIL">
+              </div>
+              <div class="large-4 small-5 columns">
+                <input type="submit" value="Sign me up!" name="subscribe" id="mc-embedded-subscribe" class="button postfix">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mce-responses" class="clear">
+          <div class="response" id="mce-error-response" style="display:none"></div>
+          <div class="response" id="mce-success-response" style="display:none"></div>
+        </div>
+        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+        <div style="position: absolute; left: -5000px;"><input type="text" name="b_8ce159842b5c98cecb4ebdf16_96030b0bda" tabindex="-1" value=""></div>
+      </div>
+
+      <input type="hidden" name="SIGNUP" value="https://rossta.net/blog/2019-01-01-reasons-to-choose-vue.js-in-2019.html" />
+      <input type="hidden" name="SIGNUP_APP" value="Mailchimp" />
+      <input type="hidden" name="SIGNUP_LOCATION" id="signup_location" value="blog/2019-01-01-reasons-to-choose-vue.js-in-2019.html" />
+        <input type="hidden" name="group[17961][1]" id="signup_technology" value="Vue" />
+    </form>
+  </div>
+  <!--End mc_embed_signup-->
+</div>
+
+    </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/john-moeses-bauan-skyline-unsplash-90169b52.jpg" alt="John moeses bauan skyline unsplash" />
+            <figcaption>Photo by John Moeses Bauan on Unsplash</figcaption>
+        </figure>
+    </article>
+    <section class="margin-bottom double">
+      <p>
+        Published on Jan  1, 2019
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "reasons-to-choose-vue-js-in-2019";
+    var disqus_title      = "Seven reasons choose Vue.js in 2019";
+    var disqus_url        = "https://rossta.net/blog/reasons-to-choose-vue-js-in-2019.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/n-1-is-a-rails-feature.html">N+1 is a Rails feature</a></li>
+          <li><a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+          <li><a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/vue.html">Vue</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2019 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/assets/javascripts/runtime.bundle-2352c808.js"></script><script src="/assets/javascripts/vendor.bundle-0116f3b0.js"></script><script src="/assets/javascripts/app.bundle-ed1e4144.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>
