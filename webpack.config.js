@@ -32,7 +32,9 @@ const siteConfig = {
 
   output: {
     path: `${__dirname}/.tmp/dist`,
-    filename: 'assets/javascripts/[name].bundle.js',
+    publicPath: 'assets/javascripts',
+    filename: '[name].js',
+    chunkFilename: '[name].chunk.js',
   },
 
   module: {

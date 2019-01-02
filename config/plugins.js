@@ -13,7 +13,7 @@ const definePlugin = new webpack.DefinePlugin({
 
 const cleanPluginTmp = new Clean(['.tmp']);
 
-const extractPluginCSS = new ExtractTextPlugin('assets/stylesheets/app.bundle.css');
+const extractPluginCSS = new ExtractTextPlugin('assets/stylesheets/[name].css');
 
 const commonsChunkPlugin = new webpack.optimize.CommonsChunkPlugin({
   names: ['vendor', 'runtime'],

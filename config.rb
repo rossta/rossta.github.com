@@ -78,6 +78,8 @@ set :css_dir, 'assets/stylesheets'
 set :js_dir, 'assets/javascripts'
 set :images_dir, 'assets/images'
 
+activate :asset_hash, ignore: [/^serviceworker.js/, /touch-icon.*png/]
+
 # Build-specific configuration
 configure :build do
   set :trailing_slash, false
@@ -89,7 +91,6 @@ configure :build do
   set :mailchimp_form_id,   '96030b0bda'
   set :segmentio_id, 'NdBtrprkAGAjQryMShljRdVf90saElAU'
 
-  activate :asset_hash, ignore: [/^serviceworker.js/, /touch-icon.*png/]
   activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
 end
 

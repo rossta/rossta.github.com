@@ -14,6 +14,9 @@
     <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
     <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
     <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="48x48"   href="/touch-icon-48x48.png">
+    <link rel="icon" type="image/png" sizes="36x36"   href="/touch-icon-36x36.png">
+    <link rel="icon" type="image/png" sizes="36x36"   href="/touch-icon-36x36.png">
     <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
 
@@ -25,7 +28,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <%= stylesheet_link_tag "app.bundle" %>
+    <%= stylesheet_link_tag "app" %>
   </head>
   <body id="application" class="typekit">
     <%= partial "partials/topbar" %>
@@ -36,7 +39,7 @@
     </div>
     <%= partial "partials/zen" %>
     <%= partial "partials/footer" %>
-    <%= javascript_include_tag "runtime.bundle", "vendor.bundle", "app.bundle" %>
+    <%= javascript_include_tag "runtime", "vendor", "app" %>
     <%= yield_content :javascripts %>
     <%= partial "partials/analytics" %>
   </body>
