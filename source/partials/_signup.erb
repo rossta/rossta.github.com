@@ -12,8 +12,8 @@
     <% else %>
       Please
     <% end %>
-    allow me to send you an occasional email about
-    <%= current_page_tags.join(', ') %> and the web. Thank you!
+    enter your email address below so I can send you an occasional email about
+    <%= current_page_tags.join(', ') + (current_page_tags.length > 1 ? "," : "") %> and the web. Thank you!
   </p>
   <div id="mc_embed_signup">
     <form action="<%= signup_form_url %>" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
