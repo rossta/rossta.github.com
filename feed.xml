@@ -86,7 +86,7 @@ vue create my-project
         4. A solid ecosystem
       &lt;/h3&gt;
     
-&lt;p&gt;Before Vue, I&amp;#39;ve gotten frustrated with the fractured nature of learning best practices beyond the basics. What client-side router should I use? Which data management/Flux implementation should I use? How do I test my components? How should I configure my build system? Over time, answering these questions has gotten easier, depending on the community, but I&amp;#39;ve like Vue&amp;#39;s approach since the start.&lt;/p&gt;
+&lt;p&gt;Before Vue, I&amp;#39;ve gotten frustrated with the fractured nature of learning best practices beyond the basics. What client-side router should I use? Which data management/Flux implementation should I use? How do I test my components? How should I configure my build system? Over time, answering these questions has gotten easier, depending on the community, but I&amp;#39;ve liked Vue&amp;#39;s approach since the start.&lt;/p&gt;
 
 &lt;p&gt;Vue provides official support for several essential add-ons, including &lt;code&gt;vue-router&lt;/code&gt; for client-side routing, &lt;code&gt;vuex&lt;/code&gt; for managing state, &lt;code&gt;vue-test-utils&lt;/code&gt; for unit testing components, the &lt;code&gt;vue-devtools&lt;/code&gt; browser extension for debugging, Vue CLI as described earlier. None of these tools are required Vue can work quite well with alternatives for these libraries, like &lt;code&gt;redux&lt;/code&gt; or &lt;code&gt;mobx&lt;/code&gt; instead of &lt;code&gt;vuex&lt;/code&gt;, or another router. The critical point is that the community assists developers by supporting a set of very good recommended defaults, something that a backend framework like Ruby on Rails has traditionally done very well.&lt;/p&gt;
 
