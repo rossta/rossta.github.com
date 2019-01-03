@@ -38,17 +38,17 @@ Backing up a step, RSpec tests are typically individually wrapped in database tr
 
 The reason is the underlying test implementation is forced to start the Rails server in a separate process from the test itself; any data created in a transaction in the test isn’t committed to the DB, so the Rails server doesn’t have access to the data! Missing data in the JS acceptance tests is really confusing to lots of Rails developers, myself included. To this day, this “gotcha” has tripped me up on new projects.
 
-The workaround, for years, has been to disable transaction mode—the very feature that makes database-backed test faster and easier to rollback for successive tests. To replace this, most RSpec-based Rails projects lean on another gem, DatabaseCleaner, plus some extra configuration, to switch modes just for JavaScript-enabled acceptance tests. The alternative modes are usually either truncate the whole DB or delete all the rows; both slower and sometime problematic when switching back-and-forth. All this instead of just having RSpec rollback transactions without us having to think about it while developing our tests.
+The workaround, for years, has been to disable transaction mode for—the very feature that makes database-backed test faster and easier to rollback for successive tests—for JavaScript-enabled feature tests. To replace this, most RSpec-based Rails projects lean on another gem, DatabaseCleaner, plus some extra configuration, to switch modes just for JavaScript-enabled acceptance tests. The alternative modes are usually either truncate the whole DB or delete all the rows; both slower and sometime problematic when switching back-and-forth. All this instead of just having RSpec rollback transactions without us having to think about it while developing our tests.
 
 Not to mention, having the Rails server run in a separate process makes it a lot harder to debug. If you like using a debugger like pry in your application code, good luck making it work with traditional RSpec acceptance tests.
 
-Rails 5.1+ solves the database problem. [Eileen Uchitelle](https://github.com/eileencodes) on the Rails team made the changes necessary to run ensure test threads and the Rails server can run in the same process by sharing the database connection ([pull request](https://github.com/rails/rails/pull/28083)). This made it possible to wrap JavaScript-enabled acceptance tests in database transactions.
+Rails 5.1+ solves the database problem. [Eileen Uchitelle](https://github.com/eileencodes) on the Rails team made the changes necessary to run ensure test threads and the Rails server can run in the same process by sharing the database connection ([pull request](https://github.com/rails/rails/pull/28083)). This made it possible to wrap JavaScript-enabled acceptance tests in database transactions. To take advantage, RSpec users would need to upgrade to a recent version of Rails, re-enable transactional fixtures for all tests, and remove the DatabaseCleaner gem.
 
 The result: faster rollback, no multiprocess confusion, no need to manage the database with DatabaseCleaner, debugging the server in process is possible, etc. A better solution all around.
 
 ### In closing
 
-To my RSpec friends: upgrade to Rails 5.1 ands drop the DatabaseCleaner gem. It should also be relatively straightforward to [adopt system tests from existing feature tests](https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6), but either strategy will work with those changes. You’ll still need to fix those flaky scenarios yourself though.
+To my RSpec friends: upgrade to Rails 5.1, drop the DatabaseCleaner gem, and set  `config.use_transactional_fixtures = true` in the RSpec configuration. It should also be relatively straightforward to [adopt system tests from existing feature tests](https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6), but either strategy will work with those changes. You’ll still need to fix those flaky scenarios yourself though.
 
 ### Resources
 
