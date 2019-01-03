@@ -66,6 +66,7 @@ task :publish do |t, args|
   end
 
   Dir.chdir "build" do
+    system "mkdir -p .circleci && cp ../.circleci/config.yml .circleci"
     system "git add -A"
     system "git commit -m '#{message.gsub("'", "\\'")}'"
     system "git push origin #{branch}"
