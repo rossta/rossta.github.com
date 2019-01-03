@@ -46,7 +46,7 @@ No need to learn the whole API to get started with Vue, no need to learn a new s
 
 ### 4. A solid ecosystem
 
-Before Vue, I've gotten frustrated with the fractured nature of learning best practices beyond the basics. What client-side router should I use? Which data management/Flux implementation should I use? How do I test my components? How should I configure my build system? Over time, answering these questions has gotten easier, depending on the community, but I've like Vue's approach since the start.
+Before Vue, I've gotten frustrated with the fractured nature of learning best practices beyond the basics. What client-side router should I use? Which data management/Flux implementation should I use? How do I test my components? How should I configure my build system? Over time, answering these questions has gotten easier, depending on the community, but I've liked Vue's approach since the start.
 
 Vue provides official support for several essential add-ons, including `vue-router` for client-side routing, `vuex` for managing state, `vue-test-utils` for unit testing components, the `vue-devtools` browser extension for debugging, Vue CLI as described earlier. None of these tools are required Vue can work quite well with alternatives for these libraries, like `redux` or `mobx` instead of `vuex`, or another router. The critical point is that the community assists developers by supporting a set of very good recommended defaults, something that a backend framework like Ruby on Rails has traditionally done very well.
 
