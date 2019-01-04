@@ -12,8 +12,6 @@ tags:
   - Rails
 ---
 
-*This post has been edited to reflect Thomas Walpole's corrections in the comments.*
-
 I get the feeling a lot of RSpec users don’t know about the advantages of Rails 5.1 changes as part of the introduction of system tests. RSpec has had feature tests for a long time? What’s the big deal?
 
 ### Background
@@ -57,3 +55,5 @@ To my RSpec friends: upgrade to Rails 5.1, drop the DatabaseCleaner gem, and set
 * https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/
 * https://github.com/rails/rails/pull/28083
 * https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec
+
+*This post has been edited to reflect Thomas Walpole's corrections in the comments.*
