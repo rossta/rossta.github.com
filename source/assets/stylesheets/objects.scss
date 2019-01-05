@@ -28,6 +28,10 @@
   }
 }
 
+.margin-left {
+  margin-left: 1em;
+}
+
 .font-light { color:$greyColor; }
 
 .text-center { text-align: center; }
@@ -76,7 +80,8 @@
 }
 
 .button {
-  @include header-font;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-radius: 4px;
 
   &.primary {
     background-color: $secondaryColor;
@@ -101,7 +106,7 @@
 }
 
 blockquote {
-  font-family: $header-font-family;
+  font-family: inherit;
   font-style: italic;
   color: #444;
   font-size: 90%;

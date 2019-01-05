@@ -7,7 +7,7 @@ activate :meta_tags
 # Time.zone = "UTC"
 activate :external_pipeline,
          name: :webpack,
-         command: build? ?  "yarn build:prod" : "yarn build:dev",
+         command: build? ? "yarn build:prod" : "yarn build:dev",
          source: ".tmp/dist",
          latency: 1
 
@@ -28,8 +28,8 @@ activate :blog do |blog|
   blog.custom_collections = {
     series: {
       link: '/series/{series}.html',
-      template: 'series.html'
-    }
+      template: 'series.html',
+    },
   }
 end
 
@@ -43,7 +43,7 @@ activate :blog do |blog|
   blog.taglink = "tags/{tag}"
   blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.default_extension = ".md"
-  blog.layout   = "talk"
+  blog.layout = "talk"
   blog.paginate = true
   blog.per_page = 25
 end
@@ -58,7 +58,7 @@ activate :blog do |blog|
   blog.taglink = "tags/{tag}"
   blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.default_extension = ".md"
-  blog.layout   = "project"
+  blog.layout = "project"
   blog.paginate = true
   blog.per_page = 25
 end
@@ -88,7 +88,7 @@ configure :build do
   set :host, "rossta.net"
   set :port, nil
   set :google_analytics_id, 'UA-16458563-2'
-  set :mailchimp_form_id,   '96030b0bda'
+  set :mailchimp_form_id, '96030b0bda'
   set :segmentio_id, 'NdBtrprkAGAjQryMShljRdVf90saElAU'
 
   activate :gzip, exts: %w(.js .css .html .htm .svg .ttf .otf .woff .eot)
@@ -100,7 +100,7 @@ configure :development do
   set :port, 4567
 
   set :google_analytics_id, 'UA-xxxxxxxx-x'
-  set :mailchimp_form_id,   'a57e354058'
+  set :mailchimp_form_id, 'a57e354058'
   set :segmentio_id, '7KlQZWWPWr2MDj4pWepIF7O95JPZ9wfp'
 end
 
@@ -149,7 +149,7 @@ helpers do
   end
 
   def page_header(title, summary = nil)
-    partial "partials/page_header", locals: { title: title, summary: summary }
+    partial "partials/page_header", locals: {title: title, summary: summary}
   end
 
   def section
@@ -185,8 +185,8 @@ helpers do
       path: "/subscribe/post",
       query_values: {
         u: "8ce159842b5c98cecb4ebdf16",
-        id: config[:mailchimp_form_id]
-      }
+        id: config[:mailchimp_form_id],
+      },
     )
   end
 
@@ -205,34 +205,48 @@ helpers do
   end
 
   Series = Struct.new(:id, :title, :summary)
+
   def blog_series
     [
       [
         "PDF Viewer",
         "Building a PDF Viewer with Vue.js",
-        "A demo app to render PDFs using PDF.js, Vue, Webpack, and the canvas element"
+        "A demo app to render PDFs using PDF.js, Vue, Webpack, and the canvas element",
       ],
       [
         "Connect Four",
         "Building Connect Four with Vue.js and Phoenix",
-        "Tackling multi-player game rendering, animation, and realtime interaction"
+        "Tackling multi-player game rendering, animation, and realtime interaction",
       ],
       [
         "Service Worker",
         "Progressive Web Apps on Rails",
-        "Leveraging the powerful JavaScript API for Progressive Web Apps"
+        "Leveraging the powerful JavaScript API for Progressive Web Apps",
       ],
       [
         "Enumerable",
         "Exploring Ruby's Enumerable",
-        "Working with collections and sequences in Ruby"
-      ]
+        "Working with collections and sequences in Ruby",
+      ],
     ].map { |data| Series.new(*data) }
   end
 
   def current_page_tags
-    tags = Array(current_page.data[:tags])
-    tags.present? ? tags : %w[JavaScript Ruby]
+    Array(current_page.data[:tags]).presence ||
+      %w[JavaScript Ruby]
+  end
+
+  def convertkit_tag_value(tag)
+    {
+      "JavaScript" => "733959",
+      "Vue" => "733963",
+      "Ruby" => "733960",
+      "Rails" => "733966",
+      "Webpack" => "733964",
+      "Service Worker" => "733965",
+      "Node" => "733969",
+      "Elixir" => "733970",
+    }[tag]
   end
 
   def nozen?
