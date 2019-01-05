@@ -153,9 +153,8 @@ $small-font-color: scale-color($header-font-color, $lightness: 55%);
 // $paragraph-font-family: inherit;
 // $paragraph-font-weight: normal;
 // $paragraph-font-size: 1rem;
-$paragraph-font-size: 1.38rem;
-$paragraph-line-height: 1.75;
-$paragraph-margin-bottom: rem-calc(34);
+// $paragraph-line-height: 1.75;
+// $paragraph-margin-bottom: rem-calc(34);
 // $paragraph-aside-font-size: rem-calc(14);
 // $paragraph-aside-line-height: 1.35;
 // $paragraph-aside-font-style: italic;
@@ -1204,15 +1203,15 @@ $topbar-link-font-family: $header-font-family;
 // $include-table-visibility-classes: true;
 // $include-legacy-visibility-classes: true;
 
-$row-width: 54em;
+$row-width: 50em;
 $column-gutter: rem-calc(75);
 $signatureFont: $body-font-family;
 $primaryColor: #0B5FA5;
 $mainColor: rgba(0,0,0,0.8);
 $secondaryColor: #41921E !default;
 $greyColor: #777 !default;
-$paragraph-font-size: 1.38rem;
-$paragraph-line-height: 1.75;
+$paragraph-font-size: 1.34rem;
+$paragraph-line-height: 1.54;
 $paragraph-margin-bottom: rem-calc(34);
 $lightGreyColor: #f8f8ff;
 $borderColor: #ccc;
@@ -1233,7 +1232,7 @@ $topbar-title-weight: bold;
 // $topbar-title-font-size: rem-calc(17);
 
 // Style the top bar dropdown elements
-$topbar-dropdown-bg: $lightGreyColor;
+$topbar-dropdown-bg: #FFF;
 // $topbar-dropdown-link-color: #fff;
 // $topbar-dropdown-link-bg: #333;
 // $topbar-dropdown-link-weight: normal;
@@ -1249,9 +1248,9 @@ $topbar-link-color-active-hover: $secondaryColor;
 // $topbar-link-weight: normal;
 // $topbar-link-font-size: rem-calc(13);
 // $topbar-link-hover-lightness: -10%; // Darken by 10%
-$topbar-link-bg-hover: $lightGreyColor;
-$topbar-link-bg-active: $lightGreyColor;
-$topbar-link-bg-active-hover: scale-color($lightGreyColor, $lightness: -14%);
+$topbar-link-bg-hover: #FFF;
+$topbar-link-bg-active: #FFF;
+$topbar-link-bg-active-hover: #FFF;
 // $topbar-link-font-family: $body-font-family;
 
 // $topbar-button-font-size: 0.75rem;
