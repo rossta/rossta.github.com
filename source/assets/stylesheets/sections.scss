@@ -78,7 +78,7 @@
 
   @include hero($side);
 
-  margin: -2em (-$side) 4em (-$side);
+  margin: 0 (-$side) $side (-$side);
 
   header {
     margin-bottom: 0em;
@@ -102,8 +102,13 @@ form {
 }
 
 .signup-form-standalone {
-  @include hero(2em);
-  margin: 0.75em 0;
+  $side: 2.5em;
+
+  @include hero($side);
+  margin: 1em (-$side) 2em (-$side);
+
+  // margin-top: 0.75em;
+  // margin-bottom: 0.75em;
   border: solid 1px #dfdfdf;
 
   @media #{$small-only} {
