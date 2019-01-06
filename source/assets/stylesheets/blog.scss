@@ -28,6 +28,18 @@ article {
     outline: 0;
     text-align: center;
   }
+
+  blockquote {
+    font-family: inherit;
+
+    p {
+      color: #666;
+    }
+  }
+
+  img {
+    width: 100%;
+  }
 }
 
 ul.index {
