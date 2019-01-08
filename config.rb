@@ -232,8 +232,10 @@ helpers do
   end
 
   def current_page_tags
-    Array(current_page.data[:tags]).presence ||
-      %w[JavaScript Ruby]
+    explicit_page_tags.presence || %w[JavaScript Ruby]
+  end
+  def explicit_page_tags
+    Array(current_page.data[:tags])
   end
 
   def convertkit_tag_value(tag)
@@ -247,6 +249,10 @@ helpers do
       "Node" => "733969",
       "Elixir" => "733970",
     }[tag]
+  end
+
+  def convertkit_campaign
+    explicit_page_tags.first || "Homepage"
   end
 
   def nozen?
