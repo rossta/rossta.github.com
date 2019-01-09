@@ -29,7 +29,7 @@
 &lt;p&gt;There are lots of à la carte software environments in this world... I want this for my ORM, I want that for my template language, and let&amp;#39;s finish it off with this routing library... It&amp;#39;s a very popular way of consuming software. Rails is not that. Rails is omakase. A team of chefs picked out the ingredients, designed the APIs, and arranged the order of consumption on your behalf according to their idea of what would make for a tasty full-stack framework. The menu can be both personal and quirky. It isn&amp;#39;t designed to appeal to the taste of everyone, everywhere.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;I love this metaphor, because a) Rails, including all its API choices and baggage, has treated me very well throughout my career in tech, and b) I love to dine omakase.&lt;/p&gt;
+&lt;p&gt;I love this metaphor, because a) Rails, including all its API choices and baggage, has treated me very well throughout my career in tech, and b) I love me some agedashi tofu.&lt;/p&gt;
 
 &lt;p&gt;What does this have to do with Vue? I believe Vue&amp;#39;s growing popularity is partly due to its highly selective maintainers and that the recommended ingredients, though not to everyone&amp;#39;s taste, are well-suited to most projects, big and small.&lt;/p&gt;
 
@@ -71,12 +71,12 @@
 
 &lt;p&gt;Much has been made of Vue&amp;#39;s choice to avoid class syntax for components as the default, e.g. &lt;a href="https://github.com/vuejs/vue/issues/2371"&gt;this issue on GitHub&lt;/a&gt;. There are excellent reasons for this decision, one of which is for Vue to work without a build environment. As a feature, this makes Vue incredibly easy to get up-and-running, for beginners learning the framework or for seasoned developers trying out a quick prototype. &amp;quot;It will fail,&amp;quot; some said. I suppose that remains to be seen, but after several years of arguing, the framework continues to thrive.&lt;/p&gt;
 
-      &lt;h3 id="expect-a-consistent-experience-for-all-customers" class="title"&gt;
-        &lt;a name="expect-a-consistent-experience-for-all-customers" class="anchor" href="#expect-a-consistent-experience-for-all-customers"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+      &lt;h3 id="a-consistent-experience-for-all-customers" class="title"&gt;
+        &lt;a name="a-consistent-experience-for-all-customers" class="anchor" href="#a-consistent-experience-for-all-customers"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
 &lt;/a&gt;
-        Expect a consistent experience for all customers
+        A consistent experience for all customers
       &lt;/h3&gt;
     
 &lt;p&gt;Scott Molinari made this comment on a previous post of mine:&lt;/p&gt;
