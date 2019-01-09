@@ -1,0 +1,731 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Vue.js is omakase - rossta.net</title>
+<meta name="description" content="Taking a page of the Rails cookbook, Vue.js manages to provide a great developer experience for those looking to hit the ground running and other wishing to customize their setup." />
+<meta name="keywords" content="Vue" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Taking a page of the Rails cookbook, Vue.js manages to provide a great developer experience for those looking to hit the ground running and other wishing to customize their setup." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/kuba-boski-sushi-unsplash-a0c2c1b5.jpg" />
+<meta name="twitter:title" content="Vue.js is omakase" />
+<meta property="og:description" content="Taking a page of the Rails cookbook, Vue.js manages to provide a great developer experience for those looking to hit the ground running and other wishing to customize their setup." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/kuba-boski-sushi-unsplash-a0c2c1b5.jpg" />
+<meta property="og:title" content="Vue.js is omakase" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon"                      href="/apple-touch-icon.png" />
+    <link rel="icon"                                  href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/touch-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="144x144" href="/touch-icon-144x144.png" />
+    <link rel="icon" type="image/png" sizes="96x96"   href="/touch-icon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="72x72"   href="/touch-icon-72x72.png" />
+    <link rel="icon" type="image/png" sizes="48x48"   href="/touch-icon-48x48.png">
+    <link rel="icon" type="image/png" sizes="36x36"   href="/touch-icon-36x36.png">
+    <link rel="icon" type="image/png" sizes="36x36"   href="/touch-icon-36x36.png">
+    <link rel="icon" type="image/png" sizes="32x32"   href="/touch-icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16"   href="/touch-icon-16x16.png">
+
+    <link rel="mask-icon" href="/safari-pinned-tab-5cdca7ae.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    <link href="/assets/stylesheets/app-2c29e0ae.css" rel="stylesheet" />
+  </head>
+  <body id="application" class="typekit">
+    <nav id="welcome-nav" class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a class="logo" href="/"><img src="/assets/images/turtle-logo-096698b6.svg" alt="Turtle logo" /><span>rossta.net</span></a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
+</nav>
+
+    <div class="row">
+      <section id="main" role="main" class="large-12 small-12 columns">
+          <section id="blog" class="margin-bottom double">
+    <article class="post margin-bottom double">
+      <header class="page-header with-summary">
+  <h1>
+    Vue.js is omakase
+  </h1>
+    <h3>
+      A heavily curated, delicious framework
+    </h3>
+</header>
+
+
+      <p>I&#39;m borrowing from David Heinemeier Hansson here. Six years ago, he wrote <a href="https://dhh.dk//2012/rails-is-omakase.html">Rails is omakase</a> likening his notion of what makes a delicious software framework: it is heavily curated and borne of experience. I think of Vue.js the same way.</p>
+
+<p>Here&#39;s an excerpt from DHH&#39;s post:</p>
+
+<blockquote>
+<p>There are lots of à la carte software environments in this world... I want this for my ORM, I want that for my template language, and let&#39;s finish it off with this routing library... It&#39;s a very popular way of consuming software. Rails is not that. Rails is omakase. A team of chefs picked out the ingredients, designed the APIs, and arranged the order of consumption on your behalf according to their idea of what would make for a tasty full-stack framework. The menu can be both personal and quirky. It isn&#39;t designed to appeal to the taste of everyone, everywhere. - DHH</p>
+</blockquote>
+
+<p>I love this metaphor, because a) Rails, including all its API choices and baggage, has treated me very well throughout my career in tech, and b) I love to dine omakase.</p>
+
+<p>What does this have to do with Vue? I believe Vue&#39;s growing popularity is, in part, like Rails, that its menu is highly selective and that its recommended ingredients, though not to everyone&#39;s taste, are well-suited to many and foster a desirable trait across projects: consistency.</p>
+
+      <h3 id="enjoy-a-multiple-course-meal" class="title">
+        <a name="enjoy-a-multiple-course-meal" class="anchor" href="#enjoy-a-multiple-course-meal">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Enjoy a multiple-course meal
+      </h3>
+    
+<p>Vue articulates many courses making up the full meal for a frontend framework. These days, developers have come to expect a robust API to build components and a fast implementation built on top of a virtual dom. However, Vue.js doesn&#39;t stop there. For Vue developers, the framework and its ecosystem provide adequate if not excellent implementations of orthogonal dependencies that solve problems many non-trivial apps eventually need.</p>
+
+<p>The offering includes the Vue Router, Vuex for state management, and the Vue test utils for unit testing. Through the Vue CLI, developers also get sensible defaults in Webpack configuration for hot module replacement, code-splitting, tree-shaking, efficient long-term caching, while having access to pre-configured opt-ins for TypeScript, Progressive Web Apps, ESLint, and multiple test runners.</p>
+
+<p>There is great comfort in knowing that the Vue team is behind these projects and they complement one another appropriately in my Vue.js applications.</p>
+
+      <h3 id="substitutions-cost-little-extra" class="title">
+        <a name="substitutions-cost-little-extra" class="anchor" href="#substitutions-cost-little-extra">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Substitutions cost little extra
+      </h3>
+    
+<p>Some teams prefer to cobble together projects from individual dishes and ingredients. I’d argue that the right framework suits most of us most of the time, right out-of-the-box. Want to use Redux? No problem! Class-style syntax? The customer is always right.</p>
+
+<p>As another example, let&#39;s talk about Webpack. I think it is a fantastic piece of software. I&#39;ve spent months learning how it works. I have given <a href="https://rossta.net/talks/webpack-survival-guide-rails.html">a conference talk</a> about it. However, usually, most of us, myself included, don’t want to maintain a custom configuration from project to project when we have deadlines to meet. The Vue CLI defaults are just fine. Still need to customize? Vue provides an API to extend the base configuration while making it easier to upgrade to take advantage of framework-supported improvements. There&#39;s also nothing stopping you from ditching Webpack for Parcel or Rollup or whatever other transpiler or module bundler you prefer.</p>
+
+      <h2 id="an-opinionated-chef" class="title">
+        <a name="an-opinionated-chef" class="anchor" href="#an-opinionated-chef">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        An opinionated chef
+      </h2>
+    
+<p>So you may not agree with everything on the menu. That&#39;s fine! Many of the defaults are easily changed through configuration or add-ons. Don&#39;t like mustache-style curly braces in templates? You can change it! Maybe you can&#39;t stand the fact that Vue has templates at all and would prefer to use JavaScript. Well, that&#39;s ok too; add another <a href="https://github.com/vuejs/babel-plugin-transform-vue-jsx">Babel plugin</a>, and you can write Vue components with JSX inside of render functions a lot like React.</p>
+
+<p>Much has been made of Vue&#39;s choice to avoid class syntax for components as the default, e.g. <a href="https://github.com/vuejs/vue/issues/2371">this issue on GitHub</a>. There are excellent reasons for this decision, one of which is for Vue to work without a build environment. As a feature, this makes Vue incredibly easy to get up-and-running, for beginners learning the framework or for seasoned developers trying out a quick prototype. &quot;It will fail,&quot; some said. I suppose that remains to be seen, but after several years of arguing, the framework continues to thrive.</p>
+
+      <h2 id="expect-a-consistent-experience-for-all-customers" class="title">
+        <a name="expect-a-consistent-experience-for-all-customers" class="anchor" href="#expect-a-consistent-experience-for-all-customers">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Expect a consistent experience for all customers
+      </h2>
+    
+<p>Scott Molinari made this comment on a previous post of mine:</p>
+
+<blockquote>
+<p>once the usage of the API is down pat, anyone and everyone who knows Vue is basically doing the same thing. This also means the need for best practices are held to a minimum and both of these advantages mean cognitive load over time is reduced. i.e. when you dig into someone else’s component, you understand it quickly. This all in turn means Vue code is more robust and in the end, it’s of higher quality. - Scott Molinari</p>
+</blockquote>
+
+<p>This point is especially important for both beginners and experienced developers alike. One of the significant tradeoffs to cobbling libraries together is that it can be harder to transition into new projects or unfamiliar parts of a large codebase. This approach may pay off for the right teams. In most cases, those tradeoffs aren&#39;t worth it to me because I place much value on consistency.</p>
+
+<hr>
+
+<p>When my late wife and I lived in New York City, our favorite restaurant was <a href="https://www.zenkichi.com/">Zenkichi</a>. The cuisine is Japanese brasserie, but the experience is so much more. The primary menu option is the chef&#39;s omakase.</p>
+
+<p><img src="/assets/images/blog/stock/zenkichi-tofu-246b63b1.jpg" alt="Zenkichi tofu" /></p>
+
+<p>It&#39;s housed in a small building with a wooden exterior and no discernable markings. Located near the East River in the Williamsburg of Brooklyn, it&#39;s easy to miss from the outside.</p>
+
+<p><img src="/assets/images/blog/stock/zenkichi-entrance-efa34cd0.jpg" alt="Zenkichi entrance" /></p>
+
+<p>The interior is dark, romantic, hand-crafted. Each table upstairs is like a small private dining room with a pull-down curtain and a small buzzer to summon the wait staff.</p>
+
+<p><img src="/assets/images/blog/stock/zenkichi-tables-083e0edd.jpg" alt="Zenkichi tables" /></p>
+
+<p>For our meal, we always chose omakase. We left all the decision-making up to the chef. It&#39;s difficult at first to place that kind of trust in someone else&#39;s judgment. Giving up control is uncomfortable. However, this led to many delightful discoveries. Of course, not all the courses were to our liking. Nevertheless, we loved the experience.</p>
+
+<hr>
+
+<p>The chef’s menu need not be reserved for special occasions in web development. With Vue.js, we have a framework that gives us all the ingredients we need to jump into building outstanding user interfaces. It also makes it relatively easy to swap out menu items to suit your preferences. So it would seem you <a href="https://en.wikipedia.org/wiki/You_can%27t_have_your_cake_and_eat_it">can have your cake and eat it too</a>? Just another reason why I find Vue.js so fulfilling.</p>
+
+    </article>
+
+    <section class="signup-form-standalone margin-bottom quadruple">
+      <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+<form
+  action="https://app.convertkit.com/forms/818387/subscriptions?ref=Vue"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="818387"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+  min-width="400 500 600 700 800"
+>
+  <div data-style="clean">
+      <h3>
+  Did you like this post?
+</h3>
+<p>
+  Please
+  <b><a href="https://twitter.com/intent/tweet?text=Vue.js%20is%20omakase&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fvue-js-is-omakase.html" target="_blank" rel="noopener">share it on Twitter</a></b>
+  and enter your email below to subscribe to my newsletter on
+  Vue and the web. Thank you!
+</p>
+
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <input
+          class="formkit-input"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="text"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit formkit-submit"
+        style="background-color: rgb(22, 119, 190); border-radius: 4px; color: rgb(255, 255, 255); font-weight: 400;"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+    <a
+      href="https://convertkit.com/?utm_source=dynamic&amp;utm_medium=referral&amp;utm_campaign=poweredby&amp;utm_content=form"
+      class="formkit-powered-by"
+      data-element="powered-by"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Powered By ConvertKit</a
+    >
+  </div>
+  <style>
+    .formkit-form[data-uid='cda82aafbf'] * {
+      font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
+      box-sizing: border-box;
+    }
+    .formkit-form[data-uid='cda82aafbf'] legend {
+      border: none;
+      font-size: inherit;
+      margin-bottom: 10px;
+      padding: 0;
+      position: relative;
+      display: table;
+    }
+    .formkit-form[data-uid='cda82aafbf'] fieldset {
+      border: 0;
+      padding: 0.01em 0 0 0;
+      margin: 0;
+      min-width: 0;
+    }
+    .formkit-form[data-uid='cda82aafbf'] body:not(:-moz-handler-blocked) fieldset {
+      display: table-cell;
+    }
+
+    .formkit-form[data-uid='cda82aafbf'][data-format='modal'] {
+      display: none;
+    }
+    .formkit-form[data-uid='cda82aafbf'][data-format='slide in'] {
+      display: none;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-input,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-select,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-checkboxes {
+      width: 100%;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-button,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit {
+      border: 0;
+      border-radius: 5px;
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-block;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 15px;
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+      vertical-align: middle;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-button:hover,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit:hover,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-button:focus,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus {
+      outline: none;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-button:hover > span,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit:hover > span,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-button:focus > span,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus > span {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-button > span,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit > span {
+      display: block;
+      -webkit-transition: all 300ms ease-in-out;
+      transition: all 300ms ease-in-out;
+      padding: 12px 24px;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-input {
+      background: #ffffff;
+      font-size: 15px;
+      padding: 12px;
+      border: 1px solid #e3e3e3;
+      -webkit-flex: 1 0 auto;
+      -ms-flex: 1 0 auto;
+      flex: 1 0 auto;
+      line-height: 1.4;
+      margin: 0;
+      -webkit-transition: border-color ease-out 300ms;
+      transition: border-color ease-out 300ms;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-input:focus {
+      outline: none;
+      border-color: #1677be;
+      -webkit-transition: border-color ease 300ms;
+      transition: border-color ease 300ms;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-input::-webkit-input-placeholder {
+      color: #848585;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-input::-moz-placeholder {
+      color: #848585;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-input:-ms-input-placeholder {
+      color: #848585;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-input::placeholder {
+      color: #848585;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-group='dropdown'] {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-group='dropdown']::before {
+      content: '';
+      top: calc(50% - 2.5px);
+      right: 10px;
+      position: absolute;
+      pointer-events: none;
+      border-color: #4f4f4f transparent transparent transparent;
+      border-style: solid;
+      border-width: 6px 6px 0 6px;
+      height: 0;
+      width: 0;
+      z-index: 999;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-group='dropdown'] select {
+      height: auto;
+      width: 100%;
+      cursor: pointer;
+      color: #333333;
+      line-height: 1.4;
+      margin-bottom: 0;
+      padding: 0 6px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      font-size: 15px;
+      padding: 12px;
+      padding-right: 25px;
+      border: 1px solid #e3e3e3;
+      background: #ffffff;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-group='dropdown'] select:focus {
+      outline: none;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-group='checkboxes'] {
+      text-align: left;
+      margin: 0;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-group='checkboxes'] [data-group='checkbox'] {
+      margin-bottom: 10px;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-group='checkboxes'] [data-group='checkbox'] * {
+      cursor: pointer;
+    }
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']:last-of-type {
+      margin-bottom: 0;
+    }
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']
+      input[type='checkbox'] {
+      display: none;
+    }
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']
+      input[type='checkbox']
+      + label::after {
+      content: none;
+    }
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']
+      input[type='checkbox']:checked
+      + label::after {
+      border-color: #ffffff;
+      content: '';
+    }
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']
+      input[type='checkbox']:checked
+      + label::before {
+      background: #10bf7a;
+      border-color: #10bf7a;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-group='checkboxes'] [data-group='checkbox'] label {
+      position: relative;
+      display: inline-block;
+      padding-left: 28px;
+    }
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']
+      label::before,
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']
+      label::after {
+      position: absolute;
+      content: '';
+      display: inline-block;
+    }
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']
+      label::before {
+      height: 16px;
+      width: 16px;
+      border: 1px solid #e3e3e3;
+      background: #ffffff;
+      left: 0px;
+      top: 3px;
+    }
+    .formkit-form[data-uid='cda82aafbf']
+      [data-group='checkboxes']
+      [data-group='checkbox']
+      label::after {
+      height: 4px;
+      width: 8px;
+      border-left: 2px solid #4d4d4d;
+      border-bottom: 2px solid #4d4d4d;
+      -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      left: 4px;
+      top: 8px;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-alert {
+      background: #f9fafb;
+      border: 1px solid #e3e3e3;
+      border-radius: 5px;
+      -webkit-flex: 1 0 auto;
+      -ms-flex: 1 0 auto;
+      flex: 1 0 auto;
+      list-style: none;
+      margin: 25px auto;
+      padding: 12px;
+      text-align: center;
+      width: 100%;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-alert:empty {
+      display: none;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-alert-success {
+      background: #d3fbeb;
+      border-color: #10bf7a;
+      color: #0c905c;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-alert-error {
+      background: #fde8e2;
+      border-color: #f2643b;
+      color: #ea4110;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-spinner {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      height: 0px;
+      width: 0px;
+      margin: 0 auto;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 0px;
+      overflow: hidden;
+      text-align: center;
+      -webkit-transition: all 300ms ease-in-out;
+      transition: all 300ms ease-in-out;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-spinner > div {
+      margin: auto;
+      width: 12px;
+      height: 12px;
+      background-color: #fff;
+      opacity: 0.3;
+      border-radius: 100%;
+      display: inline-block;
+      -webkit-animation: formkit-bouncedelay-formkit-form-data-uid-cda82aafbf- 1.4s infinite
+        ease-in-out both;
+      animation: formkit-bouncedelay-formkit-form-data-uid-cda82aafbf- 1.4s infinite ease-in-out
+        both;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-spinner > div:nth-child(1) {
+      -webkit-animation-delay: -0.32s;
+      animation-delay: -0.32s;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-spinner > div:nth-child(2) {
+      -webkit-animation-delay: -0.16s;
+      animation-delay: -0.16s;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit[data-active] .formkit-spinner {
+      opacity: 1;
+      height: 100%;
+      width: 50px;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit[data-active] .formkit-spinner ~ span {
+      opacity: 0;
+    }
+    @-webkit-keyframes formkit-bouncedelay-formkit-form-data-uid-cda82aafbf- {
+      0%,
+      80%,
+      100% {
+        -webkit-transform: scale(0);
+        -ms-transform: scale(0);
+        transform: scale(0);
+      }
+      40% {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+      }
+    }
+    @keyframes formkit-bouncedelay-formkit-form-data-uid-cda82aafbf- {
+      0%,
+      80%,
+      100% {
+        -webkit-transform: scale(0);
+        -ms-transform: scale(0);
+        transform: scale(0);
+      }
+      40% {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+      }
+    }
+    .formkit-form[data-uid='cda82aafbf'] {
+      max-width: 700px;
+    }
+    .formkit-form[data-uid='cda82aafbf'] [data-style='clean'] {
+      width: 100%;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-fields {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      margin: 0 auto;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-field,
+    .formkit-form[data-uid='cda82aafbf'] .formkit-submit {
+      margin: 0 0 15px 0;
+      -webkit-flex: 1 0 100%;
+      -ms-flex: 1 0 100%;
+      flex: 1 0 100%;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-powered-by {
+      color: #7d7d7d;
+      display: block;
+      font-size: 12px;
+      margin: 0;
+      text-align: center;
+    }
+    .formkit-form[data-uid='cda82aafbf'] .formkit-powered-by[data-active='false'] {
+      opacity: 0.5;
+    }
+    .formkit-form[data-uid='cda82aafbf'][min-width~='700'] [data-style='clean'],
+    .formkit-form[data-uid='cda82aafbf'][min-width~='800'] [data-style='clean'] {
+      padding: 10px;
+    }
+    .formkit-form[data-uid='cda82aafbf'][min-width~='700'] .formkit-fields[data-stacked='false'],
+    .formkit-form[data-uid='cda82aafbf'][min-width~='800'] .formkit-fields[data-stacked='false'] {
+      margin-left: -5px;
+      margin-right: -5px;
+    }
+    .formkit-form[data-uid='cda82aafbf'][min-width~='700']
+      .formkit-fields[data-stacked='false']
+      .formkit-field,
+    .formkit-form[data-uid='cda82aafbf'][min-width~='800']
+      .formkit-fields[data-stacked='false']
+      .formkit-field,
+    .formkit-form[data-uid='cda82aafbf'][min-width~='700']
+      .formkit-fields[data-stacked='false']
+      .formkit-submit,
+    .formkit-form[data-uid='cda82aafbf'][min-width~='800']
+      .formkit-fields[data-stacked='false']
+      .formkit-submit {
+      margin: 0 5px 15px 5px;
+    }
+    .formkit-form[data-uid='cda82aafbf'][min-width~='700']
+      .formkit-fields[data-stacked='false']
+      .formkit-field,
+    .formkit-form[data-uid='cda82aafbf'][min-width~='800']
+      .formkit-fields[data-stacked='false']
+      .formkit-field {
+      -webkit-flex: 100 1 auto;
+      -ms-flex: 100 1 auto;
+      flex: 100 1 auto;
+    }
+    .formkit-form[data-uid='cda82aafbf'][min-width~='700']
+      .formkit-fields[data-stacked='false']
+      .formkit-submit,
+    .formkit-form[data-uid='cda82aafbf'][min-width~='800']
+      .formkit-fields[data-stacked='false']
+      .formkit-submit {
+      -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+    }
+  </style>
+    <input type="hidden" name="tags[]" value="733963" />
+  <input type="hidden" aria-label="URL" name="fields[URL]" placeholder="URL" value="https://rossta.net/blog/2019-01-08-vue.js-is-omakase.html" />
+</form>
+
+
+    </section>
+    <article>
+        <figure>
+          <img src="/assets/images/blog/stock/kuba-boski-sushi-unsplash-a0c2c1b5.jpg" alt="Kuba boski sushi unsplash" />
+            <figcaption>Photo by Kuba Boski on Unsplash</figcaption>
+        </figure>
+    </article>
+    <section class="margin-bottom double">
+      <p>
+        Published on Jan  8, 2019
+      </p>
+    </section>
+  </section>
+    <hr />
+    <section class="comments">
+      <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname  = "rosskaff";
+    var disqus_identifier = "vue-js-is-omakase";
+    var disqus_title      = "Vue.js is omakase";
+    var disqus_url        = "https://rossta.net/blog/vue-js-is-omakase.html";
+
+    var disqus_config = function () {
+        this.page.url = disqus_url;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = disqus_identifier; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.title = disqus_title;
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//rosskaff.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<!-- <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a> -->
+
+    </section>
+
+      </section>
+    </div>
+    
+    <footer>
+  <div class="row">
+    <img src="/assets/images/turtle-logo-096698b6.svg" class="turtle" alt="Turtle logo" />
+    <section class="large-6 columns">
+      <h5>Most Popular</h5>
+      <ul>
+          <li><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
+          <li><a href="/blog/local-ssl-for-rails-5.html">Local SSL for Rails 5 development and tests</a></li>
+          <li><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Categories</h5>
+      <ul>
+          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
+          <li><a href="/blog/tags/rails.html">Rails</a></li>
+          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
+          <li><a href="/blog/tags/vue.html">Vue</a></li>
+          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+      </ul>
+    </section>
+    <section class="large-3 columns">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+      </ul>
+    </section>
+  </div>
+  <p class="copyright small subtle center">
+    © 2019 Ross Kaffenberger. All rights reserved.
+  </p>
+</footer>
+
+    <script src="/runtime-3fa7456e.js"></script><script src="/vendor-0116f3b0.js"></script><script src="/app-ed1e4144.js"></script>
+    
+    <script type="text/javascript">
+!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+analytics.load("NdBtrprkAGAjQryMShljRdVf90saElAU");
+analytics.page()
+window.$.tracking.flush(analytics);
+}}();
+</script>
+
+  </body>
+</html>
