@@ -3,10 +3,10 @@
 </h3>
 <p>
   Please
-  <b><%= tweet_link_to "share it on Twitter", {
+  <%= tweet_link_to "share it on Twitter", {
   text: current_article.title,
   url: to_url(path: current_article.url)
-  } %></b>
+  } %>
   and enter your email below to subscribe to my newsletter on
   <%= current_page_tags.join(', ') + (current_page_tags.length > 1 ? "," : "") %> and the web. Thank you!
 </p>
