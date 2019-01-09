@@ -456,5 +456,5 @@
   <% current_page_tags.each_with_index do |tag, i| %>
     <input type="hidden" name="tags[]" value="<%= convertkit_tag_value(tag) %>" />
   <% end %>
-  <input type="hidden" aria-label="URL" name="fields[URL]" placeholder="URL" value="<%= current_url %>" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="<%= current_url %>" />
 </form>
