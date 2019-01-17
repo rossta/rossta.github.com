@@ -22,7 +22,7 @@ Presented at [VueDC](https://www.meetup.com/Vue-DC/events/257172134/) on January
 
 Check out the [demo project](https://rossta.net/vue-pdfjs-demo) and the [source code](https://github.com/rossta/vue-pdfjs-demo)!
 
-[![Vue PDF.js Demo](https://rossta.net/vue-pdfjs-demo)](https://github.com/rossta/vue-pdfjs-demo)
+[![Vue PDF.js Demo](screenshots/screenshot-pdf-viewer.png)](https://github.com/rossta/vue-pdfjs-demo)
 
 ### Resources
 I covered a lot of ground in a short time during this talk. Here are some links to learn more about what I shared:
