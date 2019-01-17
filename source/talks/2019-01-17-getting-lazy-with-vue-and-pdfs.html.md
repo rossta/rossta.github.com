@@ -1,7 +1,7 @@
 ---
 title: Getting Lazy with Vue and PDFs
 author: Ross Kaffenberger
-summary: What to expect switching from Sprockets to Webpack
+summary: A roundabout way of discovering IntersectionObserver
 description: Here's a lightning talk I gave at VueDC in which I share the most important lesson I learned while building a PDF Viewer in Vue.
 pull_image: 'screenshots/screenshot-pdf-viewer.png'
 published: true
@@ -10,7 +10,7 @@ tags:
   - Vue
 ---
 
-I recently built a [a PDF Viewer in Vue](https://rossta.net/blog/series/pdf-viewer.html)
+I recently built a [a PDF Viewer in Vue](https://rossta.net/blog/series/pdf-viewer.html). I had a chance to speak about my experience recently at [VueDC](https://www.meetup.com/Vue-DC/events/257172134/). I shared the most important lesson I learned while attempting to make the app more performant.
 
 <br />
 
