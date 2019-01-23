@@ -334,7 +334,7 @@ end
 Each thread runs an infinite loop that repeatedly pops jobs of the queue with
 `@jobs.pop`. The [`Queue#pop`](http://ruby-doc.org/stdlib-2.0.0/libdoc/thread/rdoc/Queue.html#method-i-pop) method here will block when the queue is empty so the thread will happily wait for new jobs to be scheduled at this point.
 
-Notice also to [`catch`](http://ruby-doc.org/core-2.3.0/Kernel.html#method-i-catch) block. We break out of the thread loops by
+We also use a [`catch`](http://ruby-doc.org/core-2.3.0/Kernel.html#method-i-catch) block. We break out of the thread loops by
 pushing `throw :exit` on to the job queue, once for each thread in the
 `#shutdown` method. This means that jobs currently executing when the shutdown
 method is called will be able to complete before the threads can be joined.
