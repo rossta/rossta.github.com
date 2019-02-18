@@ -1,12 +1,9 @@
 {
   "presets": [
-    ["env", {
-      "modules": false,
-        "targets": {
-          "browsers": "> 1%",
-          "uglify": true
-        },
-        "useBuiltIns": true
+    ["@babel/preset-env", {
+      "forceAllTransforms": true,
+      "useBuiltIns": "entry",
+      "modules": false
     }]
   ],
 
