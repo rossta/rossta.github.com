@@ -12,10 +12,10 @@ module.exports = {
   },
 
   output: {
-    path: `${__dirname}/.tmp/dist`,
-    publicPath: 'assets/javascripts',
-    filename: '[name].js',
-    chunkFilename: '[name].chunk.js',
+    path: `${__dirname}/.tmp/dist/assets`,
+    publicPath: '/assets/',
+    filename: 'js/[name].[contenthash].js',
+    chunkFilename: 'js/[name].chunk.[contenthash].js',
   },
 
   module: {
@@ -48,6 +48,13 @@ module.exports = {
         ],
       },
     ],
+  },
+
+  optimization: {
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+    },
   },
 
   node: {

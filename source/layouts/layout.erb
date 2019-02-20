@@ -12,7 +12,7 @@
 
     <script type="text/javascript" src="//use.typekit.net/ned0mml.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <%= stylesheet_link_tag "app" %>
+    <%= stylesheet_pack_tag "app" %>
   </head>
   <body id="application" class="typekit">
     <%= partial "partials/topbar" %>
@@ -23,7 +23,7 @@
     </div>
     <%= partial "partials/zen" %>
     <%= partial "partials/footer" %>
-    <%= javascript_include_tag "app" %>
+    <%= javascript_pack_tag "runtime", "vendors~app", "app" %>
     <%= yield_content :javascripts %>
     <%= partial "partials/analytics" %>
   </body>
