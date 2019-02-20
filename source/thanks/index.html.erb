@@ -1,15 +1,5 @@
 <% content_for(:title) { } %>
 <% content_for(:section) { 'I make things' } %>
-<% content_for(:javascripts) do %>
-  <script type="text/javascript">
-    (function() {
-      $.tracking.identify({ newsletter: true });
-      $.tracking.track("Newsletter sign up");
-
-      $('.back.button').click(function goBack() { window.history.back(); });
-    })();
-  </script>
-<% end %>
 
 <section id="hero">
   <header>

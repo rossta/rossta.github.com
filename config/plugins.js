@@ -1,9 +1,9 @@
 const webpack = require('webpack');
-const env = require('./env');
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Clean = require('clean-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const env = require('./env');
 
 const definePlugin = new webpack.DefinePlugin({
   __DEVELOPMENT__: JSON.stringify(env.__DEVELOPMENT__),
@@ -13,24 +13,15 @@ const definePlugin = new webpack.DefinePlugin({
 
 const cleanPluginTmp = new Clean(['.tmp']);
 
-const extractPluginCSS = new ExtractTextPlugin('assets/stylesheets/[name].css');
-
-const commonsChunkPlugin = new webpack.optimize.CommonsChunkPlugin({
-  names: ['vendor', 'runtime'],
-});
-
-const providePluginJquery = new webpack.ProvidePlugin({
-  $: 'jquery',
-  jQuery: 'jquery',
-  'window.jQuery': 'jquery',
+const miniCssExtractPlugin = new MiniCssExtractPlugin({
+  filename: '[name].css',
+  chunkFilename: '[id].css',
 });
 
 let sitePlugins = [
   definePlugin,
   cleanPluginTmp,
-  extractPluginCSS,
-  commonsChunkPlugin,
-  providePluginJquery,
+  miniCssExtractPlugin,
 ];
 
 if (env.__BUILD__) {
@@ -53,9 +44,10 @@ if (env.__BUILD__) {
   sitePlugins = [...sitePlugins, uglifyJsPlugin, compressionPluginGzip];
 }
 
-const swPlugins = [definePlugin];
+// const styleLoader = env.__DEVELOPMENT__ ? 'style-loader' : MiniCssExtractPlugin.loader;
+const styleLoader = MiniCssExtractPlugin.loader;
 
 module.exports = {
   sitePlugins,
-  swPlugins,
+  styleLoader,
 };
