@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'json'
 require_relative './lib/custom_markdown_renderer'
 
 activate :livereload
@@ -83,7 +84,8 @@ set :images_dir, 'assets/images'
 ignore 'assets/stylesheets/*'
 ignore 'assets/javascripts/*'
 
-activate :asset_hash
+# Disabled in favor of Webpack hashing
+# activate :asset_hash
 
 # Build-specific configuration
 configure :build do
@@ -159,6 +161,24 @@ helpers do
 
   def section
     (yield_content(:section) || title || '')
+  end
+
+  def webpack_manifest
+    manifest_path = '.tmp/dist/assets/manifest.json'
+    unless File.exist?(manifest_path)
+      warn 'Could not read manifest json!!'
+      return {}
+    end
+
+    @webpack_manifest ||= JSON.parse(File.read(manifest_path))
+  end
+
+  def stylesheet_pack_tag(*names)
+    names.map { |name| "<link href='#{webpack_manifest[name + '.css']}' rel='stylesheet'></link>" }.join('')
+  end
+
+  def javascript_pack_tag(*names)
+    names.map { |name| "<script src='#{webpack_manifest[name + '.js']}'></script>" }.join('')
   end
 
   def to_url(opts = {})

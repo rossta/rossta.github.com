@@ -1,11 +1,10 @@
 import '../stylesheets/app.scss';
-import hljs from 'highlight.js';
 import 'enhance';
 import debug from 'debug';
 
 const log = debug('app:app');
 
-hljs.initHighlightingOnLoad();
+import(/* webpackChunkName: "highlight.js", webpackPrefetch: true */ 'highlight.js').then(hljs => hljs.initHighlightingOnLoad());
 
 if (__DEVELOPMENT__) {
   log('Running in development mode!');

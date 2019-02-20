@@ -1,8 +1,11 @@
 const webpack = require('webpack');
+const path = require('path');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Clean = require('clean-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
+
 const env = require('./env');
 
 const definePlugin = new webpack.DefinePlugin({
@@ -11,17 +14,24 @@ const definePlugin = new webpack.DefinePlugin({
   __VERSION__: JSON.stringify(env.__VERSION__),
 });
 
-const cleanPluginTmp = new Clean(['.tmp']);
+const cleanPluginTmp = new Clean(['.tmp'], {
+  root: path.resolve(__dirname, '..'),
+});
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
-  filename: '[name].css',
-  chunkFilename: '[id].css',
+  filename: 'css/[name].[contenthash].css',
+  chunkFilename: 'css/[id].[contenthash].css',
+});
+
+const manifestPlugin = new ManifestPlugin({
+  writeToFileEmit: true,
 });
 
 let sitePlugins = [
   definePlugin,
   cleanPluginTmp,
   miniCssExtractPlugin,
+  manifestPlugin,
 ];
 
 if (env.__BUILD__) {
@@ -41,10 +51,18 @@ if (env.__BUILD__) {
     test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
   });
 
-  sitePlugins = [...sitePlugins, uglifyJsPlugin, compressionPluginGzip];
+  const hasheModuleIdsPlugin = new webpack.HashedModuleIdsPlugin();
+
+  sitePlugins = [...sitePlugins, uglifyJsPlugin, compressionPluginGzip, hasheModuleIdsPlugin];
 }
 
-// const styleLoader = env.__DEVELOPMENT__ ? 'style-loader' : MiniCssExtractPlugin.loader;
+if (process.env.WEBPACK_ANALYZE_BUNDLE) {
+  const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+  const bundleAnalyzerPlugin = new BundleAnalyzerPlugin();
+
+  sitePlugins = [...sitePlugins, bundleAnalyzerPlugin];
+}
+
 const styleLoader = MiniCssExtractPlugin.loader;
 
 module.exports = {
