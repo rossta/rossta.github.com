@@ -89,15 +89,15 @@
 
 &lt;p&gt;When my late wife and I lived in New York City, our favorite restaurant was &lt;a href="https://www.zenkichi.com/"&gt;Zenkichi&lt;/a&gt;. The cuisine is Japanese brasserie, but the experience is so much more. If you make it to the Williamsburg neighborhood in Brooklyn, you should try it.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-tofu-246b63b1.jpg" alt="Zenkichi tofu" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-tofu.jpg" alt="Zenkichi tofu" /&gt;&lt;/p&gt;
 
 &lt;p&gt;It&amp;#39;s housed in a small building with a wooden exterior and no discernable markings. Located near the East River in the Williamsburg of Brooklyn, it&amp;#39;s easy to miss from the outside.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-entrance-efa34cd0.jpg" alt="Zenkichi entrance" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-entrance.jpg" alt="Zenkichi entrance" /&gt;&lt;/p&gt;
 
 &lt;p&gt;The interior is dark, romantic, hand-crafted. Each table upstairs is like a small private dining room with a pull-down curtain and a small buzzer to summon the wait staff.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-tables-083e0edd.jpg" alt="Zenkichi tables" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-tables.jpg" alt="Zenkichi tables" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Everytime we ate there, we chose the omakase menu. We left all the decision-making up to the chef. It&amp;#39;s difficult at first to place that kind of trust in someone else&amp;#39;s judgment. Giving up control is uncomfortable. However, this led to some delightful discoveries. Of course, not all the courses were to our liking. Nevertheless, we loved the experience.&lt;/p&gt;
 
@@ -171,7 +171,7 @@ vue create my-project
 
 &lt;p&gt;One reason for this, I believe, is that Vue is a &amp;quot;progressive JavaScript framework.&amp;quot;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/vue/vuejs.org-homepage-ba6768c6.png" alt="Vue is a Progressive JavaScript Framework" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/vue/vuejs.org-homepage.png" alt="Vue is a Progressive JavaScript Framework" /&gt;&lt;/p&gt;
 
 &lt;p&gt;No need to learn the whole API to get started with Vue, no need to learn a new syntax like JSX; only basic HTML, CSS, and JS knowledge is required to get started.&lt;/p&gt;
 
@@ -296,7 +296,7 @@ vue create my-project
     
 &lt;p&gt;So far in &lt;a href="/blog/series/pdf-viewer.html"&gt;this series&lt;/a&gt;, we have built a simple PDF viewer to render the pages of PDF document to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements with Vue. We have also updated our components to fetch and render PDF pages lazily as they are scrolled into the viewport and we have extracted this behavior into a &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3-28bad22b.jpg" alt="Preview of the preview" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" /&gt;&lt;/p&gt;
 
       &lt;h3 id="the-problem" class="title"&gt;
         &lt;a name="the-problem" class="anchor" href="#the-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -469,7 +469,7 @@ render() {
 
 &lt;p&gt;One practical advantage is we can troubleshoot the scrolling behavior with a clear picture of where the behavior is located in our component tree with Vue devtools:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/vue-pdf-viewer/part-4-shared-behavior-devtools-c2fb2d8e.jpg" alt="scrolling components in Vue devtools" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/vue-pdf-viewer/part-4-shared-behavior-devtools.jpg" alt="scrolling components in Vue devtools" /&gt;&lt;/p&gt;
 
 &lt;p&gt;In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.&lt;/p&gt;
 
@@ -678,7 +678,7 @@ end
 
 &lt;p&gt;In this post I&amp;#39;ll demonstrate how I set up my Rails 5 app for local development and system tests over SSL with wildcard domains.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://github.com/rossta/local-ssl-demo-rails"&gt;&lt;img src="/assets/images/screenshots/screenshot-local-ssl-demo-4e7a7ffe.png" alt="Local Rails SSL Demo" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/rossta/local-ssl-demo-rails"&gt;&lt;img src="/assets/images/screenshots/screenshot-local-ssl-demo.png" alt="Local Rails SSL Demo" /&gt;&lt;/a&gt;&lt;/p&gt;
 
       &lt;h3 id="why-local-ssl-" class="title"&gt;
         &lt;a name="why-local-ssl-" class="anchor" href="#why-local-ssl-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
