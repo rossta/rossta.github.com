@@ -4,7 +4,6 @@ jobs:
     environment:
       USER_NAME: rossta
       USER_EMAIL: ross@rossta.net
-      NODE_ENV: production
     docker:
       - image: circleci/ruby:2.5-node-browsers
 
