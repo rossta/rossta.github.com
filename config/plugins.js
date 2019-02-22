@@ -20,7 +20,7 @@ const cleanPluginTmp = new Clean(['.tmp'], {
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
   filename: 'css/[name].[contenthash].css',
-  chunkFilename: 'css/[id].[contenthash].css',
+  chunkFilename: 'css/[name].chunk.[contenthash].css',
 });
 
 const manifestPlugin = new ManifestPlugin({
