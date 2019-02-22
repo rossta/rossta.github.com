@@ -1,7 +1,6 @@
 {
   "app.css": "/assets/css/app.chunk.f62cfb2bc5b697dbb988.css",
-  "app.js": "/assets/js/app.chunk.757dbd04772ca3a6e187.js",
-  "runtime.js": "/assets/js/runtime.bfaad9c5d5bc951e78a9.js",
-  "vendors~app.js": "/assets/js/vendors~app.chunk.2e9c881ffb21cefe97a3.js",
-  "vendors~highlight.js.js": "/assets/js/vendors~highlight.js.chunk.53ed2106fa01f188abed.js"
+  "app.js": "/assets/js/app.chunk.bd71582fef57e74c2cae.js",
+  "runtime.js": "/assets/js/runtime.269cddb94bf0453a0b81.js",
+  "vendors~app.js": "/assets/js/vendors~app.chunk.4b1267fd98b568417a7b.js"
 }
