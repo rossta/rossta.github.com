@@ -3,7 +3,7 @@ import highlight from 'highlight.js/lib/highlight';
 import bash from 'highlight.js/lib/languages/bash';
 import css from 'highlight.js/lib/languages/css';
 import elixir from 'highlight.js/lib/languages/elixir';
-import html from 'highlight.js/lib/languages/html';
+import xml from 'highlight.js/lib/languages/xml';
 import javascript from 'highlight.js/lib/languages/javascript';
 import json from 'highlight.js/lib/languages/json';
 import nginx from 'highlight.js/lib/languages/nginx';
@@ -15,7 +15,7 @@ const languages = {
   bash,
   css,
   elixir,
-  html,
+  xml,
   javascript,
   json,
   nginx,
