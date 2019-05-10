@@ -168,4 +168,4 @@ One practical advantage is we can troubleshoot the scrolling behavior with a cle
 
 In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.
 
-As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the [source code on Github](https://githbub.com/rossta/vue-pdfjs-demo). Make a pull request or let me know how I could improve things by [reaching out on Twitter](https://twitter.com/rossta).
+As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the [source code on Github](https://github.com/rossta/vue-pdfjs-demo). Make a pull request or let me know how I could improve things by [reaching out on Twitter](https://twitter.com/rossta).
