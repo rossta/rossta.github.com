@@ -473,7 +473,7 @@ render() {
 
 &lt;p&gt;In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.&lt;/p&gt;
 
-&lt;p&gt;As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the &lt;a href="https://githbub.com/rossta/vue-pdfjs-demo"&gt;source code on Github&lt;/a&gt;. Make a pull request or let me know how I could improve things by &lt;a href="https://twitter.com/rossta"&gt;reaching out on Twitter&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;source code on Github&lt;/a&gt;. Make a pull request or let me know how I could improve things by &lt;a href="https://twitter.com/rossta"&gt;reaching out on Twitter&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>
