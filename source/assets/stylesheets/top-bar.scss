@@ -6,8 +6,16 @@
       span {
         font-size: inherit;
         padding-left: 2px;
-        @media #{$small-only} { display: none; }
       }
+    }
+  }
+
+  @include phablet {
+    .top-bar-section {
+      display: none;
+    }
+    .top-bar-section.homepage {
+      display: block;
     }
   }
 
@@ -17,4 +25,3 @@
     .name h1 a { padding: 0 15px; }
   }
 }
-

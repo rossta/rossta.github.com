@@ -11,7 +11,6 @@
 #main {
   @include base-font;
   padding-bottom: 1em;
-  margin-top: 1em;
   margin-bottom: 1em;
 
   @media #{$small-only} {
@@ -77,8 +76,9 @@
   $side: 2.5em;
 
   @include hero($side);
-
-  margin: 0 (-$side) $side (-$side);
+  @include desktop {
+    margin: 0 (-$side) $side (-$side);
+  }
 
   header {
     margin-bottom: 0em;

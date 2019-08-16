@@ -134,6 +134,9 @@ blockquote {
   li {
     height: 64px;
   }
+  @media #{$small-only} {
+    display: none;
+  }
 }
 
 .flex {

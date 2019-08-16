@@ -10,3 +10,13 @@ if ('serviceWorker' in navigator) {
 } else {
   log('service worker is not supported.');
 }
+
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('.menu-icon a').addEventListener('click', (event) => {
+    event.stopPropagation();
+    const menu = event.target.closest('.top-bar')
+    if (menu.style.height) menu.style.height = null;
+    else menu.style.height = 'auto';
+  });
+});

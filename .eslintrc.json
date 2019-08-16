@@ -4,7 +4,9 @@
     "__DEVELOPMENT__": true,
     "__BUILD__": true,
     "__VERSION__": true,
-    "navigator": true
+    "window": true,
+    "navigator": true,
+    "document": true
   },
   "rules": {
     "import/no-extraneous-dependencies": {

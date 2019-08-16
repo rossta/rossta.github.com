@@ -6,16 +6,14 @@
     <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
   </ul>
 
-  <% if homepage? %>
-    <section class="top-bar-section">
-      <ul class="left">
-        <li class="nav"><a href="/blog">blog</a></li>
-        <li class="nav"><a href="/series">series</a></li>
-        <li class="nav"><a href="/talks">talks</a></li>
-        <li class="nav"><a href="/projects">projects</a></li>
-        <li class="nav"><a href="/about">about</a></li>
-        <li class="nav"><a href="/feed.xml">feed</a></li>
-      </ul>
-    </section>
-  <% end %>
+  <section class="top-bar-section<%= ' homepage' if homepage? %>">
+    <ul class="left">
+      <li class="nav"><a href="/blog">blog</a></li>
+      <li class="nav"><a href="/series">series</a></li>
+      <li class="nav"><a href="/talks">talks</a></li>
+      <li class="nav"><a href="/projects">projects</a></li>
+      <li class="nav"><a href="/about">about</a></li>
+      <li class="nav"><a href="/feed.xml">feed</a></li>
+    </ul>
+  </section>
 </nav>
