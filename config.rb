@@ -191,8 +191,12 @@ helpers do
 
   def current_url
     path = current_page.path
-    path = '/' if current_page.path == 'index.html'
+    path = '/' if homepage?
     to_url(path: path)
+  end
+
+  def homepage?
+    current_page.path == 'index.html'
   end
 
   def image_url(source)

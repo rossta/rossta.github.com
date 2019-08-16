@@ -1,19 +1,21 @@
 <nav id="welcome-nav" class="top-bar" data-topbar>
   <ul class="title-area">
     <li class="name">
-      <h1><a class="logo" href="/"><%= image_tag "turtle-logo.svg" %><span>rossta.net</span></a></h1>
+      <h1><a class="logo" href="/"><span>rossta.net</span></a></h1>
     </li>
     <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
   </ul>
 
-  <section class="top-bar-section">
-    <ul class="left">
-      <li class="nav"><a href="/blog">blog</a></li>
-      <li class="nav"><a href="/series">series</a></li>
-      <li class="nav"><a href="/talks">talks</a></li>
-      <li class="nav"><a href="/projects">projects</a></li>
-      <li class="nav"><a href="/about">about</a></li>
-      <li class="nav"><a href="/feed.xml">feed</a></li>
-    </ul>
-  </section>
+  <% if homepage? %>
+    <section class="top-bar-section">
+      <ul class="left">
+        <li class="nav"><a href="/blog">blog</a></li>
+        <li class="nav"><a href="/series">series</a></li>
+        <li class="nav"><a href="/talks">talks</a></li>
+        <li class="nav"><a href="/projects">projects</a></li>
+        <li class="nav"><a href="/about">about</a></li>
+        <li class="nav"><a href="/feed.xml">feed</a></li>
+      </ul>
+    </section>
+  <% end %>
 </nav>
