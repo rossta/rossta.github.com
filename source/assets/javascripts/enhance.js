@@ -13,10 +13,19 @@ if ('serviceWorker' in navigator) {
 
 
 window.addEventListener('DOMContentLoaded', () => {
-  document.querySelector('.menu-icon a').addEventListener('click', (event) => {
-    event.stopPropagation();
-    const menu = event.target.closest('.top-bar')
-    if (menu.style.height) menu.style.height = null;
-    else menu.style.height = 'auto';
+  document.querySelectorAll('.top-bar-menu-button').forEach(el => {
+    el.addEventListener('click', (event) => {
+      event.stopPropagation();
+      toggleClass(document.querySelector('.top-bar-section'), 'hidden');
+      el.querySelectorAll('.icon').forEach(ic => toggleClass(ic, 'hidden'));
+    })
   });
 });
+
+function toggleClass(el, className) {
+  if (el.classList.contains(className)) {
+    el.classList.remove(className)
+  } else {
+    el.classList.add(className)
+  }
+}

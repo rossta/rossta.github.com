@@ -28,4 +28,4 @@ Object.entries(languages).forEach(([name, language]) => {
   highlight.registerLanguage(name, language);
 });
 
-highlight.initHighlightingOnLoad();
+export default highlight;

@@ -7,7 +7,6 @@ per_page: 25
 
 <%= page_header 'Articles on rossta.net', 'Programming for the web' %>
 
-<br /><hr /><br/>
 <section id="blog" class="index-posts">
   <%= partial "partials/article_index", locals: { local_articles: page_articles } %>
   <hr /><br /><br />
@@ -18,4 +17,3 @@ per_page: 25
 <section class="signup-form-standalone margin-bottom double">
   <%= partial "partials/signup" %>
 </section>
-

@@ -1,0 +1,170 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import './forms';
+@import './code';
+@import './code-docco-theme';
+
+html {
+  font-size: 18px;
+}
+
+hr {
+  @apply mb-6;
+}
+
+.bg-silver {
+  background-color: #f8f8ff;
+}
+
+h1,
+h2,
+h3 {
+  @apply font-bold leading-snug text-gray-800;
+}
+h1 {
+  @apply text-2xl;
+}
+h2 {
+  @apply text-xl;
+}
+h3 {
+  @apply text-lg;
+}
+
+@screen sm {
+  h1 {
+    @apply text-3xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+  h3 {
+    @apply text-xl;
+  }
+}
+
+.layout {
+  @apply mx-auto w-full px-4;
+
+  max-width: 780px;
+}
+
+@screen sm {
+  .layout {
+    @apply px-6;
+  }
+}
+@screen lg {
+  .layout {
+    @apply w-1/2;
+  }
+}
+
+.button {
+  @apply bg-green-800;
+}
+main a,
+footer a {
+  @apply text-green-800;
+}
+main a {
+  @apply text-green-800 underline;
+}
+main a:hover,
+footer a:hover {
+  @apply text-green-600;
+}
+
+.index-post {
+  @apply mb-8;
+}
+
+.index-title {
+  @apply font-bold mb-2 text-xl;
+}
+
+.index-alt-title {
+  @apply text-gray-700;
+}
+
+.page-header {
+  @apply mb-8 pb-8 border-b border-gray-400;
+}
+.post p,
+.index-post p {
+  @apply mb-6;
+}
+.post .title {
+  @apply mb-4 flex items-center;
+}
+.post .title .anchor {
+  @apply hidden;
+}
+
+@screen lg {
+  .post .title {
+    @apply -ml-5;
+  }
+
+  .post .title .anchor {
+    @apply block mr-1;
+
+    visibility: hidden;
+  }
+  .post .title:hover > .anchor {
+    visibility: visible;
+  }
+}
+
+.post blockquote {
+  @apply italic text-gray-700 -ml-6 pl-6 border-l border-gray-700;
+}
+
+.post ul,
+.post ol {
+  @apply mb-4;
+}
+
+.post ul li {
+  list-style-type: disc;
+
+  @apply ml-4 text-gray-700;
+}
+
+.post ol li {
+  list-style-type: decimal;
+
+  @apply ml-4 text-gray-700;
+}
+
+.signup-form-standalone {
+  @apply mt-6 mb-12 p-6 rounded;
+
+  background-color: #f8f8ff;
+}
+@screen lg {
+  .signup-form-standalone {
+    @apply -mx-6;
+  }
+}
+
+figcaption {
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  font-style: normal;
+  font-feature-settings: 'liga' on, 'lnum' on;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: rgba(0, 0, 0, 0.68);
+  letter-spacing: 0;
+  position: relative;
+  left: 0;
+  width: 100%;
+  top: 0;
+  margin-top: 10px;
+  color: rgba(0, 0, 0, 0.68);
+  outline: 0;
+  text-align: center;
+}

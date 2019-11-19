@@ -5,34 +5,30 @@
   <% title current_article.title %>
   <% description current_page.data.description %>
   <% keywords (current_page.data.tags || []).join(', ') %>
-  <section id="blog" class="margin-bottom double">
-    <article class="post margin-bottom double">
-      <%= page_header current_article.title, current_page.data.summary %>
-
-      <%= yield %>
-    </article>
-
-    <section class="signup-form-standalone margin-bottom quadruple">
-      <%= partial "partials/signup" %>
-    </section>
-    <article>
-      <% if current_page.data.pull_image %>
-        <figure>
-          <%= image_tag current_page.data.pull_image if current_page.data.pull_image %>
-          <% if current_page.data.pull_image_caption %>
-            <figcaption><%= current_page.data.pull_image_caption %></figcaption>
-          <% end %>
-        </figure>
-      <% end %>
-    </article>
-    <section class="margin-bottom double">
-      <p>
-        <% if current_page.data.series %>
-          <% series =  current_page.data.series %>
-          Part of the <%= link_to series, series_path(series, "blog") %> series.
+  <article class="post mb-12">
+    <%= page_header current_article.title, current_page.data.summary %>
+    <%= yield %>
+  </article>
+  <section class="signup-form-standalone mb-12">
+    <%= partial "partials/signup" %>
+  </section>
+  <article class="mb-12">
+    <% if current_page.data.pull_image %>
+      <figure>
+        <%= image_tag current_page.data.pull_image if current_page.data.pull_image %>
+        <% if current_page.data.pull_image_caption %>
+          <figcaption><%= current_page.data.pull_image_caption %></figcaption>
         <% end %>
-        Published on <%= current_article.date.strftime('%b %e, %Y') %>
-      </p>
-    </section>
+      </figure>
+    <% end %>
+  </article>
+  <section class="mb-12 italic font-light">
+    <p>
+      <% if current_page.data.series %>
+        <% series =  current_page.data.series %>
+        Part of the <%= link_to series, series_path(series, "blog") %> series.
+      <% end %>
+      Published on <%= current_article.date.strftime('%b %e, %Y') %>
+    </p>
   </section>
 <% end %>
