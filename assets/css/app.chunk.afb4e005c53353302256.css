@@ -11450,8 +11450,17 @@ pre {
   background-color: ghostwhite;
 }
 
+@media (min-width: 1024px) {
+  pre {
+    padding: 1.5rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+  }
+}
+
 pre code {
   font-size: 0.75rem;
+  padding: 0;
   background-color: none;
   overflow:auto;
   font-weight:normal;
@@ -11733,13 +11742,14 @@ footer a:hover {
 .signup-form-standalone {
   margin-top: 1.5rem;
   margin-bottom: 3rem;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 0.25rem;
   background-color: #f8f8ff;
 }
 
 @media (min-width: 1024px) {
   .signup-form-standalone {
+    padding: 1.5rem;
     margin-left: -1.5rem;
     margin-right: -1.5rem;
   }
