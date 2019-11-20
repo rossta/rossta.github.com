@@ -1,6 +1,15 @@
 {
-  "app.css": "/assets/css/app.chunk.ec0fe26b83d3a067ec6b.css",
-  "app.js": "/assets/js/app.chunk.452b0d6880b982c6f58e.js",
-  "runtime.js": "/assets/js/runtime.269cddb94bf0453a0b81.js",
-  "vendors~app.js": "/assets/js/vendors~app.chunk.744433b6240167794468.js"
+  "app.css": "/assets/css/app.chunk.9df2bf47156ffdacf56d.css",
+  "app.js": "/assets/js/app.chunk.9b02ed1688728941abed.js",
+  "highlight.js": "/assets/js/highlight.chunk.130e502dfd239639475e.js",
+  "runtime.js": "/assets/js/runtime.678dffb2b521ddc02d44.js",
+  "vendors~app.js": "/assets/js/vendors~app.chunk.2a219e9e35ac659e5139.js",
+  "vendors~highlight.js": "/assets/js/vendors~highlight.chunk.77e78a07761ee7dca286.js",
+  "css/app.chunk.9df2bf47156ffdacf56d.css.gz": "/assets/css/app.chunk.9df2bf47156ffdacf56d.css.gz",
+  "js/app.chunk.9b02ed1688728941abed.js.gz": "/assets/js/app.chunk.9b02ed1688728941abed.js.gz",
+  "js/highlight.chunk.130e502dfd239639475e.js.gz": "/assets/js/highlight.chunk.130e502dfd239639475e.js.gz",
+  "js/runtime.678dffb2b521ddc02d44.js.gz": "/assets/js/runtime.678dffb2b521ddc02d44.js.gz",
+  "js/vendors~app.chunk.2a219e9e35ac659e5139.js.LICENSE": "/assets/js/vendors~app.chunk.2a219e9e35ac659e5139.js.LICENSE",
+  "js/vendors~app.chunk.2a219e9e35ac659e5139.js.gz": "/assets/js/vendors~app.chunk.2a219e9e35ac659e5139.js.gz",
+  "js/vendors~highlight.chunk.77e78a07761ee7dca286.js.gz": "/assets/js/vendors~highlight.chunk.77e78a07761ee7dca286.js.gz"
 }

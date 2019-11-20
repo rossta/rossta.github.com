@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html class="antialiased">
   <head>
     <title>Ross Kaffenberger - rossta.net</title>
 <meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, and Elixir" />
@@ -22,85 +22,91 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.ec0fe26b83d3a067ec6b.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.9df2bf47156ffdacf56d.css' rel='stylesheet'></link>
   </head>
-  <body id="application">
-    <nav id="welcome-nav" class="top-bar" data-topbar>
-  <ul class="title-area">
-    <li class="name">
-      <h1><a class="logo" href="/"><span>rossta.net</span></a></h1>
-    </li>
-    <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
-  </ul>
+  <body id="application" class="leading-normal text-gray-900">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
 
-  <section class="top-bar-section">
-    <ul class="left">
-      <li class="nav"><a href="/blog">blog</a></li>
-      <li class="nav"><a href="/series">series</a></li>
-      <li class="nav"><a href="/talks">talks</a></li>
-      <li class="nav"><a href="/projects">projects</a></li>
-      <li class="nav"><a href="/about">about</a></li>
-      <li class="nav"><a href="/feed.xml">feed</a></li>
-    </ul>
-  </section>
-</nav>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2" href="/blog">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/series">series</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/talks">talks</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/projects">projects</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
 
-    <div class="row">
-      <section id="main" role="main" class="large-12 small-12 columns">
-          <section id="page">
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
     
-<header class="page-header with-summary">
+<header class="page-header mt-4">
   <h1>
     Projects
   </h1>
-    <h3>
+    <h3 class="mt-4 text-gray-600 text-lg font-medium">
       Selected projects and free open source software
     </h3>
 </header>
 
 
-<br /><hr /><br/>
 <section id="projects" class="index-posts">
     <article class="index-post">
-      <header>
-        <h3><a href="https://rossta.net/vue-pdfjs-demo">PDF Viewer</a></h3>
-          <p class="alt-title subtle">A demo application built with Vue.js and PDF.js</p>
+      <header class="index-title">
+        <a href="https://rossta.net/vue-pdfjs-demo">PDF Viewer</a>
       </header>
-      <p>Coming soon: a behind-the-scenes look at how I built the PDF Viewer with Vue.js</p>
+        <p class="index-alt-title subtle">A demo application built with Vue.js and PDF.js</p>
+      <section class="mt-6">
+        <p>Coming soon: a behind-the-scenes look at how I built the PDF Viewer with Vue.js</p>
 
 <p><a href="https://rossta.net/vue-pdfjs-demo/"><img src="/assets/images/screenshots/screenshot-pdf-viewer.png" alt="Online demo" /></a></p>
 
-        <p>
-            <a href="https://rossta.net/vue-pdfjs-demo">Online demo</a>
-              &middot;
-            <a href="https://github.com/rossta/vue-pdfjs-demo">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="https://rossta.net/vue-pdfjs-demo">Online demo</a>
+                &middot;
+              <a href="https://github.com/rossta/vue-pdfjs-demo">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="http://connectfour.rossta.me/">Connect Four</a></h3>
-          <p class="alt-title subtle">Play the classic game online in realtime; built with Vue.js and Elixir</p>
+      <header class="index-title">
+        <a href="http://connectfour.rossta.me/">Connect Four</a>
       </header>
-      <p>Check out the <a href="https://rossta.net/blog/series/connect-four.html">series</a> for an in-depth look at some of the features and concepts explored in this project.</p>
+        <p class="index-alt-title subtle">Play the classic game online in realtime; built with Vue.js and Elixir</p>
+      <section class="mt-6">
+        <p>Check out the <a href="https://rossta.net/blog/series/connect-four.html">series</a> for an in-depth look at some of the features and concepts explored in this project.</p>
 
 <p><a href="http://connectfour.rossta.me/"><img src="/assets/images/screenshots/screenshot-connectfour.png" alt="Play online" /></a></p>
 
-        <p>
-            <a href="http://connectfour.rossta.me/">Play online</a>
-              &middot;
-            <a href="https://github.com/rossta/connect-four-vue">Frontend source code on GitHub</a>
-              &middot;
-            <a href="https://github.com/rossta/connect-four-elixir">Backend source code on GitHub</a>
-        </p>
+          <p>
+              <a href="http://connectfour.rossta.me/">Play online</a>
+                &middot;
+              <a href="https://github.com/rossta/connect-four-vue">Frontend source code on GitHub</a>
+                &middot;
+              <a href="https://github.com/rossta/connect-four-elixir">Backend source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://rossta.net/">ServiceWorker::Rails</a></h3>
-          <p class="alt-title subtle">Turn your Rails app into a Progressive Web App</p>
+      <header class="index-title">
+        <a href="https://rossta.net/">ServiceWorker::Rails</a>
       </header>
-      <p>The Rails asset pipeline makes a number of assumptions about what&#39;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &quot;cacheability&quot;. Rails also assumes a single parent directory, <code>/public/assets</code>, to make it easier to look up the file path for a given asset.</p>
+        <p class="index-alt-title subtle">Turn your Rails app into a Progressive Web App</p>
+      <section class="mt-6">
+        <p>The Rails asset pipeline makes a number of assumptions about what&#39;s best for deploying JavaScript, including asset digest fingerprints and long-lived cache headers - mostly to increase &quot;cacheability&quot;. Rails also assumes a single parent directory, <code>/public/assets</code>, to make it easier to look up the file path for a given asset.</p>
 
 <p>We want Sprockets to compile service worker JavaScript from ES6/7, CoffeeScript, ERB, etc. but must remove the caching and scoping mechanisms offered by Rails asset pipeline defaults. This is where <code>serviceworker-rails</code> comes in.</p>
 
@@ -110,19 +116,21 @@ for more background.</em></p>
 <p><img src="/assets/images/screenshots/screenshot-serviceworker-rails.png" alt="Service Worker Rails
 Sandbox" /></p>
 
-        <p>
-            <a href="https://github.com/rossta/serviceworker-rails">Source code on GitHub</a>
-              &middot;
-            <a href="https://serviceworker-rails.herokuapp.com/">Demo app</a>
-        </p>
+          <p>
+              <a href="https://github.com/rossta/serviceworker-rails">Source code on GitHub</a>
+                &middot;
+              <a href="https://serviceworker-rails.herokuapp.com/">Demo app</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://rossta.net/montrose">Montrose</a></h3>
-          <p class="alt-title subtle">A Ruby library for modeling recurring events</p>
+      <header class="index-title">
+        <a href="https://rossta.net/montrose">Montrose</a>
       </header>
-      <p>Why would you need <a href="https://github.com/rossta/montrose"><code>Montrose</code></a>? Well, a calendaring or scheduling application may reach a point where it needs to handle entries that repeat at predefined intervals; it may useful to have an abstraction to represent that recurrence.  How would you handle &quot;every Friday 13th, forever&quot;? It wouldn&#39;t be feasible to generate infinite events upfront to represent each instance - <code>Montrose</code> helps
+        <p class="index-alt-title subtle">A Ruby library for modeling recurring events</p>
+      <section class="mt-6">
+        <p>Why would you need <a href="https://github.com/rossta/montrose"><code>Montrose</code></a>? Well, a calendaring or scheduling application may reach a point where it needs to handle entries that repeat at predefined intervals; it may useful to have an abstraction to represent that recurrence.  How would you handle &quot;every Friday 13th, forever&quot;? It wouldn&#39;t be feasible to generate infinite events upfront to represent each instance - <code>Montrose</code> helps
 you define and enumerate these recurrences on demand.</p>
 
 <pre><code class="ruby"># Friday the 13th, forever
@@ -135,173 +143,194 @@ Montrose.monthly(on: { friday: 13 })
 
 <p><code>$ gem install montrose</code></p>
 
-        <p>
-            <a href="https://github.com/rossta/montrose">Source code on GitHub</a>
-              &middot;
-            <a href="https://rossta.net/montrose">Documentation</a>
-        </p>
+          <p>
+              <a href="https://github.com/rossta/montrose">Source code on GitHub</a>
+                &middot;
+              <a href="https://rossta.net/montrose">Documentation</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://rossta.net/tacokit.rb">Tacokit.rb</a></h3>
-          <p class="alt-title subtle">A Ruby wrapper for the Trello API</p>
+      <header class="index-title">
+        <a href="https://rossta.net/tacokit.rb">Tacokit.rb</a>
       </header>
-      <p>Ruby toolkit for the <a href="https://developer.trello.com">Trello API</a>... a work-in-progress. Design and philosophy inspired by <a href="https://gitbhub.com/octokit/octokit.rb">ocktokit.rb</a>. I love using <a href="https://trello.com">Trello</a> almost everyday for work and personal stuff - which means there&#39;s a treasure trove of data waiting to be unlocked. The <code>Tacokit</code> gem is a simple ruby interface. It&#39;s well-tested, well-documented, and easy to use by Rubyists.</p>
+        <p class="index-alt-title subtle">A Ruby wrapper for the Trello API</p>
+      <section class="mt-6">
+        <p>Ruby toolkit for the <a href="https://developer.trello.com">Trello API</a>... a work-in-progress. Design and philosophy inspired by <a href="https://gitbhub.com/octokit/octokit.rb">ocktokit.rb</a>. I love using <a href="https://trello.com">Trello</a> almost everyday for work and personal stuff - which means there&#39;s a treasure trove of data waiting to be unlocked. The <code>Tacokit</code> gem is a simple ruby interface. It&#39;s well-tested, well-documented, and easy to use by Rubyists.</p>
 
 <p><code>$ gem install tacokit</code></p>
 
 <p><img src="/assets/images/taco.png" alt="Taco" /></p>
 
-        <p>
-            <a href="https://github.com/rossta/tacokit.rb">Source code on GitHub</a>
-              &middot;
-            <a href="https://rossta.net/tacokit.rb">Documentation</a>
-        </p>
+          <p>
+              <a href="https://github.com/rossta/tacokit.rb">Source code on GitHub</a>
+                &middot;
+              <a href="https://rossta.net/tacokit.rb">Documentation</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://rossta.net/pathfinder">Pathfinder</a></h3>
-          <p class="alt-title subtle">Graph search demo on React.js, Redux, and Immutable.js</p>
+      <header class="index-title">
+        <a href="https://rossta.net/pathfinder">Pathfinder</a>
       </header>
-      <p>A visualization project: animating breadth-first-search with <a href="https://facebook.github.io/react/">react</a>, <a href="https://facebook.github.io/immutable-js/">immutable.js</a>, and <a href="https://github.com/rackt/redux">redux</a>.</p>
+        <p class="index-alt-title subtle">Graph search demo on React.js, Redux, and Immutable.js</p>
+      <section class="mt-6">
+        <p>A visualization project: animating breadth-first-search with <a href="https://facebook.github.io/react/">react</a>, <a href="https://facebook.github.io/immutable-js/">immutable.js</a>, and <a href="https://github.com/rackt/redux">redux</a>.</p>
 
 <p><a href="https://rossta.net/pathfinder"><img src="/assets/images/screenshots/screenshot-pathfinder.png" alt="Pathfinder" /></a></p>
 
-        <p>
-            <a href="https://rossta.net/pathfinder">Demo</a>
-              &middot;
-            <a href="https://github.com/rossta/pathfinder">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="https://rossta.net/pathfinder">Demo</a>
+                &middot;
+              <a href="https://github.com/rossta/pathfinder">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://rossta.net/opensesame/">OpenSesame</a></h3>
-          <p class="alt-title subtle">Rails engine for authenticating internal applications</p>
+      <header class="index-title">
+        <a href="https://rossta.net/opensesame/">OpenSesame</a>
       </header>
-      <p><a href="https://rossta.net/opensesame/">OpenSesame</a> is a <a href="https://github.com/hassox/warden">Warden</a> strategy for providing &quot;walled garden&quot; authentication for access to Rack-based applications via Omniauth. For example, your company has internal apps and/or staging enviroments for multiple projects and you want something better than HTTP basic auth. The intent is protect the visibility of your app from the out</p>
+        <p class="index-alt-title subtle">Rails engine for authenticating internal applications</p>
+      <section class="mt-6">
+        <p><a href="https://rossta.net/opensesame/">OpenSesame</a> is a <a href="https://github.com/hassox/warden">Warden</a> strategy for providing &quot;walled garden&quot; authentication for access to Rack-based applications via Omniauth. For example, your company has internal apps and/or staging enviroments for multiple projects and you want something better than HTTP basic auth. The intent is protect the visibility of your app from the out</p>
 
 <p><code>$ gem install opensesame</code></p>
 
 <p><a href="https://rossta.net/opensesame"><img src="/assets/images/screenshots/screenshot-opensesame.png" alt="OpenSesame" /></a></p>
 
-        <p>
-            <a href="https://github.com/rossta/opensesame">Source code on GitHub</a>
-              &middot;
-            <a href="https://rossta.net/opensesame/">Documentation</a>
-        </p>
+          <p>
+              <a href="https://github.com/rossta/opensesame">Source code on GitHub</a>
+                &middot;
+              <a href="https://rossta.net/opensesame/">Documentation</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://github.com/rossta/lionel_richie">LionelRichie</a></h3>
-          <p class="alt-title subtle">Trello? Export your Trello data to Google Docs</p>
+      <header class="index-title">
+        <a href="https://github.com/rossta/lionel_richie">LionelRichie</a>
       </header>
-      <p>LionelRichie is a script for exporting Trello data to Google Docs. Written in ruby, it provides a DSL for mapping data from a Trello board to Google spreadsheets cells and a command line executable suitable for use in scripts. It can be installed via rubygems:</p>
+        <p class="index-alt-title subtle">Trello? Export your Trello data to Google Docs</p>
+      <section class="mt-6">
+        <p>LionelRichie is a script for exporting Trello data to Google Docs. Written in ruby, it provides a DSL for mapping data from a Trello board to Google spreadsheets cells and a command line executable suitable for use in scripts. It can be installed via rubygems:</p>
 
 <p><code>$ gem install lionel_richie</code></p>
 
-        <p>
-            <a href="https://github.com/rossta/lionel_richie">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="https://github.com/rossta/lionel_richie">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://zenkaffe.herokuapp.com/says">ZenKaffe</a></h3>
-          <p class="alt-title subtle">A simple API for a sip of inspiration built on node.js</p>
+      <header class="index-title">
+        <a href="https://zenkaffe.herokuapp.com/says">ZenKaffe</a>
       </header>
-      <p>A text-only API for with zen-like phrases of inspiration. The snippets are randomly queried and display in the banner of this blog. Built on <a href="https://nodejs.org">node.js</a>, <a href="http://expressjs.com/">express</a>, <a href="http://passportjs.org/">passport</a>, and <a href="http://mongoosejs.com/">mongoose</a>.</p>
+        <p class="index-alt-title subtle">A simple API for a sip of inspiration built on node.js</p>
+      <section class="mt-6">
+        <p>A text-only API for with zen-like phrases of inspiration. The snippets are randomly queried and display in the banner of this blog. Built on <a href="https://nodejs.org">node.js</a>, <a href="http://expressjs.com/">express</a>, <a href="http://passportjs.org/">passport</a>, and <a href="http://mongoosejs.com/">mongoose</a>.</p>
 
-        <p>
-            <a href="https://zenkaffe.herokuapp.com/says">Try it out</a>
-              &middot;
-            <a href="https://github.com/rossta/zenkaffe">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="https://zenkaffe.herokuapp.com/says">Try it out</a>
+                &middot;
+              <a href="https://github.com/rossta/zenkaffe">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://github.com/rossta/seymour">Seymour</a></h3>
-          <p class="alt-title subtle">Redis-backed activity feeds for Rails</p>
+      <header class="index-title">
+        <a href="https://github.com/rossta/seymour">Seymour</a>
       </header>
-      <p>A Ruby gem for distributing activity items to Redis-backed activity feeds in a Rails application. Abstractions are provided to make it easy to declare &quot;recipients&quot; of a given event and how these activities should be rendered. To install:</p>
+        <p class="index-alt-title subtle">Redis-backed activity feeds for Rails</p>
+      <section class="mt-6">
+        <p>A Ruby gem for distributing activity items to Redis-backed activity feeds in a Rails application. Abstractions are provided to make it easy to declare &quot;recipients&quot; of a given event and how these activities should be rendered. To install:</p>
 
 <p><code>$ gem install seymour</code></p>
 
-        <p>
-            <a href="https://github.com/rossta/seymour">Documentation</a>
-              &middot;
-            <a href="https://github.com/rossta/seymour">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="https://github.com/rossta/seymour">Documentation</a>
+                &middot;
+              <a href="https://github.com/rossta/seymour">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="http://playsudokill.com">Sudokill</a></h3>
-          <p class="alt-title subtle">Sudokill is a realtime, multiplayer, web-based Sudoku game</p>
+      <header class="index-title">
+        <a href="http://playsudokill.com">Sudokill</a>
       </header>
-      <p>One of my favorite projects, Sudokill is a realtime multiplayer Sudoku implementation. The interface designed to support human vs human over the web, computer vs computer via TCP, or human vs computer. I built the game for NYU heuristics students to compete with their own Sudokill “player” programs.The object of the game is to force the other player to make an invalid Sudoku move. Players take turn playing valid sudoku moves. Moves are valid as long as they don’t violate traditional sudoku configuration. Moves need not conform to the final solution of the board as in solitary Sudoku; in fact, the possibility of invalid states increases as more moves are made which diverge from the actual solution. The best strategies work reduce valid possibilities for the opponent based by looking ahead to future board states.</p>
+        <p class="index-alt-title subtle">Sudokill is a realtime, multiplayer, web-based Sudoku game</p>
+      <section class="mt-6">
+        <p>One of my favorite projects, Sudokill is a realtime multiplayer Sudoku implementation. The interface designed to support human vs human over the web, computer vs computer via TCP, or human vs computer. I built the game for NYU heuristics students to compete with their own Sudokill “player” programs.The object of the game is to force the other player to make an invalid Sudoku move. Players take turn playing valid sudoku moves. Moves are valid as long as they don’t violate traditional sudoku configuration. Moves need not conform to the final solution of the board as in solitary Sudoku; in fact, the possibility of invalid states increases as more moves are made which diverge from the actual solution. The best strategies work reduce valid possibilities for the opponent based by looking ahead to future board states.</p>
 
 <p>This project is particularly exciting to me as it leverages the HTML5 WebSocket protocol to make it possible to play the game in a web browser and communicate with a server in realtime using only HTML, CSS and Javascript on the front-end. I implemented a separate protocol to allow programs to connect to the server and play the game via TCP. Fellow students at NYU wrote computer “players” in a variety of languages (java, python, ruby, c ). The game also has some interesting features, such as configurable board density, an on-deck player queue, and a chat server.</p>
 
 <p><a href="http://playsudokill.com"><img src="/assets/images/screenshots/screenshot-sudokill.png" alt="Play Sudokill: Sudoku's not a one player game anymore" /></a></p>
 
-        <p>
-            <a href="http://playsudokill.com">Try it out</a>
-              &middot;
-            <a href="https://github.com/rossta/sudokill">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="http://playsudokill.com">Try it out</a>
+                &middot;
+              <a href="https://github.com/rossta/sudokill">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://github.com/rossta/runningontilt">Running on Tilt</a></h3>
-          <p class="alt-title subtle">Podcast for the amateur endurance athlete</p>
+      <header class="index-title">
+        <a href="https://github.com/rossta/runningontilt">Running on Tilt</a>
       </header>
-      <p>My friend Brenn got me into running not long after moving to New York. We’re both lifelong lovers of sport and we’ve shared many stories of athletic adventures and mishaps. <a href="http://runningontilt.com">runningontilt</a> was born out of the desire to share our own sports stories with the world. I build, design and maintain the site, while Brenn does most of the podcasting. This site is formerly known as <em>turfcasts</em>.</p>
+        <p class="index-alt-title subtle">Podcast for the amateur endurance athlete</p>
+      <section class="mt-6">
+        <p>My friend Brenn got me into running not long after moving to New York. We’re both lifelong lovers of sport and we’ve shared many stories of athletic adventures and mishaps. <a href="http://runningontilt.com">runningontilt</a> was born out of the desire to share our own sports stories with the world. I build, design and maintain the site, while Brenn does most of the podcasting. This site is formerly known as <em>turfcasts</em>.</p>
 
 <p><a href="http://runningontilt.com"><img src="/assets/images/screenshots/screenshot-runningontilt.png" alt="Running on Tilt" /></a></p>
 
-        <p>
-            <a href="http://runningontilt.com">Website</a>
-              &middot;
-            <a href="https://github.com/rossta/runningontilt">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="http://runningontilt.com">Website</a>
+                &middot;
+              <a href="https://github.com/rossta/runningontilt">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="http://terraling.com">Terraling</a></h3>
-          <p class="alt-title subtle">Searchable database of the World's Languages</p>
+      <header class="index-title">
+        <a href="http://terraling.com">Terraling</a>
       </header>
-      <p>Professor Dennis Shasha at NYU recruited me to create a linguistics research tool. The vision is to provide a platform for linguists to make comparisons across a variety of attributes and properties of the world’s languages. Together with an undergrad developer, we built the site over a single semester and launched this past May, 2011. I continue to provide ongoing support.We devised a few database abstractions that would support a wide variety of use cases such as syntactic structures or phonetics. I engineered a multilevel search algorithm to filter results by a variety of potential inputs including linguistic properties, categories, keywords, parent and child relationships and examples.</p>
+        <p class="index-alt-title subtle">Searchable database of the World's Languages</p>
+      <section class="mt-6">
+        <p>Professor Dennis Shasha at NYU recruited me to create a linguistics research tool. The vision is to provide a platform for linguists to make comparisons across a variety of attributes and properties of the world’s languages. Together with an undergrad developer, we built the site over a single semester and launched this past May, 2011. I continue to provide ongoing support.We devised a few database abstractions that would support a wide variety of use cases such as syntactic structures or phonetics. I engineered a multilevel search algorithm to filter results by a variety of potential inputs including linguistic properties, categories, keywords, parent and child relationships and examples.</p>
 
 <p><a href="http://terraling.com"><img src="/assets/images/screenshots/screenshot-terraling.png" alt="Terraling: searchable database of the world's languages" /></a></p>
 
-        <p>
-            <a href="http://terraling.com">Website</a>
-              &middot;
-            <a href="https://github.com/linguisticexplorer/Linguistic-Explorer">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="http://terraling.com">Website</a>
+                &middot;
+              <a href="https://github.com/linguisticexplorer/Linguistic-Explorer">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
     <article class="index-post">
-      <header>
-        <h3><a href="https://rossta.net/soapbox">Soapbox</a></h3>
-          <p class="alt-title subtle">Browser-based tool for editing and showing off simple presentation slides</p>
+      <header class="index-title">
+        <a href="https://rossta.net/soapbox">Soapbox</a>
       </header>
-      <p>In August 2010, I created a simple in-browser PowerPoint-like application as an entry in the 10K Apart contest from <a href="http://www.alistapart.com/">a list apart</a>. Contestants were challenged to use features of HTML5 to create front-end applications in less than 10K of code. Soapbox leverages HTML5 localStorage to save slides in stringified JSON for future use. Although my <a href="http://10k.aneventapart.com/1/Entry/361">my entry</a> didn’t win, it was a good experience to create something straightforward and useful under constraints and a tight timeline.</p>
+        <p class="index-alt-title subtle">Browser-based tool for editing and showing off simple presentation slides</p>
+      <section class="mt-6">
+        <p>In August 2010, I created a simple in-browser PowerPoint-like application as an entry in the 10K Apart contest from <a href="http://www.alistapart.com/">a list apart</a>. Contestants were challenged to use features of HTML5 to create front-end applications in less than 10K of code. Soapbox leverages HTML5 localStorage to save slides in stringified JSON for future use. Although my <a href="http://10k.aneventapart.com/1/Entry/361">my entry</a> didn’t win, it was a good experience to create something straightforward and useful under constraints and a tight timeline.</p>
 
 <p><a href="https://rossta.net/soapbox"><img src="/assets/images/screenshots/screenshot-soapbox.png" alt="Screenshot soapbox" /></a></p>
 
-        <p>
-            <a href="https://rossta.net/soapbox">Website</a>
-              &middot;
-            <a href="https://github.com/rossta/soapbox">Source code on GitHub</a>
-        </p>
+          <p>
+              <a href="https://rossta.net/soapbox">Website</a>
+                &middot;
+              <a href="https://github.com/rossta/soapbox">Source code on GitHub</a>
+          </p>
+      </section>
     </article>
       <br /><hr /><br />
 </section>
@@ -316,10 +345,10 @@ Montrose.monthly(on: { friday: 13 })
   data-format="inline"
   data-version="5"
   data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
-  min-width="400 500 600 700 800"
 >
-  <div data-style="clean">
-      <h3>
+  <div>
+    <div class="mb-4">
+        <h3 class="mb-2">
   Join the Newsletter
 </h3>
 <p>
@@ -327,6 +356,7 @@ Montrose.monthly(on: { friday: 13 })
   JavaScript, Ruby, and the web. Thank you!
 </p>
 
+    </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
     <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
       <div class="formkit-field">
@@ -341,8 +371,8 @@ Montrose.monthly(on: { friday: 13 })
       </div>
       <button
         data-element="submit"
-        class="formkit-submit formkit-submit"
-        style="background-color: rgb(22, 119, 190); border-radius: 4px; color: rgb(255, 255, 255); font-weight: 400;"
+        class="formkit-submit formkit-submit button"
+        style="border-radius: 4px; color: rgb(255, 255, 255); font-weight: 400;"
       >
         <div class="formkit-spinner">
           <div></div>
@@ -363,7 +393,6 @@ Montrose.monthly(on: { friday: 13 })
   </div>
   <style>
     .formkit-form[data-uid='cda82aafbf'] * {
-      font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
       box-sizing: border-box;
     }
     .formkit-form[data-uid='cda82aafbf'] legend {
@@ -772,57 +801,56 @@ Montrose.monthly(on: { friday: 13 })
 
 </section>
 
-  </section>
+  </article>
 
-      </section>
-    </div>
+    </main>
       <div id="zen">
-    <div class="row">
-      <div class="enlightenment large-12 columns"></div>
-    </div>
+    <div class="enlightenment text-center mt-12 bg-silver p-8"></div>
   </div>
 
-    <footer>
-  <div class="row">
-    <img src="/assets/images/turtle-logo.svg" class="turtle" alt="Turtle logo" />
-    <section class="large-6 columns">
-      <h5>Most Popular</h5>
-      <ul>
-          <li><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
-          <li><a href="/blog/local-ssl-for-rails-5.html">Local SSL for Rails 5 development and tests</a></li>
-          <li><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
-          <li><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
-          <li><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
-      </ul>
+    <footer class="bg-silver border-t text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
+            <li class="mb-1"><a href="/blog/local-ssl-for-rails-5.html">Local SSL for Rails 5 development and tests</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+            <li class="mb-1"><a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a></li>
+            <li class="mb-1"><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Categories</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+            <li class="mb-1"><a href="/blog/tags/service-worker.html">Service Worker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
+          <li class="mb-1"><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
+          <li class="mb-1"><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
+          <li class="mb-1"><a href="https://github.com/rossta" rel="me noopener">github</a></li>
+          <!-- <li class="mb-1"><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
+          <li class="mb-1"><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
+        </ul>
+      </section>
     </section>
-    <section class="large-3 columns">
-      <h5>Categories</h5>
-      <ul>
-          <li><a href="/blog/tags/ruby.html">Ruby</a></li>
-          <li><a href="/blog/tags/rails.html">Rails</a></li>
-          <li><a href="/blog/tags/javascript.html">JavaScript</a></li>
-          <li><a href="/blog/tags/vue.html">Vue</a></li>
-          <li><a href="/blog/tags/service-worker.html">Service Worker</a></li>
-      </ul>
-    </section>
-    <section class="large-3 columns">
-      <h5>Contact</h5>
-      <ul>
-        <li><a href="mailto:ross@rossta.net" rel="me noopener">email</a></li>
-        <li><a href="https://twitter.com/rossta" rel="me noopener">twitter</a></li>
-        <li><a href="https://medium.com/@rossta" rel="me noopener">medium</a></li>
-        <li><a href="https://github.com/rossta" rel="me noopener">github</a></li>
-        <!-- <li><a href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me">stackoverflow</a></li> -->
-        <li><a href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener">linkedin</a></li>
-      </ul>
-    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2019 Ross Kaffenberger. All rights reserved.
+    </p>
   </div>
-  <p class="copyright small subtle center">
-    © 2019 Ross Kaffenberger. All rights reserved.
-  </p>
 </footer>
 
-    <script src='/assets/js/runtime.269cddb94bf0453a0b81.js'></script><script src='/assets/js/vendors~app.chunk.744433b6240167794468.js'></script><script src='/assets/js/app.chunk.452b0d6880b982c6f58e.js'></script>
+    <script src='/assets/js/runtime.678dffb2b521ddc02d44.js'></script><script src='/assets/js/vendors~app.chunk.2a219e9e35ac659e5139.js'></script><script src='/assets/js/app.chunk.9b02ed1688728941abed.js'></script>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-16458563-2"></script>
 <script type="text/javascript">
