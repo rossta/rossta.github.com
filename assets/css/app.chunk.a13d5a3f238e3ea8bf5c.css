@@ -11639,7 +11639,6 @@ footer a {
 
 main a {
   color: #276749;
-  text-decoration: underline;
 }
 
 main a:hover,
@@ -11666,6 +11665,10 @@ footer a:hover {
   padding-bottom: 2rem;
   border-bottom-width: 1px;
   border-color: #cbd5e0;
+}
+
+.post a {
+  text-decoration: underline;
 }
 
 .post p,
