@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const Clean = require('clean-webpack-plugin');
+const  { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 
@@ -14,9 +14,7 @@ const definePlugin = new webpack.DefinePlugin({
   __VERSION__: JSON.stringify(env.__VERSION__),
 });
 
-const cleanPluginTmp = new Clean(['.tmp'], {
-  root: path.resolve(__dirname, '..'),
-});
+const cleanPluginTmp = new CleanWebpackPlugin();
 
 const miniCssExtractPlugin = new MiniCssExtractPlugin({
   filename: 'css/[name].[contenthash].css',

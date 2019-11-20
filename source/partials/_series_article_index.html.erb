@@ -1,14 +1,14 @@
 <ol>
 <% local_articles.each_with_index do |article| %>
     <li>
-        <article class="index-post">
-        <header>
-            <h3><%= link_to article.title, article %></h3>
-            <% if article.data.summary %>
-            <p class="alt-title subtle"><%= article.data.summary %></p>
-            <% end %>
+      <article class="index-post">
+        <header class="index-title">
+          <%= link_to article.title, article %>
         </header>
-        </article>
+        <% if article.data.summary %>
+          <p class="index-alt-title subtle"><%= article.data.summary %></p>
+        <% end %>
+      </article>
     </li>
   <% end %>
- </ol> 
+ </ol>

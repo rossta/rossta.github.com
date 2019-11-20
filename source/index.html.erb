@@ -5,15 +5,14 @@ per_page: 4
 ---
 <% content_for(:title) { } %>
 <% content_for(:section) { 'I make things' } %>
-
-<section id="hero" class="hero">
-  <section class="flex align-center space-between">
+<section id="hero" class="hero p-4 lg:p-12 lg:-mx-12 mb-12 bg-silver rounded">
+  <section class="flex items-center justify-between mb-4">
     <header>
       <h1>Hello! I'm Ross. I build web apps.</h1>
     </header>
     <%= partial "partials/social" %>
   </section>
-  <section>
+  <section class="mb-12">
     <p>Building applications for the web is HARD.
       Here's where I share what I've learned.
       Check out my
@@ -21,7 +20,6 @@ per_page: 4
       <%= link_to "talks", '/talks' %>
       and
       <%= link_to "projects", "/projects" %>.
-
       You can also connect with me on
       <%= link_to "Twitter", "https://twitter.com/rossta" %>
       and
@@ -30,27 +28,28 @@ per_page: 4
   </section>
   <%= partial "partials/signup" %>
 </section>
-
-<h2 class="margin-bottom">New? Start here</h2>
-<section class="index-posts margin-top">
-  <% blog_series.each do |series| %>
-    <article class="index-post">
-      <header>
-        <h4><%= link_to series.title, series_path(series.id, "blog") %> <small>&middot; SERIES</small></h4>
-        <p class="alt-title subtle"><%= series.summary %></p>
-      </header>
-    </article>
-  <% end %>
-  <% page_articles.each do |article| %>
-    <article class="index-post">
-      <header>
-        <h4>
-          <%= link_to article.title, article %>
-        </h4>
+<section class="mb-12">
+  <h2 class="mb-8">New? Start here</h2>
+  <section class="index-posts">
+    <% blog_series.each do |series| %>
+      <article class="index-post mb-8">
+        <header class="index-title font-bold mb-2 text-xl">
+          <%= link_to series.title, series_path(series.id, "blog") %> <small class="uppercase text-gray-500 text-xs">&middot; Series</small>
+        </header>
+        <p class="index-alt-title subtle text-gray-700"><%= series.summary %></p>
+      </article>
+    <% end %>
+    <% page_articles.each do |article| %>
+      <article class="index-post mb-8">
+        <header>
+          <div class="font-bold mb-2">
+            <%= link_to article.title, article, class: "text-xl" %>
+          </div>
+        </header>
         <% if article.data.summary %>
-          <p class="alt-title subtle"><%= article.data.summary %></p>
+          <p class="index-alt-title subtle text-gray-700"><%= article.data.summary %></p>
         <% end %>
-      </header>
-    </article>
-  <% end %>
+      </article>
+    <% end %>
+  </section>
 </section>

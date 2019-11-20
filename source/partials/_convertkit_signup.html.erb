@@ -8,14 +8,15 @@
   data-format="inline"
   data-version="5"
   data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
-  min-width="400 500 600 700 800"
 >
-  <div data-style="clean">
-    <% if current_article.present? %>
-      <%= partial "partials/signup_post_prompt" %>
-    <% else %>
-      <%= partial "partials/signup_prompt" %>
-    <% end %>
+  <div>
+    <div class="mb-4">
+      <% if current_article.present? %>
+        <%= partial "partials/signup_post_prompt" %>
+      <% else %>
+        <%= partial "partials/signup_prompt" %>
+      <% end %>
+    </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
     <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
       <div class="formkit-field">
@@ -30,8 +31,8 @@
       </div>
       <button
         data-element="submit"
-        class="formkit-submit formkit-submit"
-        style="background-color: rgb(22, 119, 190); border-radius: 4px; color: rgb(255, 255, 255); font-weight: 400;"
+        class="formkit-submit formkit-submit button"
+        style="border-radius: 4px; color: rgb(255, 255, 255); font-weight: 400;"
       >
         <div class="formkit-spinner">
           <div></div>
@@ -52,7 +53,6 @@
   </div>
   <style>
     .formkit-form[data-uid='cda82aafbf'] * {
-      font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
       box-sizing: border-box;
     }
     .formkit-form[data-uid='cda82aafbf'] legend {

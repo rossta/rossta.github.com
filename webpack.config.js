@@ -36,13 +36,9 @@ module.exports = {
             },
           },
           {
-            loader: 'sass-loader',
+            loader: 'postcss-loader',
             options: {
               sourceMap: true,
-              includePaths: [
-                path.resolve(__dirname, 'node_modules/foundation-sites'),
-                path.resolve(__dirname, 'node_modules/highlight.js/styles'),
-              ],
             },
           },
         ],

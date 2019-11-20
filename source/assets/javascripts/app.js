@@ -1,9 +1,12 @@
-import '../stylesheets/app.scss';
+import '../stylesheets/app.css';
+
 import 'enhance';
-import 'syntax-highlight';
 import debug from 'debug';
 
 const log = debug('app:app');
+
+import( /* webpackChunkName: "highlight" */ 'syntax-highlight')
+  .then(({ default: highlight }) => highlight.initHighlighting())
 
 if (__DEVELOPMENT__) {
   log('Running in development mode!');
