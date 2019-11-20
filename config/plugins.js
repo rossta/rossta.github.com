@@ -33,25 +33,16 @@ let sitePlugins = [
 ];
 
 if (env.__BUILD__) {
-  const uglifyJsPlugin = new webpack.optimize.UglifyJsPlugin({
-    sourceMap: true,
-    compress: {
-      warnings: false,
-    },
-    output: {
-      comments: false,
-    },
-  });
-
   const compressionPluginGzip = new CompressionPlugin({
-    asset: '[path].gz[query]',
+    filename: '[path].gz[query]',
     algorithm: 'gzip',
+    cache: true,
     test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
   });
 
-  const hasheModuleIdsPlugin = new webpack.HashedModuleIdsPlugin();
+  const hashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin();
 
-  sitePlugins = [...sitePlugins, uglifyJsPlugin, compressionPluginGzip, hasheModuleIdsPlugin];
+  sitePlugins = [...sitePlugins, compressionPluginGzip, hashedModuleIdsPlugin];
 }
 
 if (process.env.WEBPACK_ANALYZE_BUNDLE) {

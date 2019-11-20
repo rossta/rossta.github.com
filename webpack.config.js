@@ -1,6 +1,19 @@
-const path = require('path');
+const path = require('path')
 
-const { sitePlugins, styleLoader } = require('./config/plugins');
+const { sitePlugins, styleLoader } = require('./config/plugins')
+const env = require('./config/env')
+
+const TerserPlugin = require('terser-webpack-plugin')
+
+const minimizer = env.__BUILD__
+  ? [
+      new TerserPlugin({
+        parallel: true,
+        cache: true,
+        sourceMap: true,
+      }),
+    ]
+  : undefined
 
 module.exports = {
   entry: {
@@ -51,6 +64,7 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
     },
+    minimizer,
   },
 
   node: {
@@ -58,4 +72,4 @@ module.exports = {
   },
 
   plugins: sitePlugins,
-};
+}
