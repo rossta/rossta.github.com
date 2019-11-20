@@ -70,7 +70,7 @@ footer a {
   @apply text-green-800;
 }
 main a {
-  @apply text-green-800 underline;
+  @apply text-green-800;
 }
 main a:hover,
 footer a:hover {
@@ -91,6 +91,9 @@ footer a:hover {
 
 .page-header {
   @apply mb-8 pb-8 border-b border-gray-400;
+}
+.post a {
+  @apply underline;
 }
 .post p,
 .index-post p {
