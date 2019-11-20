@@ -143,13 +143,13 @@ footer a:hover {
 }
 
 .signup-form-standalone {
-  @apply mt-6 mb-12 p-6 rounded;
+  @apply mt-6 mb-12 p-4 rounded;
 
   background-color: #f8f8ff;
 }
 @screen lg {
   .signup-form-standalone {
-    @apply -mx-6;
+    @apply p-6 -mx-6;
   }
 }
 

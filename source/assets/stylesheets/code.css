@@ -14,8 +14,14 @@ pre {
   background-color: ghostwhite;
 }
 
+@screen lg {
+  pre {
+    @apply p-6 -mx-6;
+  }
+}
+
 pre code {
-  @apply text-xs;
+  @apply text-xs p-0;
   background-color: none;
   overflow:auto;
   font-weight:normal;
