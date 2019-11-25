@@ -9,11 +9,9 @@ per_page: 25
 
 <section id="blog" class="index-posts">
   <%= partial "partials/article_index", locals: { local_articles: page_articles } %>
-  <hr /><br /><br />
   <%= partial "partials/pagination" %>
-  <br />
 </section>
 
-<section class="signup-form-standalone margin-bottom double">
+<section class="signup-form-standalone">
   <%= partial "partials/signup" %>
 </section>
