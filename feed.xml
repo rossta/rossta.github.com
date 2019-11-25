@@ -55,8 +55,12 @@ require(&amp;quot;channels&amp;quot;)
 &lt;p&gt;It should also insert the appropriate javascript and stylesheet &amp;quot;pack&amp;quot; tags in your application layout:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;%= stylesheet_pack_tag &amp;#39;application&amp;#39;, media: &amp;#39;all&amp;#39; %&amp;gt;
-&amp;lt;%= javascript_packs_with_chunks_tag &amp;#39;application&amp;#39; %&amp;gt;
+&amp;lt;%= javascript_pack_tag &amp;#39;application&amp;#39; %&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Tip&lt;/em&gt;: If you omit the &lt;code&gt;javascript_pack_tag&lt;/code&gt; and have &lt;code&gt;extract_css: false&lt;/code&gt; set for your environment in &lt;code&gt;config/webpacker.yml&lt;/code&gt;, then the CSS won&amp;#39;t load! The JS bundle is necessary in this case.&lt;/p&gt;
+&lt;/blockquote&gt;
 
       &lt;h3 id="installing-bootstrap" class="title"&gt;
         &lt;a name="installing-bootstrap" class="anchor" href="#installing-bootstrap"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
