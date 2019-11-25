@@ -5,10 +5,243 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2019-01-08T00:00:00+00:00</updated>
+  <updated>2019-11-25T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Using Bootstrap with Rails Webpacker</title>
+    <link rel="alternate" href="/blog/webpacker-with-bootstrap.html"/>
+    <id>/blog/webpacker-with-bootstrap.html</id>
+    <published>2019-11-25T00:00:00+00:00</published>
+    <updated>2019-11-25T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;In this post, I'll demonstrate how to set up a Rails application with Bootstrap for Webpacker.&lt;/p&gt;
+
+&lt;p&gt;If you'd prefer to skip the post and go straight to the demo app, you can find it here: &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The examples...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;In this post, I&amp;#39;ll demonstrate how to set up a Rails application with Bootstrap for Webpacker.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;#39;d prefer to skip the post and go straight to the demo app, you can find it here: &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The examples and demo app described in this post use the following dependencies:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;# Ruby/Rails
+Rails 6.0.1
+Ruby 2.6.5
+Webpacker 4.2.0
+
+# npm
+@rails/webpacker 4.2.0
+bootstrap 4.3.1
+jQuery 3.4.1
+popper.js 1.16.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;#39;ll assume we&amp;#39;re working from a recently-created Rails 6 app with the default Webpacker installation. The examples may also work with other versions Rails that support Webpacker 4.&lt;/p&gt;
+
+&lt;p&gt;Your entry point for your JavaScript is in &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. The default install contains like the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
+require(&amp;quot;@rails/ujs&amp;quot;).start()
+require(&amp;quot;channels&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Note: the &lt;code&gt;require&lt;/code&gt; statements in the generated javascript can be converted into &lt;code&gt;import&lt;/code&gt; statements, see below, where I&amp;#39;ve also removed the &amp;#39;channels&amp;#39; import.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;It should also insert the appropriate javascript and stylesheet &amp;quot;pack&amp;quot; tags in your application layout:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;%= stylesheet_pack_tag &amp;#39;application&amp;#39;, media: &amp;#39;all&amp;#39; %&amp;gt;
+&amp;lt;%= javascript_packs_with_chunks_tag &amp;#39;application&amp;#39; %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="installing-bootstrap" class="title"&gt;
+        &lt;a name="installing-bootstrap" class="anchor" href="#installing-bootstrap"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Installing bootstrap
+      &lt;/h3&gt;
+    
+&lt;p&gt;To add bootstrap 4, install via yarn:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ yarn add bootstrap
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;At the time of this post, the above is the equivalent to &lt;code&gt;yarn add bootstrap@4.3.0&lt;/code&gt;. Your installation may vary; I would expect most of the following will still work for other versions of bootstrap 4.&lt;/p&gt;
+
+&lt;p&gt;To get bootstrap css working, add a stylesheet &lt;code&gt;app/javascript/css/site.scss&lt;/code&gt; you&amp;#39;ll import the global bootstrap scss file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="scss"&gt;// app/javascript/css/site.scss
+
+@import &amp;quot;~bootstrap/scss/bootstrap.scss&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To include our new stylesheet in the build output, we must import it from somewhere in our dependency graph. Let&amp;#39;s put this import in the entry point, our &lt;code&gt;application.js&lt;/code&gt; &amp;quot;pack&amp;quot;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
+
+import &amp;#39;css/main&amp;#39; // Webpacker configures Webpack resolve dependencies relative to app/javascript/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you&amp;#39;re new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically consider have separate &lt;code&gt;app/assets/stylesheets/application.css&lt;/code&gt; and &lt;code&gt;app/assets/javascripts/application.js&lt;/code&gt; files as the top of the dependency trees; in Webpack, think of your &amp;quot;application pack&amp;quot;, e.g., &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;, as the top of the dependency tree from which all static assets will be imported. In other words, there is no need for a separate &amp;quot;stylesheet pack&amp;quot;: ~&lt;code&gt;app/javascript/packs/application.css&lt;/code&gt;~.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Tip&lt;/em&gt; With Webpack, it&amp;#39;s recommended to have only &lt;em&gt;one&lt;/em&gt; entry point (or &amp;quot;pack&amp;quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. I cannot stress this point enough.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+      &lt;h3 id="adding-sass-overrides" class="title"&gt;
+        &lt;a name="adding-sass-overrides" class="anchor" href="#adding-sass-overrides"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Adding SASS overrides
+      &lt;/h3&gt;
+    
+&lt;p&gt;Since &lt;code&gt;bootstrap.scss&lt;/code&gt; uses SASS variables for theme-ing, you can override the defaults with new values.&lt;/p&gt;
+
+&lt;p&gt;For example, you can change the background and font colors as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="scss"&gt;// app/javascript/css/site.scss
+
+// sass variable overrides
+$body-bg: aliceblue;
+$body-color: #111;
+
+@import &amp;quot;~bootstrap/scss/bootstrap.scss&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You may also surgically import selected parts of bootstrap to limit bundle size:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="scss"&gt;// app/javascript/css/site.scss
+
+// Option A: Include all of Bootstrap
+// @import &amp;quot;~bootstrap/scss/bootstrap.scss&amp;quot;;
+
+// Option B: Include parts of Bootstrap
+@import &amp;quot;~bootstrap/scss/functions.scss&amp;quot;;
+@import &amp;quot;~bootstrap/scss/variables.scss&amp;quot;;
+@import &amp;quot;~bootstrap/scss/mixins.scss&amp;quot;;
+
+@import &amp;quot;~bootstrap/scss/reboot.scss&amp;quot;;
+@import &amp;quot;~bootstrap/scss/type.scss&amp;quot;;
+@import &amp;quot;~bootstrap/scss/images.scss&amp;quot;;
+@import &amp;quot;~bootstrap/scss/code.scss&amp;quot;;
+@import &amp;quot;~bootstrap/scss/grid.scss&amp;quot;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bootstrap also ships with some JavaScript utilities that function as jQuery plugins. To enable this functionality, add jQuery and popper.js as dependencies:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;yarn add jquery popper.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;These libraries need to be available in your Webpack build, so import them along with bootstrap javascript:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
+
+// ...
+import &amp;#39;jquery&amp;#39;
+import &amp;#39;popper.js&amp;#39;
+import &amp;#39;bootstrap&amp;#39;
+// ...
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="optimizing-the-javascript-bundle" class="title"&gt;
+        &lt;a name="optimizing-the-javascript-bundle" class="anchor" href="#optimizing-the-javascript-bundle"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Optimizing the JavaScript bundle
+      &lt;/h3&gt;
+    
+&lt;p&gt;An optional, advanced technique would be to import selected modules asynchronously. The benefit is to limit the size of our initial bundle and defer as much as possible to decrease latency for downloading, parsing, and evaluating JavaScript on page load. Note the &lt;code&gt;application.js&lt;/code&gt; bundle (fingerprinted as &lt;code&gt;js/application-c67c235b5c7d8ac4f1fe.js&lt;/code&gt;) is already 940kB in our Webpack build:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;Version: webpack 4.41.2
+Time: 1003ms
+Built at: 11/25/2019 4:08:14 PM
+                                     Asset       Size       Chunks                         Chunk Names
+              css/application-8d90f960.css    175 KiB  application  [immutable]            application
+          css/application-8d90f960.css.map    377 KiB  application  [dev]                  application
+    js/application-c67c235b5c7d8ac4f1fe.js    940 KiB  application  [emitted] [immutable]  application
+js/application-c67c235b5c7d8ac4f1fe.js.map   1.06 MiB  application  [emitted] [dev]        application
+                             manifest.json  640 bytes               [emitted]
+ℹ ｢wdm｣: Compiled successfully.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As an exercise, we might decide to defer the import and initialization of the jquery plugins. Let&amp;#39;s consider &lt;code&gt;jquery&lt;/code&gt; as a critical dependency; it is needed as part of the &amp;quot;initial&amp;quot; bundle that blocks the page load while it is parsed and evaluated. But &lt;code&gt;popper.js&lt;/code&gt; and &lt;code&gt;bootstrap&lt;/code&gt; can be deferred; since they are plugins that affect the DOM, they&amp;#39;re not as critical, i.e., the DOM needs to be loaded first anyways.&lt;/p&gt;
+
+&lt;p&gt;One such deferring technique is dynamic import. Webpack will recognize when &lt;code&gt;import&lt;/code&gt; is used as a function, e.g. &lt;code&gt;import(&amp;#39;some-lib&amp;#39;)&lt;/code&gt;, and pull out the module as a separate &amp;quot;chunk&amp;quot; (another file), that will be loaded asynchronously when the function is evaluated.&lt;/p&gt;
+
+&lt;p&gt;In our demo app, we can move &lt;code&gt;popper.js&lt;/code&gt; and &lt;code&gt;bootstrap&lt;/code&gt; to a separate file. Critically, this file is NOT in &lt;code&gt;app/javascript/packs&lt;/code&gt; but outside of this directory, such as &lt;code&gt;app/javascript/src&lt;/code&gt;, where we will put all our non-entry-point js:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/src/plugins.js
+
+import &amp;#39;popper.js&amp;#39;
+import &amp;#39;bootstrap&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Back in the application pack, we replace the &lt;code&gt;popper.js&lt;/code&gt; and &lt;code&gt;bootstrap&lt;/code&gt; imports with a &lt;em&gt;dynamic&lt;/em&gt; import of &lt;code&gt;app/javascript/src/plugins.js&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
+
+import &amp;#39;jquery&amp;#39;
+import(&amp;#39;src/plugins&amp;#39;) // note the function usage!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When compiling, Webpack will show us a number of additional javascript &amp;quot;chunks&amp;quot; of smaller size than the bundle previously:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Version: webpack 4.41.2
+Time: 41ms
+Built at: 11/25/2019 4:03:54 PM
+                                     Asset       Size       Chunks                         Chunk Names
+              css/application-8d90f960.css    175 KiB  application  [immutable]            application
+          css/application-8d90f960.css.map    377 KiB  application  [dev]                  application
+        js/0-7f46c35cf4589f8534f7.chunk.js    217 KiB            0  [immutable]
+    js/0-7f46c35cf4589f8534f7.chunk.js.map    257 KiB            0  [dev]
+        js/1-6bb4a0148baccc5762c4.chunk.js  926 bytes            1  [immutable]
+    js/1-6bb4a0148baccc5762c4.chunk.js.map  246 bytes            1  [dev]
+    js/application-0b7847cb72725f896091.js    727 KiB  application  [emitted] [immutable]  application
+js/application-0b7847cb72725f896091.js.map    835 KiB  application  [emitted] [dev]        application
+                             manifest.json  640 bytes               [emitted]
+ℹ ｢wdm｣: Compiled successfully.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;#39;ve knocked the &lt;code&gt;application.js&lt;/code&gt; bundle, (now fingerprinted as &lt;code&gt;js/application-0b7847cb72725f896091.js&lt;/code&gt;) down to 727kB. Still sizable, but represents a significant reduction from the first pass.&lt;/p&gt;
+
+&lt;p&gt;Another optimization step could be to configure the &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/"&gt;&lt;code&gt;SplitChunksPlugin&lt;/code&gt;&lt;/a&gt; to code-split our bundle programmatically, but we&amp;#39;ll save that for another post.&lt;/p&gt;
+
+&lt;p&gt;Our final &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt; file is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import Rails from &amp;quot;@rails/ujs&amp;quot;
+
+import &amp;#39;jquery&amp;#39;
+import(&amp;#39;src/plugins&amp;#39;) // loads async
+
+import &amp;#39;css/site&amp;#39;
+
+Rails.start()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And our final directory structure is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;app/
+  javascript/
+    css/
+      site.css
+    src/
+      plugins.js
+    packs/
+      application.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can also check out the demo app for this post at &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I hope this post shed some light on using Bootstrap with Webpacker on Rails and wish you Happy Webpacking!&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Vue.js is omakase</title>
     <link rel="alternate" href="/blog/vue-js-is-omakase.html"/>
@@ -662,381 +895,6 @@ end
       &lt;/h3&gt;
     
 &lt;p&gt;When you&amp;#39;re in a punch, you can use &lt;code&gt;to_enum&lt;/code&gt; to wrap iterative methods to add otherwise missing &lt;code&gt;Enumerable&lt;/code&gt; properties. And, when designing your classes, consider adopting the &lt;code&gt;return to_enum(__method__) unless block_given?&lt;/code&gt; pattern in method definitions to enhance iterative methods.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Local SSL for Rails 5 development and tests</title>
-    <link rel="alternate" href="/blog/local-ssl-for-rails-5.html"/>
-    <id>/blog/local-ssl-for-rails-5.html</id>
-    <published>2018-09-05T00:00:00+00:00</published>
-    <updated>2018-09-05T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Is your Rails app on SSL in production? It may be a good idea to use SSL locally too. It's just that it's typically been a pain to set up for development. Using SSL with Capybara for acceptance tests has traditionally been even more challenging— until...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Is your Rails app on SSL in production? It may be a good idea to use SSL locally too. It&amp;#39;s just that it&amp;#39;s typically been a pain to set up for development. Using SSL with Capybara for acceptance tests has traditionally been even more challenging— until now.&lt;/p&gt;
-
-&lt;p&gt;In this post I&amp;#39;ll demonstrate how I set up my Rails 5 app for local development and system tests over SSL with wildcard domains.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/rossta/local-ssl-demo-rails"&gt;&lt;img src="/assets/images/screenshots/screenshot-local-ssl-demo.png" alt="Local Rails SSL Demo" /&gt;&lt;/a&gt;&lt;/p&gt;
-
-      &lt;h3 id="why-local-ssl-" class="title"&gt;
-        &lt;a name="why-local-ssl-" class="anchor" href="#why-local-ssl-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Why local SSL?
-      &lt;/h3&gt;
-    
-&lt;p&gt;First, a tweet.&lt;/p&gt;
-
-&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;I so often get re-explaining from others that &amp;quot;localhost doesn&amp;#39;t need local https&amp;quot;. eyeroll.&lt;br&gt;&lt;br&gt;this is not universally true. this tweet thread is the last time i&amp;#39;m gonna explain. henceforth it will just be linked to.&lt;/p&gt;&amp;mdash; getify (@getify) &lt;a href="https://twitter.com/getify/status/1023202051902373888?ref_src=twsrc%5Etfw"&gt;July 28, 2018&lt;/a&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;p&gt;&lt;/p&gt;&lt;/p&gt;
-
-&lt;p&gt;To summarize Kyle Simpson&amp;#39;s Twitter rant, if your production app is on SSL, you want to develop on local SSL as well to test:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;URL logic (routing, history, redirects, enforcing https)&lt;/li&gt;
-&lt;li&gt;No mixed content warnings&lt;/li&gt;
-&lt;li&gt;CORS across http or https boundaries&lt;/li&gt;
-&lt;li&gt;Web platform features (e.g., geolocation) that require SSL (or will eventually)&lt;/li&gt;
-&lt;li&gt;Secure websockets (wss) as the upgrade from https&lt;/li&gt;
-&lt;li&gt;Secure cookies, which behave very differently across http vs https boundaries&lt;/li&gt;
-&lt;li&gt;Https-specific headers like HSTS or CORS &lt;code&gt;allow-*&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Third-party integrations, possibly OAuth-based, that require SSL&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;One knock against local SSL is that it has been considered a pain to set up. This post and the companion gitub repo, &lt;a href="https://github.com/rossta/local-ssl-demo-rails"&gt;rossta/local-ssl-demo-rails&lt;/a&gt;, is intended to help make that task a little easier for Rails apps.&lt;/p&gt;
-
-      &lt;h3 id="how-does-it-work-" class="title"&gt;
-        &lt;a name="how-does-it-work-" class="anchor" href="#how-does-it-work-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        How does it work?
-      &lt;/h3&gt;
-    
-&lt;p&gt;The general workflow I use for setting up my Rails applications for local SSL is as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;a href="#resolve-a-domain-name-to-localhost"&gt;Resolve a domain to localhost&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#create-a-self-signed-certificate"&gt;Create a self-signed SSL certificate&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#trust-the-certificate"&gt;Instruct browsers to trust the certificate&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#configure-the-local-server"&gt;Configure the local server to use the cerficate&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;There are plenty of reasonable alternatives to this workflow.&lt;/p&gt;
-
-&lt;p&gt;Jed Schmidt&amp;#39;s excellent &lt;a href="https://gist.github.com/jed/6147872"&gt;How to set up stress-free SSL on an OSX development machine&lt;/a&gt; is also worth checking out; it walks through a similar setup for a Node.js server.&lt;/p&gt;
-
-&lt;p&gt;You could, instead of trusting certificates for each app you develop, create your own &lt;a href="https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/"&gt;SSL certificate authority&lt;/a&gt;. The setup steps are more invovled, but once your local CA is trusted by browsers, you can skip the process of manually trusting each cert.&lt;/p&gt;
-
-&lt;p&gt;Or, use &lt;a href="https://ngrok.com"&gt;ngrok&lt;/a&gt;, a zero-configuration service for running your localhost server over a secure URL. While this approach may work well for local development, I currently don&amp;#39;t know of anyone using it for tests or CI environments. Learn more on setting up ngrok from &lt;a href="https://www.remotesynthesis.com/blog/running-ssl-localhost"&gt;this post by Brian Rinaldi&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h3 id="resolve-a-domain-name-to-localhost" class="title"&gt;
-        &lt;a name="resolve-a-domain-name-to-localhost" class="anchor" href="#resolve-a-domain-name-to-localhost"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Resolve a domain name to localhost
-      &lt;/h3&gt;
-    
-&lt;p&gt;To use SSL locally for a custom domain, i.e., something besides &lt;code&gt;localhost&lt;/code&gt;, you&amp;#39;ll need to find a way to route requests for that domain back to your local IP; for this post we&amp;#39;ll assume the IP is &lt;code&gt;127.0.0.1&lt;/code&gt;. It may be something else if you&amp;#39;re developing on a separate VM such as through Vagrant.&lt;/p&gt;
-
-&lt;p&gt;Here are a few alternatives for using a custom domain name for local development and tests.&lt;/p&gt;
-
-      &lt;h4 id="manual-configuration" class="title"&gt;
-        &lt;a name="manual-configuration" class="anchor" href="#manual-configuration"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Manual configuration
-      &lt;/h4&gt;
-    
-&lt;p&gt;The simplest approach is to add an entry for each domain you want to use to your &lt;code&gt;/etc/hosts&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;# /etc/hosts
-
-127.0.0.1     localhost.ross
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The disadvantage is that &lt;code&gt;/etc/hosts&lt;/code&gt; does not support wildcard domains, so you would need to add an entry for every unique domain you plan to use.&lt;/p&gt;
-
-      &lt;h4 id="dynamic-local-domains" class="title"&gt;
-        &lt;a name="dynamic-local-domains" class="anchor" href="#dynamic-local-domains"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Dynamic local domains
-      &lt;/h4&gt;
-    
-&lt;p&gt;For more flexible approach, you may want to use &lt;code&gt;dnsmasq&lt;/code&gt; to route arbitrary domain names wherever you want. In our case, we can use it to send all traffic on a custom tld back to our local machine.&lt;/p&gt;
-
-&lt;p&gt;The following script (adapted from Jed) will install and configure dnsmasq. The dnsmasq server will resolve all requests to the top level domain &lt;code&gt;.ross&lt;/code&gt; on my local machine back to &lt;code&gt;127.0.0.1&lt;/code&gt;. (Replace &lt;code&gt;$(whoami)&lt;/code&gt; with your preferred top-level domain):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;local_tld=$(whoami)
-brew install dnsmasq
-mkdir -pv $(brew --prefix)/etc
-sudo cp -v $(brew --prefix dnsmasq)/homebrew.mxcl.dnsmasq.plist /Library/LaunchDaemons
-sudo launchctl load -w /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
-sudo mkdir -pv /etc/resolver
-echo &amp;quot;address=/.$local_tld/127.0.0.1&amp;quot; | sudo tee -a $(brew --prefix)/etc/dnsmasq.conf
-echo &amp;quot;nameserver 127.0.0.1&amp;quot; | sudo tee /etc/resolver/$local_tld
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h4 id="use-a-registered-domain-name" class="title"&gt;
-        &lt;a name="use-a-registered-domain-name" class="anchor" href="#use-a-registered-domain-name"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Use a registered domain name
-      &lt;/h4&gt;
-    
-&lt;p&gt;Or, purchase a domain and add A records to resolve the appex and wildcard subdomains to &lt;code&gt;127.0.0.1&lt;/code&gt;. This is the approach used by known &amp;quot;localhost&amp;quot; domains like &lt;code&gt;lvh.me&lt;/code&gt; or &lt;code&gt;xip.io&lt;/code&gt;.&lt;/p&gt;
-
-      &lt;h3 id="create-a-self-signed-certificate" class="title"&gt;
-        &lt;a name="create-a-self-signed-certificate" class="anchor" href="#create-a-self-signed-certificate"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Create a self-signed certificate
-      &lt;/h3&gt;
-    
-&lt;p&gt;The following script (adapted from Jed) will generate a self-signed certificate and private key for &lt;code&gt;localhost.ross&lt;/code&gt; on my machine.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;name=localhost.$(whoami)
-openssl req \
-  -new \
-  -newkey rsa:2048 \
-  -sha256 \
-  -days 3650 \
-  -nodes \
-  -x509 \
-  -keyout $name.key \
-  -out $name.crt \
-  -config &amp;lt;(cat &amp;lt;&amp;lt;-EOF
-  [req]
-  distinguished_name = req_distinguished_name
-  x509_extensions = v3_req
-  prompt = no
-  [req_distinguished_name]
-  CN = $name
-  [v3_req]
-  keyUsage = keyEncipherment, dataEncipherment
-  extendedKeyUsage = serverAuth
-  subjectAltName = @alt_names
-  [alt_names]
-  DNS.1 = $name
-  DNS.2 = *.$name
-EOF
-)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The key/certificate files generated on my machine would be named &lt;code&gt;localhost.ross.key&lt;/code&gt; and &lt;code&gt;localhost.ross.crt&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;To generate a tld for a different domain, change &lt;code&gt;localhost.$(whoami)&lt;/code&gt; to your own desired domain name. You can omit the line &lt;code&gt;DNS.2 = *.$name&lt;/code&gt; if you don&amp;#39;t need wildcard subdomains or if you&amp;#39;re simply setting up SSL for &lt;code&gt;localhost&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;For Rails projects, I typically generate separate key/pairs using different domain names for each project and move  each file pair to my Rails &lt;code&gt;config&lt;/code&gt; directory:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;mkdir -p config/ssl
-mv localhost.ross.key localhost.ross.crt config/ssl
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="trust-the-certificate" class="title"&gt;
-        &lt;a name="trust-the-certificate" class="anchor" href="#trust-the-certificate"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Trust the certificate
-      &lt;/h3&gt;
-    
-&lt;p&gt;On macOS, we can trust the certificate in the System Keychain with this one-liner.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain config/ssl/localhost.ross.crt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There are a variety of blog posts out there that demonstrate how to do this manually through the Keychain application; that should work too.&lt;/p&gt;
-
-      &lt;h3 id="configure-the-local-server" class="title"&gt;
-        &lt;a name="configure-the-local-server" class="anchor" href="#configure-the-local-server"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Configure the local server
-      &lt;/h3&gt;
-    
-&lt;p&gt;Now that we have a trusted certificate, we can configure Puma with our key/certificate pair to serve local SSL requests for both &lt;code&gt;development&lt;/code&gt; and &lt;code&gt;test&lt;/code&gt; on our custom domain. (You could also use Nginx to proxy local requests and &lt;a href="http://nginx.org/en/docs/http/configuring_https_servers.html"&gt;set up your Nginx config with your SSL certificate&lt;/a&gt;).&lt;/p&gt;
-
-      &lt;h4 id="in-development" class="title"&gt;
-        &lt;a name="in-development" class="anchor" href="#in-development"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        In development
-      &lt;/h4&gt;
-    
-&lt;p&gt;First, I&amp;#39;ll typically move my self-signed key and certificate into the Rails project directory.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;cd path/to/my/rails/app
-mkdir config/ssl
-mv path/to/localhost.ross.{key,crt} config.ssl
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With puma, we can bind the server to an SSL url on startup by providing paths to the key/certificate pair generated in the previous step.&lt;/p&gt;
-
-&lt;p&gt;Now, when starting the rails server from the root of the project for local development, I&amp;#39;ll specify the ssl binding as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;rails s -b &amp;#39;ssl://127.0.0.1:3000?key=config/ssl/localhost.ross.key&amp;amp;cert=config/ssl/localhost.ross.crt&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Since I use &lt;code&gt;foreman&lt;/code&gt; to run my application locally, I&amp;#39;ll place the command in the &lt;code&gt;Procfile.dev&lt;/code&gt; file and substitute the port number with the &lt;code&gt;$PORT&lt;/code&gt; variable:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="bash"&gt;rails s -b &amp;#39;ssl://127.0.0.1:$PORT?key=config/ssl/localhost.ross.key&amp;amp;cert=config/ssl/localhost.ross.crt&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Puma also provides a hook to &lt;a href="https://github.com/puma/puma/blob/395337df4a3b27cc14eeab048016fb1ee85d2f83/examples/config.rb#L79"&gt;set this binding in the config file&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;#39;re using Webpack with the &lt;code&gt;webpacker&lt;/code&gt; gem to bundle javascript and other static assets, you will want to connect to the &lt;code&gt;webpack-dev-server&lt;/code&gt; in development over SSL. This can be done in the &lt;code&gt;config/webpacker.yml&lt;/code&gt; file:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yml"&gt;# config/webpacker.yml
-development:
-  &amp;lt;&amp;lt;: *default
-  # ...
-  dev_server:
-    https: true
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In recent versions of &lt;code&gt;webpacker-dev-server&lt;/code&gt;, the SSL certificate is generated on your behalf; you may have to trust this certificate manually in Keychain separately to avoid invalid certificate errors in the browser.&lt;/p&gt;
-
-      &lt;h4 id="in-tests" class="title"&gt;
-        &lt;a name="in-tests" class="anchor" href="#in-tests"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        In tests
-      &lt;/h4&gt;
-    
-&lt;p&gt;Using our SSL certificates for local Rails testing is mostly relevant for system tests (aka acceptance or feature tests) where we would typically use Capybara to launch a real app server. Setting up Capybara to handle SSL requests has been painful, possibly involving some &lt;a href="https://gist.github.com/Papierkorb/1787d28874443ec760d1"&gt;server monkeypatching&lt;/a&gt; to wire everything up.&lt;/p&gt;
-
-&lt;p&gt;As of Capybara &lt;code&gt;&amp;gt;= 3.1.0&lt;/code&gt;, it&amp;#39;s much easier to pass configuration to the underlying Puma server to include our SSL certificates (&lt;a href="https://github.com/teamcapybara/capybara/pull/2028"&gt;commit&lt;/a&gt;) using a binding similar to our startup command in development:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;Capybara.server = :puma, server: {
-  Host: &amp;quot;ssl://#{Capybara.server_host}?key=config/ssl/localhost.ross.key&amp;amp;cert=config/ssl/localhost.ross.crt&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;System tests also rely on a web driver to control the browser; in most cases, these web drivers will ignore the invalid certificate warnings. To get the newer headless versions of Chrome and Firefox to play nicely with SSL, I&amp;#39;ve found that some extra configuration is required.&lt;/p&gt;
-
-&lt;p&gt;First, let&amp;#39;s use the &lt;code&gt;webdrivers&lt;/code&gt; gem to make sure we have the latest binaries for &lt;code&gt;chromedriver&lt;/code&gt; and &lt;code&gt;geckodriver&lt;/code&gt; to test against Chrome and Firefox respectively.&lt;/p&gt;
-
-&lt;p&gt;Previously invalid SSL certificates could not work in headless Chrome so system tests under SSL were not possible in this mode. But with the recent release of Chrome 65, this changed. We can now set up headless Chrome driver with capabilities to accept invalid SSL certificates like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;Capybara.register_driver(:headless_chrome_ssl) do |app|
-  options = Selenium::WebDriver::Chrome::Options.new(
-    args: %w[--headless --disable-gpu --no-sandbox --disable-web-security],
-  )
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    acceptInsecureCerts: true,
-  )
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :chrome,
-    options: options,
-    desired_capabilities: capabilities
-  )
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can switch to our new driver in RSpec with a hook like the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;RSpec.configure do |config|
-  config.before(:each, type: :system, js: true) do
-    driven_by :headless_chrome_ssl
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For Firefox, the driver configuration is similar:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;Capybara.register_driver(:headless_firefox_ssl) do |app|
-  options = Selenium::WebDriver::Firefox::Options.new(args: %w[--headless])
-
-  capabilities = Selenium::WebDriver::Remote::Capabilities.firefox(
-    acceptInsecureCerts: true,
-  )
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :firefox,
-    options: options,
-    desired_capabilities: capabilities
-  )
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;With our server and drivers configured, we set our default Capybara app host with our custom domain on https:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;Capybara.app_host = &amp;quot;https://www.localhost.ross&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now we&amp;#39;re set up to run system tests over SSL!&lt;/p&gt;
-
-      &lt;h3 id="requirements" class="title"&gt;
-        &lt;a name="requirements" class="anchor" href="#requirements"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Requirements
-      &lt;/h3&gt;
-    
-&lt;p&gt;Below is a list of binaries and gems with the versions used in for the &lt;a href="https://github.com/rossta/local-ssl-demo-rails"&gt;demo app&lt;/a&gt;. It may be possible to make this work with other relatively recent versions of these tools, though your mileage may vary.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ openssl version
-LibreSSL 2.2.7
-
-$ ruby -v
-ruby 2.4.1p111 (2017-03-22 revision 58053) [x86_64-darwin16]
-
-$ /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version
-Google Chrome 68.0.3440.106
-
-$ /Applications/Firefox.app/Contents/MacOS/firefox --version
-Mozilla Firefox 60.0.1
-
-$ ~/.webdrivers/chromedriver -v
-ChromeDriver 2.41.578706 (5f725d1b4f0a4acbf5259df887244095596231db)
-
-$ ~/.webdrivers/geckodriver --version
-geckodriver 0.21.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And selected Ruby gems in the &lt;code&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;#39;rails&amp;#39;, &amp;#39;~&amp;gt; 5.2.1&amp;#39;
-gem &amp;#39;puma&amp;#39;, &amp;#39;~&amp;gt; 3.12&amp;#39;
-gem &amp;#39;webpacker&amp;#39;, &amp;#39;~&amp;gt; 3.5.5&amp;#39; # optional
-
-group :test do
-  gem &amp;#39;capybara&amp;#39;, &amp;#39;~&amp;gt; 3.5.1&amp;#39;
-  gem &amp;#39;selenium-webdriver&amp;#39;, &amp;#39;~&amp;gt; 3.14.0&amp;#39;
-  gem &amp;#39;webdrivers&amp;#39;, &amp;#39;~&amp;gt; 3.3.3&amp;#39;
-  gem &amp;#39;rspec-rails&amp;#39;, &amp;#39;~&amp;gt; 3.8.0&amp;#39; # optional
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Other versions of these tools may work fine. For example, Puma server configuration was added to Capybara as of &lt;code&gt;3.1.0&lt;/code&gt; and &lt;code&gt;chromedriver&lt;/code&gt; added support for the &lt;code&gt;acceptInsecureCerts&lt;/code&gt; flag in 2.35/Chrome 65. Just be aware that possible issues may arise otherwise, as &lt;a href="https://stackoverflow.com/questions/51881206/using-acceptinsecurecerts-with-headless-chrome-and-selenium-webdriver-macos-ra"&gt;I found out&lt;/a&gt; by inadvertently using an older version of &lt;code&gt;chromedriver&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;I recommend the &lt;code&gt;webdrivers&lt;/code&gt; gem as it will install the lastest driver binaries as needed on your behalf, including &lt;code&gt;chromedriver&lt;/code&gt; for Chrome and &lt;code&gt;geckodriver&lt;/code&gt; for Firefox. Many other posts may instruct you to install &lt;code&gt;chromedriver&lt;/code&gt; with Homebrew or point to the &lt;code&gt;chromedriver-helper&lt;/code&gt; gem; these may work just fine for you, though it will be up to you to keep the drivers updated.&lt;/p&gt;
-
-      &lt;h3 id="wrapping-up" class="title"&gt;
-        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Wrapping up
-      &lt;/h3&gt;
-    
-&lt;p&gt;If you&amp;#39;re onboard with &amp;quot;SSL everywhere&amp;quot;, let that include &lt;code&gt;localhost&lt;/code&gt; as well. Getting SSL set up for Rails development and test requires a bit of effort, but it&amp;#39;s easier than ever before with the introduction of Rails system tests and recent improvements to Puma, Capybara, Selenium, and the Chrome and Firefox web drivers.&lt;/p&gt;
 </content>
   </entry>
 </feed>
