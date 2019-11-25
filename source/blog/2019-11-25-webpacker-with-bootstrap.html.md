@@ -33,15 +33,17 @@ popper.js 1.16.0
 
 We'll assume we're working from a recently-created Rails 6 app with the default Webpacker installation. The examples may also work with other versions Rails that support Webpacker 4.
 
-Your entry point for your JavaScript is in `app/javascript/packs/application.js`. The default install contains like the following:
+When the Webpacker install is run, i.e. `bin/rails webpacker:install`, it adds the file `app/javascript/packs/application.js`. Webpack calls this file an "entry point" and Webpacker calls it a "pack". We'll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by Webpack.
+
+The file initially looks something like the following:
 ```javascript
 // app/javascript/packs/application.js
 require("@rails/ujs").start()
 require("channels")
 ```
-_Note: the `require` statements in the generated javascript can be converted into `import` statements, see below, where I've also removed the 'channels' import._
+_Note: the `require` statements in the generated javascript can be converted into `import` statements._
 
-It should also insert the appropriate javascript and stylesheet "pack" tags in your application layout:
+Installation should also insert the appropriate javascript and stylesheet "pack" tags in your application layout:
 ```erb
 <%= stylesheet_pack_tag 'application', media: 'all' %>
 <%= javascript_pack_tag 'application' %>
@@ -49,32 +51,35 @@ It should also insert the appropriate javascript and stylesheet "pack" tags in y
 > *Tip*: If you omit the `javascript_pack_tag` and have `extract_css: false` set for your environment in `config/webpacker.yml`, then the CSS won't load! The JS bundle is necessary in this case.
 
 ### Installing bootstrap
-To add bootstrap 4, install via yarn:
+To add Bootstrap, install via yarn:
 ```sh
 $ yarn add bootstrap
 ```
-At the time of this post, the above is the equivalent to `yarn add bootstrap@4.3.0`. Your installation may vary; I would expect most of the following will still work for other versions of bootstrap 4.
+At the time of this post, the above is the equivalent to `yarn add bootstrap@4.3.0`. Your installation may vary; I would expect the tutorial here will still work for other versions of Bootstrap 4.
 
-To get bootstrap css working, add a stylesheet `app/javascript/css/site.scss` you'll import the global bootstrap scss file:
+To get Bootstrap css working, add a stylesheet `app/javascript/css/site.scss`. Here, you'll import the global Bootstrap scss file:
 ```scss
 // app/javascript/css/site.scss
 
 @import "~bootstrap/scss/bootstrap.scss"
 ```
-To include our new stylesheet in the build output, we must import it from somewhere in our dependency graph. Let's put this import in the entry point, our `application.js` "pack":
+_Note: the file extensions are important, i.e., Webpacker configure files ending in '.scss' and '.sass' to be processed by Webpack's `sass-loader`._
+
+To include our new stylesheet in the build output, we must import it from somewhere in our dependency tree. Let's put this import in the entry point, our `application.js` pack:
 ```javascript
 // app/javascript/packs/application.js
 
-import 'css/main' // Webpacker configures Webpack resolve dependencies relative to app/javascript/
+import 'css/site' // Webpacker configures Webpack to resolve dependencies relative to app/javascript/
 ```
-If you're new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically consider have separate `app/assets/stylesheets/application.css` and `app/assets/javascripts/application.js` files as the top of the dependency trees; in Webpack, think of your "application pack", e.g., `app/javascript/packs/application.js`, as the top of the dependency tree from which all static assets will be imported. In other words, there is no need for a separate "stylesheet pack": ~`app/javascript/packs/application.css`~.
+If you're new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate `application.css` and `application.js` files as the top of separate dependency trees. In Webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the `application.css` bundle is simply a by-product of the build. In other words, there is no need for a separate "stylesheet pack" like `app/javascript/packs/application.css`.
 
-> *Tip* With Webpack, it's recommended to have only *one* entry point (or "pack" in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is `app/javascript/packs/application.js`. I cannot stress this point enough.
+> *Tip*: With Webpack, it's recommended to have only *one* entry point (or "pack" in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is `app/javascript/packs/application.js`. I cannot stress this point enough.
 
 ### Adding SASS overrides
 Since `bootstrap.scss` uses SASS variables for theme-ing, you can override the defaults with new values.
 
 For example, you can change the background and font colors as follows:
+
 ```scss
 // app/javascript/css/site.scss
 
@@ -86,6 +91,7 @@ $body-color: #111;
 ```
 
 You may also surgically import selected parts of bootstrap to limit bundle size:
+
 ```scss
 // app/javascript/css/site.scss
 
