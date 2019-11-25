@@ -69,7 +69,7 @@ To include our new stylesheet in the build output, we must import it from somewh
 ```javascript
 // app/javascript/packs/application.js
 
-import 'css/site' // Webpacker configures Webpack to resolve dependencies relative to app/javascript/
+import 'css/site'
 ```
 If you're new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate `application.css` and `application.js` files as the top of separate dependency trees. In Webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the `application.css` bundle is simply a by-product of the build. In other words, there is no need for a separate "stylesheet pack" like `app/javascript/packs/application.css`.
 
