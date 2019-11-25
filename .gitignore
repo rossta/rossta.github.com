@@ -20,3 +20,4 @@ source/blog/.Ulysses-Group.plist
 /dist
 /.tmp
 /vendor
+.vscode

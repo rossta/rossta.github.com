@@ -1,13 +1,11 @@
 <% if paginate %>
-  <section>
-    <p>
-      Page <%= page_number %> of <%= num_pages %>
-      <% if prev_page %>
-        &middot; <%= link_to "Previous", prev_page %>
-      <% end %>
-      <% if next_page %>
-        &middot; <%= link_to "Next", next_page %>
-      <% end %>
-    </p>
+  <section class="border-t pt-8 pb-16">
+    Page <%= page_number %> of <%= num_pages %>
+    <% if prev_page %>
+      &middot; <%= link_to "Previous", prev_page %>
+    <% end %>
+    <% if next_page %>
+      &middot; <%= link_to "Next", next_page %>
+    <% end %>
   </section>
 <% end %>

@@ -11,9 +11,9 @@
         </ul>
       </section>
       <section class="mb-8">
-        <h5 class="font-bold mb-4">Categories</h5>
+        <h5 class="font-bold mb-4"><a href="blog/tags.html">Categories</ahttp://localhost:4567/blog/tags.html></h5>
         <ul>
-          <% top_tags.take(5).each do |tag, articles| %>
+          <% top_curated_tags.take(5).each do |tag| %>
             <li class="mb-1"><%= link_to tag, tag_path(tag, 'blog') %></li>
           <% end %>
         </ul>
