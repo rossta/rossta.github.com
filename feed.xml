@@ -43,16 +43,18 @@ popper.js 1.16.0
 
 &lt;p&gt;We&amp;#39;ll assume we&amp;#39;re working from a recently-created Rails 6 app with the default Webpacker installation. The examples may also work with other versions Rails that support Webpacker 4.&lt;/p&gt;
 
-&lt;p&gt;Your entry point for your JavaScript is in &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. The default install contains like the following:&lt;/p&gt;
+&lt;p&gt;When the Webpacker install is run, i.e. &lt;code&gt;bin/rails webpacker:install&lt;/code&gt;, it adds the file &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. Webpack calls this file an &amp;quot;entry point&amp;quot; and Webpacker calls it a &amp;quot;pack&amp;quot;. We&amp;#39;ll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by Webpack.&lt;/p&gt;
+
+&lt;p&gt;The file initially looks something like the following:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
 require(&amp;quot;@rails/ujs&amp;quot;).start()
 require(&amp;quot;channels&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;em&gt;Note: the &lt;code&gt;require&lt;/code&gt; statements in the generated javascript can be converted into &lt;code&gt;import&lt;/code&gt; statements, see below, where I&amp;#39;ve also removed the &amp;#39;channels&amp;#39; import.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note: the &lt;code&gt;require&lt;/code&gt; statements in the generated javascript can be converted into &lt;code&gt;import&lt;/code&gt; statements.&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;It should also insert the appropriate javascript and stylesheet &amp;quot;pack&amp;quot; tags in your application layout:&lt;/p&gt;
+&lt;p&gt;Installation should also insert the appropriate javascript and stylesheet &amp;quot;pack&amp;quot; tags in your application layout:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;%= stylesheet_pack_tag &amp;#39;application&amp;#39;, media: &amp;#39;all&amp;#39; %&amp;gt;
 &amp;lt;%= javascript_pack_tag &amp;#39;application&amp;#39; %&amp;gt;
@@ -70,31 +72,33 @@ require(&amp;quot;channels&amp;quot;)
         Installing bootstrap
       &lt;/h3&gt;
     
-&lt;p&gt;To add bootstrap 4, install via yarn:&lt;/p&gt;
+&lt;p&gt;To add Bootstrap, install via yarn:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="sh"&gt;$ yarn add bootstrap
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;At the time of this post, the above is the equivalent to &lt;code&gt;yarn add bootstrap@4.3.0&lt;/code&gt;. Your installation may vary; I would expect most of the following will still work for other versions of bootstrap 4.&lt;/p&gt;
+&lt;p&gt;At the time of this post, the above is the equivalent to &lt;code&gt;yarn add bootstrap@4.3.0&lt;/code&gt;. Your installation may vary; I would expect the tutorial here will still work for other versions of Bootstrap 4.&lt;/p&gt;
 
-&lt;p&gt;To get bootstrap css working, add a stylesheet &lt;code&gt;app/javascript/css/site.scss&lt;/code&gt; you&amp;#39;ll import the global bootstrap scss file:&lt;/p&gt;
+&lt;p&gt;To get Bootstrap css working, add a stylesheet &lt;code&gt;app/javascript/css/site.scss&lt;/code&gt;. Here, you&amp;#39;ll import the global Bootstrap scss file:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="scss"&gt;// app/javascript/css/site.scss
 
 @import &amp;quot;~bootstrap/scss/bootstrap.scss&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;To include our new stylesheet in the build output, we must import it from somewhere in our dependency graph. Let&amp;#39;s put this import in the entry point, our &lt;code&gt;application.js&lt;/code&gt; &amp;quot;pack&amp;quot;:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note: the file extensions are important, i.e., Webpacker configure files ending in &amp;#39;.scss&amp;#39; and &amp;#39;.sass&amp;#39; to be processed by Webpack&amp;#39;s &lt;code&gt;sass-loader&lt;/code&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;To include our new stylesheet in the build output, we must import it from somewhere in our dependency tree. Let&amp;#39;s put this import in the entry point, our &lt;code&gt;application.js&lt;/code&gt; pack:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
 
-import &amp;#39;css/main&amp;#39; // Webpacker configures Webpack resolve dependencies relative to app/javascript/
+import &amp;#39;css/site&amp;#39; // Webpacker configures Webpack to resolve dependencies relative to app/javascript/
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;If you&amp;#39;re new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically consider have separate &lt;code&gt;app/assets/stylesheets/application.css&lt;/code&gt; and &lt;code&gt;app/assets/javascripts/application.js&lt;/code&gt; files as the top of the dependency trees; in Webpack, think of your &amp;quot;application pack&amp;quot;, e.g., &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;, as the top of the dependency tree from which all static assets will be imported. In other words, there is no need for a separate &amp;quot;stylesheet pack&amp;quot;: ~&lt;code&gt;app/javascript/packs/application.css&lt;/code&gt;~.&lt;/p&gt;
+&lt;p&gt;If you&amp;#39;re new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate &lt;code&gt;application.css&lt;/code&gt; and &lt;code&gt;application.js&lt;/code&gt; files as the top of separate dependency trees. In Webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the &lt;code&gt;application.css&lt;/code&gt; bundle is simply a by-product of the build. In other words, there is no need for a separate &amp;quot;stylesheet pack&amp;quot; like &lt;code&gt;app/javascript/packs/application.css&lt;/code&gt;.&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;Tip&lt;/em&gt; With Webpack, it&amp;#39;s recommended to have only &lt;em&gt;one&lt;/em&gt; entry point (or &amp;quot;pack&amp;quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. I cannot stress this point enough.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Tip&lt;/em&gt;: With Webpack, it&amp;#39;s recommended to have only &lt;em&gt;one&lt;/em&gt; entry point (or &amp;quot;pack&amp;quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. I cannot stress this point enough.&lt;/p&gt;
 &lt;/blockquote&gt;
 
       &lt;h3 id="adding-sass-overrides" class="title"&gt;

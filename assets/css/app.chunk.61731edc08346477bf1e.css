@@ -11621,7 +11621,7 @@ h3 {
   width: 100%;
   padding-left: 1rem;
   padding-right: 1rem;
-  max-width: 780px;
+  max-width: 820px;
 }
 
 @media (min-width: 640px) {
@@ -11700,6 +11700,7 @@ footer a:hover {
 @media (min-width: 1024px) {
   .post .title {
     margin-left: -1.25rem;
+    margin-top: 3rem;
   }
 
   .post .title .anchor {

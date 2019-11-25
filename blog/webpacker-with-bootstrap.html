@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.afb4e005c53353302256.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.61731edc08346477bf1e.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -79,16 +79,18 @@ popper.js 1.16.0
 
 <p>We&#39;ll assume we&#39;re working from a recently-created Rails 6 app with the default Webpacker installation. The examples may also work with other versions Rails that support Webpacker 4.</p>
 
-<p>Your entry point for your JavaScript is in <code>app/javascript/packs/application.js</code>. The default install contains like the following:</p>
+<p>When the Webpacker install is run, i.e. <code>bin/rails webpacker:install</code>, it adds the file <code>app/javascript/packs/application.js</code>. Webpack calls this file an &quot;entry point&quot; and Webpacker calls it a &quot;pack&quot;. We&#39;ll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by Webpack.</p>
+
+<p>The file initially looks something like the following:</p>
 
 <pre><code class="javascript">// app/javascript/packs/application.js
 require(&quot;@rails/ujs&quot;).start()
 require(&quot;channels&quot;)
 </code></pre>
 
-<p><em>Note: the <code>require</code> statements in the generated javascript can be converted into <code>import</code> statements, see below, where I&#39;ve also removed the &#39;channels&#39; import.</em></p>
+<p><em>Note: the <code>require</code> statements in the generated javascript can be converted into <code>import</code> statements.</em></p>
 
-<p>It should also insert the appropriate javascript and stylesheet &quot;pack&quot; tags in your application layout:</p>
+<p>Installation should also insert the appropriate javascript and stylesheet &quot;pack&quot; tags in your application layout:</p>
 
 <pre><code class="erb">&lt;%= stylesheet_pack_tag &#39;application&#39;, media: &#39;all&#39; %&gt;
 &lt;%= javascript_pack_tag &#39;application&#39; %&gt;
@@ -106,31 +108,33 @@ require(&quot;channels&quot;)
         Installing bootstrap
       </h3>
     
-<p>To add bootstrap 4, install via yarn:</p>
+<p>To add Bootstrap, install via yarn:</p>
 
 <pre><code class="sh">$ yarn add bootstrap
 </code></pre>
 
-<p>At the time of this post, the above is the equivalent to <code>yarn add bootstrap@4.3.0</code>. Your installation may vary; I would expect most of the following will still work for other versions of bootstrap 4.</p>
+<p>At the time of this post, the above is the equivalent to <code>yarn add bootstrap@4.3.0</code>. Your installation may vary; I would expect the tutorial here will still work for other versions of Bootstrap 4.</p>
 
-<p>To get bootstrap css working, add a stylesheet <code>app/javascript/css/site.scss</code> you&#39;ll import the global bootstrap scss file:</p>
+<p>To get Bootstrap css working, add a stylesheet <code>app/javascript/css/site.scss</code>. Here, you&#39;ll import the global Bootstrap scss file:</p>
 
 <pre><code class="scss">// app/javascript/css/site.scss
 
 @import &quot;~bootstrap/scss/bootstrap.scss&quot;
 </code></pre>
 
-<p>To include our new stylesheet in the build output, we must import it from somewhere in our dependency graph. Let&#39;s put this import in the entry point, our <code>application.js</code> &quot;pack&quot;:</p>
+<p><em>Note: the file extensions are important, i.e., Webpacker configure files ending in &#39;.scss&#39; and &#39;.sass&#39; to be processed by Webpack&#39;s <code>sass-loader</code>.</em></p>
+
+<p>To include our new stylesheet in the build output, we must import it from somewhere in our dependency tree. Let&#39;s put this import in the entry point, our <code>application.js</code> pack:</p>
 
 <pre><code class="javascript">// app/javascript/packs/application.js
 
-import &#39;css/main&#39; // Webpacker configures Webpack resolve dependencies relative to app/javascript/
+import &#39;css/site&#39; // Webpacker configures Webpack to resolve dependencies relative to app/javascript/
 </code></pre>
 
-<p>If you&#39;re new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically consider have separate <code>app/assets/stylesheets/application.css</code> and <code>app/assets/javascripts/application.js</code> files as the top of the dependency trees; in Webpack, think of your &quot;application pack&quot;, e.g., <code>app/javascript/packs/application.js</code>, as the top of the dependency tree from which all static assets will be imported. In other words, there is no need for a separate &quot;stylesheet pack&quot;: ~<code>app/javascript/packs/application.css</code>~.</p>
+<p>If you&#39;re new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate <code>application.css</code> and <code>application.js</code> files as the top of separate dependency trees. In Webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the <code>application.css</code> bundle is simply a by-product of the build. In other words, there is no need for a separate &quot;stylesheet pack&quot; like <code>app/javascript/packs/application.css</code>.</p>
 
 <blockquote>
-<p><em>Tip</em> With Webpack, it&#39;s recommended to have only <em>one</em> entry point (or &quot;pack&quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is <code>app/javascript/packs/application.js</code>. I cannot stress this point enough.</p>
+<p><em>Tip</em>: With Webpack, it&#39;s recommended to have only <em>one</em> entry point (or &quot;pack&quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is <code>app/javascript/packs/application.js</code>. I cannot stress this point enough.</p>
 </blockquote>
 
       <h3 id="adding-sass-overrides" class="title">
