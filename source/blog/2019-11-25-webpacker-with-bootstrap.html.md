@@ -44,8 +44,10 @@ _Note: the `require` statements in the generated javascript can be converted int
 It should also insert the appropriate javascript and stylesheet "pack" tags in your application layout:
 ```erb
 <%= stylesheet_pack_tag 'application', media: 'all' %>
-<%= javascript_packs_with_chunks_tag 'application' %>
+<%= javascript_pack_tag 'application' %>
 ```
+> *Tip*: If you omit the `javascript_pack_tag` and have `extract_css: false` set for your environment in `config/webpacker.yml`, then the CSS won't load! The JS bundle is necessary in this case.
+
 ### Installing bootstrap
 To add bootstrap 4, install via yarn:
 ```sh
