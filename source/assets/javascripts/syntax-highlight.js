@@ -2,6 +2,7 @@ import highlight from 'highlight.js/lib/highlight';
 
 import bash from 'highlight.js/lib/languages/bash';
 import css from 'highlight.js/lib/languages/css';
+import scss from 'highlight.js/lib/languages/scss';
 import elixir from 'highlight.js/lib/languages/elixir';
 import xml from 'highlight.js/lib/languages/xml';
 import javascript from 'highlight.js/lib/languages/javascript';
@@ -14,6 +15,7 @@ import yaml from 'highlight.js/lib/languages/yaml';
 const languages = {
   bash,
   css,
+  scss,
   elixir,
   xml,
   javascript,
