@@ -92,7 +92,7 @@ require(&amp;quot;channels&amp;quot;)
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
 
-import &amp;#39;css/site&amp;#39; // Webpacker configures Webpack to resolve dependencies relative to app/javascript/
+import &amp;#39;css/site&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;If you&amp;#39;re new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate &lt;code&gt;application.css&lt;/code&gt; and &lt;code&gt;application.js&lt;/code&gt; files as the top of separate dependency trees. In Webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the &lt;code&gt;application.css&lt;/code&gt; bundle is simply a by-product of the build. In other words, there is no need for a separate &amp;quot;stylesheet pack&amp;quot; like &lt;code&gt;app/javascript/packs/application.css&lt;/code&gt;.&lt;/p&gt;
