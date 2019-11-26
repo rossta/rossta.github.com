@@ -36,6 +36,7 @@ We'll assume we're working from a recently-created Rails 6 app with the default 
 When the Webpacker install is run, i.e. `bin/rails webpacker:install`, it adds the file `app/javascript/packs/application.js`. Webpack calls this file an "entry point" and Webpacker calls it a "pack". We'll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by Webpack.
 
 The file initially looks something like the following:
+
 ```javascript
 // app/javascript/packs/application.js
 require("@rails/ujs").start()
@@ -44,10 +45,12 @@ require("channels")
 _Note: the `require` statements in the generated javascript can be converted into `import` statements._
 
 Installation should also insert the appropriate javascript and stylesheet "pack" tags in your application layout:
+
 ```erb
 <%= stylesheet_pack_tag 'application', media: 'all' %>
 <%= javascript_pack_tag 'application' %>
 ```
+
 > *Tip*: If you omit the `javascript_pack_tag` and have `extract_css: false` set for your environment in `config/webpacker.yml`, then the CSS won't load! The JS bundle is necessary in this case.
 
 ### Installing bootstrap
@@ -129,7 +132,7 @@ import 'bootstrap'
 ### Optimizing the JavaScript bundle
 
 An optional, advanced technique would be to import selected modules asynchronously. The benefit is to limit the size of our initial bundle and defer as much as possible to decrease latency for downloading, parsing, and evaluating JavaScript on page load. Note the `application.js` bundle (fingerprinted as `js/application-c67c235b5c7d8ac4f1fe.js`) is already 940kB in our Webpack build:
-```javascript
+```shell
 Version: webpack 4.41.2
 Time: 1003ms
 Built at: 11/25/2019 4:08:14 PM
@@ -147,12 +150,14 @@ As an exercise, we might decide to defer the import and initialization of the jq
 One such deferring technique is dynamic import. Webpack will recognize when `import` is used as a function, e.g. `import('some-lib')`, and pull out the module as a separate "chunk" (another file), that will be loaded asynchronously when the function is evaluated.
 
 In our demo app, we can move `popper.js` and `bootstrap` to a separate file. Critically, this file is NOT in `app/javascript/packs` but outside of this directory, such as `app/javascript/src`, where we will put all our non-entry-point js:
+
 ```javascript
 // app/javascript/src/plugins.js
 
 import 'popper.js'
 import 'bootstrap'
 ```
+
 Back in the application pack, we replace the `popper.js` and `bootstrap` imports with a *dynamic* import of `app/javascript/src/plugins.js`:
 ```javascript
 // app/javascript/packs/application.js
@@ -160,8 +165,9 @@ Back in the application pack, we replace the `popper.js` and `bootstrap` imports
 import 'jquery'
 import('src/plugins') // note the function usage!
 ```
+
 When compiling, Webpack will show us a number of additional javascript "chunks" of smaller size than the bundle previously:
-```
+```shell
 Version: webpack 4.41.2
 Time: 41ms
 Built at: 11/25/2019 4:03:54 PM
