@@ -4,10 +4,11 @@
 
 @import './forms';
 @import './code';
-@import './code-docco-theme';
 
-html {
-  font-size: 18px;
+@screen lg {
+  html {
+    font-size: 18px;
+  }
 }
 
 hr {
@@ -17,6 +18,7 @@ hr {
 .bg-silver {
   background-color: #f8f8ff;
 }
+
 
 h1,
 h2,
@@ -47,8 +49,6 @@ h3 {
 
 .layout {
   @apply mx-auto w-full px-4;
-
-  max-width: 820px;
 }
 
 @screen sm {
@@ -56,9 +56,10 @@ h3 {
     @apply px-6;
   }
 }
-@screen lg {
+@screen md {
   .layout {
-    @apply w-1/2;
+    @apply w-3/4;
+    max-width: 940px;
   }
 }
 
