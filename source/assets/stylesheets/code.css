@@ -1,3 +1,5 @@
+@import 'highlight.js/styles/agate';
+
 code {
   @apply bg-gray-400 p-1 text-sm;
 
@@ -5,24 +7,40 @@ code {
 }
 
 pre {
-  @apply mb-6 p-4 border rounded leading-snug;
-
+  @apply mb-6;
   display: block;
-  color: #333;
   word-break: break-all;
   word-wrap: break-word;
-  background-color: ghostwhite;
-}
-
-@screen lg {
-  pre {
-    @apply p-6 -mx-6;
-  }
 }
 
 pre code {
-  @apply text-xs p-0;
+  @apply border leading-snug text-sm -mx-4;
   background-color: none;
-  overflow:auto;
-  font-weight:normal;
+  overflow: auto;
+  font-weight: normal;
+}
+
+.hljs {
+  @apply p-4;
+}
+
+@screen md {
+  pre code {
+    @apply rounded -mx-6;
+  }
+
+  .hljs {
+    @apply p-6;
+  }
+
+}
+
+@screen lg {
+  pre code {
+    @apply -mx-8 text-base rounded-lg;
+  }
+
+  .hljs {
+    @apply p-8;
+  }
 }
