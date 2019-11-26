@@ -167,7 +167,7 @@ import &amp;#39;bootstrap&amp;#39;
     
 &lt;p&gt;An optional, advanced technique would be to import selected modules asynchronously. The benefit is to limit the size of our initial bundle and defer as much as possible to decrease latency for downloading, parsing, and evaluating JavaScript on page load. Note the &lt;code&gt;application.js&lt;/code&gt; bundle (fingerprinted as &lt;code&gt;js/application-c67c235b5c7d8ac4f1fe.js&lt;/code&gt;) is already 940kB in our Webpack build:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="javascript"&gt;Version: webpack 4.41.2
+&lt;pre&gt;&lt;code class="shell"&gt;Version: webpack 4.41.2
 Time: 1003ms
 Built at: 11/25/2019 4:08:14 PM
                                      Asset       Size       Chunks                         Chunk Names
@@ -201,7 +201,7 @@ import(&amp;#39;src/plugins&amp;#39;) // note the function usage!
 
 &lt;p&gt;When compiling, Webpack will show us a number of additional javascript &amp;quot;chunks&amp;quot; of smaller size than the bundle previously:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;Version: webpack 4.41.2
+&lt;pre&gt;&lt;code class="shell"&gt;Version: webpack 4.41.2
 Time: 41ms
 Built at: 11/25/2019 4:03:54 PM
                                      Asset       Size       Chunks                         Chunk Names

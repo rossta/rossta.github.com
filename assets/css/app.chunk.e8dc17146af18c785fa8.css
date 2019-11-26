@@ -11401,6 +11401,12 @@ video {
   z-index: auto;
 }
 
+@media (min-width: 1024px) {
+  html {
+    font-size: 18px;
+  }
+}
+
 input:not([type]),
 input[type='text'],
 input[type='password'],
@@ -11430,6 +11436,89 @@ textarea {
   font-weight: bold;
 }
 
+/*
+
+Dracula Theme v1.2.0
+
+https://github.com/zenorocha/dracula-theme
+
+Copyright 2015, All rights reserved
+
+Code licensed under the MIT license
+http://zenorocha.mit-license.org
+
+@author Ãverton Ribeiro <nuxlli@gmail.com>
+@author Zeno Rocha <hi@zenorocha.com>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #282a36;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+  color: #8be9fd;
+}
+
+.hljs-function .hljs-keyword {
+  color: #ff79c6;
+}
+
+.hljs,
+.hljs-subst {
+  color: #f8f8f2;
+}
+
+.hljs-string,
+.hljs-title,
+.hljs-name,
+.hljs-type,
+.hljs-attribute,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition,
+.hljs-variable,
+.hljs-template-tag,
+.hljs-template-variable {
+  color: #f1fa8c;
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion,
+.hljs-meta {
+  color: #6272a4;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-type,
+.hljs-name,
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+/* Dracula-specific override */
+
+.hljs-comment {
+  color: #8293c6;
+}
+
 code {
   background-color: #cbd5e0;
   padding: 0.25rem;
@@ -11439,138 +11528,71 @@ code {
 
 pre {
   margin-bottom: 1.5rem;
-  padding: 1rem;
-  border-width: 1px;
-  border-radius: 0.25rem;
-  line-height: 1.375;
   display: block;
-  color: #333;
   word-break: break-all;
   word-wrap: break-word;
-  background-color: ghostwhite;
-}
-
-@media (min-width: 1024px) {
-  pre {
-    padding: 1.5rem;
-    margin-left: -1.5rem;
-    margin-right: -1.5rem;
-  }
 }
 
 pre code {
-  font-size: 0.75rem;
-  padding: 0;
   background-color: none;
-  overflow:auto;
-  font-weight:normal;
-}
-
-/*
-Docco style used in http://jashkenas.github.com/docco/ converted by Simon Madine (@thingsinjars)
-*/
-
-.hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
-  color: #000;
-  background: #f8f8ff;
-}
-
-.hljs-comment,
-.hljs-quote {
-  color: #408080;
-  font-style: italic;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-literal,
-.hljs-subst {
-  color: #954121;
-}
-
-.hljs-number {
-  color: #40a070;
-}
-
-.hljs-string,
-.hljs-doctag {
-  color: #219161;
-}
-
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-section,
-.hljs-type {
-  color: #19469d;
-}
-
-.hljs-params {
-  color: #00f;
-}
-
-.hljs-title {
-  color: #458;
-  font-weight: bold;
-}
-
-.hljs-tag,
-.hljs-name,
-.hljs-attribute {
-  color: #000080;
+  overflow: auto;
   font-weight: normal;
 }
 
-.hljs-variable,
-.hljs-template-variable {
-  color: #008080;
+pre code,
+.hljs {
+  border-width: 1px;
+  line-height: 1.375;
+  font-size: 0.875rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding: 1rem;
 }
 
-.hljs-regexp,
-.hljs-link {
-  color: #b68;
+@media (min-width: 768px) {
+  pre code,
+  .hljs {
+    border-radius: 0.25rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding: 1.5rem;
+  }
 }
 
-.hljs-symbol,
-.hljs-bullet {
-  color: #990073;
+@media (min-width: 1024px) {
+  pre code,
+  .hljs {
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding: 2rem;
+  }
 }
 
-.hljs-built_in,
-.hljs-builtin-name {
-  color: #0086b3;
+.hero {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding: 1rem;
 }
 
-.hljs-meta {
-  color: #999;
-  font-weight: bold;
+@media (min-width: 768px) {
+  .hero {
+    border-radius: 0.25rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding: 1.5rem;
+  }
 }
 
-.hljs-deletion {
-  background: #fdd;
-}
-
-.hljs-addition {
-  background: #dfd;
-}
-
-.hljs-emphasis {
-  font-style: italic;
-}
-
-.hljs-strong {
-  font-weight: bold;
-}
-
-pre {
-  border: 1px solid ghostwhite;
-  background: ghostwhite;
-}
-
-html {
-  font-size: 18px;
+@media (min-width: 1024px) {
+  .hero {
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding: 2rem;
+  }
 }
 
 hr {
@@ -11621,7 +11643,6 @@ h3 {
   width: 100%;
   padding-left: 1rem;
   padding-right: 1rem;
-  max-width: 820px;
 }
 
 @media (min-width: 640px) {
@@ -11631,9 +11652,10 @@ h3 {
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .layout {
-    width: 50%;
+    width: 75%;
+    max-width: 940px;
   }
 }
 
@@ -11743,17 +11765,7 @@ footer a:hover {
 .signup-form-standalone {
   margin-top: 1.5rem;
   margin-bottom: 3rem;
-  padding: 1rem;
-  border-radius: 0.25rem;
   background-color: #f8f8ff;
-}
-
-@media (min-width: 1024px) {
-  .signup-form-standalone {
-    padding: 1.5rem;
-    margin-left: -1.5rem;
-    margin-right: -1.5rem;
-  }
 }
 
 figcaption {
