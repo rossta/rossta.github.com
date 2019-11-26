@@ -1,14 +1,14 @@
 <% content_for(:title) { } %>
 <% content_for(:section) { 'I make things' } %>
 
-<section id="hero">
+<section id="hero" class="hero">
   <header>
     <h1>Thanks for Signing up!</h1>
   </header>
   <section>
-    <p>Boom! Your subscription to my newsletter has been confirmed. I'm looking forward to helping you on your journey as a web developer.</p>
+    <p>Your subscription to my newsletter has been confirmed. I'm looking forward to helping you on your journey as a web developer.</p>
     <p>I'd love to hear from you, so <%= link_to "send me an email", email_url %> or <%= link_to "follow me on twitter", "https://twitter.com/rossta" %>. While you're here, read on!</p>
-    <a href="/" class="primary button back">Back</a>
-    <a href="/blog" class="button">Browse more articles</a>
+    <a href="/" class="btn back">Back</a>
+    <a href="/blog" class="btn">Browse more articles</a>
   </section>
 </section>

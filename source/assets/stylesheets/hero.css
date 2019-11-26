@@ -1,0 +1,15 @@
+.hero {
+  @apply -mx-4 p-4;
+}
+
+@screen md {
+  .hero {
+    @apply rounded -mx-6 p-6;
+  }
+}
+
+@screen lg {
+  .hero {
+    @apply text-base rounded-lg -mx-8 p-8;
+  }
+}

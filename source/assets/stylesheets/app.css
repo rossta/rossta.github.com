@@ -1,15 +1,12 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
+
 @import 'tailwindcss/utilities';
 
+@import './base';
 @import './forms';
 @import './code';
-
-@screen lg {
-  html {
-    font-size: 18px;
-  }
-}
+@import './hero';
 
 hr {
   @apply mb-6;
@@ -18,7 +15,6 @@ hr {
 .bg-silver {
   background-color: #f8f8ff;
 }
-
 
 h1,
 h2,
@@ -144,14 +140,9 @@ footer a:hover {
 }
 
 .signup-form-standalone {
-  @apply mt-6 mb-12 p-4 rounded;
+  @apply mt-6 mb-12;
 
   background-color: #f8f8ff;
-}
-@screen lg {
-  .signup-form-standalone {
-    @apply p-6 -mx-6;
-  }
 }
 
 figcaption {
