@@ -8,6 +8,10 @@
 @import './code';
 @import './hero';
 
+.formkit-form {
+  visibility: hidden;
+}
+
 hr {
   @apply mb-6;
 }
