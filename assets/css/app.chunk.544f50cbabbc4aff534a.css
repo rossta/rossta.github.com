@@ -11595,6 +11595,10 @@ pre code,
   }
 }
 
+.formkit-form {
+  visibility: hidden;
+}
+
 hr {
   margin-bottom: 1.5rem;
 }
