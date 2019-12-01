@@ -124,12 +124,12 @@ We rendered script tags for the vendor and application bundle respectively in th
 <!-- application.html.erb -->
 
 <html>
-	<body>
-		<!-- ... -->
+  <body>
+    <!-- ... -->
 
-		<%= javascript_include_tag 'vendor' %>
-		<%= javascript_include_tag 'application' %>
-	</body>
+    <%= javascript_include_tag 'vendor' %>
+    <%= javascript_include_tag 'application' %>
+  </body>
 </html>
 ```
 
@@ -154,14 +154,14 @@ We added script tags to the application layout using the helper provided by Webp
 <!-- application.html.erb -->
 
 <html>
-	<body>
-		<!-- ... -->
-		<%= javascript_pack_tag 'vendor' %>
-		<%= javascript_include_tag 'vendor' %>
+  <body>
+    <!-- ... -->
+    <%= javascript_pack_tag 'vendor' %>
+    <%= javascript_include_tag 'vendor' %>
 
-		<%= javascript_pack_tag 'application' %>
-		<%= javascript_include_tag 'application' %>
-	</body>
+    <%= javascript_pack_tag 'application' %>
+    <%= javascript_include_tag 'application' %>
+  </body>
 </html>
 ```
 The idea was that we could port dependencies from `app/assets/javascripts` to `app/javascript` one-by-one. So, we'd move `some_module.js` from `app/assets/javascripts` to `app/javascript`, update its syntax to ES6.
@@ -326,7 +326,7 @@ $ NODE_ENV=development node
 > let config = require('./config/webpack/development');
 ```
 
-We now have a shared file in the `config/webpack` directory that imports the Webpack configuration through its API and exports the modified config object for the enviornment-specific config files to consume.
+We now have a shared file in the `config/webpack` directory that imports the Webpack configuration through its API and exports the modified config object for the environment-specific config files to consume.
 
 ```
 // config/webpack/environment.js
