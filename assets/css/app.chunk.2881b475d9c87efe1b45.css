@@ -11659,7 +11659,7 @@ h3 {
 @media (min-width: 768px) {
   .layout {
     width: 75%;
-    max-width: 940px;
+    max-width: 860px;
   }
 }
 
@@ -11669,16 +11669,16 @@ h3 {
 
 main a,
 footer a {
-  color: #276749;
+  color: #22543d;
 }
 
 main a {
-  color: #276749;
+  color: #22543d;
 }
 
 main a:hover,
 footer a:hover {
-  color: #38a169;
+  color: #2f855a;
 }
 
 .index-post {
@@ -11757,13 +11757,13 @@ footer a:hover {
 .post ul li {
   list-style-type: disc;
   margin-left: 1rem;
-  color: #4a5568;
+  color: #1a202c;
 }
 
 .post ol li {
   list-style-type: decimal;
   margin-left: 1rem;
-  color: #4a5568;
+  color: #1a202c;
 }
 
 .signup-form-standalone {

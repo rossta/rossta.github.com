@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.544f50cbabbc4aff534a.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.2881b475d9c87efe1b45.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -213,12 +213,12 @@
 <pre><code class="erb">&lt;!-- application.html.erb --&gt;
 
 &lt;html&gt;
-    &lt;body&gt;
-        &lt;!-- ... --&gt;
+  &lt;body&gt;
+    &lt;!-- ... --&gt;
 
-        &lt;%= javascript_include_tag &#39;vendor&#39; %&gt;
-        &lt;%= javascript_include_tag &#39;application&#39; %&gt;
-    &lt;/body&gt;
+    &lt;%= javascript_include_tag &#39;vendor&#39; %&gt;
+    &lt;%= javascript_include_tag &#39;application&#39; %&gt;
+  &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
 
@@ -244,14 +244,14 @@ app/javascript
 <pre><code class="erb">&lt;!-- application.html.erb --&gt;
 
 &lt;html&gt;
-    &lt;body&gt;
-        &lt;!-- ... --&gt;
-        &lt;%= javascript_pack_tag &#39;vendor&#39; %&gt;
-        &lt;%= javascript_include_tag &#39;vendor&#39; %&gt;
+  &lt;body&gt;
+    &lt;!-- ... --&gt;
+    &lt;%= javascript_pack_tag &#39;vendor&#39; %&gt;
+    &lt;%= javascript_include_tag &#39;vendor&#39; %&gt;
 
-        &lt;%= javascript_pack_tag &#39;application&#39; %&gt;
-        &lt;%= javascript_include_tag &#39;application&#39; %&gt;
-    &lt;/body&gt;
+    &lt;%= javascript_pack_tag &#39;application&#39; %&gt;
+    &lt;%= javascript_include_tag &#39;application&#39; %&gt;
+  &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
 
@@ -441,7 +441,7 @@ _.assign(App, Packs.application);
 &gt; let config = require(&#39;./config/webpack/development&#39;);
 </code></pre>
 
-<p>We now have a shared file in the <code>config/webpack</code> directory that imports the Webpack configuration through its API and exports the modified config object for the enviornment-specific config files to consume.</p>
+<p>We now have a shared file in the <code>config/webpack</code> directory that imports the Webpack configuration through its API and exports the modified config object for the environment-specific config files to consume.</p>
 
 <pre><code>// config/webpack/environment.js
 
@@ -1064,7 +1064,7 @@ module.exports = function(config) {
   </div>
 </footer>
 
-    <script src='/assets/js/runtime.65dc3fdaa83c14bd496a.js'></script><script src='/assets/js/vendors~app.chunk.6c6b7f30d28c87e9d1b2.js'></script><script src='/assets/js/app.chunk.40bf88435cbef0a86cb4.js'></script>
+    <script src='/assets/js/runtime.9a3b98bbc5673d6f14b9.js'></script><script src='/assets/js/vendors~app.chunk.6c6b7f30d28c87e9d1b2.js'></script><script src='/assets/js/app.chunk.40bf88435cbef0a86cb4.js'></script>
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-16458563-2"></script>
 <script type="text/javascript">
