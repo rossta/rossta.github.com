@@ -4,6 +4,7 @@ import bash from 'highlight.js/lib/languages/bash';
 import css from 'highlight.js/lib/languages/css';
 import scss from 'highlight.js/lib/languages/scss';
 import elixir from 'highlight.js/lib/languages/elixir';
+import erb from 'highlight.js/lib/languages/erb';
 import xml from 'highlight.js/lib/languages/xml';
 import javascript from 'highlight.js/lib/languages/javascript';
 import json from 'highlight.js/lib/languages/json';
@@ -16,6 +17,7 @@ const languages = {
   bash,
   css,
   scss,
+  erb,
   elixir,
   xml,
   javascript,

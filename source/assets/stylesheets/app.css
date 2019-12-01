@@ -59,7 +59,7 @@ h3 {
 @screen md {
   .layout {
     @apply w-3/4;
-    max-width: 940px;
+    max-width: 860px;
   }
 }
 
@@ -68,14 +68,14 @@ h3 {
 }
 main a,
 footer a {
-  @apply text-green-800;
+  @apply text-green-900;
 }
 main a {
-  @apply text-green-800;
+  @apply text-green-900;
 }
 main a:hover,
 footer a:hover {
-  @apply text-green-600;
+  @apply text-green-700;
 }
 
 .index-post {
@@ -134,13 +134,13 @@ footer a:hover {
 .post ul li {
   list-style-type: disc;
 
-  @apply ml-4 text-gray-700;
+  @apply ml-4 text-gray-900;
 }
 
 .post ol li {
   list-style-type: decimal;
 
-  @apply ml-4 text-gray-700;
+  @apply ml-4 text-gray-900;
 }
 
 .signup-form-standalone {
