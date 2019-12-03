@@ -9,22 +9,10 @@
 @import './code';
 @import './hero';
 
-.formkit-form {
-  visibility: hidden;
-}
-
-hr {
-  @apply mb-6;
-}
-
-.bg-silver {
-  background-color: #f8f8ff;
-}
-
 h1,
 h2,
 h3 {
-  @apply font-bold leading-snug text-gray-800;
+  @apply font-bold leading-snug text-gray-900;
 }
 h1 {
   @apply text-2xl;
@@ -64,17 +52,24 @@ h3 {
   }
 }
 
-
 main a,
 footer a {
-  @apply text-green-900;
+  color: #0366d6;
 }
-main a {
-  @apply text-green-900;
+main header a {
+  @apply text-gray-800;
 }
 main a:hover,
 footer a:hover {
-  @apply text-green-700;
+  @apply underline;
+}
+
+hr {
+  @apply mb-6;
+}
+
+.bg-silver {
+  background-color: #f8f8ff;
 }
 
 .index-post {
@@ -92,7 +87,7 @@ footer a:hover {
 .page-header {
   @apply mb-8 pb-8 border-b border-gray-400;
 }
-.post a {
+.post a:hover {
   @apply underline;
 }
 .post p,

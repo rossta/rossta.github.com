@@ -17,11 +17,15 @@ textarea {
   height: auto;
 }
 
-// ConvertKit form overrides
+/* ConvertKit form overrides */
 .formkit-form[data-uid='cda82aafbf'] p {
   color: inherit;
   font-weight: inherit;
 }
 .formkit-form[data-uid='cda82aafbf'] p > a {
   font-weight: bold;
+}
+
+.formkit-form {
+  visibility: hidden;
 }
