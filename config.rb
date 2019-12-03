@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "json"
 require_relative("./lib/custom_markdown_renderer")
 
@@ -75,7 +76,7 @@ configure(:build) do
   set(:google_analytics_id, "UA-16458563-2")
   set(:mailchimp_form_id, "96030b0bda")
   set(:segmentio_id, "NdBtrprkAGAjQryMShljRdVf90saElAU")
-  activate(:gzip,   exts: %w[.js .css .html .htm .svg .ttf .otf .woff .eot])
+  activate(:gzip, exts: %w[.js .css .html .htm .svg .ttf .otf .woff .eot])
 end
 
 configure(:development) do
@@ -122,13 +123,12 @@ page("/sitemap.xml", layout: false)
 # end
 # rubocop:disable
 helpers do
-
   def page_title
     yield_content(:title)
   end
 
   def page_header(title, summary = nil)
-    partial("partials/page_header",     locals: {title: title, summary: summary})
+    partial("partials/page_header", locals: {title: title, summary: summary})
   end
 
   def section
@@ -165,7 +165,7 @@ helpers do
   def current_url
     path = current_page.path
     path = "/" if homepage?
-    to_url(    path: path)
+    to_url(path: path)
   end
 
   def homepage?
@@ -173,7 +173,7 @@ helpers do
   end
 
   def image_url(source)
-    to_url(    path: image_path(source))
+    to_url(path: image_path(source))
   end
 
   def email_url
@@ -181,13 +181,18 @@ helpers do
   end
 
   def signup_form_url
-    Addressable::URI.new(    scheme: nil,     host: "rossta.us6.list-manage.com",     path: "/subscribe/post",     query_values: {u: "8ce159842b5c98cecb4ebdf16", id: config[:mailchimp_form_id]})
+    Addressable::URI.new(
+      scheme: nil,
+      host: "rossta.us6.list-manage.com",
+      path: "/subscribe/post",
+      query_values: {u: "8ce159842b5c98cecb4ebdf16", id: config[:mailchimp_form_id]}
+    )
   end
 
   def tweet_link_to(text, params = {}, options = {})
     uri = Addressable::URI.parse("https://twitter.com/intent/tweet")
     uri.query_values = params
-    link_to(text, uri, options.merge(    target: "_blank",     rel: "noopener"))
+    link_to(text, uri, options.merge(target: "_blank", rel: "noopener"))
   end
 
   def top_tags

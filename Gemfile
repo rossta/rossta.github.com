@@ -9,3 +9,4 @@ gem "nokogiri", ">= 1.10.4" # security patch
 gem "builder" # For feed.xml.builder
 gem "rake"
 gem "pry-byebug"
+gem "standard"
