@@ -4,6 +4,7 @@
 @import 'tailwindcss/utilities';
 
 @import './base';
+@import './buttons';
 @import './forms';
 @import './code';
 @import './hero';
@@ -63,9 +64,7 @@ h3 {
   }
 }
 
-.button {
-  @apply bg-green-800;
-}
+
 main a,
 footer a {
   @apply text-green-900;
