@@ -11407,6 +11407,36 @@ video {
   }
 }
 
+.button {
+  color: #fff;
+  font-weight: 700;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 0.25rem;
+}
+
+.button:hover {
+  color: #fff;
+}
+
+.button-green {
+  background-color: #38a169;
+}
+
+.button-green:hover {
+  background-color: #48bb78;
+}
+
+.button-blue {
+  background-color: #3182ce;
+}
+
+.button-blue:hover {
+  background-color: #4299e1;
+}
+
 input:not([type]),
 input[type='text'],
 input[type='password'],
@@ -11661,10 +11691,6 @@ h3 {
     width: 75%;
     max-width: 860px;
   }
-}
-
-.button {
-  background-color: #276749;
 }
 
 main a,
