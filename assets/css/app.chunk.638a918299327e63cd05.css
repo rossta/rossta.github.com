@@ -61,6 +61,11 @@ hr {
  * 2. Correct the odd `em` font sizing in all browsers.
  */
 
+pre {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+
 /* Text-level semantics
    ========================================================================== */
 
@@ -77,6 +82,13 @@ a {
  * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
  */
 
+abbr[title] {
+  border-bottom: none; /* 1 */
+  text-decoration: underline; /* 2 */
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted; /* 2 */
+}
+
 /**
  * Add the correct font weight in Chrome, Edge, and Safari.
  */
@@ -91,7 +103,9 @@ strong {
  * 2. Correct the odd `em` font sizing in all browsers.
  */
 
-code {
+code,
+kbd,
+samp {
   font-family: monospace, monospace; /* 1 */
   font-size: 1em; /* 2 */
 }
@@ -146,6 +160,7 @@ img {
 
 button,
 input,
+optgroup,
 select,
 textarea {
   font-family: inherit; /* 1 */
@@ -212,6 +227,10 @@ button:-moz-focusring,
  * Correct the padding in Firefox.
  */
 
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+
 /**
  * 1. Correct the text wrapping in Edge and IE.
  * 2. Correct the color inheritance from `fieldset` elements in IE.
@@ -231,6 +250,10 @@ legend {
 /**
  * Add the correct vertical alignment in Chrome, Firefox, and Opera.
  */
+
+progress {
+  vertical-align: baseline;
+}
 
 /**
  * Remove the default vertical scrollbar in IE 10+.
@@ -295,6 +318,10 @@ textarea {
  * Add the correct display in Edge, IE 10+, and Firefox.
  */
 
+details {
+  display: block;
+}
+
 /*
  * Add the correct display in all browsers.
  */
@@ -349,15 +376,19 @@ html {
  * Removes the default spacing and border for appropriate elements.
  */
 
-
+blockquote,
+dl,
+dd,
 h1,
 h2,
 h3,
+h4,
 h5,
 h6,
 hr,
 figure,
-p {
+p,
+pre {
   margin: 0;
 }
 
@@ -374,6 +405,11 @@ button {
 button:focus {
   outline: 1px dotted;
   outline: 5px auto -webkit-focus-ring-color;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
 }
 
 ol,
@@ -474,9 +510,14 @@ button,
   cursor: pointer;
 }
 
+table {
+  border-collapse: collapse;
+}
+
 h1,
 h2,
 h3,
+h4,
 h5,
 h6 {
   font-size: inherit;
@@ -503,6 +544,7 @@ a {
 
 button,
 input,
+optgroup,
 select,
 textarea {
   padding: 0;
@@ -517,8 +559,10 @@ textarea {
  * 'mono' font family.
  */
 
-
-code {
+pre,
+code,
+kbd,
+samp {
   font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -532,7 +576,10 @@ code {
 
 img,
 svg,
+video,
 canvas,
+audio,
+iframe,
 embed,
 object {
   display: block;
@@ -546,7 +593,8 @@ object {
  * https://github.com/mozdevs/cssremedy/issues/14
  */
 
-img {
+img,
+video {
   max-width: 100%;
   height: auto;
 }
@@ -579,7 +627,7 @@ img {
   }
 }
 
-.bg-green-200 {
+.hover\:bg-green-200:hover {
   background-color: #c6f6d5;
 }
 
@@ -599,6 +647,10 @@ img {
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .inline {
   display: inline;
 }
@@ -606,6 +658,10 @@ img {
 .flex {
   display: -webkit-box;
   display: flex;
+}
+
+.table {
+  display: table;
 }
 
 .hidden {
@@ -620,10 +676,6 @@ img {
 .justify-between {
   -webkit-box-pack: justify;
           justify-content: space-between;
-}
-
-.justify-around {
-  justify-content: space-around;
 }
 
 .font-light {
@@ -646,13 +698,8 @@ img {
   line-height: 1.5;
 }
 
-.-mx-12 {
-  margin-left: -3rem;
-  margin-right: -3rem;
-}
-
-.mt-0 {
-  margin-top: 0;
+.m-1 {
+  margin: 0.25rem;
 }
 
 .mt-1 {
@@ -707,12 +754,8 @@ img {
   margin-bottom: 4rem;
 }
 
-.outline-none {
+.focus\:outline-none:focus {
   outline: 0;
-}
-
-.p-0 {
-  padding: 0;
 }
 
 .p-4 {
@@ -725,10 +768,6 @@ img {
 
 .p-8 {
   padding: 2rem;
-}
-
-.p-12 {
-  padding: 3rem;
 }
 
 .py-1 {
@@ -783,6 +822,19 @@ img {
   position: relative;
 }
 
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+.resize {
+  resize: both;
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
 .fill-current {
   fill: currentColor;
 }
@@ -809,6 +861,14 @@ img {
 
 .text-gray-900 {
   color: #1a202c;
+}
+
+.hover\:text-gray-700:hover {
+  color: #4a5568;
+}
+
+.focus\:text-gray-700:focus {
+  color: #4a5568;
 }
 
 .text-xs {
@@ -839,13 +899,35 @@ img {
   text-transform: uppercase;
 }
 
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.w-1 {
-  width: 0.25rem;
+.visible {
+  visibility: visible;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .w-6 {
@@ -854,6 +936,10 @@ img {
 
 .w-8 {
   width: 2rem;
+}
+
+.w-1\/2 {
+  width: 50%;
 }
 
 @media (min-width: 1024px) {
@@ -942,13 +1028,122 @@ http://zenorocha.mit-license.org
 
 */
 
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #282a36;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+  color: #8be9fd;
+}
+
+.hljs-function .hljs-keyword {
+  color: #ff79c6;
+}
+
+.hljs,
+.hljs-subst {
+  color: #f8f8f2;
+}
+
+.hljs-string,
+.hljs-title,
+.hljs-name,
+.hljs-type,
+.hljs-attribute,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition,
+.hljs-variable,
+.hljs-template-tag,
+.hljs-template-variable {
+  color: #f1fa8c;
+}
+
+.hljs-comment,
+.hljs-quote,
+.hljs-deletion,
+.hljs-meta {
+  color: #6272a4;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-title,
+.hljs-section,
+.hljs-doctag,
+.hljs-type,
+.hljs-name,
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
 /* Dracula-specific override */
+
+.hljs-comment {
+  color: #8293c6;
+}
 
 code {
   background-color: #cbd5e0;
   padding: 0.25rem;
   font-size: 0.875rem;
   background-color: ghostwhite;
+}
+
+pre {
+  margin-bottom: 1.5rem;
+  display: block;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+pre code {
+  background-color: none;
+  overflow: auto;
+  font-weight: normal;
+}
+
+pre code,
+.hljs {
+  border-width: 1px;
+  line-height: 1.375;
+  font-size: 0.875rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  pre code,
+  .hljs {
+    border-radius: 0.25rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  pre code,
+  .hljs {
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding: 2rem;
+  }
 }
 
 .hero {
@@ -1092,11 +1287,34 @@ hr {
           align-items: center;
 }
 
+.post .title .anchor {
+  display: none;
+}
+
 @media (min-width: 1024px) {
   .post .title {
     margin-left: -1.25rem;
     margin-top: 3rem;
   }
+
+  .post .title .anchor {
+    display: block;
+    margin-right: 0.25rem;
+    visibility: hidden;
+  }
+
+  .post .title:hover > .anchor {
+    visibility: visible;
+  }
+}
+
+.post blockquote {
+  font-style: italic;
+  color: #4a5568;
+  margin-left: -1.5rem;
+  padding-left: 1.5rem;
+  border-left-width: 1px;
+  border-color: #4a5568;
 }
 
 .post ul,
@@ -1139,5 +1357,79 @@ figcaption {
   color: rgba(0, 0, 0, 0.68);
   outline: 0;
   text-align: center;
+}
+
+@media (min-width: 640px) {
+
+  .sm\:block {
+    display: block;
+  }
+
+  .sm\:flex {
+    display: -webkit-box;
+    display: flex;
+  }
+
+  .sm\:hidden {
+    display: none;
+  }
+
+  .sm\:items-center {
+    -webkit-box-align: center;
+            align-items: center;
+  }
+
+  .sm\:justify-between {
+    -webkit-box-pack: justify;
+            justify-content: space-between;
+  }
+
+  .sm\:justify-around {
+    justify-content: space-around;
+  }
+
+  .sm\:mt-0 {
+    margin-top: 0;
+  }
+
+  .sm\:ml-2 {
+    margin-left: 0.5rem;
+  }
+
+  .sm\:p-0 {
+    padding: 0;
+  }
+
+  .sm\:py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .sm\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  .lg\:flex {
+    display: -webkit-box;
+    display: flex;
+  }
+
+  .lg\:justify-between {
+    -webkit-box-pack: justify;
+            justify-content: space-between;
+  }
+
+  .lg\:-mx-12 {
+    margin-left: -3rem;
+    margin-right: -3rem;
+  }
+
+  .lg\:p-12 {
+    padding: 3rem;
+  }
 }
 
