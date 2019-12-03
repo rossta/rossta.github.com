@@ -11,17 +11,6 @@
   display: table;
 }
 
-.formkit-form[data-uid='cda82aafbf'] fieldset {
-  border: 0;
-  padding: 0.01em 0 0 0;
-  margin: 0;
-  min-width: 0;
-}
-
-.formkit-form[data-uid='cda82aafbf'] body:not(:-moz-handler-blocked) fieldset {
-  display: table-cell;
-}
-
 .formkit-form[data-uid='cda82aafbf'][data-format='modal'] {
   display: none;
 }
@@ -30,13 +19,11 @@
   display: none;
 }
 
-.formkit-form[data-uid='cda82aafbf'] .formkit-input,
-.formkit-form[data-uid='cda82aafbf'] .formkit-select,
-.formkit-form[data-uid='cda82aafbf'] .formkit-checkboxes {
+.formkit-form[data-uid='cda82aafbf'] .formkit-input {
   width: 100%;
 }
 
-.formkit-form[data-uid='cda82aafbf'] .formkit-button,
+
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit {
   border: 0;
   border-radius: 5px;
@@ -53,21 +40,19 @@
   vertical-align: middle;
 }
 
-.formkit-form[data-uid='cda82aafbf'] .formkit-button:hover,
+
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:hover,
-.formkit-form[data-uid='cda82aafbf'] .formkit-button:focus,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus {
   outline: none;
 }
 
-.formkit-form[data-uid='cda82aafbf'] .formkit-button:hover > span,
+
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:hover > span,
-.formkit-form[data-uid='cda82aafbf'] .formkit-button:focus > span,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus > span {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.formkit-form[data-uid='cda82aafbf'] .formkit-button > span,
+
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit > span {
   display: block;
   padding: 12px 24px;
@@ -265,12 +250,6 @@
 
 .formkit-form[data-uid='cda82aafbf'] .formkit-alert:empty {
   display: none;
-}
-
-.formkit-form[data-uid='cda82aafbf'] .formkit-alert-success {
-  background: #d3fbeb;
-  border-color: #10bf7a;
-  color: #0c905c;
 }
 
 .formkit-form[data-uid='cda82aafbf'] .formkit-alert-error {
