@@ -6,7 +6,10 @@ module.exports = {
     require('tailwindcss'),
     require('autoprefixer'),
     purgecss({
-      content: ['./**/*.erb'],
+      content: ['./**/*.erb', './**/*.rb'],
+      defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
+      whitelist: ['blockquote', 'li'],
+      whitelistPatterns: [/hljs/],
     }),
   ]
 }
