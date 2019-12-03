@@ -1,10 +1,11 @@
 <% nozen! %>
+<% tags = current_page.data.tags || [] %>
 <% wrap_layout :layout do %>
   <% content_for(:title) { current_article.title } %>
   <% content_for(:section) { 'I write about things' } %>
   <% title current_article.title %>
   <% description current_page.data.description %>
-  <% keywords (current_page.data.tags || []).join(', ') %>
+  <% keywords tags.join(', ') %>
   <article class="post mb-12">
     <%= page_header current_article.title, current_page.data.summary %>
     <%= yield %>
@@ -31,4 +32,8 @@
       Published on <%= current_article.date.strftime('%b %e, %Y') %>
     </p>
   </section>
+  <% if (%w[Rails Webpack] & tags).any? %>
+    <!-- Webpack on Rails course popup form -->
+    <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
+  <% end %>
 <% end %>
