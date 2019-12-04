@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -61,7 +61,7 @@
 
     <p>Vue components don&#39;t have to just be about displaying information and user interaction. In this post, we&#39;ll show how to build a component whose main job is to simply fetch data for other components. We&#39;ll use props, events, and scoped-slots to tie the pieces together.</p>
 
-      <h3 id="the-project" class="title">
+      <h3 id="the-project" class="title title-h3">
         <a name="the-project" class="anchor" href="#the-project">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -73,7 +73,7 @@
 
 <p>Here&#39;s the latest <a href="https://rossta.net/vue-pdfjs-demo/">project demo</a>.</p>
 
-      <h3 id="catching-up-from-last-time" class="title">
+      <h3 id="catching-up-from-last-time" class="title title-h3">
         <a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -87,7 +87,7 @@
 
 <p>This preview pane will display the entire document (as smaller, clickable thumbnails), be independently-scrollable, and render PDF pages lazily, i.e., it will behave a lot like our current <code>&lt;PDFDocument&gt;</code>. First, we&#39;d like to make some of our current code reusable.</p>
 
-      <h3 id="the-why" class="title">
+      <h3 id="the-why" class="title title-h3">
         <a name="the-why" class="anchor" href="#the-why">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -105,7 +105,7 @@
 
 <p>It&#39;s also worth noting that we&#39;re not currently using <a href="https://vuex.vuejs.org">Vuex</a> to manage application state in the project. It may be wise, as an alternative to what&#39;s described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It&#39;s also simply a worthy exercise to consider data components.</p>
 
-      <h3 id="bird-39-s-eye-view" class="title">
+      <h3 id="bird-39-s-eye-view" class="title title-h3">
         <a name="bird-39-s-eye-view" class="anchor" href="#bird-39-s-eye-view">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -161,7 +161,7 @@
 
 <p>Next we&#39;ll take a look at how this data component is constructed and how it will pass data to the child components.</p>
 
-      <h3 id="extracting-the-data-component" class="title">
+      <h3 id="extracting-the-data-component" class="title title-h3">
         <a name="extracting-the-data-component" class="anchor" href="#extracting-the-data-component">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -224,7 +224,7 @@ render(h) {
 
 <p>*Technically, this component isn&#39;t &quot;renderless&quot;—it inserts an additional <code>div</code> as a root to its scoped slots children. Otherwise, the error <code>Multiple root nodes returned from render function. Render function should return a single root node.</code> is raised in the current version of Vue I&#39;m using (<code>2.5.16</code>). The main point is that we can use components in our component hierarchy that add functionality but handoff display responsibility to its children.</p>
 
-      <h3 id="communicating-with-the-children" class="title">
+      <h3 id="communicating-with-the-children" class="title title-h3">
         <a name="communicating-with-the-children" class="anchor" href="#communicating-with-the-children">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -293,7 +293,7 @@ methods: {
 }
 </code></pre>
 
-      <h3 id="wrapping-up" class="title">
+      <h3 id="wrapping-up" class="title title-h3">
         <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -320,15 +320,15 @@ methods: {
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=Extracting%20a%20data%20component%20in%20Vue&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fextracting-a-data-component-in-vue.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  Vue and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Did you like this post?
+  </h3>
+  <p>
+    Please
+    <a href="https://twitter.com/intent/tweet?text=Extracting%20a%20data%20component%20in%20Vue&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fextracting-a-data-component-in-vue.html" target="_blank" rel="noopener">share it on Twitter</a>
+    and enter your email below to subscribe to my newsletter on
+    Vue and the web. Thank you!
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>

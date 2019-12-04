@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -61,7 +61,7 @@
 
     <p>I get the feeling a lot of RSpec users don’t know about the advantages of Rails 5.1 changes as part of the introduction of system tests. RSpec has had feature tests for a long time? What’s the big deal?</p>
 
-      <h3 id="background" class="title">
+      <h3 id="background" class="title title-h3">
         <a name="background" class="anchor" href="#background">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -79,7 +79,7 @@
 
 <p>The real win with Rails 5.1 is what&#39;s happening under the surface. The Rails team made key changes to internals, stuff RSpec alone couldn’t provide.</p>
 
-      <h3 id="why-transactional-tests-are-better" class="title">
+      <h3 id="why-transactional-tests-are-better" class="title title-h3">
         <a name="why-transactional-tests-are-better" class="anchor" href="#why-transactional-tests-are-better">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -103,7 +103,7 @@
 
 <p>The result: faster rollback, no multiprocess confusion, no need to manage the database with DatabaseCleaner, debugging the server in process is possible, etc. A better solution all around.</p>
 
-      <h3 id="in-closing" class="title">
+      <h3 id="in-closing" class="title title-h3">
         <a name="in-closing" class="anchor" href="#in-closing">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -113,7 +113,7 @@
     
 <p>To my RSpec friends: upgrade to Rails 5.1, drop the DatabaseCleaner gem, and set  <code>config.use_transactional_fixtures = true</code> in the RSpec configuration. It should also be relatively straightforward to <a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6">adopt system tests from existing feature tests</a>, but either strategy will work with those changes. You’ll still need to fix those flaky scenarios yourself though.</p>
 
-      <h3 id="resources" class="title">
+      <h3 id="resources" class="title title-h3">
         <a name="resources" class="anchor" href="#resources">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -146,15 +146,16 @@
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=Why%20RSpec%20users%20should%20care%20about%20Rails%205.1%20and%20system%20tests&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fwhy-rails-system-tests-matter.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  Rails and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Need help with Webpack on Rails?
+  </h3>
+  <p class="mb-4">
+    Webpacker now ships by default in Rails 6 but there's no need to stress.
+    I'm putting together a course to help you master Webpack on Rails.
+  </p>
+  <p>
+    Subscribe to stay in the loop.
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>

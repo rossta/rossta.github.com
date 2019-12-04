@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -87,7 +87,7 @@ visitor&#39;s browser and your servers <em>outside the lifecycle of a page</em>.
 
 <p>Keep in mind also, will be a <em>progressive enhancement</em>. Since service workers are <a href="https://jakearchibald.github.io/isserviceworkerready/">not available in all browsers</a>, this approach won&#39;t work for everyone, but the experience won&#39;t degrade for those visitors either.</p>
 
-      <h3 id="produce-the-assets" class="title">
+      <h3 id="produce-the-assets" class="title title-h3">
         <a name="produce-the-assets" class="anchor" href="#produce-the-assets">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -101,7 +101,7 @@ visitor&#39;s browser and your servers <em>outside the lifecycle of a page</em>.
 
 <p>Alternatively, set up a route to a controller action as a <a href="https://mattbrictson.com/dynamic-rails-error-pages">dynamic Rails error page</a>.</p>
 
-      <h3 id="add-a-service-worker-file" class="title">
+      <h3 id="add-a-service-worker-file" class="title title-h3">
         <a name="add-a-service-worker-file" class="anchor" href="#add-a-service-worker-file">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -128,7 +128,7 @@ configuration know to precompile our serviceworker separately:</p>
 Rails.application.config.assets.precompile += %w[serviceworker.js]
 </code></pre>
 
-      <h3 id="declare-an-39-install-39-event" class="title">
+      <h3 id="declare-an-39-install-39-event" class="title title-h3">
         <a name="declare-an-39-install-39-event" class="anchor" href="#declare-an-39-install-39-event">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -165,7 +165,7 @@ self.addEventListener(&#39;install&#39;, function onInstall(event) {
 ]);
 </code></pre>
 
-      <h3 id="-39-fetch-39-or-fallback" class="title">
+      <h3 id="-39-fetch-39-or-fallback" class="title title-h3">
         <a name="-39-fetch-39-or-fallback" class="anchor" href="#-39-fetch-39-or-fallback">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -202,7 +202,7 @@ request. If that doesn&#39;t resolve, our <code>catch</code> handler will be inv
 attempt to match the request in the cache or simply return our cached offline
 page.</p>
 
-      <h3 id="clean-up-during-39-activate-39-" class="title">
+      <h3 id="clean-up-during-39-activate-39-" class="title title-h3">
         <a name="clean-up-during-39-activate-39-" class="anchor" href="#clean-up-during-39-activate-39-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -235,7 +235,7 @@ will be invoked again to re-cache the static resources for the offline page.
 During <code>activate</code>, any cache names that don&#39;t match the new version number will
 be removed.</p>
 
-      <h3 id="register-that-worker" class="title">
+      <h3 id="register-that-worker" class="title title-h3">
         <a name="register-that-worker" class="anchor" href="#register-that-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -258,7 +258,7 @@ the service worker to be active. In other words, registering the service worker
 at its precompiled path <code>/assets/serviceworker.js</code>, won&#39;t be helpful since we
 won&#39;t be able to intercept requests to the root path.</p>
 
-      <h3 id="sprinkle-in-some-middleware" class="title">
+      <h3 id="sprinkle-in-some-middleware" class="title title-h3">
         <a name="sprinkle-in-some-middleware" class="anchor" href="#sprinkle-in-some-middleware">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -297,7 +297,7 @@ instead:</p>
 
 <p>While you&#39;re at it, <a href="https://github.com/rossta/serviceworker-rails">star the project on GitHub</a>!</p>
 
-      <h3 id="moment-of-truth" class="title">
+      <h3 id="moment-of-truth" class="title title-h3">
         <a name="moment-of-truth" class="anchor" href="#moment-of-truth">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -317,7 +317,7 @@ can find its <a href="https://github.com/rossta/serviceworker-rails-sandbox">sou
 
 <p><img src="/assets/images/screenshots/screenshot-offline-custom.jpg" alt="Screenshot offline custom" /></p>
 
-      <h3 id="debugging" class="title">
+      <h3 id="debugging" class="title title-h3">
         <a name="debugging" class="anchor" href="#debugging">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -341,7 +341,7 @@ let a new service worker take control immediately when used during <code>install
 });
 </code></pre>
 
-      <h3 id="final-word" class="title">
+      <h3 id="final-word" class="title title-h3">
         <a name="final-word" class="anchor" href="#final-word">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -371,15 +371,16 @@ closer to an even playing field with mobile apps.</p>
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=An%20offline%20page%20for%20your%20Rails%20application&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Foffline-page-for-your-rails-application.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  Rails, JavaScript, Service Worker, and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Need help with Webpack on Rails?
+  </h3>
+  <p class="mb-4">
+    Webpacker now ships by default in Rails 6 but there's no need to stress.
+    I'm putting together a course to help you master Webpack on Rails.
+  </p>
+  <p>
+    Subscribe to stay in the loop.
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>

@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -61,7 +61,7 @@
 
     <p>To add a preview pane to the Vue.js PDF viewer, I wanted it to have very similar behavior to the document pane. In this post, I&#39;ll demonstrate how I extracted this behavior with a set of components, as opposed to alternatives, like a mixin.</p>
 
-      <h3 id="the-project" class="title">
+      <h3 id="the-project" class="title title-h3">
         <a name="the-project" class="anchor" href="#the-project">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -73,7 +73,7 @@
 
 <p>Here&#39;s the latest <a href="https://rossta.net/vue-pdfjs-demo/">project demo</a>.</p>
 
-      <h3 id="catching-up-from-last-time" class="title">
+      <h3 id="catching-up-from-last-time" class="title title-h3">
         <a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -85,7 +85,7 @@
 
 <p><img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" /></p>
 
-      <h3 id="the-problem" class="title">
+      <h3 id="the-problem" class="title title-h3">
         <a name="the-problem" class="anchor" href="#the-problem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -135,7 +135,7 @@
 
 <p>The <code>&lt;PDFPage&gt;</code> is responsible for determining when it is visible by determining whether its boundaries overlap with the viewport.</p>
 
-      <h3 id="the-component-based-solution" class="title">
+      <h3 id="the-component-based-solution" class="title title-h3">
         <a name="the-component-based-solution" class="anchor" href="#the-component-based-solution">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -242,7 +242,7 @@ render() {
 
 <p>We can render a different experience in this part of the component hierachy by changing the component we give to the slot (the <code>&lt;PDFThumbnail&gt;</code>) while also getting the benefits of the shared behavior.</p>
 
-      <h3 id="stepping-back" class="title">
+      <h3 id="stepping-back" class="title title-h3">
         <a name="stepping-back" class="anchor" href="#stepping-back">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -277,15 +277,15 @@ render() {
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=Refactoring%20to%20nested%20abstract%20components&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Frefactoring-to-nested-abstract-components-vuejs-pdf-viewer.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  Vue and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Did you like this post?
+  </h3>
+  <p>
+    Please
+    <a href="https://twitter.com/intent/tweet?text=Refactoring%20to%20nested%20abstract%20components&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Frefactoring-to-nested-abstract-components-vuejs-pdf-viewer.html" target="_blank" rel="noopener">share it on Twitter</a>
+    and enter your email below to subscribe to my newsletter on
+    Vue and the web. Thank you!
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>

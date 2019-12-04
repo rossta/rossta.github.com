@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -68,7 +68,7 @@ cards, and actions (like comments, copies, moves, etc).</p>
 
 <p>In most cases, Trello will provide a default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that? In this post, we&#39;ll examine a few ways to collect paginated results in Ruby.</p>
 
-      <h3 id="trello-world" class="title">
+      <h3 id="trello-world" class="title title-h3">
         <a name="trello-world" class="anchor" href="#trello-world">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -92,7 +92,7 @@ cards, and actions (like comments, copies, moves, etc).</p>
 
 <p>You should see a JSON response with attributes like your Trello id, username, bio, etc.</p>
 
-      <h3 id="script-mode" class="title">
+      <h3 id="script-mode" class="title title-h3">
         <a name="script-mode" class="anchor" href="#script-mode">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -170,7 +170,7 @@ def get(path)
 end
 </code></pre>
 
-      <h3 id="let-39-s-paginate" class="title">
+      <h3 id="let-39-s-paginate" class="title title-h3">
         <a name="let-39-s-paginate" class="anchor" href="#let-39-s-paginate">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -217,7 +217,7 @@ comments
 
 <p>The main problem with this approach is that it forces the results to be eager loaded. Unless a max is specified in the method call, we could be waiting for up to 1000 comments to load - 20 requests of 50 comments each - to execute before the results are returned.</p>
 
-      <h3 id="stop-enumerate-and-listen" class="title">
+      <h3 id="stop-enumerate-and-listen" class="title title-h3">
         <a name="stop-enumerate-and-listen" class="anchor" href="#stop-enumerate-and-listen">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -283,7 +283,7 @@ end
 
 <p>The <code>y.yield</code> is not the keyword <code>yield</code>, but the invokation of the <code>#yield</code> method of <code>Enumerator::Yielder</code>, an object the enumerator uses internally to pass values through to the first block used in the enumerator chain. For a more detailed look at how enumerators work under the hood, read more about how <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">Ruby works hard so you can be lazy</a>.</p>
 
-      <h3 id="a-cursor-y-example" class="title">
+      <h3 id="a-cursor-y-example" class="title title-h3">
         <a name="a-cursor-y-example" class="anchor" href="#a-cursor-y-example">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -460,7 +460,7 @@ end
 
 <p>&quot;Recursive each&quot; is a powerful technique for providing a seamless, enumerable interface to paginated or cursored results. I first encountered <a href="https://github.com/sferik/twitter/blob/c6c2fe44e4a56c3e3544a3c08492a8b83b549635/lib/twitter/enumerable.rb">this approach</a> in the <a href="https://github.com/sferik">sferik&#39;s</a> <a href="https://github.com/sferik/twitter">Twitter gem</a> - a great resource for those considering writing an API wrapper in Ruby.</p>
 
-      <h3 id="on-your-own" class="title">
+      <h3 id="on-your-own" class="title title-h3">
         <a name="on-your-own" class="anchor" href="#on-your-own">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -485,7 +485,7 @@ end
 
 <hr>
 
-      <h3 id="credits" class="title">
+      <h3 id="credits" class="title title-h3">
         <a name="credits" class="anchor" href="#credits">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -514,15 +514,15 @@ end
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=Handling%20Paginated%20Resources%20in%20Ruby&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fpaginated-resources-in-ruby.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  Ruby and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Did you like this post?
+  </h3>
+  <p>
+    Please
+    <a href="https://twitter.com/intent/tweet?text=Handling%20Paginated%20Resources%20in%20Ruby&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fpaginated-resources-in-ruby.html" target="_blank" rel="noopener">share it on Twitter</a>
+    and enter your email below to subscribe to my newsletter on
+    Ruby and the web. Thank you!
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>

@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -72,7 +72,7 @@ $ ftt [Google Form Url]
 
 <p>This assumes that you&#39;ve already installed <a href="https://nodejs.org/en/download/package-manager/">nodejs</a>,  <a href="http://docs.casperjs.org/en/latest/installation.html">CasperJS</a>, and its pre-requisites.</p>
 
-      <h2 id="casper-the-friendly-ghost" class="title">
+      <h2 id="casper-the-friendly-ghost" class="title title-h2">
         <a name="casper-the-friendly-ghost" class="anchor" href="#casper-the-friendly-ghost">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -88,7 +88,7 @@ with multi-stage interactions and waiting for asynchronous actions. In other
 words, I could&#39;ve done this with just using PhantomJS, but the code I needed to
 write got a whole lot easier by using the CasperJS module on top of it.</p>
 
-      <h2 id="a-closer-look" class="title">
+      <h2 id="a-closer-look" class="title title-h2">
         <a name="a-closer-look" class="anchor" href="#a-closer-look">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -157,7 +157,7 @@ the form. CasperJS makes it easy to do this with additional args to
 
 <p>Check out the full <a href="https://github.com/rossta/form-to-terminal/blob/96a4dd8be4b071b5bfb5adb50676a6383c685240/index.js">CasperJS script</a> to see how <code>form-to-terminal</code> interacts with Google Forms in more detail.</p>
 
-      <h2 id="command-line-node" class="title">
+      <h2 id="command-line-node" class="title title-h2">
         <a name="command-line-node" class="anchor" href="#command-line-node">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -186,7 +186,7 @@ child.on(&#39;exit&#39;, process.exit);
 will interact. The line <code>process.stdin.pipe(child.stdin);</code> ensures the text we
 enter on the command line is passed to CasperJS.</p>
 
-      <h2 id="going-further" class="title">
+      <h2 id="going-further" class="title title-h2">
         <a name="going-further" class="anchor" href="#going-further">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -225,15 +225,15 @@ CodeNewbie Google Form, so you can try it too:</p>
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=Fill%20out%20Google%20Forms%20from%20the%20command%20line&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Ffill-out-google-forms-from-the-command-line-with-casperjs.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  JavaScript, Node, and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Did you like this post?
+  </h3>
+  <p>
+    Please
+    <a href="https://twitter.com/intent/tweet?text=Fill%20out%20Google%20Forms%20from%20the%20command%20line&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Ffill-out-google-forms-from-the-command-line-with-casperjs.html" target="_blank" rel="noopener">share it on Twitter</a>
+    and enter your email below to subscribe to my newsletter on
+    JavaScript, Node, and the web. Thank you!
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>

@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -78,7 +78,7 @@ heavy development (as of this writing the latest version is
   </p>
 </aside>
 
-      <h3 id="hanami-opinions-are-not-rails-opinions" class="title">
+      <h3 id="hanami-opinions-are-not-rails-opinions" class="title title-h3">
         <a name="hanami-opinions-are-not-rails-opinions" class="anchor" href="#hanami-opinions-are-not-rails-opinions">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -115,7 +115,7 @@ venerable <a href="http://sequel.jeremyevans.net/rdoc/files/doc/schema_modificat
 reloading</a> (at the moment). This
 was not obvious to me starting off since the development server does &quot;appear&quot; to reload code. It turns out that the dev server launches with <a href="https://github.com/rtomayko/shotgun">Shotgun</a> (commonly used in Sinatra projects), to serve each development request in a new process with <code>fork(2)</code>. I didn&#39;t pick up on this until several iterations in when I added the <a href="https://github.com/brandonhilkert/sucker_punch">SuckerPunch gem</a> and couldn&#39;t figure out why my background jobs wouldn&#39;t run in development. I added a <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/controllers/tickets/sync.rb#L11">sync action</a> that allows users to trigger a <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/jobs/sync_tickets_job.rb">background job to import ticket data</a> from Groove into the application. Long story short, kicking off background jobs in threads in the request process, as is possible with SuckerPunch, won&#39;t work without disabling Shotgun.</p>
 
-      <h3 id="hanami-mvc-is-not-rails-mvc" class="title">
+      <h3 id="hanami-mvc-is-not-rails-mvc" class="title title-h3">
         <a name="hanami-mvc-is-not-rails-mvc" class="anchor" href="#hanami-mvc-is-not-rails-mvc">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -246,7 +246,7 @@ end
 
 <p>Validations do exist in Hanami <a href="https://github.com/hanami/validations">as a separate mixin</a> but these are more typically done in the params macro at the action-layer.</p>
 
-      <h2 id="expect-to-write-code" class="title">
+      <h2 id="expect-to-write-code" class="title title-h2">
         <a name="expect-to-write-code" class="anchor" href="#expect-to-write-code">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -292,7 +292,7 @@ thing a lot.</p>
 where its <code>HANAMI_ENV</code> is set to <code>&#39;production&#39;</code>. In many cases, custom classes I
 extracted, like one for sharing <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/repositories/pagination.rb">a pagination query</a> and another for <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/vendor/groove.rb">wrapping the <code>Groove API Ruby Client</code></a> (my <a href="https://github.com/Fodoj/groovehq/pull/16">fork with paginated enumeration</a>) weren&#39;t &quot;autoloaded&quot; when booting the Hanami application. To resolve this, I added explicit requires like <code>require_relative &#39;./pagination&#39;</code>. Again, I didn&#39;t have time to dig into whether this issue would be expected or not; I could have been missing something important here.</p>
 
-      <h3 id="the-community-is-still-young" class="title">
+      <h3 id="the-community-is-still-young" class="title title-h3">
         <a name="the-community-is-still-young" class="anchor" href="#the-community-is-still-young">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -320,7 +320,7 @@ rely on <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb
 your sleeves&quot; to get to the bottom of issues, figure how to do things that
 aren&#39;t covered by the guides, or otherwise, get from a Rails-specific gem.</p>
 
-      <h3 id="hanami-is-and-is-not-rails" class="title">
+      <h3 id="hanami-is-and-is-not-rails" class="title title-h3">
         <a name="hanami-is-and-is-not-rails" class="anchor" href="#hanami-is-and-is-not-rails">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -352,15 +352,16 @@ work for you so can focus on what&#39;s important - your business logic. Persona
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=What%20I%20learned%20building%20an%20app%20in%20Hanami&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fwhat-i-learned-about-hanami.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  Ruby, Rails, and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Need help with Webpack on Rails?
+  </h3>
+  <p class="mb-4">
+    Webpacker now ships by default in Rails 6 but there's no need to stress.
+    I'm putting together a course to help you master Webpack on Rails.
+  </p>
+  <p>
+    Subscribe to stay in the loop.
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>

@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -69,7 +69,7 @@
 
 <p>When a player achieves four-in-a-row, we update the visual elements on the board to indicate the win and provide a &quot;Play again&quot; link to reset the game state.</p>
 
-      <h2 id="imagining-the-algorithm" class="title">
+      <h2 id="imagining-the-algorithm" class="title title-h2">
         <a name="imagining-the-algorithm" class="anchor" href="#imagining-the-algorithm">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -115,7 +115,7 @@ const maxRow = max(focalRow, this.rowCount-1);
 
 <p>The min and max row and column values form the boundaries of the search space, which may be much smaller than the total number of segments on the board, especially when the last checker played is near the edges.</p>
 
-      <h2 id="checking-the-horizonal-segment" class="title">
+      <h2 id="checking-the-horizonal-segment" class="title title-h2">
         <a name="checking-the-horizonal-segment" class="anchor" href="#checking-the-horizonal-segment">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -149,7 +149,7 @@ checkHorizontalSegments({ focalRow, minCol, maxCol }) {
 
 <p>If a win is detected, we&#39;ll record the color and checker positions of the winning segment, which we can later use as data to show the winning state on the game board. Similar functions for checking the vertical and diagonal segments are left as an exercise for the reader... or you may inspect the <a href="https://codepen.io/rossta/pen/VydJKG">source of the CodePen demo</a>.</p>
 
-      <h2 id="updating-the-vue" class="title">
+      <h2 id="updating-the-vue" class="title title-h2">
         <a name="updating-the-vue" class="anchor" href="#updating-the-vue">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -227,7 +227,7 @@ opacity() {
 },
 </code></pre>
 
-      <h2 id="checking-for-a-draw" class="title">
+      <h2 id="checking-for-a-draw" class="title title-h2">
         <a name="checking-for-a-draw" class="anchor" href="#checking-for-a-draw">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -266,7 +266,7 @@ land() {
 },
 </code></pre>
 
-      <h2 id="resetting-the-game" class="title">
+      <h2 id="resetting-the-game" class="title title-h2">
         <a name="resetting-the-game" class="anchor" href="#resetting-the-game">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -305,7 +305,7 @@ reset() {
 },
 </code></pre>
 
-      <h2 id="summing-up" class="title">
+      <h2 id="summing-up" class="title title-h2">
         <a name="summing-up" class="anchor" href="#summing-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -330,15 +330,15 @@ reset() {
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=Finding%20Four-in-a-Row%20for%20the%20Win&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Ffinding-four-in-a-row-ftw.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  Vue, JavaScript, and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Did you like this post?
+  </h3>
+  <p>
+    Please
+    <a href="https://twitter.com/intent/tweet?text=Finding%20Four-in-a-Row%20for%20the%20Win&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Ffinding-four-in-a-row-ftw.html" target="_blank" rel="noopener">share it on Twitter</a>
+    and enter your email below to subscribe to my newsletter on
+    Vue, JavaScript, and the web. Thank you!
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>

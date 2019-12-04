@@ -1103,21 +1103,21 @@ code {
 }
 
 pre {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   display: block;
   word-break: break-all;
   word-wrap: break-word;
 }
 
 pre code {
-  background-color: none;
+  background-color: #282a36;
   overflow: auto;
   font-weight: normal;
+  color: #f8f8f2;
 }
 
 pre code,
 .hljs {
-  border-width: 1px;
   line-height: 1.375;
   font-size: 0.875rem;
   margin-left: -1rem;

@@ -5,10 +5,141 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2019-11-25T00:00:00+00:00</updated>
+  <updated>2019-12-03T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Overpacking: A Common Webpacker Mistake</title>
+    <link rel="alternate" href="/blog/overpacking-a-common-webpacker-mistake.html"/>
+    <id>/blog/overpacking-a-common-webpacker-mistake.html</id>
+    <published>2019-12-03T00:00:00+00:00</published>
+    <updated>2019-12-03T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;I recently encountered a Rails app at work that was spending nearly seven minutes precompiling assets:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-before-fix.png" alt="CI Screenshot: Precompile assets, 6:56"&gt;&lt;/p&gt;
+
+&lt;p&gt;When I found that the project was using Webpacker, my spidey sense started to tingle.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;I've seen this before&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Leaning on prior experience, I...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;I recently encountered a Rails app at work that was spending nearly seven minutes precompiling assets:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-before-fix.png" alt="CI Screenshot: Precompile assets, 6:56" /&gt;&lt;/p&gt;
+
+&lt;p&gt;When I found that the project was using Webpacker, my spidey sense started to tingle.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;I&amp;#39;ve seen this before&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Leaning on prior experience, I found the problem, moved some files around, and pushed a branch with the fix up to CI.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Big improvement!&lt;/p&gt;
+
+      &lt;h3 id="a-common-problem" class="title title-h3"&gt;
+        &lt;a name="a-common-problem" class="anchor" href="#a-common-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        A Common Problem
+      &lt;/h3&gt;
+    
+&lt;p&gt;If you&amp;#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.&lt;/p&gt;
+
+&lt;p&gt;I know this because I was once in your shoes struggling to learn how Webpack works and I&amp;#39;ve also spent a lot of time helping others on my team, on StackOverflow, and through Github issues on the rails/webpacker project.&lt;/p&gt;
+
+&lt;p&gt;One of the most frequently-reported issues I&amp;#39;ve seen is slow build times to go along with high memory and CPU usage. For Heroku users on small dynos, this often leads to failed deploys.&lt;/p&gt;
+
+&lt;p&gt;More often than not, the root cause is a simple mistake in directory structure, which I call &amp;quot;overpacking&amp;quot;.&lt;/p&gt;
+
+      &lt;h3 id="overpacking-explained" class="title title-h3"&gt;
+        &lt;a name="overpacking-explained" class="anchor" href="#overpacking-explained"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Overpacking explained
+      &lt;/h3&gt;
+    
+&lt;p&gt;Here&amp;#39;s the layout of the &lt;code&gt;app/javascript&lt;/code&gt; directory in the Rails app &lt;em&gt;before&lt;/em&gt; I introduced the fix:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;rake assets:precompile — 6:56&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="shell"&gt;app/
+  javascript/
+    packs/
+      application.js
+      components/
+      images/
+      stylesheets/
+      ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here&amp;#39;s what the project looked like building in under a minute:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;rake assets:precompile — 0:44&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="shell"&gt;app/
+  javascript/
+    components/
+    images/
+    stylesheets/
+    ...
+    packs/
+      application.js    # limit your entries/packs!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;See the difference?&lt;/p&gt;
+
+&lt;p&gt;The primary change here was moving everything expect &lt;code&gt;application.js&lt;/code&gt; outside of the &lt;code&gt;packs&lt;/code&gt; directory under &lt;code&gt;app/javascript&lt;/code&gt;. I also had updated paths for &lt;code&gt;import&lt;/code&gt; statements within &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt; to the appropriate location.&lt;/p&gt;
+
+      &lt;h3 id="webpack-entry-points" class="title title-h3"&gt;
+        &lt;a name="webpack-entry-points" class="anchor" href="#webpack-entry-points"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Webpack Entry Points
+      &lt;/h3&gt;
+    
+&lt;p&gt;So why did this matter?&lt;/p&gt;
+
+&lt;p&gt;Webpack needs at least one &lt;strong&gt;entry&lt;/strong&gt; point to build the dependency graph for produce the JavaScript and CSS bundles and static assets (images, fonts, etc).&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The Webpacker project refers to entries as &lt;strong&gt;packs&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;It will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.&lt;/p&gt;
+
+&lt;p&gt;Since WebpackER, by defaults, treats &lt;em&gt;every file&lt;/em&gt; in the &lt;code&gt;packs&lt;/code&gt; directory as a separate entry, it will build a separate dependency graph for &lt;em&gt;every file&lt;/em&gt; located there.&lt;/p&gt;
+
+&lt;p&gt;That also means, for &lt;em&gt;every file&lt;/em&gt; in the &lt;code&gt;packs&lt;/code&gt; directory, there will be at least one, possibly more, files emitted as output in the &lt;code&gt;public&lt;/code&gt; directory during precompilation. If you&amp;#39;re not linking to these files anywhere in your app, then they don&amp;#39;t need to be emitted as output.&lt;/p&gt;
+
+&lt;p&gt;For a large project, that could be lot of unnecessary work.&lt;/p&gt;
+
+      &lt;h3 id="a-simple-rule" class="title title-h3"&gt;
+        &lt;a name="a-simple-rule" class="anchor" href="#a-simple-rule"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        A Simple Rule
+      &lt;/h3&gt;
+    
+&lt;p&gt;Is your Webpacker compilation taking forever? You may be overpacking.&lt;/p&gt;
+
+&lt;p&gt;Your project may very well need more than one entry besides the typical &lt;code&gt;application.js&lt;/code&gt;. However, treating every module in your application as an entry is most likely a mistake.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Don&amp;#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Be good to yourself and stick to this rule: &lt;strong&gt;one entry per page&lt;/strong&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Using Bootstrap with Rails Webpacker</title>
     <link rel="alternate" href="/blog/webpacker-with-bootstrap.html"/>
@@ -64,7 +195,7 @@ require(&amp;quot;channels&amp;quot;)
 &lt;p&gt;&lt;em&gt;Tip&lt;/em&gt;: If you omit the &lt;code&gt;javascript_pack_tag&lt;/code&gt; and have &lt;code&gt;extract_css: false&lt;/code&gt; set for your environment in &lt;code&gt;config/webpacker.yml&lt;/code&gt;, then the CSS won&amp;#39;t load! The JS bundle is necessary in this case.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-      &lt;h3 id="installing-bootstrap" class="title"&gt;
+      &lt;h3 id="installing-bootstrap" class="title title-h3"&gt;
         &lt;a name="installing-bootstrap" class="anchor" href="#installing-bootstrap"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -101,7 +232,7 @@ import &amp;#39;css/site&amp;#39;
 &lt;p&gt;&lt;em&gt;Tip&lt;/em&gt;: With Webpack, it&amp;#39;s recommended to have only &lt;em&gt;one&lt;/em&gt; entry point (or &amp;quot;pack&amp;quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. I cannot stress this point enough.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-      &lt;h3 id="adding-sass-overrides" class="title"&gt;
+      &lt;h3 id="adding-sass-overrides" class="title title-h3"&gt;
         &lt;a name="adding-sass-overrides" class="anchor" href="#adding-sass-overrides"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -157,7 +288,7 @@ import &amp;#39;bootstrap&amp;#39;
 // ...
 &lt;/code&gt;&lt;/pre&gt;
 
-      &lt;h3 id="optimizing-the-javascript-bundle" class="title"&gt;
+      &lt;h3 id="optimizing-the-javascript-bundle" class="title title-h3"&gt;
         &lt;a name="optimizing-the-javascript-bundle" class="anchor" href="#optimizing-the-javascript-bundle"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -274,7 +405,7 @@ Rails.start()
 
 &lt;p&gt;What does this have to do with Vue? I believe Vue&amp;#39;s growing popularity is partly due to its highly selective maintainers and that the recommended ingredients, though not to everyone&amp;#39;s taste, are well-suited to most projects, big and small.&lt;/p&gt;
 
-      &lt;h3 id="enjoy-a-multiple-course-meal" class="title"&gt;
+      &lt;h3 id="enjoy-a-multiple-course-meal" class="title title-h3"&gt;
         &lt;a name="enjoy-a-multiple-course-meal" class="anchor" href="#enjoy-a-multiple-course-meal"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -288,7 +419,7 @@ Rails.start()
 
 &lt;p&gt;There is great comfort in knowing that the Vue team is behind these projects and they complement one another appropriately in my Vue.js applications.&lt;/p&gt;
 
-      &lt;h3 id="substitutions-cost-little-extra" class="title"&gt;
+      &lt;h3 id="substitutions-cost-little-extra" class="title title-h3"&gt;
         &lt;a name="substitutions-cost-little-extra" class="anchor" href="#substitutions-cost-little-extra"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -300,7 +431,7 @@ Rails.start()
 
 &lt;p&gt;As another example, let&amp;#39;s talk about Webpack. I think it is a fantastic piece of software. I&amp;#39;ve spent months learning how it works. I have given &lt;a href="https://rossta.net/talks/webpack-survival-guide-rails.html"&gt;a conference talk&lt;/a&gt; about it. However, usually, most of us, myself included, don’t want to maintain a custom configuration from project to project when we have deadlines to meet. The Vue CLI defaults are just fine. Still need to customize? Vue provides an API to extend the base configuration while making it easier to upgrade to take advantage of framework-supported improvements. There&amp;#39;s also nothing stopping you from ditching Webpack for Parcel or Rollup or whatever other transpiler or module bundler you prefer.&lt;/p&gt;
 
-      &lt;h3 id="an-opinionated-chef" class="title"&gt;
+      &lt;h3 id="an-opinionated-chef" class="title title-h3"&gt;
         &lt;a name="an-opinionated-chef" class="anchor" href="#an-opinionated-chef"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -310,7 +441,7 @@ Rails.start()
     
 &lt;p&gt;The core team consistently shows restraint in decided what features and improvements to fold into the framework. For example, much has been made of Vue&amp;#39;s choice to avoid class syntax for components as the default, e.g. &lt;a href="https://github.com/vuejs/vue/issues/2371"&gt;this issue on GitHub&lt;/a&gt;. There are excellent reasons for this decision, one of which is for Vue to work without a build environment. As a feature, this makes Vue incredibly easy to get up-and-running, for beginners learning the framework or for seasoned developers trying out a quick prototype. &amp;quot;It will fail,&amp;quot; some said. I suppose that remains to be seen, but after several years of arguing, the framework continues to thrive.&lt;/p&gt;
 
-      &lt;h3 id="a-consistent-experience-for-all-customers" class="title"&gt;
+      &lt;h3 id="a-consistent-experience-for-all-customers" class="title title-h3"&gt;
         &lt;a name="a-consistent-experience-for-all-customers" class="anchor" href="#a-consistent-experience-for-all-customers"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -358,7 +489,7 @@ Rails.start()
     </author>
     <summary type="html">&lt;p&gt;I love building applications in Vue.js and here's why I think the future is looking bright for the framework and its community.&lt;/p&gt;
 
-      &lt;h3 id="1-no-build-step-required" class="title"&gt;
+      &lt;h3 id="1-no-build-step-required" class="title title-h3"&gt;
         &lt;a name="1-no-build-step-required" class="anchor" href="#1-no-build-step-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -369,7 +500,7 @@ Rails.start()
 &lt;p&gt;A critical aspect of the Vue philosophy...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;I love building applications in Vue.js and here&amp;#39;s why I think the future is looking bright for the framework and its community.&lt;/p&gt;
 
-      &lt;h3 id="1-no-build-step-required" class="title"&gt;
+      &lt;h3 id="1-no-build-step-required" class="title title-h3"&gt;
         &lt;a name="1-no-build-step-required" class="anchor" href="#1-no-build-step-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -384,7 +515,7 @@ Rails.start()
 
 &lt;p&gt;Having a low barrier to entry makes Vue a worthy consideration as a first JS framework to learn.&lt;/p&gt;
 
-      &lt;h3 id="2-a-world-class-command-line-interface" class="title"&gt;
+      &lt;h3 id="2-a-world-class-command-line-interface" class="title title-h3"&gt;
         &lt;a name="2-a-world-class-command-line-interface" class="anchor" href="#2-a-world-class-command-line-interface"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -400,7 +531,7 @@ vue create my-project
 
 &lt;p&gt;This past year, the Vue core team re-wrote their command line interface from the ground up, resulting in Vue CLI 3. It&amp;#39;s designed in such a way to promote best practices and a full-featured default Webpack configuration that should be easier to extend without making it difficult to upgrade, i.e., &amp;quot;no need to eject.&amp;quot; Vue CLI provides a ton of useful additional features, including an interactive project initialization wizard (available through the terminal or a web-based UI), a plugin system to support generators and configuration for community add-ons, and the ability to specify alternative build targets, like web components or as libraries.&lt;/p&gt;
 
-      &lt;h3 id="3-friendly-learning-curve" class="title"&gt;
+      &lt;h3 id="3-friendly-learning-curve" class="title title-h3"&gt;
         &lt;a name="3-friendly-learning-curve" class="anchor" href="#3-friendly-learning-curve"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -416,7 +547,7 @@ vue create my-project
 
 &lt;p&gt;No need to learn the whole API to get started with Vue, no need to learn a new syntax like JSX; only basic HTML, CSS, and JS knowledge is required to get started.&lt;/p&gt;
 
-      &lt;h3 id="4-a-solid-ecosystem" class="title"&gt;
+      &lt;h3 id="4-a-solid-ecosystem" class="title title-h3"&gt;
         &lt;a name="4-a-solid-ecosystem" class="anchor" href="#4-a-solid-ecosystem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -428,7 +559,7 @@ vue create my-project
 
 &lt;p&gt;Vue provides official support for several essential add-ons, including &lt;code&gt;vue-router&lt;/code&gt; for client-side routing, &lt;code&gt;vuex&lt;/code&gt; for managing state, &lt;code&gt;vue-test-utils&lt;/code&gt; for unit testing components, the &lt;code&gt;vue-devtools&lt;/code&gt; browser extension for debugging, Vue CLI as described earlier. None of these tools are required Vue can work quite well with alternatives for these libraries, like &lt;code&gt;redux&lt;/code&gt; or &lt;code&gt;mobx&lt;/code&gt; instead of &lt;code&gt;vuex&lt;/code&gt;, or another router. The critical point is that the community assists developers by supporting a set of very good recommended defaults, something that a backend framework like Ruby on Rails has traditionally done very well.&lt;/p&gt;
 
-      &lt;h3 id="5-the-vue-instance" class="title"&gt;
+      &lt;h3 id="5-the-vue-instance" class="title title-h3"&gt;
         &lt;a name="5-the-vue-instance" class="anchor" href="#5-the-vue-instance"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -447,7 +578,7 @@ vue create my-project
 
 &lt;p&gt;Vue&amp;#39;s reactivity system is beautiful in its simplicity. Playing with the Vue instance is an excellent way to understanding how the reactivity system works and level up one&amp;#39;s Vue, and JavaScript, skills in general.&lt;/p&gt;
 
-      &lt;h3 id="6-vue-3-lands-this-year" class="title"&gt;
+      &lt;h3 id="6-vue-3-lands-this-year" class="title title-h3"&gt;
         &lt;a name="6-vue-3-lands-this-year" class="anchor" href="#6-vue-3-lands-this-year"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -472,7 +603,7 @@ vue create my-project
 
 &lt;p&gt;Vue 3 Proxy-based reactivity makes these annoying issues go away.&lt;/p&gt;
 
-      &lt;h3 id="7-an-amazing-community" class="title"&gt;
+      &lt;h3 id="7-an-amazing-community" class="title title-h3"&gt;
         &lt;a name="7-an-amazing-community" class="anchor" href="#7-an-amazing-community"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -482,7 +613,7 @@ vue create my-project
     
 &lt;p&gt;Since I&amp;#39;ve started using Vue, I&amp;#39;ve been fortunate to learn from a variety of Vue developers through forums, on Twitter and GitHub, and at local meetups. Vue has a distributed, hard-working core team, who are continually improving the framework without over-burdening developers with a bunch of fringe features or painful upgrades. The &lt;a href="https://forum.vuejs.org/"&gt;Vue forums&lt;/a&gt; is a great way to get insight from experts on tricky issues. Vue conferences, like &lt;a href="https://vueconf.us/"&gt;VueConf.us&lt;/a&gt; and &lt;a href="https://www.vuejs.amsterdam/"&gt;Vue Amsterdam&lt;/a&gt;, a great way to connect with other members of the community and attend more in-depth workshops, are already taking place all over the world. There&amp;#39;s also &lt;a href="https://vuevixens.org/"&gt;Vue Vixens&lt;/a&gt;, an organization that provides safe environments for people who identify as women to learn Vue.js.&lt;/p&gt;
 
-      &lt;h3 id="bonus-it-39-s-just-plain-fun" class="title"&gt;
+      &lt;h3 id="bonus-it-39-s-just-plain-fun" class="title title-h3"&gt;
         &lt;a name="bonus-it-39-s-just-plain-fun" class="anchor" href="#bonus-it-39-s-just-plain-fun"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -515,7 +646,7 @@ vue create my-project
      ...</summary>
     <content type="html">&lt;p&gt;To add a preview pane to the Vue.js PDF viewer, I wanted it to have very similar behavior to the document pane. In this post, I&amp;#39;ll demonstrate how I extracted this behavior with a set of components, as opposed to alternatives, like a mixin.&lt;/p&gt;
 
-      &lt;h3 id="the-project" class="title"&gt;
+      &lt;h3 id="the-project" class="title title-h3"&gt;
         &lt;a name="the-project" class="anchor" href="#the-project"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -527,7 +658,7 @@ vue create my-project
 
 &lt;p&gt;Here&amp;#39;s the latest &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
 
-      &lt;h3 id="catching-up-from-last-time" class="title"&gt;
+      &lt;h3 id="catching-up-from-last-time" class="title title-h3"&gt;
         &lt;a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -539,7 +670,7 @@ vue create my-project
 
 &lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" /&gt;&lt;/p&gt;
 
-      &lt;h3 id="the-problem" class="title"&gt;
+      &lt;h3 id="the-problem" class="title title-h3"&gt;
         &lt;a name="the-problem" class="anchor" href="#the-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -589,7 +720,7 @@ vue create my-project
 
 &lt;p&gt;The &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; is responsible for determining when it is visible by determining whether its boundaries overlap with the viewport.&lt;/p&gt;
 
-      &lt;h3 id="the-component-based-solution" class="title"&gt;
+      &lt;h3 id="the-component-based-solution" class="title title-h3"&gt;
         &lt;a name="the-component-based-solution" class="anchor" href="#the-component-based-solution"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -696,7 +827,7 @@ render() {
 
 &lt;p&gt;We can render a different experience in this part of the component hierachy by changing the component we give to the slot (the &lt;code&gt;&amp;lt;PDFThumbnail&amp;gt;&lt;/code&gt;) while also getting the benefits of the shared behavior.&lt;/p&gt;
 
-      &lt;h3 id="stepping-back" class="title"&gt;
+      &lt;h3 id="stepping-back" class="title title-h3"&gt;
         &lt;a name="stepping-back" class="anchor" href="#stepping-back"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -728,7 +859,7 @@ render() {
     </author>
     <summary type="html">&lt;p&gt;I get the feeling a lot of RSpec users don’t know about the advantages of Rails 5.1 changes as part of the introduction of system tests. RSpec has had feature tests for a long time? What’s the big deal?&lt;/p&gt;
 
-      &lt;h3 id="background" class="title"&gt;
+      &lt;h3 id="background" class="title title-h3"&gt;
         &lt;a name="background" class="anchor" href="#background"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -736,7 +867,7 @@ render() {
    ...&lt;/h3&gt;</summary>
     <content type="html">&lt;p&gt;I get the feeling a lot of RSpec users don’t know about the advantages of Rails 5.1 changes as part of the introduction of system tests. RSpec has had feature tests for a long time? What’s the big deal?&lt;/p&gt;
 
-      &lt;h3 id="background" class="title"&gt;
+      &lt;h3 id="background" class="title title-h3"&gt;
         &lt;a name="background" class="anchor" href="#background"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -754,7 +885,7 @@ render() {
 
 &lt;p&gt;The real win with Rails 5.1 is what&amp;#39;s happening under the surface. The Rails team made key changes to internals, stuff RSpec alone couldn’t provide.&lt;/p&gt;
 
-      &lt;h3 id="why-transactional-tests-are-better" class="title"&gt;
+      &lt;h3 id="why-transactional-tests-are-better" class="title title-h3"&gt;
         &lt;a name="why-transactional-tests-are-better" class="anchor" href="#why-transactional-tests-are-better"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -778,7 +909,7 @@ render() {
 
 &lt;p&gt;The result: faster rollback, no multiprocess confusion, no need to manage the database with DatabaseCleaner, debugging the server in process is possible, etc. A better solution all around.&lt;/p&gt;
 
-      &lt;h3 id="in-closing" class="title"&gt;
+      &lt;h3 id="in-closing" class="title title-h3"&gt;
         &lt;a name="in-closing" class="anchor" href="#in-closing"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -788,7 +919,7 @@ render() {
     
 &lt;p&gt;To my RSpec friends: upgrade to Rails 5.1, drop the DatabaseCleaner gem, and set  &lt;code&gt;config.use_transactional_fixtures = true&lt;/code&gt; in the RSpec configuration. It should also be relatively straightforward to &lt;a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6"&gt;adopt system tests from existing feature tests&lt;/a&gt;, but either strategy will work with those changes. You’ll still need to fix those flaky scenarios yourself though.&lt;/p&gt;
 
-      &lt;h3 id="resources" class="title"&gt;
+      &lt;h3 id="resources" class="title title-h3"&gt;
         &lt;a name="resources" class="anchor" href="#resources"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
@@ -805,104 +936,6 @@ render() {
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;em&gt;This post has been edited to reflect Thomas Walpole&amp;#39;s corrections in the comments.&lt;/em&gt;&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Everything is Enumerated</title>
-    <link rel="alternate" href="/blog/everything-is-enumerated.html"/>
-    <id>/blog/everything-is-enumerated.html</id>
-    <published>2018-12-21T00:00:00+00:00</published>
-    <updated>2018-12-21T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;In Ruby, some methods expect a block as a callback yielding elements of some internal data structure.&lt;/p&gt;
-
-&lt;p&gt;Imagine a method &lt;code&gt;paginated_results&lt;/code&gt; on some &lt;code&gt;client&lt;/code&gt; object that yields individual pages.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;client.paginated_results(params) { |page| puts page.contents...&lt;/code&gt;&lt;/pre&gt;</summary>
-    <content type="html">&lt;p&gt;In Ruby, some methods expect a block as a callback yielding elements of some internal data structure.&lt;/p&gt;
-
-&lt;p&gt;Imagine a method &lt;code&gt;paginated_results&lt;/code&gt; on some &lt;code&gt;client&lt;/code&gt; object that yields individual pages.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;client.paginated_results(params) { |page| puts page.contents }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The method may hide away some complexity in retrieving pages.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def paginated_results(params = {})
-  before  = nil
-  max     = 1000
-  limit   = 50
-  results = []
-
-  loop do
-    page = fetch_page(params.merge(before: before, limit: limit)) # imaginary request
-
-    results += page
-
-    yield page
-
-    break if results.length &amp;gt;= max
-
-    before = page.last[&amp;quot;id&amp;quot;]
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To callers of this method, there is an implicit data structure. Being Ruby, we may expect to be able to call &lt;code&gt;Enumerable&lt;/code&gt; methods on this data to inspect, slice, or augment the contents in a convenient way.&lt;/p&gt;
-
-&lt;p&gt;But we may not have access to method&amp;#39;s internals and the underlying data structure, especially if we&amp;#39;re using a method from an external library. This is the case with our &lt;code&gt;paginated_results&lt;/code&gt; example; the &lt;code&gt;results&lt;/code&gt; array is not exposed to the method caller.&lt;/p&gt;
-
-&lt;p&gt;Callers of the method are forced to build up state from the outside. Here&amp;#39;s a contrived example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;table_of_contents = []
-index = 0
-
-client.paginated_results(order: :asc) do |p|
-  table_of_contents &amp;lt;&amp;lt; [index+1, p.title] if p.title_page?
-end
-
-puts table_of_contents
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There&amp;#39;s another way in Ruby! We can &amp;quot;enumeratorize&amp;quot; it!&lt;/p&gt;
-
-&lt;p&gt;Ruby&amp;#39;s &lt;code&gt;to_enum&lt;/code&gt; method is defined on all objects. Quite simply, it can convert a method into &lt;code&gt;Enumerator&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;client.to_enum(:paginated_results, params)
-# =&amp;gt; &amp;lt;Enumerator ...&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;What this gives us is an enumerable object that behaves as if we built up that array ourselves, which means we can call methods from the &lt;code&gt;Enumerable&lt;/code&gt; module, chain other enumerators to augment the block arguments, use &lt;code&gt;lazy&lt;/code&gt;, etc.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;client.to_enum(:paginated_results, params).
-  filter(:title_page?).
-  map.with_index { |p, i| [i+i, p.title] }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I love this type of expression because it&amp;#39;s more direct, flexible, and intention revealing. Authors need be less concerned with building up state with local variables.&lt;/p&gt;
-
-&lt;p&gt;In fact, this pattern is so useful that many authors have started building in &lt;code&gt;to_enum&lt;/code&gt; to such methods for when the caller omits the block. The implementation for &lt;code&gt;paginated_results&lt;/code&gt; might look like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;def paginated_results(params = {})
-  return to_enum(__method__, params) unless block_given?
-
-  # rest unchanged
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;While you are free to stick with the imperative approach, I hope this post demonstrates how &lt;code&gt;to_enum&lt;/code&gt; offers Rubyists a more declarative and functionally-flavored alternative.&lt;/p&gt;
-
-      &lt;h3 id="wrapping-up" class="title"&gt;
-        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Wrapping up
-      &lt;/h3&gt;
-    
-&lt;p&gt;When you&amp;#39;re in a punch, you can use &lt;code&gt;to_enum&lt;/code&gt; to wrap iterative methods to add otherwise missing &lt;code&gt;Enumerable&lt;/code&gt; properties. And, when designing your classes, consider adopting the &lt;code&gt;return to_enum(__method__) unless block_given?&lt;/code&gt; pattern in method definitions to enhance iterative methods.&lt;/p&gt;
 </content>
   </entry>
 </feed>

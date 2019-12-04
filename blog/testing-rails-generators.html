@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.638a918299327e63cd05.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -63,7 +63,7 @@
 
 <p>I recently added a Rails generator to my gem, <code>serviceworker-rails</code>, to make it easier to add the assets and configuration files needed to <a href="/blog/make-your-rails-app-a-progressive-web-app.html">turn your Rails app into a Progressive Web App</a>. I&#39;ve written a few Rails generators before, but have usually skipped the part about writing tests because––no excuse.</p>
 
-      <h2 id="the-requirements" class="title">
+      <h2 id="the-requirements" class="title title-h2">
         <a name="the-requirements" class="anchor" href="#the-requirements">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -87,7 +87,7 @@
 
 <p>Though this is a testing post but I&#39;ll briefly mention some resources I&#39;ve found helpeful for writing Rails generators. I recommend the <a href="http://guides.rubyonrails.org/generators.html">Rails guides</a> to get your Rails generator started. It also help to understand how <code>Thor</code> works (<a href="http://whatisthor.com/">What is Thor?</a>), the library on which most Rails commandline tools are based. The Rails generator base classes leverage <a href="http://www.rubydoc.info/github/erikhuda/thor/master/Thor/Actions">Thor actions</a>, i.e., <code>create_file</code>, <code>gsub_file</code>, <code>insert_into_file</code>, and sprinkle in some <a href="http://api.rubyonrails.org/classes/Rails/Generators/Actions.html">Rails-specific methods</a>, including <code>gem</code>, <code>rake</code>, <code>initializer</code>, etc.</p>
 
-      <h2 id="a-first-pass" class="title">
+      <h2 id="a-first-pass" class="title title-h2">
         <a name="a-first-pass" class="anchor" href="#a-first-pass">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -176,7 +176,7 @@ end
 <p>I had several tests that read the contents of files and matches expected content
 through regular expressions.</p>
 
-      <h2 id="using-rails-generators-testcase" class="title">
+      <h2 id="using-rails-generators-testcase" class="title title-h2">
         <a name="using-rails-generators-testcase" class="anchor" href="#using-rails-generators-testcase">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -368,7 +368,7 @@ end
 
 <p><a href="https://github.com/rossta/serviceworker-rails/blob/94c45720f793397f0df66dbd4d67c680f3a293c3/test/serviceworker/install_generator_test.rb">Check out the source</a> of the <code>serviceworker-rails</code> generator test case to see the full picture of how all the pieces fit together.</p>
 
-      <h2 id="wrapping-up" class="title">
+      <h2 id="wrapping-up" class="title title-h2">
         <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
@@ -398,15 +398,16 @@ got a good feel for how I can test more generators moving forward.</p>
 >
   <div>
     <div class="mb-4">
-        <h3 class="mb-2">
-  Did you like this post?
-</h3>
-<p>
-  Please
-  <a href="https://twitter.com/intent/tweet?text=Testing%20Rails%20generators&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Ftesting-rails-generators.html" target="_blank" rel="noopener">share it on Twitter</a>
-  and enter your email below to subscribe to my newsletter on
-  Rails and the web. Thank you!
-</p>
+          <h3 class="mb-2">
+    Need help with Webpack on Rails?
+  </h3>
+  <p class="mb-4">
+    Webpacker now ships by default in Rails 6 but there's no need to stress.
+    I'm putting together a course to help you master Webpack on Rails.
+  </p>
+  <p>
+    Subscribe to stay in the loop.
+  </p>
 
     </div>
     <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
