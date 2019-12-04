@@ -31,11 +31,11 @@ Big improvement!
 
 If you're new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.
 
-I know this because I was once in your shoes struggling to learn how Webpack works and I've also spent a lot of time helping others on my team, on StackOverflow, and through Github issues on the rails/webpacker project.
+I know this because I was once in your shoes struggling to learn how Webpack works and I've also spent a lot of time helping others on my team, on StackOverflow, and through Github issues on the [`rails/webpacker`](https://github.com/rails/webpacker) project.
 
 One of the most frequently-reported issues I've seen is slow build times to go along with high memory and CPU usage. For Heroku users on small dynos, this often leads to failed deploys.
 
-More often than not, the root cause is a simple mistake in directory structure, which I call "overpacking".
+More often than not, the root cause is a simple oversight in directory structure—a mistake I call "overpacking".
 
 ### Overpacking explained
 
@@ -82,6 +82,8 @@ Webpack needs at least one **entry** point to build the dependency graph for pro
 It will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.
 
 Since WebpackER, by defaults, treats *every file* in the `packs` directory as a separate entry, it will build a separate dependency graph for *every file* located there.
+
+> Here's a case where Rails tries to make things easier for you—by auto-configuring entry files—while also making it easier to shoot yourself in the foot.
 
 That also means, for *every file* in the `packs` directory, there will be at least one, possibly more, files emitted as output in the `public` directory during precompilation. If you're not linking to these files anywhere in your app, then they don't need to be emitted as output.
 
