@@ -255,6 +255,10 @@ helpers do
     }[tag]
   end
 
+  def current_page_tagged?(tagged_with = [])
+    ((current_page.data.tags || []) & tagged_with).any?
+  end
+
   def convertkit_campaign
     explicit_page_tags.first || "Homepage"
   end
