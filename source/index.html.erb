@@ -29,16 +29,8 @@ per_page: 4
   <%= partial "partials/signup" %>
 </section>
 <section class="mb-12">
-  <h2 class="mb-8">New? Start here</h2>
+  <h2 class="mb-8">Latest</h2>
   <section class="index-posts">
-    <% blog_series.each do |series| %>
-      <article class="index-post mb-8">
-        <header class="index-title font-bold mb-2 text-xl">
-          <%= link_to series.title, series_path(series.id, "blog") %> <small class="uppercase text-gray-500 text-xs">&middot; Series</small>
-        </header>
-        <p class="index-alt-title subtle text-gray-700"><%= series.summary %></p>
-      </article>
-    <% end %>
     <% page_articles.each do |article| %>
       <article class="index-post mb-8">
         <header>
