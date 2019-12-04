@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.f07e974eedcd4ab743a8.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.9adc2cd591c43e999a03.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -83,11 +83,11 @@
     
 <p>If you&#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.</p>
 
-<p>I know this because I was once in your shoes struggling to learn how Webpack works and I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and through Github issues on the rails/webpacker project.</p>
+<p>I know this because I was once in your shoes struggling to learn how Webpack works and I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and through Github issues on the <a href="https://github.com/rails/webpacker"><code>rails/webpacker</code></a> project.</p>
 
 <p>One of the most frequently-reported issues I&#39;ve seen is slow build times to go along with high memory and CPU usage. For Heroku users on small dynos, this often leads to failed deploys.</p>
 
-<p>More often than not, the root cause is a simple mistake in directory structure, which I call &quot;overpacking&quot;.</p>
+<p>More often than not, the root cause is a simple oversight in directory structure—a mistake I call &quot;overpacking&quot;.</p>
 
       <h3 id="overpacking-explained" class="title title-h3">
         <a name="overpacking-explained" class="anchor" href="#overpacking-explained">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -148,6 +148,10 @@
 <p>It will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.</p>
 
 <p>Since WebpackER, by defaults, treats <em>every file</em> in the <code>packs</code> directory as a separate entry, it will build a separate dependency graph for <em>every file</em> located there.</p>
+
+<blockquote>
+<p>Here&#39;s a case where Rails tries to make things easier for you—by auto-configuring entry files—while also making it easier to shoot yourself in the foot.</p>
+</blockquote>
 
 <p>That also means, for <em>every file</em> in the <code>packs</code> directory, there will be at least one, possibly more, files emitted as output in the <code>public</code> directory during precompilation. If you&#39;re not linking to these files anywhere in your app, then they don&#39;t need to be emitted as output.</p>
 
