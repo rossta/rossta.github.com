@@ -8,7 +8,7 @@ module.exports = {
     purgecss({
       content: ['./**/*.erb', './**/*.rb'],
       defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
-      whitelist: ['blockquote', 'li'],
+      whitelist: ['blockquote', 'li', 'pre', 'code', 'figcaption'],
       whitelistPatterns: [/hljs/],
     }),
   ]

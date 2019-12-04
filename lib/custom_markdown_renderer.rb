@@ -12,7 +12,7 @@ class CustomMarkdownRenderer < Middleman::Renderers::MiddlemanRedcarpetHTML
     @headers << permalink
 
     %(
-      <h#{level} id=\"#{permalink}\" class="title">
+      <h#{level} id=\"#{permalink}\" class="title title-h#{level}">
         <a name="#{permalink}" class="anchor" href="##{permalink}">#{anchor_svg}</a>
         #{title}
       </h#{level}>

@@ -12,21 +12,22 @@ code {
 }
 
 pre {
-  @apply mb-6;
+  @apply mb-8;
   display: block;
   word-break: break-all;
   word-wrap: break-word;
 }
 
 pre code {
-  background-color: none;
+  background-color: #282a36;
   overflow: auto;
   font-weight: normal;
+  color: #f8f8f2;
 }
 
 pre code,
 .hljs {
-  @apply border leading-snug text-sm -mx-4 p-4;
+  @apply leading-snug text-sm -mx-4 p-4;
 }
 
 @screen md {
