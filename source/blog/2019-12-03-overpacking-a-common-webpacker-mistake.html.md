@@ -81,7 +81,7 @@ Webpack needs at least one **entry** point to build the dependency graph for pro
 
 > The Webpacker project refers to entries as **packs**.
 
-"Entry" is listed first key concept on Webpack's documentation site: https://webpack.js.org/concepts/#entry.
+"Entry" is listed as the first key concept on Webpack's documentation site: https://webpack.js.org/concepts/#entry.
 
 Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.
 
