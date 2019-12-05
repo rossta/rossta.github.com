@@ -135,17 +135,11 @@
     
 &lt;p&gt;Is your Webpacker compilation taking forever? You may be overpacking.&lt;/p&gt;
 
-&lt;p&gt;Be good to yourself and stick to this rule: &lt;strong&gt;one entry per page&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;If you use the same JS on every page, then using a single &lt;code&gt;application.js&lt;/code&gt; entry for every page on the site satisfies the rule. &lt;/p&gt;
-
-&lt;p&gt;Your project may need want a separate entry for &lt;code&gt;admin.js&lt;/code&gt; to import functionality for the admin pages of the site. You may further split up your entries across pages more agressively, i.e., &lt;code&gt;page1.js&lt;/code&gt;, &lt;code&gt;page2.js&lt;/code&gt;, etc. &lt;/p&gt;
-
-&lt;p&gt;However, treating every module in your application as an entry is most likely a mistake. Pay attention to what you&amp;#39;re putting in the &amp;quot;packs&amp;quot; directory with Webpacker.&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;Don&amp;#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.&lt;/p&gt;
 &lt;/blockquote&gt;
+
+&lt;p&gt;Be good to yourself and your development and deployment experience by being very intentional about what files you put in your &amp;quot;packs&amp;quot; directory. If any file in this directory does not also have a corresponding &lt;code&gt;javascript_pack_tag&lt;/code&gt; in your application, then you may be wasting resources.&lt;/p&gt;
 </content>
   </entry>
   <entry>

@@ -167,17 +167,11 @@
     
 <p>Is your Webpacker compilation taking forever? You may be overpacking.</p>
 
-<p>Be good to yourself and stick to this rule: <strong>one entry per page</strong>.</p>
-
-<p>If you use the same JS on every page, then using a single <code>application.js</code> entry for every page on the site satisfies the rule. </p>
-
-<p>Your project may need want a separate entry for <code>admin.js</code> to import functionality for the admin pages of the site. You may further split up your entries across pages more agressively, i.e., <code>page1.js</code>, <code>page2.js</code>, etc. </p>
-
-<p>However, treating every module in your application as an entry is most likely a mistake. Pay attention to what you&#39;re putting in the &quot;packs&quot; directory with Webpacker.</p>
-
 <blockquote>
 <p>Don&#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.</p>
 </blockquote>
+
+<p>Be good to yourself and your development and deployment experience by being very intentional about what files you put in your &quot;packs&quot; directory. If any file in this directory does not also have a corresponding <code>javascript_pack_tag</code> in your application, then you may be wasting resources.</p>
 
   </article>
   <section class="signup-form-standalone hero">
