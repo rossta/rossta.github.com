@@ -25,7 +25,7 @@ Leaning on prior experience, I found the problem, moved some files around, and p
 
 ![CI Screenshot: Precompile assets, 0:44](blog/webpack/overpack-after-fix.png)
 
-Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.
+The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.
 
 So what were the changes?
 
