@@ -25,7 +25,9 @@ Leaning on prior experience, I found the problem, moved some files around, and p
 
 ![CI Screenshot: Precompile assets, 0:44](blog/webpack/overpack-after-fix.png)
 
-Big improvement! How did I do it? I'll show you.
+Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.
+
+So what were the changes?
 
 ### A Common Problem
 
@@ -83,7 +85,7 @@ Webpack needs at least one **entry** point to build the dependency graph for pro
 
 Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.
 
-Since WebpackER, by defaults, treats *every file* in the `packs` directory as a separate entry, it will build a separate dependency graph for *every file* located there.
+Since Webpack*er*, by default, treats *every file* in the `packs` directory as a separate entry, it will build a separate dependency graph for *every file* located there.
 
 That also means, for *every file* in the `packs` directory, there will be at least one, possibly more, files emitted as output in the `public` directory during precompilation. If you're not linking to these files anywhere in your app, then they don't need to be emitted as output. For a large project, that could be lot of unnecessary work.
 
@@ -93,7 +95,7 @@ Here's a case where Rails tries to make things easier for you—by auto-configur
 
 Is your Webpacker compilation taking forever? You may be overpacking.
 
-> If any file in this directory does not also have a corresponding `javascript_pack_tag` in your application, then you're overpacking.
+> If any file in Webpacker's "packs" directory does not also have a corresponding `javascript_pack_tag` in your application, then you're overpacking.
 
 Be good to yourself and your development and deployment experience by being very intentional about what files you put in your "packs" directory.
 
