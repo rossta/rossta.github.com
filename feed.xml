@@ -115,7 +115,7 @@
 &lt;p&gt;The Webpacker project refers to entries as &lt;strong&gt;packs&lt;/strong&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&amp;quot;Entry&amp;quot; is listed first key concept on Webpack&amp;#39;s documentation site: &lt;a href="https://webpack.js.org/concepts/#entry"&gt;https://webpack.js.org/concepts/#entry&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&amp;quot;Entry&amp;quot; is listed as the first key concept on Webpack&amp;#39;s documentation site: &lt;a href="https://webpack.js.org/concepts/#entry"&gt;https://webpack.js.org/concepts/#entry&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.&lt;/p&gt;
 
