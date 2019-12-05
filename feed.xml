@@ -39,7 +39,7 @@
 
 &lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" /&gt;&lt;/p&gt;
 
-&lt;p&gt;Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.&lt;/p&gt;
+&lt;p&gt;The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.&lt;/p&gt;
 
 &lt;p&gt;So what were the changes?&lt;/p&gt;
 
