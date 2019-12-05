@@ -25,15 +25,15 @@ Leaning on prior experience, I found the problem, moved some files around, and p
 
 ![CI Screenshot: Precompile assets, 0:44](blog/webpack/overpack-after-fix.png)
 
-Big improvement!
+Big improvement! Now let's take a closer look.
 
 ### A Common Problem
 
 If you're new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.
 
-I know this because I was once in your shoes struggling to learn how Webpack works and I've also spent a lot of time helping others on my team, on StackOverflow, and through Github issues on the [`rails/webpacker`](https://github.com/rails/webpacker) project.
+I know this because I was once in your shoes struggling to learn how Webpack works and I've also spent a lot of time helping others on my team, on StackOverflow, and via [`rails/webpacker`](https://github.com/rails/webpacker) Github issues.
 
-One of the most frequently-reported issues I've seen is slow build times to go along with high memory and CPU usage. For Heroku users on small dynos, this often leads to failed deploys.
+One of the most frequently-reported issues I've seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation leads to failed deploys.
 
 More often than not, the root cause is a simple oversight in directory structure—a mistake I call "overpacking".
 
@@ -47,9 +47,9 @@ app/
   javascript/
     packs/
       application.js
-      components/
-      images/
-      stylesheets/
+      components/     # lots of files
+      images/         # lots of files
+      stylesheets/    # lots of files
       ...
 ```
 
@@ -64,12 +64,12 @@ app/
     stylesheets/
     ...
     packs/
-      application.js    # limit your entries/packs!
+      application.js    # just one file in packs/
 ```
 
 See the difference?
 
-The primary change here was moving everything expect `application.js` outside of the `packs` directory under `app/javascript`. I also had updated paths for `import` statements within `app/javascript/packs/application.js` to the appropriate location.
+The primary change here was moving everything except `application.js` outside of the `packs` directory under `app/javascript`. (To make this work properly, I also had to update some relative paths in `import` statements.)
 
 ### Webpack Entry Points
 
