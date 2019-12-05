@@ -93,6 +93,8 @@ For a large project, that could be lot of unnecessary work.
 
 Is your Webpacker compilation taking forever? You may be overpacking.
 
-> Don't overpack. At best, this is wasteful; at worst, this is a productivity killer.
+> If any file in this directory does not also have a corresponding `javascript_pack_tag` in your application, then you're overpacking.
 
-Be good to yourself and your development and deployment experience by being very intentional about what files you put in your "packs" directory. If any file in this directory does not also have a corresponding `javascript_pack_tag` in your application, then you may be wasting resources.
+Be good to yourself and your development and deployment experience by being very intentional about what files you put in your "packs" directory.
+
+Don't overpack. At best, this is wasteful; at worst, this is a productivity killer.
