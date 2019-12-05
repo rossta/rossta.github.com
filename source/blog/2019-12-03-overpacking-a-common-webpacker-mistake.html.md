@@ -93,8 +93,6 @@ For a large project, that could be lot of unnecessary work.
 
 Is your Webpacker compilation taking forever? You may be overpacking.
 
-Your project may very well need more than one entry besides the typical `application.js`. However, treating every module in your application as an entry is most likely a mistake.
-
 > Don't overpack. At best, this is wasteful; at worst, this is a productivity killer.
 
-Be good to yourself and stick to this rule: **one entry per page**.
+Be good to yourself and your development and deployment experience by being very intentional about what files you put in your "packs" directory. If any file in this directory does not also have a corresponding `javascript_pack_tag` in your application, then you may be wasting resources.
