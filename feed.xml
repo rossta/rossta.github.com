@@ -22,16 +22,16 @@
 
 &lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-before-fix.png" alt="CI Screenshot: Precompile assets, 6:56"&gt;&lt;/p&gt;
 
-&lt;p&gt;When I found that the project was using Webpacker, my spidey sense started to tingle.&lt;/p&gt;
+&lt;p&gt;I looked in the &lt;code&gt;Gemfile&lt;/code&gt; and found the project was using Webpacker. My spidey sense started to tingle.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;I've seen this before&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;Leaning on prior experience, I...&lt;/p&gt;</summary>
+&lt;p&gt;Leaning on prior...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;I recently encountered a Rails app at work that was spending nearly seven minutes precompiling assets:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-before-fix.png" alt="CI Screenshot: Precompile assets, 6:56" /&gt;&lt;/p&gt;
 
-&lt;p&gt;When I found that the project was using Webpacker, my spidey sense started to tingle.&lt;/p&gt;
+&lt;p&gt;I looked in the &lt;code&gt;Gemfile&lt;/code&gt; and found the project was using Webpacker. My spidey sense started to tingle.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;I&amp;#39;ve seen this before&lt;/em&gt;.&lt;/p&gt;
 
@@ -39,7 +39,7 @@
 
 &lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" /&gt;&lt;/p&gt;
 
-&lt;p&gt;Big improvement! Now let&amp;#39;s take a closer look.&lt;/p&gt;
+&lt;p&gt;Big improvement! How did I do it? I&amp;#39;ll show you.&lt;/p&gt;
 
       &lt;h3 id="a-common-problem" class="title title-h3"&gt;
         &lt;a name="a-common-problem" class="anchor" href="#a-common-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -49,11 +49,11 @@
         A Common Problem
       &lt;/h3&gt;
     
-&lt;p&gt;If you&amp;#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.&lt;/p&gt;
+&lt;p&gt;First, let&amp;#39;s take a step back. If you&amp;#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.&lt;/p&gt;
 
-&lt;p&gt;I know this because I was once in your shoes struggling to learn how Webpack works and I&amp;#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via &lt;a href="https://github.com/rails/webpacker"&gt;&lt;code&gt;rails/webpacker&lt;/code&gt;&lt;/a&gt; Github issues.&lt;/p&gt;
+&lt;p&gt;I know this because I was once in your shoes struggling to learn how Webpack works. I&amp;#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via &lt;a href="https://github.com/rails/webpacker"&gt;&lt;code&gt;rails/webpacker&lt;/code&gt;&lt;/a&gt; Github issues.&lt;/p&gt;
 
-&lt;p&gt;One of the most frequently-reported issues I&amp;#39;ve seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation leads to failed deploys.&lt;/p&gt;
+&lt;p&gt;One of the most frequently-reported issues I&amp;#39;ve seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation can lead to failed deploys.&lt;/p&gt;
 
 &lt;p&gt;More often than not, the root cause is a simple oversight in directory structure—a mistake I call &amp;quot;overpacking&amp;quot;.&lt;/p&gt;
 
@@ -81,7 +81,7 @@
 
 &lt;p&gt;Here&amp;#39;s what the project looked like building in under a minute:&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;rake assets:precompile — 0:44&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;rake assets:precompile — 0:44&lt;/strong&gt;&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="shell"&gt;app/
   javascript/
@@ -113,17 +113,15 @@
 &lt;p&gt;The Webpacker project refers to entries as &lt;strong&gt;packs&lt;/strong&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;It will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.&lt;/p&gt;
+&lt;p&gt;&amp;quot;Entry&amp;quot; is listed first key concept on Webpack&amp;#39;s documentation site: &lt;a href="https://webpack.js.org/concepts/#entry"&gt;https://webpack.js.org/concepts/#entry&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.&lt;/p&gt;
 
 &lt;p&gt;Since WebpackER, by defaults, treats &lt;em&gt;every file&lt;/em&gt; in the &lt;code&gt;packs&lt;/code&gt; directory as a separate entry, it will build a separate dependency graph for &lt;em&gt;every file&lt;/em&gt; located there.&lt;/p&gt;
 
-&lt;blockquote&gt;
+&lt;p&gt;That also means, for &lt;em&gt;every file&lt;/em&gt; in the &lt;code&gt;packs&lt;/code&gt; directory, there will be at least one, possibly more, files emitted as output in the &lt;code&gt;public&lt;/code&gt; directory during precompilation. If you&amp;#39;re not linking to these files anywhere in your app, then they don&amp;#39;t need to be emitted as output. For a large project, that could be lot of unnecessary work.&lt;/p&gt;
+
 &lt;p&gt;Here&amp;#39;s a case where Rails tries to make things easier for you—by auto-configuring entry files—while also making it easier to shoot yourself in the foot.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;That also means, for &lt;em&gt;every file&lt;/em&gt; in the &lt;code&gt;packs&lt;/code&gt; directory, there will be at least one, possibly more, files emitted as output in the &lt;code&gt;public&lt;/code&gt; directory during precompilation. If you&amp;#39;re not linking to these files anywhere in your app, then they don&amp;#39;t need to be emitted as output.&lt;/p&gt;
-
-&lt;p&gt;For a large project, that could be lot of unnecessary work.&lt;/p&gt;
 
       &lt;h3 id="a-simple-rule" class="title title-h3"&gt;
         &lt;a name="a-simple-rule" class="anchor" href="#a-simple-rule"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
