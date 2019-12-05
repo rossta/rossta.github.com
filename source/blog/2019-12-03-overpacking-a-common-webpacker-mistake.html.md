@@ -17,7 +17,7 @@ I recently encountered a Rails app at work that was spending nearly seven minute
 
 ![CI Screenshot: Precompile assets, 6:56](blog/webpack/overpack-before-fix.png)
 
-When I found that the project was using Webpacker, my spidey sense started to tingle.
+I looked in the `Gemfile` and found the project was using Webpacker. My spidey sense started to tingle.
 
 *I've seen this before*.
 
@@ -25,15 +25,15 @@ Leaning on prior experience, I found the problem, moved some files around, and p
 
 ![CI Screenshot: Precompile assets, 0:44](blog/webpack/overpack-after-fix.png)
 
-Big improvement! Now let's take a closer look.
+Big improvement! How did I do it? I'll show you.
 
 ### A Common Problem
 
-If you're new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.
+First, let's take a step back. If you're new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.
 
-I know this because I was once in your shoes struggling to learn how Webpack works and I've also spent a lot of time helping others on my team, on StackOverflow, and via [`rails/webpacker`](https://github.com/rails/webpacker) Github issues.
+I know this because I was once in your shoes struggling to learn how Webpack works. I've also spent a lot of time helping others on my team, on StackOverflow, and via [`rails/webpacker`](https://github.com/rails/webpacker) Github issues.
 
-One of the most frequently-reported issues I've seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation leads to failed deploys.
+One of the most frequently-reported issues I've seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation can lead to failed deploys.
 
 More often than not, the root cause is a simple oversight in directory structure—a mistake I call "overpacking".
 
@@ -55,7 +55,7 @@ app/
 
 Here's what the project looked like building in under a minute:
 
-***rake assets:precompile — 0:44***
+**rake assets:precompile — 0:44**
 ```shell
 app/
   javascript/
@@ -79,15 +79,15 @@ Webpack needs at least one **entry** point to build the dependency graph for pro
 
 > The Webpacker project refers to entries as **packs**.
 
-It will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.
+"Entry" is listed first key concept on Webpack's documentation site: https://webpack.js.org/concepts/#entry.
+
+Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.
 
 Since WebpackER, by defaults, treats *every file* in the `packs` directory as a separate entry, it will build a separate dependency graph for *every file* located there.
 
-> Here's a case where Rails tries to make things easier for you—by auto-configuring entry files—while also making it easier to shoot yourself in the foot.
+That also means, for *every file* in the `packs` directory, there will be at least one, possibly more, files emitted as output in the `public` directory during precompilation. If you're not linking to these files anywhere in your app, then they don't need to be emitted as output. For a large project, that could be lot of unnecessary work.
 
-That also means, for *every file* in the `packs` directory, there will be at least one, possibly more, files emitted as output in the `public` directory during precompilation. If you're not linking to these files anywhere in your app, then they don't need to be emitted as output.
-
-For a large project, that could be lot of unnecessary work.
+Here's a case where Rails tries to make things easier for you—by auto-configuring entry files—while also making it easier to shoot yourself in the foot.
 
 ### A Simple Rule
 
