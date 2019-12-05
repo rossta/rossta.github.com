@@ -39,7 +39,7 @@
 
 &lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" /&gt;&lt;/p&gt;
 
-&lt;p&gt;Big improvement!&lt;/p&gt;
+&lt;p&gt;Big improvement! Now let&amp;#39;s take a closer look.&lt;/p&gt;
 
       &lt;h3 id="a-common-problem" class="title title-h3"&gt;
         &lt;a name="a-common-problem" class="anchor" href="#a-common-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -51,9 +51,9 @@
     
 &lt;p&gt;If you&amp;#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.&lt;/p&gt;
 
-&lt;p&gt;I know this because I was once in your shoes struggling to learn how Webpack works and I&amp;#39;ve also spent a lot of time helping others on my team, on StackOverflow, and through Github issues on the &lt;a href="https://github.com/rails/webpacker"&gt;&lt;code&gt;rails/webpacker&lt;/code&gt;&lt;/a&gt; project.&lt;/p&gt;
+&lt;p&gt;I know this because I was once in your shoes struggling to learn how Webpack works and I&amp;#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via &lt;a href="https://github.com/rails/webpacker"&gt;&lt;code&gt;rails/webpacker&lt;/code&gt;&lt;/a&gt; Github issues.&lt;/p&gt;
 
-&lt;p&gt;One of the most frequently-reported issues I&amp;#39;ve seen is slow build times to go along with high memory and CPU usage. For Heroku users on small dynos, this often leads to failed deploys.&lt;/p&gt;
+&lt;p&gt;One of the most frequently-reported issues I&amp;#39;ve seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation leads to failed deploys.&lt;/p&gt;
 
 &lt;p&gt;More often than not, the root cause is a simple oversight in directory structure—a mistake I call &amp;quot;overpacking&amp;quot;.&lt;/p&gt;
 
@@ -73,9 +73,9 @@
   javascript/
     packs/
       application.js
-      components/
-      images/
-      stylesheets/
+      components/     # lots of files
+      images/         # lots of files
+      stylesheets/    # lots of files
       ...
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -90,12 +90,12 @@
     stylesheets/
     ...
     packs/
-      application.js    # limit your entries/packs!
+      application.js    # just one file in packs/
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;See the difference?&lt;/p&gt;
 
-&lt;p&gt;The primary change here was moving everything expect &lt;code&gt;application.js&lt;/code&gt; outside of the &lt;code&gt;packs&lt;/code&gt; directory under &lt;code&gt;app/javascript&lt;/code&gt;. I also had updated paths for &lt;code&gt;import&lt;/code&gt; statements within &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt; to the appropriate location.&lt;/p&gt;
+&lt;p&gt;The primary change here was moving everything except &lt;code&gt;application.js&lt;/code&gt; outside of the &lt;code&gt;packs&lt;/code&gt; directory under &lt;code&gt;app/javascript&lt;/code&gt;. (To make this work properly, I also had to update some relative paths in &lt;code&gt;import&lt;/code&gt; statements.)&lt;/p&gt;
 
       &lt;h3 id="webpack-entry-points" class="title title-h3"&gt;
         &lt;a name="webpack-entry-points" class="anchor" href="#webpack-entry-points"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -135,13 +135,17 @@
     
 &lt;p&gt;Is your Webpacker compilation taking forever? You may be overpacking.&lt;/p&gt;
 
-&lt;p&gt;Your project may very well need more than one entry besides the typical &lt;code&gt;application.js&lt;/code&gt;. However, treating every module in your application as an entry is most likely a mistake.&lt;/p&gt;
+&lt;p&gt;Be good to yourself and stick to this rule: &lt;strong&gt;one entry per page&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you use the same JS on every page, then using a single &lt;code&gt;application.js&lt;/code&gt; entry for every page on the site satisfies the rule. &lt;/p&gt;
+
+&lt;p&gt;Your project may need want a separate entry for &lt;code&gt;admin.js&lt;/code&gt; to import functionality for the admin pages of the site. You may further split up your entries across pages more agressively, i.e., &lt;code&gt;page1.js&lt;/code&gt;, &lt;code&gt;page2.js&lt;/code&gt;, etc. &lt;/p&gt;
+
+&lt;p&gt;However, treating every module in your application as an entry is most likely a mistake. Pay attention to what you&amp;#39;re putting in the &amp;quot;packs&amp;quot; directory with Webpacker.&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Don&amp;#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.&lt;/p&gt;
 &lt;/blockquote&gt;
-
-&lt;p&gt;Be good to yourself and stick to this rule: &lt;strong&gt;one entry per page&lt;/strong&gt;.&lt;/p&gt;
 </content>
   </entry>
   <entry>

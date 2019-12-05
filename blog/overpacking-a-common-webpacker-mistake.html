@@ -71,7 +71,7 @@
 
 <p><img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" /></p>
 
-<p>Big improvement!</p>
+<p>Big improvement! Now let&#39;s take a closer look.</p>
 
       <h3 id="a-common-problem" class="title title-h3">
         <a name="a-common-problem" class="anchor" href="#a-common-problem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -83,9 +83,9 @@
     
 <p>If you&#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.</p>
 
-<p>I know this because I was once in your shoes struggling to learn how Webpack works and I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and through Github issues on the <a href="https://github.com/rails/webpacker"><code>rails/webpacker</code></a> project.</p>
+<p>I know this because I was once in your shoes struggling to learn how Webpack works and I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via <a href="https://github.com/rails/webpacker"><code>rails/webpacker</code></a> Github issues.</p>
 
-<p>One of the most frequently-reported issues I&#39;ve seen is slow build times to go along with high memory and CPU usage. For Heroku users on small dynos, this often leads to failed deploys.</p>
+<p>One of the most frequently-reported issues I&#39;ve seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation leads to failed deploys.</p>
 
 <p>More often than not, the root cause is a simple oversight in directory structure—a mistake I call &quot;overpacking&quot;.</p>
 
@@ -105,9 +105,9 @@
   javascript/
     packs/
       application.js
-      components/
-      images/
-      stylesheets/
+      components/     # lots of files
+      images/         # lots of files
+      stylesheets/    # lots of files
       ...
 </code></pre>
 
@@ -122,12 +122,12 @@
     stylesheets/
     ...
     packs/
-      application.js    # limit your entries/packs!
+      application.js    # just one file in packs/
 </code></pre>
 
 <p>See the difference?</p>
 
-<p>The primary change here was moving everything expect <code>application.js</code> outside of the <code>packs</code> directory under <code>app/javascript</code>. I also had updated paths for <code>import</code> statements within <code>app/javascript/packs/application.js</code> to the appropriate location.</p>
+<p>The primary change here was moving everything except <code>application.js</code> outside of the <code>packs</code> directory under <code>app/javascript</code>. (To make this work properly, I also had to update some relative paths in <code>import</code> statements.)</p>
 
       <h3 id="webpack-entry-points" class="title title-h3">
         <a name="webpack-entry-points" class="anchor" href="#webpack-entry-points">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -167,13 +167,17 @@
     
 <p>Is your Webpacker compilation taking forever? You may be overpacking.</p>
 
-<p>Your project may very well need more than one entry besides the typical <code>application.js</code>. However, treating every module in your application as an entry is most likely a mistake.</p>
+<p>Be good to yourself and stick to this rule: <strong>one entry per page</strong>.</p>
+
+<p>If you use the same JS on every page, then using a single <code>application.js</code> entry for every page on the site satisfies the rule. </p>
+
+<p>Your project may need want a separate entry for <code>admin.js</code> to import functionality for the admin pages of the site. You may further split up your entries across pages more agressively, i.e., <code>page1.js</code>, <code>page2.js</code>, etc. </p>
+
+<p>However, treating every module in your application as an entry is most likely a mistake. Pay attention to what you&#39;re putting in the &quot;packs&quot; directory with Webpacker.</p>
 
 <blockquote>
 <p>Don&#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.</p>
 </blockquote>
-
-<p>Be good to yourself and stick to this rule: <strong>one entry per page</strong>.</p>
 
   </article>
   <section class="signup-form-standalone hero">
