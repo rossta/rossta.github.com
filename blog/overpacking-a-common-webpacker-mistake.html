@@ -71,7 +71,9 @@
 
 <p><img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" /></p>
 
-<p>Big improvement! How did I do it? I&#39;ll show you.</p>
+<p>Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.</p>
+
+<p>So what were the changes?</p>
 
       <h3 id="a-common-problem" class="title title-h3">
         <a name="a-common-problem" class="anchor" href="#a-common-problem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -149,7 +151,7 @@
 
 <p>Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.</p>
 
-<p>Since WebpackER, by defaults, treats <em>every file</em> in the <code>packs</code> directory as a separate entry, it will build a separate dependency graph for <em>every file</em> located there.</p>
+<p>Since Webpack*er*, by default, treats <em>every file</em> in the <code>packs</code> directory as a separate entry, it will build a separate dependency graph for <em>every file</em> located there.</p>
 
 <p>That also means, for <em>every file</em> in the <code>packs</code> directory, there will be at least one, possibly more, files emitted as output in the <code>public</code> directory during precompilation. If you&#39;re not linking to these files anywhere in your app, then they don&#39;t need to be emitted as output. For a large project, that could be lot of unnecessary work.</p>
 
@@ -166,7 +168,7 @@
 <p>Is your Webpacker compilation taking forever? You may be overpacking.</p>
 
 <blockquote>
-<p>If any file in this directory does not also have a corresponding <code>javascript_pack_tag</code> in your application, then you&#39;re overpacking.</p>
+<p>If any file in Webpacker&#39;s &quot;packs&quot; directory does not also have a corresponding <code>javascript_pack_tag</code> in your application, then you&#39;re overpacking.</p>
 </blockquote>
 
 <p>Be good to yourself and your development and deployment experience by being very intentional about what files you put in your &quot;packs&quot; directory.</p>

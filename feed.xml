@@ -39,7 +39,9 @@
 
 &lt;p&gt;&lt;img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" /&gt;&lt;/p&gt;
 
-&lt;p&gt;Big improvement! How did I do it? I&amp;#39;ll show you.&lt;/p&gt;
+&lt;p&gt;Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.&lt;/p&gt;
+
+&lt;p&gt;So what were the changes?&lt;/p&gt;
 
       &lt;h3 id="a-common-problem" class="title title-h3"&gt;
         &lt;a name="a-common-problem" class="anchor" href="#a-common-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -117,7 +119,7 @@
 
 &lt;p&gt;Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.&lt;/p&gt;
 
-&lt;p&gt;Since WebpackER, by defaults, treats &lt;em&gt;every file&lt;/em&gt; in the &lt;code&gt;packs&lt;/code&gt; directory as a separate entry, it will build a separate dependency graph for &lt;em&gt;every file&lt;/em&gt; located there.&lt;/p&gt;
+&lt;p&gt;Since Webpack*er*, by default, treats &lt;em&gt;every file&lt;/em&gt; in the &lt;code&gt;packs&lt;/code&gt; directory as a separate entry, it will build a separate dependency graph for &lt;em&gt;every file&lt;/em&gt; located there.&lt;/p&gt;
 
 &lt;p&gt;That also means, for &lt;em&gt;every file&lt;/em&gt; in the &lt;code&gt;packs&lt;/code&gt; directory, there will be at least one, possibly more, files emitted as output in the &lt;code&gt;public&lt;/code&gt; directory during precompilation. If you&amp;#39;re not linking to these files anywhere in your app, then they don&amp;#39;t need to be emitted as output. For a large project, that could be lot of unnecessary work.&lt;/p&gt;
 
@@ -134,7 +136,7 @@
 &lt;p&gt;Is your Webpacker compilation taking forever? You may be overpacking.&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;If any file in this directory does not also have a corresponding &lt;code&gt;javascript_pack_tag&lt;/code&gt; in your application, then you&amp;#39;re overpacking.&lt;/p&gt;
+&lt;p&gt;If any file in Webpacker&amp;#39;s &amp;quot;packs&amp;quot; directory does not also have a corresponding &lt;code&gt;javascript_pack_tag&lt;/code&gt; in your application, then you&amp;#39;re overpacking.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;Be good to yourself and your development and deployment experience by being very intentional about what files you put in your &amp;quot;packs&amp;quot; directory.&lt;/p&gt;
