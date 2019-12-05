@@ -136,10 +136,12 @@
 &lt;p&gt;Is your Webpacker compilation taking forever? You may be overpacking.&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;Don&amp;#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.&lt;/p&gt;
+&lt;p&gt;If any file in this directory does not also have a corresponding &lt;code&gt;javascript_pack_tag&lt;/code&gt; in your application, then you&amp;#39;re overpacking.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Be good to yourself and your development and deployment experience by being very intentional about what files you put in your &amp;quot;packs&amp;quot; directory. If any file in this directory does not also have a corresponding &lt;code&gt;javascript_pack_tag&lt;/code&gt; in your application, then you may be wasting resources.&lt;/p&gt;
+&lt;p&gt;Be good to yourself and your development and deployment experience by being very intentional about what files you put in your &amp;quot;packs&amp;quot; directory.&lt;/p&gt;
+
+&lt;p&gt;Don&amp;#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.&lt;/p&gt;
 </content>
   </entry>
   <entry>
