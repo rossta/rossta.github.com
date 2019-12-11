@@ -627,6 +627,18 @@ video {
   }
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .hover\:bg-green-200:hover {
   background-color: #c6f6d5;
 }
@@ -963,11 +975,11 @@ video {
 }
 
 .button-green {
-  background-color: #38a169;
+  background-color: #2f855a;
 }
 
 .button-green:hover {
-  background-color: #48bb78;
+  background-color: #38a169;
 }
 
 .button-blue {
@@ -1010,6 +1022,18 @@ textarea {
 
 .formkit-form {
   visibility: hidden;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap; /* added line */
+  border: 0;
 }
 
 /*
