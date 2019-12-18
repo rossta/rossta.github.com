@@ -1,6 +1,20 @@
-### A Guide
+---
+title: Bundling CSS with Webpacker
+author: Ross Kaffenberger
+published: false
+summary: Bundling CSS with Webpacker
+description: An unofficial guide
+pull_image: 'blog/stock/louvre-pexels-photo.jpg'
+series:
+category: Code
+tags:
+  - Webpack
+  - Rails
+---
 
-Webpack isn't just for bundling JavaScript. While it's currently possible to use Webpacker and Sprockets side-by-side
+Webpack isn't just for bundling JavaScript. This post aims to serve as a guide for bundling CSS with Webpack
+
+While it's currently possible to use Webpacker and Sprockets side-by-side
 
 In Sprockets, land, you might have an `application.css` declared separately along with your application.js.
 
