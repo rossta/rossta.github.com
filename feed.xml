@@ -18,12 +18,12 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Webpack isn't just for JavaScript. You can bundle images with it too. Webpacker makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;Webpack isn't just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;In this post, we'll demonstrate how to reference Webpacker...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Webpack isn&amp;#39;t just for JavaScript. You can bundle images with it too. Webpacker makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;Webpack isn&amp;#39;t just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;In this post, we&amp;#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views.&lt;/p&gt;
+&lt;p&gt;In this post, we&amp;#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include &lt;a href="https://yarnpkg.com/"&gt;yarn&lt;/a&gt;.&lt;/p&gt;
 
       &lt;h3 id="folder-structure" class="title title-h3"&gt;
         &lt;a name="folder-structure" class="anchor" href="#folder-structure"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
