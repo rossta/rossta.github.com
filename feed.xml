@@ -5,10 +5,246 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2019-12-03T00:00:00+00:00</updated>
+  <updated>2019-12-18T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Importing images with Webpacker</title>
+    <link rel="alternate" href="/blog/importing-images-with-webpacker.html"/>
+    <id>/blog/importing-images-with-webpacker.html</id>
+    <published>2019-12-18T00:00:00+00:00</published>
+    <updated>2019-12-18T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Webpack isn't just for JavaScript. You can bundle images with it too. Webpacker makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this post, we'll demonstrate how to reference Webpacker...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Webpack isn&amp;#39;t just for JavaScript. You can bundle images with it too. Webpacker makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this post, we&amp;#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views.&lt;/p&gt;
+
+      &lt;h3 id="folder-structure" class="title title-h3"&gt;
+        &lt;a name="folder-structure" class="anchor" href="#folder-structure"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Folder structure
+      &lt;/h3&gt;
+    
+&lt;p&gt;First, where should you put your images? It doesn&amp;#39;t matter. The easiest place to start is under your &lt;code&gt;app/javascript&lt;/code&gt; folder, the default source path for Webpacker, such as &lt;code&gt;app/javascript/images&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;For the rest of this guide, we&amp;#39;ll assume the following directory structure and files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;app/javascript
+├── components
+│   └── Taco.js
+├── css
+│   ├── main.css
+├── images
+│   ├── burritos.jpg
+│   ├── guacamole.jpg
+│   └── tacos.jpg
+└── packs
+    └── application.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Isn&amp;#39;t weird to put images and css in a folder called &amp;quot;javascript&amp;quot;? Depends. If you consider, from Webpack&amp;#39;s perspective, everything is a JavaScript module, it may not be so strange. Otherwise, it&amp;#39;s possible to rename &lt;code&gt;app/javascript&lt;/code&gt; or place your images elsewhere. More on that below.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+      &lt;h3 id="images-in-js" class="title title-h3"&gt;
+        &lt;a name="images-in-js" class="anchor" href="#images-in-js"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Images in JS
+      &lt;/h3&gt;
+    
+&lt;p&gt;To reference an image from JavaScript in your Webpacker build, simply import it like any other module. React is not required for this to work ;)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascripts/components/Taco.js
+import TacoImage from &amp;#39;../images/tacos.jpg&amp;#39;
+
+export default function({ title }) {
+  return `
+  &amp;lt;div&amp;gt;
+    &amp;lt;h1&amp;gt;${title}&amp;lt;/h1&amp;gt;
+    &amp;lt;p&amp;gt;&amp;lt;img src=${TacoImage} alt=&amp;quot;Tacos, yum&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+  &amp;lt;/div&amp;gt;
+  `
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the example above, Webpack will import &lt;code&gt;TacoImage&lt;/code&gt; as a url to the file. In other words, an &amp;quot;image module&amp;quot; in Webpack exports a single default value, a string, representing the location of the file. Based on the default Webpacker configuration, the filename will look something like &lt;code&gt;&amp;quot;/packs/media/images/tacos-abcd1234.jpg&amp;quot;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Importing a image also works if you&amp;#39;re using &amp;quot;CSS in JS&amp;quot; to style a React component.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="jsx"&gt;import React from &amp;#39;react&amp;#39;
+
+import TacoImage from &amp;#39;../images/tacos.jpg&amp;#39;
+
+const styles = {
+  backgroundImage: `url(${TacoImage})`,
+}
+
+export default function ({ title }) {
+  return (
+    &amp;lt;div style={styles}&amp;gt;
+      {title}!
+    &amp;lt;/div&amp;gt;
+  )
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h2 id="images-in-css" class="title title-h2"&gt;
+        &lt;a name="images-in-css" class="anchor" href="#images-in-css"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Images in CSS
+      &lt;/h2&gt;
+    
+&lt;p&gt;In Sprockets, when referencing images in CSS, you would use a special &lt;code&gt;image-url()&lt;/code&gt; helper. In Webpack, simply use the standard &lt;code&gt;url()&lt;/code&gt; expression in CSS with a relative path.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="css"&gt;/* app/javascript/css/main.css */
+.burritos {
+  background-image: url(&amp;quot;../images/burritos.jpg&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The output for the style rule will, again, look something like &lt;code&gt;background-image: url(/packs/media/images/burritos-efgh5678.jpg);&lt;/code&gt;. This technique will also work for image paths in CSS Modules.&lt;/p&gt;
+
+      &lt;h3 id="images-in-css-within-npm-modules" class="title title-h3"&gt;
+        &lt;a name="images-in-css-within-npm-modules" class="anchor" href="#images-in-css-within-npm-modules"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Images in CSS within NPM modules
+      &lt;/h3&gt;
+    
+&lt;p&gt;One tricky bit worth mentioning is bundling images referenced in SCSS within an imported NPM module. For example, many jQuery plugins bundle their own SCSS and image assets. When Webpack processes this vendored CSS, you may see an error like the following, like in &lt;a href="https://stackoverflow.com/questions/58727976/import-images-of-an-npm-package-with-webpacker-and-rails"&gt;this question on StackOverflow&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Module not found: Error: Can&amp;#39;t resolve &amp;#39;../img/controls.png&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The problem is the path does not resolve properly relative to the output for this vendored SCSS. From the &lt;a href="https://github.com/rails/webpacker/blob/76b491750993fada8b0b0cc2546dfcfbc4aaae13/docs/css.md#resolve-url-loader"&gt;Webpacker docs&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Since Sass/libsass does not provide url rewriting, all linked assets must be relative to the output. Add the missing url rewriting using the resolve-url-loader. Place it directly after the sass-loader in the loader chain.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To fix this, you may need to get your hands dirty with some Webpacker configuration. Add the &lt;code&gt;resolve-url-loader&lt;/code&gt; and configure in &lt;code&gt;config/webpack/environment.js&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="shell"&gt;yarn add resolve-url-loader
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
+
+// resolve-url-loader must be used before sass-loader
+environment.loaders.get(&amp;#39;sass&amp;#39;).use.splice(-1, 0, {
+  loader: &amp;#39;resolve-url-loader&amp;#39;
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This loader rule, inserted in the loader pipeline for SASS/SCSS files, will ensure the proper url is written to the CSS output by Webpack.&lt;/p&gt;
+
+      &lt;h3 id="images-in-rails-views" class="title title-h3"&gt;
+        &lt;a name="images-in-rails-views" class="anchor" href="#images-in-rails-views"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Images in Rails views
+      &lt;/h3&gt;
+    
+&lt;p&gt;You may be accustomed to &lt;code&gt;&amp;lt;%= image_tag &amp;#39;tacos.jpg&amp;#39; %&amp;gt;&lt;/code&gt; to reference a image bundled in the Rails asset pipeline. Webpack has a similar tag:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- app/views/lunches/index.html.erb --&amp;gt;
+
+&amp;lt;%= image_pack_tag &amp;#39;media/images/guacamole.jpg&amp;#39; %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note, since Webpacker 4, the prefix &lt;code&gt;media/&lt;/code&gt; is necessary and the remaining path represents the location from your Webpack source path.&lt;/p&gt;
+
+&lt;p&gt;There&amp;#39;s a catch. This change may result in the following error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Webpacker::Manifest::MissingEntryError in Lunches#index
+Showing /path/to/project/app/views/lunches/index.html.erb where line #4 raised:
+
+Webpacker can&amp;#39;t find media/images/guacamole.jpg in /path/to/project/public/packs/manifest.json.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;However, if you use &lt;code&gt;&amp;lt;%= image_pack_tag &amp;#39;media/images/tacos.jpg %&amp;gt;&lt;/code&gt;, the taco image will happily renders. What gives?&lt;/p&gt;
+
+&lt;p&gt;Your Rails app is not being selective about cuisine. The difference is, we earlier imported the &lt;code&gt;tacos.jpg&lt;/code&gt; image in Webpack, but not &lt;code&gt;guacamole.jpg&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;One way to fix this issue is to import the &lt;code&gt;guacamole.jpg&lt;/code&gt; image somewhere in your Webpack dependency graph. It&amp;#39;s not necessary to grab a reference to the imported variable because we only care about the side effect of emitting the file for Rails to reference in the view.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="js"&gt;import &amp;#39;../images/guacamole.jpg&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Another way to fix this issue is to import &lt;em&gt;all&lt;/em&gt; images in the &lt;code&gt;app/javascript/images&lt;/code&gt; directory. Webpack provides a special function to import many files in a directory in one expression: &lt;code&gt;require.context&lt;/code&gt;. You might add this to your &lt;code&gt;application.js&lt;/code&gt; pack:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
+
+require.context(&amp;#39;../images&amp;#39;, true)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This expression will recursively require all the files in the &lt;code&gt;images&lt;/code&gt; directory. As a result, we can now render &lt;code&gt;guacamole.jpg&lt;/code&gt; in a Rails view.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Note: I only recommend using &lt;code&gt;require.context&lt;/code&gt; for your images if you need to render them in your Rails views; &lt;code&gt;require.context&lt;/code&gt; is NOT necessary to import images into JS files like your React components, as illustrated earlier.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+      &lt;h3 id="reconfiguring" class="title title-h3"&gt;
+        &lt;a name="reconfiguring" class="anchor" href="#reconfiguring"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Reconfiguring
+      &lt;/h3&gt;
+    
+&lt;p&gt;If you don&amp;#39;t feel comfortable with &lt;code&gt;app/javascript&lt;/code&gt; as the source directory for &lt;code&gt;images&lt;/code&gt;, you can either rename the source path or add to the set of resolved paths.&lt;/p&gt;
+
+&lt;p&gt;To rename &lt;code&gt;app/javascript&lt;/code&gt;, rename the directory and tell Rails about it in &lt;code&gt;config/webpacker.yml&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="yaml"&gt;default: &amp;amp;default
+  source_path: app/frontend
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To add to the set of resolved paths where Webpack should look for assets besides in &lt;code&gt;app/javascript&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="yaml"&gt;default: &amp;amp;default
+  resolved_paths:
+    - app/assets
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="diving-deeper" class="title title-h3"&gt;
+        &lt;a name="diving-deeper" class="anchor" href="#diving-deeper"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Diving Deeper
+      &lt;/h3&gt;
+    
+&lt;p&gt;I have to admit, a few years ago, when I first heard about Webpack, I was super-confused. I understood it to be a JavaScript module bundler. &lt;em&gt;How on Earth does it handles images?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The short answer, of course, is &lt;em&gt;it depends&lt;/em&gt;. Generally, Webpack will treat everything it can understand as a JavaScript module. To help Webpack understand images, projects would add a &amp;quot;loader&amp;quot; (or loaders) to the Webpack configuration. A suitable loader would know how to handle an image file and output a representation of something, like an inlined base64 string, that can be manipulated in JavaScript.&lt;/p&gt;
+
+&lt;p&gt;To help Webpack understand images, svg files, and fonts in your Rails project, Webpacker adds the &lt;code&gt;file-loader&lt;/code&gt; package. This package will emit the imported file as a side effect of the build and return a path to the file as the module contents.&lt;/p&gt;
+
+&lt;p&gt;For more on how Webpack works with images, check out the &lt;a href="https://webpack.js.org/guides/asset-management/#loading-images"&gt;asset management docs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I also put together a sample Rails 6 Webpacker demo project on GitHub for more context:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/images"&gt;Images in JS, CSS, and Rails&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/react-image"&gt;Images with CSS-in-JS in a React app&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+  </entry>
   <entry>
     <title>Overpacking: A Common Webpacker Mistake</title>
     <link rel="alternate" href="/blog/overpacking-a-common-webpacker-mistake.html"/>
@@ -850,96 +1086,6 @@ render() {
 &lt;p&gt;In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.&lt;/p&gt;
 
 &lt;p&gt;As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;source code on Github&lt;/a&gt;. Make a pull request or let me know how I could improve things by &lt;a href="https://twitter.com/rossta"&gt;reaching out on Twitter&lt;/a&gt;.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Why RSpec users should care about Rails 5.1 and system tests</title>
-    <link rel="alternate" href="/blog/why-rails-system-tests-matter.html"/>
-    <id>/blog/why-rails-system-tests-matter.html</id>
-    <published>2018-12-27T00:00:00+00:00</published>
-    <updated>2018-12-27T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;I get the feeling a lot of RSpec users don’t know about the advantages of Rails 5.1 changes as part of the introduction of system tests. RSpec has had feature tests for a long time? What’s the big deal?&lt;/p&gt;
-
-      &lt;h3 id="background" class="title title-h3"&gt;
-        &lt;a name="background" class="anchor" href="#background"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-   ...&lt;/h3&gt;</summary>
-    <content type="html">&lt;p&gt;I get the feeling a lot of RSpec users don’t know about the advantages of Rails 5.1 changes as part of the introduction of system tests. RSpec has had feature tests for a long time? What’s the big deal?&lt;/p&gt;
-
-      &lt;h3 id="background" class="title title-h3"&gt;
-        &lt;a name="background" class="anchor" href="#background"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Background
-      &lt;/h3&gt;
-    
-&lt;p&gt;For context, RSpec has supported high level testing through &lt;a href="https://relishapp.com/rspec/rspec-rails/docs/feature-specs/feature-spec"&gt;feature tests&lt;/a&gt; for many years. Like Cucumber, feature tests are designed to exercise application functionality through the user interface. There are many merits to feature tests as a way to document core business logic and catch regressions. There are drawbacks as well, including the fact that they can be very expensive, i.e., slow, to maintain and execute. I&amp;#39;m going to ignore this for now.&lt;/p&gt;
-
-&lt;p&gt;I&amp;#39;ll also altogether ignore interesting alternatives for UI and fullstack testing, like &lt;a href="https://www.cypress.io/"&gt;cypress.io&lt;/a&gt;. This post is aimed at folks working on Rails apps that have accumulated month or years worth of RSpec feature tests.&lt;/p&gt;
-
-&lt;p&gt;For a long time, Rails has resisted first class support for this kind of testing, so much of RSpec&amp;#39;s integration with Rails is bolted on. It has mostly worked well, though there have been some gotchas which I&amp;#39;ll get to.&lt;/p&gt;
-
-&lt;p&gt;Last year, that all changed when Rails released Rails 5.1 with some key changes to support the introduction of system tests. On the surface, Rails system tests have pretty much the same usage and goals as RSpec feature tests, including integration with Capybara, the Ruby interface to interacting with numerous webdrivers like headless Chrome, Gecko for Firefox, PhantomJS, etc. So basically everything we&amp;#39;ve had in RSpec for ages. RSpec developers collectively yawned.&lt;/p&gt;
-
-&lt;p&gt;The real win with Rails 5.1 is what&amp;#39;s happening under the surface. The Rails team made key changes to internals, stuff RSpec alone couldn’t provide.&lt;/p&gt;
-
-      &lt;h3 id="why-transactional-tests-are-better" class="title title-h3"&gt;
-        &lt;a name="why-transactional-tests-are-better" class="anchor" href="#why-transactional-tests-are-better"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Why transactional tests are better
-      &lt;/h3&gt;
-    
-&lt;p&gt;Awhile back, RSpec feature tests, through Capybara, enabled developers to test UI interactions enabled by JavaScript. With so much logic in our apps going to the frontend, this was a huge improvement over standard Rails testing support, which previously stopped well short of that.&lt;/p&gt;
-
-&lt;p&gt;Though this helped increase testing confidence (let’s ignore flaky JS tests for now), this approach also came with a catch: developers had to think about managing the database in their end-to-end JavaScript-enabled acceptance tests.&lt;/p&gt;
-
-&lt;p&gt;Backing up a step, RSpec tests are typically individually wrapped in database transactions. This makes rolling back DB changes that occur within each test really fast and easy. But in pre-Rails 5.1, RSpec feature tests with a JavaScript-enabled webdriver like Chrome, wrapping tests in transactions doesn’t work!&lt;/p&gt;
-
-&lt;p&gt;Previously, it was not possible for the test and server threads to share the same database connection for JavaScript-enabled drivers; any data created in a transaction in the test isn’t committed to the DB, so the Rails server doesn’t have access to the data! Missing data in the JavaScript acceptance tests is really confusing to lots of Rails developers, myself included. To this day, this “gotcha” has tripped me up on new projects.&lt;/p&gt;
-
-&lt;p&gt;The workaround, for years, has been to disable transaction mode for—the very feature that makes database-backed test faster and easier to rollback for successive tests—for JavaScript-enabled feature tests. To replace this, most RSpec-based Rails projects lean on another gem, DatabaseCleaner, plus some extra configuration, to switch modes just for JavaScript-enabled acceptance tests. The alternative modes are usually either truncate the whole DB or delete all the rows; both slower and sometime problematic when switching back-and-forth. All this instead of just having RSpec rollback transactions without us having to think about it while developing our tests.&lt;/p&gt;
-
-&lt;p&gt;Not to mention, having the Rails server run in a separate process makes it a lot harder to debug. If you like using a debugger like pry in your application code, good luck making it work with traditional RSpec acceptance tests.&lt;/p&gt;
-
-&lt;p&gt;Rails 5.1+ solves the database problem. &lt;a href="https://github.com/eileencodes"&gt;Eileen Uchitelle&lt;/a&gt; on the Rails team made the changes necessary to run ensure test threads and the Rails server can run in the same process by sharing the database connection (&lt;a href="https://github.com/rails/rails/pull/28083"&gt;pull request&lt;/a&gt;). This made it possible to wrap JavaScript-enabled acceptance tests in database transactions. To take advantage, RSpec users would need to upgrade to a recent version of Rails, re-enable transactional fixtures for all tests, and remove the DatabaseCleaner gem.&lt;/p&gt;
-
-&lt;p&gt;The result: faster rollback, no multiprocess confusion, no need to manage the database with DatabaseCleaner, debugging the server in process is possible, etc. A better solution all around.&lt;/p&gt;
-
-      &lt;h3 id="in-closing" class="title title-h3"&gt;
-        &lt;a name="in-closing" class="anchor" href="#in-closing"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        In closing
-      &lt;/h3&gt;
-    
-&lt;p&gt;To my RSpec friends: upgrade to Rails 5.1, drop the DatabaseCleaner gem, and set  &lt;code&gt;config.use_transactional_fixtures = true&lt;/code&gt; in the RSpec configuration. It should also be relatively straightforward to &lt;a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6"&gt;adopt system tests from existing feature tests&lt;/a&gt;, but either strategy will work with those changes. You’ll still need to fix those flaky scenarios yourself though.&lt;/p&gt;
-
-      &lt;h3 id="resources" class="title title-h3"&gt;
-        &lt;a name="resources" class="anchor" href="#resources"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Resources
-      &lt;/h3&gt;
-    
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6"&gt;https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html"&gt;https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/"&gt;https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/rails/rails/pull/28083"&gt;https://github.com/rails/rails/pull/28083&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec"&gt;https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;This post has been edited to reflect Thomas Walpole&amp;#39;s corrections in the comments.&lt;/em&gt;&lt;/p&gt;
 </content>
   </entry>
 </feed>
