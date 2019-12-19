@@ -75,7 +75,7 @@ export default function ({ title }) {
 }
 ```
 
-## Images in CSS
+### Images in CSS
 
 In Sprockets, when referencing images in CSS, you would use a special `image-url()` helper. In Webpack, simply use the standard `url()` expression in CSS with a relative path.
 
@@ -113,7 +113,6 @@ environment.loaders.get('sass').use.splice(-1, 0, {
 })
 ```
 This loader rule, inserted in the loader pipeline for SASS/SCSS files, will ensure the proper url is written to the CSS output by Webpack.
-
 
 ### Images in Rails views
 
