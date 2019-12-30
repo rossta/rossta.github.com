@@ -22,7 +22,7 @@
   <section class="signup-form-standalone hero">
     <%= partial "partials/signup" %>
   </section>
-  <section class="index-posts mb-12">
+  <section class="index-posts mb-24">
     <h2 class="mb-8">More posts</h2>
     <%= partial "partials/article_index", locals: { local_articles: related_articles(current_article, 3) } %>
   </section>
