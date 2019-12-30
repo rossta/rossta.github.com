@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.83dd48060eaf62bf1e16.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
   </head>
   <body id="application" class="leading-normal text-gray-900">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
@@ -466,6 +466,12 @@ export default {
 <p>In the next post, we&#39;ll look at adding some conditional rendering; since all pages aren&#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.</p>
 
   </article>
+  <section class="mb-12 italic font-light">
+    <p>
+        Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
+      Published on Jun 28, 2018
+    </p>
+  </section>
   <section class="signup-form-standalone hero">
     <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
 <form
@@ -536,14 +542,30 @@ export default {
 
 
   </section>
-  <article class="mb-12">
+  <section class="index-posts mb-12">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/extracting-a-data-component-in-vue.html">Extracting a data component in Vue</a>
+    </header>
+      <p>In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PDF page data.</p>
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
-      Published on Jun 28, 2018
-    </p>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/building-a-pdf-viewer-with-vue-part-2.html">Displaying PDFs lazily with Vue</a>
+    </header>
+      <p>This tutorial demonstrates how to use Vue to defer fetching and rendering of PDF page data until elements are scrolled into the client browser.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/deploying-vue-with-circleci-2.html">Deploying Vue with CircleCI 2.0</a>
+    </header>
+      <p>Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy</p>
+  </article>
+
   </section>
+  <article class="mb-24">
+  </article>
     <!-- Webpack on Rails course popup form -->
     <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
 

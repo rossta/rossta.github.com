@@ -766,6 +766,10 @@ video {
   margin-bottom: 4rem;
 }
 
+.mb-24 {
+  margin-bottom: 6rem;
+}
+
 .focus\:outline-none:focus {
   outline: 0;
 }
@@ -861,10 +865,6 @@ video {
 
 .text-gray-600 {
   color: #718096;
-}
-
-.text-gray-700 {
-  color: #4a5568;
 }
 
 .text-gray-800 {
