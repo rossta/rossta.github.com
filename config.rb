@@ -207,6 +207,22 @@ helpers do
     blog("blog").articles.select { |a| a.data[:popular] }.sort_by { |a| a.data[:popular] }
   end
 
+  # Look for similar articles published since and prior to current
+  # Fall back to different articles
+  def related_articles(article, count = 3)
+    other_articles = blog("blog").articles - [article]
+    article_tags = article.tags
+    similar, different = *other_articles.partition { |a| (a.tags & article_tags).any? }
+    similar_since, similar_prior = similar.partition { |a| a.date > article.date }
+    similar_ordered = (similar_since + similar_prior)
+
+    if (similar_since.length > (count - 1))
+      similar_ordered = (similar_since + similar_prior).rotate(similar_since.length - (count - 1))
+    end
+
+    (similar_ordered + different).take(count)
+  end
+
   Series = Struct.new(:id, :title, :summary)
 
   def blog_series

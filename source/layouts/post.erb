@@ -13,16 +13,6 @@
   <section class="signup-form-standalone hero">
     <%= partial "partials/signup" %>
   </section>
-  <article class="mb-12">
-    <% if current_page.data.pull_image %>
-      <figure>
-        <%= image_tag current_page.data.pull_image if current_page.data.pull_image %>
-        <% if current_page.data.pull_image_caption %>
-          <figcaption><%= current_page.data.pull_image_caption %></figcaption>
-        <% end %>
-      </figure>
-    <% end %>
-  </article>
   <section class="mb-12 italic font-light">
     <p>
       <% if current_page.data.series %>
@@ -32,6 +22,20 @@
       Published on <%= current_article.date.strftime('%b %e, %Y') %>
     </p>
   </section>
+  <section class="index-posts mb-12">
+    <h2 class="mb-8">More posts</h2>
+    <%= partial "partials/article_index", locals: { local_articles: related_articles(current_article, 3) } %>
+  </section>
+  <article class="mb-24">
+    <% if current_page.data.pull_image %>
+      <figure>
+        <%= image_tag current_page.data.pull_image if current_page.data.pull_image %>
+        <% if current_page.data.pull_image_caption %>
+          <figcaption><%= current_page.data.pull_image_caption %></figcaption>
+        <% end %>
+      </figure>
+    <% end %>
+  </article>
   <% if current_page_tagged?(%w[Rails Webpack]) %>
     <!-- Webpack on Rails course popup form -->
     <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
