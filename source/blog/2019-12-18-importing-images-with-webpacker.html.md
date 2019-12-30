@@ -3,7 +3,7 @@ title: Importing images with Webpacker
 author: Ross Kaffenberger
 published: true
 summary: An unofficial Rails guide
-description: Learn how to reference Webpacker images from your JavaScript, CSS, and views in your Rails app.
+description: "Using images bundled by Webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate."
 pull_image: 'blog/stock/jr-korpa-lights-unsplash.jpg'
 pull_image_caption: Photo by JR Korpa on Unsplash
 series:

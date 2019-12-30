@@ -3,8 +3,8 @@
     <header class="index-title">
       <%= link_to article.title, article %>
     </header>
-    <% if article.data.summary %>
-      <p class="index-alt-title subtle"><%= article.data.summary %></p>
+    <% if article.data.description %>
+      <p><%= article.data.description %></p>
     <% end %>
   </article>
 <% end %>
