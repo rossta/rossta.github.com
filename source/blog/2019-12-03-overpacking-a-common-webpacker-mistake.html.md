@@ -1,5 +1,5 @@
 ---
-title: 'Overpacking: A Common Webpacker Mistake'
+title: 'Overpacking: A common Webpacker mistake'
 author: Ross Kaffenberger
 published: true
 summary: i.e., How I saved 6 minutes in a Rails team's deploy time
