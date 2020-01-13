@@ -9,6 +9,22 @@
 @import './code';
 @import './hero';
 
+.layout {
+  @apply mx-auto w-full px-4;
+}
+
+@screen sm {
+  .layout {
+    @apply px-6;
+  }
+}
+@screen md {
+  .layout {
+    @apply w-3/4;
+    max-width: 840px;
+  }
+}
+
 h1,
 h2,
 h3 {
@@ -33,22 +49,6 @@ h3 {
   }
   h3 {
     @apply text-xl;
-  }
-}
-
-.layout {
-  @apply mx-auto w-full px-4;
-}
-
-@screen sm {
-  .layout {
-    @apply px-6;
-  }
-}
-@screen md {
-  .layout {
-    @apply w-3/4;
-    max-width: 860px;
   }
 }
 
@@ -127,7 +127,7 @@ hr {
 
 .post ul,
 .post ol {
-  @apply mb-4;
+  @apply mb-8;
 }
 
 .post ul li {
