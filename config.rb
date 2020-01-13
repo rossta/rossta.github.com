@@ -192,7 +192,13 @@ helpers do
   def tweet_link_to(text, params = {}, options = {})
     uri = Addressable::URI.parse("https://twitter.com/intent/tweet")
     uri.query_values = params
-    link_to(text, uri, options.merge(target: "_blank", rel: "noopener"))
+    link_to(text, uri, options.merge(target: "_blank", rel: "noopener noreferrer"))
+  end
+
+  def discuss_on_twitter_link_to(url, options = {})
+    uri = Addressable::URI.parse("https://mobile.twitter.com/search")
+    uri.query_values = {q: url}
+    link_to("Discuss on Twitter", uri, options.merge(target: "_blank", rel: "noopener noreferrer"))
   end
 
   def top_tags
@@ -216,7 +222,7 @@ helpers do
     similar_since, similar_prior = similar.partition { |a| a.date > article.date }
     similar_ordered = (similar_since + similar_prior)
 
-    if (similar_since.length > (count - 1))
+    if similar_since.length > (count - 1)
       similar_ordered = (similar_since + similar_prior).rotate(similar_since.length - (count - 1))
     end
 

@@ -10,13 +10,17 @@
     <%= page_header current_article.title, current_page.data.summary %>
     <%= yield %>
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      <% if current_page.data.series %>
-        <% series =  current_page.data.series %>
-        Part of the <%= link_to series, series_path(series, "blog") %> series.
-      <% end %>
-      Published on <%= current_article.date.strftime('%b %e, %Y') %>
+  <section class="mb-12">
+    <p class="text-right">
+      <%= discuss_on_twitter_link_to(current_url, class: "font-bold") %>
+      &middot;
+      <span class="italic font-light">
+        <% if current_page.data.series %>
+          <% series =  current_page.data.series %>
+          Part of the <%= link_to series, series_path(series, "blog") %> series.
+        <% end %>
+        Published on <%= current_article.date.strftime('%b %e, %Y') %>
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
