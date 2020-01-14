@@ -19,7 +19,7 @@ Following this recent announcement from [@dhh](https://twitter.com/dhh) and the 
 
 When I first started working with Webpack, I didn't realize how under-prepared I was. I was tasked with [integrating Webpack into a large Rails app](/blog/from-sprockets-to-webpack.html) and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience with the Rails asset pipeline. Many of these assumptions turned out to be wrong. This was frustrating and humbling.
 
-And after spending the last month answering Webpack questions on StackOverflow, I've found I'm not alone.
+And after spending the last month answering Webpack questions on StackOverflow, I've come across plenty of folks going through some of the same mental hurdles I've been through.
 
 The intended audience for this post has a general notion of "why use Webpack" or "why use an asset bundler", but for more on that, I recommend [The Many Jobs of JS Build Tools](https://www.swyx.io/writing/jobs-of-js-build-tools/) and [Webpack from Nothing: What problem are we solving?](https://what-problem-does-it-solve.com/webpack/index.html). For a rigorous technical overview of the project, I suggest [the Webpack docs](https://webpack.js.org/); they have gotten quite good.
 
