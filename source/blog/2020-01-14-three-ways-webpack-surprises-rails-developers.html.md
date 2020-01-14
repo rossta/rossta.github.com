@@ -117,11 +117,11 @@ app/javascript
 
 The mixing of CSS bundled in JavaScript and treated as JavaScript modules has isn't strictly necessary, but it most certainly a mental leap for the uninitiated.
 
-### 3. Webpack configuration has a high barrier to entry
+### 3. Webpack configuration is extreme pluggable
+
+There's a reason Webpack configuration has such a high barrier to entry: Webpack is the ultimate delegator.
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">I continue to be amazed at how many learners seem to almost deliberately avoid reading the actual official docs for the tools they&#39;re trying to use. I keep seeing folks asking for Udemy courses and &quot;best tutorials&quot; and stuff.<br><br>Why do people avoid reading actual docs?</p>&mdash; Mark Erikson (@acemarke) <a href="https://twitter.com/acemarke/status/1213898963679633411?ref_src=twsrc%5Etfw">January 5, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-My best guess about why we don't read docs is that we're easily distracted. Too many other things competing for our attention. And, as is especially true in this case, most of us would rather spend our time focused on our apps than on our build tools.
 
 Coming from Rails, which famously values "convention over configuration", the ergonomics of setting up a Webpack configuration cause discomfort. It aims to be extremely flexible and extensible; to that end, it succeeds superbly. To serve this goal, Webpack provides a large array of [configuration options](https://webpack.js.org/configuration/). On top of that, most Webpack configurations bring in a number of loader and plugins, each of which have their own configuration requirements.
 
