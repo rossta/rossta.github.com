@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,7 +59,7 @@
     </h2>
 </header>
 
-    <p>With all the hubbub around <a href="http://nodejs.org/">node.js</a> lately, it’s been easy to forget established event-driven server-side processing solutions in Ruby. One option is <a href="http://rubyeventmachine.com/">eventmachine</a>, which I recently used to develop a multi-player online sudoku game, <a href="http://playsudokill.com">Sudokill</a>, for my Heuristics class at NYU.</p>
+    <p>With all the hubbub around <a href="http://nodejs.org/" target="_blank" rel="noopener noreferrer">node.js</a> lately, it’s been easy to forget established event-driven server-side processing solutions in Ruby. One option is <a href="http://rubyeventmachine.com/" target="_blank" rel="noopener noreferrer">eventmachine</a>, which I recently used to develop a multi-player online sudoku game, <a href="http://playsudokill.com" target="_blank" rel="noopener noreferrer">Sudokill</a>, for my Heuristics class at NYU.</p>
 
 <p>As the game designer, I needed to build a game server that could easily handle multiple socket connections to player programs written by my classmates. Leveraging the event-driven nature of eventmachine, I was able to build a server that is fast, efficient and easy to maintain.</p>
 
@@ -86,15 +86,15 @@ Whenever a socket connection disconnects, say goodbye
 
 <p>Let’s consider how we would test a client player connecting to my game server through a socket. I’ll build a class called Server which will be responsible for starting the eventmachine when its #start method is called. When a socket connection is made, I want to add the new player to a list of players kept on the server and send the message “READY” back to the client.</p>
 
-<p>How would we write an integration test for this with rspec? The test would have to start an instance of my server class and separately initiate a client socket connection. Once the connection is made, then the test assertions can be run. After some digging around, I found some good examples to follow in the Ilya Grigorik’s eventmachine-backed websocket server, <a href="https://github.com/igrigorik/em-websocket">em-websocket</a>. Here’s the basic approach:</p>
+<p>How would we write an integration test for this with rspec? The test would have to start an instance of my server class and separately initiate a client socket connection. Once the connection is made, then the test assertions can be run. After some digging around, I found some good examples to follow in the Ilya Grigorik’s eventmachine-backed websocket server, <a href="https://github.com/igrigorik/em-websocket" target="_blank" rel="noopener noreferrer">em-websocket</a>. Here’s the basic approach:</p>
 
-<p>An eventmachine process runs in a loop: once we start the loop, it will run forever until we trigger the event to stop the loop. All of our eventmachine code will happen in the event loop. We setup the loop by passing our code in a block to the <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000461">run</a> method:</p>
+<p>An eventmachine process runs in a loop: once we start the loop, it will run forever until we trigger the event to stop the loop. All of our eventmachine code will happen in the event loop. We setup the loop by passing our code in a block to the <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000461" target="_blank" rel="noopener noreferrer">run</a> method:</p>
 
 <p>So in our test, we’ll create the event loop with EM.run and pass a block with our test code in which we can start the game server and the socket connection. Once the assertions have been made, we’ll call EM.stop to end the event loop. Otherwise, it would run forever; we’d never get to the next test!</p>
 
-<p>An eventmachine socket server can be initiated with the <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000470">start_server</a> method. We’ll give this method a host and port where it will listen for clients.</p>
+<p>An eventmachine socket server can be initiated with the <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000470" target="_blank" rel="noopener noreferrer">start_server</a> method. We’ll give this method a host and port where it will listen for clients.</p>
 
-<p>We’ll also use eventmachine’s <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000473">connect</a> method to make the client socket connection to the server. When a socket connection is made, eventmachine creates an instance of EventMachine::Connection which responds to certain methods representing different phases of the socket connection: after initialization, when a message is received, when the connection is broken, etc. EM.connect accepts a module or class inheriting from EventMachine::Connection which allows us to mix in our app or test logic to the connection.</p>
+<p>We’ll also use eventmachine’s <a href="http://eventmachine.rubyforge.org/EventMachine.html#M000473" target="_blank" rel="noopener noreferrer">connect</a> method to make the client socket connection to the server. When a socket connection is made, eventmachine creates an instance of EventMachine::Connection which responds to certain methods representing different phases of the socket connection: after initialization, when a message is received, when the connection is broken, etc. EM.connect accepts a module or class inheriting from EventMachine::Connection which allows us to mix in our app or test logic to the connection.</p>
 
 <p>To take the place of a player client in the test, I’ve borrowed FakeSocketClient (which subclasses EventMachine::Connection) from the em-websocket test suite and defined it in my spec_helper.rb. The fake client exposes attr_accessors onopen, omessage and onclose that we’ll treat like callbacks in the test.</p>
 
@@ -106,12 +106,16 @@ Whenever a socket connection disconnects, say goodbye
 
 <p>Other tests may include multiple client connections where we may need to assert that different messages like “YOUR TURN” and “WAIT YOUR TURN” are sent to the correct players.</p>
 
-<p>For more reading on the subject of event programming, I recommend <a href="http://pdos.csail.mit.edu/~rtm/papers/dabek:event.pdf">Dabek, et.al, Event-driven Programming for Robust Software</a>.</p>
+<p>For more reading on the subject of event programming, I recommend <a href="http://pdos.csail.mit.edu/~rtm/papers/dabek:event.pdf" target="_blank" rel="noopener noreferrer">Dabek, et.al, Event-driven Programming for Robust Software</a>.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Dec 27, 2010
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2010-12-27-behavior-driven-event-driven-eventmachine-rspec.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Dec 27, 2010
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -133,7 +137,7 @@ Whenever a socket connection disconnects, say goodbye
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=How%20to%20Test%20Your%20Eventmachine%20Code%20with%20RSpec&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fbehavior-driven-event-driven-eventmachine-rspec.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=How%20to%20Test%20Your%20Eventmachine%20Code%20with%20RSpec&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fbehavior-driven-event-driven-eventmachine-rspec.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby, RSpec, and the web. Thank you!
   </p>
@@ -251,7 +255,7 @@ Whenever a socket connection disconnects, say goodbye
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

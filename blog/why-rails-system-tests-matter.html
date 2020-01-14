@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -69,9 +69,9 @@
         Background
       </h3>
     
-<p>For context, RSpec has supported high level testing through <a href="https://relishapp.com/rspec/rspec-rails/docs/feature-specs/feature-spec">feature tests</a> for many years. Like Cucumber, feature tests are designed to exercise application functionality through the user interface. There are many merits to feature tests as a way to document core business logic and catch regressions. There are drawbacks as well, including the fact that they can be very expensive, i.e., slow, to maintain and execute. I&#39;m going to ignore this for now.</p>
+<p>For context, RSpec has supported high level testing through <a href="https://relishapp.com/rspec/rspec-rails/docs/feature-specs/feature-spec" target="_blank" rel="noopener noreferrer">feature tests</a> for many years. Like Cucumber, feature tests are designed to exercise application functionality through the user interface. There are many merits to feature tests as a way to document core business logic and catch regressions. There are drawbacks as well, including the fact that they can be very expensive, i.e., slow, to maintain and execute. I&#39;m going to ignore this for now.</p>
 
-<p>I&#39;ll also altogether ignore interesting alternatives for UI and fullstack testing, like <a href="https://www.cypress.io/">cypress.io</a>. This post is aimed at folks working on Rails apps that have accumulated month or years worth of RSpec feature tests.</p>
+<p>I&#39;ll also altogether ignore interesting alternatives for UI and fullstack testing, like <a href="https://www.cypress.io/" target="_blank" rel="noopener noreferrer">cypress.io</a>. This post is aimed at folks working on Rails apps that have accumulated month or years worth of RSpec feature tests.</p>
 
 <p>For a long time, Rails has resisted first class support for this kind of testing, so much of RSpec&#39;s integration with Rails is bolted on. It has mostly worked well, though there have been some gotchas which I&#39;ll get to.</p>
 
@@ -99,7 +99,7 @@
 
 <p>Not to mention, having the Rails server run in a separate process makes it a lot harder to debug. If you like using a debugger like pry in your application code, good luck making it work with traditional RSpec acceptance tests.</p>
 
-<p>Rails 5.1+ solves the database problem. <a href="https://github.com/eileencodes">Eileen Uchitelle</a> on the Rails team made the changes necessary to run ensure test threads and the Rails server can run in the same process by sharing the database connection (<a href="https://github.com/rails/rails/pull/28083">pull request</a>). This made it possible to wrap JavaScript-enabled acceptance tests in database transactions. To take advantage, RSpec users would need to upgrade to a recent version of Rails, re-enable transactional fixtures for all tests, and remove the DatabaseCleaner gem.</p>
+<p>Rails 5.1+ solves the database problem. <a href="https://github.com/eileencodes" target="_blank" rel="noopener noreferrer">Eileen Uchitelle</a> on the Rails team made the changes necessary to run ensure test threads and the Rails server can run in the same process by sharing the database connection (<a href="https://github.com/rails/rails/pull/28083" target="_blank" rel="noopener noreferrer">pull request</a>). This made it possible to wrap JavaScript-enabled acceptance tests in database transactions. To take advantage, RSpec users would need to upgrade to a recent version of Rails, re-enable transactional fixtures for all tests, and remove the DatabaseCleaner gem.</p>
 
 <p>The result: faster rollback, no multiprocess confusion, no need to manage the database with DatabaseCleaner, debugging the server in process is possible, etc. A better solution all around.</p>
 
@@ -111,7 +111,7 @@
         In closing
       </h3>
     
-<p>To my RSpec friends: upgrade to Rails 5.1, drop the DatabaseCleaner gem, and set  <code>config.use_transactional_fixtures = true</code> in the RSpec configuration. It should also be relatively straightforward to <a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6">adopt system tests from existing feature tests</a>, but either strategy will work with those changes. You’ll still need to fix those flaky scenarios yourself though.</p>
+<p>To my RSpec friends: upgrade to Rails 5.1, drop the DatabaseCleaner gem, and set  <code>config.use_transactional_fixtures = true</code> in the RSpec configuration. It should also be relatively straightforward to <a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6" target="_blank" rel="noopener noreferrer">adopt system tests from existing feature tests</a>, but either strategy will work with those changes. You’ll still need to fix those flaky scenarios yourself though.</p>
 
       <h3 id="resources" class="title title-h3">
         <a name="resources" class="anchor" href="#resources">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -122,19 +122,23 @@
       </h3>
     
 <ul>
-<li><a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6">https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6</a></li>
-<li><a href="https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html">https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html</a></li>
-<li><a href="https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/">https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/</a></li>
-<li><a href="https://github.com/rails/rails/pull/28083">https://github.com/rails/rails/pull/28083</a></li>
-<li><a href="https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec">https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec</a></li>
+<li><a href="https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6" target="_blank" rel="noopener noreferrer">https://medium.com/table-xi/a-quick-guide-to-rails-system-tests-in-rspec-b6e9e8a8b5f6</a></li>
+<li><a href="https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html" target="_blank" rel="noopener noreferrer">https://everydayrails.com/2018/01/08/rspec-3.7-system-tests.html</a></li>
+<li><a href="https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/" target="_blank" rel="noopener noreferrer">https://chriskottom.com/blog/2017/04/full-stack-testing-with-rails-system-tests/</a></li>
+<li><a href="https://github.com/rails/rails/pull/28083" target="_blank" rel="noopener noreferrer">https://github.com/rails/rails/pull/28083</a></li>
+<li><a href="https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec" target="_blank" rel="noopener noreferrer">https://stackoverflow.com/questions/44269257/rails-5-1-configuring-built-in-system-tests-with-rspec</a></li>
 </ul>
 
 <p><em>This post has been edited to reflect Thomas Walpole&#39;s corrections in the comments.</em></p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Dec 27, 2018
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2018-12-27-why-rails-system-tests-matter.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Dec 27, 2018
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -210,7 +214,7 @@
     <h2 class="mb-8">More posts</h2>
       <article class="index-post">
     <header class="index-title">
-      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A Common Webpacker Mistake</a>
+      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A common Webpacker mistake</a>
     </header>
       <p>A big issue that comes up with Webpacker is "where to put the JavaScript files". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.</p>
   </article>
@@ -280,7 +284,7 @@
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

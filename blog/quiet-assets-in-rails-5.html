@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,7 +59,7 @@
     </h2>
 </header>
 
-    <p>Recent changes to the <a href="https://github.com/rails/sprockets-rails"><code>sprockets-rails</code></a> gem now include a configuration option
+    <p>Recent changes to the <a href="https://github.com/rails/sprockets-rails" target="_blank" rel="noopener noreferrer"><code>sprockets-rails</code></a> gem now include a configuration option
 to silence asset request logging in development.</p>
 
       <h3 id="the-problem" class="title title-h3">
@@ -75,7 +75,7 @@ debug something, the first question I&#39;m thinking is, &quot;What do the logs 
 
 <p>That said, sometimes Rails logs more info than we need. By default, Rails will record the web requests for each asset in development. Each page load could incur several to many additional requests for JavaScript, CSS, and images, potentially drowning your <code>STDOUT</code> or <code>development.log</code>.</p>
 
-<p>As <a href="https://eliotsykes.com/quiet-assets">this great article on Rails debugging with quiet logs points out</a>, your log may get filled with lines like this:</p>
+<p>As <a href="https://eliotsykes.com/quiet-assets" target="_blank" rel="noopener noreferrer">this great article on Rails debugging with quiet logs points out</a>, your log may get filled with lines like this:</p>
 
 <pre><code class="bash">Started GET &quot;/assets/jquery.abcde.js?body=1&quot; for 127.0.0.1 at 2016-08-27 18:38:00 -0400
 ...
@@ -97,7 +97,7 @@ debug something, the first question I&#39;m thinking is, &quot;What do the logs 
 
 <p><code>Rails::Rack::Logger</code> is a middleware in the Rails middleware stack that logs all requests coming into your Rails app and implements an <code>ActiveSupport::Notification</code> for each request you can hook into for additional information. The <code>quiet_assets</code> gem simply sets the log level to <code>Logger::Error</code> for any request matching your application&#39;s assets path prefix, which means it won&#39;t show up in your log file or <code>STDOUT</code>.</p>
 
-<p>The <code>quiet_assets</code> gem <a href="https://github.com/evrone/quiet_assets/blob/e54ca548f005ca2a93e781c7b583ff4d0b59dd35/lib/quiet_assets.rb#L20">monkeypatches <code>Rails::Rack::Logger</code></a> to accomplish this. Here&#39;s the relevant code provided in the gem:</p>
+<p>The <code>quiet_assets</code> gem <a href="https://github.com/evrone/quiet_assets/blob/e54ca548f005ca2a93e781c7b583ff4d0b59dd35/lib/quiet_assets.rb#L20" target="_blank" rel="noopener noreferrer">monkeypatches <code>Rails::Rack::Logger</code></a> to accomplish this. Here&#39;s the relevant code provided in the gem:</p>
 
 <pre><code class="ruby">Rails::Rack::Logger.class_eval do
   def call_with_quiet_assets(env)
@@ -153,7 +153,7 @@ use Rails::Rack::Logger
 
 <p>When <code>config.assets.quiet</code> is enabled in development, the <code>Sprockets::Rails::Middleware</code> also matches on asset requests, but instead uses the <code>Rails.logger.silence { ... }</code> block method to change the log level to <code>Logger::ERROR</code>.</p>
 
-<p>Here&#39;s a <a href="https://github.com/rails/sprockets-rails/pull/355">link to the recent pull request</a> if you&#39;re interested to take a closer look at how this functionality works. The entire middleware is <a href="https://github.com/rails/sprockets-rails/blob/df5950017d7f2aa6fcbfa3949edfef85c35c28c7/lib/sprockets/rails/quiet_assets.rb">currently only 18 lines</a>:</p>
+<p>Here&#39;s a <a href="https://github.com/rails/sprockets-rails/pull/355" target="_blank" rel="noopener noreferrer">link to the recent pull request</a> if you&#39;re interested to take a closer look at how this functionality works. The entire middleware is <a href="https://github.com/rails/sprockets-rails/blob/df5950017d7f2aa6fcbfa3949edfef85c35c28c7/lib/sprockets/rails/quiet_assets.rb" target="_blank" rel="noopener noreferrer">currently only 18 lines</a>:</p>
 
 <pre><code class="ruby">module Sprockets
   module Rails
@@ -178,7 +178,7 @@ end
 <p>Of course, this feature isn&#39;t just for Rails 5; it should also be possible for you to upgrade to this version of <code>sprockets-rails</code> for existing Rails 4 applications.</p>
 
 <p>In case you&#39;re wondering, the <code>Rails.logger.silence { ... }</code> call assumes your
-Rails logger includes the <a href="http://api.rubyonrails.org/classes/LoggerSilence.html"><code>LoggerSilence</code> module</a>, which adds the <code>#silence</code> method to the including logger class, which will set the log level to <code>Logger::ERROR</code> for the duration of the block, similar to how the <code>quiet_assets</code> gem works, but without monkeypatching.</p>
+Rails logger includes the <a href="http://api.rubyonrails.org/classes/LoggerSilence.html" target="_blank" rel="noopener noreferrer"><code>LoggerSilence</code> module</a>, which adds the <code>#silence</code> method to the including logger class, which will set the log level to <code>Logger::ERROR</code> for the duration of the block, similar to how the <code>quiet_assets</code> gem works, but without monkeypatching.</p>
 
       <h3 id="logging-to-stdout" class="title title-h3">
         <a name="logging-to-stdout" class="anchor" href="#logging-to-stdout">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -188,7 +188,7 @@ Rails logger includes the <a href="http://api.rubyonrails.org/classes/LoggerSile
         Logging to STDOUT
       </h3>
     
-<p>You may be surprised then to see asset requests fail if you&#39;re using a non-compliant logger. Unfortunately, this includes the <code>Logger</code> class from the Ruby standard library, which, of course, does not include the <code>LoggerSilence</code> module. You might be using Ruby&#39;s <code>Logger</code> if you&#39;ve followed common recommendations to change your Rails logger to log to <code>STDOUT</code>, as in <a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html">this tutorial</a>:</p>
+<p>You may be surprised then to see asset requests fail if you&#39;re using a non-compliant logger. Unfortunately, this includes the <code>Logger</code> class from the Ruby standard library, which, of course, does not include the <code>LoggerSilence</code> module. You might be using Ruby&#39;s <code>Logger</code> if you&#39;ve followed common recommendations to change your Rails logger to log to <code>STDOUT</code>, as in <a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html" target="_blank" rel="noopener noreferrer">this tutorial</a>:</p>
 
 <pre><code class="ruby">config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
 </code></pre>
@@ -204,7 +204,7 @@ to <code>sprockets-rails 3.1.1</code> and began seeing <code>NoMethodError: unde
 
 <p>Alternatively, we could create our own subclass of <code>Logger</code> with <code>LoggerSilence</code>
 included. If we just want <code>STDOUT</code> logging, we could instead use Heroku&#39;s
-<a href="https://github.com/heroku/rails_stdout_logging"><code>rails_stdout_logging</code></a> gem,
+<a href="https://github.com/heroku/rails_stdout_logging" target="_blank" rel="noopener noreferrer"><code>rails_stdout_logging</code></a> gem,
 which will also try to include the <code>LoggerSilence</code> module in our logger, if available.</p>
 
       <h3 id="resources" class="title title-h3">
@@ -219,20 +219,24 @@ which will also try to include the <code>LoggerSilence</code> module in our logg
 about customizing your Rails logger. Happy logging!</p>
 
 <ul>
-<li><a href="http://hawkins.io/2013/08/using-the-ruby-logger/">Using the Ruby Logger</a></li>
-<li><a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html">Rails 5 allows to send log to STDOUT via environment variable</a></li>
-<li><a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html">Ruby Logger</a></li>
-<li><a href="http://apidock.com/rails/LoggerSilence/silence">LoggerSilence</a></li>
-<li><a href="https://eliotsykes.com/quiet-assets">Debug Rails faster with quiet assets &amp; quieter logs</a></li>
-<li><a href="https://github.com/evrone/quiet_assets">Quiet Assets gem</a></li>
-<li><a href="https://github.com/heroku/rails_stdout_logging">Rails STDOUT logging gem</a></li>
-<li><a href="https://github.com/rails/sprockets-rails/pull/355">PR to introduce quiet assets to <code>sprockets-rails</code></a></li>
+<li><a href="http://hawkins.io/2013/08/using-the-ruby-logger/" target="_blank" rel="noopener noreferrer">Using the Ruby Logger</a></li>
+<li><a href="http://blog.bigbinary.com/2016/04/12/rails-5-allows-to-send-log-to-stdout-via-environment-variable.html" target="_blank" rel="noopener noreferrer">Rails 5 allows to send log to STDOUT via environment variable</a></li>
+<li><a href="https://ruby-doc.org/stdlib-2.3.0/libdoc/logger/rdoc/Logger.html" target="_blank" rel="noopener noreferrer">Ruby Logger</a></li>
+<li><a href="http://apidock.com/rails/LoggerSilence/silence" target="_blank" rel="noopener noreferrer">LoggerSilence</a></li>
+<li><a href="https://eliotsykes.com/quiet-assets" target="_blank" rel="noopener noreferrer">Debug Rails faster with quiet assets &amp; quieter logs</a></li>
+<li><a href="https://github.com/evrone/quiet_assets" target="_blank" rel="noopener noreferrer">Quiet Assets gem</a></li>
+<li><a href="https://github.com/heroku/rails_stdout_logging" target="_blank" rel="noopener noreferrer">Rails STDOUT logging gem</a></li>
+<li><a href="https://github.com/rails/sprockets-rails/pull/355" target="_blank" rel="noopener noreferrer">PR to introduce quiet assets to <code>sprockets-rails</code></a></li>
 </ul>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Aug 26, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-08-26-quiet-assets-in-rails-5.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Aug 26, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -377,7 +381,7 @@ about customizing your Rails logger. Happy logging!</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

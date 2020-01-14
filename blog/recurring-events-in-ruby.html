@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,9 +59,9 @@
     </h2>
 </header>
 
-    <p>I was considering recently how I&#39;d build an <a href="http://meetedgar.com/">Edgar</a> clone to post updates about <a href="/">rossta.net</a> on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.</p>
+    <p>I was considering recently how I&#39;d build an <a href="http://meetedgar.com/" target="_blank" rel="noopener noreferrer">Edgar</a> clone to post updates about <a href="/">rossta.net</a> on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.</p>
 
-<p>For scheduling tasks, we have <a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html">cron</a> at the system level and even such options as the <a href="https://github.com/javan/whenever"><code>whenever</code></a> gem to setup cron from Rails and Sinatra applications. Rubyists can also take advantage of fantastic background job schedulers like <a href="https://github.com/jmettraux/rufus-scheduler"><code>rufus-scheduler</code></a> to run recurring tasks from a separate process or even an API for defining repeating <a href="https://github.com/mperham/sidekiq"><code>Sidekiq</code></a> jobs with <a href="https://github.com/tobiassvn/sidetiq"><code>Sidetiq</code></a>.</p>
+<p>For scheduling tasks, we have <a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html" target="_blank" rel="noopener noreferrer">cron</a> at the system level and even such options as the <a href="https://github.com/javan/whenever" target="_blank" rel="noopener noreferrer"><code>whenever</code></a> gem to setup cron from Rails and Sinatra applications. Rubyists can also take advantage of fantastic background job schedulers like <a href="https://github.com/jmettraux/rufus-scheduler" target="_blank" rel="noopener noreferrer"><code>rufus-scheduler</code></a> to run recurring tasks from a separate process or even an API for defining repeating <a href="https://github.com/mperham/sidekiq" target="_blank" rel="noopener noreferrer"><code>Sidekiq</code></a> jobs with <a href="https://github.com/tobiassvn/sidetiq" target="_blank" rel="noopener noreferrer"><code>Sidetiq</code></a>.</p>
 
 <p>For an Edgar clone though, we need a layer for users of the application to define their own recurrences. This means finding a way to represent time-based recurrences which are:</p>
 
@@ -70,20 +70,20 @@
 <li>enumerable, so we can determine when the next post(s) should be shared on designated social networks.</li>
 </ol>
 
-<p>It&#39;s an interesting problem to model. While we have classes like <code>Time</code>, <code>Date</code>, and event <code>ActiveSupport::Duration</code>, it&#39;s more elusive to consider recurrences. I mean, what does it mean to represent the meeting time of my <a href="http://www.meetup.com/NYC-rb/">NYC.rb</a> meetup: &quot;every second Tuesday of the month at 7pm&quot;.</p>
+<p>It&#39;s an interesting problem to model. While we have classes like <code>Time</code>, <code>Date</code>, and event <code>ActiveSupport::Duration</code>, it&#39;s more elusive to consider recurrences. I mean, what does it mean to represent the meeting time of my <a href="http://www.meetup.com/NYC-rb/" target="_blank" rel="noopener noreferrer">NYC.rb</a> meetup: &quot;every second Tuesday of the month at 7pm&quot;.</p>
 
-<p>Solutions for this exist in Ruby, namely <a href="https://github.com/seejohnrun/ice_cube"><code>ice_cube</code></a>. If you&#39;re looking for a mature, up-to-date project devoted to modeling recurring events in Ruby, please check it out. I did, and highly recommend it. After playing with it for awhile, I found felt the urge for alternative semantics - like the ability to define a recurrence without a start date - and API similar to the hash-like syntax provided by another less-active recurring events library, <a href="https://github.com/fnando/recurrence"><code>recurrence</code></a>.</p>
+<p>Solutions for this exist in Ruby, namely <a href="https://github.com/seejohnrun/ice_cube" target="_blank" rel="noopener noreferrer"><code>ice_cube</code></a>. If you&#39;re looking for a mature, up-to-date project devoted to modeling recurring events in Ruby, please check it out. I did, and highly recommend it. After playing with it for awhile, I found felt the urge for alternative semantics - like the ability to define a recurrence without a start date - and API similar to the hash-like syntax provided by another less-active recurring events library, <a href="https://github.com/fnando/recurrence" target="_blank" rel="noopener noreferrer"><code>recurrence</code></a>.</p>
 
-<p>I thought of the <a href="https://github.com/httprb/http"><code>HTTP</code></a> gem which bills
+<p>I thought of the <a href="https://github.com/httprb/http" target="_blank" rel="noopener noreferrer"><code>HTTP</code></a> gem which bills
 itself as the following:</p>
 
 <blockquote>
-<p>HTTP (The Gem! a.k.a. http.rb) is an easy-to-use client library for making requests from Ruby. It uses a simple method chaining system for building requests, similar to Python&#39;s <a href="http://docs.python-requests.org/en/latest/">Requests</a>.</p>
+<p>HTTP (The Gem! a.k.a. http.rb) is an easy-to-use client library for making requests from Ruby. It uses a simple method chaining system for building requests, similar to Python&#39;s <a href="http://docs.python-requests.org/en/latest/" target="_blank" rel="noopener noreferrer">Requests</a>.</p>
 </blockquote>
 
 <p>Taking a cue from <code>http.rb</code> and the <code>recurrence</code> gem, I set out to create something similar for recurring events.</p>
 
-<p>Introducing <a href="https://github.com/rossta/montrose"><code>Montrose</code></a>.</p>
+<p>Introducing <a href="https://github.com/rossta/montrose" target="_blank" rel="noopener noreferrer"><code>Montrose</code></a>.</p>
 
 <p>Montrose allows you to easily create &quot;recurrence&quot; objects through chaining:</p>
 
@@ -148,7 +148,7 @@ r1.merge(r2).merge(r3).merge(r4).to_a
 2016-02-16 12:00:00 -0500]
 </code></pre>
 
-<p>With a nod to DHH and the <a href="http://rubyonrails.org/doctrine">Rails doctrine</a>, Montrose aims to <a href="http://rubyonrails.org/doctrine/#optimize-for-programmer-happiness">optimize for programmer happiness</a>. Hence, there are several ways to define equivalent recurrences. For example, recurrences intervals can be configured as an explicit option, or inferred by the frequency duration.</p>
+<p>With a nod to DHH and the <a href="http://rubyonrails.org/doctrine" target="_blank" rel="noopener noreferrer">Rails doctrine</a>, Montrose aims to <a href="http://rubyonrails.org/doctrine/#optimize-for-programmer-happiness" target="_blank" rel="noopener noreferrer">optimize for programmer happiness</a>. Hence, there are several ways to define equivalent recurrences. For example, recurrences intervals can be configured as an explicit option, or inferred by the frequency duration.</p>
 
 <pre><code class="ruby"># Every 3 hours, all equivalent
 Montrose.hourly.interval(3)
@@ -211,9 +211,9 @@ es.recurrence
 
 <p>This library is still in its early stages (version <code>0.2.1</code> as of this writing) and aspects of the API are still in flux, such as the ability to configure default start and end times or combines multiple, distinct recurrences in a <code>Montrose::Schedule</code>. <code>Montrose</code> has one dependency - <code>ActiveSupport</code> - for time calculations.</p>
 
-<p>There are <a href="https://github.com/rossta/montrose/issues">plenty of missing features</a>, including iCal serialization though Montrose already <a href="https://github.com/rossta/montrose/blob/master/spec/rfc_spec.rb">supports most of the examples</a> given by the iCal spec, <a href="https://www.ietf.org/rfc/rfc2445.txt">rfc2445</a>.</p>
+<p>There are <a href="https://github.com/rossta/montrose/issues" target="_blank" rel="noopener noreferrer">plenty of missing features</a>, including iCal serialization though Montrose already <a href="https://github.com/rossta/montrose/blob/master/spec/rfc_spec.rb" target="_blank" rel="noopener noreferrer">supports most of the examples</a> given by the iCal spec, <a href="https://www.ietf.org/rfc/rfc2445.txt" target="_blank" rel="noopener noreferrer">rfc2445</a>.</p>
 
-<p>I still haven&#39;t built that Edgar clone, but feel this is a good place from which to grow. As I said earlier, the <code>ice_cube</code> gem is a mature library and already does much of what I&#39;ve described here. Writing my own solution allowed me to think more deeply about the internal mechanisms for calculating recurrences and ultimately, once my curiosity was piqued, I couldn&#39;t stop. If, you like what <code>Montrose</code> has to offer and you&#39;re feeling adventurous, try it out in your own application and send some feedback. Don&#39;t hesitate to <a href="https://github.com/rossta/montrose">fork the project</a> and contribute.</p>
+<p>I still haven&#39;t built that Edgar clone, but feel this is a good place from which to grow. As I said earlier, the <code>ice_cube</code> gem is a mature library and already does much of what I&#39;ve described here. Writing my own solution allowed me to think more deeply about the internal mechanisms for calculating recurrences and ultimately, once my curiosity was piqued, I couldn&#39;t stop. If, you like what <code>Montrose</code> has to offer and you&#39;re feeling adventurous, try it out in your own application and send some feedback. Don&#39;t hesitate to <a href="https://github.com/rossta/montrose" target="_blank" rel="noopener noreferrer">fork the project</a> and contribute.</p>
 
 <p>NYC.rb?</p>
 
@@ -224,10 +224,14 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
 <p>See you there.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
-      Published on Feb  3, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-02-03-recurring-events-in-ruby.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Feb  3, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -249,7 +253,7 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Recurring%20events%20in%20Ruby&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Frecurring-events-in-ruby.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Recurring%20events%20in%20Ruby&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Frecurring-events-in-ruby.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -369,7 +373,7 @@ r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

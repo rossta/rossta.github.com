@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -85,7 +85,7 @@
 <li>Adds a default <code>offline.html</code> file to <code>public/</code></li>
 </ul>
 
-<p>Though this is a testing post but I&#39;ll briefly mention some resources I&#39;ve found helpeful for writing Rails generators. I recommend the <a href="http://guides.rubyonrails.org/generators.html">Rails guides</a> to get your Rails generator started. It also help to understand how <code>Thor</code> works (<a href="http://whatisthor.com/">What is Thor?</a>), the library on which most Rails commandline tools are based. The Rails generator base classes leverage <a href="http://www.rubydoc.info/github/erikhuda/thor/master/Thor/Actions">Thor actions</a>, i.e., <code>create_file</code>, <code>gsub_file</code>, <code>insert_into_file</code>, and sprinkle in some <a href="http://api.rubyonrails.org/classes/Rails/Generators/Actions.html">Rails-specific methods</a>, including <code>gem</code>, <code>rake</code>, <code>initializer</code>, etc.</p>
+<p>Though this is a testing post but I&#39;ll briefly mention some resources I&#39;ve found helpeful for writing Rails generators. I recommend the <a href="http://guides.rubyonrails.org/generators.html" target="_blank" rel="noopener noreferrer">Rails guides</a> to get your Rails generator started. It also help to understand how <code>Thor</code> works (<a href="http://whatisthor.com/" target="_blank" rel="noopener noreferrer">What is Thor?</a>), the library on which most Rails commandline tools are based. The Rails generator base classes leverage <a href="http://www.rubydoc.info/github/erikhuda/thor/master/Thor/Actions" target="_blank" rel="noopener noreferrer">Thor actions</a>, i.e., <code>create_file</code>, <code>gsub_file</code>, <code>insert_into_file</code>, and sprinkle in some <a href="http://api.rubyonrails.org/classes/Rails/Generators/Actions.html" target="_blank" rel="noopener noreferrer">Rails-specific methods</a>, including <code>gem</code>, <code>rake</code>, <code>initializer</code>, etc.</p>
 
       <h2 id="a-first-pass" class="title title-h2">
         <a name="a-first-pass" class="anchor" href="#a-first-pass">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -159,7 +159,7 @@ end
 </ul>
 
 <p>For this first pass, I ended up with something very similar to Zurb&#39;s
-<code>foundation-rails</code> tests for its install generator: <a href="https://github.com/zurb/foundation-rails/blob/4dfe9b12e8cf3a1aa04b257ff64c782832efc6a0/spec/features/generator_spec.rb">spec</a> and <a href="https://github.com/zurb/foundation-rails/blob/4dfe9b12e8cf3a1aa04b257ff64c782832efc6a0/spec/support/helpers.rb">helper
+<code>foundation-rails</code> tests for its install generator: <a href="https://github.com/zurb/foundation-rails/blob/4dfe9b12e8cf3a1aa04b257ff64c782832efc6a0/spec/features/generator_spec.rb" target="_blank" rel="noopener noreferrer">spec</a> and <a href="https://github.com/zurb/foundation-rails/blob/4dfe9b12e8cf3a1aa04b257ff64c782832efc6a0/spec/support/helpers.rb" target="_blank" rel="noopener noreferrer">helper
 methods</a>.</p>
 
 <pre><code class="ruby">def test_generates_serviceworker
@@ -186,7 +186,7 @@ through regular expressions.</p>
     
 <p>Though what I came up with worked and didn&#39;t rely on any third-party dependencies, I wasn&#39;t totally happy with it. The tests were very verbose. I didn&#39;t like that I had to shell out to run the generator. I finally decided to &quot;peek&quot; and see how Rails tests its own generators, you know, the ones you love for generating models, migrations, and entire resource scaffolds.</p>
 
-<p>It turns out Rails generators are tested using <code>Rails::Generators::TestCase</code>. Since Rails tests are also written in <code>MiniTest</code> and my library already relies on Rails as a dependency--it <em>is</em> a Rails engine--making the switch in my tests easy. If you&#39;re using RSpec, I did come across <a href="https://github.com/alexrothenberg/ammeter"><code>ammeter</code></a>, which delegates to <code>Rails::Generators::TestCase</code> under the hood, so it&#39;d be quite similar to what I did here.</p>
+<p>It turns out Rails generators are tested using <code>Rails::Generators::TestCase</code>. Since Rails tests are also written in <code>MiniTest</code> and my library already relies on Rails as a dependency--it <em>is</em> a Rails engine--making the switch in my tests easy. If you&#39;re using RSpec, I did come across <a href="https://github.com/alexrothenberg/ammeter" target="_blank" rel="noopener noreferrer"><code>ammeter</code></a>, which delegates to <code>Rails::Generators::TestCase</code> under the hood, so it&#39;d be quite similar to what I did here.</p>
 
 <p>First, we inherit from the base class:</p>
 
@@ -366,7 +366,7 @@ end
 end
 </code></pre>
 
-<p><a href="https://github.com/rossta/serviceworker-rails/blob/94c45720f793397f0df66dbd4d67c680f3a293c3/test/serviceworker/install_generator_test.rb">Check out the source</a> of the <code>serviceworker-rails</code> generator test case to see the full picture of how all the pieces fit together.</p>
+<p><a href="https://github.com/rossta/serviceworker-rails/blob/94c45720f793397f0df66dbd4d67c680f3a293c3/test/serviceworker/install_generator_test.rb" target="_blank" rel="noopener noreferrer">Check out the source</a> of the <code>serviceworker-rails</code> generator test case to see the full picture of how all the pieces fit together.</p>
 
       <h2 id="wrapping-up" class="title title-h2">
         <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -384,9 +384,13 @@ got a good feel for how I can test more generators moving forward.</p>
 <p>Hopefully, you&#39;ll find this useful when and if you decide to write a Rails generator yourself.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Nov 12, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-11-12-testing-rails-generators.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Nov 12, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -531,7 +535,7 @@ got a good feel for how I can test more generators moving forward.</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

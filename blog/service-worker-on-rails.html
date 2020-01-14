@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,17 +59,17 @@
     </h2>
 </header>
 
-    <p>Have you heard about <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API">Service
+    <p>Have you heard about <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank" rel="noopener noreferrer">Service
 Worker</a>? I
 believe this new JavaScript API has the potential to transform the way users
 interact with the web and how web developers construct websites. Though still in
-development, Service Worker is already <a href="https://jakearchibald.github.io/isserviceworkerready/">landing in modern
+development, Service Worker is already <a href="https://jakearchibald.github.io/isserviceworkerready/" target="_blank" rel="noopener noreferrer">landing in modern
 browsers</a>.</p>
 
 <p>So far, there hasn&#39;t been a good story for adding Service Worker to Rails. Until
 now!</p>
 
-<p>There&#39;s a new Ruby gem, <a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code></a>, to make it easier to integrate Service Worker with the Rails asset pipeline. To understand why Rails developers might want to use this, let&#39;s take a step back.</p>
+<p>There&#39;s a new Ruby gem, <a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer"><code>serviceworker-rails</code></a>, to make it easier to integrate Service Worker with the Rails asset pipeline. To understand why Rails developers might want to use this, let&#39;s take a step back.</p>
 
       <h2 id="a-brief-intro" class="title title-h2">
         <a name="a-brief-intro" class="anchor" href="#a-brief-intro">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -79,7 +79,7 @@ now!</p>
         A brief intro
       </h2>
     
-<p>In its plainest form, service workers are just JavaScript running in a separate thread outside the context of a web page, like any other <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API">web worker</a>.</p>
+<p>In its plainest form, service workers are just JavaScript running in a separate thread outside the context of a web page, like any other <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank" rel="noopener noreferrer">web worker</a>.</p>
 
 <p>But, service workers are special; they can act as <strong>client-side proxies</strong>. This means they can <em>hook into the request/response cycle</em> on the user&#39;s machine.</p>
 
@@ -87,7 +87,7 @@ now!</p>
 
 <p>I&#39;ve been <a href="/blog/adding-serviceworker-to-a-simple-website.html">playing with Service Worker</a> a bit lately. Now that you&#39;ve visited my site, your browser has cached the data for <a href="/offline.html">my offline page</a>, so if you lost your network connection, you&#39;d at least see a friendly message instead of the dreaded Chrome dinosaur.</p>
 
-<p>Go ahead and take a look at the <a href="https://github.com/rossta/rossta.github.com/blob/45b67d326bb1118c9e0743ae74e1a5ca570a5947/source/assets/javascripts/serviceworker.js">source code for the rossta.net service worker</a> to see how I did it. I&#39;m still learning about Service Worker - is it <em>really</em> new after all - so I&#39;m sure there&#39;s lots of ways I could improve it!</p>
+<p>Go ahead and take a look at the <a href="https://github.com/rossta/rossta.github.com/blob/45b67d326bb1118c9e0743ae74e1a5ca570a5947/source/assets/javascripts/serviceworker.js" target="_blank" rel="noopener noreferrer">source code for the rossta.net service worker</a> to see how I did it. I&#39;m still learning about Service Worker - is it <em>really</em> new after all - so I&#39;m sure there&#39;s lots of ways I could improve it!</p>
 
       <h2 id="let-39-s-talk-rails" class="title title-h2">
         <a name="let-39-s-talk-rails" class="anchor" href="#let-39-s-talk-rails">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -110,10 +110,10 @@ now!</p>
 served. So if you try to register a service worker from a Rails asset pipeline
 path, like <code>/assets/serviceworker-abcd1234.js</code>, it will only be able to interact
 with requests and responses within <code>/assets/</code><em>**</em>. This is not what we want.</p></li>
-<li><p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API#Download_install_and_activate">MDN states</a> browsers check for updated service worker scripts in the background every 24 hours (possibly less). Rails developers wouldn&#39;t be able to take advantage of this feature since the fingerprint strategy means assets at a given url are immutable. Beside fingerprintings, the <code>Cache-Control</code> headers used for static files served from Rails also work against browser&#39;s treatment of service workers.</p></li>
+<li><p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API#Download_install_and_activate" target="_blank" rel="noopener noreferrer">MDN states</a> browsers check for updated service worker scripts in the background every 24 hours (possibly less). Rails developers wouldn&#39;t be able to take advantage of this feature since the fingerprint strategy means assets at a given url are immutable. Beside fingerprintings, the <code>Cache-Control</code> headers used for static files served from Rails also work against browser&#39;s treatment of service workers.</p></li>
 </ul>
 
-<p><em>**</em><a href="https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-allowed">There is an early proposal</a> to use the <code>Service-Worker-Allowed</code> header to change scopes.</p>
+<p><em>**</em><a href="https://slightlyoff.github.io/ServiceWorker/spec/service_worker/#service-worker-allowed" target="_blank" rel="noopener noreferrer">There is an early proposal</a> to use the <code>Service-Worker-Allowed</code> header to change scopes.</p>
 
       <h2 id="what-to-do-" class="title title-h2">
         <a name="what-to-do-" class="anchor" href="#what-to-do-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -123,7 +123,7 @@ with requests and responses within <code>/assets/</code><em>**</em>. This is not
         What to do?
       </h2>
     
-<p><a href="https://github.com/rails/sprockets/issues/44">For now</a>, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.</p>
+<p><a href="https://github.com/rails/sprockets/issues/44" target="_blank" rel="noopener noreferrer">For now</a>, Rails developers need to work around best practices in the Rails asset pipeline to use service workers.</p>
 
 <p>One approach would be to just place service worker scripts in <code>/public</code>. That
 could work, but it could mean foregoing the asset pipeline altogether. We lose
@@ -152,7 +152,7 @@ pull in... or put this in a Rack middleware!</p>
         Using serviceworker-rails
       </h2>
     
-<p>This is what I&#39;ve done with <a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code></a>. It inserts a middleware into the Rails stack that acts as a separate router for service worker scripts. In development, you can edit and recompile your service workers on the fly as with any other asset in the pipeline. In production, the service worker endpoints map to the precompiled asset in <code>/public/assets</code>.</p>
+<p>This is what I&#39;ve done with <a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer"><code>serviceworker-rails</code></a>. It inserts a middleware into the Rails stack that acts as a separate router for service worker scripts. In development, you can edit and recompile your service workers on the fly as with any other asset in the pipeline. In production, the service worker endpoints map to the precompiled asset in <code>/public/assets</code>.</p>
 
 <p>Once the gem is added to your <code>Gemfile</code>, you can add a Rails initializer to set
 up the service worker middleware router:</p>
@@ -177,21 +177,25 @@ asset names.</p>
 match &quot;/project/:id/serviceworker.js&quot; =&gt; &quot;project/%{id}/serviceworker&quot;
 </code></pre>
 
-<p>Check out the project <a href="https://github.com/rossta/serviceworker-rails#serviceworkerrails">README</a> for more info on how to set up and configure the middleware for your Rails app.</p>
+<p>Check out the project <a href="https://github.com/rossta/serviceworker-rails#serviceworkerrails" target="_blank" rel="noopener noreferrer">README</a> for more info on how to set up and configure the middleware for your Rails app.</p>
 
-<p>Though the project is still young, you can see <code>serviceworker-rails</code> in action in the <a href="https://serviceworker-rails.herokuapp.com/">Service Workers on Rails Sandbox</a>. Inspired by Mozilla&#39;s <a href="https://serviceworke.rs/">Service Workers Cookbook</a>, it serves as good place to experiment with Service Workers on Rails in an open source setting. Try using the site in Chrome Canary with the <a href="https://www.chromium.org/blink/serviceworker/service-worker-faq">advanced service worker debugging tools</a> to play around. I&#39;ve added just a few examples so far but am interested to explore further with various caching strategies, push notifications, and eventually background sync to name a few.</p>
+<p>Though the project is still young, you can see <code>serviceworker-rails</code> in action in the <a href="https://serviceworker-rails.herokuapp.com/" target="_blank" rel="noopener noreferrer">Service Workers on Rails Sandbox</a>. Inspired by Mozilla&#39;s <a href="https://serviceworke.rs/" target="_blank" rel="noopener noreferrer">Service Workers Cookbook</a>, it serves as good place to experiment with Service Workers on Rails in an open source setting. Try using the site in Chrome Canary with the <a href="https://www.chromium.org/blink/serviceworker/service-worker-faq" target="_blank" rel="noopener noreferrer">advanced service worker debugging tools</a> to play around. I&#39;ve added just a few examples so far but am interested to explore further with various caching strategies, push notifications, and eventually background sync to name a few.</p>
 
 <p>What do you think of this approach?</p>
 
 <hr>
 
-<p>Interested in contributing? <a href="https://github.com/rossta/serviceworker-rails">Fork the serviceworker-rails gem</a> or the <a href="https://github.com/rossta/serviceworker-rails-sandbox">Service Workers on Rails Sandbox</a> to get started.</p>
+<p>Interested in contributing? <a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer">Fork the serviceworker-rails gem</a> or the <a href="https://github.com/rossta/serviceworker-rails-sandbox" target="_blank" rel="noopener noreferrer">Service Workers on Rails Sandbox</a> to get started.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
-      Published on May  3, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-05-03-service-worker-on-rails.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
+        Published on May  3, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -338,7 +342,7 @@ match &quot;/project/:id/serviceworker.js&quot; =&gt; &quot;project/%{id}/servic
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

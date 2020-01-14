@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,9 +59,9 @@
     </h2>
 </header>
 
-    <p><em><strong>Update</strong>: for configuring CircleCI 2.0 to deploy Vue applications to S3, see <a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html">my follow up post</a>.</em></p>
+    <p><em><strong>Update</strong>: for configuring CircleCI 2.0 to deploy Vue applications to S3, see <a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html" target="_blank" rel="noopener noreferrer">my follow up post</a>.</em></p>
 
-<p>In this post, we&#39;ll walkthrough how I set up continuous deployment for my <a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/">Vue.js static website</a>. Every time I <code>git push</code> to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.</p>
+<p>In this post, we&#39;ll walkthrough how I set up continuous deployment for my <a href="http://connect-four-vue-abcdefg.s3-website-us-west-2.amazonaws.com/" target="_blank" rel="noopener noreferrer">Vue.js static website</a>. Every time I <code>git push</code> to the primary branch of my repository, an automated process will build the project and upload any new files to Amazon S3 with the appropriate caching headers.</p>
 
 <p><em>This post is part of an ongoing series on <a href="/series/connect-four.html">building Connect Four with Vue.js and Phoenix</a>.</em></p>
 
@@ -85,13 +85,13 @@
         From CodePen to Github
       </h3>
     
-<p>Since my version of Connect Four up to this point has been <a href="https://codepen.io/rossta/pen/VydJKG">built and hosted entirely on CodePen</a>, my first step was to move the source code to Github. I initialized a new <code>vue-cli</code> (version 2) using the Webpack template.</p>
+<p>Since my version of Connect Four up to this point has been <a href="https://codepen.io/rossta/pen/VydJKG" target="_blank" rel="noopener noreferrer">built and hosted entirely on CodePen</a>, my first step was to move the source code to Github. I initialized a new <code>vue-cli</code> (version 2) using the Webpack template.</p>
 
 <pre><code class="shell">$ yarn global install vue-cli
 $ vue init webpack connect-four-vue
 </code></pre>
 
-<p>With the game working and now backed by version control (<a href="https://github.com/rossta/connect-four-vue">source code</a>), I was able to bundle a set of static assets suitable for deployment to a provider like S3:</p>
+<p>With the game working and now backed by version control (<a href="https://github.com/rossta/connect-four-vue" target="_blank" rel="noopener noreferrer">source code</a>), I was able to bundle a set of static assets suitable for deployment to a provider like S3:</p>
 
 <pre><code class="shell">$ yarn run build
 </code></pre>
@@ -114,7 +114,7 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
         The host with the most
       </h3>
     
-<p>To host on Amazon S3, I needed an S3 bucket with permissions to make its contents available to the public for static website hosting. This can be done from the <a href="https://aws.amazon.com">AWS console</a>:</p>
+<p>To host on Amazon S3, I needed an S3 bucket with permissions to make its contents available to the public for static website hosting. This can be done from the <a href="https://aws.amazon.com" target="_blank" rel="noopener noreferrer">AWS console</a>:</p>
 
 <p><img src="/assets/images/blog/connect-four/s3/aws-create-bucket.jpg" alt="Aws create bucket" /></p>
 
@@ -122,7 +122,7 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
 
 <p><img src="/assets/images/blog/connect-four/s3/aws-static-website-properties.jpg" alt="Aws static website properties" /></p>
 
-<p>This screen also reveals the public endpoint for the S3 bucket index page, which is what we&#39;ll need to navigate to our deployed site in the browser. The endpoint may be something like <strong><a href="http://bucket-name.s3-website-region-name.amazonaws.com">http://bucket-name.s3-website-region-name.amazonaws.com</a></strong>.</p>
+<p>This screen also reveals the public endpoint for the S3 bucket index page, which is what we&#39;ll need to navigate to our deployed site in the browser. The endpoint may be something like <strong><a href="http://bucket-name.s3-website-region-name.amazonaws.com" target="_blank" rel="noopener noreferrer">http://bucket-name.s3-website-region-name.amazonaws.com</a></strong>.</p>
 
 <p>On the <strong>Permissions</strong> tab, I added a bucket policy to provide public read permissions to everything in the bucket.</p>
 
@@ -144,7 +144,7 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
 }
 </code></pre>
 
-<p>For more information on setting up static websites on Amazon S3, check out Kyle Galbraith&#39;s <a href="https://medium.freecodecamp.org/how-to-host-a-website-on-s3-without-getting-lost-in-the-sea-e2b82aa6cd38">How to host a website on S3 with getting lost in the sea</a>, which also touches on costs and custom domain setup. Connor Leech wrote a nice post on <a href="https://medium.com/@connorleech/host-a-vue-js-website-on-amazon-s3-for-the-best-hosting-solution-ever-%EF%B8%8F-eee2a28b2506">hosting a Vue.js website on Amazon S3</a> with manual file upload, which I used as my starting point. The AWS documentation provides a <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html">general walkthrough</a> as well.</p>
+<p>For more information on setting up static websites on Amazon S3, check out Kyle Galbraith&#39;s <a href="https://medium.freecodecamp.org/how-to-host-a-website-on-s3-without-getting-lost-in-the-sea-e2b82aa6cd38" target="_blank" rel="noopener noreferrer">How to host a website on S3 with getting lost in the sea</a>, which also touches on costs and custom domain setup. Connor Leech wrote a nice post on <a href="https://medium.com/@connorleech/host-a-vue-js-website-on-amazon-s3-for-the-best-hosting-solution-ever-%EF%B8%8F-eee2a28b2506" target="_blank" rel="noopener noreferrer">hosting a Vue.js website on Amazon S3</a> with manual file upload, which I used as my starting point. The AWS documentation provides a <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html" target="_blank" rel="noopener noreferrer">general walkthrough</a> as well.</p>
 
       <h3 id="automatic-for-the-people" class="title title-h3">
         <a name="automatic-for-the-people" class="anchor" href="#automatic-for-the-people">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -154,7 +154,7 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
         Automatic for the people
       </h3>
     
-<p><em><strong>Update</strong>: for configuring CircleCI 2.0 to deploy Vue applications to S3, see <a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html">my follow up post</a>.</em></p>
+<p><em><strong>Update</strong>: for configuring CircleCI 2.0 to deploy Vue applications to S3, see <a href="https://rossta.net/blog/deploying-vue-with-circleci-2.html" target="_blank" rel="noopener noreferrer">my follow up post</a>.</em></p>
 
 <p>For continuous deployment, I chose CircleCI 1.0 since I&#39;m most familiar with its configuration options and it&#39;s currently free for my needs.</p>
 
@@ -220,7 +220,7 @@ deployment:
       gzip: true
 </code></pre>
 
-<p>See the <a href="https://github.com/bep/s3deploy"><code>s3deploy</code> project page</a> for more information on configuration options.</p>
+<p>See the <a href="https://github.com/bep/s3deploy" target="_blank" rel="noopener noreferrer"><code>s3deploy</code> project page</a> for more information on configuration options.</p>
 
       <h3 id="permissions-please" class="title title-h3">
         <a name="permissions-please" class="anchor" href="#permissions-please">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -295,10 +295,14 @@ Check out <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.htm
 <p><em>Did you like this post?</em> Please share! Even better, sign up for my newsletter to hear about new posts in my ongoing series on <a href="/blog/basic-connect-four-with-vuejs.html">building Connect Four with Vue.js and Phoenix</a>.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
-      Published on Feb  5, 2018
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2018-02-05-deploying-vue-to-amazon-s3-with-circleci.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
+        Published on Feb  5, 2018
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -320,7 +324,7 @@ Check out <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.htm
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Deploying%20a%20Vue.js%20website%20to%20AWS%20S3%20with%20CircleCI%201.0&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fdeploying-vue-to-amazon-s3-with-circleci.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Deploying%20a%20Vue.js%20website%20to%20AWS%20S3%20with%20CircleCI%201.0&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fdeploying-vue-to-amazon-s3-with-circleci.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Vue and the web. Thank you!
   </p>
@@ -441,7 +445,7 @@ Check out <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.htm
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

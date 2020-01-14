@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -64,9 +64,9 @@ offline dinosaur.</p>
 
 <p>No wonder we tend to think of websites as less reliable than mobile applications - we can&#39;t use them without the network.</p>
 
-<p>At least, not typically. We could use <a href="http://diveintohtml5.info/offline.html">App Cache</a> and the Cache Manifest to create an offline experience. For <a href="http://alistapart.com/article/application-cache-is-a-douchebag">a number of reasons</a>, developers have found App Cache difficult to work with.</p>
+<p>At least, not typically. We could use <a href="http://diveintohtml5.info/offline.html" target="_blank" rel="noopener noreferrer">App Cache</a> and the Cache Manifest to create an offline experience. For <a href="http://alistapart.com/article/application-cache-is-a-douchebag" target="_blank" rel="noopener noreferrer">a number of reasons</a>, developers have found App Cache difficult to work with.</p>
 
-<p>Luckily, there&#39;s a new web standard, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API">Service Worker</a>, that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.</p>
+<p>Luckily, there&#39;s a new web standard, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank" rel="noopener noreferrer">Service Worker</a>, that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.</p>
 
 <p>For now, we use a service worker to render a simple error page with our own branding
 when a user attempts to come back to our site without a connection. Keep in
@@ -85,7 +85,7 @@ network connection, we can use our service worker to render the offline page.</p
 <p>This is possible because Service Worker acts as a liason between your
 visitor&#39;s browser and your servers <em>outside the lifecycle of a page</em>.</p>
 
-<p>Keep in mind also, will be a <em>progressive enhancement</em>. Since service workers are <a href="https://jakearchibald.github.io/isserviceworkerready/">not available in all browsers</a>, this approach won&#39;t work for everyone, but the experience won&#39;t degrade for those visitors either.</p>
+<p>Keep in mind also, will be a <em>progressive enhancement</em>. Since service workers are <a href="https://jakearchibald.github.io/isserviceworkerready/" target="_blank" rel="noopener noreferrer">not available in all browsers</a>, this approach won&#39;t work for everyone, but the experience won&#39;t degrade for those visitors either.</p>
 
       <h3 id="produce-the-assets" class="title title-h3">
         <a name="produce-the-assets" class="anchor" href="#produce-the-assets">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -97,9 +97,9 @@ visitor&#39;s browser and your servers <em>outside the lifecycle of a page</em>.
     
 <p>First we need an offline page. We could simply use an HTML page in the public directory with embedded styles like the generated Rails 404 and 500 pages.</p>
 
-<p><a href="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0">Source: /offline.html</a></p>
+<p><a href="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0" target="_blank" rel="noopener noreferrer">Source: /offline.html</a></p>
 
-<p>Alternatively, set up a route to a controller action as a <a href="https://mattbrictson.com/dynamic-rails-error-pages">dynamic Rails error page</a>.</p>
+<p>Alternatively, set up a route to a controller action as a <a href="https://mattbrictson.com/dynamic-rails-error-pages" target="_blank" rel="noopener noreferrer">dynamic Rails error page</a>.</p>
 
       <h3 id="add-a-service-worker-file" class="title title-h3">
         <a name="add-a-service-worker-file" class="anchor" href="#add-a-service-worker-file">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -155,7 +155,7 @@ self.addEventListener(&#39;install&#39;, function onInstall(event) {
 });
 </code></pre>
 
-<p><code>event.waitUntil</code> accepts <a href="http://www.html5rocks.com/en/tutorials/es6/promises/">a promise</a> which must succeed for the <code>install</code> event to install the service worker successfully. We use <code>caches.open</code> to return a promise that adds our static offline assets to a named cache associated with our site and the user&#39;s browser. The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache">Cache API</a> provides client-side storage for request/response pairs, a lot like a built in HTTP cache.</p>
+<p><code>event.waitUntil</code> accepts <a href="http://www.html5rocks.com/en/tutorials/es6/promises/" target="_blank" rel="noopener noreferrer">a promise</a> which must succeed for the <code>install</code> event to install the service worker successfully. We use <code>caches.open</code> to return a promise that adds our static offline assets to a named cache associated with our site and the user&#39;s browser. The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank" rel="noopener noreferrer">Cache API</a> provides client-side storage for request/response pairs, a lot like a built in HTTP cache.</p>
 
 <p>We can also cache precompiled assets by renaming our <code>serviceworker.js</code> to <code>serviceworker.js.erb</code> and embedding helper methods:</p>
 
@@ -176,7 +176,7 @@ self.addEventListener(&#39;install&#39;, function onInstall(event) {
 <p>Our service worker can intercept any external network request from our visitor&#39;s
 browser - even to cross-origin hosts - within the fetch event.</p>
 
-<p>There are <a href="https://jakearchibald.com/2014/offline-cookbook/">a ton of strategies we can
+<p>There are <a href="https://jakearchibald.com/2014/offline-cookbook/" target="_blank" rel="noopener noreferrer">a ton of strategies we can
 employ</a> to give the service
 worker power to respond to various requests, for our simple offline page</p>
 
@@ -267,7 +267,7 @@ won&#39;t be able to intercept requests to the root path.</p>
       </h3>
     
 <p>To make this work with the Rails asset pipeline, we can use the
-<a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code></a> gem.</p>
+<a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer"><code>serviceworker-rails</code></a> gem.</p>
 
 <pre><code class="ruby"># Gemfile
 
@@ -293,9 +293,9 @@ instead:</p>
 <pre><code class="ruby">match &quot;/serviceworker.js&quot; =&gt; &quot;nested/directory/serviceworker.js&quot;
 </code></pre>
 
-<p>See the project <a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md">README</a> for more info on how to configure the middleware.</p>
+<p>See the project <a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md" target="_blank" rel="noopener noreferrer">README</a> for more info on how to configure the middleware.</p>
 
-<p>While you&#39;re at it, <a href="https://github.com/rossta/serviceworker-rails">star the project on GitHub</a>!</p>
+<p>While you&#39;re at it, <a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer">star the project on GitHub</a>!</p>
 
       <h3 id="moment-of-truth" class="title title-h3">
         <a name="moment-of-truth" class="anchor" href="#moment-of-truth">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -311,9 +311,9 @@ Chrome Canary to take your browser offline while Firefox has the <em>Work Offlin
 
 <p><img src="/assets/images/screenshots/screenshot-dev-tools-network-offline.jpg" alt="Screenshot dev tools network offline" /></p>
 
-<p>To see a working demo of an offline page, check out the <a href="https://serviceworker-rails.herokuapp.com/offline-fallback/">Service Worker Rails
+<p>To see a working demo of an offline page, check out the <a href="https://serviceworker-rails.herokuapp.com/offline-fallback/" target="_blank" rel="noopener noreferrer">Service Worker Rails
 Sandbox app</a>. You
-can find its <a href="https://github.com/rossta/serviceworker-rails-sandbox">source code on GitHub</a>.</p>
+can find its <a href="https://github.com/rossta/serviceworker-rails-sandbox" target="_blank" rel="noopener noreferrer">source code on GitHub</a>.</p>
 
 <p><img src="/assets/images/screenshots/screenshot-offline-custom.jpg" alt="Screenshot offline custom" /></p>
 
@@ -352,15 +352,19 @@ let a new service worker take control immediately when used during <code>install
 <p>I believe it&#39;s important for web developers to start thinking about ways to make
 our application more reliable in the eyes of consumers. While rendering an
 offline page isn&#39;t a game changer by itself, it is a low-risk way to begin
-experimenting with the Service Worker API which has the potential for <a href="http://serviceworke.rs/">many more
+experimenting with the Service Worker API which has the potential for <a href="http://serviceworke.rs/" target="_blank" rel="noopener noreferrer">many more
 advanced use cases</a> and can help the web get
 closer to an even playing field with mobile apps.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
-      Published on May  9, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-05-09-offline-page-for-your-rails-application.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
+        Published on May  9, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -507,7 +511,7 @@ closer to an even playing field with mobile apps.</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

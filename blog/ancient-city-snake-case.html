@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,7 +59,7 @@
     </h2>
 </header>
 
-    <p>Last week <a href="#">I spoke</a> at <a href="#">Ancient City Ruby Conference</a> where the organizers encouraged people to participate in a Ruby programming challenge called <a href="http://www.ancientcityruby.com/snake_case/">Snake Case</a>. I benchmarked a number of different ways to solve the challenge in Ruby and present the results here.</p>
+    <p>Last week <a href="" target="_blank" rel="noopener noreferrer">I spoke</a> at <a href="" target="_blank" rel="noopener noreferrer">Ancient City Ruby Conference</a> where the organizers encouraged people to participate in a Ruby programming challenge called <a href="http://www.ancientcityruby.com/snake_case/" target="_blank" rel="noopener noreferrer">Snake Case</a>. I benchmarked a number of different ways to solve the challenge in Ruby and present the results here.</p>
 
 <p>Here&#39;s the challenge:</p>
 
@@ -126,13 +126,13 @@ end
         Binary and Binomial
       </h3>
     
-<p><a href="http://rayhightower.com/">Ray Hightower</a>, who also <a href="http://rayhightower.com/blog/2016/04/08/ancient-city-ruby-2016/">spoke at ACR</a>, recently published a nice writeup of a <a href="http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/">&quot;brute force&quot; solution in Ruby, C, and Go</a>. Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.</p>
+<p><a href="http://rayhightower.com/" target="_blank" rel="noopener noreferrer">Ray Hightower</a>, who also <a href="http://rayhightower.com/blog/2016/04/08/ancient-city-ruby-2016/" target="_blank" rel="noopener noreferrer">spoke at ACR</a>, recently published a nice writeup of a <a href="http://rayhightower.com/blog/2016/04/11/comparing-ruby-c-and-go/" target="_blank" rel="noopener noreferrer">&quot;brute force&quot; solution in Ruby, C, and Go</a>. Please check out his detailed explanation of both a mathematical and brute force solution in Ruby.</p>
 
 <p>The mathematics approach is a factorial: given a 10x10 grid, we want to
 construct 20 moves where 10 moves are &quot;south&quot; and 10 moves are &quot;east&quot;. We could
 represent this conceptually as a bit map, where the total number of bits is
 20^2, or <code>(h+w)**2</code> where <code>h</code> is the height and <code>w</code> is the width of the grid. It
-turns out this can be represented as a <a href="https://en.wikipedia.org/wiki/Binomial_coefficient">binomial coefficient</a> often expressed as:</p>
+turns out this can be represented as a <a href="https://en.wikipedia.org/wiki/Binomial_coefficient" target="_blank" rel="noopener noreferrer">binomial coefficient</a> often expressed as:</p>
 
 <p><img src="/assets/images/blog/binomial-coefficient.gif" alt="Binomial coefficient" /></p>
 
@@ -301,7 +301,7 @@ iterations/second and share the results.</p>
 
 <p>Here&#39;s a file that defines each of the approaches we&#39;ve described in separate
 modules and benchmarks the performance for calculating the result for a 10x10
-grid. (<a href="https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb">Full source</a>)</p>
+grid. (<a href="https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb" target="_blank" rel="noopener noreferrer">Full source</a>)</p>
 
 <p>Running on my mid-2014 MacBook Pro with MRI ruby-2.3:</p>
 
@@ -361,7 +361,7 @@ end
 
 <p>The factorial solution is orders of magnitude faster than the others. The iterative (and relatively similar enumerative) examples are only about ~10x slower than the factorial version while the recursive solution is almost 10,000x slower. The brute force solution is over a million-times slower. Even though the standard deviation in some of the results was fairly large, the differences across strategies appear conclusive.</p>
 
-<p>The maintainer of <code>benchmark-ips</code>, <a href="https://twitter.com/evanphx">Evan Phoenix</a>, added the ability to share benchmark results online. You can see <a href="https://benchmark.fyi/f">the results for this test on benchmark.fyi</a>. The <a href="https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb">full source code is also on GitHub</a>.</p>
+<p>The maintainer of <code>benchmark-ips</code>, <a href="https://twitter.com/evanphx" target="_blank" rel="noopener noreferrer">Evan Phoenix</a>, added the ability to share benchmark results online. You can see <a href="https://benchmark.fyi/f" target="_blank" rel="noopener noreferrer">the results for this test on benchmark.fyi</a>. The <a href="https://github.com/rossta/loves-enumerable/blob/edbab0fcb2aeac65a7b34d9fa603b3aa58563b4f/code/snake_case.rb" target="_blank" rel="noopener noreferrer">full source code is also on GitHub</a>.</p>
 
       <h3 id="and-the-winner-is-" class="title title-h3">
         <a name="and-the-winner-is-" class="anchor" href="#and-the-winner-is-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -379,13 +379,17 @@ performance matters, the mathematical approach has a clear advantage, but
 sacrifices readability. I might be inclined to choose the iterative or recursive
 approach in situations where performance isn&#39;t the key concern.</p>
 
-<p>Given my preference for <a href="https://rossta.net/blog/series/enumerable.html">Enumerable</a>, I personally love the enumerative approach, but, as <a href="https://rossta.net/talks/ruby-enumerator.html">I discussed at Ancient City Ruby</a>, I doubt most would agree.</p>
+<p>Given my preference for <a href="https://rossta.net/blog/series/enumerable.html" target="_blank" rel="noopener noreferrer">Enumerable</a>, I personally love the enumerative approach, but, as <a href="https://rossta.net/talks/ruby-enumerator.html" target="_blank" rel="noopener noreferrer">I discussed at Ancient City Ruby</a>, I doubt most would agree.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
-      Published on Apr 12, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-04-12-ancient-city-snake-case.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Apr 12, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -407,7 +411,7 @@ approach in situations where performance isn&#39;t the key concern.</p>
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Ancient%20City%20Ruby%20Snake%20Case&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fancient-city-snake-case.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Ancient%20City%20Ruby%20Snake%20Case&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fancient-city-snake-case.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -527,7 +531,7 @@ approach in situations where performance isn&#39;t the key concern.</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

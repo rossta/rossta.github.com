@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,9 +59,9 @@
     </h2>
 </header>
 
-    <p>To give you some idea about what a geek I am, when <a href="https://twitter.com/saronyitbarek">Saron</a> asked me to fill out a form to submit blog posts to the <a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter">CodeNewbie Newsletter</a>, I thought, &quot;what if I could automate that?&quot; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...</p>
+    <p>To give you some idea about what a geek I am, when <a href="https://twitter.com/saronyitbarek" target="_blank" rel="noopener noreferrer">Saron</a> asked me to fill out a form to submit blog posts to the <a href="http://www.codenewbie.org/blogs/submit-to-the-codenewbie-newsletter" target="_blank" rel="noopener noreferrer">CodeNewbie Newsletter</a>, I thought, &quot;what if I could automate that?&quot; I happen to spend a lot of time in a terminal and thinking about webpage interaction, so...</p>
 
-<p>Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&#39;s a <a href="http://casperjs.org/">CasperJS</a> script available as an npm package. It&#39;s called <a href="https://github.com/rossta/form-to-terminal"><code>form-to-terminal</code></a>.</p>
+<p>Instead of filling out the form for my last article, I ended up creating a tool to submit a Google Form from the command line. At its core, it&#39;s a <a href="http://casperjs.org/" target="_blank" rel="noopener noreferrer">CasperJS</a> script available as an npm package. It&#39;s called <a href="https://github.com/rossta/form-to-terminal" target="_blank" rel="noopener noreferrer"><code>form-to-terminal</code></a>.</p>
 
 <p>To use <code>form-to-terminal</code>, install it via npm and use the executable <code>ftt</code> along with a url to a Google Form url:</p>
 
@@ -70,7 +70,7 @@ $ npm install -g form-to-terminal
 $ ftt [Google Form Url]
 </code></pre>
 
-<p>This assumes that you&#39;ve already installed <a href="https://nodejs.org/en/download/package-manager/">nodejs</a>,  <a href="http://docs.casperjs.org/en/latest/installation.html">CasperJS</a>, and its pre-requisites.</p>
+<p>This assumes that you&#39;ve already installed <a href="https://nodejs.org/en/download/package-manager/" target="_blank" rel="noopener noreferrer">nodejs</a>,  <a href="http://docs.casperjs.org/en/latest/installation.html" target="_blank" rel="noopener noreferrer">CasperJS</a>, and its pre-requisites.</p>
 
       <h2 id="casper-the-friendly-ghost" class="title title-h2">
         <a name="casper-the-friendly-ghost" class="anchor" href="#casper-the-friendly-ghost">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -80,7 +80,7 @@ $ ftt [Google Form Url]
         Casper, the friendly ghost
       </h2>
     
-<p>CasperJS is actually just a wrapper around <a href="http://phantomjs.org/">PhantomJS</a>, which provides
+<p>CasperJS is actually just a wrapper around <a href="http://phantomjs.org/" target="_blank" rel="noopener noreferrer">PhantomJS</a>, which provides
 fully-featured API for interacting with webpages from JavaScript.</p>
 
 <p>CasperJS makes this scripting more pleasant by providing some syntactic sugar for dealing
@@ -155,7 +155,7 @@ the form. CasperJS makes it easy to do this with additional args to
 });
 </code></pre>
 
-<p>Check out the full <a href="https://github.com/rossta/form-to-terminal/blob/96a4dd8be4b071b5bfb5adb50676a6383c685240/index.js">CasperJS script</a> to see how <code>form-to-terminal</code> interacts with Google Forms in more detail.</p>
+<p>Check out the full <a href="https://github.com/rossta/form-to-terminal/blob/96a4dd8be4b071b5bfb5adb50676a6383c685240/index.js" target="_blank" rel="noopener noreferrer">CasperJS script</a> to see how <code>form-to-terminal</code> interacts with Google Forms in more detail.</p>
 
       <h2 id="command-line-node" class="title title-h2">
         <a name="command-line-node" class="anchor" href="#command-line-node">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -198,7 +198,7 @@ enter on the command line is passed to CasperJS.</p>
 fully those with text inputs. It&#39;s likely quite buggy - for example, it doesn&#39;t
 currently check that you&#39;ve filled out all required fields, nor does it check
 for validations errors after you&#39;ve submitted the form - but, hey, it&#39;s a start.
-Go ahead and <a href="https://github.com/rossta/form-to-terminal">check it out on GitHub</a> and contribute some improvements!</p>
+Go ahead and <a href="https://github.com/rossta/form-to-terminal" target="_blank" rel="noopener noreferrer">check it out on GitHub</a> and contribute some improvements!</p>
 
 <p>CasperJS is a fun tool for automating your workflow and worth a look for
 automated testing for web developers.</p>
@@ -211,9 +211,13 @@ CodeNewbie Google Form, so you can try it too:</p>
 </code></pre>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Sep 28, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-09-28-fill-out-google-forms-from-the-command-line-with-casperjs.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Sep 28, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -235,7 +239,7 @@ CodeNewbie Google Form, so you can try it too:</p>
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Fill%20out%20Google%20Forms%20from%20the%20command%20line&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Ffill-out-google-forms-from-the-command-line-with-casperjs.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Fill%20out%20Google%20Forms%20from%20the%20command%20line&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Ffill-out-google-forms-from-the-command-line-with-casperjs.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     JavaScript, Node, and the web. Thank you!
   </p>
@@ -356,7 +360,7 @@ CodeNewbie Google Form, so you can try it too:</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

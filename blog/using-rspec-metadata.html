@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -61,14 +61,14 @@
 
     <p>A useful feature of RSpec is the ability to pass metadata to tests and suites.</p>
 
-<p>You may already be familiar with how <a href="https://github.com/jnicklas/capybara">Capybara</a> uses the <code>:js</code> option to enable the javascript driver.</p>
+<p>You may already be familiar with how <a href="https://github.com/jnicklas/capybara" target="_blank" rel="noopener noreferrer">Capybara</a> uses the <code>:js</code> option to enable the javascript driver.</p>
 
 <pre><code class="ruby">describe &quot;a javascript feature&quot;, :js do
   # tests run against the Capyabara.javascript_driver
 end
 </code></pre>
 
-<p>Capybara <a href="https://github.com/jnicklas/capybara/blob/957c35f580b68e8a140b5bbe7818fdcf06bc4521/lib/capybara/rspec.rb#L27">provides an RSpec configuration hook</a> that changes the web driver for any example where <code>:js</code> metadata is present. Here it is, oversimplified:</p>
+<p>Capybara <a href="https://github.com/jnicklas/capybara/blob/957c35f580b68e8a140b5bbe7818fdcf06bc4521/lib/capybara/rspec.rb#L27" target="_blank" rel="noopener noreferrer">provides an RSpec configuration hook</a> that changes the web driver for any example where <code>:js</code> metadata is present. Here it is, oversimplified:</p>
 
 <pre><code class="ruby"># capybara/rspec.rb
 RSpec.configure do |config|
@@ -99,7 +99,7 @@ Rails environment and make it suitable for running in test mode. For performance
 reasons, it may be beneficial to run each of our specs in a database
 transaction so test data can be easily rolled back at the start of each spec.</p>
 
-<p>Here&#39;s a common base configuration for using the popular <a href="https://github.com/DatabaseCleaner/database_cleaner">DatabaseCleaner</a> gem to
+<p>Here&#39;s a common base configuration for using the popular <a href="https://github.com/DatabaseCleaner/database_cleaner" target="_blank" rel="noopener noreferrer">DatabaseCleaner</a> gem to
 set up transactional database behavior for RSpec:</p>
 
 <pre><code class="ruby">RSpec.configure do |config|
@@ -128,7 +128,7 @@ committed to the database so multiple database connections will have access to t
 
 <p>Let&#39;s use RSpec metadata to toggle database behavior automatically when using
 the javascript driver (i.e., not the default <code>:rack_test</code> driver). We&#39;ll add the
-following hooks, borrowed from the DatabaseCleaner <a href="https://github.com/DatabaseCleaner/database_cleaner/tree/f32abebc4f28faa6ff944c4d1d4fee3f21ceb0bb#rspec-example">README</a>:</p>
+following hooks, borrowed from the DatabaseCleaner <a href="https://github.com/DatabaseCleaner/database_cleaner/tree/f32abebc4f28faa6ff944c4d1d4fee3f21ceb0bb#rspec-example" target="_blank" rel="noopener noreferrer">README</a>:</p>
 
 <pre><code class="ruby"># spec/spec_helper.rb
 config.before(:each, type: :feature) do
@@ -247,7 +247,7 @@ RSpec.configure do |config|
 end
 </code></pre>
 
-<p>This may require changing behavior of instances which is <a href="https://relishapp.com/rspec/rspec-mocks/docs/working-with-legacy-code/any-instance">typically discouraged</a>. We may also need to clean up other global state, like clearing the Rails cache after the test run.</p>
+<p>This may require changing behavior of instances which is <a href="https://relishapp.com/rspec/rspec-mocks/docs/working-with-legacy-code/any-instance" target="_blank" rel="noopener noreferrer">typically discouraged</a>. We may also need to clean up other global state, like clearing the Rails cache after the test run.</p>
 
       <h4 id="better-attempt" class="title title-h4">
         <a name="better-attempt" class="anchor" href="#better-attempt">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -294,8 +294,8 @@ other tests unintentionally - a big no-no.</p>
 <p>Here, we are storing the previously set value of <code>ActionContoller::Base.perform_caching</code>, setting it for the local suite, and resetting it back to the original value after it completes.</p>
 
 <p>This technique may come into play when integrating with certain gems like
-<a href="https://github.com/airblade/paper_trail">PaperTrail</a> which may generate expensive logic or queries not need in most
-situations. PaperTrail even <a href="https://github.com/airblade/paper_trail/blob/eef918bca42bab85c4467541037897f0788b6062/lib/paper_trail/frameworks/rspec.rb">provides a helper</a> to take advantage of RSpec. It may be worth considering whether to provide an interface to toggle behavior and RSpec helpers next time we write a gem.
+<a href="https://github.com/airblade/paper_trail" target="_blank" rel="noopener noreferrer">PaperTrail</a> which may generate expensive logic or queries not need in most
+situations. PaperTrail even <a href="https://github.com/airblade/paper_trail/blob/eef918bca42bab85c4467541037897f0788b6062/lib/paper_trail/frameworks/rspec.rb" target="_blank" rel="noopener noreferrer">provides a helper</a> to take advantage of RSpec. It may be worth considering whether to provide an interface to toggle behavior and RSpec helpers next time we write a gem.
 metadata to toggle behavior in specs.</p>
 
       <h3 id="filtering-specs" class="title title-h3">
@@ -308,7 +308,7 @@ metadata to toggle behavior in specs.</p>
     
 <p>One useful technique while developing is to run a selected set of specs. We may
 be editing acceptances specs, model validations, and other disparate tests while test driving a
-feature from <a href="http://everydayrails.com/2014/01/15/outside-in-example-ruby-tapas.html">outside to in</a>.</p>
+feature from <a href="http://everydayrails.com/2014/01/15/outside-in-example-ruby-tapas.html" target="_blank" rel="noopener noreferrer">outside to in</a>.</p>
 
       <h4 id="manual-tagging" class="title title-h4">
         <a name="manual-tagging" class="anchor" href="#manual-tagging">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -416,7 +416,7 @@ end
 <p>Now, all specs in the directory will run with the <code>:truncation_mode</code> metadata
 and the database strategy will be set to <code>:truncation</code> as long as it is declared ahead of the additional DatabaseCleaner configuration we referenced earlier.</p>
 
-<p>Note, this is the <a href="https://github.com/rspec/rspec-rails/blob/a09a6231ceecefa177ec08b27c3066d5947e5899/lib/rspec/rails/configuration.rb#L85">same method</a> used in <code>rspec-rails</code> to add custom behavior to specs in the specific directories, e.g. <code>spec/controllers&#39;,</code>spec/requests, etc.</p>
+<p>Note, this is the <a href="https://github.com/rspec/rspec-rails/blob/a09a6231ceecefa177ec08b27c3066d5947e5899/lib/rspec/rails/configuration.rb#L85" target="_blank" rel="noopener noreferrer">same method</a> used in <code>rspec-rails</code> to add custom behavior to specs in the specific directories, e.g. <code>spec/controllers&#39;,</code>spec/requests, etc.</p>
 
 <aside class="callout panel">
 <p>The example above is borrowed from <a href="http://stackoverflow.com/questions/29651981/before-and-after-hooks-for-a-spec-directory-in-rspec">an answer I recently gave on Stackoverflow</a>.
@@ -434,7 +434,7 @@ and the database strategy will be set to <code>:truncation</code> as long as it 
 <p>While using RSpec metadata can be a powerful technique for altering test
 behavior and application settings in specs, it can also be taken too far.</p>
 
-<p>As @avdgaag notes in <a href="http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html">his blog post on the topic</a>, make sure to distinguish between <em>how</em> spec is run from <em>what</em> the spec should test. We should probably not use metadata to create records specific to certain tests or authenticate users for a given context, for example.</p>
+<p>As @avdgaag notes in <a href="http://arjanvandergaag.nl/blog/using-abusing-rspec-metadata.html" target="_blank" rel="noopener noreferrer">his blog post on the topic</a>, make sure to distinguish between <em>how</em> spec is run from <em>what</em> the spec should test. We should probably not use metadata to create records specific to certain tests or authenticate users for a given context, for example.</p>
 
 <p>One rule of thumb for adding metadata is decide whether it would be generally useful to any Rails app (good) or it is specific to the business logic of your current application (bad). The latter is best set up more explicitly within or alongside your tests.</p>
 
@@ -447,9 +447,13 @@ non-specific to my application. If so, the behavior <em>might</em> be useful as 
 <p>Use wisely!</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Dec 29, 2015
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2015-12-29-using-rspec-metadata.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Dec 29, 2015
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -596,7 +600,7 @@ non-specific to my application. If so, the behavior <em>might</em> be useful as 
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

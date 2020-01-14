@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,19 +59,19 @@
     </h2>
 </header>
 
-    <p>Push messages from mobile and desktop browsers are <a href="http://caniuse.com/#feat=push-api">now a thing</a> on the open web.</p>
+    <p>Push messages from mobile and desktop browsers are <a href="http://caniuse.com/#feat=push-api" target="_blank" rel="noopener noreferrer">now a thing</a> on the open web.</p>
 
 <p>Why use the Push API? It allows us to use free, third-party services to notify our users
 of events, even when they&#39;re not actively engaged with our site. It&#39;s
 not meant to replace other methods of pushing data to clients, like
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API">WebSockets</a> or <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events">Server Sent Events</a>, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&#39;s
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" target="_blank" rel="noopener noreferrer">WebSockets</a> or <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events" target="_blank" rel="noopener noreferrer">Server Sent Events</a>, but can be useful for sending small, infrequent payloads to keep users engaged. Think: a build has finished successfully, a new post was published, a touchdown was scored.  What&#39;s
 common place on our smartphones from installed apps is now possible from the browser.</p>
 
-<p><a href="https://serviceworker-rails.herokuapp.com/push-simple/"><img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-3.jpg" alt="Push message in Chrome" /></a></p>
+<p><a href="https://serviceworker-rails.herokuapp.com/push-simple/" target="_blank" rel="noopener noreferrer"><img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-3.jpg" alt="Push message in Chrome" /></a></p>
 
 <p>Though only supported in Chrome and Firefox on the desktop and in Chrome on Android at the time of this writing, it&#39;ll be more widespread soon enough. While I previously <a href="/blog/web-push-notifications-from-rails.html">wrote about this topic</a>, there have been recent changes in the Chrome implementation to make the API consistent with Firefox, which we&#39;ll describe here.</p>
 
-<p>In this post, we&#39;ll walk through setting up a Ruby or Node.js web application to use the Push API with the <a href="https://tools.ietf.org/html/draft-ietf-webpush-vapid-01">Voluntary Application server Identification (VAPID)</a>. Use of VAPID for push requests is optional, but primarily a security benefit. Application servers use VAPID to identify themselves to the push servers so push subscriptions can be properly restricted to their origin app servers. In other words, VAPID could theoretically prevent an attacker from stealing a user <code>PushSubscription</code> and sending push messages to that recipient from another server. Down the road, push services may be able to provide analytics and debugging assistance for app servers using the VAPID protocol. Another benefit: in Chrome, it is no longer necessary to register our web apps through the Google Developer Console and pass around Google app credentials in web push requests.</p>
+<p>In this post, we&#39;ll walk through setting up a Ruby or Node.js web application to use the Push API with the <a href="https://tools.ietf.org/html/draft-ietf-webpush-vapid-01" target="_blank" rel="noopener noreferrer">Voluntary Application server Identification (VAPID)</a>. Use of VAPID for push requests is optional, but primarily a security benefit. Application servers use VAPID to identify themselves to the push servers so push subscriptions can be properly restricted to their origin app servers. In other words, VAPID could theoretically prevent an attacker from stealing a user <code>PushSubscription</code> and sending push messages to that recipient from another server. Down the road, push services may be able to provide analytics and debugging assistance for app servers using the VAPID protocol. Another benefit: in Chrome, it is no longer necessary to register our web apps through the Google Developer Console and pass around Google app credentials in web push requests.</p>
 
       <h2 id="overview" class="title title-h2">
         <a name="overview" class="anchor" href="#overview">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -206,7 +206,7 @@ else {
 }
 </code></pre>
 
-<p>For Rails developers, we may want to look at the <a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code> gem</a> and this <a href="https://rossta.net/blog/service-worker-on-rails.html">helpful tutorial</a> to integrate service worker scripts with the Rails asset pipeline.</p>
+<p>For Rails developers, we may want to look at the <a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer"><code>serviceworker-rails</code> gem</a> and this <a href="https://rossta.net/blog/service-worker-on-rails.html" target="_blank" rel="noopener noreferrer">helpful tutorial</a> to integrate service worker scripts with the Rails asset pipeline.</p>
 
       <h2 id="subscribing-to-push-notifications" class="title title-h2">
         <a name="subscribing-to-push-notifications" class="anchor" href="#subscribing-to-push-notifications">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -289,7 +289,7 @@ $(&#39;.webpush-button&#39;).on(&#39;click&#39;, (e) =&gt; {
 <code>PushSubscription</code> instance with all the information the push service needs to
 send a push message to this user&#39;s browser. This includes an <code>endpoint</code>, the URL
 on the push server where we&#39;ll send the push request, and a pair of <code>keys</code>
-labelled as <code>p256dh</code> and <code>auth</code> required to encrypt the push message payload. If interested to learn more about how this encryption works, check out this detailed summary on <a href="https://developers.google.com/web/updates/2016/03/web-push-encryption">web push payload encryption</a>.</p>
+labelled as <code>p256dh</code> and <code>auth</code> required to encrypt the push message payload. If interested to learn more about how this encryption works, check out this detailed summary on <a href="https://developers.google.com/web/updates/2016/03/web-push-encryption" target="_blank" rel="noopener noreferrer">web push payload encryption</a>.</p>
 
 <pre><code class="javascript">// subscription.toJSON();
 {
@@ -378,7 +378,7 @@ self.addEventListener(&quot;push&quot;, (event) =&gt; {
 });
 </code></pre>
 
-<p>Before the notifications can be displayed, the user must grant permission for <a href="https://developer.mozilla.org/en-US/docs/Web/API/notification">notifications</a> in a browser prompt, using something like the example below.</p>
+<p>Before the notifications can be displayed, the user must grant permission for <a href="https://developer.mozilla.org/en-US/docs/Web/API/notification" target="_blank" rel="noopener noreferrer">notifications</a> in a browser prompt, using something like the example below.</p>
 
 <pre><code class="javascript">// application.js
 
@@ -410,10 +410,14 @@ interested to hear how things are working out for folks integrating web push
 into their web apps.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
-      Published on Oct 21, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-10-21-using-the-web-push-api-with-vapid.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
+        Published on Oct 21, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -435,7 +439,7 @@ into their web apps.</p>
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Using%20Web%20Push%20Notifications%20with%20VAPID&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fusing-the-web-push-api-with-vapid.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Using%20Web%20Push%20Notifications%20with%20VAPID&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fusing-the-web-push-api-with-vapid.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby, JavaScript, Service Worker, and the web. Thank you!
   </p>
@@ -557,7 +561,7 @@ into their web apps.</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

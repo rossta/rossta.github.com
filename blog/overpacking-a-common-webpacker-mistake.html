@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="antialiased" lang="en">
   <head>
-    <title>Overpacking: A Common Webpacker Mistake - rossta.net</title>
+    <title>Overpacking: A common Webpacker mistake - rossta.net</title>
 <meta name="description" content="A big issue that comes up with Webpacker is &quot;where to put the JavaScript files&quot;. This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha." />
 <meta name="keywords" content="Webpack, Rails" />
 <meta name="site" content="rossta.net" />
@@ -10,10 +10,10 @@
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="A big issue that comes up with Webpacker is &quot;where to put the JavaScript files&quot;. This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha." />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/brandless-packing-unsplash.jpg" />
-<meta name="twitter:title" content="Overpacking: A Common Webpacker Mistake" />
+<meta name="twitter:title" content="Overpacking: A common Webpacker mistake" />
 <meta property="og:description" content="A big issue that comes up with Webpacker is &quot;where to put the JavaScript files&quot;. This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha." />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/stock/brandless-packing-unsplash.jpg" />
-<meta property="og:title" content="Overpacking: A Common Webpacker Mistake" />
+<meta property="og:title" content="Overpacking: A common Webpacker mistake" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -52,7 +52,7 @@
         <article class="post mb-12">
     <header class="page-header mt-4">
   <h1>
-    Overpacking: A Common Webpacker Mistake
+    Overpacking: A common Webpacker mistake
   </h1>
     <h2 class="mt-4 text-gray-600 font-medium">
       i.e., How I saved 6 minutes in a Rails team's deploy time
@@ -85,7 +85,7 @@
     
 <p>First, let&#39;s take a step back. If you&#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.</p>
 
-<p>I know this because I was once in your shoes struggling to learn how Webpack works. I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via <a href="https://github.com/rails/webpacker"><code>rails/webpacker</code></a> Github issues.</p>
+<p>I know this because I was once in your shoes struggling to learn how Webpack works. I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via <a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"><code>rails/webpacker</code></a> Github issues.</p>
 
 <p>One of the most frequently-reported issues I&#39;ve seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation can lead to failed deploys.</p>
 
@@ -147,7 +147,7 @@
 <p>The Webpacker project refers to entries as <strong>packs</strong>.</p>
 </blockquote>
 
-<p>&quot;Entry&quot; is listed as the first key concept on Webpack&#39;s documentation site: <a href="https://webpack.js.org/concepts/#entry">https://webpack.js.org/concepts/#entry</a>.</p>
+<p>&quot;Entry&quot; is listed as the first key concept on Webpack&#39;s documentation site: <a href="https://webpack.js.org/concepts/#entry" target="_blank" rel="noopener noreferrer">https://webpack.js.org/concepts/#entry</a>.</p>
 
 <p>Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.</p>
 
@@ -176,9 +176,13 @@
 <p>Don&#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Dec  3, 2019
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2019-12-03-overpacking-a-common-webpacker-mistake.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Dec  3, 2019
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -325,7 +329,7 @@
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

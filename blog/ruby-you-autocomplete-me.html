@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -80,8 +80,8 @@ IRB.start
 </code></pre>
 
 <p>Turns out that all <code>irb/completion</code> does is configure the ruby interface to the
-<a href="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html">GNU Readline Library</a>.
-This is done with the ruby <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html">Readline</a>
+<a href="http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html" target="_blank" rel="noopener noreferrer">GNU Readline Library</a>.
+This is done with the ruby <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html" target="_blank" rel="noopener noreferrer">Readline</a>
 module. <code>Readline</code> accepts a <code>proc</code> that determines completion behavior by returning an array of string
 candidates given an input string triggered, typically, by pressing <code>TAB</code>.</p>
 
@@ -101,7 +101,7 @@ object and provide a set of candidates to match, such as <code>String</code> ins
 the input matches <code>$r{^(([&quot;&#39;]).*\2)\.([^.]*)$}</code>.</p>
 
 <p>To give <code>Readline</code> a spin, fire up <code>irb</code> and paste in the following example, borrowed
-from the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html">ruby docs</a>:</p>
+from the <a href="http://www.ruby-doc.org/stdlib-1.9.3/libdoc/readline/rdoc/Readline.html" target="_blank" rel="noopener noreferrer">ruby docs</a>:</p>
 
 <pre><code class="ruby">require &#39;readline&#39;
 
@@ -136,11 +136,11 @@ tag list in memory and grep for the matches instead. There is still another prob
 by replacing the <code>Readline.completion_proc</code>, we&#39;ve clobbered the functionality
 provided by <code>irb/completion</code>. One approach would be to fall back to the
 <code>IRB::InputCompletor::CompletionProc</code> or add its result to the array of candidates.
-Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorrect-completions">incorrect completions</a>
+Given IRB has documented, <a href="https://github.com/cldwalker/bond#irbs-incorrect-completions" target="_blank" rel="noopener noreferrer">incorrect completions</a>
 (try completing methods on a proc) and no built-in support for extending completion behavior,
 this could get messy.</p>
 
-<p>Enter <a href="https://github.com/cldwalker/bond">bond</a>, a drop-in replacement for IRB
+<p>Enter <a href="https://github.com/cldwalker/bond" target="_blank" rel="noopener noreferrer">bond</a>, a drop-in replacement for IRB
 completion. It aims to improve on IRB&#39;s shortcomings and provides methods for
 adding custom completions. To take advantage of Bond in the console:</p>
 
@@ -148,7 +148,7 @@ adding custom completions. To take advantage of Bond in the console:</p>
 Bond.start
 </code></pre>
 
-<p>Bond allows you to extend the strategies for autocompleting text with <a href="https://github.com/cldwalker/bond/blob/master/lib/bond.rb#L21">the
+<p>Bond allows you to extend the strategies for autocompleting text with <a href="https://github.com/cldwalker/bond/blob/master/lib/bond.rb#L21" target="_blank" rel="noopener noreferrer">the
 <code>Bond.completion</code> method</a>.
 To set up a Bond completion, we need a condition and an action; when the condition is matched,
 then the given action will determine which candidates are returned. Calling
@@ -195,9 +195,13 @@ Ruby standard library source code proved to be a useful exercise, revealing some
 simple ways to hook into features easily taken for granted.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Feb  5, 2014
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2014-02-05-ruby-you-autocomplete-me.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Feb  5, 2014
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -219,7 +223,7 @@ simple ways to hook into features easily taken for granted.</p>
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Ruby%2C%20You%20Autocomplete%20Me&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fruby-you-autocomplete-me.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Ruby%2C%20You%20Autocomplete%20Me&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fruby-you-autocomplete-me.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -338,7 +342,7 @@ simple ways to hook into features easily taken for granted.</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

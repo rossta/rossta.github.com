@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,7 +59,7 @@
     </h2>
 </header>
 
-    <p>In case you missed the news, <a href="http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/">Rails is loving JavaScript</a> and Rails 5.1 ships with the option to compile JavaScript with <a href="https://webpack.js.org">Webpack</a> via the <a href="https://github.com/rails/webpacker">Webpacker gem</a>. This is a big change after years of the Rails asset pipeline running on Sprockets. My team at <a href="https://learnzillion.com">LearnZillion</a> recently decided to embrace this change and make the switch to Webpack with Webpacker to compile our clientside JavasScript for our Rails 4.2 application. <em>Gulp!</em></p>
+    <p>In case you missed the news, <a href="http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/" target="_blank" rel="noopener noreferrer">Rails is loving JavaScript</a> and Rails 5.1 ships with the option to compile JavaScript with <a href="https://webpack.js.org" target="_blank" rel="noopener noreferrer">Webpack</a> via the <a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer">Webpacker gem</a>. This is a big change after years of the Rails asset pipeline running on Sprockets. My team at <a href="https://learnzillion.com" target="_blank" rel="noopener noreferrer">LearnZillion</a> recently decided to embrace this change and make the switch to Webpack with Webpacker to compile our clientside JavasScript for our Rails 4.2 application. <em>Gulp!</em></p>
 
 <p>This post describes the challenges we encountered while switching from Sprockets to Webpack, how we solved those issues, and what we learned along the way.</p>
 
@@ -76,24 +76,24 @@
       </h2>
     
 <ol>
-<li><a href="#why-switch-">Why</a></li>
-<li><a href="#webpack-the-rails-way">Webpack, the Rails Way</a></li>
-<li><a href="#making-a-plan">Making a plan</a></li>
-<li><a href="#setting-up-webpack-entries">Setting up Webpack entries</a></li>
-<li><a href="#maintaining-backwards-compatibility">Maintaining backwards compatibility</a></li>
-<li><a href="#migrating-a-javascript-module">Migrating a JavaScript module</a></li>
-<li><a href="#exporting-from-webpack">Exporting from Webpack</a></li>
-<li><a href="#resolving-application-modules">Resolving application modules</a></li>
-<li><a href="#extending-the-webpack-configuration">Extending the Webpack configuration</a></li>
-<li><a href="#importing-libraries-and-global-scope">Importing libraries and global scope</a></li>
-<li><a href="#discovering-webpack-chunks">Discovering Webpack chunks</a></li>
-<li><a href="#extracting-common-chunks">Extracting common chunks</a></li>
-<li><a href="#adding-predictable-long-term-caching">Adding predictable long-term caching</a></li>
-<li><a href="#third-party-stylesheets-images-and-fonts">Third party stylesheets, images, and fonts</a></li>
-<li><a href="#deploying-with-capistrano-and-nginx">Deploying with Capistrano and Nginx</a></li>
-<li><a href="#unit-testing-with-karma">Unit testing with Karma</a></li>
-<li><a href="#local-development-with-ssl">Local development with SSL</a></li>
-<li><a href="#wrapping-up">Wrapping up</a></li>
+<li><a href="#why-switch-" target="_blank" rel="noopener noreferrer">Why</a></li>
+<li><a href="#webpack-the-rails-way" target="_blank" rel="noopener noreferrer">Webpack, the Rails Way</a></li>
+<li><a href="#making-a-plan" target="_blank" rel="noopener noreferrer">Making a plan</a></li>
+<li><a href="#setting-up-webpack-entries" target="_blank" rel="noopener noreferrer">Setting up Webpack entries</a></li>
+<li><a href="#maintaining-backwards-compatibility" target="_blank" rel="noopener noreferrer">Maintaining backwards compatibility</a></li>
+<li><a href="#migrating-a-javascript-module" target="_blank" rel="noopener noreferrer">Migrating a JavaScript module</a></li>
+<li><a href="#exporting-from-webpack" target="_blank" rel="noopener noreferrer">Exporting from Webpack</a></li>
+<li><a href="#resolving-application-modules" target="_blank" rel="noopener noreferrer">Resolving application modules</a></li>
+<li><a href="#extending-the-webpack-configuration" target="_blank" rel="noopener noreferrer">Extending the Webpack configuration</a></li>
+<li><a href="#importing-libraries-and-global-scope" target="_blank" rel="noopener noreferrer">Importing libraries and global scope</a></li>
+<li><a href="#discovering-webpack-chunks" target="_blank" rel="noopener noreferrer">Discovering Webpack chunks</a></li>
+<li><a href="#extracting-common-chunks" target="_blank" rel="noopener noreferrer">Extracting common chunks</a></li>
+<li><a href="#adding-predictable-long-term-caching" target="_blank" rel="noopener noreferrer">Adding predictable long-term caching</a></li>
+<li><a href="#third-party-stylesheets-images-and-fonts" target="_blank" rel="noopener noreferrer">Third party stylesheets, images, and fonts</a></li>
+<li><a href="#deploying-with-capistrano-and-nginx" target="_blank" rel="noopener noreferrer">Deploying with Capistrano and Nginx</a></li>
+<li><a href="#unit-testing-with-karma" target="_blank" rel="noopener noreferrer">Unit testing with Karma</a></li>
+<li><a href="#local-development-with-ssl" target="_blank" rel="noopener noreferrer">Local development with SSL</a></li>
+<li><a href="#wrapping-up" target="_blank" rel="noopener noreferrer">Wrapping up</a></li>
 </ol>
 
       <h2 id="why-switch-" class="title title-h2">
@@ -110,7 +110,7 @@
 
 <ul>
 <li>Sprockets is too slow, i.e., in development, we don&#39;t want to run JavaScript compilation through our Rails process</li>
-<li>To adopt ES6 syntax and <a href="https://github.com/TannerRogalsky/sprockets-es6#sprockets-es6">Sprockets support for ES6 is experimental</a></li>
+<li>To adopt ES6 syntax and <a href="https://github.com/TannerRogalsky/sprockets-es6#sprockets-es6" target="_blank" rel="noopener noreferrer">Sprockets support for ES6 is experimental</a></li>
 <li>For advanced features not available in Sprockets (or without extra effort), i.e., modularity, tree-shaking, live-reload, configurable source-maps, etc.</li>
 </ul>
 
@@ -124,15 +124,15 @@
         Webpack, the Rails Way
       </h2>
     
-<p><a href="https://github.com/rails/webpacker">Webpacker</a> is the official Rails gem for integrating Webpack with Rails. <a href="https://medium.com/@gauravtiwari">Guarav Tiwari</a> recently wrote a <a href="https://medium.com/statuscode/introducing-webpacker-7136d66cddfb">detailed introduction to Webpacker</a>.</p>
+<p><a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer">Webpacker</a> is the official Rails gem for integrating Webpack with Rails. <a href="https://medium.com/@gauravtiwari" target="_blank" rel="noopener noreferrer">Guarav Tiwari</a> recently wrote a <a href="https://medium.com/statuscode/introducing-webpacker-7136d66cddfb" target="_blank" rel="noopener noreferrer">detailed introduction to Webpacker</a>.</p>
 
 <p>Why does Webpacker exist?</p>
 
-<p>First, Webpacker helps make Webpack <em>Rails-friendly</em>. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes <em>convention over configuration</em>. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through integration with <a href="https://babeljs.io/">Babel</a>.</p>
+<p>First, Webpacker helps make Webpack <em>Rails-friendly</em>. Webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes <em>convention over configuration</em>. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through integration with <a href="https://babeljs.io/" target="_blank" rel="noopener noreferrer">Babel</a>.</p>
 
 <p>Also, Webpacker helps form the bridge between the Webpack build and the Rails application. Rails needs to be able to render <code>&lt;script&gt;</code> tags for Webpack assets in views. Webpacker provides helpers, including <code>javascript_pack_tag</code>, for this purpose.</p>
 
-<p>By Webpacker convention, Webpack will build JavaScript from source files located in <code>app/javascript</code> (a new addition to the traditional Rails directory structure) and from <code>node_modules</code> installed via <code>yarn</code>. To determine what dependencies to build, Webpack is configured by Webpacker to treat each file in <code>app/javascript/packs</code> as a separate <a href="https://webpack.js.org/concepts/#entry">entry</a> point. Entries in Webpack are analogous to JavaScript assets configured for Sprockets compilation via <code>Rails.configuration.assets.precompile</code>.</p>
+<p>By Webpacker convention, Webpack will build JavaScript from source files located in <code>app/javascript</code> (a new addition to the traditional Rails directory structure) and from <code>node_modules</code> installed via <code>yarn</code>. To determine what dependencies to build, Webpack is configured by Webpacker to treat each file in <code>app/javascript/packs</code> as a separate <a href="https://webpack.js.org/concepts/#entry" target="_blank" rel="noopener noreferrer">entry</a> point. Entries in Webpack are analogous to JavaScript assets configured for Sprockets compilation via <code>Rails.configuration.assets.precompile</code>.</p>
 
 <p>For deployment, the precompile task, <code>rake assets:precompile</code>, runs both Sprockets and Webpack build steps. By default, each Webpack entry will correspond to an output file that will be compiled to the <code>public/packs</code> directory in production, analogous to the <code>public/assets</code> directory for Sprockets builds. Webpack generates a <code>manifest.json</code> in <code>public/packs</code> that maps asset names to their locations. Rails will read the manifest to determine the urls for Webpack assets.</p>
 
@@ -282,7 +282,7 @@ app/javascript
 
 <p>But why was this an issue?</p>
 
-<p>It helps to understand that Sprockets and Webpack are two completely different paradigms of bundling JavaScript for the browser. The differences get to the heart of <a href="https://what-problem-does-it-solve.com/webpack/intro.html#what-problem-does-webpack-solve">how Webpack works</a>. Instead of concatenating all your JavaScript into the global scope, as Sprockets does, Webpack provides a runtime that compartmentalizes each JavaScript module into separate scopes via closures so that access between modules must be declared via imports. By default, none of these modules are exposed to the global scope.</p>
+<p>It helps to understand that Sprockets and Webpack are two completely different paradigms of bundling JavaScript for the browser. The differences get to the heart of <a href="https://what-problem-does-it-solve.com/webpack/intro.html#what-problem-does-webpack-solve" target="_blank" rel="noopener noreferrer">how Webpack works</a>. Instead of concatenating all your JavaScript into the global scope, as Sprockets does, Webpack provides a runtime that compartmentalizes each JavaScript module into separate scopes via closures so that access between modules must be declared via imports. By default, none of these modules are exposed to the global scope.</p>
 
 <aside class="callout panel">
 <h3>What problem does Webpack solve?</h3>
@@ -370,7 +370,7 @@ To ensure we selected modules to migrate in the right order, we wrote a short sc
         Exporting from Webpack
       </h2>
     
-<p>Webpack provides for a use case that met our needs: that of library authors. This entails <a href="https://webpack.js.org/configuration/output/#output-library">configuring the Webpack output to export a variable</a> to its receiving scope—in our case, the browser <code>window</code>. That meant we would package our Webpack modules into a library for our Sprockets code!</p>
+<p>Webpack provides for a use case that met our needs: that of library authors. This entails <a href="https://webpack.js.org/configuration/output/#output-library" target="_blank" rel="noopener noreferrer">configuring the Webpack output to export a variable</a> to its receiving scope—in our case, the browser <code>window</code>. That meant we would package our Webpack modules into a library for our Sprockets code!</p>
 
 <p>To do this, we modified our Webpack config:</p>
 
@@ -478,7 +478,7 @@ module.exports = merge(config, additionalConfig);
 module.exports = require(&#39;./shared&#39;);
 </code></pre>
 
-<p>The Webpacker docs also provide <a href="https://github.com/rails/webpacker/blob/05bf821ce983a2ad88fba0da476023e67f8efe43/docs/webpack.md#configuration">some helpful tips</a> on how to extend the default configuration.</p>
+<p>The Webpacker docs also provide <a href="https://github.com/rails/webpacker/blob/05bf821ce983a2ad88fba0da476023e67f8efe43/docs/webpack.md#configuration" target="_blank" rel="noopener noreferrer">some helpful tips</a> on how to extend the default configuration.</p>
 
       <h2 id="importing-libraries-and-global-scope" class="title title-h2">
         <a name="importing-libraries-and-global-scope" class="anchor" href="#importing-libraries-and-global-scope">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -490,9 +490,9 @@ module.exports = require(&#39;./shared&#39;);
     
 <p>Though Webpack tries hard to encourage you to avoid exporting your dependencies to the global scope. Recall this wasn&#39;t an option for us.</p>
 
-<p>To make our third party JavaScript libraries, like jQuery and knockout, available in the global scope, we added special <a href="https://webpack.js.org/concepts/loaders/">loader</a> to the Webpack pipeline. A Webpack loader generally describes a type of transformation for a given file type. For example, <a href="https://github.com/rails/webpacker/blob/b2d899b25fb9f1cb11426b1b5e2d699c680bdcf6/package/loaders/babel.js">Babel integrates with Webpack via a loader</a> in Webpacker to transform any JavaScript file from ES6 to ES5 syntax.</p>
+<p>To make our third party JavaScript libraries, like jQuery and knockout, available in the global scope, we added special <a href="https://webpack.js.org/concepts/loaders/" target="_blank" rel="noopener noreferrer">loader</a> to the Webpack pipeline. A Webpack loader generally describes a type of transformation for a given file type. For example, <a href="https://github.com/rails/webpacker/blob/b2d899b25fb9f1cb11426b1b5e2d699c680bdcf6/package/loaders/babel.js" target="_blank" rel="noopener noreferrer">Babel integrates with Webpack via a loader</a> in Webpacker to transform any JavaScript file from ES6 to ES5 syntax.</p>
 
-<p>One way to instruct Webpack to expose variables exported by a given library to the global scope is via the official <a href="https://github.com/webpack-contrib/expose-loader"><code>expose-loader</code></a>. To use this loader, we updated the default Webpack config provided by Webpacker to ensure that our Webpack-compiled <code>jQuery</code> package is made available in the global scope for our legacy JavaScript:</p>
+<p>One way to instruct Webpack to expose variables exported by a given library to the global scope is via the official <a href="https://github.com/webpack-contrib/expose-loader" target="_blank" rel="noopener noreferrer"><code>expose-loader</code></a>. To use this loader, we updated the default Webpack config provided by Webpacker to ensure that our Webpack-compiled <code>jQuery</code> package is made available in the global scope for our legacy JavaScript:</p>
 
 <pre><code class="javascript">// config/webpack/shared.js
 
@@ -573,7 +573,7 @@ import &#39;slick-carousel&#39;;
 
 <p>Not expected! Clearly, there are some side effects from importing these packages in Webpack. Turns out, there were a couple issues here converging at once.</p>
 
-<p>At this point, it would help to visualize what&#39;s happening in our Webpack bundles. We can do this in development with <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer"><code>webpack-bundle-analyzer</code></a>. Adding this plugin to our Webpack config produces a separate local webserver that graphs the packages used in each bundle.</p>
+<p>At this point, it would help to visualize what&#39;s happening in our Webpack bundles. We can do this in development with <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"><code>webpack-bundle-analyzer</code></a>. Adding this plugin to our Webpack config produces a separate local webserver that graphs the packages used in each bundle.</p>
 
 <p>Here&#39;s what the analyzer produced before we added <code>slick-carousel</code>:</p>
 
@@ -585,7 +585,7 @@ import &#39;slick-carousel&#39;;
 
 <p>Two jQuerys! (You may have noticed some other modules are duplicated as well.)</p>
 
-<p>It turns out that <code>slick-carousel</code> employs a common pattern in modern JavaScript packages to detect the presence of a JavaScript module loader API, such as Asynchronous Module Definition (AMD) or CommonJS. The pattern looks something like this, <a href="https://github.com/kenwheeler/slick/blob/ee7d37faeb92c4619ffeefeba2cc4c733f39b1b3/slick/slick.js#L18">excerpted from the <code>slick-carousel</code> source</a>:</p>
+<p>It turns out that <code>slick-carousel</code> employs a common pattern in modern JavaScript packages to detect the presence of a JavaScript module loader API, such as Asynchronous Module Definition (AMD) or CommonJS. The pattern looks something like this, <a href="https://github.com/kenwheeler/slick/blob/ee7d37faeb92c4619ffeefeba2cc4c733f39b1b3/slick/slick.js#L18" target="_blank" rel="noopener noreferrer">excerpted from the <code>slick-carousel</code> source</a>:</p>
 
 <pre><code class="javascript">;(function(factory) {
     &#39;use strict&#39;;
@@ -607,13 +607,13 @@ import &#39;slick-carousel&#39;;
 
 <p>Ok, but why didn&#39;t we see two jQuerys when we included <code>chosen-js</code>?</p>
 
-<p>The reason is that the Chosen jQuery plugin only works with browser globals, as described by <a href="https://github.com/harvesthq/chosen/issues/2215">this issue on the chosen-js GitHub repository</a>. It doesn&#39;t use a module loader pattern, so if we hadn&#39;t exported <code>jQuery</code> to global scope in the first place, it wouldn&#39;t have worked at all. In that case, we would have followed <a href="http://reactkungfu.com/2015/10/integrating-jquery-chosen-with-webpack-using-imports-loader/">this post that describes how to integrate Chosen with Webpack using the <code>imports-loader</code></a>.</p>
+<p>The reason is that the Chosen jQuery plugin only works with browser globals, as described by <a href="https://github.com/harvesthq/chosen/issues/2215" target="_blank" rel="noopener noreferrer">this issue on the chosen-js GitHub repository</a>. It doesn&#39;t use a module loader pattern, so if we hadn&#39;t exported <code>jQuery</code> to global scope in the first place, it wouldn&#39;t have worked at all. In that case, we would have followed <a href="http://reactkungfu.com/2015/10/integrating-jquery-chosen-with-webpack-using-imports-loader/" target="_blank" rel="noopener noreferrer">this post that describes how to integrate Chosen with Webpack using the <code>imports-loader</code></a>.</p>
 
 <p>When we import <code>chosen-js</code> in the <code>application.js</code> bundle, it attaches itself to the global <code>jQuery</code> instance we imported in <code>vendor.js</code>. When we then import <code>slick-carousel</code>, it subsequently imports <code>jQuery</code> again, which is represented by a separate &quot;chunk&quot; in Webpack. This new instance of <code>jQuery</code> clobbers the original instance in the global. Since the original instance is the one to which the Chosen plugin attached itself, no <code>$.fn.chosen</code> function appears in the browser.</p>
 
-<p>Luckily, you don&#39;t have to resort to global variables just to use Chosen or most other packages that fail to employ the module loader pattern. In most cases, there&#39;s a loader (or plugin) for that! The Webpack documentation devotes an entire <a href="https://webpack.js.org/guides/shimming/">guide to shimming modules</a> that&#39;s worth your time.</p>
+<p>Luckily, you don&#39;t have to resort to global variables just to use Chosen or most other packages that fail to employ the module loader pattern. In most cases, there&#39;s a loader (or plugin) for that! The Webpack documentation devotes an entire <a href="https://webpack.js.org/guides/shimming/" target="_blank" rel="noopener noreferrer">guide to shimming modules</a> that&#39;s worth your time.</p>
 
-<p>If you&#39;re not able to shim a module, you can always resort to the <a href="https://webpack.js.org/loaders/script-loader/"><code>script-loader</code></a>, which will evaluate the module in the global context. The main takeaway here is you may have to roll up your sleeves and dig into the source of your dependencies to understand whether they&#39;ll work in the Webpack context and/or whether you&#39;ll need to integrate with a loader or plugin.</p>
+<p>If you&#39;re not able to shim a module, you can always resort to the <a href="https://webpack.js.org/loaders/script-loader/" target="_blank" rel="noopener noreferrer"><code>script-loader</code></a>, which will evaluate the module in the global context. The main takeaway here is you may have to roll up your sleeves and dig into the source of your dependencies to understand whether they&#39;ll work in the Webpack context and/or whether you&#39;ll need to integrate with a loader or plugin.</p>
 
 <p>Through our debugging sessions we came to learn a good lesson the hard way:</p>
 
@@ -633,9 +633,9 @@ import &#39;slick-carousel&#39;;
     
 <p>We fixed the &quot;two jQuerys&quot; problem with some additional Webpack configuration. We essentially have to instruct Webpack to pull jQuery (or just about any module) into only one bundle.</p>
 
-<p>Two promising strategies of note include use of community supported Webpack plugins. One of these is the <a href="https://webpack.js.org/plugins/dll-plugin/"><code>DllPlugin</code></a>, which is a powerful way to split bundles and drastically improve build performance. It&#39;s also a bit more complex to setup and requires an extra build step.</p>
+<p>Two promising strategies of note include use of community supported Webpack plugins. One of these is the <a href="https://webpack.js.org/plugins/dll-plugin/" target="_blank" rel="noopener noreferrer"><code>DllPlugin</code></a>, which is a powerful way to split bundles and drastically improve build performance. It&#39;s also a bit more complex to setup and requires an extra build step.</p>
 
-<p>We decided to use the <a href="https://webpack.js.org/plugins/commons-chunk-plugin/">CommonsChunkPlugin</a> instead as this was bit easier to setup in Webpacker. (If you&#39;re interested in setting up the DllPlugin with Webpacker, <a href="https://github.com/rails/webpacker/issues/702">check out this thread on GitHub</a>).</p>
+<p>We decided to use the <a href="https://webpack.js.org/plugins/commons-chunk-plugin/" target="_blank" rel="noopener noreferrer">CommonsChunkPlugin</a> instead as this was bit easier to setup in Webpacker. (If you&#39;re interested in setting up the DllPlugin with Webpacker, <a href="https://github.com/rails/webpacker/issues/702" target="_blank" rel="noopener noreferrer">check out this thread on GitHub</a>).</p>
 
 <p>To ensure jQuery and any other package from <code>node_modules</code> ends up in the <code>vendor.js</code> bundle only, we add something like this to our Webpack plugins configuration:</p>
 
@@ -712,9 +712,9 @@ application-80aab62cb2b8b0bfd6f3.js     4.5 kB       0  [emitted]         applic
 
 <p>Instead, you&#39;ll notice both the application and vendor digests changed. Again, not expected!</p>
 
-<p>The root problem (and solution) gets into the real meat of how Webpack works under the hood. First, here is <a href="https://www.ag-grid.com/ag-grid-understanding-webpack/">an article that has helped us better understand how Webpack works</a> including its use of module ids to link modules in the Webpack runtime.</p>
+<p>The root problem (and solution) gets into the real meat of how Webpack works under the hood. First, here is <a href="https://www.ag-grid.com/ag-grid-understanding-webpack/" target="_blank" rel="noopener noreferrer">an article that has helped us better understand how Webpack works</a> including its use of module ids to link modules in the Webpack runtime.</p>
 
-<p>Building on that primer, we followed the steps outlined in this <a href="https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31">great article on predictable long term caching</a> to ensure Webpack generates the same fingerprinted output for our infrequently changing vendor bundle.</p>
+<p>Building on that primer, we followed the steps outlined in this <a href="https://medium.com/webpack/predictable-long-term-caching-with-webpack-d3eee1d3fa31" target="_blank" rel="noopener noreferrer">great article on predictable long term caching</a> to ensure Webpack generates the same fingerprinted output for our infrequently changing vendor bundle.</p>
 
       <h2 id="third-party-stylesheets-images-and-fonts" class="title title-h2">
         <a name="third-party-stylesheets-images-and-fonts" class="anchor" href="#third-party-stylesheets-images-and-fonts">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -800,9 +800,9 @@ set :default_env, { &#39;NODE_ENV&#39; =&gt; &#39;production&#39; }
         Unit Testing with Karma
       </h2>
     
-<p>For unit testing our JavaScript with the Rails asset pipeline, we used <a href="https://github.com/searls/jasmine-rails">jasmine-rails</a>. That gem has allowed us to run JS unit tests either in the browser or on the command line. Given its tight coupling to the Rails asset pipeline, we would also have to replace our test runner. After trying out a few options, we liked the features of <a href="https://karma-runner.github.io/1.0/index.html">Karma</a> and that a) it was easy to setup with Webpack, and b) supports the Jasmine assertion syntax. That meant we could port our existing tests to Karma + Webpack with minimal changes.</p>
+<p>For unit testing our JavaScript with the Rails asset pipeline, we used <a href="https://github.com/searls/jasmine-rails" target="_blank" rel="noopener noreferrer">jasmine-rails</a>. That gem has allowed us to run JS unit tests either in the browser or on the command line. Given its tight coupling to the Rails asset pipeline, we would also have to replace our test runner. After trying out a few options, we liked the features of <a href="https://karma-runner.github.io/1.0/index.html" target="_blank" rel="noopener noreferrer">Karma</a> and that a) it was easy to setup with Webpack, and b) supports the Jasmine assertion syntax. That meant we could port our existing tests to Karma + Webpack with minimal changes.</p>
 
-<p>There are plenty of tutorials and tips out there for Karma + Webpack, including <a href="https://github.com/rails/webpacker/blob/master/docs/testing.md#karma-setup-for-typescript">Karma setup instructions in the Webpacker docs</a>. Here&#39;s a brief overview of what we did:</p>
+<p>There are plenty of tutorials and tips out there for Karma + Webpack, including <a href="https://github.com/rails/webpacker/blob/master/docs/testing.md#karma-setup-for-typescript" target="_blank" rel="noopener noreferrer">Karma setup instructions in the Webpacker docs</a>. Here&#39;s a brief overview of what we did:</p>
 
 <p>First we added several packages.</p>
 
@@ -843,7 +843,7 @@ module.exports = function(config) {
 };
 </code></pre>
 
-<p>We ran into few problems using Karma with certain Webpack plugins, including <a href="https://github.com/webpack-contrib/karma-webpack/issues/22">this issue</a> with <code>karma-webpack</code> plus the <code>CommonsChunkPlugin</code> and <a href="https://github.com/rails/webpacker/issues/435">this issue</a> with Webpacker&#39;s use of the <code>ManifestPlugin</code>. Turns out, to run unit tests in the Karma context, our Webpack plugins are irrelevant, so we&#39;ve opted to remove them altogether in the Karma configuration for now. The downside is that our unit testing setup does not exercise our Webpack plugin configuration, but any issue there would be caught by our integration testing workflow.</p>
+<p>We ran into few problems using Karma with certain Webpack plugins, including <a href="https://github.com/webpack-contrib/karma-webpack/issues/22" target="_blank" rel="noopener noreferrer">this issue</a> with <code>karma-webpack</code> plus the <code>CommonsChunkPlugin</code> and <a href="https://github.com/rails/webpacker/issues/435" target="_blank" rel="noopener noreferrer">this issue</a> with Webpacker&#39;s use of the <code>ManifestPlugin</code>. Turns out, to run unit tests in the Karma context, our Webpack plugins are irrelevant, so we&#39;ve opted to remove them altogether in the Karma configuration for now. The downside is that our unit testing setup does not exercise our Webpack plugin configuration, but any issue there would be caught by our integration testing workflow.</p>
 
 <p>Another problem we needed to solve was to keep our legacy specs in jasmine-rails passing during the transition. As soon as we moved our first critical dependency from the asset pipeline to Webpack, all of our jasmine-rails specs broke. This is because jasmine-rails assumes you&#39;re just using Sprockets and knows nothing about our Webpack output.</p>
 
@@ -886,7 +886,7 @@ module.exports = function(config) {
 
 <p>Webpack assets are proxied to the Webpack dev server by the Webpacker middleware, but after enabling <code>https</code> for the dev server, autoreload wasn&#39;t working. This is because Webpack inserts a script that opens up a websocket connection to the dev server over the endpoint <code>/sockjs-node</code>.</p>
 
-<p>We needed to provide the hostname to webpack dev server so it can initiate the websocket connection for live reloading (<a href="https://webpack.js.org/configuration/dev-server/#devserver-public">Webpack docs</a>). To do so, we set the <code>public</code> option in <code>config/webpacker.yml</code>:</p>
+<p>We needed to provide the hostname to webpack dev server so it can initiate the websocket connection for live reloading (<a href="https://webpack.js.org/configuration/dev-server/#devserver-public" target="_blank" rel="noopener noreferrer">Webpack docs</a>). To do so, we set the <code>public</code> option in <code>config/webpacker.yml</code>:</p>
 
 <pre><code class="yaml">development:
   # ...
@@ -935,9 +935,13 @@ module.exports = function(config) {
 <p>As of this writing, all of our clientside application JavaScript now runs through Webpack in development and for deployment. So far, our team has been delighted by results and we&#39;re glad we invested in upgrading from the asset pipeline.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Nov  5, 2017
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2017-11-05-from-sprockets-to-webpack.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Nov  5, 2017
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -1085,7 +1089,7 @@ module.exports = function(config) {
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

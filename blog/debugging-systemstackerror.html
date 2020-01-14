@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -92,7 +92,7 @@ indicated.</p>
 ruby 2.1.6p336 (2015-04-13 revision 50298) [x86_64-darwin14.0]
 </code></pre>
 
-<p>Prior to Ruby 2.2 and <a href="https://bugs.ruby-lang.org/issues/6216">this issue</a>, the
+<p>Prior to Ruby 2.2 and <a href="https://bugs.ruby-lang.org/issues/6216" target="_blank" rel="noopener noreferrer">this issue</a>, the
 backtrace for <code>SystemStackError</code> was reduced to one line. That meant, unless
 that one line lead you to an obvious culprit in your source code, it
 would be very difficult to unravel the method calls causing the stack to overflow.</p>
@@ -100,7 +100,7 @@ would be very difficult to unravel the method calls causing the stack to overflo
 <p>So, first step in debugging the <code>SystemStackError</code> is upgrade to Ruby 2.2!</p>
 
 <p>In case that&#39;s not possible, there&#39;s still hope. Let&#39;s try using information
-from the error first. Here&#39;s the method containing <a href="https://github.com/rossta/montrose/blob/e5b7a12f6832b4f971a52b27800cefe144ecd399/lib/montrose/options.rb#L204">the line in the backtrace</a>:</p>
+from the error first. Here&#39;s the method containing <a href="https://github.com/rossta/montrose/blob/e5b7a12f6832b4f971a52b27800cefe144ecd399/lib/montrose/options.rb#L204" target="_blank" rel="noopener noreferrer">the line in the backtrace</a>:</p>
 
 <pre><code class="ruby"># lib/montrose/options.rb:204
 
@@ -115,7 +115,7 @@ end
 of this method in this class.</p>
 
 <p>Let&#39;s try rescuing from the error in a test and printing the execution stack
-using <a href="http://ruby-doc.org/core-2.2.3/Kernel.html#method-i-caller"><code>Kernel.caller</code></a>. I can isolate the application code that produces the stack overflow in a single test and rescue there.</p>
+using <a href="http://ruby-doc.org/core-2.2.3/Kernel.html#method-i-caller" target="_blank" rel="noopener noreferrer"><code>Kernel.caller</code></a>. I can isolate the application code that produces the stack overflow in a single test and rescue there.</p>
 
 <pre><code class="ruby">it &quot;a test&quot; do
   # given
@@ -166,9 +166,9 @@ bin/m:16:in `&lt;main&gt;&#39;
 <p>The backtrace points to lines in minitest. Since I&#39;ve been running tests prior
 to this isssue successfully, it&#39;s unlikely minitest is the source of the stack overflow error. So rescuing from <code>SytemStackError</code> doesn&#39;t help us either.</p>
 
-<p>Luckily, we have <a href="https://gist.github.com/jbgo/4493822">this gist</a> from
-<a href="https://github.com/jbgo">@jbgo</a> who highlighted a special feature in Ruby for
-tracing function events: <a href="http://ruby-doc.org/core-1.9.3/Kernel.html#method-i-set_trace_func"><code>Kernel.set_trace_func</code></a>.</p>
+<p>Luckily, we have <a href="https://gist.github.com/jbgo/4493822" target="_blank" rel="noopener noreferrer">this gist</a> from
+<a href="https://github.com/jbgo" target="_blank" rel="noopener noreferrer">@jbgo</a> who highlighted a special feature in Ruby for
+tracing function events: <a href="http://ruby-doc.org/core-1.9.3/Kernel.html#method-i-set_trace_func" target="_blank" rel="noopener noreferrer"><code>Kernel.set_trace_func</code></a>.</p>
 
 <p>Here&#39;s the example from the docs:</p>
 
@@ -264,7 +264,7 @@ if ENV[&quot;TRACE&quot;]
 end
 </code></pre>
 
-<p>In my <a href="https://github.com/rossta/montrose">Montrose</a> gem, <a href="https://github.com/rossta/montrose/blob/9600e0b63bde342011b3b9b1e29ab9f76f5f69c3/spec/support/trace.rb">this file</a> gets loaded during every test run but the <code>set_trace_func</code> hook will
+<p>In my <a href="https://github.com/rossta/montrose" target="_blank" rel="noopener noreferrer">Montrose</a> gem, <a href="https://github.com/rossta/montrose/blob/9600e0b63bde342011b3b9b1e29ab9f76f5f69c3/spec/support/trace.rb" target="_blank" rel="noopener noreferrer">this file</a> gets loaded during every test run but the <code>set_trace_func</code> hook will
 only be evaluated when the <code>TRACE</code> environment variable is present:</p>
 
 <pre><code>$ TRACE=500 bin/m spec/montrose/recurrence_spec.rb
@@ -274,9 +274,13 @@ only be evaluated when the <code>TRACE</code> environment variable is present:</
 2.2+, but keep this in mind next time you get stuck &quot;in the loop&quot;.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Jan 12, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-01-12-debugging-systemstackerror.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Jan 12, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -298,7 +302,7 @@ only be evaluated when the <code>TRACE</code> environment variable is present:</
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Debugging%20SystemStackError&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fdebugging-systemstackerror.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Debugging%20SystemStackError&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fdebugging-systemstackerror.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -418,7 +422,7 @@ only be evaluated when the <code>TRACE</code> environment variable is present:</
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

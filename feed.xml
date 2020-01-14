@@ -18,12 +18,12 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Webpack isn't just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;Webpack isn't just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;In this post, we'll demonstrate how to reference Webpacker...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Webpack isn&amp;#39;t just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
+    <content type="html">&lt;p&gt;Webpack isn&amp;#39;t just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;In this post, we&amp;#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include &lt;a href="https://yarnpkg.com/"&gt;yarn&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In this post, we&amp;#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include &lt;a href="https://yarnpkg.com/" target="_blank" rel="noopener noreferrer"&gt;yarn&lt;/a&gt;.&lt;/p&gt;
 
       &lt;h3 id="folder-structure" class="title title-h3"&gt;
         &lt;a name="folder-structure" class="anchor" href="#folder-structure"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -124,12 +124,12 @@ export default function ({ title }) {
         Images in CSS within NPM modules
       &lt;/h3&gt;
     
-&lt;p&gt;One tricky bit worth mentioning is bundling images referenced in SCSS within an imported NPM module. For example, many jQuery plugins bundle their own SCSS and image assets. When Webpack processes this vendored CSS, you may see an error like the following, like in &lt;a href="https://stackoverflow.com/questions/58727976/import-images-of-an-npm-package-with-webpacker-and-rails"&gt;this question on StackOverflow&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;One tricky bit worth mentioning is bundling images referenced in SCSS within an imported NPM module. For example, many jQuery plugins bundle their own SCSS and image assets. When Webpack processes this vendored CSS, you may see an error like the following, like in &lt;a href="https://stackoverflow.com/questions/58727976/import-images-of-an-npm-package-with-webpacker-and-rails" target="_blank" rel="noopener noreferrer"&gt;this question on StackOverflow&lt;/a&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;Module not found: Error: Can&amp;#39;t resolve &amp;#39;../img/controls.png&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The problem is the path does not resolve properly relative to the output for this vendored SCSS. From the &lt;a href="https://github.com/rails/webpacker/blob/76b491750993fada8b0b0cc2546dfcfbc4aaae13/docs/css.md#resolve-url-loader"&gt;Webpacker docs&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;The problem is the path does not resolve properly relative to the output for this vendored SCSS. From the &lt;a href="https://github.com/rails/webpacker/blob/76b491750993fada8b0b0cc2546dfcfbc4aaae13/docs/css.md#resolve-url-loader" target="_blank" rel="noopener noreferrer"&gt;Webpacker docs&lt;/a&gt;:&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Since Sass/libsass does not provide url rewriting, all linked assets must be relative to the output. Add the missing url rewriting using the resolve-url-loader. Place it directly after the sass-loader in the loader chain.&lt;/p&gt;
@@ -235,18 +235,18 @@ require.context(&amp;#39;../images&amp;#39;, true)
 
 &lt;p&gt;To help Webpack understand images, svg files, and fonts in your Rails project, Webpacker adds the &lt;code&gt;file-loader&lt;/code&gt; package. This package will emit the imported file as a side effect of the build and return a path to the file as the module contents.&lt;/p&gt;
 
-&lt;p&gt;For more on how Webpack works with images, check out the &lt;a href="https://webpack.js.org/guides/asset-management/#loading-images"&gt;asset management docs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For more on how Webpack works with images, check out the &lt;a href="https://webpack.js.org/guides/asset-management/#loading-images" target="_blank" rel="noopener noreferrer"&gt;asset management docs&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;I also put together a sample Rails 6 Webpacker demo project on GitHub for more context:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/images"&gt;Images in JS, CSS, and Rails&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/react-image"&gt;Images with CSS-in-JS in a React app&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/images" target="_blank" rel="noopener noreferrer"&gt;Images in JS, CSS, and Rails&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/react-image" target="_blank" rel="noopener noreferrer"&gt;Images with CSS-in-JS in a React app&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </content>
   </entry>
   <entry>
-    <title>Overpacking: A Common Webpacker Mistake</title>
+    <title>Overpacking: A common Webpacker mistake</title>
     <link rel="alternate" href="/blog/overpacking-a-common-webpacker-mistake.html"/>
     <id>/blog/overpacking-a-common-webpacker-mistake.html</id>
     <published>2019-12-03T00:00:00+00:00</published>
@@ -289,7 +289,7 @@ require.context(&amp;#39;../images&amp;#39;, true)
     
 &lt;p&gt;First, let&amp;#39;s take a step back. If you&amp;#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.&lt;/p&gt;
 
-&lt;p&gt;I know this because I was once in your shoes struggling to learn how Webpack works. I&amp;#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via &lt;a href="https://github.com/rails/webpacker"&gt;&lt;code&gt;rails/webpacker&lt;/code&gt;&lt;/a&gt; Github issues.&lt;/p&gt;
+&lt;p&gt;I know this because I was once in your shoes struggling to learn how Webpack works. I&amp;#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via &lt;a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;rails/webpacker&lt;/code&gt;&lt;/a&gt; Github issues.&lt;/p&gt;
 
 &lt;p&gt;One of the most frequently-reported issues I&amp;#39;ve seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation can lead to failed deploys.&lt;/p&gt;
 
@@ -351,7 +351,7 @@ require.context(&amp;#39;../images&amp;#39;, true)
 &lt;p&gt;The Webpacker project refers to entries as &lt;strong&gt;packs&lt;/strong&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;&amp;quot;Entry&amp;quot; is listed as the first key concept on Webpack&amp;#39;s documentation site: &lt;a href="https://webpack.js.org/concepts/#entry"&gt;https://webpack.js.org/concepts/#entry&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&amp;quot;Entry&amp;quot; is listed as the first key concept on Webpack&amp;#39;s documentation site: &lt;a href="https://webpack.js.org/concepts/#entry" target="_blank" rel="noopener noreferrer"&gt;https://webpack.js.org/concepts/#entry&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.&lt;/p&gt;
 
@@ -391,12 +391,12 @@ require.context(&amp;#39;../images&amp;#39;, true)
     </author>
     <summary type="html">&lt;p&gt;In this post, I'll demonstrate how to set up a Rails application with Bootstrap for Webpacker.&lt;/p&gt;
 
-&lt;p&gt;If you'd prefer to skip the post and go straight to the demo app, you can find it here: &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;If you'd prefer to skip the post and go straight to the demo app, you can find it here: &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo" target="_blank" rel="noopener noreferrer"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The examples...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;In this post, I&amp;#39;ll demonstrate how to set up a Rails application with Bootstrap for Webpacker.&lt;/p&gt;
 
-&lt;p&gt;If you&amp;#39;d prefer to skip the post and go straight to the demo app, you can find it here: &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;If you&amp;#39;d prefer to skip the post and go straight to the demo app, you can find it here: &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo" target="_blank" rel="noopener noreferrer"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;The examples and demo app described in this post use the following dependencies:&lt;/p&gt;
 
@@ -590,7 +590,7 @@ js/application-0b7847cb72725f896091.js.map    835 KiB  application  [emitted] [d
 
 &lt;p&gt;We&amp;#39;ve knocked the &lt;code&gt;application.js&lt;/code&gt; bundle, (now fingerprinted as &lt;code&gt;js/application-0b7847cb72725f896091.js&lt;/code&gt;) down to 727kB. Still sizable, but represents a significant reduction from the first pass.&lt;/p&gt;
 
-&lt;p&gt;Another optimization step could be to configure the &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/"&gt;&lt;code&gt;SplitChunksPlugin&lt;/code&gt;&lt;/a&gt; to code-split our bundle programmatically, but we&amp;#39;ll save that for another post.&lt;/p&gt;
+&lt;p&gt;Another optimization step could be to configure the &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;SplitChunksPlugin&lt;/code&gt;&lt;/a&gt; to code-split our bundle programmatically, but we&amp;#39;ll save that for another post.&lt;/p&gt;
 
 &lt;p&gt;Our final &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt; file is:&lt;/p&gt;
 
@@ -616,7 +616,7 @@ Rails.start()
       application.js
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;You can also check out the demo app for this post at &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can also check out the demo app for this post at &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo" target="_blank" rel="noopener noreferrer"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;I hope this post shed some light on using Bootstrap with Webpacker on Rails and wish you Happy Webpacking!&lt;/p&gt;
 </content>
@@ -630,10 +630,10 @@ Rails.start()
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;I'm borrowing from David Heinemeier Hansson here. Six years ago, he wrote &lt;a href="https://dhh.dk//2012/rails-is-omakase.html"&gt;Rails is omakase&lt;/a&gt; to capture his notion of what makes a delicious software framework: it is heavily curated and borne of experience. I think of Vue.js the same way.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;I'm borrowing from David Heinemeier Hansson here. Six years ago, he wrote &lt;a href="https://dhh.dk//2012/rails-is-omakase.html" target="_blank" rel="noopener noreferrer"&gt;Rails is omakase&lt;/a&gt; to capture his notion of what makes a delicious software framework: it is heavily curated and borne of experience. I think of Vue.js the same way.&lt;/p&gt;
 
 &lt;p&gt;Here's an...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;I&amp;#39;m borrowing from David Heinemeier Hansson here. Six years ago, he wrote &lt;a href="https://dhh.dk//2012/rails-is-omakase.html"&gt;Rails is omakase&lt;/a&gt; to capture his notion of what makes a delicious software framework: it is heavily curated and borne of experience. I think of Vue.js the same way.&lt;/p&gt;
+    <content type="html">&lt;p&gt;I&amp;#39;m borrowing from David Heinemeier Hansson here. Six years ago, he wrote &lt;a href="https://dhh.dk//2012/rails-is-omakase.html" target="_blank" rel="noopener noreferrer"&gt;Rails is omakase&lt;/a&gt; to capture his notion of what makes a delicious software framework: it is heavily curated and borne of experience. I think of Vue.js the same way.&lt;/p&gt;
 
 &lt;p&gt;Here&amp;#39;s an excerpt from DHH&amp;#39;s post:&lt;/p&gt;
 
@@ -667,9 +667,9 @@ Rails.start()
         Substitutions cost little extra
       &lt;/h3&gt;
     
-&lt;p&gt;So you may not agree with everything on the menu. That&amp;#39;s fine! Many of the defaults are easily changed through configuration or add-ons. Want to use Redux? No problem! Class-style syntax? The customer is always right. Don&amp;#39;t like mustache-style curly braces in templates? You can change it! Maybe you can&amp;#39;t stand the fact that Vue has templates at all and would prefer to use JavaScript. Well, that&amp;#39;s ok too; add another &lt;a href="https://github.com/vuejs/babel-plugin-transform-vue-jsx"&gt;Babel plugin&lt;/a&gt;, and you can write Vue components with JSX inside of render functions a lot like React.&lt;/p&gt;
+&lt;p&gt;So you may not agree with everything on the menu. That&amp;#39;s fine! Many of the defaults are easily changed through configuration or add-ons. Want to use Redux? No problem! Class-style syntax? The customer is always right. Don&amp;#39;t like mustache-style curly braces in templates? You can change it! Maybe you can&amp;#39;t stand the fact that Vue has templates at all and would prefer to use JavaScript. Well, that&amp;#39;s ok too; add another &lt;a href="https://github.com/vuejs/babel-plugin-transform-vue-jsx" target="_blank" rel="noopener noreferrer"&gt;Babel plugin&lt;/a&gt;, and you can write Vue components with JSX inside of render functions a lot like React.&lt;/p&gt;
 
-&lt;p&gt;As another example, let&amp;#39;s talk about Webpack. I think it is a fantastic piece of software. I&amp;#39;ve spent months learning how it works. I have given &lt;a href="https://rossta.net/talks/webpack-survival-guide-rails.html"&gt;a conference talk&lt;/a&gt; about it. However, usually, most of us, myself included, don’t want to maintain a custom configuration from project to project when we have deadlines to meet. The Vue CLI defaults are just fine. Still need to customize? Vue provides an API to extend the base configuration while making it easier to upgrade to take advantage of framework-supported improvements. There&amp;#39;s also nothing stopping you from ditching Webpack for Parcel or Rollup or whatever other transpiler or module bundler you prefer.&lt;/p&gt;
+&lt;p&gt;As another example, let&amp;#39;s talk about Webpack. I think it is a fantastic piece of software. I&amp;#39;ve spent months learning how it works. I have given &lt;a href="https://rossta.net/talks/webpack-survival-guide-rails.html" target="_blank" rel="noopener noreferrer"&gt;a conference talk&lt;/a&gt; about it. However, usually, most of us, myself included, don’t want to maintain a custom configuration from project to project when we have deadlines to meet. The Vue CLI defaults are just fine. Still need to customize? Vue provides an API to extend the base configuration while making it easier to upgrade to take advantage of framework-supported improvements. There&amp;#39;s also nothing stopping you from ditching Webpack for Parcel or Rollup or whatever other transpiler or module bundler you prefer.&lt;/p&gt;
 
       &lt;h3 id="an-opinionated-chef" class="title title-h3"&gt;
         &lt;a name="an-opinionated-chef" class="anchor" href="#an-opinionated-chef"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -679,7 +679,7 @@ Rails.start()
         An opinionated chef
       &lt;/h3&gt;
     
-&lt;p&gt;The core team consistently shows restraint in decided what features and improvements to fold into the framework. For example, much has been made of Vue&amp;#39;s choice to avoid class syntax for components as the default, e.g. &lt;a href="https://github.com/vuejs/vue/issues/2371"&gt;this issue on GitHub&lt;/a&gt;. There are excellent reasons for this decision, one of which is for Vue to work without a build environment. As a feature, this makes Vue incredibly easy to get up-and-running, for beginners learning the framework or for seasoned developers trying out a quick prototype. &amp;quot;It will fail,&amp;quot; some said. I suppose that remains to be seen, but after several years of arguing, the framework continues to thrive.&lt;/p&gt;
+&lt;p&gt;The core team consistently shows restraint in decided what features and improvements to fold into the framework. For example, much has been made of Vue&amp;#39;s choice to avoid class syntax for components as the default, e.g. &lt;a href="https://github.com/vuejs/vue/issues/2371" target="_blank" rel="noopener noreferrer"&gt;this issue on GitHub&lt;/a&gt;. There are excellent reasons for this decision, one of which is for Vue to work without a build environment. As a feature, this makes Vue incredibly easy to get up-and-running, for beginners learning the framework or for seasoned developers trying out a quick prototype. &amp;quot;It will fail,&amp;quot; some said. I suppose that remains to be seen, but after several years of arguing, the framework continues to thrive.&lt;/p&gt;
 
       &lt;h3 id="a-consistent-experience-for-all-customers" class="title title-h3"&gt;
         &lt;a name="a-consistent-experience-for-all-customers" class="anchor" href="#a-consistent-experience-for-all-customers"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -699,7 +699,7 @@ Rails.start()
 
 &lt;hr&gt;
 
-&lt;p&gt;When my late wife and I lived in New York City, our favorite restaurant was &lt;a href="https://www.zenkichi.com/"&gt;Zenkichi&lt;/a&gt;. The cuisine is Japanese brasserie, but the experience is so much more. If you make it to the Williamsburg neighborhood in Brooklyn, you should try it.&lt;/p&gt;
+&lt;p&gt;When my late wife and I lived in New York City, our favorite restaurant was &lt;a href="https://www.zenkichi.com/" target="_blank" rel="noopener noreferrer"&gt;Zenkichi&lt;/a&gt;. The cuisine is Japanese brasserie, but the experience is so much more. If you make it to the Williamsburg neighborhood in Brooklyn, you should try it.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-tofu.jpg" alt="Zenkichi tofu" /&gt;&lt;/p&gt;
 
@@ -715,7 +715,7 @@ Rails.start()
 
 &lt;hr&gt;
 
-&lt;p&gt;The chef’s menu need not be reserved for special occasions in web development. With Vue.js, we have a framework that gives us all the ingredients we need to jump into building outstanding user interfaces. It also makes it relatively easy to swap out menu items to suit your preferences. So it would seem you &lt;a href="https://en.wikipedia.org/wiki/You_can%27t_have_your_cake_and_eat_it"&gt;can have your cake and eat it too&lt;/a&gt;? Just another reason why I find Vue.js so fulfilling.&lt;/p&gt;
+&lt;p&gt;The chef’s menu need not be reserved for special occasions in web development. With Vue.js, we have a framework that gives us all the ingredients we need to jump into building outstanding user interfaces. It also makes it relatively easy to swap out menu items to suit your preferences. So it would seem you &lt;a href="https://en.wikipedia.org/wiki/You_can%27t_have_your_cake_and_eat_it" target="_blank" rel="noopener noreferrer"&gt;can have your cake and eat it too&lt;/a&gt;? Just another reason why I find Vue.js so fulfilling.&lt;/p&gt;
 </content>
   </entry>
   <entry>
@@ -748,7 +748,7 @@ Rails.start()
         1. No build step required
       &lt;/h3&gt;
     
-&lt;p&gt;A critical aspect of the Vue philosophy is it be easy to get started. Unlike some other popular frameworks, it&amp;#39;s not necessary to use a complex build tool like Webpack to build an application with it. Just include a script tag pointing to the &lt;a href="https://vuejs.org/v2/guide/installation.html#Direct-lt-script-gt-Include"&gt;latest release for development or production&lt;/a&gt;, and you have access to the Vue runtime.&lt;/p&gt;
+&lt;p&gt;A critical aspect of the Vue philosophy is it be easy to get started. Unlike some other popular frameworks, it&amp;#39;s not necessary to use a complex build tool like Webpack to build an application with it. Just include a script tag pointing to the &lt;a href="https://vuejs.org/v2/guide/installation.html#Direct-lt-script-gt-Include" target="_blank" rel="noopener noreferrer"&gt;latest release for development or production&lt;/a&gt;, and you have access to the Vue runtime.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;&amp;lt;script src=&amp;quot;https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -779,7 +779,7 @@ vue create my-project
         3. Friendly learning curve
       &lt;/h3&gt;
     
-&lt;p&gt;A common criticism I hear about Vue is that its API has a larger surface area than some other popular frameworks and I agree up to a point (depending on the framework). Ironically, one thing I hear &lt;a href="https://hackernoon.com/should-you-learn-react-or-vue-first-7dc0d4dd8c04"&gt;over&lt;/a&gt; and &lt;a href="https://www.quora.com/How-does-Vue-js-compare-to-React-js"&gt;over&lt;/a&gt; in some of these comparisons are Vue is easy to learn. Though this point is subjective and anecdotal, this has held for folks I&amp;#39;ve heard from regardless of previous experience with JavaScript frameworks and JavaScript in general.&lt;/p&gt;
+&lt;p&gt;A common criticism I hear about Vue is that its API has a larger surface area than some other popular frameworks and I agree up to a point (depending on the framework). Ironically, one thing I hear &lt;a href="https://hackernoon.com/should-you-learn-react-or-vue-first-7dc0d4dd8c04" target="_blank" rel="noopener noreferrer"&gt;over&lt;/a&gt; and &lt;a href="https://www.quora.com/How-does-Vue-js-compare-to-React-js" target="_blank" rel="noopener noreferrer"&gt;over&lt;/a&gt; in some of these comparisons are Vue is easy to learn. Though this point is subjective and anecdotal, this has held for folks I&amp;#39;ve heard from regardless of previous experience with JavaScript frameworks and JavaScript in general.&lt;/p&gt;
 
 &lt;p&gt;One reason for this, I believe, is that Vue is a &amp;quot;progressive JavaScript framework.&amp;quot;&lt;/p&gt;
 
@@ -807,7 +807,7 @@ vue create my-project
         5. The Vue instance
       &lt;/h3&gt;
     
-&lt;p&gt;The most potent aspect Vue is its &lt;a href="https://codingexplained.com/coding/front-end/vue-js/understanding-vue-js-reactivity"&gt;reactivity system&lt;/a&gt;. We can tap into it through &lt;a href="https://vuejs.org/v2/guide/instance.html"&gt;the &lt;code&gt;Vue&lt;/code&gt; instance&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The most potent aspect Vue is its &lt;a href="https://codingexplained.com/coding/front-end/vue-js/understanding-vue-js-reactivity" target="_blank" rel="noopener noreferrer"&gt;reactivity system&lt;/a&gt;. We can tap into it through &lt;a href="https://vuejs.org/v2/guide/instance.html" target="_blank" rel="noopener noreferrer"&gt;the &lt;code&gt;Vue&lt;/code&gt; instance&lt;/a&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;new Vue({
   el: &amp;quot;#app&amp;quot;,
@@ -826,9 +826,9 @@ vue create my-project
         6. Vue 3 lands this year
       &lt;/h3&gt;
     
-&lt;p&gt;Speaking of Vue&amp;#39;s reactivity system, &lt;a href="https://medium.com/the-vue-point/plans-for-the-next-iteration-of-vue-js-777ffea6fabf"&gt;Vue 3 is expected to ship this year&lt;/a&gt;. Among some architectural and performance improvements and minor API changes, Vue 3 provides a new Proxy-based implementation of its reactivity system.&lt;/p&gt;
+&lt;p&gt;Speaking of Vue&amp;#39;s reactivity system, &lt;a href="https://medium.com/the-vue-point/plans-for-the-next-iteration-of-vue-js-777ffea6fabf" target="_blank" rel="noopener noreferrer"&gt;Vue 3 is expected to ship this year&lt;/a&gt;. Among some architectural and performance improvements and minor API changes, Vue 3 provides a new Proxy-based implementation of its reactivity system.&lt;/p&gt;
 
-&lt;p&gt;The Proxy-based system solves &lt;a href="https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats"&gt;some of the known caveats with Vue change detection&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;The Proxy-based system solves &lt;a href="https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats" target="_blank" rel="noopener noreferrer"&gt;some of the known caveats with Vue change detection&lt;/a&gt;:&lt;/p&gt;
 
 &lt;p&gt;In Vue 2, Vue cannot:&lt;/p&gt;
 
@@ -851,7 +851,7 @@ vue create my-project
         7. An amazing community
       &lt;/h3&gt;
     
-&lt;p&gt;Since I&amp;#39;ve started using Vue, I&amp;#39;ve been fortunate to learn from a variety of Vue developers through forums, on Twitter and GitHub, and at local meetups. Vue has a distributed, hard-working core team, who are continually improving the framework without over-burdening developers with a bunch of fringe features or painful upgrades. The &lt;a href="https://forum.vuejs.org/"&gt;Vue forums&lt;/a&gt; is a great way to get insight from experts on tricky issues. Vue conferences, like &lt;a href="https://vueconf.us/"&gt;VueConf.us&lt;/a&gt; and &lt;a href="https://www.vuejs.amsterdam/"&gt;Vue Amsterdam&lt;/a&gt;, a great way to connect with other members of the community and attend more in-depth workshops, are already taking place all over the world. There&amp;#39;s also &lt;a href="https://vuevixens.org/"&gt;Vue Vixens&lt;/a&gt;, an organization that provides safe environments for people who identify as women to learn Vue.js.&lt;/p&gt;
+&lt;p&gt;Since I&amp;#39;ve started using Vue, I&amp;#39;ve been fortunate to learn from a variety of Vue developers through forums, on Twitter and GitHub, and at local meetups. Vue has a distributed, hard-working core team, who are continually improving the framework without over-burdening developers with a bunch of fringe features or painful upgrades. The &lt;a href="https://forum.vuejs.org/" target="_blank" rel="noopener noreferrer"&gt;Vue forums&lt;/a&gt; is a great way to get insight from experts on tricky issues. Vue conferences, like &lt;a href="https://vueconf.us/" target="_blank" rel="noopener noreferrer"&gt;VueConf.us&lt;/a&gt; and &lt;a href="https://www.vuejs.amsterdam/" target="_blank" rel="noopener noreferrer"&gt;Vue Amsterdam&lt;/a&gt;, a great way to connect with other members of the community and attend more in-depth workshops, are already taking place all over the world. There&amp;#39;s also &lt;a href="https://vuevixens.org/" target="_blank" rel="noopener noreferrer"&gt;Vue Vixens&lt;/a&gt;, an organization that provides safe environments for people who identify as women to learn Vue.js.&lt;/p&gt;
 
       &lt;h3 id="bonus-it-39-s-just-plain-fun" class="title title-h3"&gt;
         &lt;a name="bonus-it-39-s-just-plain-fun" class="anchor" href="#bonus-it-39-s-just-plain-fun"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -894,9 +894,9 @@ vue create my-project
         The project
       &lt;/h3&gt;
     
-&lt;p&gt;This post is part of ongoing series, &lt;a href="/blog/series/pdf-viewer.html"&gt;Building a PDF Viewer with Vue.js&lt;/a&gt;. The source code for this project is on Github at &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;rossta/vue-pdfjs-demo&lt;/a&gt;. The source code for the behavior described in this post can be found in the &lt;a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-4-shared-behavior-components"&gt;&lt;code&gt;tutorial/part-4-shared-behavior-components&lt;/code&gt; branch on Github&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This post is part of ongoing series, &lt;a href="/blog/series/pdf-viewer.html"&gt;Building a PDF Viewer with Vue.js&lt;/a&gt;. The source code for this project is on Github at &lt;a href="https://github.com/rossta/vue-pdfjs-demo" target="_blank" rel="noopener noreferrer"&gt;rossta/vue-pdfjs-demo&lt;/a&gt;. The source code for the behavior described in this post can be found in the &lt;a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-4-shared-behavior-components" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;tutorial/part-4-shared-behavior-components&lt;/code&gt; branch on Github&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Here&amp;#39;s the latest &lt;a href="https://rossta.net/vue-pdfjs-demo/"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here&amp;#39;s the latest &lt;a href="https://rossta.net/vue-pdfjs-demo/" target="_blank" rel="noopener noreferrer"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
 
       &lt;h3 id="catching-up-from-last-time" class="title title-h3"&gt;
         &lt;a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -1085,7 +1085,7 @@ render() {
 
 &lt;p&gt;In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.&lt;/p&gt;
 
-&lt;p&gt;As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the &lt;a href="https://github.com/rossta/vue-pdfjs-demo"&gt;source code on Github&lt;/a&gt;. Make a pull request or let me know how I could improve things by &lt;a href="https://twitter.com/rossta"&gt;reaching out on Twitter&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the &lt;a href="https://github.com/rossta/vue-pdfjs-demo" target="_blank" rel="noopener noreferrer"&gt;source code on Github&lt;/a&gt;. Make a pull request or let me know how I could improve things by &lt;a href="https://twitter.com/rossta" target="_blank" rel="noopener noreferrer"&gt;reaching out on Twitter&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>

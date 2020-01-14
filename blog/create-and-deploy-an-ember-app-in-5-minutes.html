@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,15 +59,15 @@
     </h2>
 </header>
 
-    <p>The <a href="https://github.com/emberjs/ember-rails">ember-rails</a> gem is a great way to get started with <a href="http://emberjs.com/">Ember.js</a> in a Rails project. Another approach is to create and serve an Ember app on a static webpage, totally decoupled from the backend environment. It would be great to have some of the modern front-end development tools we get with something like Rails in a static web environment. A great project to consider for this is <a href="http://middlemanapp.com/">Middleman</a>.</p>
+    <p>The <a href="https://github.com/emberjs/ember-rails" target="_blank" rel="noopener noreferrer">ember-rails</a> gem is a great way to get started with <a href="http://emberjs.com/" target="_blank" rel="noopener noreferrer">Ember.js</a> in a Rails project. Another approach is to create and serve an Ember app on a static webpage, totally decoupled from the backend environment. It would be great to have some of the modern front-end development tools we get with something like Rails in a static web environment. A great project to consider for this is <a href="http://middlemanapp.com/" target="_blank" rel="noopener noreferrer">Middleman</a>.</p>
 
-<p>Middleman is a static website generator enhanced with some key tools like the asset pipeline. It works really well as an alternative to <a href="https://github.com/mojombo/jekyll">Jekyll</a> for rolling a blog. It’s comparable to <a href="http://yeoman.io/">Yeoman</a> for the benefits it provides for the front-end workflow, though the underlying tools both are quite different. Middleman builds on top of Rack and Sinatra, so you can take advantage of Rack middleware in development or deployment.</p>
+<p>Middleman is a static website generator enhanced with some key tools like the asset pipeline. It works really well as an alternative to <a href="https://github.com/mojombo/jekyll" target="_blank" rel="noopener noreferrer">Jekyll</a> for rolling a blog. It’s comparable to <a href="http://yeoman.io/" target="_blank" rel="noopener noreferrer">Yeoman</a> for the benefits it provides for the front-end workflow, though the underlying tools both are quite different. Middleman builds on top of Rack and Sinatra, so you can take advantage of Rack middleware in development or deployment.</p>
 
 <p>To install middleman:</p>
 
 <p><code>$ gem install middleman</code></p>
 
-<p>A key feature for getting up and running quickly with Middleman are its use of project templates. You can use some out-of-the-box templates for setting up a Middleman project with the <a href="http://html5boilerplate.com/">HTML5 Boilerplate</a>. I’ve got a fork of an <a href="https://github.com/rossta/middleman-ember-template">Ember app template</a> that you can download or clone into <code>~/.middleman/</code> to get up and running with ember-1.0.0-rc1 with ember-data. To start a new Middleman project with my ember template:</p>
+<p>A key feature for getting up and running quickly with Middleman are its use of project templates. You can use some out-of-the-box templates for setting up a Middleman project with the <a href="http://html5boilerplate.com/" target="_blank" rel="noopener noreferrer">HTML5 Boilerplate</a>. I’ve got a fork of an <a href="https://github.com/rossta/middleman-ember-template" target="_blank" rel="noopener noreferrer">Ember app template</a> that you can download or clone into <code>~/.middleman/</code> to get up and running with ember-1.0.0-rc1 with ember-data. To start a new Middleman project with my ember template:</p>
 
 <pre><code>$ git clone git://github.com/rossta/middleman-ember-template.git \~/.middleman/ember
 
@@ -76,9 +76,9 @@ $ middleman init my\_new\_project --template=ember
 $ middleman server
 </code></pre>
 
-<p>If everything worked, you should be able to navigate to <a href="http://localhost:4567">http://localhost:4567</a> to see Hello World generated with Ember.</p>
+<p>If everything worked, you should be able to navigate to <a href="http://localhost:4567" target="_blank" rel="noopener noreferrer">http://localhost:4567</a> to see Hello World generated with Ember.</p>
 
-<p>There are lots of options for deploying a Middleman app. To deploy easily with Heroku, we can use a <a href="https://devcenter.heroku.com/articles/buildpacks">buildpack</a>. Buildpacks are scripts that take advantage of hooks provided by the Heroku build process and also us to customize what happens when we run “git push heroku master”. For the app generated from my ember template, we’ll want this process to build the Middleman app, which will minify assets and provide cacheable asset urls through the asset pipeline, and serve it on Rack using the <a href="https://github.com/rack/rack-contrib/blob/master/lib/rack/contrib/try_static.rb">Rack::TryStatic</a> middleware. Luckily, there are already some buildpacks out there that fit these requirements. It’s easy to configure our Heroku app to use a custom buildpack via a git url</p>
+<p>There are lots of options for deploying a Middleman app. To deploy easily with Heroku, we can use a <a href="https://devcenter.heroku.com/articles/buildpacks" target="_blank" rel="noopener noreferrer">buildpack</a>. Buildpacks are scripts that take advantage of hooks provided by the Heroku build process and also us to customize what happens when we run “git push heroku master”. For the app generated from my ember template, we’ll want this process to build the Middleman app, which will minify assets and provide cacheable asset urls through the asset pipeline, and serve it on Rack using the <a href="https://github.com/rack/rack-contrib/blob/master/lib/rack/contrib/try_static.rb" target="_blank" rel="noopener noreferrer">Rack::TryStatic</a> middleware. Luckily, there are already some buildpacks out there that fit these requirements. It’s easy to configure our Heroku app to use a custom buildpack via a git url</p>
 
 <pre><code>$ heroku create my_app --buildpack git://github.com/indirect/heroku-buildpack-middleman.git
 
@@ -87,14 +87,18 @@ $ git push heroku master
 
 <p>If everything worked, you should be able to see your static web Ember app served up on Heroku.</p>
 
-<p>I gave a quick lightning talk on this topic at the <a href="http://www.meetup.com/EmberJS-NYC/events/100237642/">Ember.js NYC Meetup</a> yesterday. Check out the slides, <a href="https://speakerdeck.com/rossta/create-and-deploy-an-ember-app-in-5-minutes">also on Speaker Deck</a></p>
+<p>I gave a quick lightning talk on this topic at the <a href="http://www.meetup.com/EmberJS-NYC/events/100237642/" target="_blank" rel="noopener noreferrer">Ember.js NYC Meetup</a> yesterday. Check out the slides, <a href="https://speakerdeck.com/rossta/create-and-deploy-an-ember-app-in-5-minutes" target="_blank" rel="noopener noreferrer">also on Speaker Deck</a></p>
 
 <script class="speakerdeck-embed" data-id="974b0d70647701301b1e12313b100525" data-ratio="1.29456384323641" src="//speakerdeck.com/assets/embed.js"></script>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Mar  1, 2013
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2013-03-01-create-and-deploy-an-ember-app-in-5-minutes.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Mar  1, 2013
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -116,7 +120,7 @@ $ git push heroku master
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Create%20and%20Deploy%20an%20Ember%20App%20in%205%20Minutes&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fcreate-and-deploy-an-ember-app-in-5-minutes.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Create%20and%20Deploy%20an%20Ember%20App%20in%205%20Minutes&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fcreate-and-deploy-an-ember-app-in-5-minutes.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     JavaScript and the web. Thank you!
   </p>
@@ -235,7 +239,7 @@ $ git push heroku master
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

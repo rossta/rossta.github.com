@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,21 +59,21 @@
     </h2>
 </header>
 
-    <p>When I’m really hungry, all I want is a Chipotle burrito. It seems like a good idea – it’s big, it tastes good and it’s right there across the street! It’s not long before I regret taking on that much food in one sitting. So it goes for upgrading <a href="http://www.weplay.com">Weplay</a> to Rails 3.</p>
+    <p>When I’m really hungry, all I want is a Chipotle burrito. It seems like a good idea – it’s big, it tastes good and it’s right there across the street! It’s not long before I regret taking on that much food in one sitting. So it goes for upgrading <a href="http://www.weplay.com" target="_blank" rel="noopener noreferrer">Weplay</a> to Rails 3.</p>
 
 <p>A fundamental shift in Rails 3 is html escaping by default. A number of posts describe the need for this change, an important tool against cross-site scripting (XSS) attacks. Rather than rely on developers to escape user content where needed, all strings that don’t originate from Rails (link_to, form_for, etc.) are treated as unsafe. This is a good thing. Unfortunately, for most running Rails 2 apps, automatically html-escaping our views without adjustments results in a hot steaming pile of onscreen view-source dung.</p>
 
-<p>This is exactly what you see the first time you install the recommended <a href="https://github.com/rails/rails_xss">rails_xss</a> plugin to provide Rails 3 XSS protection for your Rails 2 app. Despite the obvious work entailed to get things back to normal, this is another good thing. Making the switch to Rails 3 overnight may not be feasible, but adding XSS protection ahead of time will help smooth the transition.</p>
+<p>This is exactly what you see the first time you install the recommended <a href="https://github.com/rails/rails_xss" target="_blank" rel="noopener noreferrer">rails_xss</a> plugin to provide Rails 3 XSS protection for your Rails 2 app. Despite the obvious work entailed to get things back to normal, this is another good thing. Making the switch to Rails 3 overnight may not be feasible, but adding XSS protection ahead of time will help smooth the transition.</p>
 
 <p>Except perhaps when your app is large. At the present count, we have over 1500 *.html.erb files in Weplay’s main repo. We simply can’t afford to devote the days to focus solely on fixes for excess html escaping in our templates. We need to be able to iterate on this change like everything else; incrementally instead of as an overhaul.</p>
 
-<p>We came up with an alternative: <a href="https://github.com/weplay/rails_xss">we forked rails_xss</a> to <em>disable</em> automatic html escaping by default while still providing the use of “html safe” strings and the Erubis ERB template engine. Developers can turn on html escaping locally using the <strong>autoescape</strong> block helper.</p>
+<p>We came up with an alternative: <a href="https://github.com/weplay/rails_xss" target="_blank" rel="noopener noreferrer">we forked rails_xss</a> to <em>disable</em> automatic html escaping by default while still providing the use of “html safe” strings and the Erubis ERB template engine. Developers can turn on html escaping locally using the <strong>autoescape</strong> block helper.</p>
 
 <p>Everything within the helper is escaped. Anything outside the helper is not escaped. Nesting autoescapes is ok: everything inside the outermost invocation is escaped.</p>
 
 <p>The autoescape helper allows us to apply the fixes on a view-by-view basis. We can devote most of our time to building features to help us make money and chip away at templates and partials as they pop up in our workflow. We even have a script to tell us how many files we still need to address.</p>
 
-<p>The key to this change is manipulating the original rails_xss plugin behavior. Rails 3 helpers are composed of the String subclass <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">SafeBuffer</a>, which will escape concatenated content not already marked as “html safe”. Internally, calling .html_safe on a string simply sets a flag on the string object and this is flag is checked when adding to a string to SafeBuffer. By monkey-patching String, we disable the automatic escaping by always returning true for the html_safe? check. The autoescape flips on the flag, yields to the content block and flips the flag check back off afterwards. When autoescaping is already turned on, the block is returned as-is to allow nested autoescaping.</p>
+<p>The key to this change is manipulating the original rails_xss plugin behavior. Rails 3 helpers are composed of the String subclass <a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/" target="_blank" rel="noopener noreferrer">SafeBuffer</a>, which will escape concatenated content not already marked as “html safe”. Internally, calling .html_safe on a string simply sets a flag on the string object and this is flag is checked when adding to a string to SafeBuffer. By monkey-patching String, we disable the automatic escaping by always returning true for the html_safe? check. The autoescape flips on the flag, yields to the content block and flips the flag check back off afterwards. When autoescaping is already turned on, the block is returned as-is to allow nested autoescaping.</p>
 
 <p>There are alternatives. We could all crash on the upgrade (no time!) or we could keep the fully “escaped” version of our app in a separate branch, chip away at it, merge occasionally (not fun!).</p>
 
@@ -82,15 +82,19 @@
 <p>Resources</p>
 
 <ul>
-<li><a href="https://github.com/rails/rails_xss">rails/rails_xss</a></li>
-<li><a href="https://github.com/weplay/rails_xss">weplay/rails_xss</a></li>
-<li><a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">Safe Buffer</a></li>
+<li><a href="https://github.com/rails/rails_xss" target="_blank" rel="noopener noreferrer">rails/rails_xss</a></li>
+<li><a href="https://github.com/weplay/rails_xss" target="_blank" rel="noopener noreferrer">weplay/rails_xss</a></li>
+<li><a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/" target="_blank" rel="noopener noreferrer">Safe Buffer</a></li>
 </ul>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Feb 26, 2011
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2011-02-26-opt-in-xss-protection-for-rails-3-upgrade.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Feb 26, 2011
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -112,7 +116,7 @@
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Opt-in%20XSS%20protection%20for%20Rails%203%20upgrade&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fopt-in-xss-protection-for-rails-3-upgrade.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Opt-in%20XSS%20protection%20for%20Rails%203%20upgrade&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fopt-in-xss-protection-for-rails-3-upgrade.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -229,7 +233,7 @@
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

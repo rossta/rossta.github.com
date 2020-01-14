@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -85,7 +85,7 @@ checkers falling to the bottom of each column.</p>
     
 <p>Vue.js can help us here. It provides a number of features to support
 <em>transitions</em>, such as adding/removing single elements, adding/removing items in
-a list, and even between values in data itself. Vue provides a <a href="https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components"><code>&lt;transition&gt;</code>
+a list, and even between values in data itself. Vue provides a <a href="https://vuejs.org/v2/guide/transitions.html#Transitioning-Single-Elements-Components" target="_blank" rel="noopener noreferrer"><code>&lt;transition&gt;</code>
 component, which can be leveraged to animate elements as they enter and leave the DOM</a>. This is what we&#39;ll use to animate checkers when they are added to the board.</p>
 
 <pre><code>&lt;transition&gt;
@@ -96,7 +96,7 @@ component, which can be leveraged to animate elements as they enter and leave th
 <p>The Vue <code>&lt;transition&gt;</code> element has mechanisms for either CSS or JavaScript
 animation. Since we&#39;ll have exact coordinates as component properties
 representing the start and end points of the checker&#39;s fall, we&#39;ll want to reach
-for the component&#39;s <a href="https://vuejs.org/v2/guide/transitions.html#JavaScript-Hooks">JavaScript
+for the component&#39;s <a href="https://vuejs.org/v2/guide/transitions.html#JavaScript-Hooks" target="_blank" rel="noopener noreferrer">JavaScript
 hooks</a>, which
 include <code>before-enter</code>, <code>enter</code>, <code>after-enter</code>, <code>before-leave</code>, <code>leave</code>, etc. To
 keep things short and sweet, we&#39;ll simply animate checkers as they are added to
@@ -178,10 +178,10 @@ transition has completed.</p>
     
 <p>So how to animate? We can lean on a third-party library to do the heavy-lifting;
 we just need to wire it up correctly to get the desired effect. I chose the
-<code>GSAP</code> library from <a href="https://greensock.com/">Greensock</a> which is well-suited for
+<code>GSAP</code> library from <a href="https://greensock.com/" target="_blank" rel="noopener noreferrer">Greensock</a> which is well-suited for
 SVG animation, though just about any popular animation library could work in its
 place. But don&#39;t take it from me—here&#39;s what expert, Sarah Drasner, has to say
-in her book <a href="http://shop.oreilly.com/product/0636920045335.do">SVG Animations</a>:</p>
+in her book <a href="http://shop.oreilly.com/product/0636920045335.do" target="_blank" rel="noopener noreferrer">SVG Animations</a>:</p>
 
 <blockquote>
 <p>Due to the fact that GreenSock corrects some of SVG’s cross-browser quirks,
@@ -192,7 +192,7 @@ frequently.</p>
 
 <p>The GSAP ships with a number of utilities to support complex animation and
 synchronization. We&#39;re going to use the
-<a href="https://greensock.com/docs/TweenMax/static.fromTo"><code>TweenMax.fromTo</code></a> function
+<a href="https://greensock.com/docs/TweenMax/static.fromTo" target="_blank" rel="noopener noreferrer"><code>TweenMax.fromTo</code></a> function
 with an easing parameter to bounce the checker in to place. It needs a target
 element, a duration, &quot;from params&quot;, and &quot;to params&quot;, which describe the
 animation at the start and end—hence, <code>fromTo</code>:</p>
@@ -282,7 +282,7 @@ const duration = return 0.2 + 0.4 * this.percentage;           // seconds
 
 <p>Adding this to our game board, we now have some nicely animated checkers falling
 into place as we play! Note that, because we&#39;re using SVG pattern masking, as
-described in <a href="#">an earlier post</a>, the checkers appear to fall behind the Connect
+described in <a href="" target="_blank" rel="noopener noreferrer">an earlier post</a>, the checkers appear to fall behind the Connect
 Four wall, visible through the portholes.</p>
 
 <p data-height="485" data-theme-id="light" data-slug-hash="jYxxGv" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four with Vue.js, SVG: animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/jYxxGv/">Connect Four with Vue.js, SVG: animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
@@ -296,10 +296,14 @@ Four wall, visible through the portholes.</p>
 <p>Notice though, that you can continue dropping checkers until the board fills up. In the <a href="/blog/finding-four-in-a-row-ftw.html">next post</a>, we&#39;ll fix that by introducing an algorithm to check for a win and display the results in the UI when the game ends.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
-      Published on Jan 18, 2018
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2018-01-18-animating-connect-four-with-vuejs.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
+        Published on Jan 18, 2018
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -321,7 +325,7 @@ Four wall, visible through the portholes.</p>
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Animating%20Connect%20Four%20with%20Vue.js&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fanimating-connect-four-with-vuejs.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Animating%20Connect%20Four%20with%20Vue.js&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fanimating-connect-four-with-vuejs.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Vue, JavaScript, and the web. Thank you!
   </p>
@@ -443,7 +447,7 @@ Four wall, visible through the portholes.</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

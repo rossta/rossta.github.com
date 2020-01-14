@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,15 +59,15 @@
     </h2>
 </header>
 
-    <p>I just completed another semester of grad school at NYU. Progress towards my computer science degree has been slow: this is my fourth year in the program. As a part-time student, one class at a time is all I can handle. This time, the course was <a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/index.html">Heuristics</a>, which by itself was more than almost anyone can handle.</p>
+    <p>I just completed another semester of grad school at NYU. Progress towards my computer science degree has been slow: this is my fourth year in the program. As a part-time student, one class at a time is all I can handle. This time, the course was <a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/index.html" target="_blank" rel="noopener noreferrer">Heuristics</a>, which by itself was more than almost anyone can handle.</p>
 
-<p>At its core, the course is about solving puzzles. What is the shortest route that passes through all the cities (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/travelingsalesman.html">Traveling Salesman</a>)? How many injured people around the city can you pick up in your ambulances in time (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/ambulance.html">Ambulance Planning</a>)? What strategy is best for winning more area than your opponents (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/voronoi.html">Voronoi</a>)? Who’s the best match across these 30 personality traits (Dating Game)?</p>
+<p>At its core, the course is about solving puzzles. What is the shortest route that passes through all the cities (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/travelingsalesman.html" target="_blank" rel="noopener noreferrer">Traveling Salesman</a>)? How many injured people around the city can you pick up in your ambulances in time (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/ambulance.html" target="_blank" rel="noopener noreferrer">Ambulance Planning</a>)? What strategy is best for winning more area than your opponents (<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/voronoi.html" target="_blank" rel="noopener noreferrer">Voronoi</a>)? Who’s the best match across these 30 personality traits (Dating Game)?</p>
 
 <p>Most of these problems fall into the category called NP-hard, which may be roughly defined as the class of problems that are at least as hard as those that can be solved in non-deterministic polynomial time. The more useful way for us to think about the general definition is to say that there is a verifiable best answer to the problem, but it would be very difficult, perhaps impossible, to design a general approach that would find this solution quickly.</p>
 
 <p>Our goal for each problem then was to apply an appropriate set of heuristics: strategies to estimate a solution that would come as close as possible to the best solution in a reasonable amount of time. Two minutes in fact. Every week then, we had write a program to solve a NP-hard problem in competition with our classmates. If the program didn’t run, we lost. If it went over the two minute time limit, we lost.</p>
 
-<p>Most problems involved interacting with a server via sockets. One student was chosen as the “architect” each week. Instead of solving the problem, the architect created an interface and protocol for communicating with the player clients, and a GUI to display the game progress and results. Extra pressure came with this role: if the server didn’t work or if player clients had difficulty connecting, the competition would be a failure. I chose to be the architect for the final game of the semester, <a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html">Sudokill</a>, a form of competitive Sudoku. I plan to write more about Sudokill in the near future.</p>
+<p>Most problems involved interacting with a server via sockets. One student was chosen as the “architect” each week. Instead of solving the problem, the architect created an interface and protocol for communicating with the player clients, and a GUI to display the game progress and results. Extra pressure came with this role: if the server didn’t work or if player clients had difficulty connecting, the competition would be a failure. I chose to be the architect for the final game of the semester, <a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html" target="_blank" rel="noopener noreferrer">Sudokill</a>, a form of competitive Sudoku. I plan to write more about Sudokill in the near future.</p>
 
 <p>By far, this course was the most difficult class I’ve taken in grad school, both conceptually and regarding the workload. At its peak, I spent 30-40 hours a week preparing for the Monday competition. This was often time spent in the early morning hours before and after work. By the end of the semester, fewer than 50% of students were completing their assignments on time. Despite the burden on my free time, this was also the most fun and rewarding class I’ve ever taken. It certainly helped that I was allowed to write my programs in Ruby; this is a rare opportunity in department where most of the faculty prefers Java and C .</p>
 
@@ -76,13 +76,17 @@
 <p>My code for the Sudokill game server:</p>
 
 <p>Check out the game too:
-<a href="http://rosskaff.github.com/sudokill/">http://rosskaff.github.com/sudokill</a>
-<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html">Game rules</a></p>
+<a href="http://rosskaff.github.com/sudokill/" target="_blank" rel="noopener noreferrer">http://rosskaff.github.com/sudokill</a>
+<a href="http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html" target="_blank" rel="noopener noreferrer">Game rules</a></p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Dec 25, 2010
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2010-12-25-heuristics.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Dec 25, 2010
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -104,7 +108,7 @@
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Heuristics&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fheuristics.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Heuristics&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fheuristics.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -222,7 +226,7 @@
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,7 +59,7 @@
     </h2>
 </header>
 
-    <p>On top of the list of <a href="http://developer.yahoo.com/performance/rules.html">best practices for speeding up your website</a> is reducing the number of HTTP requests required to render the page. As our websites grow and there are more pages to style, we have more style rules to deliver to our visitors. Keeping the number of requests to a minimum usually means we either need to put all our styles in a single stylesheet, or use a bundling strategy such as <a href="http://documentcloud.github.com/jammit/">Jammit</a> or <a href="http://github.com/brynary/asset-trip">Asset Trip</a>, like we use at <a href="http://www.weplay.com">Weplay</a>, to pull our stylesheets together as one at deploy time.</p>
+    <p>On top of the list of <a href="http://developer.yahoo.com/performance/rules.html" target="_blank" rel="noopener noreferrer">best practices for speeding up your website</a> is reducing the number of HTTP requests required to render the page. As our websites grow and there are more pages to style, we have more style rules to deliver to our visitors. Keeping the number of requests to a minimum usually means we either need to put all our styles in a single stylesheet, or use a bundling strategy such as <a href="http://documentcloud.github.com/jammit/" target="_blank" rel="noopener noreferrer">Jammit</a> or <a href="http://github.com/brynary/asset-trip" target="_blank" rel="noopener noreferrer">Asset Trip</a>, like we use at <a href="http://www.weplay.com" target="_blank" rel="noopener noreferrer">Weplay</a>, to pull our stylesheets together as one at deploy time.</p>
 
 <p>One problem with the single CSS request approach is we often send CSS rules that our users don’t need to render the page initially or at any time during the current page view. This is like making dinner for 10 when only 2 people have RSVP’d; it can potentially be a big waste. In this wacky ajaxy world we live in, who says all your CSS needs to be on the page at load time? Consider using just-in-time CSS for page elements that aren’t necessary to display right away.</p>
 
@@ -85,9 +85,13 @@ function require(url) {
 <p>The key is that the HTTP request is not made until the stylesheet tag is appended to the document head tag after the page has already loaded. We decrease the number and/or size of the requests needed to render the page initially keeping our visitors satisfied.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Feb 17, 2010
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2010-02-17-just-in-time-css.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Feb 17, 2010
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -109,7 +113,7 @@ function require(url) {
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Just-in-Time%20CSS&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fjust-in-time-css.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Just-in-Time%20CSS&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fjust-in-time-css.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     CSS and the web. Thank you!
   </p>
@@ -168,7 +172,7 @@ function require(url) {
   </article>
   <article class="index-post">
     <header class="index-title">
-      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A Common Webpacker Mistake</a>
+      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A common Webpacker mistake</a>
     </header>
       <p>A big issue that comes up with Webpacker is "where to put the JavaScript files". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.</p>
   </article>
@@ -229,7 +233,7 @@ function require(url) {
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

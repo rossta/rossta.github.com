@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,9 +59,9 @@
     </h2>
 </header>
 
-    <p>Webpack isn&#39;t just for JavaScript. You can bundle images with it too. <a href="https://github.com/rails/webpacker">Webpacker</a> makes it relatively easy to work with images, but it is admittedly confusing at first: <em>Images in JavaScript?</em></p>
+    <p>Webpack isn&#39;t just for JavaScript. You can bundle images with it too. <a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer">Webpacker</a> makes it relatively easy to work with images, but it is admittedly confusing at first: <em>Images in JavaScript?</em></p>
 
-<p>In this post, we&#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include <a href="https://yarnpkg.com/">yarn</a>.</p>
+<p>In this post, we&#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include <a href="https://yarnpkg.com/" target="_blank" rel="noopener noreferrer">yarn</a>.</p>
 
       <h3 id="folder-structure" class="title title-h3">
         <a name="folder-structure" class="anchor" href="#folder-structure">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -162,12 +162,12 @@ export default function ({ title }) {
         Images in CSS within NPM modules
       </h3>
     
-<p>One tricky bit worth mentioning is bundling images referenced in SCSS within an imported NPM module. For example, many jQuery plugins bundle their own SCSS and image assets. When Webpack processes this vendored CSS, you may see an error like the following, like in <a href="https://stackoverflow.com/questions/58727976/import-images-of-an-npm-package-with-webpacker-and-rails">this question on StackOverflow</a>:</p>
+<p>One tricky bit worth mentioning is bundling images referenced in SCSS within an imported NPM module. For example, many jQuery plugins bundle their own SCSS and image assets. When Webpack processes this vendored CSS, you may see an error like the following, like in <a href="https://stackoverflow.com/questions/58727976/import-images-of-an-npm-package-with-webpacker-and-rails" target="_blank" rel="noopener noreferrer">this question on StackOverflow</a>:</p>
 
 <pre><code>Module not found: Error: Can&#39;t resolve &#39;../img/controls.png&#39;
 </code></pre>
 
-<p>The problem is the path does not resolve properly relative to the output for this vendored SCSS. From the <a href="https://github.com/rails/webpacker/blob/76b491750993fada8b0b0cc2546dfcfbc4aaae13/docs/css.md#resolve-url-loader">Webpacker docs</a>:</p>
+<p>The problem is the path does not resolve properly relative to the output for this vendored SCSS. From the <a href="https://github.com/rails/webpacker/blob/76b491750993fada8b0b0cc2546dfcfbc4aaae13/docs/css.md#resolve-url-loader" target="_blank" rel="noopener noreferrer">Webpacker docs</a>:</p>
 
 <blockquote>
 <p>Since Sass/libsass does not provide url rewriting, all linked assets must be relative to the output. Add the missing url rewriting using the resolve-url-loader. Place it directly after the sass-loader in the loader chain.</p>
@@ -273,19 +273,23 @@ require.context(&#39;../images&#39;, true)
 
 <p>To help Webpack understand images, svg files, and fonts in your Rails project, Webpacker adds the <code>file-loader</code> package. This package will emit the imported file as a side effect of the build and return a path to the file as the module contents.</p>
 
-<p>For more on how Webpack works with images, check out the <a href="https://webpack.js.org/guides/asset-management/#loading-images">asset management docs</a>.</p>
+<p>For more on how Webpack works with images, check out the <a href="https://webpack.js.org/guides/asset-management/#loading-images" target="_blank" rel="noopener noreferrer">asset management docs</a>.</p>
 
 <p>I also put together a sample Rails 6 Webpacker demo project on GitHub for more context:</p>
 
 <ul>
-<li><a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/images">Images in JS, CSS, and Rails</a></li>
-<li><a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/react-image">Images with CSS-in-JS in a React app</a></li>
+<li><a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/images" target="_blank" rel="noopener noreferrer">Images in JS, CSS, and Rails</a></li>
+<li><a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/react-image" target="_blank" rel="noopener noreferrer">Images with CSS-in-JS in a React app</a></li>
 </ul>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Dec 18, 2019
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2019-12-18-importing-images-with-webpacker.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Dec 18, 2019
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -362,7 +366,7 @@ require.context(&#39;../images&#39;, true)
     <h2 class="mb-8">More posts</h2>
       <article class="index-post">
     <header class="index-title">
-      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A Common Webpacker Mistake</a>
+      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A common Webpacker mistake</a>
     </header>
       <p>A big issue that comes up with Webpacker is "where to put the JavaScript files". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.</p>
   </article>
@@ -432,7 +436,7 @@ require.context(&#39;../images&#39;, true)
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

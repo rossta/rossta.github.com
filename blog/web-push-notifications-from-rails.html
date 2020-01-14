@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,16 +59,16 @@
     </h2>
 </header>
 
-    <p><em>Update: Check out <a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html">Using the Push API with VAPID</a> for sending Web Push notifications without needing to configure Google app settings</em></p>
+    <p><em>Update: Check out <a href="https://rossta.net/blog/using-the-web-push-api-with-vapid.html" target="_blank" rel="noopener noreferrer">Using the Push API with VAPID</a> for sending Web Push notifications without needing to configure Google app settings</em></p>
 
 <p>We&#39;ve had push notifications in our mobile and desktop apps for sometime. It&#39;s now becoming possible on the open web.</p>
 
 <p>Web Push notifications are powerful because they allow you to engage with your users <em>even when they&#39;re not on your site</em>.</p>
 
-<p>I&#39;m going to share how to I got a working demo of the new <a href="https://www.w3.org/TR/push-api/">Web Push API</a> from a Rails (or any Ruby) web application to push desktop-style notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.</p>
+<p>I&#39;m going to share how to I got a working demo of the new <a href="https://www.w3.org/TR/push-api/" target="_blank" rel="noopener noreferrer">Web Push API</a> from a Rails (or any Ruby) web application to push desktop-style notifications through supporting browsers - currently Chrome and Firefox at the time of this writing.</p>
 
-<p>We&#39;ll cover the basics of implementing Push yourself though it&#39;s interesting to note that third party services are already stepping in to do some of the technical work for you, like <a href="https://goroost.com/">Roost</a>, <a href="https://pushcrew.com/">PushCrew</a>, or
-<a href="https://onesignal.com/webpush">OneSignal</a>.</p>
+<p>We&#39;ll cover the basics of implementing Push yourself though it&#39;s interesting to note that third party services are already stepping in to do some of the technical work for you, like <a href="https://goroost.com/" target="_blank" rel="noopener noreferrer">Roost</a>, <a href="https://pushcrew.com/" target="_blank" rel="noopener noreferrer">PushCrew</a>, or
+<a href="https://onesignal.com/webpush" target="_blank" rel="noopener noreferrer">OneSignal</a>.</p>
 
 <div class="callout panel">
 <p>
@@ -86,7 +86,7 @@
     
 <p>&quot;Yeah, Ross, but Rails 5. Action Cable. Web Sockets. Server Sent Events. <code>$MY_FAVORITE_ALTERNATIVE</code>!&quot;</p>
 
-<p>You might not want to drop all those alternatives just yet, as <a href="http://caniuse.com/#feat=push-api">browser support for Web Push</a> still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.</p>
+<p>You might not want to drop all those alternatives just yet, as <a href="http://caniuse.com/#feat=push-api" target="_blank" rel="noopener noreferrer">browser support for Web Push</a> still needs improvement. Web Push could be a good alternative for a subset push features for applications where deploying Rails 5 Action Cable would be overkill. Web push also currently relies on third party web which may or may not be advantage depending on your deployment options.</p>
 
 <p>But the killer feature of Web Push is that notifications can be displayed even when the user is not on the site, something those other solutions cannot provide.</p>
 
@@ -100,14 +100,14 @@
     
 <p>Want to see it in action first?</p>
 
-<p>I created a demo at the <a href="https://serviceworker-rails.herokuapp.com/push-simple/">Service Worker Rails
+<p>I created a demo at the <a href="https://serviceworker-rails.herokuapp.com/push-simple/" target="_blank" rel="noopener noreferrer">Service Worker Rails
 Sandbox</a> to show how a
 simple push message would look like. Try it out in Firefox or Chrome or check
-out the <a href="https://github.com/rossta/serviceworker-rails-sandbox">source code on GitHub</a>.</p>
+out the <a href="https://github.com/rossta/serviceworker-rails-sandbox" target="_blank" rel="noopener noreferrer">source code on GitHub</a>.</p>
 
-<p><a href="https://serviceworker-rails.herokuapp.com/push-simple/"><img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-1.png" alt="Screenshot sw sandbox push simple 1" /></a></p>
+<p><a href="https://serviceworker-rails.herokuapp.com/push-simple/" target="_blank" rel="noopener noreferrer"><img src="/assets/images/screenshots/screenshot-sw-sandbox-push-simple-1.png" alt="Screenshot sw sandbox push simple 1" /></a></p>
 
-<p>My demo is mostly informed by Mozilla&#39;s <a href="https://serviceworke.rs/">Service Worker
+<p>My demo is mostly informed by Mozilla&#39;s <a href="https://serviceworke.rs/" target="_blank" rel="noopener noreferrer">Service Worker
 Cookbook</a>, which I highly recommend if you&#39;re looking
 to learn more about Service Worker.</p>
 
@@ -126,13 +126,13 @@ which for our purposes is either Google or Firefox.</p>
 <p><img src="/assets/images/blog/push-notification-high-level.png" alt="Push notification high level" /></p>
 
 <blockquote>
-<p>Diagram courtesy of the <a href="https://wiki.mozilla.org/Firefox/Push_Notifications">Firefox wiki</a></p>
+<p>Diagram courtesy of the <a href="https://wiki.mozilla.org/Firefox/Push_Notifications" target="_blank" rel="noopener noreferrer">Firefox wiki</a></p>
 </blockquote>
 
 <ol>
-<li><p>We&#39;ll use JavaScript on the user&#39;s current page to <a href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register">register a service worker</a> subscribe to push notifications via the <a href="https://developer.mozilla.org/en-US/docs/Web/API/PushManager/subscribe"><code>pushManager</code></a> interface. The browser will make a request to the Web Push server to a <a href="https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription"><code>PushSubscription</code></a> which will contain a unique endpoint to the Web Push server and authorization keys required for encrypting the push notification request body.</p></li>
+<li><p>We&#39;ll use JavaScript on the user&#39;s current page to <a href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register" target="_blank" rel="noopener noreferrer">register a service worker</a> subscribe to push notifications via the <a href="https://developer.mozilla.org/en-US/docs/Web/API/PushManager/subscribe" target="_blank" rel="noopener noreferrer"><code>pushManager</code></a> interface. The browser will make a request to the Web Push server to a <a href="https://developer.mozilla.org/en-US/docs/Web/API/PushSubscription" target="_blank" rel="noopener noreferrer"><code>PushSubscription</code></a> which will contain a unique endpoint to the Web Push server and authorization keys required for encrypting the push notification request body.</p></li>
 <li><p>We&#39;ll post the subscription info to our Rails app to be persisted on the server side.</p></li>
-<li><p>To send a push notification, we&#39;ll use the <a href="https://github.com/zaru/webpush"><code>webpush</code></a> Ruby gem triggered from our Rails app. <code>webpush</code> is responsible for sending a proper request to the Web Push server, including <a href="https://developers.google.com/web/updates/2016/03/web-push-encryption?hl=en">encryption of the message payload</a> for delivery.</p></li>
+<li><p>To send a push notification, we&#39;ll use the <a href="https://github.com/zaru/webpush" target="_blank" rel="noopener noreferrer"><code>webpush</code></a> Ruby gem triggered from our Rails app. <code>webpush</code> is responsible for sending a proper request to the Web Push server, including <a href="https://developers.google.com/web/updates/2016/03/web-push-encryption?hl=en" target="_blank" rel="noopener noreferrer">encryption of the message payload</a> for delivery.</p></li>
 <li><p>If the request is successful, the Web Push server opens a socket to our
 registered service worker which can listen for <code>&#39;push&#39;</code> events to show a
 notification to the user. Since service workers have a lifecycle independent of
@@ -150,8 +150,8 @@ website.</p></li>
     
 <p>At the time of this writing, we&#39;ll need to configure our app to use the Google Cloud Messaging platform by registering for application keys. No special authorization is needed to use the Firefox push server as far as I can tell.</p>
 
-<p>Google provides some decent <a href="https://developers.google.com/web/fundamentals/getting-started/push-notifications/step-04?hl=en">instructions for registering your app for push
-notifications</a> which involves some clicking around on the <a href="https://console.developers.google.com">Google developer console</a>. (I&#39;ve heard rumors this may not be necessary in the near future.) You&#39;ll want to come away with a project id for your app and an API key to make authorized requests to the push server.</p>
+<p>Google provides some decent <a href="https://developers.google.com/web/fundamentals/getting-started/push-notifications/step-04?hl=en" target="_blank" rel="noopener noreferrer">instructions for registering your app for push
+notifications</a> which involves some clicking around on the <a href="https://console.developers.google.com" target="_blank" rel="noopener noreferrer">Google developer console</a>. (I&#39;ve heard rumors this may not be necessary in the near future.) You&#39;ll want to come away with a project id for your app and an API key to make authorized requests to the push server.</p>
 
 <p>Both Firefox and Chrome will expect us to link to a <code>manifest</code> json file to
 provide metadata for push subscriptions and notifications. Here&#39;s an example:</p>
@@ -185,7 +185,7 @@ add a special <code>&lt;link&gt;</code> tag to the manifest:</p>
 <pre><code class="html">&lt;link rel=&quot;manifest&quot; href=&quot;/manifest.json&quot;&gt;
 </code></pre>
 
-<p>Here&#39;s the <a href="https://serviceworker-rails.herokuapp.com/push-simple/manifest.json">actual manifest.json</a> for the Service Worker Rails Sandbox <a href="https://serviceworker-rails.herokuapp.com/push-simple/">push demo</a> as another point of reference.</p>
+<p>Here&#39;s the <a href="https://serviceworker-rails.herokuapp.com/push-simple/manifest.json" target="_blank" rel="noopener noreferrer">actual manifest.json</a> for the Service Worker Rails Sandbox <a href="https://serviceworker-rails.herokuapp.com/push-simple/" target="_blank" rel="noopener noreferrer">push demo</a> as another point of reference.</p>
 
       <h2 id="subscribe-through-a-service-worker" class="title title-h2">
         <a name="subscribe-through-a-service-worker" class="anchor" href="#subscribe-through-a-service-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -223,7 +223,7 @@ if (&#39;serviceWorker&#39; in navigator) {
 }
 </code></pre>
 
-<p>This code registers a service worker on the given scope via <code>navigator.serviceWorker.register</code>. This returns a <a href="#">Promise</a> which will resolve to an instance of <code>ServiceWorkerRegistration</code>. This registration object has a <code>pushManager</code> property which we use to <code>subscribe</code> to the Web Push server. The <code>{ userVisibleOnly: true }</code> parameter is required for us to use notifications.</p>
+<p>This code registers a service worker on the given scope via <code>navigator.serviceWorker.register</code>. This returns a <a href="" target="_blank" rel="noopener noreferrer">Promise</a> which will resolve to an instance of <code>ServiceWorkerRegistration</code>. This registration object has a <code>pushManager</code> property which we use to <code>subscribe</code> to the Web Push server. The <code>{ userVisibleOnly: true }</code> parameter is required for us to use notifications.</p>
 
       <h3 id="troubleshooting" class="title title-h3">
         <a name="troubleshooting" class="anchor" href="#troubleshooting">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -265,7 +265,7 @@ self.addEventListener(&quot;push&quot;, onPush);
 
 <p>Because <code>serviceworker.js</code> needs to be a separate script available on the root
 path, we either need to copy it to our <code>public/</code> directory , or, even better, we
-can use the <a href="https://github.com/rossta/serviceworker-rails"><code>serviceworker-rails</code> (Star it on GitHub!)</a> gem which will allow us to make use of both the asset pipeline and custom routing features we need.</p>
+can use the <a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer"><code>serviceworker-rails</code> (Star it on GitHub!)</a> gem which will allow us to make use of both the asset pipeline and custom routing features we need.</p>
 
       <h3 id="rails-setup" class="title title-h3">
         <a name="rails-setup" class="anchor" href="#rails-setup">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -498,16 +498,20 @@ server. That exercise is left up to you!</p>
         Wrap up
       </h2>
     
-<p>This took quite a bit of setup though not nearly as much as getting <a href="https://developer.apple.com/notifications/safari-push-notifications/">Apple
+<p>This took quite a bit of setup though not nearly as much as getting <a href="https://developer.apple.com/notifications/safari-push-notifications/" target="_blank" rel="noopener noreferrer">Apple
 Push Notifications to work in Safari</a>. Overall, the Web Push API is an interesting step for the web in terms of feature parity with mobile.</p>
 
 <p>What do you think?</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
-      Published on May 13, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-05-13-web-push-notifications-from-rails.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
+        Published on May 13, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -654,7 +658,7 @@ Push Notifications to work in Safari</a>. Overall, the Web Push API is an intere
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

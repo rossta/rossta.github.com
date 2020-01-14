@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,17 +59,17 @@
     </h2>
 </header>
 
-    <p>I&#39;ve <a href="/blog/why-i-ditched-wordpress-for-github.html">hosted this site on Github Pages</a> with the <a href="https://middlemanapp.com/">Middleman static site framework</a> for several years now. To keep up with the most recent release of the framework, I decided to upgrade the site to <a href="https://middlemanapp.com/basics/upgrade-v4/">Middleman version 4</a>. There were some significant changes to the configuration options and helper methods, which are <a href="https://middlemanapp.com/basics/upgrade-v4/">well documented</a> on the Middleman blog.</p>
+    <p>I&#39;ve <a href="/blog/why-i-ditched-wordpress-for-github.html">hosted this site on Github Pages</a> with the <a href="https://middlemanapp.com/" target="_blank" rel="noopener noreferrer">Middleman static site framework</a> for several years now. To keep up with the most recent release of the framework, I decided to upgrade the site to <a href="https://middlemanapp.com/basics/upgrade-v4/" target="_blank" rel="noopener noreferrer">Middleman version 4</a>. There were some significant changes to the configuration options and helper methods, which are <a href="https://middlemanapp.com/basics/upgrade-v4/" target="_blank" rel="noopener noreferrer">well documented</a> on the Middleman blog.</p>
 
-<p>By far the biggest change was the <a href="https://middlemanapp.com/advanced/asset_pipeline/">removal of the Sprockets</a> dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.</p>
+<p>By far the biggest change was the <a href="https://middlemanapp.com/advanced/asset_pipeline/" target="_blank" rel="noopener noreferrer">removal of the Sprockets</a> dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.</p>
 
-<p>Given the &quot;explosion of front-end language and tooling&quot; that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like <a href="http://gruntjs.com/">Grunt</a>, <a href="http://gulpjs.com/">Gulp</a>, <a href="https://webpack.github.io">Webpack</a>, <a href="http://browserify.org/">Browserify</a>, <a href="http://brunch.io/">Brunch</a>, <a href="http://broccolijs.com/">Brocolli</a>---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the <code>external_pipeline</code> feature which allows &quot;subprocesses&quot; to run alongside the development server or build process.</p>
+<p>Given the &quot;explosion of front-end language and tooling&quot; that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like <a href="http://gruntjs.com/" target="_blank" rel="noopener noreferrer">Grunt</a>, <a href="http://gulpjs.com/" target="_blank" rel="noopener noreferrer">Gulp</a>, <a href="https://webpack.github.io" target="_blank" rel="noopener noreferrer">Webpack</a>, <a href="http://browserify.org/" target="_blank" rel="noopener noreferrer">Browserify</a>, <a href="http://brunch.io/" target="_blank" rel="noopener noreferrer">Brunch</a>, <a href="http://broccolijs.com/" target="_blank" rel="noopener noreferrer">Brocolli</a>---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the <code>external_pipeline</code> feature which allows &quot;subprocesses&quot; to run alongside the development server or build process.</p>
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated Webpack inside Middleman. Dev &amp; build modes</p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/580115759768059904">March 23, 2015</a></blockquote>
 
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-<p>In this post, I&#39;ll describe how I set up the external pipeline for Webpack. I&#39;ll be showing some Webpack configuration snippets to illustrate a few points but you can see the <a href="https://github.com/rossta/rossta.github.com/blob/cc94b759ed742d571b2470777a0164ac43db9c73/webpack.config.js">full Webpack config file</a> for this site as of this writing as well.</p>
+<p>In this post, I&#39;ll describe how I set up the external pipeline for Webpack. I&#39;ll be showing some Webpack configuration snippets to illustrate a few points but you can see the <a href="https://github.com/rossta/rossta.github.com/blob/cc94b759ed742d571b2470777a0164ac43db9c73/webpack.config.js" target="_blank" rel="noopener noreferrer">full Webpack config file</a> for this site as of this writing as well.</p>
 
       <h3 id="before-the-upgrade" class="title title-h3">
         <a name="before-the-upgrade" class="anchor" href="#before-the-upgrade">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -79,7 +79,7 @@
         Before the upgrade
       </h3>
     
-<p>Before I upgrading the Middleman version 4, I had been using built-in Sprockets integration to configure, import, and transpile assets in the rossta.net static build. This required some custom imports in my Middleman <a href="https://github.com/rossta/rossta.github.com/blob/96444337b05e6a996b8a6f2b63f353194bc9eb4b/config.rb#L122"><code>config.rb</code></a> to make <a href="http://foundation.zurb.com/">Foundation</a> CSS and JavaScript available to the Sprockets runtime.</p>
+<p>Before I upgrading the Middleman version 4, I had been using built-in Sprockets integration to configure, import, and transpile assets in the rossta.net static build. This required some custom imports in my Middleman <a href="https://github.com/rossta/rossta.github.com/blob/96444337b05e6a996b8a6f2b63f353194bc9eb4b/config.rb#L122" target="_blank" rel="noopener noreferrer"><code>config.rb</code></a> to make <a href="http://foundation.zurb.com/" target="_blank" rel="noopener noreferrer">Foundation</a> CSS and JavaScript available to the Sprockets runtime.</p>
 
 <pre><code class="ruby"># config.rb
 compass_config do |config|
@@ -119,7 +119,7 @@ end
 <p>With Sprockets dropped in Middleman version 4, this approach would no longer be
 possible so I had to rethink the build pipeline. I preferred to support multiple
 bundles and also wanted to upgrade my custom JavaScript to ES2015 syntax. For
-this, <a href="https://webpack.github.io/">Webpack</a> appeared to offer some nice advantages, though, many of the
+this, <a href="https://webpack.github.io/" target="_blank" rel="noopener noreferrer">Webpack</a> appeared to offer some nice advantages, though, many of the
 build tools and systems mentioned earlier would also make good choices and fit
 right into the new Middleman external pipeline feature.</p>
 
@@ -149,7 +149,7 @@ $ npm install --save-dev webpack
 
 <p>The external pipeline feature in Middleman provides a mechanism for the
 middleman development server to manage processes that live outside the Ruby
-runtime. For Webpack, this means telling Middleman how to trigger the <a href="https://webpack.github.io/docs/tutorials/getting-started/#setup-compilation">Webpack
+runtime. For Webpack, this means telling Middleman how to trigger the <a href="https://webpack.github.io/docs/tutorials/getting-started/#setup-compilation" target="_blank" rel="noopener noreferrer">Webpack
 compilation command</a>.</p>
 
 <p>In <code>config.rb</code>:</p>
@@ -163,14 +163,14 @@ compilation command</a>.</p>
          latency: 1
 </code></pre>
 
-<p>I copied this configuration directly from the <a href="middleman/middleman-core/lib/middleman-core/extensions/external_pipeline.rb">Middleman guides source</a> which I learned made the same change recently.</p>
+<p>I copied this configuration directly from the <a href="middleman/middleman-core/lib/middleman-core/extensions/external_pipeline.rb" target="_blank" rel="noopener noreferrer">Middleman guides source</a> which I learned made the same change recently.</p>
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Commit upgrading Middleman Guides from Asset Pipeline to Webpack: <a href="https://t.co/uP4LH19SfJ">https://t.co/uP4LH19SfJ</a></p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/678711274516033536">December 20, 2015</a></blockquote>
 
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <p>Specifying <code>activate :external_pipeline</code> enables Middleman&#39;s external pipeline
-extension (<a href="https://github.com/middleman/middleman/blob/6872e07d34ab037897e8466db634efb9b49b4af5/middleman-core/lib/middleman-core/extensions/external_pipeline.rb">source</a>). The three required options are worth noting:</p>
+extension (<a href="https://github.com/middleman/middleman/blob/6872e07d34ab037897e8466db634efb9b49b4af5/middleman-core/lib/middleman-core/extensions/external_pipeline.rb" target="_blank" rel="noopener noreferrer">source</a>). The three required options are worth noting:</p>
 
 <pre><code class="ruby"># middleman/middleman-core/lib/middleman-core/extensions/external_pipeline.rb
 option :name, nil, &#39;The name of the pipeline&#39;, required: true
@@ -265,7 +265,7 @@ module.exports = {
 </code></pre>
 
 <p><strong>Transpile SCSS to CSS</strong>. Though Middleman still provides an integration with
-Compass, <a href="https://benfrain.com/lightning-fast-sass-compiling-with-libsass-node-sass-and-grunt-sass/">word on the street</a> is that Node tools like <code>node-sass</code> out-perform the Ruby Compass implementation. With the node-sass and some additional Webpack dependencies, we can transpile SCSS with Webpack to a separate css bundle:</p>
+Compass, <a href="https://benfrain.com/lightning-fast-sass-compiling-with-libsass-node-sass-and-grunt-sass/" target="_blank" rel="noopener noreferrer">word on the street</a> is that Node tools like <code>node-sass</code> out-perform the Ruby Compass implementation. With the node-sass and some additional Webpack dependencies, we can transpile SCSS with Webpack to a separate css bundle:</p>
 
 <pre><code class="sh">$ npm install --save-dev node-sass sass-loader extract-text-webpack-plugin
 </code></pre>
@@ -299,7 +299,7 @@ module.exports = {
 };
 </code></pre>
 
-<p><strong>Enable feature flags</strong>. <a href="https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html">I love puts debugging</a> so I&#39;ve got quite a few log statements in my JavaScript code. I don&#39;t really want these log statements in the production build of the website, so I can use Webpack to allow me to enable logging only in development:</p>
+<p><strong>Enable feature flags</strong>. <a href="https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html" target="_blank" rel="noopener noreferrer">I love puts debugging</a> so I&#39;ve got quite a few log statements in my JavaScript code. I don&#39;t really want these log statements in the production build of the website, so I can use Webpack to allow me to enable logging only in development:</p>
 
 <pre><code class="javascript">// webpack.config.js
 var definePlugin = new webpack.DefinePlugin({
@@ -334,9 +334,9 @@ contexts respectively:</p>
 
 <p>My development experience is greatly enhanced with the auto-recompile feature of
 webpack along with the <code>middleman-livereload</code> extension. Though I haven&#39;t tried
-the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/hot-module-replacement-with-webpack.html">hot-reloading of Webpack modules</a>, it seems possible to set this up to work with Middleman.</p>
+the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/hot-module-replacement-with-webpack.html" target="_blank" rel="noopener noreferrer">hot-reloading of Webpack modules</a>, it seems possible to set this up to work with Middleman.</p>
 
-<p>You can go much further with Webpack of course. For more info, check out the <a href="https://webpack.github.io/">Webpack guides</a> and Pete Hunt&#39;s <a href="https://github.com/petehunt/webpack-howto">Webpack How-to</a>.</p>
+<p>You can go much further with Webpack of course. For more info, check out the <a href="https://webpack.github.io/" target="_blank" rel="noopener noreferrer">Webpack guides</a> and Pete Hunt&#39;s <a href="https://github.com/petehunt/webpack-howto" target="_blank" rel="noopener noreferrer">Webpack How-to</a>.</p>
 
       <h3 id="moving-away-from-sprockets" class="title title-h3">
         <a name="moving-away-from-sprockets" class="anchor" href="#moving-away-from-sprockets">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -351,9 +351,13 @@ the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/
 <p>In my opinion, if the Rails community wishes to stay relevant in the coming years, it would be wise to adopt a similar strategy: to &quot;future proof&quot; the rapidly changing front-end environment, Rails should drop Sprockets and embrace the external pipeline like Middleman.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Apr 16, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-04-16-using-webpack-with-middleman.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Apr 16, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -500,7 +504,7 @@ the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

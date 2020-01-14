@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -60,7 +60,7 @@
 </header>
 
     <p>Let&#39;s build a simple web crawler in Ruby. For inspiration, I&#39;d like to
-to revisit <a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/">Alan Skorkin&#39;s How to Write a Simple Web Crawler in Ruby</a> and attempt to achieve something similar with a fresh perspective.</p>
+to revisit <a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-ruby/" target="_blank" rel="noopener noreferrer">Alan Skorkin&#39;s How to Write a Simple Web Crawler in Ruby</a> and attempt to achieve something similar with a fresh perspective.</p>
 
 <p>We&#39;ll adapt Skork&#39;s original goals and provide a few of our own:</p>
 
@@ -87,7 +87,7 @@ to revisit <a href="http://www.skorks.com/2009/07/how-to-write-a-web-crawler-in-
         Breaking it down
       </h3>
     
-<p>For this exercise, we&#39;re going to crawl <a href="http://www.programmableweb.com/">Programmable Web</a> to extract data from their <a href="http://www.programmableweb.com/apis/directory">API directory</a>.</p>
+<p>For this exercise, we&#39;re going to crawl <a href="http://www.programmableweb.com/" target="_blank" rel="noopener noreferrer">Programmable Web</a> to extract data from their <a href="http://www.programmableweb.com/apis/directory" target="_blank" rel="noopener noreferrer">API directory</a>.</p>
 
 <p>Rather than take the naive approach of grabbing all content from any page, we&#39;re going to build a webcrawler that emits
 structured data. Traversing from the first page of the api directory, our
@@ -132,7 +132,7 @@ hashes with meaningful key-value pairs.</p>
         Designing the surface
       </h3>
     
-<p>If you&#39;ve been following my posts lately, you know that <a href="https://rossta.net/blog/ruby-enumerable.html">I love Enumerable</a> and you may not be surprised that I&#39;d like to model our structured, website data with an <a href="/blog/what-is-enumerator.html">Enumerator</a>. This will provide a familiar, flexible interface that can be adapted for logging, storage, transformation, and a wide range of use cases.</p>
+<p>If you&#39;ve been following my posts lately, you know that <a href="https://rossta.net/blog/ruby-enumerable.html" target="_blank" rel="noopener noreferrer">I love Enumerable</a> and you may not be surprised that I&#39;d like to model our structured, website data with an <a href="/blog/what-is-enumerator.html">Enumerator</a>. This will provide a familiar, flexible interface that can be adapted for logging, storage, transformation, and a wide range of use cases.</p>
 
 <p>I want to simply ask a <code>spider</code> object for its results and get back an enumerator:</p>
 
@@ -141,8 +141,8 @@ hashes with meaningful key-value pairs.</p>
 </code></pre>
 
 <p>We&#39;ll be able to do some interesting things, like stream the
-results lazily into a flexible storage engine, e.g. <a href="https://www.mongodb.org/">mongodb</a> or <code>PStore</code>,
-available from the <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/pstore/rdoc/PStore.html">Ruby standard library</a>:</p>
+results lazily into a flexible storage engine, e.g. <a href="https://www.mongodb.org/" target="_blank" rel="noopener noreferrer">mongodb</a> or <code>PStore</code>,
+available from the <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/pstore/rdoc/PStore.html" target="_blank" rel="noopener noreferrer">Ruby standard library</a>:</p>
 
 <pre><code class="ruby">require &quot;pstore&quot;
 store  = PStore.new(&quot;api_directory.pstore&quot;)
@@ -165,9 +165,9 @@ end
         Writing the crawler
       </h3>
     
-<p>We&#39;re going to write a <code>Spider</code> class to enumerate website data. Our spider implementation borrows heavily from <a href="https://github.com/joeyAghion/spidey">joeyAghion&#39;s spidey</a> gem, described as a &quot;loose framework for crawling and scraping websites&quot; and Python&#39;s venerable <a href="http://scrapy.org/">Scrapy</a> project, which allows you to scrape websites &quot;in a fast, simple, yet extensible way.&quot; Both resources achieve the goals of being easy-to-use and extensible.</p>
+<p>We&#39;re going to write a <code>Spider</code> class to enumerate website data. Our spider implementation borrows heavily from <a href="https://github.com/joeyAghion/spidey" target="_blank" rel="noopener noreferrer">joeyAghion&#39;s spidey</a> gem, described as a &quot;loose framework for crawling and scraping websites&quot; and Python&#39;s venerable <a href="http://scrapy.org/" target="_blank" rel="noopener noreferrer">Scrapy</a> project, which allows you to scrape websites &quot;in a fast, simple, yet extensible way.&quot; Both resources achieve the goals of being easy-to-use and extensible.</p>
 
-<p>We&#39;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it <a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb">on GitHub</a>.</p>
+<p>We&#39;ll build our web crawler piece-by-piece, but if you want a full preview of the source, check out it <a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb" target="_blank" rel="noopener noreferrer">on GitHub</a>.</p>
 
 <p>Our <code>Spider</code> will maintain a set of urls to visit, data is collects, and a set of url &quot;handlers&quot; that will describe how each page should be processed. We&#39;ll take advantage of one external dependency, <code>mechanize</code>, to handle interaction with the pages we visit - to extract data, resolve urls, follow redirects, etc. Below is the <code>#enqueue</code> method to add urls and their handlers to a running list in our spider.</p>
 
@@ -291,7 +291,7 @@ operation. We&#39;d have to wait for all the pages to be processed before contin
 with the block. Returning an enumerator offers the potential to stream results
 to something like a data store.</p>
 
-<p>Why not include <code>Enumerable</code> in our <code>Spider</code> and implement <code>#each</code> instead? As pointed out in <a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/">Arkency&#39;s Stop including Enumerable, return Enumerator
+<p>Why not include <code>Enumerable</code> in our <code>Spider</code> and implement <code>#each</code> instead? As pointed out in <a href="http://blog.arkency.com/2014/01/ruby-to-enum-for-enumerator/" target="_blank" rel="noopener noreferrer">Arkency&#39;s Stop including Enumerable, return Enumerator
 instead</a>, our
 <code>Spider</code> class doesn&#39;t itself represent a collection, so exposing the <code>#results</code>
 method as an enumerator is more appropriate.</p>
@@ -339,7 +339,7 @@ Our spider will invoke the handlers (as seen above with <code>@processor.send(me
 end
 </code></pre>
 
-<p>... where <code>page</code> is an instance of <code>Mechanize::Page</code> (<a href="http://docs.seattlerb.org/mechanize/Mechanize/Page.html">docs</a>) providing a number of methods for interacting with html content:</p>
+<p>... where <code>page</code> is an instance of <code>Mechanize::Page</code> (<a href="http://docs.seattlerb.org/mechanize/Mechanize/Page.html" target="_blank" rel="noopener noreferrer">docs</a>) providing a number of methods for interacting with html content:</p>
 
 <p>The root handler method, <code>ProgrammableWeb#process_index</code>, will extract api names in the
 index list, enqueue api detail pages and additional, paginated indexes. As data
@@ -402,15 +402,19 @@ end
     
 <p>I admit, it&#39;s arguable that this implementation is &quot;simple&quot;. Skorks provided a straightforward, recursive solution to consume unstructured content. Our approach is iterative and requires some work up front to define which links to consume and how to process them with &quot;handlers&quot;. However, we were able to achieve an extensible, flexible tool with a nice separation of concerns and a familiar, enumerable interface.</p>
 
-<p>Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction. It would now be trivial to take our <code>Spider</code> class and implement a new processor for a site like <a href="https://rubygems.org">rubygems.org</a> or <a href="https://craigslist.org">craigslist</a> and stream the results to a database like <a href="http://redis.io">Redis</a> or <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html"><code>YAML::Store</code></a>.</p>
+<p>Modeling results from a multi-level page crawl as a collection may not work for every use case, but, for this exercise, it serves as a nice abstraction. It would now be trivial to take our <code>Spider</code> class and implement a new processor for a site like <a href="https://rubygems.org" target="_blank" rel="noopener noreferrer">rubygems.org</a> or <a href="https://craigslist.org" target="_blank" rel="noopener noreferrer">craigslist</a> and stream the results to a database like <a href="http://redis.io" target="_blank" rel="noopener noreferrer">Redis</a> or <a href="http://ruby-doc.org/stdlib-2.3.0/libdoc/yaml/rdoc/YAML/Store.html" target="_blank" rel="noopener noreferrer"><code>YAML::Store</code></a>.</p>
 
-<p>Try it yourself and let me know what you think of this approach (<a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb">full source</a>).</p>
+<p>Try it yourself and let me know what you think of this approach (<a href="https://github.com/rossta/loves-enumerable/blob/master/examples/spider/spider.rb" target="_blank" rel="noopener noreferrer">full source</a>).</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
-      Published on Jan 27, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-01-27-how-to-write-a-simple-web-crawler-in-ruby-revisited.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Jan 27, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -432,7 +436,7 @@ end
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=How%20to%20write%20a%20simple%20web%20crawler%20in%20Ruby%20-%20revisited&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fhow-to-write-a-simple-web-crawler-in-ruby-revisited.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=How%20to%20write%20a%20simple%20web%20crawler%20in%20Ruby%20-%20revisited&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fhow-to-write-a-simple-web-crawler-in-ruby-revisited.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -552,7 +556,7 @@ end
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -63,7 +63,7 @@
 Elixir, and the Phoenix framework</a>.</em></p>
 
 <p>One of my recent side projects to learn new technologies
-has been to build a browser-based rendition of <a href="https://en.wikipedia.org/wiki/Connect_Four">Connect
+has been to build a browser-based rendition of <a href="https://en.wikipedia.org/wiki/Connect_Four" target="_blank" rel="noopener noreferrer">Connect
 Four</a>.
 The fully-functional version of the game will have both a backend and frontend
 component with some good challenges including animating checkers
@@ -90,7 +90,7 @@ Connect Four game board:</p>
 
 <ul>
 <li>SVG has shape elements like <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code> that are better
-semantically than using divs to render columns and checkers using <a href="https://davidwalsh.name/css-circles">the rounded
+semantically than using divs to render columns and checkers using <a href="https://davidwalsh.name/css-circles" target="_blank" rel="noopener noreferrer">the rounded
 border trick</a></li>
 <li>SVG provides simple, declarative rules for positioning visual elements; no
 need to mess with picture-perfect pixels, absolute positioning, and z-indexing</li>
@@ -116,7 +116,7 @@ we could render the game board with portholes punched into it? That way, the onl
 
 <p>This is where SVG pattern masking comes in. A powerful feature of desktop visual
 editing tools Adobe Photoshop/Illustrator is available on the web.
-<a href="https://www.w3.org/TR/SVG/masking.html">Masking</a> allows for a graphic (or set of
+<a href="https://www.w3.org/TR/SVG/masking.html" target="_blank" rel="noopener noreferrer">Masking</a> allows for a graphic (or set of
 graphics) to act as a transparent overlay to reveal background elements. Applied
 to our game, it provides a mechanism by which we can see checkers falling
 through holes in the game board wall. To my knowledge, there&#39;s no (easy) way
@@ -183,7 +183,7 @@ the <code>&lt;mask&gt;</code> element by id.</p>
 
 <p>This punches a hole through the wall to reveal the checker underneath.</p>
 
-<p>Here&#39;s what we have so far on <a href="https://codepen.io/rossta/pen/NXMrLg">CodePen</a>:</p>
+<p>Here&#39;s what we have so far on <a href="https://codepen.io/rossta/pen/NXMrLg" target="_blank" rel="noopener noreferrer">CodePen</a>:</p>
 
 <p data-height="265" data-theme-id="light" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/NXMrLg/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
@@ -201,7 +201,7 @@ to position each column relative to the container <code>&lt;svg&gt;</code> witho
 specify x coordinates for each child <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code>.</p>
 
 <p>Here&#39;s the full demo of a static Connect Four SVG game board on
-<a href="https://codepen.io/rossta/pen/eyrgJe">CodePen</a>:</p>
+<a href="https://codepen.io/rossta/pen/eyrgJe" target="_blank" rel="noopener noreferrer">CodePen</a>:</p>
 
 <p data-height="370" data-theme-id="light" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyrgJe/">Connect Four board in SVG</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
@@ -220,9 +220,9 @@ specify x coordinates for each child <code>&lt;rect&gt;</code> and <code>&lt;cir
 <p>For more related info, check out the following resources:</p>
 
 <ul>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial">MDN SVG Tutorial</a></li>
-<li>MDN docs for <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg"><code>&lt;svg&gt;</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/pattern"><code>&lt;pattern /&gt;</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/mask"><code>&lt;mask /&gt;</code></a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs"><code>&lt;defs /&gt;</code></a></li>
-<li>Pretty much anything <a href="https://twitter.com/sarah_edo">Sarah Drasner</a> publishes, including <a href="http://shop.oreilly.com/product/0636920045335.do">SVG Animations</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial" target="_blank" rel="noopener noreferrer">MDN SVG Tutorial</a></li>
+<li>MDN docs for <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg" target="_blank" rel="noopener noreferrer"><code>&lt;svg&gt;</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/pattern" target="_blank" rel="noopener noreferrer"><code>&lt;pattern /&gt;</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/mask" target="_blank" rel="noopener noreferrer"><code>&lt;mask /&gt;</code></a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs" target="_blank" rel="noopener noreferrer"><code>&lt;defs /&gt;</code></a></li>
+<li>Pretty much anything <a href="https://twitter.com/sarah_edo" target="_blank" rel="noopener noreferrer">Sarah Drasner</a> publishes, including <a href="http://shop.oreilly.com/product/0636920045335.do" target="_blank" rel="noopener noreferrer">SVG Animations</a></li>
 </ul>
 
 <p>In <a href="/blog/building-basic-connect-four-with-vuejs.html">the next post</a>, we&#39;ll
@@ -230,10 +230,14 @@ take a look at using Vue.js to render the board dynamically and add checkers
 based on user interaction.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
-      Published on Jan 10, 2018
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2018-01-10-connect-four-with-svg-pattern-masking.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
+        Published on Jan 10, 2018
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -255,7 +259,7 @@ based on user interaction.</p>
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Connect%20Four%20with%20SVG%20pattern%20masking&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fconnect-four-with-svg-pattern-masking.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Connect%20Four%20with%20SVG%20pattern%20masking&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fconnect-four-with-svg-pattern-masking.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     SVG and the web. Thank you!
   </p>
@@ -320,7 +324,7 @@ based on user interaction.</p>
   </article>
   <article class="index-post">
     <header class="index-title">
-      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A Common Webpacker Mistake</a>
+      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A common Webpacker mistake</a>
     </header>
       <p>A big issue that comes up with Webpacker is "where to put the JavaScript files". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.</p>
   </article>
@@ -376,7 +380,7 @@ based on user interaction.</p>
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

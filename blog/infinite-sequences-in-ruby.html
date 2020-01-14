@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,7 +59,7 @@
     </h2>
 </header>
 
-    <p>Functional languages like Clojure have <a href="http://clojure.org/sequences">sequences</a>. Sequences are pretty amazing: they let us treat algorithms as data structures. We can call functions on the data as it is produced, allowing us to interact with the results like a collection even when the sequence is infinite.</p>
+    <p>Functional languages like Clojure have <a href="http://clojure.org/sequences" target="_blank" rel="noopener noreferrer">sequences</a>. Sequences are pretty amazing: they let us treat algorithms as data structures. We can call functions on the data as it is produced, allowing us to interact with the results like a collection even when the sequence is infinite.</p>
 
 <p>The Ruby standard library doesn’t have an official sequence class or module, but we can get pretty far with the <code>Enumerable</code> module. Rubyists are typically introduced to <code>Enumerable</code> through methods on <code>Array</code>,  like <code>#map</code> and <code>#select</code>. Arrays like <code>[1,2,3,4]</code> may be thought of as finite, eagerly loaded sequences; they already contains all the members we want to enumerate with methods. We can also extend this API to sequences like “give me multiples of 5” in Ruby.</p>
 
@@ -102,7 +102,7 @@ end
 end
 </code></pre>
 
-<p>What the heck is an <code>Enumerator</code>? It’s an enumerable object that can be used for either internal or external enumeration of a collection - for more details, check out my <a href="https://rossta.net/blog/what-is-enumerator.html">previous post</a>. The <code>Enumerator</code> initialize method take a block that acts like a template for an enumerable algorithm. The block takes a parameter, <code>y</code>, which is an instance of an <code>Enumerator::Yielder</code>, which let&#39;s us yield each member of the <code>Enumerator</code> to blocks passed to <code>Enumerable</code> method calls. In short, this means we can treat an <code>Enumerator</code> like an <code>Array</code>, though we can also do so much more.</p>
+<p>What the heck is an <code>Enumerator</code>? It’s an enumerable object that can be used for either internal or external enumeration of a collection - for more details, check out my <a href="https://rossta.net/blog/what-is-enumerator.html" target="_blank" rel="noopener noreferrer">previous post</a>. The <code>Enumerator</code> initialize method take a block that acts like a template for an enumerable algorithm. The block takes a parameter, <code>y</code>, which is an instance of an <code>Enumerator::Yielder</code>, which let&#39;s us yield each member of the <code>Enumerator</code> to blocks passed to <code>Enumerable</code> method calls. In short, this means we can treat an <code>Enumerator</code> like an <code>Array</code>, though we can also do so much more.</p>
 
 <p>To retrieve the first ten members of our enumerable fibonacci method, we’d instead do something like:</p>
 
@@ -134,7 +134,7 @@ fibonacci.lazy.with_index.select { |n, i| n.even? }.first(10)
 
 <p>Notice we only need to enumerate 13 items to retrieve 10 odd numbers from fibonacci, while 29 are needed to retrieve the first 10 evens. These results wouldn’t be easily achieved with our previous fibonacci implementation in which the number of desired members must be known ahead of time.</p>
 
-<p>Try creating other numerical sequences with enumerators on your own, like multiples of <code>n</code>, factorials for the first <code>n</code> integers or enumerating sums of squares. Also be sure to check out Pat Shaughnessy&#39;s <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy">great primer on lazy enumerators</a>.</p>
+<p>Try creating other numerical sequences with enumerators on your own, like multiples of <code>n</code>, factorials for the first <code>n</code> integers or enumerating sums of squares. Also be sure to check out Pat Shaughnessy&#39;s <a href="http://patshaughnessy.net/2013/4/3/ruby-2-0-works-hard-so-you-can-be-lazy" target="_blank" rel="noopener noreferrer">great primer on lazy enumerators</a>.</p>
 
       <h3 id="sequence-functions" class="title title-h3">
         <a name="sequence-functions" class="anchor" href="#sequence-functions">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -205,10 +205,14 @@ end
 <p>Of course, sequences of numbers aren&#39;t the only concept that can be modeled this way in Ruby. Any collection of unknown size, for example, results from a search query, paginated resources from an API client library, data from a web crawl, etc., are also great use cases for exposure as enumerables. Consider wrapping your generated collections in an Enumerator to provide callers with flexible, composable results.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
-      Published on Nov 21, 2015
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2015-11-21-infinite-sequences-in-ruby.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Nov 21, 2015
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -230,7 +234,7 @@ end
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Infinite%20Sequences%20in%20Ruby&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Finfinite-sequences-in-ruby.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Infinite%20Sequences%20in%20Ruby&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Finfinite-sequences-in-ruby.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -350,7 +354,7 @@ end
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

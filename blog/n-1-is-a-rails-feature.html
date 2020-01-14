@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -89,9 +89,9 @@ Processing by PostsController#index as HTML
   #...
 </code></pre>
 
-<p>A quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8">N+1 Rails</a> reveals many posts describing &quot;eager loading&quot; as state that the <em>silver bullet</em> to this problem.</p>
+<p>A quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&oq=N%2B1+Rails&aqs=chrome..69i57j69i60l2.2907j0j1&sourceid=chrome&ie=UTF-8" target="_blank" rel="noopener noreferrer">N+1 Rails</a> reveals many posts describing &quot;eager loading&quot; as state that the <em>silver bullet</em> to this problem.</p>
 
-<p>There is actually a gem called <a href="https://github.com/flyerhzm/bullet"><code>bullet</code></a> that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.</p>
+<p>There is actually a gem called <a href="https://github.com/flyerhzm/bullet" target="_blank" rel="noopener noreferrer"><code>bullet</code></a> that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.</p>
 
 <p>Typically, this means changing a statement like <code>Post.all</code> to
 <code>Post.all.includes(:author)</code> to ensure the authors records are loaded in a
@@ -106,7 +106,7 @@ association). This a really useful technique to reduce the number of queries you
         When gurus chat
       </h3>
     
-<p>Now consider this. Back in April, the author of <a href="https://www.railsspeed.com/">The Complete Guide to Rails Performance</a> (check it out, it&#39;s awesome), <a href="http://nateberkopec.com/">Nate Berkopec</a> spoke with <a href="https://twitter.com/dhh">DHH</a> about, ahem, Rails performance. <a href="https://youtu.be/ktZLpjCanvg?t=4m27s">Not 5 minutes in</a>, DHH says this:</p>
+<p>Now consider this. Back in April, the author of <a href="https://www.railsspeed.com/" target="_blank" rel="noopener noreferrer">The Complete Guide to Rails Performance</a> (check it out, it&#39;s awesome), <a href="http://nateberkopec.com/" target="_blank" rel="noopener noreferrer">Nate Berkopec</a> spoke with <a href="https://twitter.com/dhh" target="_blank" rel="noopener noreferrer">DHH</a> about, ahem, Rails performance. <a href="https://youtu.be/ktZLpjCanvg?t=4m27s" target="_blank" rel="noopener noreferrer">Not 5 minutes in</a>, DHH says this:</p>
 
 <blockquote>
 <p>N+1 is a feature</p>
@@ -335,9 +335,13 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
 <p>Just beware of silver bullets.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Sep 17, 2016
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2016-09-17-n%2B1-is-a-rails-feature.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Sep 17, 2016
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -482,7 +486,7 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

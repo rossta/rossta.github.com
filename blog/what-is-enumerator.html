@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,13 +59,13 @@
     </h2>
 </header>
 
-    <p>Let&#39;s pretend we know about Ruby&#39;s <a href="http://ruby-doc.org/core-2.2.3/Enumerable.html">Enumerable</a> module - that it&#39;s included in
+    <p>Let&#39;s pretend we know about Ruby&#39;s <a href="http://ruby-doc.org/core-2.2.3/Enumerable.html" target="_blank" rel="noopener noreferrer">Enumerable</a> module - that it&#39;s included in
 Ruby&#39;s core collection classes like Array and Hash and provides a bunch of
 methods for traversal, searching and sorting, and that we can can introduce it
 to plain old ruby classes through inclusion and implementing the <code>#each</code> method.
-Check out this <a href="http://ruby.bastardsbook.com/chapters/enumerables/">Enumerable primer</a> if you&#39;d like a refresher.</p>
+Check out this <a href="http://ruby.bastardsbook.com/chapters/enumerables/" target="_blank" rel="noopener noreferrer">Enumerable primer</a> if you&#39;d like a refresher.</p>
 
-<p><a href="http://ruby-doc.org/core-2.2.0/Enumerator.html">Enumerator</a> is like <code>Enumerable&#39;s</code> kid sister; while <code>Enumerable</code> is getting all the attention, <code>Enumerator</code> should get more credit for doing amazing things in her own way. Well, it&#39;s time you took notice, Ma.</p>
+<p><a href="http://ruby-doc.org/core-2.2.0/Enumerator.html" target="_blank" rel="noopener noreferrer">Enumerator</a> is like <code>Enumerable&#39;s</code> kid sister; while <code>Enumerable</code> is getting all the attention, <code>Enumerator</code> should get more credit for doing amazing things in her own way. Well, it&#39;s time you took notice, Ma.</p>
 
 <p>So what exactly is <code>Enumerator</code>? For one, it&#39;s a class. You can instantiate an
 instance of <code>Enumerator</code> by calling certain <code>Enumerable</code> instance methods, like <code>Array#each</code>, without a block:</p>
@@ -124,7 +124,7 @@ for each iteration. This usage is common enough, that <code>Enumerator</code> pr
 up knowledge of a collection and a method with which we want to enumerate.</p>
 
 <p>We can combine several enumerators in different orders to get different
-behaviors. Here&#39;s an nice example borrowed from <a href="http://dgiim.github.io/blog/2015/08/24/ruby-enumerators/#the-enumerator-class">another recent post on the subject</a>:</p>
+behaviors. Here&#39;s an nice example borrowed from <a href="http://dgiim.github.io/blog/2015/08/24/ruby-enumerators/#the-enumerator-class" target="_blank" rel="noopener noreferrer">another recent post on the subject</a>:</p>
 
 <pre><code class="ruby">letters = %w[a b c d e]
 
@@ -247,13 +247,17 @@ e.next
 
 <p>So enumerators give us flexible and composable uses for enumerables. Combine them to extend behavior of existing enumerable methods. Use them for external enumeration with methods like <code>#next</code> and <code>#peek</code> for iterating over multiple arrays. In a future post, we&#39;ll take a look at how to create our own enumerators outside the context of arrays and hashes and some good reasons for doing so.</p>
 
-<p>In case you missed it, <a href="blog/ruby-enumerable.html">check out my presentation in the previous post</a> on the <code>Enumerable</code> module for more examples on how to get the most out of this terrific Ruby module.</p>
+<p>In case you missed it, <a href="blog/ruby-enumerable.html" target="_blank" rel="noopener noreferrer">check out my presentation in the previous post</a> on the <code>Enumerable</code> module for more examples on how to get the most out of this terrific Ruby module.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
-      Published on Nov 18, 2015
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2015-11-18-what-is-enumerator.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Nov 18, 2015
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -275,7 +279,7 @@ e.next
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=What%20the%20Heck%20is%20a%20Ruby%20Enumerator%3F&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fwhat-is-enumerator.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=What%20the%20Heck%20is%20a%20Ruby%20Enumerator%3F&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fwhat-is-enumerator.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Ruby and the web. Thank you!
   </p>
@@ -395,7 +399,7 @@ e.next
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

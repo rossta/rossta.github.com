@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -69,9 +69,9 @@
         The project
       </h3>
     
-<p>This post is part of ongoing series, <a href="/blog/series/pdf-viewer.html">Building a PDF Viewer with Vue.js</a>. The source code for this project is on Github at <a href="https://github.com/rossta/vue-pdfjs-demo">rossta/vue-pdfjs-demo</a>. To see the source described in this post, <a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-3-renderless-components">checkout the branch</a>.</p>
+<p>This post is part of ongoing series, <a href="/blog/series/pdf-viewer.html">Building a PDF Viewer with Vue.js</a>. The source code for this project is on Github at <a href="https://github.com/rossta/vue-pdfjs-demo" target="_blank" rel="noopener noreferrer">rossta/vue-pdfjs-demo</a>. To see the source described in this post, <a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-3-renderless-components" target="_blank" rel="noopener noreferrer">checkout the branch</a>.</p>
 
-<p>Here&#39;s the latest <a href="https://rossta.net/vue-pdfjs-demo/">project demo</a>.</p>
+<p>Here&#39;s the latest <a href="https://rossta.net/vue-pdfjs-demo/" target="_blank" rel="noopener noreferrer">project demo</a>.</p>
 
       <h3 id="catching-up-from-last-time" class="title title-h3">
         <a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -95,15 +95,15 @@
         The why
       </h3>
     
-<p>The Vue docs provide helpful examples for using <a href="https://vuejs.org/v2/guide/mixins.html">mixins</a>, <a href="https://vuejs.org/v2/guide/custom-directive.html">custom directives</a>, and more. My preferred approach for sharing component functionality is <em>composition</em>, which means extracting shared code into separate components. In this post, we&#39;ll be using composition to reuse data fetching.</p>
+<p>The Vue docs provide helpful examples for using <a href="https://vuejs.org/v2/guide/mixins.html" target="_blank" rel="noopener noreferrer">mixins</a>, <a href="https://vuejs.org/v2/guide/custom-directive.html" target="_blank" rel="noopener noreferrer">custom directives</a>, and more. My preferred approach for sharing component functionality is <em>composition</em>, which means extracting shared code into separate components. In this post, we&#39;ll be using composition to reuse data fetching.</p>
 
 <p>Why composition? This topic deserves a separate post, but as a start, it&#39;s my preference. Borrowing from general object-oriented programming advice, I gravitate towards &quot;composition over inheritance&quot;. Practically, in Vue, this means I&#39;d like to think &quot;component-first&quot;, before reaching for mixins or <code>extends</code> (these are basically forms of inheritance).</p>
 
-<p>I also happen to agree with the drawbacks Dan Abramov enumerates in <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html">Mixins Considered Harmful</a>; though the context for his post is React, most of his points are relevant to Vue as well.</p>
+<p>I also happen to agree with the drawbacks Dan Abramov enumerates in <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html" target="_blank" rel="noopener noreferrer">Mixins Considered Harmful</a>; though the context for his post is React, most of his points are relevant to Vue as well.</p>
 
 <p>As for this particular use case, we could reuse the data fetching code we wrote previously as a mixin, there&#39;s a clear problem with that approach. It would mean the components that make use of the mixin would fetch the same data independently (without extracting some other mechanism to share the data source)—which is potentially some wasted work. This may be desired for some applications, we&#39;d prefer to only fetch the PDF page data once.</p>
 
-<p>It&#39;s also worth noting that we&#39;re not currently using <a href="https://vuex.vuejs.org">Vuex</a> to manage application state in the project. It may be wise, as an alternative to what&#39;s described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It&#39;s also simply a worthy exercise to consider data components.</p>
+<p>It&#39;s also worth noting that we&#39;re not currently using <a href="https://vuex.vuejs.org" target="_blank" rel="noopener noreferrer">Vuex</a> to manage application state in the project. It may be wise, as an alternative to what&#39;s described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It&#39;s also simply a worthy exercise to consider data components.</p>
 
       <h3 id="bird-39-s-eye-view" class="title title-h3">
         <a name="bird-39-s-eye-view" class="anchor" href="#bird-39-s-eye-view">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -169,7 +169,7 @@
         Extracting the data component
       </h3>
     
-<p>Currently, the data fetching logic resides in our <code>&lt;PDFDocument&gt;</code> component. There is a method that encapsulates the logic for <a href="https://github.com/rossta/vue-pdfjs-demo/blob/4be84574ce6837379dd90b4d68194ea19b172734/src/components/PDFDocument.vue#L145">fetching pages in batches</a>, <a href="https://github.com/rossta/vue-pdfjs-demo/blob/4be84574ce6837379dd90b4d68194ea19b172734/src/components/PDFDocument.vue#L177">watchers</a> for responding to changes in the given <code>url</code> prop and <code>pdf</code> proxy object, and relevant <code>data</code> and <code>computed</code> properties for maintaining the state of PDF data. You can see <a href="https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-2.html">the previous post</a> for more info on the implementation details. We&#39;ll move this functionality to a new <code>&lt;PDFData&gt;</code> component:</p>
+<p>Currently, the data fetching logic resides in our <code>&lt;PDFDocument&gt;</code> component. There is a method that encapsulates the logic for <a href="https://github.com/rossta/vue-pdfjs-demo/blob/4be84574ce6837379dd90b4d68194ea19b172734/src/components/PDFDocument.vue#L145" target="_blank" rel="noopener noreferrer">fetching pages in batches</a>, <a href="https://github.com/rossta/vue-pdfjs-demo/blob/4be84574ce6837379dd90b4d68194ea19b172734/src/components/PDFDocument.vue#L177" target="_blank" rel="noopener noreferrer">watchers</a> for responding to changes in the given <code>url</code> prop and <code>pdf</code> proxy object, and relevant <code>data</code> and <code>computed</code> properties for maintaining the state of PDF data. You can see <a href="https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-2.html" target="_blank" rel="noopener noreferrer">the previous post</a> for more info on the implementation details. We&#39;ll move this functionality to a new <code>&lt;PDFData&gt;</code> component:</p>
 
 <pre><code class="javascript">// src/components/PDFData.vue
 
@@ -301,15 +301,19 @@ methods: {
         Wrapping up
       </h3>
     
-<p>That does it! We&#39;ve extracted data fetching logic completely out of the <code>&lt;PDFDocument&gt;</code> into the <code>&lt;PDFData&gt;</code>. We&#39;ve avoided the <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html">drawbacks of introducing mixins</a> to share behavior. Our new data component will show up separately in the Vue dev tools extension for better debugging. The application is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative to Vuex, which would be a new dependency, to managing a portion of our application state.</p>
+<p>That does it! We&#39;ve extracted data fetching logic completely out of the <code>&lt;PDFDocument&gt;</code> into the <code>&lt;PDFData&gt;</code>. We&#39;ve avoided the <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html" target="_blank" rel="noopener noreferrer">drawbacks of introducing mixins</a> to share behavior. Our new data component will show up separately in the Vue dev tools extension for better debugging. The application is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative to Vuex, which would be a new dependency, to managing a portion of our application state.</p>
 
 <p>In the next post, we&#39;ll look at extracting shared behavior so that both our preview and document components can be independently scrollable and either can trigger additional data-fetching when the scrolled to the bottom.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
-      Published on Jul 15, 2018
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2018-07-15-extracting-a-data-component-in-vue.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
+        Published on Jul 15, 2018
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -331,7 +335,7 @@ methods: {
   </h3>
   <p>
     Please
-    <a href="https://twitter.com/intent/tweet?text=Extracting%20a%20data%20component%20in%20Vue&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fextracting-a-data-component-in-vue.html" target="_blank" rel="noopener">share it on Twitter</a>
+    <a href="https://twitter.com/intent/tweet?text=Extracting%20a%20data%20component%20in%20Vue&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fextracting-a-data-component-in-vue.html" target="_blank" rel="noopener noreferrer">share it on Twitter</a>
     and enter your email below to subscribe to my newsletter on
     Vue and the web. Thank you!
   </p>
@@ -448,7 +452,7 @@ methods: {
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

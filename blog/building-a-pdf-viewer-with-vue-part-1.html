@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -59,13 +59,13 @@
     </h2>
 </header>
 
-    <p>I remember a time not too long ago when the possibility of rendering PDFs inline on a web page would have sounded crazy. Then <a href="https://mozilla.github.io/pdf.js/">PDF.js</a> came along and changed all that.</p>
+    <p>I remember a time not too long ago when the possibility of rendering PDFs inline on a web page would have sounded crazy. Then <a href="https://mozilla.github.io/pdf.js/" target="_blank" rel="noopener noreferrer">PDF.js</a> came along and changed all that.</p>
 
-<p>I was recently tasked with just this sort of project, and I leveraged PDF.js, <a href="https://vuejs.org/">Vue</a> and <a href="https://webpack.js.org">Webpack</a> to put it all together. This post is the first in a series which demonstrates how I used Vue to render PDF pages to <code>&lt;canvas&gt;</code> elements. Later we&#39;ll explore conditional rendering and adding paging and zoom controls.</p>
+<p>I was recently tasked with just this sort of project, and I leveraged PDF.js, <a href="https://vuejs.org/" target="_blank" rel="noopener noreferrer">Vue</a> and <a href="https://webpack.js.org" target="_blank" rel="noopener noreferrer">Webpack</a> to put it all together. This post is the first in a series which demonstrates how I used Vue to render PDF pages to <code>&lt;canvas&gt;</code> elements. Later we&#39;ll explore conditional rendering and adding paging and zoom controls.</p>
 
-<p>The latest source code for this project is on Github at <a href="https://github.com/rossta/vue-pdfjs-demo">rossta/vue-pdfjs-demo</a>. To see the version of the project described in this post, check out the <a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-1-simple-document"><code>part-1-simple-document</code> branch</a>. Finally, here&#39;s a link to the <a href="https://rossta.net/vue-pdfjs-demo/">project demo</a>.</p>
+<p>The latest source code for this project is on Github at <a href="https://github.com/rossta/vue-pdfjs-demo" target="_blank" rel="noopener noreferrer">rossta/vue-pdfjs-demo</a>. To see the version of the project described in this post, check out the <a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-1-simple-document" target="_blank" rel="noopener noreferrer"><code>part-1-simple-document</code> branch</a>. Finally, here&#39;s a link to the <a href="https://rossta.net/vue-pdfjs-demo/" target="_blank" rel="noopener noreferrer">project demo</a>.</p>
 
-<p><a href="https://rossta.net/vue-pdfjs-demo/"><img src="/assets/images/screenshots/screenshot-pdf-viewer.png" alt="Demo" /></a></p>
+<p><a href="https://rossta.net/vue-pdfjs-demo/" target="_blank" rel="noopener noreferrer"><img src="/assets/images/screenshots/screenshot-pdf-viewer.png" alt="Demo" /></a></p>
 
       <h3 id="similar-projects" class="title title-h3">
         <a name="similar-projects" class="anchor" href="#similar-projects">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -75,7 +75,7 @@
         Similar projects
       </h3>
     
-<p>Mozilla&#39;s PDF.js package ships with a web viewer (<a href="https://mozilla.github.io/pdf.js/web/viewer.html">demo</a>) For an alternative approach to PDF rendering with Vue, check out the <a href="https://github.com/FranckFreiburger/vue-pdf">vue-pdf</a> package.</p>
+<p>Mozilla&#39;s PDF.js package ships with a web viewer (<a href="https://mozilla.github.io/pdf.js/web/viewer.html" target="_blank" rel="noopener noreferrer">demo</a>) For an alternative approach to PDF rendering with Vue, check out the <a href="https://github.com/FranckFreiburger/vue-pdf" target="_blank" rel="noopener noreferrer">vue-pdf</a> package.</p>
 
       <h3 id="an-incomplete-intro-to-pdf-js" class="title title-h3">
         <a name="an-incomplete-intro-to-pdf-js" class="anchor" href="#an-incomplete-intro-to-pdf-js">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -138,7 +138,7 @@ import(&#39;pdfjs-dist/webpack&#39;).then(pdfjs =&gt; {
 
 <p>The code above dynamically imports the PDF.js distribution with <code>import(&#39;pdfjs/dist&#39;)</code>. Webpack splits the PDF.js code out into a bundle and loads it asynchronously only when that line is executed in the browser. This expression returns a promise that resolves with the PDF.js module when the bundle is successfully loaded and evaluated. With a reference to the modules, <code>pdfjs</code> we can now exercise the PDF.js document API.</p>
 
-<p>The expression <code>pdjs.getDocument(&#39;url-to-pdf&#39;)</code> also returns a promise which resolves when the document is loaded and parsed by the PDF.js core layer. This promise resolves to an instance of <a href="https://mozilla.github.io/pdf.js/api/draft/PDFDocumentProxy.html"><code>PDFDocumentProxy</code></a>, which we can use to retrieve additional data from the PDF document. We used the <code>PDFDocumentProxy#numPages</code> attribute to build a number range of all the pages (using lodash <code>range</code>) and build an array of promises representing requests for each of the pages of the document returned by <code>PDFDocumentProxy#getPage(pageNumber)</code>. The key here to loading all pages at once is using <code>Promise.all</code> to resolve when all pages are retrieved as <a href="https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html">PDFPageProxy</a> objects.</p>
+<p>The expression <code>pdjs.getDocument(&#39;url-to-pdf&#39;)</code> also returns a promise which resolves when the document is loaded and parsed by the PDF.js core layer. This promise resolves to an instance of <a href="https://mozilla.github.io/pdf.js/api/draft/PDFDocumentProxy.html" target="_blank" rel="noopener noreferrer"><code>PDFDocumentProxy</code></a>, which we can use to retrieve additional data from the PDF document. We used the <code>PDFDocumentProxy#numPages</code> attribute to build a number range of all the pages (using lodash <code>range</code>) and build an array of promises representing requests for each of the pages of the document returned by <code>PDFDocumentProxy#getPage(pageNumber)</code>. The key here to loading all pages at once is using <code>Promise.all</code> to resolve when all pages are retrieved as <a href="https://mozilla.github.io/pdf.js/api/draft/PDFPageProxy.html" target="_blank" rel="noopener noreferrer">PDFPageProxy</a> objects.</p>
 
 <p>Finally, for each page object, we create a separate <code>canvas</code> element and trigger the <code>PDFPageProxy#render</code> method, which returns another promise and accepts options for a canvas context and viewport. This render method is responsible for drawing the PDF data into the canvas element asynchronously while we append the canvas elements to <code>document.body</code>.</p>
 
@@ -313,7 +313,7 @@ export default {
   // ...
 </code></pre>
 
-<p>To render a PDF to <code>&lt;canvas&gt;</code> with an acceptable resolution, we can take advantage of a browser property called <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio"><code>window.devicePixelRatio</code></a>. This value represents the ratio of screen pixels to CSS pixels. Given a hi-resolution display with a <code>devicePixelRatio</code> of <code>2</code>, we&#39;d want to give the canvas initial width and height attributes that are two times greater than its corresponding width and height in CSS. Otherwise, rendering our PDF pixels to canvas may appear blurry.</p>
+<p>To render a PDF to <code>&lt;canvas&gt;</code> with an acceptable resolution, we can take advantage of a browser property called <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio" target="_blank" rel="noopener noreferrer"><code>window.devicePixelRatio</code></a>. This value represents the ratio of screen pixels to CSS pixels. Given a hi-resolution display with a <code>devicePixelRatio</code> of <code>2</code>, we&#39;d want to give the canvas initial width and height attributes that are two times greater than its corresponding width and height in CSS. Otherwise, rendering our PDF pixels to canvas may appear blurry.</p>
 
 <p>When the <code>&lt;PDFPage&gt;</code> component is created, we can access the <code>viewport</code> property of the <code>page</code> object, via <code>PDFPageProxy#getViewport</code>, to obtain the pixel width and height of the PDF. These are the width and height attributes of the <code>&lt;canvas&gt;</code> element. For the actual size of the <code>&lt;canvas&gt;</code>, we&#39;ll use CSS attributes.</p>
 
@@ -466,10 +466,14 @@ export default {
 <p>In the next post, we&#39;ll look at adding some conditional rendering; since all pages aren&#39;t visible when the document is initially loaded, Vue can help us design a system that only fetches and renders PDF pages when scrolled into view.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-        Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
-      Published on Jun 28, 2018
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2018-06-28-building-a-pdf-viewer-with-vue-part-1.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
+        Published on Jun 28, 2018
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -612,7 +616,7 @@ export default {
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>

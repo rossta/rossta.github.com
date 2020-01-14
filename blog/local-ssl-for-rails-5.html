@@ -22,9 +22,9 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/assets/css/app.chunk.12f2445f15baf45589fb.css' rel='stylesheet'></link>
+    <link href='/assets/css/app.chunk.0c22780552a4c50dfada.css' rel='stylesheet'></link>
   </head>
-  <body id="application" class="leading-normal text-gray-900">
+  <body id="application" class="leading-relaxed">
     <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
   <div class="flex justify-between items-center px-4 py-3 sm:p-0">
     <h1 class="text-2xl font-bold">
@@ -63,7 +63,7 @@
 
 <p>In this post I&#39;ll demonstrate how I set up my Rails 5 app for local development and system tests over SSL with wildcard domains.</p>
 
-<p><a href="https://github.com/rossta/local-ssl-demo-rails"><img src="/assets/images/screenshots/screenshot-local-ssl-demo.png" alt="Local Rails SSL Demo" /></a></p>
+<p><a href="https://github.com/rossta/local-ssl-demo-rails" target="_blank" rel="noopener noreferrer"><img src="/assets/images/screenshots/screenshot-local-ssl-demo.png" alt="Local Rails SSL Demo" /></a></p>
 
       <h3 id="why-local-ssl-" class="title title-h3">
         <a name="why-local-ssl-" class="anchor" href="#why-local-ssl-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -92,7 +92,7 @@
 <li>Third-party integrations, possibly OAuth-based, that require SSL</li>
 </ol>
 
-<p>One knock against local SSL is that it has been considered a pain to set up. This post and the companion gitub repo, <a href="https://github.com/rossta/local-ssl-demo-rails">rossta/local-ssl-demo-rails</a>, is intended to help make that task a little easier for Rails apps.</p>
+<p>One knock against local SSL is that it has been considered a pain to set up. This post and the companion gitub repo, <a href="https://github.com/rossta/local-ssl-demo-rails" target="_blank" rel="noopener noreferrer">rossta/local-ssl-demo-rails</a>, is intended to help make that task a little easier for Rails apps.</p>
 
       <h3 id="how-does-it-work-" class="title title-h3">
         <a name="how-does-it-work-" class="anchor" href="#how-does-it-work-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -105,19 +105,19 @@
 <p>The general workflow I use for setting up my Rails applications for local SSL is as follows:</p>
 
 <ol>
-<li><a href="#resolve-a-domain-name-to-localhost">Resolve a domain to localhost</a></li>
-<li><a href="#create-a-self-signed-certificate">Create a self-signed SSL certificate</a></li>
-<li><a href="#trust-the-certificate">Instruct browsers to trust the certificate</a></li>
-<li><a href="#configure-the-local-server">Configure the local server to use the cerficate</a></li>
+<li><a href="#resolve-a-domain-name-to-localhost" target="_blank" rel="noopener noreferrer">Resolve a domain to localhost</a></li>
+<li><a href="#create-a-self-signed-certificate" target="_blank" rel="noopener noreferrer">Create a self-signed SSL certificate</a></li>
+<li><a href="#trust-the-certificate" target="_blank" rel="noopener noreferrer">Instruct browsers to trust the certificate</a></li>
+<li><a href="#configure-the-local-server" target="_blank" rel="noopener noreferrer">Configure the local server to use the cerficate</a></li>
 </ol>
 
 <p>There are plenty of reasonable alternatives to this workflow.</p>
 
-<p>Jed Schmidt&#39;s excellent <a href="https://gist.github.com/jed/6147872">How to set up stress-free SSL on an OSX development machine</a> is also worth checking out; it walks through a similar setup for a Node.js server.</p>
+<p>Jed Schmidt&#39;s excellent <a href="https://gist.github.com/jed/6147872" target="_blank" rel="noopener noreferrer">How to set up stress-free SSL on an OSX development machine</a> is also worth checking out; it walks through a similar setup for a Node.js server.</p>
 
-<p>You could, instead of trusting certificates for each app you develop, create your own <a href="https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/">SSL certificate authority</a>. The setup steps are more invovled, but once your local CA is trusted by browsers, you can skip the process of manually trusting each cert.</p>
+<p>You could, instead of trusting certificates for each app you develop, create your own <a href="https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/" target="_blank" rel="noopener noreferrer">SSL certificate authority</a>. The setup steps are more invovled, but once your local CA is trusted by browsers, you can skip the process of manually trusting each cert.</p>
 
-<p>Or, use <a href="https://ngrok.com">ngrok</a>, a zero-configuration service for running your localhost server over a secure URL. While this approach may work well for local development, I currently don&#39;t know of anyone using it for tests or CI environments. Learn more on setting up ngrok from <a href="https://www.remotesynthesis.com/blog/running-ssl-localhost">this post by Brian Rinaldi</a>.</p>
+<p>Or, use <a href="https://ngrok.com" target="_blank" rel="noopener noreferrer">ngrok</a>, a zero-configuration service for running your localhost server over a secure URL. While this approach may work well for local development, I currently don&#39;t know of anyone using it for tests or CI environments. Learn more on setting up ngrok from <a href="https://www.remotesynthesis.com/blog/running-ssl-localhost" target="_blank" rel="noopener noreferrer">this post by Brian Rinaldi</a>.</p>
 
       <h3 id="resolve-a-domain-name-to-localhost" class="title title-h3">
         <a name="resolve-a-domain-name-to-localhost" class="anchor" href="#resolve-a-domain-name-to-localhost">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -251,7 +251,7 @@ mv localhost.ross.key localhost.ross.crt config/ssl
         Configure the local server
       </h3>
     
-<p>Now that we have a trusted certificate, we can configure Puma with our key/certificate pair to serve local SSL requests for both <code>development</code> and <code>test</code> on our custom domain. (You could also use Nginx to proxy local requests and <a href="http://nginx.org/en/docs/http/configuring_https_servers.html">set up your Nginx config with your SSL certificate</a>).</p>
+<p>Now that we have a trusted certificate, we can configure Puma with our key/certificate pair to serve local SSL requests for both <code>development</code> and <code>test</code> on our custom domain. (You could also use Nginx to proxy local requests and <a href="http://nginx.org/en/docs/http/configuring_https_servers.html" target="_blank" rel="noopener noreferrer">set up your Nginx config with your SSL certificate</a>).</p>
 
       <h4 id="in-development" class="title title-h4">
         <a name="in-development" class="anchor" href="#in-development">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -280,7 +280,7 @@ mv path/to/localhost.ross.{key,crt} config.ssl
 <pre><code class="bash">rails s -b &#39;ssl://127.0.0.1:$PORT?key=config/ssl/localhost.ross.key&amp;cert=config/ssl/localhost.ross.crt&#39;
 </code></pre>
 
-<p>Puma also provides a hook to <a href="https://github.com/puma/puma/blob/395337df4a3b27cc14eeab048016fb1ee85d2f83/examples/config.rb#L79">set this binding in the config file</a>.</p>
+<p>Puma also provides a hook to <a href="https://github.com/puma/puma/blob/395337df4a3b27cc14eeab048016fb1ee85d2f83/examples/config.rb#L79" target="_blank" rel="noopener noreferrer">set this binding in the config file</a>.</p>
 
 <p>If you&#39;re using Webpack with the <code>webpacker</code> gem to bundle javascript and other static assets, you will want to connect to the <code>webpack-dev-server</code> in development over SSL. This can be done in the <code>config/webpacker.yml</code> file:</p>
 
@@ -302,9 +302,9 @@ development:
         In tests
       </h4>
     
-<p>Using our SSL certificates for local Rails testing is mostly relevant for system tests (aka acceptance or feature tests) where we would typically use Capybara to launch a real app server. Setting up Capybara to handle SSL requests has been painful, possibly involving some <a href="https://gist.github.com/Papierkorb/1787d28874443ec760d1">server monkeypatching</a> to wire everything up.</p>
+<p>Using our SSL certificates for local Rails testing is mostly relevant for system tests (aka acceptance or feature tests) where we would typically use Capybara to launch a real app server. Setting up Capybara to handle SSL requests has been painful, possibly involving some <a href="https://gist.github.com/Papierkorb/1787d28874443ec760d1" target="_blank" rel="noopener noreferrer">server monkeypatching</a> to wire everything up.</p>
 
-<p>As of Capybara <code>&gt;= 3.1.0</code>, it&#39;s much easier to pass configuration to the underlying Puma server to include our SSL certificates (<a href="https://github.com/teamcapybara/capybara/pull/2028">commit</a>) using a binding similar to our startup command in development:</p>
+<p>As of Capybara <code>&gt;= 3.1.0</code>, it&#39;s much easier to pass configuration to the underlying Puma server to include our SSL certificates (<a href="https://github.com/teamcapybara/capybara/pull/2028" target="_blank" rel="noopener noreferrer">commit</a>) using a binding similar to our startup command in development:</p>
 
 <pre><code class="ruby">Capybara.server = :puma, server: {
   Host: &quot;ssl://#{Capybara.server_host}?key=config/ssl/localhost.ross.key&amp;cert=config/ssl/localhost.ross.crt&quot;
@@ -374,7 +374,7 @@ end
         Requirements
       </h3>
     
-<p>Below is a list of binaries and gems with the versions used in for the <a href="https://github.com/rossta/local-ssl-demo-rails">demo app</a>. It may be possible to make this work with other relatively recent versions of these tools, though your mileage may vary.</p>
+<p>Below is a list of binaries and gems with the versions used in for the <a href="https://github.com/rossta/local-ssl-demo-rails" target="_blank" rel="noopener noreferrer">demo app</a>. It may be possible to make this work with other relatively recent versions of these tools, though your mileage may vary.</p>
 
 <pre><code>$ openssl version
 LibreSSL 2.2.7
@@ -409,7 +409,7 @@ group :test do
 end
 </code></pre>
 
-<p>Other versions of these tools may work fine. For example, Puma server configuration was added to Capybara as of <code>3.1.0</code> and <code>chromedriver</code> added support for the <code>acceptInsecureCerts</code> flag in 2.35/Chrome 65. Just be aware that possible issues may arise otherwise, as <a href="https://stackoverflow.com/questions/51881206/using-acceptinsecurecerts-with-headless-chrome-and-selenium-webdriver-macos-ra">I found out</a> by inadvertently using an older version of <code>chromedriver</code>.</p>
+<p>Other versions of these tools may work fine. For example, Puma server configuration was added to Capybara as of <code>3.1.0</code> and <code>chromedriver</code> added support for the <code>acceptInsecureCerts</code> flag in 2.35/Chrome 65. Just be aware that possible issues may arise otherwise, as <a href="https://stackoverflow.com/questions/51881206/using-acceptinsecurecerts-with-headless-chrome-and-selenium-webdriver-macos-ra" target="_blank" rel="noopener noreferrer">I found out</a> by inadvertently using an older version of <code>chromedriver</code>.</p>
 
 <p>I recommend the <code>webdrivers</code> gem as it will install the lastest driver binaries as needed on your behalf, including <code>chromedriver</code> for Chrome and <code>geckodriver</code> for Firefox. Many other posts may instruct you to install <code>chromedriver</code> with Homebrew or point to the <code>chromedriver-helper</code> gem; these may work just fine for you, though it will be up to you to keep the drivers updated.</p>
 
@@ -424,9 +424,13 @@ end
 <p>If you&#39;re onboard with &quot;SSL everywhere&quot;, let that include <code>localhost</code> as well. Getting SSL set up for Rails development and test requires a bit of effort, but it&#39;s easier than ever before with the introduction of Rails system tests and recent improvements to Puma, Capybara, Selenium, and the Chrome and Firefox web drivers.</p>
 
   </article>
-  <section class="mb-12 italic font-light">
-    <p>
-      Published on Sep  5, 2018
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2018-09-05-local-ssl-for-rails-5.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Sep  5, 2018
+      </span>
     </p>
   </section>
   <section class="signup-form-standalone hero">
@@ -572,7 +576,7 @@ end
       </section>
     </section>
     <p class="copyright text-center text-xs font-light">
-      © 2019 Ross Kaffenberger. All rights reserved.
+      © 2020 Ross Kaffenberger. All rights reserved.
     </p>
   </div>
 </footer>
