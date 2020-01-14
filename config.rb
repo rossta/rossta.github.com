@@ -75,7 +75,6 @@ configure(:build) do
   set(:port, nil)
   set(:google_analytics_id, "UA-16458563-2")
   set(:mailchimp_form_id, "96030b0bda")
-  set(:segmentio_id, "NdBtrprkAGAjQryMShljRdVf90saElAU")
   activate(:gzip, exts: %w[.js .css .html .htm .svg .ttf .otf .woff .eot])
 end
 
@@ -85,7 +84,6 @@ configure(:development) do
   set(:port, 4567)
   set(:google_analytics_id, "UA-xxxxxxxx-x")
   set(:mailchimp_form_id, "a57e354058")
-  set(:segmentio_id, "7KlQZWWPWr2MDj4pWepIF7O95JPZ9wfp")
 end
 
 ###
