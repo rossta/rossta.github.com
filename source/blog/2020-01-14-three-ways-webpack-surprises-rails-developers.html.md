@@ -1,7 +1,7 @@
 ---
 title: 3 ways Webpack surprises web developers
 author: Ross Kaffenberger
-published: false
+published: true
 summary: Especially for Rails devs switching from the asset pipeline
 description: When I first started working with Webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.
 pull_image: 'blog/stock/aaron-burden-balloons-unsplash.jpg'
@@ -19,9 +19,9 @@ In the years since, I've followed GitHub issues and StackOverflow posts and witn
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Webpack is now the default JavaScript compiler for the upcoming Rails 6 🎉 <a href="https://t.co/LJzCSoPfCV">https://t.co/LJzCSoPfCV</a></p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/1046634277985611776?ref_src=twsrc%5Etfw">October 1, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-As for the audience for this post, you might know, generally, why use Webpack or a similar bundler at all, but for more on that, I recommend [The Many Jobs of JS Build Tools](https://www.swyx.io/writing/jobs-of-js-build-tools/) and [Webpack from Nothing: What problem are we solving?](https://what-problem-does-it-solve.com/webpack/index.html). For a rigorous technical overview of the project, I suggest [the Webpack docs](https://webpack.js.org/); they have gotten quite good.
+The intended audience for this post has a general notion of "why use Webpack" or "why use an asset bundler", but for more on that, I recommend [The Many Jobs of JS Build Tools](https://www.swyx.io/writing/jobs-of-js-build-tools/) and [Webpack from Nothing: What problem are we solving?](https://what-problem-does-it-solve.com/webpack/index.html). For a rigorous technical overview of the project, I suggest [the Webpack docs](https://webpack.js.org/); they have gotten quite good.
 
-Today, we're going to look at three common surprises web developers face when learning Webpack: why global variables don't work the way you might think, how Webpack treats everything as a JavaScript module, and the big learning curve for configuring Webpack effectively.
+For this post, we're going to look at three common surprises web developers face when learning Webpack: why using global variables doesn't behave the way you might think, how Webpack treats everything as a JavaScript module, and the big learning curve for configuring Webpack effectively.
 
 ### 1. Global variables are not your friend
 
@@ -47,9 +47,9 @@ And for better or worse, every Rails I've worked on, and it's been dozens over t
 
 This approach is typical with old-school bundlers like the Rails asset pipeline because they concatenate JavaScript dependencies in the global scope. This, despite the general notion that [global variables are bad](https://stackoverflow.com/questions/2613310/ive-heard-global-variables-are-bad-what-alternative-solution-should-i-use). Notably, the Rails asset pipeline came into existence before the rise of Node.js and, subsequently, formal JavaScript modules, and it never adapted. Many prefer this way of doing things. I still lean on global variables now and then.
 
-Things work differently in Webpack. Webpack does not expose its bundled modules to the global scope by default. To reference code in another module, an explicit import must reference that module's explicit exports. To reference a library, we also may import one or more of its exported modules.
+Things work differently in Webpack. It does not expose its bundled modules to the global scope by default. To reference code in another module, it expects explicit imports that reference that module's explicit exports. The scope in which modules are evaluated is local, not global, i.e., the contents of each file are wrapped in a function.
 
-Things are little trickier if we expect to access JavaScript code from HTML. Options include manually attaching variables to the global scope, e.g. `window.$ = requre('jquery')` or modify the Webpack configuration to "expose" variables globally, as is demonstrated in this [StackOverflow post](https://stackoverflow.com/questions/58580996/unable-to-access-jquery-from-my-views-on-ror/58751163#58751163) (and many others).
+Things are trickier if we expect to access bundled JavaScript from HTML, like `MyApp.fetchPosts()` above. Options include manually attaching variables to the global scope, e.g. `window.$ = require('jquery')` or modify the Webpack configuration to "expose" variables globally, as is demonstrated in this [StackOverflow post](https://stackoverflow.com/questions/58580996/unable-to-access-jquery-from-my-views-on-ror/58751163#58751163) (and many others).
 
 This serves as an illustration of how a legacy practice would be swimming upstream in a Webpacker-enabled app: it takes effort.
 
@@ -85,13 +85,13 @@ In Webpack, global variables are not your friend, my friend.
 
 ### 2. Webpack treats everything as a JavaScript module
 
-All your Webpack bundle source files—JavaScript, CSS, images, fonts, etc.—are treated JavaScript modules.
+Webpack is so committed to its "module bundler" role it treats other static assets, including CSS, images, fonts, etc., as JavaScript modules too.
 
 > Say what?
 
-At first, I was totally confused: how does Webpack produce stylesheets out of JS? how would you render image tag from JavaScript?
+When I first learned this about Webpack, I was totally confused: How does Webpack produce stylesheets out of JS? How would I reference the an image tag's `src` for bundled images? What does it mean to import an _image module_ in JavaScript?
 
-It helps to understand that Webpack must be configured, typically with [loaders](https://webpack.js.org/loaders/) or [plugins](https://webpack.js.org/plugins/), to handle different various files types as modules. How Webpack converts these various asset modules as output depends which loaders are used.
+It helps to understand that Webpack must be configured, typically with [loaders](https://webpack.js.org/loaders/) or [plugins](https://webpack.js.org/plugins/), to handle different various files types as modules. How Webpack processes various file types as output depends which loaders are used.
 
 Many projects integrate with Babel to process JavaScript files written with ES2015+ syntax. CSS files might be bundled as JavaScript Blob objects that are dynamically inserted in the DOM; otherwise it can be extracted into a CSS stylesheet a side-effect of module compilation.
 
