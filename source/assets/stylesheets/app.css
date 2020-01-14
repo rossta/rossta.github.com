@@ -39,6 +39,9 @@ h2 {
 h3 {
   @apply text-lg;
 }
+h4, h5 {
+  @apply font-bold;
+}
 
 @screen sm {
   h1 {
