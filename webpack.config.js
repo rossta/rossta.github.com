@@ -25,8 +25,8 @@ module.exports = {
   },
 
   output: {
-    path: `${__dirname}/.tmp/dist/assets`,
-    publicPath: '/assets/',
+    path: `${__dirname}/.tmp/dist`,
+    publicPath: '/',
     filename: 'js/[name].[contenthash].js',
     chunkFilename: 'js/[name].chunk.[contenthash].js',
   },

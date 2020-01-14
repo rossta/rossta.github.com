@@ -136,7 +136,7 @@ helpers do
   end
 
   def webpack_manifest
-    manifest_path = ".tmp/dist/assets/manifest.json"
+    manifest_path = ".tmp/dist/manifest.json"
 
     unless File.exist?(manifest_path)
       warn("Could not read manifest json!!")
