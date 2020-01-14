@@ -27,7 +27,7 @@
 
 &lt;p&gt;When I first started working with Webpack, I didn&amp;#39;t realize how under-prepared I was. I was tasked with &lt;a href="/blog/from-sprockets-to-webpack.html"&gt;integrating Webpack into a large Rails app&lt;/a&gt; and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience with the Rails asset pipeline. Many of these assumptions turned out to be wrong. This was frustrating and humbling.&lt;/p&gt;
 
-&lt;p&gt;And after spending the last month answering Webpack questions on StackOverflow, I&amp;#39;ve come across plenty of folks going through some of the same mental hurdles I&amp;#39;ve been through.&lt;/p&gt;
+&lt;p&gt;And after spending the last month answering Webpack questions on StackOverflow, I&amp;#39;ve come across plenty of folks going through some of the same mental hurdles I&amp;#39;ve experienced. I came away with some perspective on what about Webpack most commonly trips up developers.&lt;/p&gt;
 
 &lt;p&gt;The intended audience for this post has a general notion of &amp;quot;why use Webpack&amp;quot; or &amp;quot;why use an asset bundler&amp;quot;, but for more on that, I recommend &lt;a href="https://www.swyx.io/writing/jobs-of-js-build-tools/" target="_blank" rel="noopener noreferrer"&gt;The Many Jobs of JS Build Tools&lt;/a&gt; and &lt;a href="https://what-problem-does-it-solve.com/webpack/index.html" target="_blank" rel="noopener noreferrer"&gt;Webpack from Nothing: What problem are we solving?&lt;/a&gt;. For a rigorous technical overview of the project, I suggest &lt;a href="https://webpack.js.org/" target="_blank" rel="noopener noreferrer"&gt;the Webpack docs&lt;/a&gt;; they have gotten quite good.&lt;/p&gt;
 
