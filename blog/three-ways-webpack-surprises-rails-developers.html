@@ -190,17 +190,17 @@
 
 <p>The mixing of CSS bundled in JavaScript and treated as JavaScript modules has isn&#39;t strictly necessary, but it most certainly a mental leap for the uninitiated.</p>
 
-      <h3 id="3-webpack-configuration-has-a-high-barrier-to-entry" class="title title-h3">
-        <a name="3-webpack-configuration-has-a-high-barrier-to-entry" class="anchor" href="#3-webpack-configuration-has-a-high-barrier-to-entry">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+      <h3 id="3-webpack-configuration-is-extreme-pluggable" class="title title-h3">
+        <a name="3-webpack-configuration-is-extreme-pluggable" class="anchor" href="#3-webpack-configuration-is-extreme-pluggable">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
 </a>
-        3. Webpack configuration has a high barrier to entry
+        3. Webpack configuration is extreme pluggable
       </h3>
     
-<p><blockquote class="twitter-tweet"><p lang="en" dir="ltr">I continue to be amazed at how many learners seem to almost deliberately avoid reading the actual official docs for the tools they&#39;re trying to use. I keep seeing folks asking for Udemy courses and &quot;best tutorials&quot; and stuff.<br><br>Why do people avoid reading actual docs?</p>&mdash; Mark Erikson (@acemarke) <a href="https://twitter.com/acemarke/status/1213898963679633411?ref_src=twsrc%5Etfw">January 5, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+<p>There&#39;s a reason Webpack configuration has such a high barrier to entry: Webpack is the ultimate delegator.</p>
 
-<p>My best guess about why we don&#39;t read docs is that we&#39;re easily distracted. Too many other things competing for our attention. And, as is especially true in this case, most of us would rather spend our time focused on our apps than on our build tools.</p>
+<p><blockquote class="twitter-tweet"><p lang="en" dir="ltr">I continue to be amazed at how many learners seem to almost deliberately avoid reading the actual official docs for the tools they&#39;re trying to use. I keep seeing folks asking for Udemy courses and &quot;best tutorials&quot; and stuff.<br><br>Why do people avoid reading actual docs?</p>&mdash; Mark Erikson (@acemarke) <a href="https://twitter.com/acemarke/status/1213898963679633411?ref_src=twsrc%5Etfw">January 5, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
 <p>Coming from Rails, which famously values &quot;convention over configuration&quot;, the ergonomics of setting up a Webpack configuration cause discomfort. It aims to be extremely flexible and extensible; to that end, it succeeds superbly. To serve this goal, Webpack provides a large array of <a href="https://webpack.js.org/configuration/" target="_blank" rel="noopener noreferrer">configuration options</a>. On top of that, most Webpack configurations bring in a number of loader and plugins, each of which have their own configuration requirements.</p>
 
