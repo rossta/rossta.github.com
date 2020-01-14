@@ -5,10 +5,186 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2019-12-18T00:00:00+00:00</updated>
+  <updated>2020-01-14T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>3 ways Webpack surprises web developers</title>
+    <link rel="alternate" href="/blog/three-ways-webpack-surprises-rails-developers.html"/>
+    <id>/blog/three-ways-webpack-surprises-rails-developers.html</id>
+    <published>2020-01-14T00:00:00+00:00</published>
+    <updated>2020-01-14T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;When I first started working with Webpack, I didn't realize how under-prepared I was. I was tasked with &lt;a href="/blog/from-sprockets-to-webpack.html"&gt;integrating Webpack into a large Rails app&lt;/a&gt; and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;When I first started working with Webpack, I didn&amp;#39;t realize how under-prepared I was. I was tasked with &lt;a href="/blog/from-sprockets-to-webpack.html"&gt;integrating Webpack into a large Rails app&lt;/a&gt; and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience with the Rails asset pipeline. Many of these assumptions turned out to be wrong. This was frustrating and humbling.&lt;/p&gt;
+
+&lt;p&gt;In the years since, I&amp;#39;ve followed GitHub issues and StackOverflow posts and witnessed other developers going through the same frustrations I did. Following this announcement from &lt;a href="https://twitter.com/dhh" target="_blank" rel="noopener noreferrer"&gt;@dhh&lt;/a&gt;, I expect there will be more now many Rails developers will likely be adopting Webpack in their apps:&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Webpack is now the default JavaScript compiler for the upcoming Rails 6 🎉 &lt;a href="https://t.co/LJzCSoPfCV"&gt;&lt;a href="https://t.co/LJzCSoPfCV" target="_blank" rel="noopener noreferrer"&gt;https://t.co/LJzCSoPfCV&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&amp;mdash; DHH (@dhh) &lt;a href="https://twitter.com/dhh/status/1046634277985611776?ref_src=twsrc%5Etfw"&gt;October 1, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;The intended audience for this post has a general notion of &amp;quot;why use Webpack&amp;quot; or &amp;quot;why use an asset bundler&amp;quot;, but for more on that, I recommend &lt;a href="https://www.swyx.io/writing/jobs-of-js-build-tools/" target="_blank" rel="noopener noreferrer"&gt;The Many Jobs of JS Build Tools&lt;/a&gt; and &lt;a href="https://what-problem-does-it-solve.com/webpack/index.html" target="_blank" rel="noopener noreferrer"&gt;Webpack from Nothing: What problem are we solving?&lt;/a&gt;. For a rigorous technical overview of the project, I suggest &lt;a href="https://webpack.js.org/" target="_blank" rel="noopener noreferrer"&gt;the Webpack docs&lt;/a&gt;; they have gotten quite good.&lt;/p&gt;
+
+&lt;p&gt;For this post, we&amp;#39;re going to look at three common surprises web developers face when learning Webpack: why using global variables doesn&amp;#39;t behave the way you might think, how Webpack treats everything as a JavaScript module, and the big learning curve for configuring Webpack effectively.&lt;/p&gt;
+
+      &lt;h3 id="1-global-variables-are-not-your-friend" class="title title-h3"&gt;
+        &lt;a name="1-global-variables-are-not-your-friend" class="anchor" href="#1-global-variables-are-not-your-friend"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        1. Global variables are not your friend
+      &lt;/h3&gt;
+    
+&lt;p&gt;I learned to program using script tags and html files loaded directly in the browser. I tied everything together with global variables. It was great.&lt;/p&gt;
+
+&lt;p&gt;And for better or worse, every Rails I&amp;#39;ve worked on, and it&amp;#39;s been dozens over the years, has relied on global variables and script tag snippets to make things work. Here is a basic example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;!-- app/view/posts/index.html.erb --&amp;gt;
+&amp;lt;%= @posts.each do |post| %&amp;gt;
+  &amp;lt;!-- ... --&amp;gt;
+&amp;lt;% end %&amp;gt;
+&amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;button--show-more&amp;quot;&amp;gt;Show more&amp;lt;/a&amp;gt;
+
+&amp;lt;script&amp;gt;
+  $(&amp;#39;.button--show-more&amp;#39;).click(function() {
+    MyApp.fetchPosts() // etc...
+  })
+
+  // MyApp and $ are global variables
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This approach is typical with old-school bundlers like the Rails asset pipeline because they concatenate JavaScript dependencies in the global scope. This, despite the general notion that &lt;a href="https://stackoverflow.com/questions/2613310/ive-heard-global-variables-are-bad-what-alternative-solution-should-i-use" target="_blank" rel="noopener noreferrer"&gt;global variables are bad&lt;/a&gt;. Notably, the Rails asset pipeline came into existence before the rise of Node.js and, subsequently, formal JavaScript modules, and it never adapted. Many prefer this way of doing things. I still lean on global variables now and then.&lt;/p&gt;
+
+&lt;p&gt;Things work differently in Webpack. It does not expose its bundled modules to the global scope by default. To reference code in another module, it expects explicit imports that reference that module&amp;#39;s explicit exports. The scope in which modules are evaluated is local, not global, i.e., the contents of each file are wrapped in a function.&lt;/p&gt;
+
+&lt;p&gt;Things are trickier if we expect to access bundled JavaScript from HTML, like &lt;code&gt;MyApp.fetchPosts()&lt;/code&gt; above. Options include manually attaching variables to the global scope, e.g. &lt;code&gt;window.$ = require(&amp;#39;jquery&amp;#39;)&lt;/code&gt; or modify the Webpack configuration to &amp;quot;expose&amp;quot; variables globally, as is demonstrated in this &lt;a href="https://stackoverflow.com/questions/58580996/unable-to-access-jquery-from-my-views-on-ror/58751163#58751163" target="_blank" rel="noopener noreferrer"&gt;StackOverflow post&lt;/a&gt; (and many others).&lt;/p&gt;
+
+&lt;p&gt;This serves as an illustration of how a legacy practice would be swimming upstream in a Webpacker-enabled app: it takes effort.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;But why?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+      &lt;h4 id="webpack-is-a-module-bundler" class="title title-h4"&gt;
+        &lt;a name="webpack-is-a-module-bundler" class="anchor" href="#webpack-is-a-module-bundler"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Webpack is a module bundler
+      &lt;/h4&gt;
+    
+&lt;p&gt;Webpack describes itself as &lt;a href="https://webpack.js.org/conceptsl" target="_blank" rel="noopener noreferrer"&gt;&amp;quot;a static module bundler for modern JavaScript applications&amp;quot;&lt;/a&gt;. For developers used to unfettered access to JavaScript global scope, the switch to working in a modular system comes as a surprise. I argue that adopting Webpack effectively means understanding JavaScript modules.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;So what then is a JavaScript module?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For a fantastic introduction to JavaScript modules, I suggest Preethi Kasireddy&amp;#39;s &lt;a href="https://www.freecodecamp.org/news/javascript-modules-a-beginner-s-guide-783f7d7a5fcc/" target="_blank" rel="noopener noreferrer"&gt;Javascript Modules: A Beginner&amp;#39;s Guide&lt;/a&gt; on freeCodeCamp. I&amp;#39;ll attempt to summarize.&lt;/p&gt;
+
+&lt;p&gt;Generally speaking, a JavaScript module is a self-contained, reusable piece of code. This definition though is inadequate to capture the behavior of various flavors of JavaScript modules, ranging from simple patterns to formal systems supported by common JavaScript runtimes.&lt;/p&gt;
+
+&lt;p&gt;In recent years, several popular JavaScript module definitions have become widely adopted, each with their own characteristics, including &lt;a href="https://requirejs.org/docs/commonjs.html" target="_blank" rel="noopener noreferrer"&gt;CommonJS&lt;/a&gt;, &lt;a href="https://requirejs.org/docs/whyamd.html#amd" target="_blank" rel="noopener noreferrer"&gt;Asynchronous Module Definition&lt;/a&gt; (AMD), and &lt;a href="https://exploringjs.com/es6/ch_modules.html" target="_blank" rel="noopener noreferrer"&gt;EcmaScript (ES) Modules&lt;/a&gt; to name a few.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/require-everything.png" alt="How did the big bang happen? require('everything')" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Webpack can be configured to recognize any of these module formats.&lt;/p&gt;
+
+&lt;p&gt;Webpack transpiles your application&amp;#39;s source files into JavaScript modules the browser can understand. It adds code to your bundle to tie these modules together. This has implications for how developers write code which means the old-school patterns that worked with the Rails asset pipeline may not work in the Webpack context.&lt;/p&gt;
+
+      &lt;h4 id="avoid-legacy-code-if-you-can" class="title title-h4"&gt;
+        &lt;a name="avoid-legacy-code-if-you-can" class="anchor" href="#avoid-legacy-code-if-you-can"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Avoid legacy code if you can
+      &lt;/h4&gt;
+    
+&lt;p&gt;&lt;a href="https://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack" target="_blank" rel="noopener noreferrer"&gt;Some&lt;/a&gt; &lt;a href="https://stackoverflow.com/questions/59042437/gmaps-with-rails-6-webpack" target="_blank" rel="noopener noreferrer"&gt;of the&lt;/a&gt; &lt;a href="https://stackoverflow.com/questions/59670743/leaflet-with-webpack-in-rails-6-l-timeline-is-not-a-function" target="_blank" rel="noopener noreferrer"&gt;most&lt;/a&gt; &lt;a href="https://stackoverflow.com/questions/40575637/how-to-use-webpack-with-google-maps-api" target="_blank" rel="noopener noreferrer"&gt;frequent&lt;/a&gt; Webpack issues that pop up on StackOverflow highlight this disparity between the context in which Webpack works best and the context for which legacy code was written.&lt;/p&gt;
+
+&lt;p&gt;Consider any jQuery plugin in your app that&amp;#39;s more than a few years old; any one of them may not play nice with Webpack. The plugin system in a way is a relic of the pre-module era; attaching to a global variable was the easy way to reuse and reference functionality across the app.&lt;/p&gt;
+
+&lt;p&gt;Many jQuery plugins (or many legacy plugins in general) have been written without awareness of JavaScript modules and assume execution within the global scope. Be ready to weigh the tradeoff of learning how to configure Webpack to play nicely with legacy code or replace it with something else altogether.&lt;/p&gt;
+
+&lt;p&gt;In Webpack, global variables are not your friend, my friend.&lt;/p&gt;
+
+      &lt;h3 id="2-webpack-treats-everything-as-a-javascript-module" class="title title-h3"&gt;
+        &lt;a name="2-webpack-treats-everything-as-a-javascript-module" class="anchor" href="#2-webpack-treats-everything-as-a-javascript-module"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        2. Webpack treats everything as a JavaScript module
+      &lt;/h3&gt;
+    
+&lt;p&gt;Webpack is so committed to its &amp;quot;module bundler&amp;quot; role it treats other static assets, including CSS, images, fonts, etc., as JavaScript modules too.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Say what?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;When I first learned this about Webpack, I was totally confused: How does Webpack produce stylesheets out of JS? How would I reference the an image tag&amp;#39;s &lt;code&gt;src&lt;/code&gt; for bundled images? What does it mean to import an &lt;em&gt;image module&lt;/em&gt; in JavaScript?&lt;/p&gt;
+
+&lt;p&gt;It helps to understand that Webpack must be configured, typically with &lt;a href="https://webpack.js.org/loaders/" target="_blank" rel="noopener noreferrer"&gt;loaders&lt;/a&gt; or &lt;a href="https://webpack.js.org/plugins/" target="_blank" rel="noopener noreferrer"&gt;plugins&lt;/a&gt;, to handle different various files types as modules. How Webpack processes various file types as output depends which loaders are used.&lt;/p&gt;
+
+&lt;p&gt;Many projects integrate with Babel to process JavaScript files written with ES2015+ syntax. CSS files might be bundled as JavaScript Blob objects that are dynamically inserted in the DOM; otherwise it can be extracted into a CSS stylesheet a side-effect of module compilation.&lt;/p&gt;
+
+&lt;p&gt;Webpack only needs one JavaScript file in your source code as an entry point to produce a dependency graph of all the JavaScript, CSS, images, fonts, svg, etc. that you intend to bundle as static assets for the browser.&lt;/p&gt;
+
+&lt;p&gt;An interesting consequence of Webpack putting JavaScript first is there only needs to be one entry point to produce both a JavaScript and a CSS bundle. In the Rails asset pipeline, the JavaScript and CSS source code is kept completely separate:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;app/assets
+├── javascripts
+│   └── application.js   # produces js bundle
+└── stylesheets
+    └── application.css  # produces css bundle
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In Webpack everything hangs off the javascript entry point, or &amp;quot;packs&amp;quot;. So assuming you have statements like &lt;code&gt;import &amp;#39;styles.css&amp;#39;&lt;/code&gt; somewhere in your JavaScript dependency graph, both &lt;code&gt;application.js&lt;/code&gt; and &lt;code&gt;application.css&lt;/code&gt; bundles will be produced.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;app/javascript
+└── packs
+    └── application.js   # produces both js and css bundles
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The mixing of CSS bundled in JavaScript and treated as JavaScript modules has isn&amp;#39;t strictly necessary, but it most certainly a mental leap for the uninitiated.&lt;/p&gt;
+
+      &lt;h3 id="3-webpack-configuration-has-a-high-barrier-to-entry" class="title title-h3"&gt;
+        &lt;a name="3-webpack-configuration-has-a-high-barrier-to-entry" class="anchor" href="#3-webpack-configuration-has-a-high-barrier-to-entry"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        3. Webpack configuration has a high barrier to entry
+      &lt;/h3&gt;
+    
+&lt;p&gt;&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;I continue to be amazed at how many learners seem to almost deliberately avoid reading the actual official docs for the tools they&amp;#39;re trying to use. I keep seeing folks asking for Udemy courses and &amp;quot;best tutorials&amp;quot; and stuff.&lt;br&gt;&lt;br&gt;Why do people avoid reading actual docs?&lt;/p&gt;&amp;mdash; Mark Erikson (@acemarke) &lt;a href="https://twitter.com/acemarke/status/1213898963679633411?ref_src=twsrc%5Etfw"&gt;January 5, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;My best guess about why we don&amp;#39;t read docs is that we&amp;#39;re easily distracted. Too many other things competing for our attention. And, as is especially true in this case, most of us would rather spend our time focused on our apps than on our build tools.&lt;/p&gt;
+
+&lt;p&gt;Coming from Rails, which famously values &amp;quot;convention over configuration&amp;quot;, the ergonomics of setting up a Webpack configuration cause discomfort. It aims to be extremely flexible and extensible; to that end, it succeeds superbly. To serve this goal, Webpack provides a large array of &lt;a href="https://webpack.js.org/configuration/" target="_blank" rel="noopener noreferrer"&gt;configuration options&lt;/a&gt;. On top of that, most Webpack configurations bring in a number of loader and plugins, each of which have their own configuration requirements.&lt;/p&gt;
+
+&lt;p&gt;Faced having to learn Webpack, Babel, PostCSS, not to mention, Webpacker&amp;#39;s abstractions around Webpack, it&amp;#39;s no wonder we&amp;#39;re intimidated. That&amp;#39;s a lot to wrap your head around.&lt;/p&gt;
+
+&lt;p&gt;One of Webpacker&amp;#39;s goals, in a similar fashion to &lt;a href="https://github.com/facebook/create-react-app" target="_blank" rel="noopener noreferrer"&gt;create-react-app&lt;/a&gt; and the &lt;a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer"&gt;vue-cli&lt;/a&gt;, is to provide a Webpack config with sane defaults, i.e. the &amp;quot;convention&amp;quot;. Depending on your project&amp;#39;s needs, these &amp;quot;out-of-the-box&amp;quot; setups may get you quite far. Unfortunately, for any non-trivial modification, like getting a large legacy library to work with global variables or optimizing your build time by splitting out vendor dependencies, developers must be prepared to dive into the documentation and search for answers far and wide on StackOverflow and Medium.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/good-developer-or-good-at-googling.png" alt="I'm not sure if I'm a good developer or good at googling" /&gt;&lt;/p&gt;
+
+      &lt;h3 id="4-bonus-webpack-is-a-powerful-tool" class="title title-h3"&gt;
+        &lt;a name="4-bonus-webpack-is-a-powerful-tool" class="anchor" href="#4-bonus-webpack-is-a-powerful-tool"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        4. Bonus: Webpack is a powerful tool
+      &lt;/h3&gt;
+    
+&lt;p&gt;I&amp;#39;ve grown to love Webpack and, I admit, this appreciation was hard-earned. As I&amp;#39;ve gotten over the initial hurdles of making my Webpack config work for my projects, I&amp;#39;ve come to value a number of Webpack&amp;#39;s benefits, including optimizing bundle size through &lt;a href="https://webpack.js.org/guides/tree-shaking/" target="_blank" rel="noopener noreferrer"&gt;tree-shaking&lt;/a&gt;, code splitting via &lt;a href="https://webpack.js.org/guides/code-splitting/#dynamic-imports" target="_blank" rel="noopener noreferrer"&gt;asynchronous dynamic imports&lt;/a&gt; and the &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer"&gt;split chunks plugin&lt;/a&gt; and support for &lt;a href="https://webpack.js.org/guides/code-splitting/#prefetchingpreloading-modules" target="_blank" rel="noopener noreferrer"&gt;preloading and prefetching&lt;/a&gt;. All of these features are virtually non-existent in the Rails asset pipeline.&lt;/p&gt;
+
+&lt;p&gt;These major strengths of Webpack all boil down to improving user experience: using it effectively can help improve metrics like &lt;a href="https://calendar.perfplanet.com/2017/time-to-interactive-measuring-more-of-the-user-experience/" target="_blank" rel="noopener noreferrer"&gt;Time-to-Interactive&lt;/a&gt; and &lt;a href="https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics#first_paint_and_first_contentful_paint" target="_blank" rel="noopener noreferrer"&gt;First Contentful Paint&lt;/a&gt;. These things matter and are ever more crucial as we lean more heavily on client-side code build rich interfaces delivered across a widening array of devices and networks.&lt;/p&gt;
+
+&lt;p&gt;Webpack receives a fair number of criticisms regarding its complexity and some of its surprising traits, like the ones I highlighted here. To be fair, Webpack aims to solve a complex problem and solves it quite well. Other asset bundlers are worth your consideration, but, arguably, no other bundler has been as successful.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Importing images with Webpacker</title>
     <link rel="alternate" href="/blog/importing-images-with-webpacker.html"/>
@@ -870,222 +1046,6 @@ vue create my-project
 &lt;hr&gt;
 
 &lt;p&gt;So what are you waiting for? Best of luck with your Vue.js journey in the coming year.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Refactoring to nested abstract components</title>
-    <link rel="alternate" href="/blog/refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html"/>
-    <id>/blog/refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html</id>
-    <published>2018-12-30T00:00:00+00:00</published>
-    <updated>2018-12-30T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;To add a preview pane to the Vue.js PDF viewer, I wanted it to have very similar behavior to the document pane. In this post, I'll demonstrate how I extracted this behavior with a set of components, as opposed to alternatives, like a mixin.&lt;/p&gt;
-
-     ...</summary>
-    <content type="html">&lt;p&gt;To add a preview pane to the Vue.js PDF viewer, I wanted it to have very similar behavior to the document pane. In this post, I&amp;#39;ll demonstrate how I extracted this behavior with a set of components, as opposed to alternatives, like a mixin.&lt;/p&gt;
-
-      &lt;h3 id="the-project" class="title title-h3"&gt;
-        &lt;a name="the-project" class="anchor" href="#the-project"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The project
-      &lt;/h3&gt;
-    
-&lt;p&gt;This post is part of ongoing series, &lt;a href="/blog/series/pdf-viewer.html"&gt;Building a PDF Viewer with Vue.js&lt;/a&gt;. The source code for this project is on Github at &lt;a href="https://github.com/rossta/vue-pdfjs-demo" target="_blank" rel="noopener noreferrer"&gt;rossta/vue-pdfjs-demo&lt;/a&gt;. The source code for the behavior described in this post can be found in the &lt;a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-4-shared-behavior-components" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;tutorial/part-4-shared-behavior-components&lt;/code&gt; branch on Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s the latest &lt;a href="https://rossta.net/vue-pdfjs-demo/" target="_blank" rel="noopener noreferrer"&gt;project demo&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h3 id="catching-up-from-last-time" class="title title-h3"&gt;
-        &lt;a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Catching up from last time
-      &lt;/h3&gt;
-    
-&lt;p&gt;So far in &lt;a href="/blog/series/pdf-viewer.html"&gt;this series&lt;/a&gt;, we have built a simple PDF viewer to render the pages of PDF document to &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; elements with Vue. We have also updated our components to fetch and render PDF pages lazily as they are scrolled into the viewport and we have extracted this behavior into a &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" /&gt;&lt;/p&gt;
-
-      &lt;h3 id="the-problem" class="title title-h3"&gt;
-        &lt;a name="the-problem" class="anchor" href="#the-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The problem
-      &lt;/h3&gt;
-    
-&lt;p&gt;At a high level, both the preview and document panes must:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Be independently scrollable&lt;/li&gt;
-&lt;li&gt;Trigger events, received by the &lt;a href="/blog/extracting-a-data-component-in-vue.html"&gt;data source, the &lt;code&gt;&amp;lt;PDFData&amp;gt;&lt;/code&gt; component&lt;/a&gt;, to fetch more page data as they are scrolled.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The new preview pane will have a similar layout to the document. Given the following component hierarchy for the current document viewer:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt;
-  &amp;lt;PDFDocument&amp;gt;
-    &amp;lt;PDFPage /&amp;gt;
-    &amp;lt;PDFPage /&amp;gt;
-    &amp;lt;PDFPage /&amp;gt;
-    ...
-  &amp;lt;/PDFDocument&amp;gt;
-&amp;lt;/PDFData&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That of the preview pane will be nearly identical:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt;
-  &amp;lt;PDFPreview&amp;gt;
-    &amp;lt;PDFThumbnail /&amp;gt;
-    &amp;lt;PDFThumbnail /&amp;gt;
-    &amp;lt;PDFThumbnail /&amp;gt;
-    ...
-  &amp;lt;/PDFPreview&amp;gt;
-&amp;lt;/PDFData&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Extracting the scroll-and-fetch functionality presents an interesting challenge because it is currently split between the &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; components.&lt;/p&gt;
-
-&lt;p&gt;Among other things, the &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; is responsible for determining when:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;the scrollable &amp;quot;boundary&amp;quot;, i.e., where in the document the viewport is located&lt;/li&gt;
-&lt;li&gt;the last fetched page has entered the viewport, i.e., when to fetch additional pages&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; is responsible for determining when it is visible by determining whether its boundaries overlap with the viewport.&lt;/p&gt;
-
-      &lt;h3 id="the-component-based-solution" class="title title-h3"&gt;
-        &lt;a name="the-component-based-solution" class="anchor" href="#the-component-based-solution"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        The component-based solution
-      &lt;/h3&gt;
-    
-&lt;p&gt;To share this behavior with the preview pane hierarchy, we&amp;#39;ll create two abstract components, a &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; to take the responsibility of determing page visibility and a &lt;code&gt;&amp;lt;ScrollingDocument&amp;gt;&lt;/code&gt; to absorb the properties and methods for determining the scroll boundaries and when the request more pages. We&amp;#39;ll compose both the document and new preview panes from these new components.&lt;/p&gt;
-
-&lt;p&gt;The hierarchy becomes:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;PDFData&amp;gt;
-  &amp;lt;PDFPreview&amp;gt;
-    &amp;lt;ScrollingDocument&amp;gt;
-      &amp;lt;ScrollingPage&amp;gt;
-        &amp;lt;PDFThumbnail /&amp;gt;
-      &amp;lt;/ScrollingPage&amp;gt;
-      &amp;lt;ScrollingPage&amp;gt;
-        &amp;lt;PDFThumbnail /&amp;gt;
-      &amp;lt;/ScrollingPage&amp;gt;
-      ...
-    &amp;lt;/ScrollingDocument&amp;gt;
-  &amp;lt;/PDFPreview&amp;gt;
-  &amp;lt;PDFDocument&amp;gt;
-    &amp;lt;ScrollingDocument&amp;gt;
-      &amp;lt;ScrollingPage&amp;gt;
-        &amp;lt;PDFPage /&amp;gt;
-      &amp;lt;/ScrollingPage&amp;gt;
-      &amp;lt;ScrollingPage&amp;gt;
-        &amp;lt;PDFPage /&amp;gt;
-      &amp;lt;/ScrollingPage&amp;gt;
-      ...
-    &amp;lt;/ScrollingDocument&amp;gt;
-  &amp;lt;/PDFDocument&amp;gt;
-&amp;lt;/PDFData&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Rather than detailing all the changes, but I&amp;#39;ll highlight some key takeaways about how I fit the pieces together.&lt;/p&gt;
-
-&lt;p&gt;First, these changes are made possible by Vue &lt;code&gt;slots&lt;/code&gt; and &lt;code&gt;slot-scope&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; component is abstract, meaning it does not render any html itself. Instead, it delegates to its children, which, for our app, is a single &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt;, through its &lt;code&gt;render&lt;/code&gt; function while passing in additional properties via &lt;code&gt;this.$scopedSlots&lt;/code&gt;. This is akin to calling the child component with arguments.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// src/components/ScrollingPage.vue
-
-render() {
-  return this.$scopedSlots.default({
-    isElementVisible: this.isElementVisible,
-  });
-},
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;&amp;lt;ScrollingDocument&amp;gt;&lt;/code&gt; uses a &lt;code&gt;v-for&lt;/code&gt; loop to render each of the fetched pages as &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; components passing in properties the &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; needs to perform its calculations. Here is a simplified version of the &lt;code&gt;&amp;lt;ScrollingDocument&amp;gt;&lt;/code&gt; template.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;template&amp;gt;
-  &amp;lt;ScrollingPage
-    v-for=&amp;quot;page in pages&amp;quot;
-    :key=&amp;quot;page.pageNumber&amp;quot;
-    v-bind=&amp;quot;{page, scrollTop, clientHeight}&amp;quot;
-    &amp;gt;
-    &amp;lt;div
-      class=&amp;quot;scrolling-page&amp;quot;
-      slot-scope=&amp;quot;{isElementVisible}&amp;quot;
-      &amp;gt;
-      &amp;lt;slot v-bind=&amp;quot;{page, isElementVisible}&amp;quot;&amp;gt;&amp;lt;/slot&amp;gt;
-    &amp;lt;/div&amp;gt;
-  &amp;lt;/ScrollingPage&amp;gt;
-&amp;lt;/template&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note the use of the &lt;code&gt;slot-scope&lt;/code&gt; to receive the &lt;code&gt;isElementVisible&lt;/code&gt; prop passed in from the &lt;code&gt;&amp;lt;ScrollingPage&amp;gt;&lt;/code&gt; scoped slot. This and the individual &lt;code&gt;page&lt;/code&gt; prop, provided by the &lt;code&gt;v-for&lt;/code&gt; loop, are passed on to the &lt;code&gt;slot&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The new &lt;code&gt;&amp;lt;PDFDocument&amp;gt;&lt;/code&gt; template below shows how this slot is used. It inserts &lt;code&gt;&amp;lt;PDFPage&amp;gt;&lt;/code&gt; as a child of &lt;code&gt;&amp;lt;ScrollingDocument&amp;gt;&lt;/code&gt; and extracts the key props with another usage of &lt;code&gt;slot-scope&lt;/code&gt; (a &lt;code&gt;slot-scope&lt;/code&gt; within a &lt;code&gt;slot-scope&lt;/code&gt;!) while merging in an additional prop, &lt;code&gt;scale&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;template&amp;gt;
-  &amp;lt;ScrollingDocument
-    class=&amp;quot;pdf-document&amp;quot;
-    v-bind=&amp;quot;{pages, pageCount, currentPage}&amp;quot;
-    @pages-fetch=&amp;quot;onPagesFetch&amp;quot;
-    &amp;gt;
-    &amp;lt;PDFPage
-      slot-scope=&amp;quot;{page, isElementVisible}&amp;quot;
-      v-bind=&amp;quot;{scale, page, isElementVisible}&amp;quot;
-    /&amp;gt;
-  &amp;lt;/ScrollingDocument&amp;gt;
-&amp;lt;/template&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;&amp;lt;PDFPreview&amp;gt;&lt;/code&gt; is almost identical and demonstrates why we went to the trouble of using scoped slots&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;template&amp;gt;
-  &amp;lt;ScrollingDocument
-    class=&amp;quot;pdf-document&amp;quot;
-    v-bind=&amp;quot;{pages, pageCount, currentPage}&amp;quot;
-    @pages-fetch=&amp;quot;onPagesFetch&amp;quot;
-    &amp;gt;
-    &amp;lt;PDFThumbnail
-      slot-scope=&amp;quot;{page, isElementVisible}&amp;quot;
-      v-bind=&amp;quot;{scale, page, isElementVisible}&amp;quot;
-    /&amp;gt;
-  &amp;lt;/ScrollingDocument&amp;gt;
-&amp;lt;/template&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can render a different experience in this part of the component hierachy by changing the component we give to the slot (the &lt;code&gt;&amp;lt;PDFThumbnail&amp;gt;&lt;/code&gt;) while also getting the benefits of the shared behavior.&lt;/p&gt;
-
-      &lt;h3 id="stepping-back" class="title title-h3"&gt;
-        &lt;a name="stepping-back" class="anchor" href="#stepping-back"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Stepping back
-      &lt;/h3&gt;
-    
-&lt;p&gt;Note the contrast in this approach with mixins. It would have been arguably much more straight forward easier to move required props, methods, and hooks into separate mixins for the preview and document panes. While we could accomplish the goal of code-sharing, it comes at the cost of implicit dependencies, potential name clashes, and other aspects of mounting complexity we noted earlier.&lt;/p&gt;
-
-&lt;p&gt;Refactoring to components has a higher barrier to entry; it requires some extra thought and a grasp of &lt;code&gt;slots&lt;/code&gt; and &lt;code&gt;slot-scope&lt;/code&gt; (yes, it can get confusing).&lt;/p&gt;
-
-&lt;p&gt;One practical advantage is we can troubleshoot the scrolling behavior with a clear picture of where the behavior is located in our component tree with Vue devtools:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/vue-pdf-viewer/part-4-shared-behavior-devtools.jpg" alt="scrolling components in Vue devtools" /&gt;&lt;/p&gt;
-
-&lt;p&gt;In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.&lt;/p&gt;
-
-&lt;p&gt;As I mentioned earlier, I left out many of the implementation details for the components described here. Feel free to check out the &lt;a href="https://github.com/rossta/vue-pdfjs-demo" target="_blank" rel="noopener noreferrer"&gt;source code on Github&lt;/a&gt;. Make a pull request or let me know how I could improve things by &lt;a href="https://twitter.com/rossta" target="_blank" rel="noopener noreferrer"&gt;reaching out on Twitter&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>
