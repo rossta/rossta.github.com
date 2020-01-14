@@ -2,7 +2,7 @@
 title: 3 ways Webpack surprises web developers
 author: Ross Kaffenberger
 published: true
-summary: Especially for Rails devs switching from the asset pipeline
+summary: What I learned answering Webpack questions on StackOverflow for a month
 description: When I first started working with Webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.
 pull_image: 'blog/stock/aaron-burden-balloons-unsplash.jpg'
 pull_image_caption: Photo by Aaron Burden on Unsplash
@@ -13,11 +13,13 @@ tags:
   - Webpack
 ---
 
-When I first started working with Webpack, I didn't realize how under-prepared I was. I was tasked with [integrating Webpack into a large Rails app](/blog/from-sprockets-to-webpack.html) and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience with the Rails asset pipeline. Many of these assumptions turned out to be wrong. This was frustrating and humbling.
-
-In the years since, I've followed GitHub issues and StackOverflow posts and witnessed other developers going through the same frustrations I did. Following this announcement from [@dhh](https://twitter.com/dhh), I expect there will be more now many Rails developers will likely be adopting Webpack in their apps:
+Following this recent announcement from [@dhh](https://twitter.com/dhh) and the release of Rails 6 last year, Rails developers will be looking to adopt Webpack in their applications:
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Webpack is now the default JavaScript compiler for the upcoming Rails 6 🎉 <a href="https://t.co/LJzCSoPfCV">https://t.co/LJzCSoPfCV</a></p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/1046634277985611776?ref_src=twsrc%5Etfw">October 1, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+When I first started working with Webpack, I didn't realize how under-prepared I was. I was tasked with [integrating Webpack into a large Rails app](/blog/from-sprockets-to-webpack.html) and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience with the Rails asset pipeline. Many of these assumptions turned out to be wrong. This was frustrating and humbling.
+
+And after spending the last month answering Webpack questions on StackOverflow, I've found I'm not alone.
 
 The intended audience for this post has a general notion of "why use Webpack" or "why use an asset bundler", but for more on that, I recommend [The Many Jobs of JS Build Tools](https://www.swyx.io/writing/jobs-of-js-build-tools/) and [Webpack from Nothing: What problem are we solving?](https://what-problem-does-it-solve.com/webpack/index.html). For a rigorous technical overview of the project, I suggest [the Webpack docs](https://webpack.js.org/); they have gotten quite good.
 
