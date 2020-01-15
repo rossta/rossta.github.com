@@ -211,12 +211,12 @@ Our legacy JavaScript application consistently followed a pattern of defining an
 
 App = App || {};
 
-App.SomeModule = (function() {
+App.SomeModule = {
   someMethod: function() {
     var timestamp = moment();
     return App.AnotherModule.method(timestamp);
   }
-}();
+};
 ```
 
 As we moved them over to Webpack, the new version of the file above might look like the example below as we converted to ES6 syntax and replaced global references with imports:
