@@ -314,12 +314,12 @@ For more background on this topic, checkout <a href="https://twitter.com/davetro
 
 App = App || {};
 
-App.SomeModule = (function() {
+App.SomeModule = {
   someMethod: function() {
     var timestamp = moment();
     return App.AnotherModule.method(timestamp);
   }
-}();
+};
 </code></pre>
 
 <p>As we moved them over to Webpack, the new version of the file above might look like the example below as we converted to ES6 syntax and replaced global references with imports:</p>
