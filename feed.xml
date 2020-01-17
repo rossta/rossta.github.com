@@ -182,7 +182,7 @@
 
 &lt;p&gt;Webpack receives a fair number of criticisms regarding its complexity and some of its surprising traits, like the ones I highlighted here. To be fair, Webpack aims to solve a complex problem and solves it quite well. Other asset bundlers are worth your consideration, but, arguably, no other bundler has been as successful.&lt;/p&gt;
 
-&lt;p&gt;Following this recent announcement from &lt;a href="https://twitter.com/dhh" target="_blank" rel="noopener noreferrer"&gt;@dhh&lt;/a&gt; and the release of Rails 6 last year, more and more Rails developers will be looking to adopt Webpack in their applications, though as we&amp;#39;ve seen today, they may be in for a few surprises.&lt;/p&gt;
+&lt;p&gt;As we saw in the &lt;a href="https://twitter.com/dhh/status/1046634277985611776" target="_blank" rel="noopener noreferrer"&gt;recent announcement from @dhh&lt;/a&gt; and the release of Rails 6 last year, Webpack is now the default JavaScript compiler for Rails. Looks like Rails developers will be looking to adopt Webpack in their applications, though as we&amp;#39;ve seen today, they may be in for a few surprises.&lt;/p&gt;
 
 &lt;p&gt;&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Webpack is now the default JavaScript compiler for the upcoming Rails 6 🎉 &lt;a href="https://t.co/LJzCSoPfCV"&gt;&lt;a href="https://t.co/LJzCSoPfCV" target="_blank" rel="noopener noreferrer"&gt;https://t.co/LJzCSoPfCV&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&amp;mdash; DHH (@dhh) &lt;a href="https://twitter.com/dhh/status/1046634277985611776?ref_src=twsrc%5Etfw"&gt;October 1, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
 </content>
