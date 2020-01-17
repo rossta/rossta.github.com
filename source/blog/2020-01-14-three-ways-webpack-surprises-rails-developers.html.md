@@ -137,6 +137,6 @@ These major strengths of Webpack all boil down to improving user experience: usi
 
 Webpack receives a fair number of criticisms regarding its complexity and some of its surprising traits, like the ones I highlighted here. To be fair, Webpack aims to solve a complex problem and solves it quite well. Other asset bundlers are worth your consideration, but, arguably, no other bundler has been as successful.
 
-Following this recent announcement from [@dhh](https://twitter.com/dhh) and the release of Rails 6 last year, more and more Rails developers will be looking to adopt Webpack in their applications, though as we've seen today, they may be in for a few surprises.
+As we saw in the [recent announcement from @dhh](https://twitter.com/dhh/status/1046634277985611776) and the release of Rails 6 last year, Webpack is now the default JavaScript compiler for Rails. Looks like Rails developers will be looking to adopt Webpack in their applications, though as we've seen today, they may be in for a few surprises.
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Webpack is now the default JavaScript compiler for the upcoming Rails 6 🎉 <a href="https://t.co/LJzCSoPfCV">https://t.co/LJzCSoPfCV</a></p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/1046634277985611776?ref_src=twsrc%5Etfw">October 1, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
