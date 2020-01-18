@@ -33,7 +33,7 @@ jobs:
             - yarn-cache
 
       - run: npm rebuild node-sass
-      - run: yarn install
+      - run: yarn install --frozen-lockfile
 
       - save_cache:
           key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
