@@ -58,6 +58,9 @@
     "debug": "^4.1.1",
     "highlight.js": "^9.16.2"
   },
+  "resolutions": {
+    "*/serialize-javascript": "^2.1.1"
+  },
   "engines": {
     "node": "^12.13.0",
     "yarn": "^1.19"
