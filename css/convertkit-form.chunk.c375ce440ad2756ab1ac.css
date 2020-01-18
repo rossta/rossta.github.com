@@ -30,11 +30,13 @@
   display: none;
 }
 
-.formkit-form[data-uid='cda82aafbf'] .formkit-input {
+.formkit-form[data-uid='cda82aafbf'] .formkit-input,
+.formkit-form[data-uid='cda82aafbf'] .formkit-select,
+.formkit-form[data-uid='cda82aafbf'] .formkit-checkboxes {
   width: 100%;
 }
 
-
+.formkit-form[data-uid='cda82aafbf'] .formkit-button,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit {
   border: 0;
   border-radius: 5px;
@@ -51,19 +53,21 @@
   vertical-align: middle;
 }
 
-
+.formkit-form[data-uid='cda82aafbf'] .formkit-button:hover,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:hover,
+.formkit-form[data-uid='cda82aafbf'] .formkit-button:focus,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus {
   outline: none;
 }
 
-
+.formkit-form[data-uid='cda82aafbf'] .formkit-button:hover > span,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:hover > span,
+.formkit-form[data-uid='cda82aafbf'] .formkit-button:focus > span,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus > span {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-
+.formkit-form[data-uid='cda82aafbf'] .formkit-button > span,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit > span {
   display: block;
   padding: 12px 24px;
@@ -263,6 +267,12 @@
   display: none;
 }
 
+.formkit-form[data-uid='cda82aafbf'] .formkit-alert-success {
+  background: #d3fbeb;
+  border-color: #10bf7a;
+  color: #0c905c;
+}
+
 .formkit-form[data-uid='cda82aafbf'] .formkit-alert-error {
   background: #fde8e2;
   border-color: #f2643b;
@@ -429,5 +439,43 @@
 
 .formkit-form {
   visibility: visible;
+}
+
+.formkit-slide-in[data-object] {
+  width: 100%;
+  right: 0;
+  padding-bottom: 0;
+}
+
+.formkit-slide-in[data-object] .formkit-close {
+  top: 0;
+  z-index: 2;
+}
+
+.formkit-slide-in[data-object] .formkit-image {
+  display: none;
+}
+
+.formkit-slide-in[data-object] .formkit-column:first-child {
+  padding-bottom: 0 !important;
+}
+
+@media (min-width: 768px) {
+  .formkit-slide-in[data-object] {
+    right: 40px;
+    padding-bottom: 40px;
+  }
+
+  .formkit-slide-in[data-object] .formkit-close {
+    top: -48px;
+  }
+
+  .formkit-slide-in[data-object] .formkit-image {
+    display: block;
+  }
+
+  .formkit-slide-in[data-object] .formkit-column:first-child {
+    padding-bottom: 40px !important;
+  }
 }
 
