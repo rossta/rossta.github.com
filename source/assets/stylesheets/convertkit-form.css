@@ -396,3 +396,38 @@
 .formkit-form {
   visibility: visible;
 }
+
+.formkit-slide-in[data-object] {
+  width: 100%;
+  right: 0;
+  padding-bottom: 0;
+}
+
+.formkit-slide-in[data-object] .formkit-close {
+  top: 0;
+  z-index: 2;
+}
+
+.formkit-slide-in[data-object] .formkit-image {
+  display: none;
+}
+
+.formkit-slide-in[data-object] .formkit-column:first-child {
+  padding-bottom: 0 !important;
+}
+
+@screen md {
+  .formkit-slide-in[data-object] {
+    right: 40px;
+    padding-bottom: 40px;
+  }
+  .formkit-slide-in[data-object] .formkit-close {
+    top: -48px;
+  }
+  .formkit-slide-in[data-object] .formkit-image {
+    display: block;
+  }
+  .formkit-slide-in[data-object] .formkit-column:first-child {
+    padding-bottom: 40px !important;
+  }
+}
