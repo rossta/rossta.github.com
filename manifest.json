@@ -1,6 +1,6 @@
 {
   "app.css": "/css/app.chunk.0c22780552a4c50dfada.css",
-  "app.js": "/js/app.chunk.a5466dc5572330179529.js",
+  "app.js": "/js/app.chunk.6ea60510f3639c2920d8.js",
   "convertkit-form.css": "/css/convertkit-form.chunk.c375ce440ad2756ab1ac.css",
   "convertkit-form.js": "/js/convertkit-form.chunk.a55ea55ba12fb4082c8f.js",
   "highlight.js": "/js/highlight.chunk.5678554a4db340ffedbb.js",
@@ -9,7 +9,7 @@
   "vendors~highlight.js": "/js/vendors~highlight.chunk.c1e97bee716ec5c693f7.js",
   "css/app.chunk.0c22780552a4c50dfada.css.gz": "/css/app.chunk.0c22780552a4c50dfada.css.gz",
   "css/convertkit-form.chunk.c375ce440ad2756ab1ac.css.gz": "/css/convertkit-form.chunk.c375ce440ad2756ab1ac.css.gz",
-  "js/app.chunk.a5466dc5572330179529.js.gz": "/js/app.chunk.a5466dc5572330179529.js.gz",
+  "js/app.chunk.6ea60510f3639c2920d8.js.gz": "/js/app.chunk.6ea60510f3639c2920d8.js.gz",
   "js/highlight.chunk.5678554a4db340ffedbb.js.gz": "/js/highlight.chunk.5678554a4db340ffedbb.js.gz",
   "js/runtime.5d7a65bee1527a00c8db.js.gz": "/js/runtime.5d7a65bee1527a00c8db.js.gz",
   "js/vendors~app.chunk.6c6b7f30d28c87e9d1b2.js.LICENSE": "/js/vendors~app.chunk.6c6b7f30d28c87e9d1b2.js.LICENSE",
