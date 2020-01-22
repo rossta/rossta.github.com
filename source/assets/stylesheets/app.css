@@ -169,3 +169,18 @@ figcaption {
   outline: 0;
   text-align: center;
 }
+
+.video-container {
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  position: relative;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
