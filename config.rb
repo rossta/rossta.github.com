@@ -145,7 +145,7 @@ helpers do
   end
 
   def stylesheet_pack_tag(*names)
-    names.map { |name| "<link href='#{webpack_manifest[name + ".css"]}' rel='stylesheet'></link>" }.join("")
+    names.map { |name| "<link href='#{webpack_manifest[name + ".css"]}' rel='stylesheet' media='all'></link>" }.join("")
   end
 
   def javascript_pack_tag(*names)
