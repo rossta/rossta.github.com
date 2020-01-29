@@ -1,9 +1,9 @@
 ---
 title: A Guide to NPM Version Constraints for Rubyists
 author: Ross Kaffenberger
-published: false
+published: true
 summary: Mind your carets and tildes
-description: A reference guide to NPM version constraints for dependencies declared in the package.json file of a Rails project from the persepective of a Ruby developer familiar with similar conventions used to specify Ruby dependencies in a Gemfile.
+description: A reference guide to NPM version constraints for dependencies declared in the package.json file of a Rails project from the perspective of a Ruby developer familiar with similar conventions used to specify Ruby dependencies in a Gemfile.
 pull_image: 'blog/stock/lulu-blue-mountain-unsplash.jpg'
 pull_image_caption: Photo by 拴 张 on Unsplash
 series:
@@ -31,7 +31,7 @@ I wrote this post to help Rubyists navigate version constraint syntax in their p
 
 ## Version constraints in Gemfile
 
-Like the `Gemfile`, package.json has a convention to specify version constraints. Both Ruby and NPM dependencies usually follow SemVer, which will format a constraint as `major.minor.patch`, i.e. the declaration `"webpack": "4.41.2"` indicates Webpack major version 4, minor version 41, and patch version 2.
+Like the `Gemfile`, package.json has a convention to specify version constraints. Both Ruby and NPM dependencies usually follow SemVer, that will format a constraint as `major.minor.patch`, i.e. the declaration `"webpack": "4.41.2"` indicates Webpack major version 4, minor version 41, and patch version 2.
 
 Where they differ is in the use of special characters to declare acceptable ranges. Let's refresh the conventions used in the Gemfile.
 
@@ -41,13 +41,13 @@ To lock a gem dependency to an exact version, we would declare the gem's name an
 gem "devise", "4.7.1"
 ```
 
-A more optimistic constraint would be to provide an open-ended range which will install or update to a version of the gem that satisfies the range.
+A more optimistic constraint would be to provide an open-ended range that will install or update to a version of the gem that satisfies the range.
 
 ```ruby
 gem "devise", ">= 4.7"
 ```
 
-To limit the upper-end of the range, say, to allow minor updates up to the next major version:
+To limit the upper end of the range, say, to allow minor updates up to the next major version:
 
 ```ruby
 gem "devise", ">= 4.7", "< 5"
@@ -59,7 +59,7 @@ This format has a shorthand notation, the squiggly arrow `~>`, or the pessimisti
 gem "devise", "~> 4.7"
 ```
 
-The upper-end of the range is determined by the smallest level of the declared constraint. For example,
+The upper end of the range is determined by the smallest level of the declared constraint. For example,
 
 * `"~> 4.7.1"` matches `">= 4.7.1", "< 4.8.0"`
 * `"~> 4.7"`   matches `">= 4.7.0", "< 5.0.0"`
@@ -96,7 +96,7 @@ NPM supports alternate syntaxes for specifying ranges, including, but not limite
 
 > NPM ~ is like Gemfile ~>
 
-Tilde ranges for NPM are equivalent to Ruby's pessimistic version constraint, the squiggly arrow `~>`. In other wordss, the upper-end of the range is determined by the smallest level of the declared constraint:
+Tilde ranges for NPM are equivalent to Ruby's pessimistic version constraint, the squiggly arrow `~>`. In other wordss, the upper end of the range is determined by the smallest level of the declared constraint:
 
 * `"~4.2.1"` matches `">= 4.2.1 <4.3.0"`
 * `"~4.2"`   matches `">= 4.2.0 <5.0.0"`
@@ -118,7 +118,7 @@ NPM also supports hyphen ranges and x-ranges, neither of which have Gemfile equi
 
 ### Hyphen ranges
 
-> NPM hyphen-ranges are like separate comparision operators in a Gemfile
+> NPM hyphen-ranges are like separate comparison operators in a Gemfile
 
 For hyphen ranges, range inclusivity is tied to specificity of the declared versions:
 
