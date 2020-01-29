@@ -1,5 +1,5 @@
 ---
-title: A Guide to NPM Version Constraints for Rubyists
+title: A guide to NPM version constraints for Rubyists
 author: Ross Kaffenberger
 published: true
 summary: Mind your carets and tildes
