@@ -128,7 +128,7 @@
 &lt;p&gt;NPM ~ is like Gemfile ~&amp;gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Tilde ranges for NPM are equivalent to Ruby&amp;#39;s pessimistic version constraint, the squiggly arrow &lt;code&gt;~&amp;gt;&lt;/code&gt;. In other wordss, the upper end of the range is determined by the smallest level of the declared constraint:&lt;/p&gt;
+&lt;p&gt;Tilde ranges for NPM are equivalent to Ruby&amp;#39;s pessimistic version constraint, the squiggly arrow &lt;code&gt;~&amp;gt;&lt;/code&gt;. In other words, the upper end of the range is determined by the smallest level of the declared constraint:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;&amp;quot;~4.2.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;= 4.2.1 &amp;lt;4.3.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
