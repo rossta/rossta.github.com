@@ -96,7 +96,7 @@ NPM supports alternate syntaxes for specifying ranges, including, but not limite
 
 > NPM ~ is like Gemfile ~>
 
-Tilde ranges for NPM are equivalent to Ruby's pessimistic version constraint, the squiggly arrow `~>`. In other wordss, the upper end of the range is determined by the smallest level of the declared constraint:
+Tilde ranges for NPM are equivalent to Ruby's pessimistic version constraint, the squiggly arrow `~>`. In other words, the upper end of the range is determined by the smallest level of the declared constraint:
 
 * `"~4.2.1"` matches `">= 4.2.1 <4.3.0"`
 * `"~4.2"`   matches `">= 4.2.0 <5.0.0"`
