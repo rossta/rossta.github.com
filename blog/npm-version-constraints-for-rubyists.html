@@ -1,0 +1,434 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <title>A Guide to NPM Version Constraints for Rubyists - rossta.net</title>
+<meta name="description" content="A reference guide to NPM version constraints for dependencies declared in the package.json file of a Rails project from the perspective of a Ruby developer familiar with similar conventions used to specify Ruby dependencies in a Gemfile." />
+<meta name="keywords" content="Rails, Webpack, JavaScript" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="A reference guide to NPM version constraints for dependencies declared in the package.json file of a Rails project from the perspective of a Ruby developer familiar with similar conventions used to specify Ruby dependencies in a Gemfile." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/lulu-blue-mountain-unsplash.jpg" />
+<meta name="twitter:title" content="A Guide to NPM Version Constraints for Rubyists" />
+<meta property="og:description" content="A reference guide to NPM version constraints for dependencies declared in the package.json file of a Rails project from the perspective of a Ruby developer familiar with similar conventions used to specify Ruby dependencies in a Gemfile." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/lulu-blue-mountain-unsplash.jpg" />
+<meta property="og:title" content="A Guide to NPM Version Constraints for Rubyists" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <link href='/css/app.chunk.aca3b125280ffbe355b4.css' rel='stylesheet' media='all'></link>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2" href="/blog">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/series">series</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/talks">talks</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/projects">projects</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    A Guide to NPM Version Constraints for Rubyists
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Mind your carets and tildes
+    </h2>
+</header>
+
+    <p>In this post, I want to answer the following question for Rubyists:</p>
+
+<blockquote>
+<p>What do the tilde <code>~</code> and caret <code>^</code> designations mean for version constraints in a <code>package.json</code> file?</p>
+</blockquote>
+
+<p>Rubyists typically use a <code>Gemfile</code> to declare Ruby dependencies for a project. For a JavaScript project, it&#39;s typical to use a <code>package.json</code> file. Some projects use both. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.</p>
+
+<p>It might include a section like this:</p>
+
+<pre><code class="json">&quot;dependencies&quot;: {
+  &quot;@rails/ujs&quot;: &quot;^6.0.0&quot;,
+  &quot;@rails/webpacker&quot;: &quot;~4.2.1&quot;,
+},
+</code></pre>
+
+<p>I wrote this post to help Rubyists navigate version constraint syntax in their package.json files.</p>
+
+      <h2 id="version-constraints-in-gemfile" class="title title-h2">
+        <a name="version-constraints-in-gemfile" class="anchor" href="#version-constraints-in-gemfile">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Version constraints in Gemfile
+      </h2>
+    
+<p>Like the <code>Gemfile</code>, package.json has a convention to specify version constraints. Both Ruby and NPM dependencies usually follow SemVer, that will format a constraint as <code>major.minor.patch</code>, i.e. the declaration <code>&quot;webpack&quot;: &quot;4.41.2&quot;</code> indicates Webpack major version 4, minor version 41, and patch version 2.</p>
+
+<p>Where they differ is in the use of special characters to declare acceptable ranges. Let&#39;s refresh the conventions used in the Gemfile.</p>
+
+<p>To lock a gem dependency to an exact version, we would declare the gem&#39;s name and its version as follows:</p>
+
+<pre><code class="ruby">gem &quot;devise&quot;, &quot;4.7.1&quot;
+</code></pre>
+
+<p>A more optimistic constraint would be to provide an open-ended range that will install or update to a version of the gem that satisfies the range.</p>
+
+<pre><code class="ruby">gem &quot;devise&quot;, &quot;&gt;= 4.7&quot;
+</code></pre>
+
+<p>To limit the upper end of the range, say, to allow minor updates up to the next major version:</p>
+
+<pre><code class="ruby">gem &quot;devise&quot;, &quot;&gt;= 4.7&quot;, &quot;&lt; 5&quot;
+</code></pre>
+
+<p>This format has a shorthand notation, the squiggly arrow <code>~&gt;</code>, or the pessimistic version constraint.</p>
+
+<pre><code class="ruby">gem &quot;devise&quot;, &quot;~&gt; 4.7&quot;
+</code></pre>
+
+<p>The upper end of the range is determined by the smallest level of the declared constraint. For example,</p>
+
+<ul>
+<li><code>&quot;~&gt; 4.7.1&quot;</code> matches <code>&quot;&gt;= 4.7.1&quot;, &quot;&lt; 4.8.0&quot;</code></li>
+<li><code>&quot;~&gt; 4.7&quot;</code>   matches <code>&quot;&gt;= 4.7.0&quot;, &quot;&lt; 5.0.0&quot;</code></li>
+<li><code>&quot;~&gt; 4&quot;</code>     matches <code>&quot;&gt;= 4.0.0&quot;, &quot;&lt; 5.0.0&quot;</code></li>
+</ul>
+
+<p>To specify &quot;no constraint&quot;, simply omit the version argument.</p>
+
+<pre><code class="ruby">gem &quot;devise&quot;
+</code></pre>
+
+<p>For more info, check out <a href="https://guides.rubygems.org/patterns/#declaring-dependencies" target="_blank" rel="noopener noreferrer">the guide on RubyGems</a>.</p>
+
+      <h2 id="version-constraints-in-package-json" class="title title-h2">
+        <a name="version-constraints-in-package-json" class="anchor" href="#version-constraints-in-package-json">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Version constraints in package.json
+      </h2>
+    
+<p>NPM conventions provide similar flexibility with alternate syntax.</p>
+
+<p>Let&#39;s consider a package.json file that declares <code>@rails/webpacker</code> as a dependency, the following would enforce an exact version:</p>
+
+<pre><code class="json">&quot;@rails/webpacker&quot;: &quot;4.2.1&quot;,
+</code></pre>
+
+<p>As with the Gemfile, comparison operators can be used as in the following examples:</p>
+
+<ul>
+<li><code>&quot;&gt;=4.2.1&quot;</code> matches greater or equal to 4.2.1</li>
+<li><code>&quot;&gt;4.2.1&quot;</code> matches greater than 4.2.1</li>
+<li><code>&quot;&gt;=4.2.1 &lt;5&quot;</code> matches greater or equal to 4.2.1 and less than 5</li>
+<li><code>&quot;&lt;5&quot;</code> matches less than 5</li>
+</ul>
+
+<p>NPM supports alternate syntaxes for specifying ranges, including, but not limited to, caret <code>^</code> and tilde <code>~</code>.</p>
+
+      <h3 id="tilde-ranges" class="title title-h3">
+        <a name="tilde-ranges" class="anchor" href="#tilde-ranges">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Tilde ranges
+      </h3>
+    
+<blockquote>
+<p>NPM ~ is like Gemfile ~&gt;</p>
+</blockquote>
+
+<p>Tilde ranges for NPM are equivalent to Ruby&#39;s pessimistic version constraint, the squiggly arrow <code>~&gt;</code>. In other wordss, the upper end of the range is determined by the smallest level of the declared constraint:</p>
+
+<ul>
+<li><code>&quot;~4.2.1&quot;</code> matches <code>&quot;&gt;= 4.2.1 &lt;4.3.0&quot;</code></li>
+<li><code>&quot;~4.2&quot;</code>   matches <code>&quot;&gt;= 4.2.0 &lt;5.0.0&quot;</code></li>
+<li><code>&quot;~4&quot;</code>     matches <code>&quot;&gt;= 4.0.0 &lt;5.0.0&quot;</code></li>
+</ul>
+
+      <h3 id="caret-ranges" class="title title-h3">
+        <a name="caret-ranges" class="anchor" href="#caret-ranges">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Caret ranges
+      </h3>
+    
+<blockquote>
+<p>NPM ^ is like Gemfile ~&gt; x.0 for versions 1 and up and ~&gt; 0.x.0 for versions less than 1 and greater than 0.0.1</p>
+</blockquote>
+
+<p>Caret ranges are another take on pessimistic version constraints that do not have a shorthand equivalent in Ruby, i.e., to my knowledge, they&#39;re a special breed. They allow patch and minor updates for versions <code>&gt;1.0.0</code>, patch updates for versions <code>&lt;1.0.0 &gt;=0.1.0</code>, and no updates for versions <code>&lt;0.1.0</code> (except preleases, e.g. <code>0.0.3-beta</code>). My understanding is that the caret is the answer for traditional SemVer, i.e., there will be breaking changes prior to 0.1.0, there may be breaking changes between minor versions prior to 1.0.0, and there may only be breaking changes between major versions above 1.0.0. Examples:</p>
+
+<ul>
+<li><code>&quot;^4.2.1&quot;</code> matches <code>&quot;&gt;=4.2.1 &lt;5.0.0&quot;</code></li>
+<li><code>&quot;^0.2.2&quot;</code> matches <code>&quot;&gt;=0.2.2 &lt;0.3.0&quot;</code></li>
+<li><code>&quot;^0.0.2&quot;</code> matches <code>&quot;&gt;=0.0.2 &lt;0.0.3&quot;</code></li>
+</ul>
+
+      <h2 id="bonus-syntax-in-package-json" class="title title-h2">
+        <a name="bonus-syntax-in-package-json" class="anchor" href="#bonus-syntax-in-package-json">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Bonus syntax in package.json
+      </h2>
+    
+<p>NPM also supports hyphen ranges and x-ranges, neither of which have Gemfile equivalents as well.</p>
+
+      <h3 id="hyphen-ranges" class="title title-h3">
+        <a name="hyphen-ranges" class="anchor" href="#hyphen-ranges">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Hyphen ranges
+      </h3>
+    
+<blockquote>
+<p>NPM hyphen-ranges are like separate comparison operators in a Gemfile</p>
+</blockquote>
+
+<p>For hyphen ranges, range inclusivity is tied to specificity of the declared versions:</p>
+
+<ul>
+<li><code>&quot;4.2.1 - 5.4.2&quot;</code> matches <code>&quot;&gt;=4.2.1 &lt;=5.4.2&quot;</code></li>
+<li><code>&quot;4.2 - 5.4.2&quot;</code>   matches <code>&quot;&gt;=4.2.0 &lt;=5.4.2&quot;</code></li>
+<li><code>&quot;4.2 - 5&quot;</code>       matches <code>&quot;&gt;=4.2.0 &lt;=6.0.0&quot;</code></li>
+</ul>
+
+      <h3 id="x-ranges" class="title title-h3">
+        <a name="x-ranges" class="anchor" href="#x-ranges">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        X-ranges
+      </h3>
+    
+<blockquote>
+<p>NPM x-ranges behave like Gemfile ~&gt; with exceptions</p>
+</blockquote>
+
+<p>X-ranges are mostly self-explanatory as the <code>x</code> denotes any value:</p>
+
+<ul>
+<li><code>&quot;4.2.x&quot;</code> matches <code>&quot;~4.2.0&quot;</code> matches <code>&quot;&gt;= 4.2.0 &lt;4.3.0&quot;</code></li>
+<li><code>&quot;4.x&quot;</code>   matches <code>&quot;~4.0&quot;</code>   matches <code>&quot;&gt;= 4.0.0 &lt;5.0.0&quot;</code></li>
+<li><code>&quot;4.x.x&quot;</code> matches <code>&quot;4.x&quot;</code></li>
+</ul>
+
+<p>A partial version range is treated as an x-range:</p>
+
+<ul>
+<li><code>&quot;4.2&quot;</code> matches &quot;<code>4.2.x&quot;</code></li>
+<li><code>&quot;4&quot;</code>   matches &quot;<code>4.x.x&quot;</code></li>
+<li><code>&quot;&quot;</code>    matches &quot;<code>*</code>&quot; matches any version</li>
+</ul>
+
+      <h2 id="conclusion" class="title title-h2">
+        <a name="conclusion" class="anchor" href="#conclusion">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Conclusion
+      </h2>
+    
+<p>For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide. Perhaps it may serve as a helpful cheatsheet in the future.</p>
+
+<p>Mostly I wrote this for myself because I tend to forget 😅.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://mobile.twitter.com/search?q=https%3A%2F%2Frossta.net%2Fblog%2F2020-01-29-npm-version-constraints-for-rubyists.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Jan 29, 2020
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/818387/subscriptions?ref=Rails"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="818387"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+          <h3 class="mb-2">
+    Need help with Webpack on Rails?
+  </h3>
+  <p class="mb-4">
+    Webpacker now ships by default in Rails 6 but there's no need to stress.
+    I'm putting together a course to help you master Webpack on Rails.
+  </p>
+  <p>
+    Subscribe to stay in the loop.
+  </p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+    <a
+      href="https://convertkit.com/?utm_source=dynamic&amp;utm_medium=referral&amp;utm_campaign=poweredby&amp;utm_content=form"
+      class="formkit-powered-by"
+      data-element="powered-by"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Powered By ConvertKit</a
+    >
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733966" />
+    <input type="hidden" name="tags[]" value="733964" />
+    <input type="hidden" name="tags[]" value="733959" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/blog/2020-01-29-npm-version-constraints-for-rubyists.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/three-ways-webpack-surprises-rails-developers.html">3 ways Webpack surprises web developers</a>
+    </header>
+      <p>When I first started working with Webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a>
+    </header>
+      <p>Using images bundled by Webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A common Webpacker mistake</a>
+    </header>
+      <p>A big issue that comes up with Webpacker is "where to put the JavaScript files". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/stock/lulu-blue-mountain-unsplash.jpg" alt="Lulu blue mountain unsplash" />
+          <figcaption>Photo by 拴 张 on Unsplash</figcaption>
+      </figure>
+  </article>
+    <!-- Webpack on Rails course popup form -->
+    <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
+
+    </main>
+    
+    <footer class="bg-silver border-t text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+            <li class="mb-1"><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
+            <li class="mb-1"><a href="/blog/local-ssl-for-rails-5.html">Local SSL for Rails 5 development and tests</a></li>
+            <li class="mb-1"><a href="/blog/using-the-web-push-api-with-vapid.html">Using Web Push Notifications with VAPID</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2020 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src='/js/runtime.5d7a65bee1527a00c8db.js'></script><script src='/js/vendors~app.chunk.6c6b7f30d28c87e9d1b2.js'></script><script src='/js/app.chunk.6ea60510f3639c2920d8.js'></script>
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-16458563-2"></script>
+<script type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-16458563-2');
+</script>
+
+  </body>
+</html>

@@ -5,10 +5,228 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2020-01-14T00:00:00+00:00</updated>
+  <updated>2020-01-29T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>A Guide to NPM Version Constraints for Rubyists</title>
+    <link rel="alternate" href="/blog/npm-version-constraints-for-rubyists.html"/>
+    <id>/blog/npm-version-constraints-for-rubyists.html</id>
+    <published>2020-01-29T00:00:00+00:00</published>
+    <updated>2020-01-29T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;In this post, I want to answer the following question for Rubyists:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;What do the tilde &lt;code&gt;~&lt;/code&gt; and caret &lt;code&gt;^&lt;/code&gt; designations mean for version constraints in a &lt;code&gt;package.json&lt;/code&gt; file?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Rubyists typically use a &lt;code&gt;Gemfile&lt;/code&gt; to declare Ruby dependencies for a project. For...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;In this post, I want to answer the following question for Rubyists:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;What do the tilde &lt;code&gt;~&lt;/code&gt; and caret &lt;code&gt;^&lt;/code&gt; designations mean for version constraints in a &lt;code&gt;package.json&lt;/code&gt; file?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Rubyists typically use a &lt;code&gt;Gemfile&lt;/code&gt; to declare Ruby dependencies for a project. For a JavaScript project, it&amp;#39;s typical to use a &lt;code&gt;package.json&lt;/code&gt; file. Some projects use both. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.&lt;/p&gt;
+
+&lt;p&gt;It might include a section like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="json"&gt;&amp;quot;dependencies&amp;quot;: {
+  &amp;quot;@rails/ujs&amp;quot;: &amp;quot;^6.0.0&amp;quot;,
+  &amp;quot;@rails/webpacker&amp;quot;: &amp;quot;~4.2.1&amp;quot;,
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I wrote this post to help Rubyists navigate version constraint syntax in their package.json files.&lt;/p&gt;
+
+      &lt;h2 id="version-constraints-in-gemfile" class="title title-h2"&gt;
+        &lt;a name="version-constraints-in-gemfile" class="anchor" href="#version-constraints-in-gemfile"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Version constraints in Gemfile
+      &lt;/h2&gt;
+    
+&lt;p&gt;Like the &lt;code&gt;Gemfile&lt;/code&gt;, package.json has a convention to specify version constraints. Both Ruby and NPM dependencies usually follow SemVer, that will format a constraint as &lt;code&gt;major.minor.patch&lt;/code&gt;, i.e. the declaration &lt;code&gt;&amp;quot;webpack&amp;quot;: &amp;quot;4.41.2&amp;quot;&lt;/code&gt; indicates Webpack major version 4, minor version 41, and patch version 2.&lt;/p&gt;
+
+&lt;p&gt;Where they differ is in the use of special characters to declare acceptable ranges. Let&amp;#39;s refresh the conventions used in the Gemfile.&lt;/p&gt;
+
+&lt;p&gt;To lock a gem dependency to an exact version, we would declare the gem&amp;#39;s name and its version as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;, &amp;quot;4.7.1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A more optimistic constraint would be to provide an open-ended range that will install or update to a version of the gem that satisfies the range.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;, &amp;quot;&amp;gt;= 4.7&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To limit the upper end of the range, say, to allow minor updates up to the next major version:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;, &amp;quot;&amp;gt;= 4.7&amp;quot;, &amp;quot;&amp;lt; 5&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This format has a shorthand notation, the squiggly arrow &lt;code&gt;~&amp;gt;&lt;/code&gt;, or the pessimistic version constraint.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;, &amp;quot;~&amp;gt; 4.7&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The upper end of the range is determined by the smallest level of the declared constraint. For example,&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;~&amp;gt; 4.7.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;= 4.7.1&amp;quot;, &amp;quot;&amp;lt; 4.8.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;~&amp;gt; 4.7&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;&amp;gt;= 4.7.0&amp;quot;, &amp;quot;&amp;lt; 5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;~&amp;gt; 4&amp;quot;&lt;/code&gt;     matches &lt;code&gt;&amp;quot;&amp;gt;= 4.0.0&amp;quot;, &amp;quot;&amp;lt; 5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To specify &amp;quot;no constraint&amp;quot;, simply omit the version argument.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For more info, check out &lt;a href="https://guides.rubygems.org/patterns/#declaring-dependencies" target="_blank" rel="noopener noreferrer"&gt;the guide on RubyGems&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h2 id="version-constraints-in-package-json" class="title title-h2"&gt;
+        &lt;a name="version-constraints-in-package-json" class="anchor" href="#version-constraints-in-package-json"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Version constraints in package.json
+      &lt;/h2&gt;
+    
+&lt;p&gt;NPM conventions provide similar flexibility with alternate syntax.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s consider a package.json file that declares &lt;code&gt;@rails/webpacker&lt;/code&gt; as a dependency, the following would enforce an exact version:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="json"&gt;&amp;quot;@rails/webpacker&amp;quot;: &amp;quot;4.2.1&amp;quot;,
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As with the Gemfile, comparison operators can be used as in the following examples:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;&amp;gt;=4.2.1&amp;quot;&lt;/code&gt; matches greater or equal to 4.2.1&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;&amp;gt;4.2.1&amp;quot;&lt;/code&gt; matches greater than 4.2.1&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;&amp;gt;=4.2.1 &amp;lt;5&amp;quot;&lt;/code&gt; matches greater or equal to 4.2.1 and less than 5&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;&amp;lt;5&amp;quot;&lt;/code&gt; matches less than 5&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;NPM supports alternate syntaxes for specifying ranges, including, but not limited to, caret &lt;code&gt;^&lt;/code&gt; and tilde &lt;code&gt;~&lt;/code&gt;.&lt;/p&gt;
+
+      &lt;h3 id="tilde-ranges" class="title title-h3"&gt;
+        &lt;a name="tilde-ranges" class="anchor" href="#tilde-ranges"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Tilde ranges
+      &lt;/h3&gt;
+    
+&lt;blockquote&gt;
+&lt;p&gt;NPM ~ is like Gemfile ~&amp;gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Tilde ranges for NPM are equivalent to Ruby&amp;#39;s pessimistic version constraint, the squiggly arrow &lt;code&gt;~&amp;gt;&lt;/code&gt;. In other wordss, the upper end of the range is determined by the smallest level of the declared constraint:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;~4.2.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;= 4.2.1 &amp;lt;4.3.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;~4.2&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;&amp;gt;= 4.2.0 &amp;lt;5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;~4&amp;quot;&lt;/code&gt;     matches &lt;code&gt;&amp;quot;&amp;gt;= 4.0.0 &amp;lt;5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="caret-ranges" class="title title-h3"&gt;
+        &lt;a name="caret-ranges" class="anchor" href="#caret-ranges"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Caret ranges
+      &lt;/h3&gt;
+    
+&lt;blockquote&gt;
+&lt;p&gt;NPM ^ is like Gemfile ~&amp;gt; x.0 for versions 1 and up and ~&amp;gt; 0.x.0 for versions less than 1 and greater than 0.0.1&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Caret ranges are another take on pessimistic version constraints that do not have a shorthand equivalent in Ruby, i.e., to my knowledge, they&amp;#39;re a special breed. They allow patch and minor updates for versions &lt;code&gt;&amp;gt;1.0.0&lt;/code&gt;, patch updates for versions &lt;code&gt;&amp;lt;1.0.0 &amp;gt;=0.1.0&lt;/code&gt;, and no updates for versions &lt;code&gt;&amp;lt;0.1.0&lt;/code&gt; (except preleases, e.g. &lt;code&gt;0.0.3-beta&lt;/code&gt;). My understanding is that the caret is the answer for traditional SemVer, i.e., there will be breaking changes prior to 0.1.0, there may be breaking changes between minor versions prior to 1.0.0, and there may only be breaking changes between major versions above 1.0.0. Examples:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;^4.2.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.1 &amp;lt;5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;^0.2.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=0.2.2 &amp;lt;0.3.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;^0.0.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=0.0.2 &amp;lt;0.0.3&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h2 id="bonus-syntax-in-package-json" class="title title-h2"&gt;
+        &lt;a name="bonus-syntax-in-package-json" class="anchor" href="#bonus-syntax-in-package-json"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Bonus syntax in package.json
+      &lt;/h2&gt;
+    
+&lt;p&gt;NPM also supports hyphen ranges and x-ranges, neither of which have Gemfile equivalents as well.&lt;/p&gt;
+
+      &lt;h3 id="hyphen-ranges" class="title title-h3"&gt;
+        &lt;a name="hyphen-ranges" class="anchor" href="#hyphen-ranges"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Hyphen ranges
+      &lt;/h3&gt;
+    
+&lt;blockquote&gt;
+&lt;p&gt;NPM hyphen-ranges are like separate comparison operators in a Gemfile&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For hyphen ranges, range inclusivity is tied to specificity of the declared versions:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;4.2.1 - 5.4.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.1 &amp;lt;=5.4.2&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;4.2 - 5.4.2&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.0 &amp;lt;=5.4.2&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;4.2 - 5&amp;quot;&lt;/code&gt;       matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.0 &amp;lt;=6.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="x-ranges" class="title title-h3"&gt;
+        &lt;a name="x-ranges" class="anchor" href="#x-ranges"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        X-ranges
+      &lt;/h3&gt;
+    
+&lt;blockquote&gt;
+&lt;p&gt;NPM x-ranges behave like Gemfile ~&amp;gt; with exceptions&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;X-ranges are mostly self-explanatory as the &lt;code&gt;x&lt;/code&gt; denotes any value:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;4.2.x&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;~4.2.0&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;= 4.2.0 &amp;lt;4.3.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;4.x&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;~4.0&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;&amp;gt;= 4.0.0 &amp;lt;5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;4.x.x&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;4.x&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A partial version range is treated as an x-range:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;4.2&amp;quot;&lt;/code&gt; matches &amp;quot;&lt;code&gt;4.2.x&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;4&amp;quot;&lt;/code&gt;   matches &amp;quot;&lt;code&gt;4.x.x&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;    matches &amp;quot;&lt;code&gt;*&lt;/code&gt;&amp;quot; matches any version&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h2 id="conclusion" class="title title-h2"&gt;
+        &lt;a name="conclusion" class="anchor" href="#conclusion"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Conclusion
+      &lt;/h2&gt;
+    
+&lt;p&gt;For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide. Perhaps it may serve as a helpful cheatsheet in the future.&lt;/p&gt;
+
+&lt;p&gt;Mostly I wrote this for myself because I tend to forget 😅.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>3 ways Webpack surprises web developers</title>
     <link rel="alternate" href="/blog/three-ways-webpack-surprises-rails-developers.html"/>
@@ -894,160 +1112,6 @@ Rails.start()
 &lt;hr&gt;
 
 &lt;p&gt;The chef’s menu need not be reserved for special occasions in web development. With Vue.js, we have a framework that gives us all the ingredients we need to jump into building outstanding user interfaces. It also makes it relatively easy to swap out menu items to suit your preferences. So it would seem you &lt;a href="https://en.wikipedia.org/wiki/You_can%27t_have_your_cake_and_eat_it" target="_blank" rel="noopener noreferrer"&gt;can have your cake and eat it too&lt;/a&gt;? Just another reason why I find Vue.js so fulfilling.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Seven reasons choose Vue.js in 2019</title>
-    <link rel="alternate" href="/blog/reasons-to-choose-vue-js-in-2019.html"/>
-    <id>/blog/reasons-to-choose-vue-js-in-2019.html</id>
-    <published>2019-01-01T00:00:00+00:00</published>
-    <updated>2019-01-01T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;I love building applications in Vue.js and here's why I think the future is looking bright for the framework and its community.&lt;/p&gt;
-
-      &lt;h3 id="1-no-build-step-required" class="title title-h3"&gt;
-        &lt;a name="1-no-build-step-required" class="anchor" href="#1-no-build-step-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        1. No build step required
-      &lt;/h3&gt;
-    
-&lt;p&gt;A critical aspect of the Vue philosophy...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;I love building applications in Vue.js and here&amp;#39;s why I think the future is looking bright for the framework and its community.&lt;/p&gt;
-
-      &lt;h3 id="1-no-build-step-required" class="title title-h3"&gt;
-        &lt;a name="1-no-build-step-required" class="anchor" href="#1-no-build-step-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        1. No build step required
-      &lt;/h3&gt;
-    
-&lt;p&gt;A critical aspect of the Vue philosophy is it be easy to get started. Unlike some other popular frameworks, it&amp;#39;s not necessary to use a complex build tool like Webpack to build an application with it. Just include a script tag pointing to the &lt;a href="https://vuejs.org/v2/guide/installation.html#Direct-lt-script-gt-Include" target="_blank" rel="noopener noreferrer"&gt;latest release for development or production&lt;/a&gt;, and you have access to the Vue runtime.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;&amp;lt;script src=&amp;quot;https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Having a low barrier to entry makes Vue a worthy consideration as a first JS framework to learn.&lt;/p&gt;
-
-      &lt;h3 id="2-a-world-class-command-line-interface" class="title title-h3"&gt;
-        &lt;a name="2-a-world-class-command-line-interface" class="anchor" href="#2-a-world-class-command-line-interface"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        2. A world-class command line interface
-      &lt;/h3&gt;
-    
-&lt;p&gt;Of course, many developers are looking for advanced development features like ES or TypeScript transpilation, hot module replacement, and tree-shaking, made possible by build tools. Vue has you covered there as well.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm install -g @vue/cli
-vue create my-project
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This past year, the Vue core team re-wrote their command line interface from the ground up, resulting in Vue CLI 3. It&amp;#39;s designed in such a way to promote best practices and a full-featured default Webpack configuration that should be easier to extend without making it difficult to upgrade, i.e., &amp;quot;no need to eject.&amp;quot; Vue CLI provides a ton of useful additional features, including an interactive project initialization wizard (available through the terminal or a web-based UI), a plugin system to support generators and configuration for community add-ons, and the ability to specify alternative build targets, like web components or as libraries.&lt;/p&gt;
-
-      &lt;h3 id="3-friendly-learning-curve" class="title title-h3"&gt;
-        &lt;a name="3-friendly-learning-curve" class="anchor" href="#3-friendly-learning-curve"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        3. Friendly learning curve
-      &lt;/h3&gt;
-    
-&lt;p&gt;A common criticism I hear about Vue is that its API has a larger surface area than some other popular frameworks and I agree up to a point (depending on the framework). Ironically, one thing I hear &lt;a href="https://hackernoon.com/should-you-learn-react-or-vue-first-7dc0d4dd8c04" target="_blank" rel="noopener noreferrer"&gt;over&lt;/a&gt; and &lt;a href="https://www.quora.com/How-does-Vue-js-compare-to-React-js" target="_blank" rel="noopener noreferrer"&gt;over&lt;/a&gt; in some of these comparisons are Vue is easy to learn. Though this point is subjective and anecdotal, this has held for folks I&amp;#39;ve heard from regardless of previous experience with JavaScript frameworks and JavaScript in general.&lt;/p&gt;
-
-&lt;p&gt;One reason for this, I believe, is that Vue is a &amp;quot;progressive JavaScript framework.&amp;quot;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/vue/vuejs.org-homepage.png" alt="Vue is a Progressive JavaScript Framework" /&gt;&lt;/p&gt;
-
-&lt;p&gt;No need to learn the whole API to get started with Vue, no need to learn a new syntax like JSX; only basic HTML, CSS, and JS knowledge is required to get started.&lt;/p&gt;
-
-      &lt;h3 id="4-a-solid-ecosystem" class="title title-h3"&gt;
-        &lt;a name="4-a-solid-ecosystem" class="anchor" href="#4-a-solid-ecosystem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        4. A solid ecosystem
-      &lt;/h3&gt;
-    
-&lt;p&gt;Before Vue, I&amp;#39;ve gotten frustrated with the fractured nature of learning best practices beyond the basics. What client-side router should I use? Which data management/Flux implementation should I use? How do I test my components? How should I configure my build system? Over time, answering these questions has gotten easier, depending on the community, but I&amp;#39;ve liked Vue&amp;#39;s approach since the start.&lt;/p&gt;
-
-&lt;p&gt;Vue provides official support for several essential add-ons, including &lt;code&gt;vue-router&lt;/code&gt; for client-side routing, &lt;code&gt;vuex&lt;/code&gt; for managing state, &lt;code&gt;vue-test-utils&lt;/code&gt; for unit testing components, the &lt;code&gt;vue-devtools&lt;/code&gt; browser extension for debugging, Vue CLI as described earlier. None of these tools are required Vue can work quite well with alternatives for these libraries, like &lt;code&gt;redux&lt;/code&gt; or &lt;code&gt;mobx&lt;/code&gt; instead of &lt;code&gt;vuex&lt;/code&gt;, or another router. The critical point is that the community assists developers by supporting a set of very good recommended defaults, something that a backend framework like Ruby on Rails has traditionally done very well.&lt;/p&gt;
-
-      &lt;h3 id="5-the-vue-instance" class="title title-h3"&gt;
-        &lt;a name="5-the-vue-instance" class="anchor" href="#5-the-vue-instance"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        5. The Vue instance
-      &lt;/h3&gt;
-    
-&lt;p&gt;The most potent aspect Vue is its &lt;a href="https://codingexplained.com/coding/front-end/vue-js/understanding-vue-js-reactivity" target="_blank" rel="noopener noreferrer"&gt;reactivity system&lt;/a&gt;. We can tap into it through &lt;a href="https://vuejs.org/v2/guide/instance.html" target="_blank" rel="noopener noreferrer"&gt;the &lt;code&gt;Vue&lt;/code&gt; instance&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;new Vue({
-  el: &amp;quot;#app&amp;quot;,
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This invocation is how every Vue application is initialized. It also creates a fully-reactive root component of the application. A Vue instance can also be used as an event bus or for tracking dependency changes separately from the application component tree, say, as an implementation detail of a Vue plugin.&lt;/p&gt;
-
-&lt;p&gt;Vue&amp;#39;s reactivity system is beautiful in its simplicity. Playing with the Vue instance is an excellent way to understanding how the reactivity system works and level up one&amp;#39;s Vue, and JavaScript, skills in general.&lt;/p&gt;
-
-      &lt;h3 id="6-vue-3-lands-this-year" class="title title-h3"&gt;
-        &lt;a name="6-vue-3-lands-this-year" class="anchor" href="#6-vue-3-lands-this-year"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        6. Vue 3 lands this year
-      &lt;/h3&gt;
-    
-&lt;p&gt;Speaking of Vue&amp;#39;s reactivity system, &lt;a href="https://medium.com/the-vue-point/plans-for-the-next-iteration-of-vue-js-777ffea6fabf" target="_blank" rel="noopener noreferrer"&gt;Vue 3 is expected to ship this year&lt;/a&gt;. Among some architectural and performance improvements and minor API changes, Vue 3 provides a new Proxy-based implementation of its reactivity system.&lt;/p&gt;
-
-&lt;p&gt;The Proxy-based system solves &lt;a href="https://vuejs.org/v2/guide/reactivity.html#Change-Detection-Caveats" target="_blank" rel="noopener noreferrer"&gt;some of the known caveats with Vue change detection&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p&gt;In Vue 2, Vue cannot:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Detect property addition, e.g., &lt;code&gt;vm.b = 2&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Detect array modification through indexing or modifying length, e.g., &lt;code&gt;arr[0] = 2&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The workound: use &lt;code&gt;Vue.set&lt;/code&gt;, e.g., &lt;code&gt;Vue.set(vm, &amp;#39;b&amp;#39;, 2)&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Vue 3 Proxy-based reactivity makes these annoying issues go away.&lt;/p&gt;
-
-      &lt;h3 id="7-an-amazing-community" class="title title-h3"&gt;
-        &lt;a name="7-an-amazing-community" class="anchor" href="#7-an-amazing-community"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        7. An amazing community
-      &lt;/h3&gt;
-    
-&lt;p&gt;Since I&amp;#39;ve started using Vue, I&amp;#39;ve been fortunate to learn from a variety of Vue developers through forums, on Twitter and GitHub, and at local meetups. Vue has a distributed, hard-working core team, who are continually improving the framework without over-burdening developers with a bunch of fringe features or painful upgrades. The &lt;a href="https://forum.vuejs.org/" target="_blank" rel="noopener noreferrer"&gt;Vue forums&lt;/a&gt; is a great way to get insight from experts on tricky issues. Vue conferences, like &lt;a href="https://vueconf.us/" target="_blank" rel="noopener noreferrer"&gt;VueConf.us&lt;/a&gt; and &lt;a href="https://www.vuejs.amsterdam/" target="_blank" rel="noopener noreferrer"&gt;Vue Amsterdam&lt;/a&gt;, a great way to connect with other members of the community and attend more in-depth workshops, are already taking place all over the world. There&amp;#39;s also &lt;a href="https://vuevixens.org/" target="_blank" rel="noopener noreferrer"&gt;Vue Vixens&lt;/a&gt;, an organization that provides safe environments for people who identify as women to learn Vue.js.&lt;/p&gt;
-
-      &lt;h3 id="bonus-it-39-s-just-plain-fun" class="title title-h3"&gt;
-        &lt;a name="bonus-it-39-s-just-plain-fun" class="anchor" href="#bonus-it-39-s-just-plain-fun"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Bonus. It&amp;#39;s just plain fun
-      &lt;/h3&gt;
-    
-&lt;p&gt;I got my start in web development just as the Ruby and the Rails framework was taking off. One thing I have always loved about Ruby is creator Yukihiro Matsumoto&amp;#39;s explicit (and, dare I say, audacious) goal of inventing a language optimized for developer happiness.&lt;/p&gt;
-
-&lt;p&gt;I get these same feelings when I build interfaces with Vue.js. I was spending less time wrestling with configuration and APIs and more time building and having fun doing it.&lt;/p&gt;
-
-&lt;p&gt;While I don&amp;#39;t know that Vue.js was created so explicitly in the name of developer happiness, for, it has and continues to be fulfilling to that end. It&amp;#39;s something I hear from many others who&amp;#39;ve taken time to learn the framework and probably the most important reason I&amp;#39;ll recommend Vue.js in 2019.&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;p&gt;So what are you waiting for? Best of luck with your Vue.js journey in the coming year.&lt;/p&gt;
 </content>
   </entry>
 </feed>
