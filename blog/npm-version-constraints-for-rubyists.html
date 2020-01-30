@@ -65,7 +65,9 @@
 <p>What do the tilde <code>~</code> and caret <code>^</code> designations mean for version constraints in a <code>package.json</code> file?</p>
 </blockquote>
 
-<p>Rubyists typically use a <code>Gemfile</code> to declare Ruby dependencies for a project. For a JavaScript project, it&#39;s typical to use a <code>package.json</code> file. Some projects use both. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.</p>
+<p>To answer this question, we&#39;ll compare how Rubyists declare Ruby project dependencies in a <code>Gemfile</code> with conventions used to declare NPM module dependencies in a <code>package.json</code> file.</p>
+
+<p>Of note, some projects use both Gemfile and package.json. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.</p>
 
 <p>It might include a section like this:</p>
 
@@ -75,7 +77,7 @@
 },
 </code></pre>
 
-<p>I wrote this post to help Rubyists navigate version constraint syntax in their package.json files.</p>
+<p>If you&#39;re a Rubyist and the version syntax looks odd, then this post is for you.</p>
 
       <h2 id="version-constraints-in-gemfile" class="title title-h2">
         <a name="version-constraints-in-gemfile" class="anchor" href="#version-constraints-in-gemfile">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -185,8 +187,8 @@
 <p>Caret ranges are another take on pessimistic version constraints that do not have a shorthand equivalent in Ruby, i.e., to my knowledge, they&#39;re a special breed. They allow patch and minor updates for versions <code>&gt;1.0.0</code>, patch updates for versions <code>&lt;1.0.0 &gt;=0.1.0</code>, and no updates for versions <code>&lt;0.1.0</code> (except preleases, e.g. <code>0.0.3-beta</code>). My understanding is that the caret is the answer for traditional SemVer, i.e., there will be breaking changes prior to 0.1.0, there may be breaking changes between minor versions prior to 1.0.0, and there may only be breaking changes between major versions above 1.0.0. Examples:</p>
 
 <ul>
-<li><code>&quot;^4.2.1&quot;</code> matches <code>&quot;&gt;=4.2.1 &lt;5.0.0&quot;</code></li>
-<li><code>&quot;^0.2.2&quot;</code> matches <code>&quot;&gt;=0.2.2 &lt;0.3.0&quot;</code></li>
+<li><code>&quot;^4.2.1&quot;</code> matches <code>&quot;&gt;=4.2.1 &lt;5.0.0&quot;</code> or <code>&quot;~4.2&quot;</code></li>
+<li><code>&quot;^0.2.2&quot;</code> matches <code>&quot;&gt;=0.2.2 &lt;0.3.0&quot;</code> or <code>&quot;~0.2.2&quot;</code></li>
 <li><code>&quot;^0.0.2&quot;</code> matches <code>&quot;&gt;=0.0.2 &lt;0.0.3&quot;</code></li>
 </ul>
 
@@ -256,7 +258,7 @@
         Conclusion
       </h2>
     
-<p>For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide. Perhaps it may serve as a helpful cheatsheet in the future.</p>
+<p>For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide, or perhaps a future cheatsheet.</p>
 
 <p>Mostly I wrote this for myself because I tend to forget 😅.</p>
 

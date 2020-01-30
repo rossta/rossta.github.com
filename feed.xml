@@ -24,14 +24,16 @@
 &lt;p&gt;What do the tilde &lt;code&gt;~&lt;/code&gt; and caret &lt;code&gt;^&lt;/code&gt; designations mean for version constraints in a &lt;code&gt;package.json&lt;/code&gt; file?&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Rubyists typically use a &lt;code&gt;Gemfile&lt;/code&gt; to declare Ruby dependencies for a project. For...&lt;/p&gt;</summary>
+&lt;p&gt;To answer this question, we'll compare how Rubyists declare Ruby project dependencies...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;In this post, I want to answer the following question for Rubyists:&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;What do the tilde &lt;code&gt;~&lt;/code&gt; and caret &lt;code&gt;^&lt;/code&gt; designations mean for version constraints in a &lt;code&gt;package.json&lt;/code&gt; file?&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Rubyists typically use a &lt;code&gt;Gemfile&lt;/code&gt; to declare Ruby dependencies for a project. For a JavaScript project, it&amp;#39;s typical to use a &lt;code&gt;package.json&lt;/code&gt; file. Some projects use both. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.&lt;/p&gt;
+&lt;p&gt;To answer this question, we&amp;#39;ll compare how Rubyists declare Ruby project dependencies in a &lt;code&gt;Gemfile&lt;/code&gt; with conventions used to declare NPM module dependencies in a &lt;code&gt;package.json&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;Of note, some projects use both Gemfile and package.json. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.&lt;/p&gt;
 
 &lt;p&gt;It might include a section like this:&lt;/p&gt;
 
@@ -41,7 +43,7 @@
 },
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;I wrote this post to help Rubyists navigate version constraint syntax in their package.json files.&lt;/p&gt;
+&lt;p&gt;If you&amp;#39;re a Rubyist and the version syntax looks odd, then this post is for you.&lt;/p&gt;
 
       &lt;h2 id="version-constraints-in-gemfile" class="title title-h2"&gt;
         &lt;a name="version-constraints-in-gemfile" class="anchor" href="#version-constraints-in-gemfile"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -151,8 +153,8 @@
 &lt;p&gt;Caret ranges are another take on pessimistic version constraints that do not have a shorthand equivalent in Ruby, i.e., to my knowledge, they&amp;#39;re a special breed. They allow patch and minor updates for versions &lt;code&gt;&amp;gt;1.0.0&lt;/code&gt;, patch updates for versions &lt;code&gt;&amp;lt;1.0.0 &amp;gt;=0.1.0&lt;/code&gt;, and no updates for versions &lt;code&gt;&amp;lt;0.1.0&lt;/code&gt; (except preleases, e.g. &lt;code&gt;0.0.3-beta&lt;/code&gt;). My understanding is that the caret is the answer for traditional SemVer, i.e., there will be breaking changes prior to 0.1.0, there may be breaking changes between minor versions prior to 1.0.0, and there may only be breaking changes between major versions above 1.0.0. Examples:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;^4.2.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.1 &amp;lt;5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;^0.2.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=0.2.2 &amp;lt;0.3.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;^4.2.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.1 &amp;lt;5.0.0&amp;quot;&lt;/code&gt; or &lt;code&gt;&amp;quot;~4.2&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;^0.2.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=0.2.2 &amp;lt;0.3.0&amp;quot;&lt;/code&gt; or &lt;code&gt;&amp;quot;~0.2.2&amp;quot;&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;&amp;quot;^0.0.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=0.0.2 &amp;lt;0.0.3&amp;quot;&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -222,7 +224,7 @@
         Conclusion
       &lt;/h2&gt;
     
-&lt;p&gt;For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide. Perhaps it may serve as a helpful cheatsheet in the future.&lt;/p&gt;
+&lt;p&gt;For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide, or perhaps a future cheatsheet.&lt;/p&gt;
 
 &lt;p&gt;Mostly I wrote this for myself because I tend to forget 😅.&lt;/p&gt;
 </content>
