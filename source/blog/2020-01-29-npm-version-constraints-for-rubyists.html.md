@@ -17,7 +17,9 @@ In this post, I want to answer the following question for Rubyists:
 
 > What do the tilde `~` and caret `^` designations mean for version constraints in a `package.json` file?
 
-Rubyists typically use a `Gemfile` to declare Ruby dependencies for a project. For a JavaScript project, it's typical to use a `package.json` file. Some projects use both. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.
+To answer this question, we'll compare how Rubyists declare Ruby project dependencies in a `Gemfile` with conventions used to declare NPM module dependencies in a `package.json` file.
+
+Of note, some projects use both Gemfile and package.json. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.
 
 It might include a section like this:
 
@@ -27,7 +29,7 @@ It might include a section like this:
   "@rails/webpacker": "~4.2.1",
 },
 ```
-I wrote this post to help Rubyists navigate version constraint syntax in their package.json files.
+If you're a Rubyist and the version syntax looks odd, then this post is for you.
 
 ## Version constraints in Gemfile
 
@@ -108,8 +110,8 @@ Tilde ranges for NPM are equivalent to Ruby's pessimistic version constraint, th
 
 Caret ranges are another take on pessimistic version constraints that do not have a shorthand equivalent in Ruby, i.e., to my knowledge, they're a special breed. They allow patch and minor updates for versions `>1.0.0`, patch updates for versions `<1.0.0 >=0.1.0`, and no updates for versions `<0.1.0` (except preleases, e.g. `0.0.3-beta`). My understanding is that the caret is the answer for traditional SemVer, i.e., there will be breaking changes prior to 0.1.0, there may be breaking changes between minor versions prior to 1.0.0, and there may only be breaking changes between major versions above 1.0.0. Examples:
 
-* `"^4.2.1"` matches `">=4.2.1 <5.0.0"`
-* `"^0.2.2"` matches `">=0.2.2 <0.3.0"`
+* `"^4.2.1"` matches `">=4.2.1 <5.0.0"` or `"~4.2"`
+* `"^0.2.2"` matches `">=0.2.2 <0.3.0"` or `"~0.2.2"`
 * `"^0.0.2"` matches `">=0.0.2 <0.0.3"`
 
 ## Bonus syntax in package.json
@@ -144,6 +146,6 @@ A partial version range is treated as an x-range:
 
 ## Conclusion
 
-For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide. Perhaps it may serve as a helpful cheatsheet in the future.
+For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide, or perhaps a future cheatsheet.
 
 Mostly I wrote this for myself because I tend to forget 😅.
