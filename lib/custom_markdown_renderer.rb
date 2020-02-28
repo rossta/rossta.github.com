@@ -32,7 +32,7 @@ class CustomMarkdownRenderer < Middleman::Renderers::MiddlemanRedcarpetHTML
   def anchor_tag(url, text)
     attributes = {href: url}
 
-    unless (url || "").start_with?("/")
+    unless url.blank? || url.start_with?("/", "#")
       attributes[:target] = "_blank"
       attributes[:rel] = "noopener noreferrer"
     end
