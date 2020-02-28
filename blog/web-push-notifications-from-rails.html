@@ -223,7 +223,7 @@ if (&#39;serviceWorker&#39; in navigator) {
 }
 </code></pre>
 
-<p>This code registers a service worker on the given scope via <code>navigator.serviceWorker.register</code>. This returns a <a href="" target="_blank" rel="noopener noreferrer">Promise</a> which will resolve to an instance of <code>ServiceWorkerRegistration</code>. This registration object has a <code>pushManager</code> property which we use to <code>subscribe</code> to the Web Push server. The <code>{ userVisibleOnly: true }</code> parameter is required for us to use notifications.</p>
+<p>This code registers a service worker on the given scope via <code>navigator.serviceWorker.register</code>. This returns a <a href="">Promise</a> which will resolve to an instance of <code>ServiceWorkerRegistration</code>. This registration object has a <code>pushManager</code> property which we use to <code>subscribe</code> to the Web Push server. The <code>{ userVisibleOnly: true }</code> parameter is required for us to use notifications.</p>
 
       <h3 id="troubleshooting" class="title title-h3">
         <a name="troubleshooting" class="anchor" href="#troubleshooting">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
