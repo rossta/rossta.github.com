@@ -88,7 +88,7 @@ GEM
       middleman-core (>= 3.0.0)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
-    nokogiri (1.10.5)
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     padrino-helpers (0.13.3.4)
       i18n (~> 0.6, >= 0.6.7)
@@ -110,7 +110,7 @@ GEM
     rack-livereload (0.3.17)
       rack
     rainbow (3.0.0)
-    rake (12.3.2)
+    rake (13.0.1)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
