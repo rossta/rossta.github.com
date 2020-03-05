@@ -253,6 +253,8 @@ It brings static-typing to frontend development, allowing developers to catch er
 
 The Webpack compilation and build process provides a large number of hooks to allow behavior modification at nearly any stage. Here is a short list of ways you can extend Webpack to meet the needs of your system:
 
+- Unit testing through the Rails asset pipeline has always felt like jumping through hoops; now take your pick of JavaScript unit testing tools like [Mocha](https://mochajs.org/) or [Jest](https://jestjs.io/).
+- Integrate with [eslint](https://eslint.org/) to standardize code style and syntax and automate fixes
 - Add a plugin to analyze the size and contents of your bundles, e.g. [WebpackBundlerAnalyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer)
 - Add a loader to parse your Rails i18n yaml files and provide them as JSON to your Webpack JavaScript modules
 - Add a plugin to produce "unfingerprinted" clones of your bundles, as with https://github.com/alexspeller/non-stupid-digest-assets
