@@ -35,7 +35,7 @@ Here are a few reasons why Webpack and Webpacker might not be a good fit for you
 
 1. **You don't have the time**
 
-    I'll be the first to admit that adopting Webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. Webpack and NPM dependencies are upgraded at a rapid pace, so you will may also need to work to keep up with upgrades. You might also need to understand how JavaScript modules work—good news, those skills are transferrable.
+    I'll be the first to admit that adopting Webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. Webpack and NPM dependencies are upgraded at a rapid pace, so you need to keep up with upgrades. You might also have to understand how JavaScript modules work—good news, those skills are transferrable.
 
 1. **You don't have the right mindset**
 
