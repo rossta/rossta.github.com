@@ -77,7 +77,7 @@ Writing your JavaScript source code within a module system allows you to take ad
 
 There seems to be little doubt now that ES modules are the future of JavaScript. As the new EcmaScript standard, eventually, we'll be able to use ES modules in browser and server-side runtimes, like Node.js. With support for both synchronous and asynchronous imports, they may eventually phase out early module specifications, like CommonJS and AMD altogether.
 
-Of note, ES modules employ live bindings, meaning when an exported module changes a value, it can be read in the importing module.. (more on what this is and why it matters). In addition to being useful potentially for application logic, this feature allows ES modules to support cyclic dependencies.
+Of note, ES modules employ live bindings, meaning when an exported module changes a value, it can be read in the importing module. In addition to being useful potentially for application logic, this feature allows ES modules to support cyclic dependencies.
 
 For more on how ES modules work, check out [this cartoon deep dive](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/).
 
