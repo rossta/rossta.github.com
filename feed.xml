@@ -5,10 +5,634 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2020-01-29T00:00:00+00:00</updated>
+  <updated>2020-03-02T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>25 reasons to switch to Webpacker</title>
+    <link rel="alternate" href="/blog/reasons-to-switch-to-webpacker.html"/>
+    <id>/blog/reasons-to-switch-to-webpacker.html</id>
+    <published>2020-03-02T00:00:00+00:00</published>
+    <updated>2020-03-02T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;&lt;em&gt;Should you switch to Webpacker?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this post, I'll offer you reasons why you should.&lt;/p&gt;
+
+&lt;p&gt;I've been using Webpacker in production since 2017 and I've spent a lot of time learning how it works. Folks have been asking me whether it's worth the tradeoff...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;&lt;em&gt;Should you switch to Webpacker?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In this post, I&amp;#39;ll offer you reasons why you should.&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;ve been using Webpacker in production since 2017 and I&amp;#39;ve spent a lot of time learning how it works. Folks have been asking me whether it&amp;#39;s worth the tradeoff of getting up to speed with Webpacker.&lt;/p&gt;
+
+&lt;p&gt;Before I say why switching to Webpacker is a good idea, I&amp;#39;ll give you a few reasons why you might NOT want to switch and stick with the Rails asset pipeline instead.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;You don&amp;#39;t have the right application&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If your application doesn&amp;#39;t use much JavaScript, it&amp;#39;s probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a heavier tool like Webpack.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;You don&amp;#39;t have the time&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;ll be the first to admit that adopting Webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. Webpack and NPM dependencies are upgraded at a rapid pace, so you will may also need to work to keep up with upgrades. You might also need to understand how JavaScript modules work—good news, those skills are transferrable.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;You don&amp;#39;t have the right mindset&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Yes, Webpack is complex. Plenty of developers love to complain about this fact. If you think you&amp;#39;re one of those developers, you probably won&amp;#39;t enjoy the process of adopting Webpack. Given the time and motivation, a lot of the frustration can be eased through education. Make sure you&amp;#39;ve got a positive attitude going in.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Given a little time, an application that could use a more capable asset bundler, and the right mindset, you&amp;#39;ll be successful upgrading to Webpacker. Here&amp;#39;s a list of ways you&amp;#39;ll benefit.&lt;/p&gt;
+
+      &lt;h3 id="1-webpacker-is-the-future-of-rails" class="title title-h3"&gt;
+        &lt;a name="1-webpacker-is-the-future-of-rails" class="anchor" href="#1-webpacker-is-the-future-of-rails"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        1. Webpacker is the future of Rails
+      &lt;/h3&gt;
+    
+&lt;p&gt;Webpacker is now the default JavaScript compiler for new Rails apps. Rails 6 apps will still include both Sprockets for managing CSS and images, but JavaScript dependencies are meant to be bundled by Webpacker. The Rails defaults fall in line with how Basecamp builds web applications and it may benefit your team to &amp;quot;go with the herd&amp;quot; to stay closer to Rails edge and attract candidates who are looking to work with more advanced tools.&lt;/p&gt;
+
+      &lt;h3 id="2-sprockets-is-dead-long-live-sprockets" class="title title-h3"&gt;
+        &lt;a name="2-sprockets-is-dead-long-live-sprockets" class="anchor" href="#2-sprockets-is-dead-long-live-sprockets"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        2. Sprockets is dead; Long live Sprockets
+      &lt;/h3&gt;
+    
+&lt;p&gt;Sprockets development may have slowed in recent years, but it&amp;#39;s not going away anytime soon. Sprockets version 4 was recently released, thanks to hard work led by Richard Schneeman. The default Rails setup encourages developers to use both Webpacker (for JavaScript compilation) and Sprockets (for CSS and images) side-by-side.&lt;/p&gt;
+
+&lt;p&gt;The ability to use both compilers in the same application is a real advantage for teams making the switch; this opens the door to an iterative migration which may be desirable for larger applications to de-risk the transition from Sprockets to Webpackexr.&lt;/p&gt;
+
+      &lt;h3 id="3-it-will-change-the-way-you-write-javascript-for-the-better" class="title title-h3"&gt;
+        &lt;a name="3-it-will-change-the-way-you-write-javascript-for-the-better" class="anchor" href="#3-it-will-change-the-way-you-write-javascript-for-the-better"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        3. It will change the way you write JavaScript for the better
+      &lt;/h3&gt;
+    
+&lt;p&gt;Prior to Rails support for Webpack through Webpacker, most of the Rails apps I&amp;#39;ve worked on or seen either directly on GitHub or implicitly through tutorials or presentations, have fallen into one of the following categories:&lt;/p&gt;
+
+&lt;p&gt;1. jQuery spaghetti
+    1. Bespoke module implementation
+    1. Combination of 1. and 2.&lt;/p&gt;
+
+&lt;p&gt;What&amp;#39;s wrong with this approach?&lt;/p&gt;
+
+&lt;p&gt;1. Accidentally leaking JavaScript into the global scope
+    1. Difficult to share code
+    1. Order-dependence when requiring code
+    1. Very difficult to understand implicit dependency graph
+    1. Very difficult to load code asynchronously&lt;/p&gt;
+
+&lt;p&gt;Writing your JavaScript source code within a module system allows you to take advantage of module scope within each file, i.e. no accidental leaking of code into the global scope. No more bespoke module implementations.&lt;/p&gt;
+
+      &lt;h3 id="4-enjoy-the-power-of-es-modules" class="title title-h3"&gt;
+        &lt;a name="4-enjoy-the-power-of-es-modules" class="anchor" href="#4-enjoy-the-power-of-es-modules"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        4. Enjoy the power of ES modules
+      &lt;/h3&gt;
+    
+&lt;p&gt;There seems to be little doubt now that ES modules are the future of JavaScript. As the new EcmaScript standard, eventually, we&amp;#39;ll be able to use ES modules in browser and server-side runtimes, like Node.js. With support for both synchronous and asynchronous imports, they may eventually phase out early module specifications, like CommonJS and AMD altogether.&lt;/p&gt;
+
+&lt;p&gt;Of note, ES modules employ live bindings, meaning when an exported module changes a value, it can be read in the importing module.. (more on what this is and why it matters). In addition to being useful potentially for application logic, this feature allows ES modules to support cyclic dependencies.&lt;/p&gt;
+
+&lt;p&gt;For more on how ES modules work, check out &lt;a href="https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/" target="_blank" rel="noopener noreferrer"&gt;this cartoon deep dive&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h3 id="5-javascript_framework-not-required" class="title title-h3"&gt;
+        &lt;a name="5-javascript_framework-not-required" class="anchor" href="#5-javascript_framework-not-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        5. $JAVASCRIPT_FRAMEWORK not required
+      &lt;/h3&gt;
+    
+&lt;p&gt;Contrary to popular belief, you don&amp;#39;t need to use a popular frontend framework, React, Vue, Angular, or Svelte, to take advantage of what Webpack has to offer. It&amp;#39;s works just great with &amp;quot;vanilla JS&amp;quot; or even jQuery-based apps.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/no-framework-required.png" alt="Webpack and JS" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Personally, I don&amp;#39;t believe single page applications are worth the extra effort and complexity for the majority of CRUD-based apps—the Rails sweet-spot. Employing &amp;quot;JavaScript sprinkles&amp;quot; still makes a lot of sense in 2020 and Webpack should be considered an advantage.&lt;/p&gt;
+
+      &lt;h3 id="6-take-advantage-of-alternative-file-structures" class="title title-h3"&gt;
+        &lt;a name="6-take-advantage-of-alternative-file-structures" class="anchor" href="#6-take-advantage-of-alternative-file-structures"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        6. Take advantage of alternative file structures
+      &lt;/h3&gt;
+    
+&lt;p&gt;Webpack opens the door to a great deal of customization of how JavaScript source files are structured. Perhaps the most popular JavaScript framework, React.js, introduced us to JSX, which allows developer to challenge the old notion of separate of concenrns to write HTML-like JavaScript code to co-locate HTML and JavaScript source for components.&lt;/p&gt;
+
+&lt;p&gt;Vue.js is famous, in-part, for its support for Single File Components, which allows developers to co-locate HTML, CSS, and JavaScript as separate portions of a single file.&lt;/p&gt;
+
+&lt;p&gt;Example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="vue"&gt;&amp;lt;template&amp;gt;
+  &amp;lt;div&amp;gt;Hello, {{ name }}!&amp;lt;/div&amp;gt;
+&amp;lt;/template&amp;gt;
+
+&amp;lt;script&amp;gt;
+export default {
+  data() {
+    return {
+      name: &amp;quot;World&amp;quot;
+    }
+  }
+}
+&amp;lt;/script&amp;gt;
+
+&amp;lt;style scoped&amp;gt;
+div {
+  background-color: aliceblue;
+  padding: 1em;
+  font-size: 2em;
+  text-align: center;
+}
+&amp;lt;/style&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is not (to my knowledge) an approach that would be easily handled in the Rails asset pipeline.&lt;/p&gt;
+
+      &lt;h3 id="7-you-39-ll-have-a-better-way-to-manage-dependencies" class="title title-h3"&gt;
+        &lt;a name="7-you-39-ll-have-a-better-way-to-manage-dependencies" class="anchor" href="#7-you-39-ll-have-a-better-way-to-manage-dependencies"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        7. You&amp;#39;ll have a better way to manage dependencies
+      &lt;/h3&gt;
+    
+&lt;p&gt;I&amp;#39;ve always found Rails &amp;quot;asset gems&amp;quot; to be a major pain. In most cases, you can replace your asset gems with Node Package Manager, or NPM, dependencies.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/npm-logo.png" alt="NPM logo" /&gt;&lt;/p&gt;
+
+&lt;p&gt;NPM has become the primary repository for distributing open source JavaScript packages. Although originally designed for packages intended to be used with the Node.js runtime, over time, it has also become the default for browser-based packages. This means that both libraries that run on Node.js, like Webpack, and libraries in the browser, like React, Vue, and jQuery, can all be distributed over NPM. Using NPM is a huge improvement over the typical for sharing JavaScript and other assets for the Rails asset pipeline. One big point of friction with the latter approach is having to maintain both a Ruby version along with the version of the packaged assets. This technique has always felt cumbersome and bolted on.&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s worth mentioning that you can still try managing assets via NPM and make them available to the Rails asset pipeline by adding node_modules to the Sprockets load path. Again, this approach is cumbersome and can potentially adversely affect build times depending on scope.&lt;/p&gt;
+
+      &lt;h3 id="8-stop-using-jquery-plugins-if-you-want-" class="title title-h3"&gt;
+        &lt;a name="8-stop-using-jquery-plugins-if-you-want-" class="anchor" href="#8-stop-using-jquery-plugins-if-you-want-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        8. Stop using jQuery plugins (if you want)
+      &lt;/h3&gt;
+    
+&lt;p&gt;One benefit of jQuery plugins prior to the adoption of modules is that it provided a means to add functionality without polluting the global scope. With a proper module system, as you&amp;#39;d get with Webpack, you need not attach functionality to the jQuery instance to reference it across the application.&lt;/p&gt;
+
+&lt;p&gt;Consider the touch-responsive carousel plugin &lt;a href="https://flickity.metafizzy.co/" target="_blank" rel="noopener noreferrer"&gt;Flickity&lt;/a&gt;. In the Rails asset pipeline, you might use it as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;//= require flickty
+
+$(function () {
+  $(&amp;#39;.main-carousel&amp;#39;).flickity({
+    contain: true
+  });
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Flickity is also intended to work without jQuery meaning you can implement the Flickity module in a Webpack environment:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import Flickity from &amp;#39;flickity&amp;#39;
+
+document.addEventListener(&amp;#39;DOMContentLoaded&amp;#39;, () =&amp;gt; {
+  const elem = document.querySelector(&amp;#39;.main-carousel&amp;#39;);
+  const flkty = new Flickity(elem, {
+    contain: true
+  });
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can leave the jQuery out of this interaction altogether.&lt;/p&gt;
+
+      &lt;h3 id="9-compile-es2015-syntax-to-es5-with-babel" class="title title-h3"&gt;
+        &lt;a name="9-compile-es2015-syntax-to-es5-with-babel" class="anchor" href="#9-compile-es2015-syntax-to-es5-with-babel"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        9. Compile ES2015+ syntax to ES5 with Babel
+      &lt;/h3&gt;
+    
+&lt;p&gt;CoffeeScript was popular when it was first introduced because it offered a cleaner, Ruby-ish syntax. Many of these ideas and more have made their was into recent verisons of EcmaScript. I love writing JavaScript in ES syntax even more than I loved CoffeeScript.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s a short list of just some of the great ways the language is evolving:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ES2015+ is a superset of ES5, so all your current ES5 code is also ES2015+ code&lt;/li&gt;
+&lt;li&gt;Replace &lt;code&gt;var&lt;/code&gt; with scope-constrained &lt;code&gt;let/const&lt;/code&gt; &lt;a href="https://exploringjs.com/es6/ch_variables.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_variables.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Destructuring, Replace &lt;code&gt;arguments&lt;/code&gt; with ...rest parameters, &lt;a href="https://exploringjs.com/es6/ch_destructuring.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_destructuring.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Replace &lt;code&gt;apply()&lt;/code&gt; and &lt;code&gt;concat()&lt;/code&gt; with (...) spread operator&lt;/li&gt;
+&lt;li&gt;Replace constructors with classes &lt;a href="https://exploringjs.com/es6/ch_classes.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_classes.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Arrow functions &lt;a href="https://exploringjs.com/es6/ch_arrow-functions.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_arrow-functions.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;New OOP features &lt;a href="https://exploringjs.com/es6/ch_oop-besides-classes.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_oop-besides-classes.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Replace function expressions in object literals to method definitions &lt;a href="https://exploringjs.com/es6/ch_oop-besides-classes.html#sec_new-features-obj-literals" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_oop-besides-classes.html#sec_new-features-obj-literals&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;New array and string methods, new number and Math features
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://exploringjs.com/es6/ch_arrays.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_arrays.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://exploringjs.com/es6/ch_strings.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_strings.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://exploringjs.com/es6/ch_numbers.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_numbers.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;New primitive type Symbol &lt;a href="https://exploringjs.com/es6/ch_symbols.html#sec_overview-symbols" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_symbols.html#sec_overview-symbols&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Template literals &lt;a href="https://exploringjs.com/es6/ch_template-literals.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_template-literals.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Generators &lt;a href="https://exploringjs.com/es6/ch_generators.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_generators.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Proper Maps and Sets &lt;a href="https://exploringjs.com/es6/ch_maps-sets.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_maps-sets.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;for-of loop &lt;a href="https://exploringjs.com/es6/ch_for-of.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_for-of.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Promises &lt;a href="https://exploringjs.com/es6/ch_promises.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_promises.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Proxies, for metaprogramming &lt;a href="https://exploringjs.com/es6/ch_proxies.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es6/ch_proxies.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="10-opt-in-out-of-experimental-es-features" class="title title-h3"&gt;
+        &lt;a name="10-opt-in-out-of-experimental-es-features" class="anchor" href="#10-opt-in-out-of-experimental-es-features"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        10. Opt in/out of experimental ES features
+      &lt;/h3&gt;
+    
+&lt;p&gt;The Babel integration allows developers to take advantage of next-level and experimental EcmaScript syntax.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;async/await &lt;a href="https://exploringjs.com/es2016-es2017/ch_async-functions.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es2016-es2017/ch_async-functions.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;decorators &lt;a href="https://www.simplethread.com/understanding-js-decorators/" target="_blank" rel="noopener noreferrer"&gt;https://www.simplethread.com/understanding-js-decorators/&lt;/a&gt;, &lt;a href="https://www.sitepoint.com/javascript-decorators-what-they-are/" target="_blank" rel="noopener noreferrer"&gt;https://www.sitepoint.com/javascript-decorators-what-they-are/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;spread operator for object literals &lt;a href="https://exploringjs.com/es2018-es2019/ch_rest-spread-properties.html" target="_blank" rel="noopener noreferrer"&gt;https://exploringjs.com/es2018-es2019/ch_rest-spread-properties.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="11-target-specific-browser-versions" class="title title-h3"&gt;
+        &lt;a name="11-target-specific-browser-versions" class="anchor" href="#11-target-specific-browser-versions"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        11. Target specific browser versions
+      &lt;/h3&gt;
+    
+&lt;p&gt;Imagine how great it would be if you could code-ify your application&amp;#39;s supported browsers? Well, with Webpacker, you can.&lt;/p&gt;
+
+&lt;p&gt;Babel integrates with a package called browserlist which allows projects to codify the browsers they wish to target with their transpiled code. Developers set their version lists using queries, which can target specific browser versions or use semantics like &lt;code&gt;last 2 version&lt;/code&gt; to avoid updating versions manually. Browserslist uses a data provided by &lt;a href="https://caniuse.com/" target="_blank" rel="noopener noreferrer"&gt;Can I Use&lt;/a&gt; to determine browser support for newer frontend APIs.&lt;/p&gt;
+
+&lt;p&gt;Now we can write future JS syntax:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const array = [1, 2, 3];
+const [first, second] = array;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Babel will compile it for Edge 16:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const array = [1, 2, 3];
+const first = array[0],
+      second = array[1];
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Browserlist: &lt;a href="https://github.com/browserslist/browserslist" target="_blank" rel="noopener noreferrer"&gt;https://github.com/browserslist/browserslist&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="12-polyfill-newer-browser-apis" class="title title-h3"&gt;
+        &lt;a name="12-polyfill-newer-browser-apis" class="anchor" href="#12-polyfill-newer-browser-apis"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        12. Polyfill newer browser apis
+      &lt;/h3&gt;
+    
+&lt;p&gt;Building on number 11, Webpacker&amp;#39;s use of &lt;code&gt;@babel/preset-env&lt;/code&gt; to makes it possible to specify more easily what new JavaScript APIs to polyfill automatically.&lt;/p&gt;
+
+&lt;p&gt;It works by inserting this code at the top of your dependency graph:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import &amp;#39;core-js/stable&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If &lt;code&gt;chrome 71&lt;/code&gt; is targeted, then this will get replaced with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import &amp;quot;core-js/modules/es.array.unscopables.flat&amp;quot;
+import &amp;quot;core-js/modules/es.array.unscopables.flat-map&amp;quot;
+import &amp;quot;core-js/modules/es.object.from-entries&amp;quot;
+import &amp;quot;core-js/modules/web.immediate&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now you can start removing those conditionals you&amp;#39;ve been adding to test for browser support.&lt;/p&gt;
+
+      &lt;h3 id="13-use-typescript" class="title title-h3"&gt;
+        &lt;a name="13-use-typescript" class="anchor" href="#13-use-typescript"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        13. Use TypeScript
+      &lt;/h3&gt;
+    
+&lt;p&gt;&lt;a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer"&gt;TypeScript&lt;/a&gt; has gained in popularity in recent years.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/typescript-superset.png" alt="TypeScript is a superset of JavaScript" /&gt;&lt;/p&gt;
+
+&lt;p&gt;It brings static-typing to frontend development, allowing developers to catch errors more easily and productivity gains via integrations with supporting JavaScript IDEs, like VS Code. It&amp;#39;s even possible to adopt TypeScript iteratively; as a superset of plain JavaScript, any valid JavaScript program is a valid TypeScript program. Webpacker provides an installer to make it easier to add to your Rails project.&lt;/p&gt;
+
+      &lt;h3 id="14-unlock-powerful-new-tools" class="title title-h3"&gt;
+        &lt;a name="14-unlock-powerful-new-tools" class="anchor" href="#14-unlock-powerful-new-tools"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        14. Unlock powerful new tools
+      &lt;/h3&gt;
+    
+&lt;p&gt;The Webpack compilation and build process provides a large number of hooks to allow behavior modification at nearly any stage. Here is a short list of ways you can extend Webpack to meet the needs of your system:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Add a plugin to analyze the size and contents of your bundles, e.g. &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"&gt;WebpackBundlerAnalyzer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Add a loader to parse your Rails i18n yaml files and provide them as JSON to your Webpack JavaScript modules&lt;/li&gt;
+&lt;li&gt;Add a plugin to produce &amp;quot;unfingerprinted&amp;quot; clones of your bundles, as with &lt;a href="https://github.com/alexspeller/non-stupid-digest-assets" target="_blank" rel="noopener noreferrer"&gt;https://github.com/alexspeller/non-stupid-digest-assets&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;One of my favorite Webpack-friendly addons is &lt;a href="https://storybook.js.org" target="_blank" rel="noopener noreferrer"&gt;Storybook&lt;/a&gt;. It&amp;#39;s a newer tool that allows developers to build components in isolation from the Rails server. This is a great way to represent your UI in various states all in one place without having to mess with real data in your development environment.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/storybook-logo.png" alt="Storybook logo" /&gt;&lt;/p&gt;
+
+      &lt;h3 id="15-modify-source-code-programmatically" class="title title-h3"&gt;
+        &lt;a name="15-modify-source-code-programmatically" class="anchor" href="#15-modify-source-code-programmatically"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        15. Modify source code programmatically
+      &lt;/h3&gt;
+    
+&lt;p&gt;Webpack provides some configuration options that make it easy to modify the output of a module. For example, to &amp;quot;provide&amp;quot; the jQuery import to all modules in your source files, you can add the &lt;code&gt;ProvidePlugin&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This really becomes important if you&amp;#39;re attempting to upgrade a legacy Rails app to Webpack. Many older jQuery plugins, for example, assume jQuery is available in the global scope. The &lt;code&gt;ProvidePlugin&lt;/code&gt; configured as follows will instruct Webpack to &amp;quot;shim&amp;quot; legacy modules with a &lt;code&gt;require(&amp;#39;jquery&amp;#39;)&lt;/code&gt; statement if necessary:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+
+const webpack = require(&amp;#39;webpack&amp;#39;);
+
+const {environment} = require(&amp;#39;@rails/webpacker&amp;#39;);
+
+environment.plugins.append(
+  &amp;#39;jquery&amp;#39;, // arbitrary name
+   new webpack.ProvidePlugin({
+    $: &amp;#39;jquery&amp;#39;,
+    jQuery: &amp;#39;jquery&amp;#39;,
+    &amp;#39;window.jQuery&amp;#39;: &amp;#39;jquery&amp;#39;
+   }),
+);
+
+module.exports = environment;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Documentation: &lt;a href="https://webpack.js.org/guides/shimming/" target="_blank" rel="noopener noreferrer"&gt;https://webpack.js.org/guides/shimming/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="16-you-can-still-quot-require_tree-quot-and-then-some" class="title title-h3"&gt;
+        &lt;a name="16-you-can-still-quot-require_tree-quot-and-then-some" class="anchor" href="#16-you-can-still-quot-require_tree-quot-and-then-some"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        16. You can still &amp;quot;require_tree&amp;quot; and then some
+      &lt;/h3&gt;
+    
+&lt;p&gt;Sprockets comes with a few conveniences for includiing files in your asset bundles including &lt;code&gt;require_tree&lt;/code&gt;. Similarly, Webpack also has a function for including multiple files in a single statement: &lt;code&gt;require.context&lt;/code&gt;. Though more verbose, it&amp;#39;s also more powerful. It provides a file filter option, say if you only want to import &lt;code&gt;.svg&lt;/code&gt; files. You can also operate on the return value.&lt;/p&gt;
+
+&lt;p&gt;Syntax:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;require.context(directory, useSubdirectories = true, regExp = /^\.\/.*$/, mode = &amp;#39;sync&amp;#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Example: require all the test files in the current and nested directories.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;require.context(&amp;#39;.&amp;#39;, true, /\.test\.js$/);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Example: import all the default exports in the current directory and re-export as named modules&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;const requireModule = require.context(&amp;#39;.&amp;#39;, false, /.js$/)
+
+context.keys().forEach(filename =&amp;gt; {
+  const moduleConfig = requireModule(filename)
+
+  // Get PascalCase name of module from filename
+  const moduleName = upperFirst(
+    camelCase(
+      filename.replace(/\.\//, &amp;#39;&amp;#39;).replace(/\.\w+$/, &amp;#39;&amp;#39;)
+    )
+  )
+
+  export {[moduleName]: moduleConfig.default}
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Documentation: &lt;a href="https://webpack.js.org/guides/dependency-management/#requirecontext" target="_blank" rel="noopener noreferrer"&gt;https://webpack.js.org/guides/dependency-management/#requirecontext&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="17-automatic-static-code-splitting" class="title title-h3"&gt;
+        &lt;a name="17-automatic-static-code-splitting" class="anchor" href="#17-automatic-static-code-splitting"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        17. Automatic static code splitting
+      &lt;/h3&gt;
+    
+&lt;p&gt;In Sprockets, a common technique to reduce bundle size and improve cacheability is to move all the vendor code into a separate bundle:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;!-- app/views/layouts.application.html.erb --&amp;gt;
+&amp;lt;%= javascript_include_tag &amp;quot;vendor&amp;quot; %&amp;gt;
+&amp;lt;%= javascript_include_tag &amp;quot;application&amp;quot; %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;One headache with this approach is having to manually account divvy up the bundles and take great care to avoid load order issues or omitting key dependencies.&lt;/p&gt;
+
+&lt;p&gt;Since Webpack statically analyzes your source code to build its dependency graph(s), it can also be configured to automatically create separate bundles for vendored and application code. This means, from a single &amp;quot;pack&amp;quot;, Webpack will produce the vendor and application bundles for you, along with the Webpack runtime. Webpacker helpers and config can be used as follows to enable this behaviior.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+
+const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
+
+environment.splitChunks()
+
+module.exports = environment
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;!-- app/views/layouts/application.html.erb --&amp;gt;
+
+&amp;lt;%= javascript_packs_with_chunks_tag &amp;quot;application&amp;quot; %&amp;gt;
+&amp;lt;!--
+&amp;lt;script src=&amp;quot;/packs/vendor-16838bab065ae1e314.chunk.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&amp;quot;/packs/application~runtime-16838bab065ae1e314.chunk.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&amp;quot;/packs/application-1016838bab065ae1e314.chunk.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+!&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;No more manual code splitting.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Documentation: &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer"&gt;https://webpack.js.org/plugins/split-chunks-plugin/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="18-automatic-dynamic-code-splitting" class="title title-h3"&gt;
+        &lt;a name="18-automatic-dynamic-code-splitting" class="anchor" href="#18-automatic-dynamic-code-splitting"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        18. Automatic dynamic code splitting
+      &lt;/h3&gt;
+    
+&lt;p&gt;An even better option to split your JavaScript code over multiple files is to use &amp;quot;dynamic imports&amp;quot;. This approach requires absolutely zero config changes. It is the very reason that Webpack&amp;#39;s creator made Webpack in the first place.&lt;/p&gt;
+
+&lt;p&gt;When Webpack detects a dynamic import function, like the following, in your application code, it will create a separate bundle for that import and load it asynchronously when that code is executed in the browser.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import(&amp;#39;pdfjs/webpack&amp;#39;).then(({default: pdfjs}) =&amp;gt; { // async import!
+  pdfjs.getDocument(&amp;#39;https://example.com/some.pdf&amp;#39;)  // ...
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This technique can help reduce initial download size, help avoid loading JavaScript code unncessarily, and potentially improve time-to-interactive metric.&lt;/p&gt;
+
+      &lt;h3 id="19-use-state-of-the-art-css-processing" class="title title-h3"&gt;
+        &lt;a name="19-use-state-of-the-art-css-processing" class="anchor" href="#19-use-state-of-the-art-css-processing"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        19. Use state-of-the-art CSS processing
+      &lt;/h3&gt;
+    
+&lt;p&gt;If you&amp;#39;ve used Rails long enough, there&amp;#39;s a good chance you&amp;#39;ve adopted SASS or SCSS and you may love it. That&amp;#39;s fine! Webpacker supports SASS/SCSS by default. That said, Webpacker also integrates with a newer tool called &lt;a href="https://postcss.org/" target="_blank" rel="noopener noreferrer"&gt;PostCSS&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/postcss-logo.png" alt="PostCSS logo" /&gt;&lt;/p&gt;
+
+&lt;p&gt;PostCSS, relatively new on the scene, allows developers to transform CSS with JavaScript. It&amp;#39;s a pluggable tool that can be configured to enable various capabilities; Webpack configures PostCSS to apply some fixes for flexbox bugs and to use a preset-env plugin to polyfill newer CSS capabilities for older browsers, similarly to @babel/preset-env does for JavaScript.&lt;/p&gt;
+
+&lt;p&gt;One of my favorite PostCSS plugins is PurgeCSS, which lets you delete unused CSS by comparing your CSS with your HTML markup and/or templates. Such a tool is invaluable when adopting a framework like TailwindCSS, which provides a ton of utility classes, many of which you&amp;#39;re unlikely to use in production code.&lt;/p&gt;
+
+      &lt;h3 id="20-get-asset-compilation-out-of-the-rails-developer-server" class="title title-h3"&gt;
+        &lt;a name="20-get-asset-compilation-out-of-the-rails-developer-server" class="anchor" href="#20-get-asset-compilation-out-of-the-rails-developer-server"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        20. Get asset compilation out of the Rails developer server
+      &lt;/h3&gt;
+    
+&lt;p&gt;With Sprockets in development, automatic compilation and recompilation of static assets is handled through the Rails server. This can become a bottleneck with the ruby process doing double-duty. With the webpack-dev-server, however, asset compilation moves into a separate process so asset compilation can occur independently of the Rails server responding to requests.&lt;/p&gt;
+
+&lt;p&gt;The webpack-dev-server is a simple Node.js web server that watches for file changes in your source code directory, triggers Webpack to recompile when changes are detected, and serves the compiles assets from memory. It can also, via websocket listener automatically inserted in the browser, autoreload the development browser window when autocompilation completes, if desired.&lt;/p&gt;
+
+      &lt;h3 id="21-update-code-in-development-without-reloading-the-page" class="title title-h3"&gt;
+        &lt;a name="21-update-code-in-development-without-reloading-the-page" class="anchor" href="#21-update-code-in-development-without-reloading-the-page"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        21. Update code in development without reloading the page
+      &lt;/h3&gt;
+    
+&lt;p&gt;Imagine being able to replace the implementation of a JavaScript module in the browser without having to reload the page. That&amp;#39;s &lt;a href="https://webpack.js.org/guides/hot-module-replacement/" target="_blank" rel="noopener noreferrer"&gt;Hot Module Replacement&lt;/a&gt; (HMR). Not only does this allow for near-instant updates of only code that&amp;#39;s changed, but application and DOM state is retained, meaning there&amp;#39;s no need for extra clicks and typing to achieve the desired UI state. There are some &lt;a href="https://webpack.js.org/guides/hot-module-replacement/#gotchas" target="_blank" rel="noopener noreferrer"&gt;gotchas&lt;/a&gt; to be aware of when using this tool, but generally speaking, it&amp;#39;s a powerful way to speed up development.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Documentation: &lt;a href="https://webpack.js.org/concepts/hot-module-replacement/" target="_blank" rel="noopener noreferrer"&gt;https://webpack.js.org/concepts/hot-module-replacement/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="22-take-advantage-of-source-map-options" class="title title-h3"&gt;
+        &lt;a name="22-take-advantage-of-source-map-options" class="anchor" href="#22-take-advantage-of-source-map-options"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        22. Take advantage of source map options
+      &lt;/h3&gt;
+    
+&lt;p&gt;Given your JavaScript and CSS source code may be written in one form but compiled to another in development and production, source maps can help fill the gap. Most evergreen browsers support the loading and rendering of source maps in the browser dev tools to allow developers to link the code that&amp;#39;s loaded in the browser to the code that lives in your source. It&amp;#39;s a really good tool to have in your toolbelt.&lt;/p&gt;
+
+&lt;p&gt;Sprockets recently brought source maps to the Rails asset pipeline. In Webpack, they&amp;#39;ve been there since its early days and they&amp;#39;re highly customizable; there are over twenty types of source maps supported in Webpack meaning there&amp;#39;s a strategy for almost every use case. One reason for this much variety is that source maps must be generated as a separate file from your ass bundles so there&amp;#39;s a build performance cost. You can save time with the tradeoff of fidelity.&lt;/p&gt;
+
+&lt;p&gt;The main point is with Webpack you&amp;#39;ve got a ton of choice.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;WTF is a source map? &lt;a href="https://schneems.com/2017/11/14/wtf-is-a-source-map/" target="_blank" rel="noopener noreferrer"&gt;https://schneems.com/2017/11/14/wtf-is-a-source-map/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Guide to source maps in sprockets: &lt;a href="https://github.com/rails/sprockets/blob/master/guides/source_maps.md" target="_blank" rel="noopener noreferrer"&gt;https://github.com/rails/sprockets/blob/master/guides/source_maps.md&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Webpack source map documentation: &lt;a href="https://webpack.js.org/configuration/devtool/" target="_blank" rel="noopener noreferrer"&gt;https://webpack.js.org/configuration/devtool/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="23-implement-performance-budgets" class="title title-h3"&gt;
+        &lt;a name="23-implement-performance-budgets" class="anchor" href="#23-implement-performance-budgets"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        23. Implement performance budgets
+      &lt;/h3&gt;
+    
+&lt;p&gt;The first rule of optimization is &amp;quot;Measure first&amp;quot;. When it comes to optimizing frontend performance, the first developer I look to for advice is &lt;a href="https://addyosmani.com/" target="_blank" rel="noopener noreferrer"&gt;Addy Osmani&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/perf-budget-metrics.png" alt="Performance Budget Images" /&gt;&lt;/p&gt;
+
+&lt;p&gt;One of his key strategies for measuring frontend performance is &amp;quot;performance budgeting&amp;quot; and how this relates to  &amp;quot;time-to-interative&amp;quot; (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application and that value is closely correlated with the amount of JavaScript you force your users&amp;#39; browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.&lt;/p&gt;
+
+&lt;p&gt;What does this have to do with Webpack? Not only does Webpack make it easier to split up your bundles, as we saw with the code splitting sections above, but it also provides built-in support for &lt;a href="https://medium.com/webpack/webpack-performance-budgets-13d4880fbf6d" target="_blank" rel="noopener noreferrer"&gt;performance budgets&lt;/a&gt;. You can customize Webpack to print a warning or even raise an error if any bundle exceeds the configured &lt;code&gt;maxEntryPointSize&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Start performance budgeting &lt;a href="https://addyosmani.com/blog/performance-budgets/" target="_blank" rel="noopener noreferrer"&gt;https://addyosmani.com/blog/performance-budgets/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Cost of JavaScript 2019 &lt;a href="https://medium.com/@addyosmani/the-cost-of-javascript-in-2018-7d8950fbb5d4" target="_blank" rel="noopener noreferrer"&gt;https://medium.com/@addyosmani/the-cost-of-javascript-in-2018-7d8950fbb5d4&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="24-peek-inside-the-bundles" class="title title-h3"&gt;
+        &lt;a name="24-peek-inside-the-bundles" class="anchor" href="#24-peek-inside-the-bundles"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        24. Peek inside the bundles
+      &lt;/h3&gt;
+    
+&lt;p&gt;One of my favorite tools for debugging Webpack is the &lt;code&gt;webpack-bundler-analyzer&lt;/code&gt;. Add this to your build and it will generate an interactive treemap that visualizes the relative size and contents of all your bundles. Wondering how much &lt;code&gt;lodash&lt;/code&gt; is adding to your overall bundle size? Use the bundle analyzer tool. Think there&amp;#39;s a bug in with one of your dependencies or in your Webpack output? The bundle analyzer may help you identify it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/webpack-bundle-analyzer.gif" alt="An example of a Webpack Bundle Analyzer treemap" /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Project &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"&gt;https://github.com/webpack-contrib/webpack-bundle-analyzer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="25-shaking-the-tree" class="title title-h3"&gt;
+        &lt;a name="25-shaking-the-tree" class="anchor" href="#25-shaking-the-tree"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        25. Shaking the tree
+      &lt;/h3&gt;
+    
+&lt;p&gt;I&amp;#39;d be remiss if I didn&amp;#39;t mention one of the favorite JavaScript bundle buzzwords, &lt;strong&gt;tree shaking&lt;/strong&gt;. All this means is that Webpack has the ability to remove unused code from your build when certain conditions are met. This typically means that the module(s) in question is an ES module, that Babel is configured to handle ES modules, and that there are no side effects from importing the module.&lt;/p&gt;
+
+&lt;p&gt;A good use case for tree shaking is &lt;code&gt;lodash&lt;/code&gt;. When loaded in its entirety, the library adds around 75 kb to the resulting asset bundle.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import _ from &amp;#39;lodash&amp;#39; // OR
+
+import {map, uniq, tail} from &amp;#39;lodash&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The following approach allows Webpack to limit the resulting file size:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import map from &amp;#39;lodash/map&amp;#39;
+import uniq from &amp;#39;lodash/uniq&amp;#39;
+import tail from &amp;#39;lodash/tail&amp;#39;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Lessons on tree-shaking Lodash with Webpack and Babel &lt;a href="https://www.azavea.com/blog/2019/03/07/lessons-on-tree-shaking-lodash/" target="_blank" rel="noopener noreferrer"&gt;https://www.azavea.com/blog/2019/03/07/lessons-on-tree-shaking-lodash/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="wrapping-up" class="title title-h3"&gt;
+        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Wrapping up
+      &lt;/h3&gt;
+    
+&lt;p&gt;There it is. I hope this has been a good introduction to some exciting possiblities and use cases for adopting Webpack in your Rails app via Webpacker. Like I said earlier, there is a tradeoff that comes with the overhead of managing many smaller JavaScript dependencies along with overcoming the &amp;quot;barrier to entry&amp;quot; in getting up to speed with how Webpack works.&lt;/p&gt;
+
+&lt;p&gt;I, for one, feel the tradeoffs have been worthwhile.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>A guide to NPM version constraints for Rubyists</title>
     <link rel="alternate" href="/blog/npm-version-constraints-for-rubyists.html"/>
@@ -1017,103 +1641,6 @@ Rails.start()
 &lt;p&gt;You can also check out the demo app for this post at &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo" target="_blank" rel="noopener noreferrer"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;I hope this post shed some light on using Bootstrap with Webpacker on Rails and wish you Happy Webpacking!&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Vue.js is omakase</title>
-    <link rel="alternate" href="/blog/vue-js-is-omakase.html"/>
-    <id>/blog/vue-js-is-omakase.html</id>
-    <published>2019-01-08T00:00:00+00:00</published>
-    <updated>2019-01-08T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;I'm borrowing from David Heinemeier Hansson here. Six years ago, he wrote &lt;a href="https://dhh.dk//2012/rails-is-omakase.html" target="_blank" rel="noopener noreferrer"&gt;Rails is omakase&lt;/a&gt; to capture his notion of what makes a delicious software framework: it is heavily curated and borne of experience. I think of Vue.js the same way.&lt;/p&gt;
-
-&lt;p&gt;Here's an...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;I&amp;#39;m borrowing from David Heinemeier Hansson here. Six years ago, he wrote &lt;a href="https://dhh.dk//2012/rails-is-omakase.html" target="_blank" rel="noopener noreferrer"&gt;Rails is omakase&lt;/a&gt; to capture his notion of what makes a delicious software framework: it is heavily curated and borne of experience. I think of Vue.js the same way.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s an excerpt from DHH&amp;#39;s post:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;There are lots of à la carte software environments in this world... I want this for my ORM, I want that for my template language, and let&amp;#39;s finish it off with this routing library... It&amp;#39;s a very popular way of consuming software. Rails is not that. Rails is omakase. A team of chefs picked out the ingredients, designed the APIs, and arranged the order of consumption on your behalf according to their idea of what would make for a tasty full-stack framework. The menu can be both personal and quirky. It isn&amp;#39;t designed to appeal to the taste of everyone, everywhere.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;I love this metaphor, because a) Rails, including all its API choices and baggage, has treated me very well throughout my career in tech, and b) I love me some agedashi tofu.&lt;/p&gt;
-
-&lt;p&gt;What does this have to do with Vue? I believe Vue&amp;#39;s growing popularity is partly due to its highly selective maintainers and that the recommended ingredients, though not to everyone&amp;#39;s taste, are well-suited to most projects, big and small.&lt;/p&gt;
-
-      &lt;h3 id="enjoy-a-multiple-course-meal" class="title title-h3"&gt;
-        &lt;a name="enjoy-a-multiple-course-meal" class="anchor" href="#enjoy-a-multiple-course-meal"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Enjoy a multiple-course meal
-      &lt;/h3&gt;
-    
-&lt;p&gt;Vue articulates many courses making up the full meal for a frontend framework. These days, developers have come to expect a robust API to build components and a fast implementation built on top of a virtual dom. However, Vue.js doesn&amp;#39;t stop there. For Vue developers, the framework and its ecosystem provide adequate if not excellent implementations of orthogonal dependencies that solve problems many non-trivial apps eventually need.&lt;/p&gt;
-
-&lt;p&gt;The offering includes the Vue Router, Vuex for state management, and the Vue test utils for unit testing. Through the Vue CLI, developers also get sensible defaults in Webpack configuration for hot module replacement, code-splitting, tree-shaking, efficient long-term caching, while having access to pre-configured opt-ins for TypeScript, Progressive Web Apps, ESLint, and multiple test runners.&lt;/p&gt;
-
-&lt;p&gt;There is great comfort in knowing that the Vue team is behind these projects and they complement one another appropriately in my Vue.js applications.&lt;/p&gt;
-
-      &lt;h3 id="substitutions-cost-little-extra" class="title title-h3"&gt;
-        &lt;a name="substitutions-cost-little-extra" class="anchor" href="#substitutions-cost-little-extra"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Substitutions cost little extra
-      &lt;/h3&gt;
-    
-&lt;p&gt;So you may not agree with everything on the menu. That&amp;#39;s fine! Many of the defaults are easily changed through configuration or add-ons. Want to use Redux? No problem! Class-style syntax? The customer is always right. Don&amp;#39;t like mustache-style curly braces in templates? You can change it! Maybe you can&amp;#39;t stand the fact that Vue has templates at all and would prefer to use JavaScript. Well, that&amp;#39;s ok too; add another &lt;a href="https://github.com/vuejs/babel-plugin-transform-vue-jsx" target="_blank" rel="noopener noreferrer"&gt;Babel plugin&lt;/a&gt;, and you can write Vue components with JSX inside of render functions a lot like React.&lt;/p&gt;
-
-&lt;p&gt;As another example, let&amp;#39;s talk about Webpack. I think it is a fantastic piece of software. I&amp;#39;ve spent months learning how it works. I have given &lt;a href="https://rossta.net/talks/webpack-survival-guide-rails.html" target="_blank" rel="noopener noreferrer"&gt;a conference talk&lt;/a&gt; about it. However, usually, most of us, myself included, don’t want to maintain a custom configuration from project to project when we have deadlines to meet. The Vue CLI defaults are just fine. Still need to customize? Vue provides an API to extend the base configuration while making it easier to upgrade to take advantage of framework-supported improvements. There&amp;#39;s also nothing stopping you from ditching Webpack for Parcel or Rollup or whatever other transpiler or module bundler you prefer.&lt;/p&gt;
-
-      &lt;h3 id="an-opinionated-chef" class="title title-h3"&gt;
-        &lt;a name="an-opinionated-chef" class="anchor" href="#an-opinionated-chef"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        An opinionated chef
-      &lt;/h3&gt;
-    
-&lt;p&gt;The core team consistently shows restraint in decided what features and improvements to fold into the framework. For example, much has been made of Vue&amp;#39;s choice to avoid class syntax for components as the default, e.g. &lt;a href="https://github.com/vuejs/vue/issues/2371" target="_blank" rel="noopener noreferrer"&gt;this issue on GitHub&lt;/a&gt;. There are excellent reasons for this decision, one of which is for Vue to work without a build environment. As a feature, this makes Vue incredibly easy to get up-and-running, for beginners learning the framework or for seasoned developers trying out a quick prototype. &amp;quot;It will fail,&amp;quot; some said. I suppose that remains to be seen, but after several years of arguing, the framework continues to thrive.&lt;/p&gt;
-
-      &lt;h3 id="a-consistent-experience-for-all-customers" class="title title-h3"&gt;
-        &lt;a name="a-consistent-experience-for-all-customers" class="anchor" href="#a-consistent-experience-for-all-customers"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        A consistent experience for all customers
-      &lt;/h3&gt;
-    
-&lt;p&gt;Scott Molinari made this comment on a previous post of mine:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;once the usage of the API is down pat, anyone and everyone who knows Vue is basically doing the same thing. This also means the need for best practices are held to a minimum and both of these advantages mean cognitive load over time is reduced. i.e. when you dig into someone else’s component, you understand it quickly. This all in turn means Vue code is more robust and in the end, it’s of higher quality.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This point is especially important for both beginners and experienced developers alike. One of the significant tradeoffs to cobbling libraries together is that it can be harder to transition into new projects or unfamiliar parts of a large codebase. This approach may pay off for the right teams. In most cases, those tradeoffs aren&amp;#39;t worth it to me because I place much value on consistency.&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;p&gt;When my late wife and I lived in New York City, our favorite restaurant was &lt;a href="https://www.zenkichi.com/" target="_blank" rel="noopener noreferrer"&gt;Zenkichi&lt;/a&gt;. The cuisine is Japanese brasserie, but the experience is so much more. If you make it to the Williamsburg neighborhood in Brooklyn, you should try it.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-tofu.jpg" alt="Zenkichi tofu" /&gt;&lt;/p&gt;
-
-&lt;p&gt;It&amp;#39;s housed in a small building with a wooden exterior and no discernable markings. Located near the East River in the Williamsburg of Brooklyn, it&amp;#39;s easy to miss from the outside.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-entrance.jpg" alt="Zenkichi entrance" /&gt;&lt;/p&gt;
-
-&lt;p&gt;The interior is dark, romantic, hand-crafted. Each table upstairs is like a small private dining room with a pull-down curtain and a small buzzer to summon the wait staff.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/stock/zenkichi-tables.jpg" alt="Zenkichi tables" /&gt;&lt;/p&gt;
-
-&lt;p&gt;Everytime we ate there, we chose the omakase menu. We left all the decision-making up to the chef. It&amp;#39;s difficult at first to place that kind of trust in someone else&amp;#39;s judgment. Giving up control is uncomfortable. However, this led to some delightful discoveries. Of course, not all the courses were to our liking. Nevertheless, we loved the experience.&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;p&gt;The chef’s menu need not be reserved for special occasions in web development. With Vue.js, we have a framework that gives us all the ingredients we need to jump into building outstanding user interfaces. It also makes it relatively easy to swap out menu items to suit your preferences. So it would seem you &lt;a href="https://en.wikipedia.org/wiki/You_can%27t_have_your_cake_and_eat_it" target="_blank" rel="noopener noreferrer"&gt;can have your cake and eat it too&lt;/a&gt;? Just another reason why I find Vue.js so fulfilling.&lt;/p&gt;
 </content>
   </entry>
 </feed>

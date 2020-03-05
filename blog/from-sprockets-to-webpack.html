@@ -443,13 +443,13 @@ _.assign(App, Packs.application);
 
 <p>We now have a shared file in the <code>config/webpack</code> directory that imports the Webpack configuration through its API and exports the modified config object for the environment-specific config files to consume.</p>
 
-<pre><code>// config/webpack/environment.js
+<pre><code class="javascript">// config/webpack/environment.js
 
 const {environment} = require(&#39;@rails/webpacker&#39;);
 module.exports = environment;
 </code></pre>
 
-<pre><code>// config/webpack/shared.js
+<pre><code class="javascript">// config/webpack/shared.js
 
 const merge = require(&#39;webpack-merge&#39;);
 const environment = require(&#39;./environment&#39;);
