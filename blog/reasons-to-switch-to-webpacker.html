@@ -79,7 +79,7 @@
         Why not switch?
       </h3>
     
-<p>Here are a few reasons why Webpacker might not be a good fit for you.</p>
+<p>Here are a few reasons why Webpack and Webpacker might not be a good fit for you.</p>
 
 <ol>
 <li><p><strong>You don&#39;t have the right application</strong></p>
@@ -398,6 +398,8 @@ import &quot;core-js/modules/web.immediate&quot;
 <p>The Webpack compilation and build process provides a large number of hooks to allow behavior modification at nearly any stage. Here is a short list of ways you can extend Webpack to meet the needs of your system:</p>
 
 <ul>
+<li>Unit testing through the Rails asset pipeline has always felt like jumping through hoops; now take your pick of JavaScript unit testing tools like <a href="https://mochajs.org/" target="_blank" rel="noopener noreferrer">Mocha</a> or <a href="https://jestjs.io/" target="_blank" rel="noopener noreferrer">Jest</a>.</li>
+<li>Integrate with <a href="https://eslint.org/" target="_blank" rel="noopener noreferrer">eslint</a> to standardize code style and syntax and automate fixes</li>
 <li>Add a plugin to analyze the size and contents of your bundles, e.g. <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer">WebpackBundlerAnalyzer</a></li>
 <li>Add a loader to parse your Rails i18n yaml files and provide them as JSON to your Webpack JavaScript modules</li>
 <li>Add a plugin to produce &quot;unfingerprinted&quot; clones of your bundles, as with <a href="https://github.com/alexspeller/non-stupid-digest-assets" target="_blank" rel="noopener noreferrer">https://github.com/alexspeller/non-stupid-digest-assets</a></li>

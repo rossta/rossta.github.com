@@ -45,7 +45,7 @@
         Why not switch?
       &lt;/h3&gt;
     
-&lt;p&gt;Here are a few reasons why Webpacker might not be a good fit for you.&lt;/p&gt;
+&lt;p&gt;Here are a few reasons why Webpack and Webpacker might not be a good fit for you.&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;You don&amp;#39;t have the right application&lt;/strong&gt;&lt;/p&gt;
@@ -364,6 +364,8 @@ import &amp;quot;core-js/modules/web.immediate&amp;quot;
 &lt;p&gt;The Webpack compilation and build process provides a large number of hooks to allow behavior modification at nearly any stage. Here is a short list of ways you can extend Webpack to meet the needs of your system:&lt;/p&gt;
 
 &lt;ul&gt;
+&lt;li&gt;Unit testing through the Rails asset pipeline has always felt like jumping through hoops; now take your pick of JavaScript unit testing tools like &lt;a href="https://mochajs.org/" target="_blank" rel="noopener noreferrer"&gt;Mocha&lt;/a&gt; or &lt;a href="https://jestjs.io/" target="_blank" rel="noopener noreferrer"&gt;Jest&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Integrate with &lt;a href="https://eslint.org/" target="_blank" rel="noopener noreferrer"&gt;eslint&lt;/a&gt; to standardize code style and syntax and automate fixes&lt;/li&gt;
 &lt;li&gt;Add a plugin to analyze the size and contents of your bundles, e.g. &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"&gt;WebpackBundlerAnalyzer&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;Add a loader to parse your Rails i18n yaml files and provide them as JSON to your Webpack JavaScript modules&lt;/li&gt;
 &lt;li&gt;Add a plugin to produce &amp;quot;unfingerprinted&amp;quot; clones of your bundles, as with &lt;a href="https://github.com/alexspeller/non-stupid-digest-assets" target="_blank" rel="noopener noreferrer"&gt;https://github.com/alexspeller/non-stupid-digest-assets&lt;/a&gt;&lt;/li&gt;
