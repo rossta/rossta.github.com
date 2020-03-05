@@ -39,7 +39,7 @@ Here are a few reasons why Webpacker might not be a good fit for you.
 
 1. **You don't have the right mindset**
 
-    Yes, Webpack is complex. Plenty of developers love to complain about this fact. If you think you're one of those developers, you probably won't enjoy the process of adopting Webpack. Given the time and motivation, a lot of the frustration can be eased through education. Make sure you've got a positive attitude going in.
+    Yes, Webpack is complex. Plenty of developers love to complain about this fact. If you think you're one of those developers, you probably won't enjoy the process of adopting Webpack. A lot of the frustration can be eased through education. Make sure you've got a positive attitude going in.
 
 ---
 
