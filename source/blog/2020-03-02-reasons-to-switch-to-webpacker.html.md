@@ -51,17 +51,17 @@ The ability to use both compilers in the same application is a real advantage fo
 
 Prior to Rails support for Webpack through Webpacker, most of the Rails apps I've worked on or seen either directly on GitHub or implicitly through tutorials or presentations, have fallen into one of the following categories:
 
-    1. jQuery spaghetti
-    1. Bespoke module implementation
-    1. Combination of 1. and 2.
+1. jQuery spaghetti
+1. Bespoke module implementation
+1. Combination of 1. and 2.
 
 What's wrong with this approach?
 
-    1. Accidentally leaking JavaScript into the global scope
-    1. Difficult to share code
-    1. Order-dependence when requiring code
-    1. Very difficult to understand implicit dependency graph
-    1. Very difficult to load code asynchronously
+1. Accidentally leaking JavaScript into the global scope
+1. Difficult to share code
+1. Order-dependence when requiring code
+1. Very difficult to understand implicit dependency graph
+1. Very difficult to load code asynchronously
 
 Writing your JavaScript source code within a module system allows you to take advantage of module scope within each file, i.e. no accidental leaking of code into the global scope. No more bespoke module implementations.
 
