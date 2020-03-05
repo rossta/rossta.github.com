@@ -2,7 +2,7 @@
 title: 25 reasons to switch to Webpacker
 author: Ross Kaffenberger
 published: true
-summary: Not sure if you're ready for the upgrade? Read on
+summary: Leaving behind the Rails asset pipeline
 description: There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here.
 pull_image: 'blog/stock/alice-donovan-packing-unsplash.jpg'
 pull_image_caption: Photo by Alice Donovan Rouse on Unsplash
@@ -15,17 +15,15 @@ tags:
 
 _Should you switch to Webpacker?_
 
-In this post, I'll give you twenty-five reasons why.
+In this post, I'll offer you reasons why you should.
 
-Why should you listen to me? I've been using Webpacker in production since 2017. I've given talks about it. I've spent countless hours learning how it works. I been writing about it and giving talks about it ever since.
+I've been using Webpacker in production since 2017 and I've spent a lot of time learning how it works. Folks have been asking me whether it's worth the tradeoff of getting up to speed with Webpacker.
 
-Folks have been asking me whether it's worth the tradeoff of getting up to speed with Webpacker. I think it is, but that may not be true for everyone. I hope this post will provide you with enough insight to make an informed decision.
-
-But before I tell you about why I think switching to Webpacker is a good idea, I'll give you a few reasons why you might NOT want to switch and stick with the Rails asset pipeline instead.
+Before I say why switching to Webpacker is a good idea, I'll give you a few reasons why you might NOT want to switch and stick with the Rails asset pipeline instead.
 
 1. **You don't have the right application**
 
-    It's probably not worth the switch if your application doesn't use much JavaScript. How much is enough? Consider your time; do you spend less than 5-10% of your development time working on JavaScript? Your app might not be very frontend-heavy.
+    If your application doesn't use much JavaScript, it's probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a heavier tool like Webpack.
 
 1. **You don't have the time**
 
@@ -377,19 +375,19 @@ PostCSS, relatively new on the scene, allows developers to transform CSS with Ja
 
 One of my favorite PostCSS plugins is PurgeCSS, which lets you delete unused CSS by comparing your CSS with your HTML markup and/or templates. Such a tool is invaluable when adopting a framework like TailwindCSS, which provides a ton of utility classes, many of which you're unlikely to use in production code.
 
-### 20. Webpack dev server runs in a separate process
+### 20. Get asset compilation out of the Rails developer server
 
 With Sprockets in development, automatic compilation and recompilation of static assets is handled through the Rails server. This can become a bottleneck with the ruby process doing double-duty. With the webpack-dev-server, however, asset compilation moves into a separate process so asset compilation can occur independently of the Rails server responding to requests.
 
 The webpack-dev-server is a simple Node.js web server that watches for file changes in your source code directory, triggers Webpack to recompile when changes are detected, and serves the compiles assets from memory. It can also, via websocket listener automatically inserted in the browser, autoreload the development browser window when autocompilation completes, if desired.
 
-### 21. Hot module replacement
+### 21. Update code in development without reloading the page
 
 Imagine being able to replace the implementation of a JavaScript module in the browser without having to reload the page. That's [Hot Module Replacement](https://webpack.js.org/guides/hot-module-replacement/) (HMR). Not only does this allow for near-instant updates of only code that's changed, but application and DOM state is retained, meaning there's no need for extra clicks and typing to achieve the desired UI state. There are some [gotchas](https://webpack.js.org/guides/hot-module-replacement/#gotchas) to be aware of when using this tool, but generally speaking, it's a powerful way to speed up development.
 
 - Documentation: https://webpack.js.org/concepts/hot-module-replacement/
 
-### 22. Myriad of source map options
+### 22. Take advantage of source map options
 
 Given your JavaScript and CSS source code may be written in one form but compiled to another in development and production, source maps can help fill the gap. Most evergreen browsers support the loading and rendering of source maps in the browser dev tools to allow developers to link the code that's loaded in the browser to the code that lives in your source. It's a really good tool to have in your toolbelt.
 
@@ -407,24 +405,24 @@ The first rule of optimization is "Measure first". When it comes to optimizing f
 
 ![Performance Budget Images](blog/webpack/perf-budget-metrics.png)
 
-One of his key strategies for measuring frontend performance is "performance budgeting" and how this relates to  "time-to-interative" (TTI). The thinking is you may be able to put a value on the "time-to-interactive" (TTI) experienced by users of your application and that value is closely correlated with the amount of JavaScript you force your users' browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.
+One of his key strategies for measuring frontend performance is "performance budgeting" and how this relates to  "time-to-interative" (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application and that value is closely correlated with the amount of JavaScript you force your users' browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.
 
 What does this have to do with Webpack? Not only does Webpack make it easier to split up your bundles, as we saw with the code splitting sections above, but it also provides built-in support for [performance budgets](https://medium.com/webpack/webpack-performance-budgets-13d4880fbf6d). You can customize Webpack to print a warning or even raise an error if any bundle exceeds the configured `maxEntryPointSize`.
 
 - Start performance budgeting https://addyosmani.com/blog/performance-budgets/
 - Cost of JavaScript 2019 https://medium.com/@addyosmani/the-cost-of-javascript-in-2018-7d8950fbb5d4
 
-### 24. Bundle analysis
+### 24. Peek inside the bundles
 
-One of my favorite tools for debugging Webpack is the webpack-bundler-analyzer. Add this to your build and it will generate an interactive treemap that visualizes the relative size and contents of all your bundles. Wondering how much `lodash` is adding to your overall bundle size? Use the bundle analyzer tool. Think there's a bug in with one of your dependencies or in your Webpack output? The bundle analyzer may help you identify it.
+One of my favorite tools for debugging Webpack is the `webpack-bundler-analyzer`. Add this to your build and it will generate an interactive treemap that visualizes the relative size and contents of all your bundles. Wondering how much `lodash` is adding to your overall bundle size? Use the bundle analyzer tool. Think there's a bug in with one of your dependencies or in your Webpack output? The bundle analyzer may help you identify it.
 
 ![An example of a Webpack Bundle Analyzer treemap](blog/webpack/webpack-bundle-analyzer.gif)
 
 - Project https://github.com/webpack-contrib/webpack-bundle-analyzer
 
-### 25. Tree shaking
+### 25. Shaking the tree
 
-I'd be remiss if I didn't mention one of the favorite JavaScript bundle buzzwords, tree shaking. All this means is that Webpack has the ability to remove unused code from your build when certain conditions are met. This typically means that the module(s) in question is an ES module, that Babel is configured to handle ES modules, and that there are no side effects from importing the module.
+I'd be remiss if I didn't mention one of the favorite JavaScript bundle buzzwords, **tree shaking**. All this means is that Webpack has the ability to remove unused code from your build when certain conditions are met. This typically means that the module(s) in question is an ES module, that Babel is configured to handle ES modules, and that there are no side effects from importing the module.
 
 A good use case for tree shaking is `lodash`. When loaded in its entirety, the library adds around 75 kb to the resulting asset bundle.
 
