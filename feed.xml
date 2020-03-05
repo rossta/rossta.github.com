@@ -81,17 +81,21 @@
     
 &lt;p&gt;Prior to Rails support for Webpack through Webpacker, most of the Rails apps I&amp;#39;ve worked on or seen either directly on GitHub or implicitly through tutorials or presentations, have fallen into one of the following categories:&lt;/p&gt;
 
-&lt;p&gt;1. jQuery spaghetti
-    1. Bespoke module implementation
-    1. Combination of 1. and 2.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;jQuery spaghetti&lt;/li&gt;
+&lt;li&gt;Bespoke module implementation&lt;/li&gt;
+&lt;li&gt;Combination of 1. and 2.&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;p&gt;What&amp;#39;s wrong with this approach?&lt;/p&gt;
 
-&lt;p&gt;1. Accidentally leaking JavaScript into the global scope
-    1. Difficult to share code
-    1. Order-dependence when requiring code
-    1. Very difficult to understand implicit dependency graph
-    1. Very difficult to load code asynchronously&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Accidentally leaking JavaScript into the global scope&lt;/li&gt;
+&lt;li&gt;Difficult to share code&lt;/li&gt;
+&lt;li&gt;Order-dependence when requiring code&lt;/li&gt;
+&lt;li&gt;Very difficult to understand implicit dependency graph&lt;/li&gt;
+&lt;li&gt;Very difficult to load code asynchronously&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;p&gt;Writing your JavaScript source code within a module system allows you to take advantage of module scope within each file, i.e. no accidental leaking of code into the global scope. No more bespoke module implementations.&lt;/p&gt;
 
