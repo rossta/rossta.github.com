@@ -27,6 +27,8 @@ In this post, I will elaborate on why I think think it's a good idea to make the
 
 ### Why not switch?
 
+Here are a few reasons why Webpacker might not be a good fit for you.
+
 1. **You don't have the right application**
 
     If your application doesn't use much JavaScript, it's probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a heavier tool like Webpack.
