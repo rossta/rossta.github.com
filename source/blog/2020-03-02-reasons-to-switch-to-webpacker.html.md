@@ -27,7 +27,7 @@ In this post, I will elaborate on why I think think it's a good idea to make the
 
 ### Why not switch?
 
-Here are a few reasons why Webpacker might not be a good fit for you.
+Here are a few reasons why Webpack and Webpacker might not be a good fit for you.
 
 1. **You don't have the right application**
 
