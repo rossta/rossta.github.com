@@ -25,6 +25,8 @@ Rails was once at the forefront—the Rails asset pipeline was a huge leap forwa
 
 In this post, I will elaborate on why I think think it's a good idea to make the switch. But this will assume some prerequisites; in other words, we'll first consider why you might NOT want to switch and instead stick with the Rails asset pipeline.
 
+### Why not switch?
+
 1. **You don't have the right application**
 
     If your application doesn't use much JavaScript, it's probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a heavier tool like Webpack.
