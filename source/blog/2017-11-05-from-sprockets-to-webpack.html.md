@@ -328,13 +328,13 @@ $ NODE_ENV=development node
 
 We now have a shared file in the `config/webpack` directory that imports the Webpack configuration through its API and exports the modified config object for the environment-specific config files to consume.
 
-```
+```javascript
 // config/webpack/environment.js
 
 const {environment} = require('@rails/webpacker');
 module.exports = environment;
 ```
-```
+```javascript
 // config/webpack/shared.js
 
 const merge = require('webpack-merge');
