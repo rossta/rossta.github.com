@@ -20,16 +20,18 @@
     </author>
     <summary type="html">&lt;p&gt;&lt;em&gt;Should you switch to Webpacker?&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;In this post, I'll offer you reasons why you should.&lt;/p&gt;
+&lt;p&gt;In this post, I'll offer you some reasons why.&lt;/p&gt;
 
-&lt;p&gt;I've been using Webpacker in production since 2017 and I've spent a lot of time learning how it works. Folks have been asking me whether it's worth the tradeoff...&lt;/p&gt;</summary>
+&lt;p&gt;&lt;em&gt;But Webpack sounds complicated... is the steep learning curve worth the tradeoff?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;To make that call, you should first consider why you might NOT want to switch and stick...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;&lt;em&gt;Should you switch to Webpacker?&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;In this post, I&amp;#39;ll offer you reasons why you should.&lt;/p&gt;
+&lt;p&gt;In this post, I&amp;#39;ll offer you some reasons why.&lt;/p&gt;
 
-&lt;p&gt;I&amp;#39;ve been using Webpacker in production since 2017 and I&amp;#39;ve spent a lot of time learning how it works. Folks have been asking me whether it&amp;#39;s worth the tradeoff of getting up to speed with Webpacker.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;But Webpack sounds complicated... is the steep learning curve worth the tradeoff?&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;Before I say why switching to Webpacker is a good idea, I&amp;#39;ll give you a few reasons why you might NOT want to switch and stick with the Rails asset pipeline instead.&lt;/p&gt;
+&lt;p&gt;To make that call, you should first consider why you might NOT want to switch and stick with the Rails asset pipeline instead:&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;You don&amp;#39;t have the right application&lt;/strong&gt;&lt;/p&gt;
@@ -45,7 +47,7 @@
 
 &lt;hr&gt;
 
-&lt;p&gt;Given a little time, an application that could use a more capable asset bundler, and the right mindset, you&amp;#39;ll be successful upgrading to Webpacker. Here&amp;#39;s a list of ways you&amp;#39;ll benefit.&lt;/p&gt;
+&lt;p&gt;However, given a little time, the need, and the right mindset, you&amp;#39;ll be successful upgrading to Webpacker. Here&amp;#39;s a list of ways you&amp;#39;ll benefit.&lt;/p&gt;
 
       &lt;h3 id="1-webpacker-is-the-future-of-rails" class="title title-h3"&gt;
         &lt;a name="1-webpacker-is-the-future-of-rails" class="anchor" href="#1-webpacker-is-the-future-of-rails"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
