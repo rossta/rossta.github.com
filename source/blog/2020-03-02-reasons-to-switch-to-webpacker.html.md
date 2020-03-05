@@ -13,13 +13,17 @@ tags:
   - Webpack
 ---
 
-_Should you switch to Webpacker?_
+​I've been getting this question lately in some form or another:
 
-In this post, I'll offer you some reasons why.
+_Is Webpack and Webpacker worth the hassle?_
 
-_But Webpack sounds complicated... is the steep learning curve worth the tradeoff?_
+It's a good question but my short answer is _yes_.
 
-To make that call, you should first consider why you might NOT want to switch and stick with the Rails asset pipeline instead:
+Given the sharp rise of mindshare in the JavaScript community in recent years, there has been a great deal of innovation in tooling, development experience, and optimization for frontend development.
+
+Rails was once at the forefront—the Rails asset pipeline was a huge leap forward when it was released—but it hasn't kept up in this department. Outsourcing JavaScript and CSS dependency management and asset bundling is smart economics at this point.
+
+In this post, I will elaborate on why I think think it's a good idea to make the switch. But this will assume some prerequisites; in other words, we'll first consider why you might NOT want to switch and instead stick with the Rails asset pipeline.
 
 1. **You don't have the right application**
 
@@ -35,7 +39,7 @@ To make that call, you should first consider why you might NOT want to switch an
 
 ---
 
-However, given a little time, the need, and the right mindset, you'll be successful upgrading to Webpacker. Here's a list of ways you'll benefit.
+All that said, given a little time, the need, and the right mindset, you'll be successful upgrading to Webpacker. Here's a list of ways you'll benefit.
 
 ### 1. Webpacker is the future of Rails
 
