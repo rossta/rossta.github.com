@@ -18,20 +18,24 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;&lt;em&gt;Should you switch to Webpacker?&lt;/em&gt;&lt;/p&gt;
+    <summary type="html">&lt;p&gt;​I've been getting this question lately in some form or another:&lt;/p&gt;
 
-&lt;p&gt;In this post, I'll offer you some reasons why.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Is Webpack and Webpacker worth the hassle?&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;But Webpack sounds complicated... is the steep learning curve worth the tradeoff?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;It's a good question but my short answer is &lt;em&gt;yes&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;To make that call, you should first consider why you might NOT want to switch and stick...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;&lt;em&gt;Should you switch to Webpacker?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Given the sharp rise of mindshare in the JavaScript community in recent years, there has...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;​I&amp;#39;ve been getting this question lately in some form or another:&lt;/p&gt;
 
-&lt;p&gt;In this post, I&amp;#39;ll offer you some reasons why.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Is Webpack and Webpacker worth the hassle?&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;But Webpack sounds complicated... is the steep learning curve worth the tradeoff?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s a good question but my short answer is &lt;em&gt;yes&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;To make that call, you should first consider why you might NOT want to switch and stick with the Rails asset pipeline instead:&lt;/p&gt;
+&lt;p&gt;Given the sharp rise of mindshare in the JavaScript community in recent years, there has been a great deal of innovation in tooling, development experience, and optimization for frontend development.&lt;/p&gt;
+
+&lt;p&gt;Rails was once at the forefront—the Rails asset pipeline was a huge leap forward when it was released—but it hasn&amp;#39;t kept up in this department. Outsourcing JavaScript and CSS dependency management and asset bundling is smart economics at this point.&lt;/p&gt;
+
+&lt;p&gt;In this post, I will elaborate on why I think think it&amp;#39;s a good idea to make the switch. But this will assume some prerequisites; in other words, we&amp;#39;ll first consider why you might NOT want to switch and instead stick with the Rails asset pipeline.&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;You don&amp;#39;t have the right application&lt;/strong&gt;&lt;/p&gt;
@@ -47,7 +51,7 @@
 
 &lt;hr&gt;
 
-&lt;p&gt;However, given a little time, the need, and the right mindset, you&amp;#39;ll be successful upgrading to Webpacker. Here&amp;#39;s a list of ways you&amp;#39;ll benefit.&lt;/p&gt;
+&lt;p&gt;All that said, given a little time, the need, and the right mindset, you&amp;#39;ll be successful upgrading to Webpacker. Here&amp;#39;s a list of ways you&amp;#39;ll benefit.&lt;/p&gt;
 
       &lt;h3 id="1-webpacker-is-the-future-of-rails" class="title title-h3"&gt;
         &lt;a name="1-webpacker-is-the-future-of-rails" class="anchor" href="#1-webpacker-is-the-future-of-rails"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
