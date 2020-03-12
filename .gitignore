@@ -21,3 +21,4 @@ source/blog/.Ulysses-Group.plist
 /.tmp
 /vendor
 .vscode
+.ruby-gemset
