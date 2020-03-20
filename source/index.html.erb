@@ -1,7 +1,7 @@
 ---
 pull_image: 'blog/stock/denisse-leon-mixer-board-unsplash.jpg'
 pageable: true
-per_page: 3
+per_page: 5
 ---
 <% content_for(:title) { } %>
 <% content_for(:section) { 'I make things' } %>
@@ -12,24 +12,26 @@ per_page: 3
     </header>
     <%= partial "partials/social" %>
   </section>
-  <section class="mb-12">
-    <p>I've worked at several startups and big cos over 
-      the years to help build applications for the web.
+  <section class="mb-4">
+    <p class="mb-4">I'm here to help full stack web developers improve
+    their frontend skills, especially at the intersection between
+    <strong>JavaScript and Ruby on Rails</strong>.</p>
+    <p>
       Check out my
       <%= link_to "writing", "/blog" %>,
       <%= link_to "talks", '/talks' %>
       and
       <%= link_to "projects", "/projects" %>.
       You can also connect with me on
-      <%= link_to "Twitter", "https://twitter.com/rossta" %>
+      <%= link_to "GitHub", "https://github.com/rossta" %>,
+      <%= link_to "Twitter", "https://twitter.com/rossta" %>,
       and
-      <%= link_to "Medium", "https://medium.com/@rossta" %>
-      where I talk about other stuff too.</p>
+      <%= link_to "Medium", "https://medium.com/@rossta" %>.
+    </p>
   </section>
   <%= partial "partials/signup" %>
 </section>
 <section class="mb-12">
-  <h2 class="mb-8">Latest</h2>
   <section class="index-posts">
     <% page_articles.each do |article| %>
       <article class="index-post mb-8">
