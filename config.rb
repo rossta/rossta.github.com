@@ -279,6 +279,14 @@ helpers do
     ((current_page.data.tags || []) & tagged_with).any?
   end
 
+  def convertkit_inline_form_id
+    if current_page_tagged?(%w[Rails Webpack])
+      "1268949"
+    else
+      "818387"
+    end
+  end
+
   def convertkit_campaign
     explicit_page_tags.first || "Homepage"
   end
