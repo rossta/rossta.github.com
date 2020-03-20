@@ -6,6 +6,7 @@ summary: Leaving behind the Rails asset pipeline
 description: There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here.
 pull_image: 'blog/stock/alice-donovan-packing-unsplash.jpg'
 pull_image_caption: Photo by Alice Donovan Rouse on Unsplash
+popular: 1
 series:
 category: Code
 tags:

@@ -6,7 +6,6 @@ summary: Sending push notifications in Ruby or Node.js on the open web
 description: Sending push notifications in Ruby or Node.js on the open web using the Voluntary Application server Identification (VAPID) protocol.
 pull_image: 'blog/stock/horsehead-nebula-pexels-photo.jpeg'
 series: Service Worker
-popular: 5
 category: Code
 tags:
   - Ruby
