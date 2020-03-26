@@ -193,10 +193,13 @@ helpers do
     link_to(text, uri, options.merge(target: "_blank", rel: "noopener noreferrer"))
   end
 
-  def discuss_on_twitter_link_to(url, options = {})
-    uri = Addressable::URI.parse("https://mobile.twitter.com/search")
-    uri.query_values = {q: url}
-    link_to("Discuss on Twitter", uri, options.merge(target: "_blank", rel: "noopener noreferrer"))
+  def discuss_article_on_twitter_link_to(article, options = {})
+    opts = options.except(:prompt)
+    prompt = opts.fetch(:prompt, "Discuss it on Twitter")
+    tweet_link_to prompt, {
+      text: [article.title, "rossta.net"].join(" - "),
+      url: to_url(path: article.url),
+    }, options
   end
 
   def top_tags

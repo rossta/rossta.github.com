@@ -14,9 +14,7 @@
     <hr />
     <section class="margin-bottom double">
       <p>
-        If you liked this presentation, <%= tweet_link_to "share it on Twitter",
-          text: [current_article.title, "rossta.net"].join(" - "),
-          url: to_url(path: current_article.path) %>
+        If you liked this presentation, <%= discuss_article_on_twitter_link_to(current_article, prompt: "share it on twitter", class: "font-bold") %>
         and <a href="https://twitter.com/rossta">follow me</a>.
       </p>
     </section>
