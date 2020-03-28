@@ -1,5 +1,5 @@
 ---
-title: jQuery plugins without jQuery in Webpack
+title: jQuery plugins in Webpack without jQuery
 author: Ross Kaffenberger
 published: true
 summary: In Webpack, some dependencies are best served vanilla
