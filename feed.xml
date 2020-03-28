@@ -29,7 +29,7 @@
 &lt;pre&gt;&lt;code class="sh"&gt;Uncaught TypeError: $(...).myJqueryPlugin is not a function
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Assuming you installed it correctly, there could be a few explanations. In this post, we&amp;#39;ll look one possible reason: with Webpack, your jQuery plugin doesn&amp;#39;t need jQuery.&lt;/p&gt;
+&lt;p&gt;Assuming you installed it correctly, there could be a few explanations. In this post, we&amp;#39;ll look one possible reason: with Webpack, your jQuery plugin &lt;em&gt;might&lt;/em&gt; not need jQuery.&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using Webpack with Rails.&lt;/p&gt;
