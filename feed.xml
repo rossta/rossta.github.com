@@ -31,6 +31,10 @@
 
 &lt;p&gt;Assuming you installed it correctly, there could be a few explanations. In this post, we&amp;#39;ll look one possible reason: with Webpack, your jQuery plugin doesn&amp;#39;t need jQuery.&lt;/p&gt;
 
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using Webpack with Rails.&lt;/p&gt;
+&lt;/blockquote&gt;
+
       &lt;h2 id="example-the-flickity-plugin" class="title title-h2"&gt;
         &lt;a name="example-the-flickity-plugin" class="anchor" href="#example-the-flickity-plugin"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
@@ -199,7 +203,7 @@ $(&amp;#39;.main-carousel&amp;#39;).flickity({
 &lt;p&gt;In this post, I will elaborate on why I think think it&amp;#39;s a good idea to make the switch. But this will assume some prerequisites; in other words, we&amp;#39;ll first consider why you might NOT want to switch and instead stick with the Rails asset pipeline.&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using Webpack with Rails&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using Webpack with Rails.&lt;/p&gt;
 &lt;/blockquote&gt;
 
       &lt;h3 id="why-not-switch-" class="title title-h3"&gt;
@@ -856,6 +860,10 @@ import tail from &amp;#39;lodash/tail&amp;#39;
 
 &lt;p&gt;If you&amp;#39;re a Rubyist and the version syntax looks odd, then this post is for you.&lt;/p&gt;
 
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using Webpack with Rails.&lt;/p&gt;
+&lt;/blockquote&gt;
+
       &lt;h2 id="version-constraints-in-gemfile" class="title title-h2"&gt;
         &lt;a name="version-constraints-in-gemfile" class="anchor" href="#version-constraints-in-gemfile"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
@@ -1054,6 +1062,10 @@ import tail from &amp;#39;lodash/tail&amp;#39;
 
 &lt;p&gt;And after spending the last month answering Webpack questions on StackOverflow, I&amp;#39;ve come across plenty of folks going through some of the same mental hurdles I&amp;#39;ve experienced. I came away with some perspective on what about Webpack most commonly trips up developers.&lt;/p&gt;
 
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using Webpack with Rails.&lt;/p&gt;
+&lt;/blockquote&gt;
+
 &lt;p&gt;The intended audience for this post has a general notion of &amp;quot;why use Webpack&amp;quot; or &amp;quot;why use an asset bundler&amp;quot;, but for more on that, I recommend &lt;a href="https://www.swyx.io/writing/jobs-of-js-build-tools/" target="_blank" rel="noopener noreferrer"&gt;The Many Jobs of JS Build Tools&lt;/a&gt; and &lt;a href="https://what-problem-does-it-solve.com/webpack/index.html" target="_blank" rel="noopener noreferrer"&gt;Webpack from Nothing: What problem are we solving?&lt;/a&gt;. For a rigorous technical overview of the project, I suggest &lt;a href="https://webpack.js.org/" target="_blank" rel="noopener noreferrer"&gt;the Webpack docs&lt;/a&gt;; they have gotten quite good.&lt;/p&gt;
 
 &lt;p&gt;For this post, we&amp;#39;re going to look at three common surprises web developers face when learning Webpack: why using global variables doesn&amp;#39;t behave the way you might think, how Webpack treats everything as a JavaScript module, and the big learning curve for configuring Webpack effectively.&lt;/p&gt;
@@ -1233,6 +1245,10 @@ import tail from &amp;#39;lodash/tail&amp;#39;
     <content type="html">&lt;p&gt;Webpack isn&amp;#39;t just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;In this post, we&amp;#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include &lt;a href="https://yarnpkg.com/" target="_blank" rel="noopener noreferrer"&gt;yarn&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using Webpack with Rails.&lt;/p&gt;
+&lt;/blockquote&gt;
 
       &lt;h3 id="folder-structure" class="title title-h3"&gt;
         &lt;a name="folder-structure" class="anchor" href="#folder-structure"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -1487,6 +1503,10 @@ require.context(&amp;#39;../images&amp;#39;, true)
 &lt;p&gt;The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.&lt;/p&gt;
 
 &lt;p&gt;So what were the changes?&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using Webpack with Rails.&lt;/p&gt;
+&lt;/blockquote&gt;
 
       &lt;h3 id="a-common-problem" class="title title-h3"&gt;
         &lt;a name="a-common-problem" class="anchor" href="#a-common-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
