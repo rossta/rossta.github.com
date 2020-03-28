@@ -5,10 +5,171 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2020-03-02T00:00:00+00:00</updated>
+  <updated>2020-03-26T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>jQuery plugins without jQuery in Webpack</title>
+    <link rel="alternate" href="/blog/you-might-not-need-jquery-with-webpack.html"/>
+    <id>/blog/you-might-not-need-jquery-with-webpack.html</id>
+    <published>2020-03-26T00:00:00+00:00</published>
+    <updated>2020-03-26T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Have you seen this console error while trying to adopt Webpack?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;Uncaught TypeError: $(...).myJqueryPlugin is not a function
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Assuming you installed it correctly, there could be a few explanations. In this post, we'll look one possible reason: with...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Have you seen this console error while trying to adopt Webpack?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;Uncaught TypeError: $(...).myJqueryPlugin is not a function
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Assuming you installed it correctly, there could be a few explanations. In this post, we&amp;#39;ll look one possible reason: with Webpack, your jQuery plugin doesn&amp;#39;t need jQuery.&lt;/p&gt;
+
+      &lt;h2 id="example-the-flickity-plugin" class="title title-h2"&gt;
+        &lt;a name="example-the-flickity-plugin" class="anchor" href="#example-the-flickity-plugin"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Example: the Flickity plugin
+      &lt;/h2&gt;
+    
+&lt;p&gt;To take advantage of this distinction, more plugins are being written without the assumption of jQuery as a dependency, but with the ability to use a plugin to support (what&amp;#39;s becoming) the legacy pattern.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s an example. The popular jQuery plugin &lt;a href="https://flickity.metafizzy.co/" target="_blank" rel="noopener noreferrer"&gt;Flickity&lt;/a&gt; makes it easy to construct &amp;quot;responsive, flickable carousels&amp;quot; as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;$(&amp;#39;.main-carousel&amp;#39;).flickity({
+  // options
+  cellAlign: &amp;#39;left&amp;#39;,
+  contain: true
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that works fine. Except, &lt;code&gt;Flickity&lt;/code&gt; is not really a just a jQuery plugin. More on that later.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s say we have a Rails application that we&amp;#39;ve already set up to run Webpack(er) (or just plain Webpack) for compiling JavaScript source files for the browser. To add Flickity, we installed it via yarn:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ yarn add flickity
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In our module-based Webpack build, the usage is instead ideally:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/src/carousel.js
+
+import Flickity from &amp;#39;flickity&amp;#39;;
+
+const flickity = new Flickity(&amp;#39;.main-carousel&amp;#39;, {
+  // options
+  cellAlign: &amp;#39;left&amp;#39;,
+  contain: true
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For this plugin, jQuery is not required. How do we know that though?&lt;/p&gt;
+
+      &lt;h3 id="package-perusal" class="title title-h3"&gt;
+        &lt;a name="package-perusal" class="anchor" href="#package-perusal"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Package perusal
+      &lt;/h3&gt;
+    
+&lt;p&gt;The first place to check is the documentation. As is the case for Flickty, there is a great documentation site with examples for both jQuery and vanilla JS initialization.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s a screenshot from the &lt;a href="https://flickity.metafizzy.co/" target="_blank" rel="noopener noreferrer"&gt;Flickity homepage&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/flickity-documentation-example.png" alt="Flickity documentation example" /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is a great hint that we can import the &lt;code&gt;Flickity&lt;/code&gt; constructor without requiring jQuery on the page or in our build.&lt;/p&gt;
+
+&lt;p&gt;If that&amp;#39;s still not enough, the next place to look is the library&amp;#39;s &lt;a href="https://nodesource.com/blog/the-basics-of-package-json-in-node-js-and-npm/#themainproperty" target="_blank" rel="noopener noreferrer"&gt;package.json &lt;code&gt;main&lt;/code&gt; property&lt;/a&gt;. This property describes the &lt;em&gt;entry point&lt;/em&gt; to the package, meaning this is the file that&amp;#39;s loaded when &lt;code&gt;require&lt;/code&gt; or &lt;code&gt;import&lt;/code&gt; statement is used to access the module.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s an excerpt from Flickity&amp;#39;s &lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="json"&gt;{
+  &amp;quot;name&amp;quot;: &amp;quot;flickity&amp;quot;,
+  &amp;quot;main&amp;quot;: &amp;quot;js/index.js&amp;quot;,
+  // ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is saying thath the file &lt;code&gt;path/to/flickity/js/index.js&lt;/code&gt; is the entry point. On my machine from the root of my project, I can open that file at &lt;code&gt;./node_modules/flickity/js/index.js&lt;/code&gt; or on GitHub (&lt;a href="https://github.com/metafizzy/flickity/blob/c67b28accbe0642352c706cb470a8f607fa5861b/js/index.js" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;) (slightly modified for this article).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;( function( window, factory ) {
+  if ( typeof define == &amp;#39;function&amp;#39; &amp;amp;&amp;amp; define.amd ) {
+    // AMD
+    define( [ &amp;#39;./flickity&amp;#39;, &amp;#39;./drag&amp;#39;, &amp;#39;./prev-next-button&amp;#39;, &amp;#39;./page-dots&amp;#39;, &amp;#39;./player&amp;#39;, &amp;#39;./add-remove-cell&amp;#39;, &amp;#39;./lazyload&amp;#39; ], factory );
+  } else if ( typeof module == &amp;#39;object&amp;#39; &amp;amp;&amp;amp; module.exports ) {
+    // CommonJS
+    module.exports = factory( require(&amp;#39;./flickity&amp;#39;), require(&amp;#39;./drag&amp;#39;), require(&amp;#39;./prev-next-button&amp;#39;), require(&amp;#39;./page-dots&amp;#39;), require(&amp;#39;./player&amp;#39;), require(&amp;#39;./add-remove-cell&amp;#39;), require(&amp;#39;./lazyload&amp;#39;));
+  }
+})( window, function factory( Flickity ) {
+  return Flickity;
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can see this exports a module, either through the &lt;code&gt;define&lt;/code&gt; function, for runtimes that support &lt;a href="https://requirejs.org/docs/whyamd.html" target="_blank" rel="noopener noreferrer"&gt;Asynchronous Module Definition (AMD)&lt;/a&gt; format, or the &lt;code&gt;require&lt;/code&gt; function, for runtimes that support &lt;a href="https://nodejs.org/docs/latest/api/modules.html" target="_blank" rel="noopener noreferrer"&gt;CommonJS&lt;/a&gt; format. Webpack supports both.&lt;/p&gt;
+
+      &lt;h3 id="jquery-not-required" class="title title-h3"&gt;
+        &lt;a name="jquery-not-required" class="anchor" href="#jquery-not-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        jQuery not required
+      &lt;/h3&gt;
+    
+&lt;p&gt;Note also that this file does not require the &lt;code&gt;&amp;#39;jquery&amp;#39;&lt;/code&gt; package. An interesting consequence of this is that it&amp;#39;s not even possible to use Flickity with jQuery (at least via the NPM package alone). This recently came up in a &lt;a href="https://github.com/rails/webpacker/issues/2456" target="_blank" rel="noopener noreferrer"&gt;GitHub issue for the Webpacker project&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In other words, the following code with Webpack:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/src/carousel.js
+import &amp;#39;jquery&amp;#39;
+import &amp;#39;flickity&amp;#39;
+
+$(&amp;#39;.main-carousel&amp;#39;).flickity({
+  // options
+  cellAlign: &amp;#39;left&amp;#39;,
+  contain: true
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;would result in this error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;Uncaught TypeError: $(...).flickity is not a function
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This project can produce a separate distribution from the package available via NPM. It takes the form of a file, here called &lt;a href="https://github.com/metafizzy/flickity/blob/c67b28accbe0642352c706cb470a8f607fa5861b/dist/flickity.pkgd.js" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;flickity.pkgd.js&lt;/code&gt;&lt;/a&gt; that is intended for the browser via a script tag. This file contains a &amp;quot;jQuery-fied&amp;quot; version of the underlying vanilla JS constructor which makes it possible to use with jQuery in the browser. For more details, see the &lt;a href="https://github.com/desandro/jquery-bridget" target="_blank" rel="noopener noreferrer"&gt;jquery-bridget&lt;/a&gt; project.&lt;/p&gt;
+
+&lt;p&gt;A similar approach exists in other plugins including:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/desandro/masonry" target="_blank" rel="noopener noreferrer"&gt;masonry&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/metafizzy/infinite-scroll" target="_blank" rel="noopener noreferrer"&gt;infinite-scroll&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/metafizzy/isotope" target="_blank" rel="noopener noreferrer"&gt;isotope&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/desandro/draggabilly" target="_blank" rel="noopener noreferrer"&gt;draggabilly&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The main takeaway here: if the library can be initialized without jQuery, there&amp;#39;s not much reason to use jQuery for that plugin in the first place.&lt;/p&gt;
+
+      &lt;h2 id="conclusion" class="title title-h2"&gt;
+        &lt;a name="conclusion" class="anchor" href="#conclusion"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Conclusion
+      &lt;/h2&gt;
+    
+&lt;p&gt;Unfortunately, jQuery plugins come in so many different flavors so not all of them can be used &lt;em&gt;without&lt;/em&gt; jQuery. In future posts, I&amp;#39;ll discuss other techniques you can use to make jQuery work with Webpack.&lt;/p&gt;
+
+&lt;p&gt;If you find yourself in this position, make sure to understand the capability of the plugins you&amp;#39;re using. Ask &amp;quot;do I have to use this plugin with jQuery?&amp;quot;, consult the documentation and/or browse the source code as described in the article. If you&amp;#39;re lucky, you may find they can work in either context such that you might not need jQuery at all.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>25 reasons to switch to Webpack(er)</title>
     <link rel="alternate" href="/blog/reasons-to-switch-to-webpacker.html"/>
@@ -1426,247 +1587,6 @@ require.context(&amp;#39;../images&amp;#39;, true)
 &lt;p&gt;Be good to yourself and your development and deployment experience by being very intentional about what files you put in your &amp;quot;packs&amp;quot; directory.&lt;/p&gt;
 
 &lt;p&gt;Don&amp;#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Using Bootstrap with Rails Webpacker</title>
-    <link rel="alternate" href="/blog/webpacker-with-bootstrap.html"/>
-    <id>/blog/webpacker-with-bootstrap.html</id>
-    <published>2019-11-25T00:00:00+00:00</published>
-    <updated>2019-11-25T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;In this post, I'll demonstrate how to set up a Rails application with Bootstrap for Webpacker.&lt;/p&gt;
-
-&lt;p&gt;If you'd prefer to skip the post and go straight to the demo app, you can find it here: &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo" target="_blank" rel="noopener noreferrer"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The examples...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;In this post, I&amp;#39;ll demonstrate how to set up a Rails application with Bootstrap for Webpacker.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;#39;d prefer to skip the post and go straight to the demo app, you can find it here: &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo" target="_blank" rel="noopener noreferrer"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The examples and demo app described in this post use the following dependencies:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;# Ruby/Rails
-Rails 6.0.1
-Ruby 2.6.5
-Webpacker 4.2.0
-
-# npm
-@rails/webpacker 4.2.0
-bootstrap 4.3.1
-jQuery 3.4.1
-popper.js 1.16.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;#39;ll assume we&amp;#39;re working from a recently-created Rails 6 app with the default Webpacker installation. The examples may also work with other versions Rails that support Webpacker 4.&lt;/p&gt;
-
-&lt;p&gt;When the Webpacker install is run, i.e. &lt;code&gt;bin/rails webpacker:install&lt;/code&gt;, it adds the file &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. Webpack calls this file an &amp;quot;entry point&amp;quot; and Webpacker calls it a &amp;quot;pack&amp;quot;. We&amp;#39;ll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by Webpack.&lt;/p&gt;
-
-&lt;p&gt;The file initially looks something like the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-require(&amp;quot;@rails/ujs&amp;quot;).start()
-require(&amp;quot;channels&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;Note: the &lt;code&gt;require&lt;/code&gt; statements in the generated javascript can be converted into &lt;code&gt;import&lt;/code&gt; statements.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Installation should also insert the appropriate javascript and stylesheet &amp;quot;pack&amp;quot; tags in your application layout:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="erb"&gt;&amp;lt;%= stylesheet_pack_tag &amp;#39;application&amp;#39;, media: &amp;#39;all&amp;#39; %&amp;gt;
-&amp;lt;%= javascript_pack_tag &amp;#39;application&amp;#39; %&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;Tip&lt;/em&gt;: If you omit the &lt;code&gt;javascript_pack_tag&lt;/code&gt; and have &lt;code&gt;extract_css: false&lt;/code&gt; set for your environment in &lt;code&gt;config/webpacker.yml&lt;/code&gt;, then the CSS won&amp;#39;t load! The JS bundle is necessary in this case.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-      &lt;h3 id="installing-bootstrap" class="title title-h3"&gt;
-        &lt;a name="installing-bootstrap" class="anchor" href="#installing-bootstrap"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Installing bootstrap
-      &lt;/h3&gt;
-    
-&lt;p&gt;To add Bootstrap, install via yarn:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;$ yarn add bootstrap
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;At the time of this post, the above is the equivalent to &lt;code&gt;yarn add bootstrap@4.3.0&lt;/code&gt;. Your installation may vary; I would expect the tutorial here will still work for other versions of Bootstrap 4.&lt;/p&gt;
-
-&lt;p&gt;To get Bootstrap css working, add a stylesheet &lt;code&gt;app/javascript/css/site.scss&lt;/code&gt;. Here, you&amp;#39;ll import the global Bootstrap scss file:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="scss"&gt;// app/javascript/css/site.scss
-
-@import &amp;quot;~bootstrap/scss/bootstrap.scss&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;Note: the file extensions are important, i.e., Webpacker configure files ending in &amp;#39;.scss&amp;#39; and &amp;#39;.sass&amp;#39; to be processed by Webpack&amp;#39;s &lt;code&gt;sass-loader&lt;/code&gt;.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;To include our new stylesheet in the build output, we must import it from somewhere in our dependency tree. Let&amp;#39;s put this import in the entry point, our &lt;code&gt;application.js&lt;/code&gt; pack:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-import &amp;#39;css/site&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If you&amp;#39;re new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate &lt;code&gt;application.css&lt;/code&gt; and &lt;code&gt;application.js&lt;/code&gt; files as the top of separate dependency trees. In Webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the &lt;code&gt;application.css&lt;/code&gt; bundle is simply a by-product of the build. In other words, there is no need for a separate &amp;quot;stylesheet pack&amp;quot; like &lt;code&gt;app/javascript/packs/application.css&lt;/code&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;Tip&lt;/em&gt;: With Webpack, it&amp;#39;s recommended to have only &lt;em&gt;one&lt;/em&gt; entry point (or &amp;quot;pack&amp;quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;. I cannot stress this point enough.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-      &lt;h3 id="adding-sass-overrides" class="title title-h3"&gt;
-        &lt;a name="adding-sass-overrides" class="anchor" href="#adding-sass-overrides"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Adding SASS overrides
-      &lt;/h3&gt;
-    
-&lt;p&gt;Since &lt;code&gt;bootstrap.scss&lt;/code&gt; uses SASS variables for theme-ing, you can override the defaults with new values.&lt;/p&gt;
-
-&lt;p&gt;For example, you can change the background and font colors as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="scss"&gt;// app/javascript/css/site.scss
-
-// sass variable overrides
-$body-bg: aliceblue;
-$body-color: #111;
-
-@import &amp;quot;~bootstrap/scss/bootstrap.scss&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You may also surgically import selected parts of bootstrap to limit bundle size:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="scss"&gt;// app/javascript/css/site.scss
-
-// Option A: Include all of Bootstrap
-// @import &amp;quot;~bootstrap/scss/bootstrap.scss&amp;quot;;
-
-// Option B: Include parts of Bootstrap
-@import &amp;quot;~bootstrap/scss/functions.scss&amp;quot;;
-@import &amp;quot;~bootstrap/scss/variables.scss&amp;quot;;
-@import &amp;quot;~bootstrap/scss/mixins.scss&amp;quot;;
-
-@import &amp;quot;~bootstrap/scss/reboot.scss&amp;quot;;
-@import &amp;quot;~bootstrap/scss/type.scss&amp;quot;;
-@import &amp;quot;~bootstrap/scss/images.scss&amp;quot;;
-@import &amp;quot;~bootstrap/scss/code.scss&amp;quot;;
-@import &amp;quot;~bootstrap/scss/grid.scss&amp;quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Bootstrap also ships with some JavaScript utilities that function as jQuery plugins. To enable this functionality, add jQuery and popper.js as dependencies:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;yarn add jquery popper.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;These libraries need to be available in your Webpack build, so import them along with bootstrap javascript:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-// ...
-import &amp;#39;jquery&amp;#39;
-import &amp;#39;popper.js&amp;#39;
-import &amp;#39;bootstrap&amp;#39;
-// ...
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="optimizing-the-javascript-bundle" class="title title-h3"&gt;
-        &lt;a name="optimizing-the-javascript-bundle" class="anchor" href="#optimizing-the-javascript-bundle"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Optimizing the JavaScript bundle
-      &lt;/h3&gt;
-    
-&lt;p&gt;An optional, advanced technique would be to import selected modules asynchronously. The benefit is to limit the size of our initial bundle and defer as much as possible to decrease latency for downloading, parsing, and evaluating JavaScript on page load. Note the &lt;code&gt;application.js&lt;/code&gt; bundle (fingerprinted as &lt;code&gt;js/application-c67c235b5c7d8ac4f1fe.js&lt;/code&gt;) is already 940kB in our Webpack build:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;Version: webpack 4.41.2
-Time: 1003ms
-Built at: 11/25/2019 4:08:14 PM
-                                     Asset       Size       Chunks                         Chunk Names
-              css/application-8d90f960.css    175 KiB  application  [immutable]            application
-          css/application-8d90f960.css.map    377 KiB  application  [dev]                  application
-    js/application-c67c235b5c7d8ac4f1fe.js    940 KiB  application  [emitted] [immutable]  application
-js/application-c67c235b5c7d8ac4f1fe.js.map   1.06 MiB  application  [emitted] [dev]        application
-                             manifest.json  640 bytes               [emitted]
-ℹ ｢wdm｣: Compiled successfully.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As an exercise, we might decide to defer the import and initialization of the jquery plugins. Let&amp;#39;s consider &lt;code&gt;jquery&lt;/code&gt; as a critical dependency; it is needed as part of the &amp;quot;initial&amp;quot; bundle that blocks the page load while it is parsed and evaluated. But &lt;code&gt;popper.js&lt;/code&gt; and &lt;code&gt;bootstrap&lt;/code&gt; can be deferred; since they are plugins that affect the DOM, they&amp;#39;re not as critical, i.e., the DOM needs to be loaded first anyways.&lt;/p&gt;
-
-&lt;p&gt;One such deferring technique is dynamic import. Webpack will recognize when &lt;code&gt;import&lt;/code&gt; is used as a function, e.g. &lt;code&gt;import(&amp;#39;some-lib&amp;#39;)&lt;/code&gt;, and pull out the module as a separate &amp;quot;chunk&amp;quot; (another file), that will be loaded asynchronously when the function is evaluated.&lt;/p&gt;
-
-&lt;p&gt;In our demo app, we can move &lt;code&gt;popper.js&lt;/code&gt; and &lt;code&gt;bootstrap&lt;/code&gt; to a separate file. Critically, this file is NOT in &lt;code&gt;app/javascript/packs&lt;/code&gt; but outside of this directory, such as &lt;code&gt;app/javascript/src&lt;/code&gt;, where we will put all our non-entry-point js:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/src/plugins.js
-
-import &amp;#39;popper.js&amp;#39;
-import &amp;#39;bootstrap&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Back in the application pack, we replace the &lt;code&gt;popper.js&lt;/code&gt; and &lt;code&gt;bootstrap&lt;/code&gt; imports with a &lt;em&gt;dynamic&lt;/em&gt; import of &lt;code&gt;app/javascript/src/plugins.js&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-import &amp;#39;jquery&amp;#39;
-import(&amp;#39;src/plugins&amp;#39;) // note the function usage!
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;When compiling, Webpack will show us a number of additional javascript &amp;quot;chunks&amp;quot; of smaller size than the bundle previously:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;Version: webpack 4.41.2
-Time: 41ms
-Built at: 11/25/2019 4:03:54 PM
-                                     Asset       Size       Chunks                         Chunk Names
-              css/application-8d90f960.css    175 KiB  application  [immutable]            application
-          css/application-8d90f960.css.map    377 KiB  application  [dev]                  application
-        js/0-7f46c35cf4589f8534f7.chunk.js    217 KiB            0  [immutable]
-    js/0-7f46c35cf4589f8534f7.chunk.js.map    257 KiB            0  [dev]
-        js/1-6bb4a0148baccc5762c4.chunk.js  926 bytes            1  [immutable]
-    js/1-6bb4a0148baccc5762c4.chunk.js.map  246 bytes            1  [dev]
-    js/application-0b7847cb72725f896091.js    727 KiB  application  [emitted] [immutable]  application
-js/application-0b7847cb72725f896091.js.map    835 KiB  application  [emitted] [dev]        application
-                             manifest.json  640 bytes               [emitted]
-ℹ ｢wdm｣: Compiled successfully.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;#39;ve knocked the &lt;code&gt;application.js&lt;/code&gt; bundle, (now fingerprinted as &lt;code&gt;js/application-0b7847cb72725f896091.js&lt;/code&gt;) down to 727kB. Still sizable, but represents a significant reduction from the first pass.&lt;/p&gt;
-
-&lt;p&gt;Another optimization step could be to configure the &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;SplitChunksPlugin&lt;/code&gt;&lt;/a&gt; to code-split our bundle programmatically, but we&amp;#39;ll save that for another post.&lt;/p&gt;
-
-&lt;p&gt;Our final &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt; file is:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;import Rails from &amp;quot;@rails/ujs&amp;quot;
-
-import &amp;#39;jquery&amp;#39;
-import(&amp;#39;src/plugins&amp;#39;) // loads async
-
-import &amp;#39;css/site&amp;#39;
-
-Rails.start()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And our final directory structure is:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;app/
-  javascript/
-    css/
-      site.css
-    src/
-      plugins.js
-    packs/
-      application.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can also check out the demo app for this post at &lt;a href="https://github.com/rossta/rails-webpacker-bootstrap-demo" target="_blank" rel="noopener noreferrer"&gt;https://github.com/rossta/rails-webpacker-bootstrap-demo&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I hope this post shed some light on using Bootstrap with Webpacker on Rails and wish you Happy Webpacking!&lt;/p&gt;
 </content>
   </entry>
 </feed>
