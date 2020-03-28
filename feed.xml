@@ -10,7 +10,7 @@
     <name>Ross Kaffenberger</name>
   </author>
   <entry>
-    <title>jQuery plugins without jQuery in Webpack</title>
+    <title>jQuery plugins in Webpack without jQuery</title>
     <link rel="alternate" href="/blog/you-might-not-need-jquery-with-webpack.html"/>
     <id>/blog/you-might-not-need-jquery-with-webpack.html</id>
     <published>2020-03-26T00:00:00+00:00</published>
