@@ -29,6 +29,8 @@ The build step dropped from nearly seven minutes to less than one. Big improveme
 
 So what were the changes?
 
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+
 ### A Common Problem
 
 First, let's take a step back. If you're new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.

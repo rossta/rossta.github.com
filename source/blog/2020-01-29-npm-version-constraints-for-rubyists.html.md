@@ -31,6 +31,8 @@ It might include a section like this:
 ```
 If you're a Rubyist and the version syntax looks odd, then this post is for you.
 
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+
 ## Version constraints in Gemfile
 
 Like the `Gemfile`, package.json has a convention to specify version constraints. Both Ruby and NPM dependencies usually follow SemVer, that will format a constraint as `major.minor.patch`, i.e. the declaration `"webpack": "4.41.2"` indicates Webpack major version 4, minor version 41, and patch version 2.

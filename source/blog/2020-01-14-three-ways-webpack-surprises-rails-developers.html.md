@@ -17,6 +17,8 @@ When I first started working with Webpack, I didn't realize how under-prepared I
 
 And after spending the last month answering Webpack questions on StackOverflow, I've come across plenty of folks going through some of the same mental hurdles I've experienced. I came away with some perspective on what about Webpack most commonly trips up developers.
 
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+
 The intended audience for this post has a general notion of "why use Webpack" or "why use an asset bundler", but for more on that, I recommend [The Many Jobs of JS Build Tools](https://www.swyx.io/writing/jobs-of-js-build-tools/) and [Webpack from Nothing: What problem are we solving?](https://what-problem-does-it-solve.com/webpack/index.html). For a rigorous technical overview of the project, I suggest [the Webpack docs](https://webpack.js.org/); they have gotten quite good.
 
 For this post, we're going to look at three common surprises web developers face when learning Webpack: why using global variables doesn't behave the way you might think, how Webpack treats everything as a JavaScript module, and the big learning curve for configuring Webpack effectively.

@@ -21,6 +21,8 @@ Uncaught TypeError: $(...).myJqueryPlugin is not a function
 
 Assuming you installed it correctly, there could be a few explanations. In this post, we'll look one possible reason: with Webpack, your jQuery plugin doesn't need jQuery.
 
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+
 ## Example: the Flickity plugin
 
 To take advantage of this distinction, more plugins are being written without the assumption of jQuery as a dependency, but with the ability to use a plugin to support (what's becoming) the legacy pattern.
