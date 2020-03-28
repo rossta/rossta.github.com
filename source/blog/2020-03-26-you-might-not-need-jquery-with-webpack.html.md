@@ -23,7 +23,7 @@ Assuming you installed it correctly, there could be a few explanations. In this 
 
 > [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
 
-## Example: the Flickity plugin
+### Example: the Flickity plugin
 
 To take advantage of this distinction, more plugins are being written without the assumption of jQuery as a dependency, but with the ability to use a plugin to support (what's becoming) the legacy pattern.
 
@@ -133,7 +133,7 @@ A similar approach exists in other plugins including:
 
 The main takeaway here: if the library can be initialized without jQuery, there's not much reason to use jQuery for that plugin in the first place.
 
-## Conclusion
+### Conclusion
 
 Unfortunately, jQuery plugins come in so many different flavors so not all of them can be used _without_ jQuery. In future posts, I'll discuss other techniques you can use to make jQuery work with Webpack.
 
