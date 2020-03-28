@@ -19,7 +19,7 @@ Have you seen this console error while trying to adopt Webpack?
 Uncaught TypeError: $(...).myJqueryPlugin is not a function
 ```
 
-Assuming you installed it correctly, there could be a few explanations. In this post, we'll look one possible reason: with Webpack, your jQuery plugin doesn't need jQuery.
+Assuming you installed it correctly, there could be a few explanations. In this post, we'll look one possible reason: with Webpack, your jQuery plugin _might_ not need jQuery.
 
 > [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
 
