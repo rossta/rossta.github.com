@@ -155,7 +155,7 @@ Forget the `:path` option and you'll never forget ^^this stuff^^ again.
 Just use this command:
 
 ```sh
-bundle config local.YOUR_GEM_NAME`
+bundle config local.YOUR_GEM_NAME
 ```
 
 And don't believe everything you read on StackOverflow.
