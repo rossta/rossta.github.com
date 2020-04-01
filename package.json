@@ -60,7 +60,9 @@
     "serialize-javascript": "^3.0.0"
   },
   "resolutions": {
-    "*/serialize-javascript": "^2.1.1"
+    "*/serialize-javascript": "^2.1.1",
+    "*/acorn": "^7.1.1",
+    "*/minimist": "^1.2.2"
   },
   "engines": {
     "node": "^12.13.0",
