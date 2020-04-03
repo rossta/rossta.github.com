@@ -125,7 +125,27 @@ hr {
 }
 
 .post blockquote {
-  @apply italic text-gray-700 -ml-6 pl-6 border-l border-gray-700;
+  @apply italic text-gray-700 p-4;
+
+  background-color: aliceblue;
+}
+
+@screen md {
+  .post blockquote {
+    @apply rounded -mx-6 p-6;
+  }
+}
+
+@screen lg {
+  .post blockquote {
+    @apply text-base rounded-lg -mx-8 p-8;
+  }
+}
+
+.post blockquote p {
+  @apply border-l border-blue-400 pl-6 pr-4 pt-2 pb-2;
+
+  margin: 0;
 }
 
 .post ul,
