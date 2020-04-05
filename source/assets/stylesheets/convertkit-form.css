@@ -412,6 +412,10 @@
   display: none;
 }
 
+.formkit-slide-in[data-object] .formkit-column {
+  @apply p-8 !important;
+}
+
 .formkit-slide-in[data-object] .formkit-column:first-child {
   padding-bottom: 0 !important;
 }
