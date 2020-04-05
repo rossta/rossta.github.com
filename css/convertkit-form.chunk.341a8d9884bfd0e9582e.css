@@ -456,6 +456,10 @@
   display: none;
 }
 
+.formkit-slide-in[data-object] .formkit-column {
+  padding: 2rem !important;
+}
+
 .formkit-slide-in[data-object] .formkit-column:first-child {
   padding-bottom: 0 !important;
 }
