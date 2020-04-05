@@ -83,7 +83,7 @@ Many jQuery plugins (or many legacy plugins in general) have been written withou
 
 In Webpack, global variables are not your friend, my friend.
 
-### 2. Webpack treats everything as a JavaScript module
+### 2. Webpack treats _everything_ as a JavaScript module
 
 Webpack is so committed to its "module bundler" role it treats other static assets, including CSS, images, fonts, etc., as JavaScript modules too.
 
@@ -117,7 +117,7 @@ app/javascript
 
 The mixing of CSS bundled in JavaScript and treated as JavaScript modules has isn't strictly necessary, but it most certainly a mental leap for the uninitiated.
 
-### 3. Webpack configuration is extreme pluggable
+### 3. Webpack configuration is extremely pluggable
 
 There's a reason Webpack configuration has such a high barrier to entry: Webpack is the ultimate delegator.
 
