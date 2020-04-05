@@ -1313,7 +1313,8 @@ hr {
 }
 
 .post p,
-.index-post p {
+.index-post p,
+.post blockquote {
   margin-bottom: 1.5rem;
 }
 
