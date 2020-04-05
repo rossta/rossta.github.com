@@ -94,7 +94,8 @@ hr {
   @apply underline;
 }
 .post p,
-.index-post p {
+.index-post p,
+.post blockquote {
   @apply mb-6;
 }
 .post .title {
