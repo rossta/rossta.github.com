@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+source, destination = ARGV
+
+unless source && destination
+  warn "\nUsage: \n./bin/convert $SOURCE $DESTINATION"
+  exit(1)
+end
+
+puts "convert #{source} -quality 75 -resize '1200x>' #{destination}"
+`convert #{source} -quality 75 -resize '1200x>' #{destination}`
