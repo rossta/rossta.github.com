@@ -14,11 +14,23 @@ tags:
 ---
 Though Webpacker adds a layer of "convention over configuration" in regards to webpack integration with Rails, the need for configuration remains. In this post, I'll describe the role of the `webpacker.yml` file for Webpacker configuration.
 
-Since webpack is a Node.js tool, it expects a JavaScript object or function as its configuration. Webpacker provides both a Ruby gem and an Node Package Manager (NPM) package: `@rails/webpacker`. The role of the `@rails/webpacker` package is primarily to provide the base configuration to webpack, i.e. where to find your source files and how and where to bundle them.
+One of Webpacker's primary roles is helping Rails communicate with webpack.
 
-Rails also needs to know about some of these webpack config values, so Webpacker provides a mechanism to read webpack configuration values in both Ruby and JavaScript.
+Here are some things both Rails and webpack need to know:
+
+​_Where are the source files located?_
+
+_What file types should be bundled?_
+
+_What's the destination for the bundle files?_
+
+_Should CSS be inserted dynamically via JavaScript or output as a separate file?_
+
+_What port should the webpack-dev-server listen on in development?_
 
 That's where `webpacker.yml` comes in.
+
+This file is read both Ruby code supplied by the Webpacker gem in the Rails server process and the JavaScript process that generates the webpack configuration via the `@rails/webpacker` NPM package. It supports a number of YAML entries which I'll describe in more detail in the [reference guide](#reference-guide).
 
 ### Creating and updating
 
