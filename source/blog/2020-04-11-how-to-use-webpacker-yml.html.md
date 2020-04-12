@@ -1,5 +1,5 @@
 ---
-title: How to use webpacker.yml
+title: Understanding webpacker.yml
 author: Ross Kaffenberger
 published: true
 summary: An unofficial guide to Rails Webpacker YAML configuration
