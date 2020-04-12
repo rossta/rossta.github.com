@@ -20,14 +20,26 @@
     </author>
     <summary type="html">&lt;p&gt;Though Webpacker adds a layer of "convention over configuration" in regards to webpack integration with Rails, the need for configuration remains. In this post, I'll describe the role of the &lt;code&gt;webpacker.yml&lt;/code&gt; file for Webpacker configuration.&lt;/p&gt;
 
-&lt;p&gt;Since webpack...&lt;/p&gt;</summary>
+&lt;p&gt;One of Webpacker...&lt;/p&gt;</summary>
     <content type="html">&lt;p&gt;Though Webpacker adds a layer of &amp;quot;convention over configuration&amp;quot; in regards to webpack integration with Rails, the need for configuration remains. In this post, I&amp;#39;ll describe the role of the &lt;code&gt;webpacker.yml&lt;/code&gt; file for Webpacker configuration.&lt;/p&gt;
 
-&lt;p&gt;Since webpack is a Node.js tool, it expects a JavaScript object or function as its configuration. Webpacker provides both a Ruby gem and an Node Package Manager (NPM) package: &lt;code&gt;@rails/webpacker&lt;/code&gt;. The role of the &lt;code&gt;@rails/webpacker&lt;/code&gt; package is primarily to provide the base configuration to webpack, i.e. where to find your source files and how and where to bundle them.&lt;/p&gt;
+&lt;p&gt;One of Webpacker&amp;#39;s primary roles is helping Rails communicate with webpack.&lt;/p&gt;
 
-&lt;p&gt;Rails also needs to know about some of these webpack config values, so Webpacker provides a mechanism to read webpack configuration values in both Ruby and JavaScript.&lt;/p&gt;
+&lt;p&gt;Here are some things both Rails and webpack need to know:&lt;/p&gt;
+
+&lt;p&gt;​&lt;em&gt;Where are the source files located?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;What file types should be bundled?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;What&amp;#39;s the destination for the bundle files?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Should CSS be inserted dynamically via JavaScript or output as a separate file?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;What port should the webpack-dev-server listen on in development?&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;That&amp;#39;s where &lt;code&gt;webpacker.yml&lt;/code&gt; comes in.&lt;/p&gt;
+
+&lt;p&gt;This file is read both Ruby code supplied by the Webpacker gem in the Rails server process and the JavaScript process that generates the webpack configuration via the &lt;code&gt;@rails/webpacker&lt;/code&gt; NPM package. It supports a number of YAML entries which I&amp;#39;ll describe in more detail in the &lt;a href="#reference-guide"&gt;reference guide&lt;/a&gt;.&lt;/p&gt;
 
       &lt;h3 id="creating-and-updating" class="title title-h3"&gt;
         &lt;a name="creating-and-updating" class="anchor" href="#creating-and-updating"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;

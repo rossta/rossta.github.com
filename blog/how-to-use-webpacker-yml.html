@@ -61,11 +61,23 @@
 
     <p>Though Webpacker adds a layer of &quot;convention over configuration&quot; in regards to webpack integration with Rails, the need for configuration remains. In this post, I&#39;ll describe the role of the <code>webpacker.yml</code> file for Webpacker configuration.</p>
 
-<p>Since webpack is a Node.js tool, it expects a JavaScript object or function as its configuration. Webpacker provides both a Ruby gem and an Node Package Manager (NPM) package: <code>@rails/webpacker</code>. The role of the <code>@rails/webpacker</code> package is primarily to provide the base configuration to webpack, i.e. where to find your source files and how and where to bundle them.</p>
+<p>One of Webpacker&#39;s primary roles is helping Rails communicate with webpack.</p>
 
-<p>Rails also needs to know about some of these webpack config values, so Webpacker provides a mechanism to read webpack configuration values in both Ruby and JavaScript.</p>
+<p>Here are some things both Rails and webpack need to know:</p>
+
+<p>​<em>Where are the source files located?</em></p>
+
+<p><em>What file types should be bundled?</em></p>
+
+<p><em>What&#39;s the destination for the bundle files?</em></p>
+
+<p><em>Should CSS be inserted dynamically via JavaScript or output as a separate file?</em></p>
+
+<p><em>What port should the webpack-dev-server listen on in development?</em></p>
 
 <p>That&#39;s where <code>webpacker.yml</code> comes in.</p>
+
+<p>This file is read both Ruby code supplied by the Webpacker gem in the Rails server process and the JavaScript process that generates the webpack configuration via the <code>@rails/webpacker</code> NPM package. It supports a number of YAML entries which I&#39;ll describe in more detail in the <a href="#reference-guide">reference guide</a>.</p>
 
       <h3 id="creating-and-updating" class="title title-h3">
         <a name="creating-and-updating" class="anchor" href="#creating-and-updating">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
