@@ -1332,7 +1332,7 @@ hr {
 
 @media (min-width: 1024px) {
   .post .title {
-    margin-left: -1.25rem;
+    margin-left: -1rem;
     margin-top: 3rem;
   }
 
