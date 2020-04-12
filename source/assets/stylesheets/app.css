@@ -107,7 +107,7 @@ hr {
 
 @screen lg {
   .post .title {
-    @apply -ml-5 mt-12;
+    @apply -ml-4 mt-12;
   }
 
   .post .title-h4,
