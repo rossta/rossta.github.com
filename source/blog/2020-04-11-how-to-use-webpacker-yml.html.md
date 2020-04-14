@@ -55,7 +55,7 @@ When upgrading the Webpacker gem, it's prudent to re-run the installer command t
 
 The `webpacker.yml` config file does not work with ERB as is typical with other Rails YAML config files, since the file must also be read in JavaScript. This may come as a surprise as indicated by recent issues, e.g. [#1615](https://github.com/rails/webpacker/issues/1615), [#956](https://github.com/rails/webpacker/issues/956).
 
-One possible workaround is to kjluse one of the supported [ENV var overrides](#env-var-overrides). It may also be an option to manipulate the JavaScript config in one of the `config/webpack` JavaScript files—look for a future post on the subject.
+One possible workaround is to use one of the supported [ENV var overrides](#env-var-overrides). It may also be an option to manipulate the JavaScript config in one of the `config/webpack` JavaScript files—look for a future post on the subject.
 
 ### Reference guide
 
