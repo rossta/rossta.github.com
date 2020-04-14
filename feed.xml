@@ -78,7 +78,7 @@
     
 &lt;p&gt;The &lt;code&gt;webpacker.yml&lt;/code&gt; config file does not work with ERB as is typical with other Rails YAML config files, since the file must also be read in JavaScript. This may come as a surprise as indicated by recent issues, e.g. &lt;a href="https://github.com/rails/webpacker/issues/1615" target="_blank" rel="noopener noreferrer"&gt;#1615&lt;/a&gt;, &lt;a href="https://github.com/rails/webpacker/issues/956" target="_blank" rel="noopener noreferrer"&gt;#956&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;One possible workaround is to kjluse one of the supported &lt;a href="#env-var-overrides"&gt;ENV var overrides&lt;/a&gt;. It may also be an option to manipulate the JavaScript config in one of the &lt;code&gt;config/webpack&lt;/code&gt; JavaScript files—look for a future post on the subject.&lt;/p&gt;
+&lt;p&gt;One possible workaround is to use one of the supported &lt;a href="#env-var-overrides"&gt;ENV var overrides&lt;/a&gt;. It may also be an option to manipulate the JavaScript config in one of the &lt;code&gt;config/webpack&lt;/code&gt; JavaScript files—look for a future post on the subject.&lt;/p&gt;
 
       &lt;h3 id="reference-guide" class="title title-h3"&gt;
         &lt;a name="reference-guide" class="anchor" href="#reference-guide"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
