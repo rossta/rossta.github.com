@@ -1,6 +1,10 @@
 require "middleman-core/renderers/redcarpet"
 
 class CustomMarkdownRenderer < Middleman::Renderers::MiddlemanRedcarpetHTML
+  def image(link, title, alt_text)
+    scope.image_tag(link, title: title, alt: alt_text, loading: "lazy")
+  end
+
   def link(url, title, text)
     anchor_tag(url, text)
   end
@@ -30,14 +34,17 @@ class CustomMarkdownRenderer < Middleman::Renderers::MiddlemanRedcarpetHTML
   private
 
   def anchor_tag(url, text)
-    attributes = {href: url}
+    # attributes = {href: url}
+    attributes = {}
 
     unless url.blank? || url.start_with?("/", "#")
       attributes[:target] = "_blank"
       attributes[:rel] = "noopener noreferrer"
     end
 
-    %(<a #{attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ")}>#{text}</a>)
+    scope.link_to(text, url, attributes)
+
+    # %(<a #{attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ")}>#{text}</a>)
   end
 
   def anchor_svg

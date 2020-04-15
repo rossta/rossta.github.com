@@ -118,7 +118,7 @@ This loader rule, inserted in the loader pipeline for SASS/SCSS files, will ensu
 
 ### Images in Rails views
 
-You may be accustomed to `<%= image_tag 'tacos.jpg' %>` to reference a image bundled in the Rails asset pipeline. Webpack has a similar tag:
+You may be accustomed to `<%= lazy_image_tag 'tacos.jpg' %>` to reference a image bundled in the Rails asset pipeline. Webpack has a similar tag:
 
 ```html
 <!-- app/views/lunches/index.html.erb -->

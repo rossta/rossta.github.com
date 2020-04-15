@@ -33,7 +33,7 @@
   <article class="mb-24">
     <% if current_page.data.pull_image %>
       <figure>
-        <%= image_tag current_page.data.pull_image if current_page.data.pull_image %>
+        <%= lazy_image_tag current_page.data.pull_image if current_page.data.pull_image %>
         <% if current_page.data.pull_image_caption %>
           <figcaption><%= current_page.data.pull_image_caption %></figcaption>
         <% end %>

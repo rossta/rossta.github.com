@@ -174,6 +174,10 @@ helpers do
     to_url(path: image_path(source))
   end
 
+  def lazy_image_tag(src, opts = {})
+    image_tag(src, {loading: "lazy"}.merge(opts))
+  end
+
   def email_url
     "mailto:ross@rossta.net"
   end

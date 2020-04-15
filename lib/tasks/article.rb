@@ -13,6 +13,7 @@ published: false
 summary: #{title}
 description: #{title}
 pull_image: 'blog/stock/louvre-pexels-photo.jpg'
+pull_image_caption: Photo by Yoyo Ma on Unsplash
 series:
 category: Code
 tags:
