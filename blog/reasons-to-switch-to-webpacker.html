@@ -175,7 +175,7 @@
     
 <p>Contrary to popular belief, you don&#39;t need to use a popular frontend framework, React, Vue, Angular, or Svelte, to take advantage of what Webpack has to offer. It works just great with &quot;vanilla JS&quot; or even jQuery-based apps.</p>
 
-<p><img src="/assets/images/blog/webpack/no-framework-required.png" alt="Webpack and JS" /></p>
+<p><img src="/assets/images/blog/webpack/no-framework-required.png" alt="Webpack and JS" loading="lazy" /></p>
 
 <p>I don&#39;t believe single-page applications are worth the extra effort and complexity for the majority of CRUD-based apps—the Rails sweet-spot. Employing &quot;JavaScript sprinkles&quot; still makes a lot of sense in 2020, and Webpack should be considered an advantage.</p>
 
@@ -229,7 +229,7 @@ div {
     
 <p>I&#39;ve always found Rails &quot;asset gems&quot; to be a significant pain. In most cases, you can replace your asset gems with Node Package Manager, or NPM, dependencies.</p>
 
-<p><img src="/assets/images/blog/webpack/npm-logo.png" alt="NPM logo" /></p>
+<p><img src="/assets/images/blog/webpack/npm-logo.png" alt="NPM logo" loading="lazy" /></p>
 
 <p>NPM has become the primary repository for distributing open-source JavaScript packages. Although initially designed for packages intended to be used with the Node.js runtime, over time, it has also become the default for browser-based packages. This means that both libraries that run on Node.js, like Webpack, and libraries in the browser, like React, Vue, and jQuery, can all be distributed over NPM. Using NPM is a vast improvement over the typical for sharing JavaScript and other assets for the Rails asset pipeline. One significant point of friction with the latter approach is having to maintain both a Ruby version along with the version of the packaged assets. This technique has always felt cumbersome and bolted on.</p>
 
@@ -387,7 +387,7 @@ import &quot;core-js/modules/web.immediate&quot;
     
 <p><a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer">TypeScript</a> has gained in popularity in recent years.</p>
 
-<p><img src="/assets/images/blog/webpack/typescript-superset.png" alt="TypeScript is a superset of JavaScript" /></p>
+<p><img src="/assets/images/blog/webpack/typescript-superset.png" alt="TypeScript is a superset of JavaScript" loading="lazy" /></p>
 
 <p>It brings static-typing to frontend development, allowing developers to catch errors more efficiently and productivity gains via integrations with supporting JavaScript IDEs, like VS Code. It&#39;s even possible to adopt TypeScript iteratively; as a superset of plain JavaScript, any valid JavaScript program is a valid TypeScript program. Webpacker provides an installer to make it easier to add to your Rails project.</p>
 
@@ -411,7 +411,7 @@ import &quot;core-js/modules/web.immediate&quot;
 
 <p>One of my favorite Webpack-friendly addons is <a href="https://storybook.js.org" target="_blank" rel="noopener noreferrer">Storybook</a>. It&#39;s a newer tool that allows developers to build components in isolation from the Rails server. This is a great way to represent your UI in various states all in one place without having to mess with real data in your development environment.</p>
 
-<p><img src="/assets/images/blog/webpack/storybook-logo.png" alt="Storybook logo" /></p>
+<p><img src="/assets/images/blog/webpack/storybook-logo.png" alt="Storybook logo" loading="lazy" /></p>
 
       <h3 id="15-modify-source-code-programmatically" class="title title-h3">
         <a name="15-modify-source-code-programmatically" class="anchor" href="#15-modify-source-code-programmatically">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -562,7 +562,7 @@ module.exports = environment
     
 <p>If you&#39;ve used Rails long enough, there&#39;s a good chance you&#39;ve adopted SASS or SCSS and you may love it. That&#39;s fine! Webpacker supports SASS/SCSS by default. That said, Webpacker also integrates with a newer tool called <a href="https://postcss.org/" target="_blank" rel="noopener noreferrer">PostCSS</a>.</p>
 
-<p><img src="/assets/images/blog/webpack/postcss-logo.png" alt="PostCSS logo" /></p>
+<p><img src="/assets/images/blog/webpack/postcss-logo.png" alt="PostCSS logo" loading="lazy" /></p>
 
 <p>PostCSS, relatively new on the scene, allows developers to transform CSS with JavaScript. It&#39;s a pluggable tool that can be configured to enable various capabilities; Webpack configures PostCSS to apply some fixes for flexbox bugs and to use a preset-env plugin to polyfill newer CSS capabilities for older browsers, similarly to @babel/preset-env does for JavaScript.</p>
 
@@ -624,7 +624,7 @@ module.exports = environment
     
 <p>The first rule of optimization is &quot;Measure first.&quot; When it comes to optimizing frontend performance, the first developer I look to for advice is <a href="https://addyosmani.com/" target="_blank" rel="noopener noreferrer">Addy Osmani</a>.</p>
 
-<p><img src="/assets/images/blog/webpack/perf-budget-metrics.png" alt="Performance Budget Images" /></p>
+<p><img src="/assets/images/blog/webpack/perf-budget-metrics.png" alt="Performance Budget Images" loading="lazy" /></p>
 
 <p>One of his key strategies for measuring frontend performance is &quot;performance budgeting&quot; and how this relates to  &quot;time-to-interactive&quot; (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application. That value closely correlates with the amount of JavaScript you force your users&#39; browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.</p>
 
@@ -645,7 +645,7 @@ module.exports = environment
     
 <p>One of my favorite tools for debugging Webpack is the <code>webpack-bundler-analyzer</code>. Add this to your build and it will generate an interactive treemap that visualizes the relative size and contents of all your bundles. Wondering how much <code>lodash</code> is adding to your overall bundle size? Use the bundle analyzer tool. Think there&#39;s a bug in with one of your dependencies or in your Webpack output? The bundle analyzer may help you identify it.</p>
 
-<p><img src="/assets/images/blog/webpack/webpack-bundle-analyzer.gif" alt="An example of a Webpack Bundle Analyzer treemap" /></p>
+<p><img src="/assets/images/blog/webpack/webpack-bundle-analyzer.gif" alt="An example of a Webpack Bundle Analyzer treemap" loading="lazy" /></p>
 
 <ul>
 <li>Project <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer">https://github.com/webpack-contrib/webpack-bundle-analyzer</a></li>
@@ -796,7 +796,7 @@ import tail from &#39;lodash/tail&#39;
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/alice-donovan-packing-unsplash.jpg" alt="Alice donovan packing unsplash" />
+        <img src="/assets/images/blog/stock/alice-donovan-packing-unsplash.jpg" loading="lazy" alt="Alice donovan packing unsplash" />
           <figcaption>Photo by Alice Donovan Rouse on Unsplash</figcaption>
       </figure>
   </article>
@@ -807,7 +807,7 @@ import tail from &#39;lodash/tail&#39;
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>

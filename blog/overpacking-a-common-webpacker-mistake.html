@@ -61,7 +61,7 @@
 
     <p>I recently encountered a Rails app at work that was spending nearly seven minutes precompiling assets:</p>
 
-<p><img src="/assets/images/blog/webpack/overpack-before-fix.png" alt="CI Screenshot: Precompile assets, 6:56" /></p>
+<p><img src="/assets/images/blog/webpack/overpack-before-fix.png" alt="CI Screenshot: Precompile assets, 6:56" loading="lazy" /></p>
 
 <p>I looked in the <code>Gemfile</code> and found the project was using Webpacker. My spidey sense started to tingle.</p>
 
@@ -69,7 +69,7 @@
 
 <p>Leaning on prior experience, I found the problem, moved some files around, and pushed a branch with the fix up to CI.</p>
 
-<p><img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" /></p>
+<p><img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" loading="lazy" /></p>
 
 <p>The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.</p>
 
@@ -283,7 +283,7 @@
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/brandless-packing-unsplash.jpg" alt="Brandless packing unsplash" />
+        <img src="/assets/images/blog/stock/brandless-packing-unsplash.jpg" loading="lazy" alt="Brandless packing unsplash" />
           <figcaption>Photo by Brandless on Unsplash</figcaption>
       </figure>
   </article>
@@ -294,7 +294,7 @@
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>

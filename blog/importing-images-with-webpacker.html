@@ -201,7 +201,7 @@ environment.loaders.get(&#39;sass&#39;).use.splice(-1, 0, {
         Images in Rails views
       </h3>
     
-<p>You may be accustomed to <code>&lt;%= image_tag &#39;tacos.jpg&#39; %&gt;</code> to reference a image bundled in the Rails asset pipeline. Webpack has a similar tag:</p>
+<p>You may be accustomed to <code>&lt;%= lazy_image_tag &#39;tacos.jpg&#39; %&gt;</code> to reference a image bundled in the Rails asset pipeline. Webpack has a similar tag:</p>
 
 <pre><code class="html">&lt;!-- app/views/lunches/index.html.erb --&gt;
 
@@ -390,7 +390,7 @@ require.context(&#39;../images&#39;, true)
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/jr-korpa-lights-unsplash.jpg" alt="Jr korpa lights unsplash" />
+        <img src="/assets/images/blog/stock/jr-korpa-lights-unsplash.jpg" loading="lazy" alt="Jr korpa lights unsplash" />
           <figcaption>Photo by JR Korpa on Unsplash</figcaption>
       </figure>
   </article>
@@ -401,7 +401,7 @@ require.context(&#39;../images&#39;, true)
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>

@@ -59,7 +59,7 @@
     </h2>
 </header>
 
-    <p>Last week <a href="">I spoke</a> at <a href="">Ancient City Ruby Conference</a> where the organizers encouraged people to participate in a Ruby programming challenge called <a href="http://www.ancientcityruby.com/snake_case/" target="_blank" rel="noopener noreferrer">Snake Case</a>. I benchmarked a number of different ways to solve the challenge in Ruby and present the results here.</p>
+    <p>Last week <a href="#">I spoke</a> at <a href="#">Ancient City Ruby Conference</a> where the organizers encouraged people to participate in a Ruby programming challenge called <a href="http://www.ancientcityruby.com/snake_case/" target="_blank" rel="noopener noreferrer">Snake Case</a>. I benchmarked a number of different ways to solve the challenge in Ruby and present the results here.</p>
 
 <p>Here&#39;s the challenge:</p>
 
@@ -75,7 +75,7 @@
 <p>You quickly note that if the downtown area were only a 2 block by 2 block grid, there would be 6 distinct paths from one corner to the other:</p>
 </blockquote>
 
-<p><img src="/assets/images/blog/snake-case-blocks.png" alt="Snake case blocks" /></p>
+<p><img src="/assets/images/blog/snake-case-blocks.png" alt="Snake case blocks" loading="lazy" /></p>
 
 <p>It&#39;s worth nothing that the intent of the problem was to calculate the correct
 number of &quot;optimal&quot; paths along the blocks, so a meandering path does not count.
@@ -134,7 +134,7 @@ represent this conceptually as a bit map, where the total number of bits is
 20^2, or <code>(h+w)**2</code> where <code>h</code> is the height and <code>w</code> is the width of the grid. It
 turns out this can be represented as a <a href="https://en.wikipedia.org/wiki/Binomial_coefficient" target="_blank" rel="noopener noreferrer">binomial coefficient</a> often expressed as:</p>
 
-<p><img src="/assets/images/blog/binomial-coefficient.gif" alt="Binomial coefficient" /></p>
+<p><img src="/assets/images/blog/binomial-coefficient.gif" alt="Binomial coefficient" loading="lazy" /></p>
 
 <p>Ray provided a nice LaTex-formatted description of the mathematics involved. Translated into a general Ruby function, this can be expressed in factorials.</p>
 
@@ -484,7 +484,7 @@ approach in situations where performance isn&#39;t the key concern.</p>
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/snakes-pexels-photo.jpg" alt="Snakes pexels photo" />
+        <img src="/assets/images/blog/stock/snakes-pexels-photo.jpg" loading="lazy" alt="Snakes pexels photo" />
       </figure>
   </article>
 
@@ -492,7 +492,7 @@ approach in situations where performance isn&#39;t the key concern.</p>
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>

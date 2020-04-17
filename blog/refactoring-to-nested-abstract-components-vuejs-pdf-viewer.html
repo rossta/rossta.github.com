@@ -83,7 +83,7 @@
     
 <p>So far in <a href="/blog/series/pdf-viewer.html">this series</a>, we have built a simple PDF viewer to render the pages of PDF document to <code>&lt;canvas&gt;</code> elements with Vue. We have also updated our components to fetch and render PDF pages lazily as they are scrolled into the viewport and we have extracted this behavior into a <code>&lt;PDFData&gt;</code> component.</p>
 
-<p><img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" /></p>
+<p><img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" loading="lazy" /></p>
 
       <h3 id="the-problem" class="title title-h3">
         <a name="the-problem" class="anchor" href="#the-problem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -256,7 +256,7 @@ render() {
 
 <p>One practical advantage is we can troubleshoot the scrolling behavior with a clear picture of where the behavior is located in our component tree with Vue devtools:</p>
 
-<p><img src="/assets/images/blog/vue-pdf-viewer/part-4-shared-behavior-devtools.jpg" alt="scrolling components in Vue devtools" /></p>
+<p><img src="/assets/images/blog/vue-pdf-viewer/part-4-shared-behavior-devtools.jpg" alt="scrolling components in Vue devtools" loading="lazy" /></p>
 
 <p>In my opinion, this approach allows us to gain a clear separation of concerns and a better representation of how the pieces fit together as a whole; i.e., I believe the system is easier to understand and debug.</p>
 
@@ -365,7 +365,7 @@ render() {
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/ak-n-cakiner-tree-branch-unsplash.jpg" alt="Ak n cakiner tree branch unsplash" />
+        <img src="/assets/images/blog/stock/ak-n-cakiner-tree-branch-unsplash.jpg" loading="lazy" alt="Ak n cakiner tree branch unsplash" />
           <figcaption>Photo by AK¥N Cakiner on Unsplash</figcaption>
       </figure>
   </article>
@@ -374,7 +374,7 @@ render() {
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>

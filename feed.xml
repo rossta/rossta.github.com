@@ -329,7 +329,7 @@ WEBPACKER_ASSET_HOST
         Feedback
       &lt;/h3&gt;
     
-&lt;p&gt;Did you find this guide useful? Please &lt;a href="https://twitter.com/intent/tweet?text=How+to+use+webpacker.yml%3A+An+unofficial+guide+to+Rails+Webpacker+YAML+configuration&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fhow-to-use-webpacker-yml.html" target="_blank" rel="noopener noreferrer"&gt;share it&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Did you find this guide useful? Please &lt;a href="https://twitter.com/intent/tweet?text=How+to+use+webpacker.yml%3A+An+unofficial+guide+to+Rails+Webpacker+YAML+configuration&amp;amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fhow-to-use-webpacker-yml.html" target="_blank" rel="noopener noreferrer"&gt;share it&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Just like with the official Rails guides, you&amp;#39;re encouraged to help improve the quality of this one. &lt;a href="https://github.com/rossta/rossta.github.com/blob/develop/source/blog/2020-04-01-configuring-webpacker.html.md" target="_blank" rel="noopener noreferrer"&gt;Please contribute&lt;/a&gt; if you see any typos or factual errors.&lt;/p&gt;
 </content>
@@ -413,7 +413,7 @@ const flickity = new Flickity(&amp;#39;.main-carousel&amp;#39;, {
 
 &lt;p&gt;Here&amp;#39;s a screenshot from the &lt;a href="https://flickity.metafizzy.co/" target="_blank" rel="noopener noreferrer"&gt;Flickity homepage&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/flickity-documentation-example.png" alt="Flickity documentation example" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/flickity-documentation-example.png" alt="Flickity documentation example" loading="lazy" /&gt;&lt;/p&gt;
 
 &lt;p&gt;This is a great hint that we can import the &lt;code&gt;Flickity&lt;/code&gt; constructor without requiring jQuery on the page or in our build.&lt;/p&gt;
 
@@ -631,7 +631,7 @@ $(&amp;#39;.main-carousel&amp;#39;).flickity({
     
 &lt;p&gt;Contrary to popular belief, you don&amp;#39;t need to use a popular frontend framework, React, Vue, Angular, or Svelte, to take advantage of what Webpack has to offer. It works just great with &amp;quot;vanilla JS&amp;quot; or even jQuery-based apps.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack/no-framework-required.png" alt="Webpack and JS" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/no-framework-required.png" alt="Webpack and JS" loading="lazy" /&gt;&lt;/p&gt;
 
 &lt;p&gt;I don&amp;#39;t believe single-page applications are worth the extra effort and complexity for the majority of CRUD-based apps—the Rails sweet-spot. Employing &amp;quot;JavaScript sprinkles&amp;quot; still makes a lot of sense in 2020, and Webpack should be considered an advantage.&lt;/p&gt;
 
@@ -685,7 +685,7 @@ div {
     
 &lt;p&gt;I&amp;#39;ve always found Rails &amp;quot;asset gems&amp;quot; to be a significant pain. In most cases, you can replace your asset gems with Node Package Manager, or NPM, dependencies.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack/npm-logo.png" alt="NPM logo" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/npm-logo.png" alt="NPM logo" loading="lazy" /&gt;&lt;/p&gt;
 
 &lt;p&gt;NPM has become the primary repository for distributing open-source JavaScript packages. Although initially designed for packages intended to be used with the Node.js runtime, over time, it has also become the default for browser-based packages. This means that both libraries that run on Node.js, like Webpack, and libraries in the browser, like React, Vue, and jQuery, can all be distributed over NPM. Using NPM is a vast improvement over the typical for sharing JavaScript and other assets for the Rails asset pipeline. One significant point of friction with the latter approach is having to maintain both a Ruby version along with the version of the packaged assets. This technique has always felt cumbersome and bolted on.&lt;/p&gt;
 
@@ -843,7 +843,7 @@ import &amp;quot;core-js/modules/web.immediate&amp;quot;
     
 &lt;p&gt;&lt;a href="https://www.typescriptlang.org/" target="_blank" rel="noopener noreferrer"&gt;TypeScript&lt;/a&gt; has gained in popularity in recent years.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack/typescript-superset.png" alt="TypeScript is a superset of JavaScript" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/typescript-superset.png" alt="TypeScript is a superset of JavaScript" loading="lazy" /&gt;&lt;/p&gt;
 
 &lt;p&gt;It brings static-typing to frontend development, allowing developers to catch errors more efficiently and productivity gains via integrations with supporting JavaScript IDEs, like VS Code. It&amp;#39;s even possible to adopt TypeScript iteratively; as a superset of plain JavaScript, any valid JavaScript program is a valid TypeScript program. Webpacker provides an installer to make it easier to add to your Rails project.&lt;/p&gt;
 
@@ -867,7 +867,7 @@ import &amp;quot;core-js/modules/web.immediate&amp;quot;
 
 &lt;p&gt;One of my favorite Webpack-friendly addons is &lt;a href="https://storybook.js.org" target="_blank" rel="noopener noreferrer"&gt;Storybook&lt;/a&gt;. It&amp;#39;s a newer tool that allows developers to build components in isolation from the Rails server. This is a great way to represent your UI in various states all in one place without having to mess with real data in your development environment.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack/storybook-logo.png" alt="Storybook logo" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/storybook-logo.png" alt="Storybook logo" loading="lazy" /&gt;&lt;/p&gt;
 
       &lt;h3 id="15-modify-source-code-programmatically" class="title title-h3"&gt;
         &lt;a name="15-modify-source-code-programmatically" class="anchor" href="#15-modify-source-code-programmatically"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -1018,7 +1018,7 @@ module.exports = environment
     
 &lt;p&gt;If you&amp;#39;ve used Rails long enough, there&amp;#39;s a good chance you&amp;#39;ve adopted SASS or SCSS and you may love it. That&amp;#39;s fine! Webpacker supports SASS/SCSS by default. That said, Webpacker also integrates with a newer tool called &lt;a href="https://postcss.org/" target="_blank" rel="noopener noreferrer"&gt;PostCSS&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack/postcss-logo.png" alt="PostCSS logo" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/postcss-logo.png" alt="PostCSS logo" loading="lazy" /&gt;&lt;/p&gt;
 
 &lt;p&gt;PostCSS, relatively new on the scene, allows developers to transform CSS with JavaScript. It&amp;#39;s a pluggable tool that can be configured to enable various capabilities; Webpack configures PostCSS to apply some fixes for flexbox bugs and to use a preset-env plugin to polyfill newer CSS capabilities for older browsers, similarly to @babel/preset-env does for JavaScript.&lt;/p&gt;
 
@@ -1080,7 +1080,7 @@ module.exports = environment
     
 &lt;p&gt;The first rule of optimization is &amp;quot;Measure first.&amp;quot; When it comes to optimizing frontend performance, the first developer I look to for advice is &lt;a href="https://addyosmani.com/" target="_blank" rel="noopener noreferrer"&gt;Addy Osmani&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack/perf-budget-metrics.png" alt="Performance Budget Images" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/perf-budget-metrics.png" alt="Performance Budget Images" loading="lazy" /&gt;&lt;/p&gt;
 
 &lt;p&gt;One of his key strategies for measuring frontend performance is &amp;quot;performance budgeting&amp;quot; and how this relates to  &amp;quot;time-to-interactive&amp;quot; (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application. That value closely correlates with the amount of JavaScript you force your users&amp;#39; browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.&lt;/p&gt;
 
@@ -1101,7 +1101,7 @@ module.exports = environment
     
 &lt;p&gt;One of my favorite tools for debugging Webpack is the &lt;code&gt;webpack-bundler-analyzer&lt;/code&gt;. Add this to your build and it will generate an interactive treemap that visualizes the relative size and contents of all your bundles. Wondering how much &lt;code&gt;lodash&lt;/code&gt; is adding to your overall bundle size? Use the bundle analyzer tool. Think there&amp;#39;s a bug in with one of your dependencies or in your Webpack output? The bundle analyzer may help you identify it.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/webpack/webpack-bundle-analyzer.gif" alt="An example of a Webpack Bundle Analyzer treemap" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/webpack/webpack-bundle-analyzer.gif" alt="An example of a Webpack Bundle Analyzer treemap" loading="lazy" /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Project &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"&gt;https://github.com/webpack-contrib/webpack-bundle-analyzer&lt;/a&gt;&lt;/li&gt;
@@ -1454,7 +1454,7 @@ import tail from &amp;#39;lodash/tail&amp;#39;
 
 &lt;p&gt;In recent years, several popular JavaScript module definitions have become widely adopted, each with their own characteristics, including &lt;a href="https://requirejs.org/docs/commonjs.html" target="_blank" rel="noopener noreferrer"&gt;CommonJS&lt;/a&gt;, &lt;a href="https://requirejs.org/docs/whyamd.html#amd" target="_blank" rel="noopener noreferrer"&gt;Asynchronous Module Definition&lt;/a&gt; (AMD), and &lt;a href="https://exploringjs.com/es6/ch_modules.html" target="_blank" rel="noopener noreferrer"&gt;EcmaScript (ES) Modules&lt;/a&gt; to name a few.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/require-everything.png" alt="How did the big bang happen? require('everything')" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/require-everything.png" alt="How did the big bang happen? require('everything')" loading="lazy" /&gt;&lt;/p&gt;
 
 &lt;p&gt;Webpack can be configured to recognize any of these module formats.&lt;/p&gt;
 
@@ -1534,7 +1534,7 @@ import tail from &amp;#39;lodash/tail&amp;#39;
 
 &lt;p&gt;One of Webpacker&amp;#39;s goals, in a similar fashion to &lt;a href="https://github.com/facebook/create-react-app" target="_blank" rel="noopener noreferrer"&gt;create-react-app&lt;/a&gt; and the &lt;a href="https://cli.vuejs.org/" target="_blank" rel="noopener noreferrer"&gt;vue-cli&lt;/a&gt;, is to provide a Webpack config with sane defaults, i.e. the &amp;quot;convention&amp;quot;. Depending on your project&amp;#39;s needs, these &amp;quot;out-of-the-box&amp;quot; setups may get you quite far. Unfortunately, for any non-trivial modification, like getting a large legacy library to work with global variables or optimizing your build time by splitting out vendor dependencies, developers must be prepared to dive into the documentation and search for answers far and wide on StackOverflow and Medium.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src="/assets/images/blog/good-developer-or-good-at-googling.png" alt="I'm not sure if I'm a good developer or good at googling" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="/assets/images/blog/good-developer-or-good-at-googling.png" alt="I'm not sure if I'm a good developer or good at googling" loading="lazy" /&gt;&lt;/p&gt;
 
       &lt;h3 id="4-bonus-webpack-is-a-powerful-tool" class="title title-h3"&gt;
         &lt;a name="4-bonus-webpack-is-a-powerful-tool" class="anchor" href="#4-bonus-webpack-is-a-powerful-tool"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -1709,7 +1709,7 @@ environment.loaders.get(&amp;#39;sass&amp;#39;).use.splice(-1, 0, {
         Images in Rails views
       &lt;/h3&gt;
     
-&lt;p&gt;You may be accustomed to &lt;code&gt;&amp;lt;%= image_tag &amp;#39;tacos.jpg&amp;#39; %&amp;gt;&lt;/code&gt; to reference a image bundled in the Rails asset pipeline. Webpack has a similar tag:&lt;/p&gt;
+&lt;p&gt;You may be accustomed to &lt;code&gt;&amp;lt;%= lazy_image_tag &amp;#39;tacos.jpg&amp;#39; %&amp;gt;&lt;/code&gt; to reference a image bundled in the Rails asset pipeline. Webpack has a similar tag:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- app/views/lunches/index.html.erb --&amp;gt;
 

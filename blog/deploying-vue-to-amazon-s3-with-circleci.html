@@ -116,17 +116,17 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
     
 <p>To host on Amazon S3, I needed an S3 bucket with permissions to make its contents available to the public for static website hosting. This can be done from the <a href="https://aws.amazon.com" target="_blank" rel="noopener noreferrer">AWS console</a>:</p>
 
-<p><img src="/assets/images/blog/connect-four/s3/aws-create-bucket.jpg" alt="Aws create bucket" /></p>
+<p><img src="/assets/images/blog/connect-four/s3/aws-create-bucket.jpg" alt="Aws create bucket" loading="lazy" /></p>
 
 <p>On the <strong>Properties</strong> pane on the bucket management page, I enabled <em>Static Website Hosting</em> and entered <code>index.html</code> as the name of the index document to match the output of the Vue build.</p>
 
-<p><img src="/assets/images/blog/connect-four/s3/aws-static-website-properties.jpg" alt="Aws static website properties" /></p>
+<p><img src="/assets/images/blog/connect-four/s3/aws-static-website-properties.jpg" alt="Aws static website properties" loading="lazy" /></p>
 
 <p>This screen also reveals the public endpoint for the S3 bucket index page, which is what we&#39;ll need to navigate to our deployed site in the browser. The endpoint may be something like <strong><a href="http://bucket-name.s3-website-region-name.amazonaws.com" target="_blank" rel="noopener noreferrer">http://bucket-name.s3-website-region-name.amazonaws.com</a></strong>.</p>
 
 <p>On the <strong>Permissions</strong> tab, I added a bucket policy to provide public read permissions to everything in the bucket.</p>
 
-<p><img src="/assets/images/blog/connect-four/s3/aws-static-website-policy.jpg" alt="Aws static website policy" /></p>
+<p><img src="/assets/images/blog/connect-four/s3/aws-static-website-policy.jpg" alt="Aws static website policy" loading="lazy" /></p>
 
 <p>The  AWS docs recommend the following policy for static website hosting. If setting this up for your own bucket, be sure to replace <code>bucket-name</code> in the <em>Resource</em> string with your bucket name:</p>
 
@@ -160,7 +160,7 @@ Though there are big changes coming to <i>vue-cli</i> in version 3, it's still i
 
 <p>With my Github account linked to my CircleCI, I added my Connect Four Github project to CircleCI from the <em>Projects</em> tab in the CircleCI dashboard.</p>
 
-<p><img src="/assets/images/blog/connect-four/s3/circle-add-projects.jpg" alt="Circle add projects" /></p>
+<p><img src="/assets/images/blog/connect-four/s3/circle-add-projects.jpg" alt="Circle add projects" loading="lazy" /></p>
 
 <p>I also added a <code>circle.yml</code> file to my project similar to the following:</p>
 
@@ -232,7 +232,7 @@ deployment:
     
 <p>Almost done! To give the <code>s3deploy</code> command permissionsto add and modify files in my S3 bucket, I needed a set of AWS credentials linked to another AWS authorization policy. To do this, I created a new Amazon IAM user for programmatic access in the Security Credentials panel on AWS.</p>
 
-<p><img src="/assets/images/blog/connect-four/s3/aws-add-user-1.jpg" alt="Aws add user 1" /></p>
+<p><img src="/assets/images/blog/connect-four/s3/aws-add-user-1.jpg" alt="Aws add user 1" loading="lazy" /></p>
 
 <p>I added this user to a security group with the following policy:</p>
 
@@ -264,7 +264,7 @@ deployment:
 
 <p>With my new IAM user, a fresh set of credentials, an AWS access key id and secret access key, are now available to control my S3 bucket programmatically.</p>
 
-<p><img src="/assets/images/blog/connect-four/s3/aws-add-user-2.jpg" alt="Aws add user 2" /></p>
+<p><img src="/assets/images/blog/connect-four/s3/aws-add-user-2.jpg" alt="Aws add user 2" loading="lazy" /></p>
 
 <p>If you follow these steps, make sure to keep your credentials in a safe place. Anyone with these credentials would be able to modify the contents of your S3 bucket with the permissions we&#39;ve used.</p>
 
@@ -276,7 +276,7 @@ Check out <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.htm
 
 <p>I added these credentials to CircleCI through its project level configuration page in the web UI.</p>
 
-<p><img src="/assets/images/blog/connect-four/s3/circle-aws.jpg" alt="Circle aws" /></p>
+<p><img src="/assets/images/blog/connect-four/s3/circle-aws.jpg" alt="Circle aws" loading="lazy" /></p>
 
 <p>This step makes the AWS credentials available to the build environment. It&#39;s a more secure option than adding credentials as plain text in the <code>circle.yml</code> file.</p>
 
@@ -397,7 +397,7 @@ Check out <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.htm
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/flower-tj-holowaychuk-unsplash.jpg" alt="Flower tj holowaychuk unsplash" />
+        <img src="/assets/images/blog/stock/flower-tj-holowaychuk-unsplash.jpg" loading="lazy" alt="Flower tj holowaychuk unsplash" />
           <figcaption>Background Photo by Tj Holowaychuk on Unsplash</figcaption>
       </figure>
   </article>
@@ -406,7 +406,7 @@ Check out <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users.htm
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>

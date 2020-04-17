@@ -83,7 +83,7 @@
     
 <p>So far in <a href="/blog/series/pdf-viewer.html">this series</a>, we have built a simple PDF viewer to render the pages of PDF document to <code>&lt;canvas&gt;</code> elements with Vue. We have also updated our components to fetch and render PDF pages lazily as they are scrolled into the viewport. For the next feature, we want to build a preview pane into the left-hand side of the viewer.</p>
 
-<p><img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" /></p>
+<p><img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" loading="lazy" /></p>
 
 <p>This preview pane will display the entire document (as smaller, clickable thumbnails), be independently-scrollable, and render PDF pages lazily, i.e., it will behave a lot like our current <code>&lt;PDFDocument&gt;</code>. First, we&#39;d like to make some of our current code reusable.</p>
 
@@ -413,7 +413,7 @@ methods: {
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>

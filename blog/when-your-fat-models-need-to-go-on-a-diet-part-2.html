@@ -86,11 +86,11 @@ scope :select\_gravatar\_attributes, select(%w[ id name gravatar\_id ])
 
 <p>All users</p>
 
-<p><img src="/images/screenshots/user-perf-test.jpg" alt="All users" /></p>
+<p><img src="/images/screenshots/user-perf-test.jpg" alt="All users" loading="lazy" /></p>
 
 <p>All as gravatars</p>
 
-<p><img src="/images/screenshots/gravatar-user-perf-test.jpg" alt="All as gravatars" /></p>
+<p><img src="/images/screenshots/gravatar-user-perf-test.jpg" alt="All as gravatars" loading="lazy" /></p>
 
 <p>The memory footprint for gravatar users is half of that for our ‘fat’ users. Obviously results will vary greatly depending on architecture, application and the attributes selected, but this anecdotal case demonstrates potential for some big wins in instantiating slimmer subclasses of your heavy models.</p>
 
@@ -196,7 +196,7 @@ scope :select\_gravatar\_attributes, select(%w[ id name gravatar\_id ])
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/logs-pexels-photo.jpg" alt="Logs pexels photo" />
+        <img src="/assets/images/blog/stock/logs-pexels-photo.jpg" loading="lazy" alt="Logs pexels photo" />
       </figure>
   </article>
     <!-- Webpack on Rails course popup form -->
@@ -206,7 +206,7 @@ scope :select\_gravatar\_attributes, select(%w[ id name gravatar\_id ])
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>

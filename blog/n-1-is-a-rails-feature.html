@@ -89,7 +89,7 @@ Processing by PostsController#index as HTML
   #...
 </code></pre>
 
-<p>A quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&oq=N%2B1+Rails&aqs=chrome..69i57j69i60l2.2907j0j1&sourceid=chrome&ie=UTF-8" target="_blank" rel="noopener noreferrer">N+1 Rails</a> reveals many posts describing &quot;eager loading&quot; as state that the <em>silver bullet</em> to this problem.</p>
+<p>A quick search for <a href="https://www.google.com/search?q=N%2B1+Rails&amp;oq=N%2B1+Rails&amp;aqs=chrome..69i57j69i60l2.2907j0j1&amp;sourceid=chrome&amp;ie=UTF-8" target="_blank" rel="noopener noreferrer">N+1 Rails</a> reveals many posts describing &quot;eager loading&quot; as state that the <em>silver bullet</em> to this problem.</p>
 
 <p>There is actually a gem called <a href="https://github.com/flyerhzm/bullet" target="_blank" rel="noopener noreferrer"><code>bullet</code></a> that will help resolve your N+1 issues with warnings and suggestions right in your logs to use eager loading where appropriate.</p>
 
@@ -437,7 +437,7 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/ladybug-pexels-photo.jpg" alt="Ladybug pexels photo" />
+        <img src="/assets/images/blog/stock/ladybug-pexels-photo.jpg" loading="lazy" alt="Ladybug pexels photo" />
       </figure>
   </article>
     <!-- Webpack on Rails course popup form -->
@@ -447,7 +447,7 @@ how lazy loading and N+1 queries allow for Russian Doll caching to be a useful a
     
     <footer class="bg-silver border-t text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>
