@@ -36,9 +36,6 @@ if('serviceWorker' in navigator) {
 }
 ```
 
-__Service Worker Script__ The service worker script gets deployed to https://rossta.net/serviceworker.js separately from
-the concatenated, versioned JavaScript bundles used on the main site.
-
 ### The script
 
 For the code in my first service worker script, I followed the strategy outlined by Jeremy Keith's excellent
