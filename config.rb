@@ -237,28 +237,7 @@ helpers do
   Series = Struct.new(:id, :title, :summary)
 
   def blog_series
-    [
-      [
-        "PDF Viewer",
-        "Building a PDF Viewer with Vue.js",
-        "A demo app to render PDFs using PDF.js, Vue, Webpack, and the canvas element",
-      ],
-      [
-        "Connect Four",
-        "Building Connect Four with Vue.js and Phoenix",
-        "Tackling multi-player game rendering, animation, and realtime interaction",
-      ],
-      [
-        "Service Worker",
-        "Progressive Web Apps on Rails",
-        "Leveraging the powerful JavaScript API for Progressive Web Apps",
-      ],
-      [
-        "Enumerable",
-        "Exploring Ruby's Enumerable",
-        "Working with collections and sequences in Ruby",
-      ],
-    ].map { |data| Series.new(*data) }
+    data.series.map { |attrs| Series.new(*attrs) }
   end
 
   def current_page_tags
@@ -270,27 +249,20 @@ helpers do
   end
 
   def convertkit_tag_value(tag)
-    {
-      "JavaScript" => "733959",
-      "Vue" => "733963",
-      "Ruby" => "733960",
-      "Rails" => "733966",
-      "Webpack" => "733964",
-      "Service Worker" => "733965",
-      "Node" => "733969",
-      "Elixir" => "733970",
-    }[tag]
+    data.convertkit_tags[tag]
   end
 
   def current_page_tagged?(tagged_with = [])
     ((current_page.data.tags || []) & tagged_with).any?
   end
 
+  CONVERTKIT_WEBPACK_INLINE_FORM_ID = "1268949"
+  CONVERTKIT_STANDARD_INLINE_FORM_ID = "818387"
   def convertkit_inline_form_id
     if current_page_tagged?(%w[Rails Webpack])
-      "1268949"
+      CONVERTKIT_WEBPACK_INLINE_FORM_ID
     else
-      "818387"
+      CONVERTKIT_STANDARD_INLINE_FORM_ID
     end
   end
 
