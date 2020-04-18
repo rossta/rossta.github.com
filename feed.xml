@@ -267,33 +267,41 @@
         dev_server
       &lt;/h4&gt;
     
-&lt;p&gt;Contains a set of key-value pairs that correspond to a subset of the &lt;code&gt;webpack-dev-server&lt;/code&gt; configuration &lt;a href="https://webpack.js.org/configuration/dev-server/" target="_blank" rel="noopener noreferrer"&gt;outlined in the webpack docs&lt;/a&gt;. Rails only needs to know the &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;port&lt;/code&gt;, &lt;code&gt;https&lt;/code&gt; values to proxy requests to the &lt;code&gt;webpack-dev-server&lt;/code&gt; in &lt;code&gt;development&lt;/code&gt;. Other &lt;code&gt;dev_server&lt;/code&gt; config values may be set in either &lt;code&gt;webpacker.yml&lt;/code&gt; or in the webpack config exported from &lt;code&gt;config/webpack/development.js&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This config contains a set of key-value pairs that correspond to a subset of the &lt;code&gt;webpack-dev-server&lt;/code&gt; configuration &lt;a href="https://webpack.js.org/configuration/dev-server/" target="_blank" rel="noopener noreferrer"&gt;outlined in the webpack docs&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Make sure at least the following values are set in &lt;code&gt;webpacker.yml&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;Rails only needs to know the &lt;code&gt;host&lt;/code&gt;, &lt;code&gt;port&lt;/code&gt;, &lt;code&gt;https&lt;/code&gt; values to proxy requests to the &lt;code&gt;webpack-dev-server&lt;/code&gt; in &lt;code&gt;development&lt;/code&gt;. Other &lt;code&gt;dev_server&lt;/code&gt; config values may be set in either &lt;code&gt;webpacker.yml&lt;/code&gt; or in the webpack config exported from &lt;code&gt;config/webpack/development.js&lt;/code&gt;. Make sure at least the following values are set in &lt;code&gt;webpacker.yml&lt;/code&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="yaml"&gt;dev_server:
-  https: false
-  host: localhost
-  port: 3035
-  public: localhost:3035
-  # ..
+&lt;pre&gt;&lt;code class="yaml"&gt;development:
+  # ...
+  dev_server:
+    https: false
+    host: localhost
+    port: 3035
+    public: localhost:3035
+    # ..
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To enable auto-recompile when source files are changed:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="yaml"&gt;dev_server:
+&lt;pre&gt;&lt;code class="yaml"&gt;development:
   # ...
-  inline: true
-  # ...
+  dev_server:
+    # ...
+    inline: true
+    # ...
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To enable &lt;a href="https://webpack.js.org/concepts/hot-module-replacement/" target="_blank" rel="noopener noreferrer"&gt;hot-module replacement&lt;/a&gt;:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="yaml"&gt;dev_server:
+&lt;pre&gt;&lt;code class="yaml"&gt;development:
   # ...
-  inline: true
-  hmr: true
-  # ...
+  extract_css: false # to allow HMR for CSS
+
+  dev_server:
+    # ...
+    inline: true
+    hmr: true
+    # ...
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Refer to the &lt;a href="https://github.com/rails/webpacker/blob/master/docs/webpack-dev-server.md" target="_blank" rel="noopener noreferrer"&gt;Webpacker docs&lt;/a&gt; and &lt;a href="https://webpack.js.org/configuration/dev-server/" target="_blank" rel="noopener noreferrer"&gt;webpack docs&lt;/a&gt; for more info.&lt;/p&gt;

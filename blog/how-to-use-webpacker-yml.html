@@ -305,33 +305,41 @@
         dev_server
       </h4>
     
-<p>Contains a set of key-value pairs that correspond to a subset of the <code>webpack-dev-server</code> configuration <a href="https://webpack.js.org/configuration/dev-server/" target="_blank" rel="noopener noreferrer">outlined in the webpack docs</a>. Rails only needs to know the <code>host</code>, <code>port</code>, <code>https</code> values to proxy requests to the <code>webpack-dev-server</code> in <code>development</code>. Other <code>dev_server</code> config values may be set in either <code>webpacker.yml</code> or in the webpack config exported from <code>config/webpack/development.js</code>.</p>
+<p>This config contains a set of key-value pairs that correspond to a subset of the <code>webpack-dev-server</code> configuration <a href="https://webpack.js.org/configuration/dev-server/" target="_blank" rel="noopener noreferrer">outlined in the webpack docs</a>.</p>
 
-<p>Make sure at least the following values are set in <code>webpacker.yml</code>:</p>
+<p>Rails only needs to know the <code>host</code>, <code>port</code>, <code>https</code> values to proxy requests to the <code>webpack-dev-server</code> in <code>development</code>. Other <code>dev_server</code> config values may be set in either <code>webpacker.yml</code> or in the webpack config exported from <code>config/webpack/development.js</code>. Make sure at least the following values are set in <code>webpacker.yml</code>:</p>
 
-<pre><code class="yaml">dev_server:
-  https: false
-  host: localhost
-  port: 3035
-  public: localhost:3035
-  # ..
+<pre><code class="yaml">development:
+  # ...
+  dev_server:
+    https: false
+    host: localhost
+    port: 3035
+    public: localhost:3035
+    # ..
 </code></pre>
 
 <p>To enable auto-recompile when source files are changed:</p>
 
-<pre><code class="yaml">dev_server:
+<pre><code class="yaml">development:
   # ...
-  inline: true
-  # ...
+  dev_server:
+    # ...
+    inline: true
+    # ...
 </code></pre>
 
 <p>To enable <a href="https://webpack.js.org/concepts/hot-module-replacement/" target="_blank" rel="noopener noreferrer">hot-module replacement</a>:</p>
 
-<pre><code class="yaml">dev_server:
+<pre><code class="yaml">development:
   # ...
-  inline: true
-  hmr: true
-  # ...
+  extract_css: false # to allow HMR for CSS
+
+  dev_server:
+    # ...
+    inline: true
+    hmr: true
+    # ...
 </code></pre>
 
 <p>Refer to the <a href="https://github.com/rails/webpacker/blob/master/docs/webpack-dev-server.md" target="_blank" rel="noopener noreferrer">Webpacker docs</a> and <a href="https://webpack.js.org/configuration/dev-server/" target="_blank" rel="noopener noreferrer">webpack docs</a> for more info.</p>
