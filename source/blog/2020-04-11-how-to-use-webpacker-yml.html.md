@@ -168,31 +168,39 @@ compile: false
 
 #### dev_server
 
-Contains a set of key-value pairs that correspond to a subset of the `webpack-dev-server` configuration [outlined in the webpack docs](https://webpack.js.org/configuration/dev-server/). Rails only needs to know the `host`, `port`, `https` values to proxy requests to the `webpack-dev-server` in `development`. Other `dev_server` config values may be set in either `webpacker.yml` or in the webpack config exported from `config/webpack/development.js`.
+This config contains a set of key-value pairs that correspond to a subset of the `webpack-dev-server` configuration [outlined in the webpack docs](https://webpack.js.org/configuration/dev-server/).
 
-Make sure at least the following values are set in `webpacker.yml`:
+Rails only needs to know the `host`, `port`, `https` values to proxy requests to the `webpack-dev-server` in `development`. Other `dev_server` config values may be set in either `webpacker.yml` or in the webpack config exported from `config/webpack/development.js`. Make sure at least the following values are set in `webpacker.yml`:
 ```yaml
-dev_server:
-  https: false
-  host: localhost
-  port: 3035
-  public: localhost:3035
-  # ..
+development:
+  # ...
+  dev_server:
+    https: false
+    host: localhost
+    port: 3035
+    public: localhost:3035
+    # ..
 ```
 To enable auto-recompile when source files are changed:
 ```yaml
-dev_server:
+development:
   # ...
-  inline: true
-  # ...
+  dev_server:
+    # ...
+    inline: true
+    # ...
 ```
 To enable [hot-module replacement](https://webpack.js.org/concepts/hot-module-replacement/):
 ```yaml
-dev_server:
+development:
   # ...
-  inline: true
-  hmr: true
-  # ...
+  extract_css: false # to allow HMR for CSS
+
+  dev_server:
+    # ...
+    inline: true
+    hmr: true
+    # ...
 ```
 Refer to the [Webpacker docs](https://github.com/rails/webpacker/blob/master/docs/webpack-dev-server.md) and [webpack docs](https://webpack.js.org/configuration/dev-server/) for more info.
 
