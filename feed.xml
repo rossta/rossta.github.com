@@ -27,6 +27,7 @@
 
 &lt;p&gt;Here are some things both Rails and webpack need to know:&lt;/p&gt;
 
+&lt;blockquote&gt;
 &lt;p&gt;​&lt;em&gt;Where are the source files located?&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;What file types should be bundled?&lt;/em&gt;&lt;/p&gt;
@@ -36,6 +37,7 @@
 &lt;p&gt;&lt;em&gt;Should CSS be inserted dynamically via JavaScript or output as a separate file?&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;What port should the webpack-dev-server listen on in development?&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;That&amp;#39;s where &lt;code&gt;webpacker.yml&lt;/code&gt; comes in.&lt;/p&gt;
 
