@@ -18,15 +18,15 @@ One of Webpacker's primary roles is helping Rails communicate with webpack.
 
 Here are some things both Rails and webpack need to know:
 
-​_Where are the source files located?_
-
-_What file types should be bundled?_
-
-_What's the destination for the bundle files?_
-
-_Should CSS be inserted dynamically via JavaScript or output as a separate file?_
-
-_What port should the webpack-dev-server listen on in development?_
+> ​_Where are the source files located?_
+>
+> _What file types should be bundled?_
+>
+> _What's the destination for the bundle files?_
+>
+> _Should CSS be inserted dynamically via JavaScript or output as a separate file?_
+>
+> _What port should the webpack-dev-server listen on in development?_
 
 That's where `webpacker.yml` comes in.
 
