@@ -71,12 +71,12 @@
 
 <p><img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" loading="lazy" /></p>
 
-<p>The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.</p>
+<p>The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling webpack assets on page refreshes would take a painfully long time.</p>
 
 <p>So what were the changes?</p>
 
 <blockquote>
-<p><a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer">Subscribe to my newsletter</a> to learn more about using Webpack with Rails.</p>
+<p><a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer">Subscribe to my newsletter</a> to learn more about using webpack with Rails.</p>
 </blockquote>
 
       <h3 id="a-common-problem" class="title title-h3">
@@ -87,9 +87,9 @@
         A Common Problem
       </h3>
     
-<p>First, let&#39;s take a step back. If you&#39;re new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.</p>
+<p>First, let&#39;s take a step back. If you&#39;re new to webpack and Webpacker for Rails, chances are you may be making some simple mistakes.</p>
 
-<p>I know this because I was once in your shoes struggling to learn how Webpack works. I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via <a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"><code>rails/webpacker</code></a> Github issues.</p>
+<p>I know this because I was once in your shoes struggling to learn how webpack works. I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via <a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"><code>rails/webpacker</code></a> Github issues.</p>
 
 <p>One of the most frequently-reported issues I&#39;ve seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation can lead to failed deploys.</p>
 
@@ -151,11 +151,11 @@
 <p>The Webpacker project refers to entries as <strong>packs</strong>.</p>
 </blockquote>
 
-<p>&quot;Entry&quot; is listed as the first key concept on Webpack&#39;s documentation site: <a href="https://webpack.js.org/concepts/#entry" target="_blank" rel="noopener noreferrer">https://webpack.js.org/concepts/#entry</a>.</p>
+<p>&quot;Entry&quot; is listed as the first key concept on webpack&#39;s documentation site: <a href="https://webpack.js.org/concepts/#entry" target="_blank" rel="noopener noreferrer">https://webpack.js.org/concepts/#entry</a>.</p>
 
-<p>Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.</p>
+<p>Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs webpack has to build.</p>
 
-<p>Since Webpack*er*, by default, treats <em>every file</em> in the <code>packs</code> directory as a separate entry, it will build a separate dependency graph for <em>every file</em> located there.</p>
+<p>Since webpack*er*, by default, treats <em>every file</em> in the <code>packs</code> directory as a separate entry, it will build a separate dependency graph for <em>every file</em> located there.</p>
 
 <p>That also means, for <em>every file</em> in the <code>packs</code> directory, there will be at least one, possibly more, files emitted as output in the <code>public</code> directory during precompilation. If you&#39;re not linking to these files anywhere in your app, then they don&#39;t need to be emitted as output. For a large project, that could be lot of unnecessary work.</p>
 
@@ -204,11 +204,11 @@
   <div>
     <div class="mb-4">
           <h3 class="mb-2">
-    Need help with Webpack on Rails?
+    Need help with webpack on Rails?
   </h3>
   <p class="mb-4">
     Webpacker now ships by default in Rails 6 but there's no need to stress.
-    I'm putting together a course to help you master Webpack on Rails.
+    I'm putting together a course to help you master webpack on Rails.
   </p>
   <p>
     Subscribe to stay in the loop.
@@ -263,15 +263,15 @@
     <h2 class="mb-8">More posts</h2>
       <article class="index-post">
     <header class="index-title">
-      <a href="/blog/three-ways-webpack-surprises-rails-developers.html">3 ways Webpack surprises web developers</a>
+      <a href="/blog/three-ways-webpack-surprises-rails-developers.html">3 ways webpack surprises web developers</a>
     </header>
-      <p>When I first started working with Webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.</p>
+      <p>When I first started working with webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.</p>
   </article>
   <article class="index-post">
     <header class="index-title">
       <a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a>
     </header>
-      <p>Using images bundled by Webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate.</p>
+      <p>Using images bundled by webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate.</p>
   </article>
   <article class="index-post">
     <header class="index-title">
@@ -299,11 +299,11 @@
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>
         <ul>
-            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to webpack(er)</a></li>
             <li class="mb-1"><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
             <li class="mb-1"><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
             <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
-            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
         </ul>
       </section>
       <section class="mb-8">

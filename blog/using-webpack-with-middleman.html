@@ -1,19 +1,19 @@
 <!doctype html>
 <html class="antialiased" lang="en">
   <head>
-    <title>Using Webpack with Middleman - rossta.net</title>
-<meta name="description" content="Explaining how to integrate the Webpack asset management tool with the Ruby static web framework Middleman" />
+    <title>Using webpack with Middleman - rossta.net</title>
+<meta name="description" content="Explaining how to integrate the webpack asset management tool with the Ruby static web framework Middleman" />
 <meta name="keywords" content="Ruby, JavaScript, Webpack" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
-<meta name="twitter:description" content="Explaining how to integrate the Webpack asset management tool with the Ruby static web framework Middleman" />
+<meta name="twitter:description" content="Explaining how to integrate the webpack asset management tool with the Ruby static web framework Middleman" />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/tundra-hike-pexels-photo.jpg" />
-<meta name="twitter:title" content="Using Webpack with Middleman" />
-<meta property="og:description" content="Explaining how to integrate the Webpack asset management tool with the Ruby static web framework Middleman" />
+<meta name="twitter:title" content="Using webpack with Middleman" />
+<meta property="og:description" content="Explaining how to integrate the webpack asset management tool with the Ruby static web framework Middleman" />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/stock/tundra-hike-pexels-photo.jpg" />
-<meta property="og:title" content="Using Webpack with Middleman" />
+<meta property="og:title" content="Using webpack with Middleman" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -52,7 +52,7 @@
         <article class="post mb-12">
     <header class="page-header mt-4">
   <h1>
-    Using Webpack with Middleman
+    Using webpack with Middleman
   </h1>
     <h2 class="mt-4 text-gray-600 font-medium">
       Ditch Sprockets and embrace the external pipeline
@@ -63,13 +63,13 @@
 
 <p>By far the biggest change was the <a href="https://middlemanapp.com/advanced/asset_pipeline/" target="_blank" rel="noopener noreferrer">removal of the Sprockets</a> dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.</p>
 
-<p>Given the &quot;explosion of front-end language and tooling&quot; that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like <a href="http://gruntjs.com/" target="_blank" rel="noopener noreferrer">Grunt</a>, <a href="http://gulpjs.com/" target="_blank" rel="noopener noreferrer">Gulp</a>, <a href="https://webpack.github.io" target="_blank" rel="noopener noreferrer">Webpack</a>, <a href="http://browserify.org/" target="_blank" rel="noopener noreferrer">Browserify</a>, <a href="http://brunch.io/" target="_blank" rel="noopener noreferrer">Brunch</a>, <a href="http://broccolijs.com/" target="_blank" rel="noopener noreferrer">Brocolli</a>---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the <code>external_pipeline</code> feature which allows &quot;subprocesses&quot; to run alongside the development server or build process.</p>
+<p>Given the &quot;explosion of front-end language and tooling&quot; that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like <a href="http://gruntjs.com/" target="_blank" rel="noopener noreferrer">Grunt</a>, <a href="http://gulpjs.com/" target="_blank" rel="noopener noreferrer">Gulp</a>, <a href="https://webpack.github.io" target="_blank" rel="noopener noreferrer">webpack</a>, <a href="http://browserify.org/" target="_blank" rel="noopener noreferrer">Browserify</a>, <a href="http://brunch.io/" target="_blank" rel="noopener noreferrer">Brunch</a>, <a href="http://broccolijs.com/" target="_blank" rel="noopener noreferrer">Brocolli</a>---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the <code>external_pipeline</code> feature which allows &quot;subprocesses&quot; to run alongside the development server or build process.</p>
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated Webpack inside Middleman. Dev &amp; build modes</p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/580115759768059904">March 23, 2015</a></blockquote>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated webpack inside Middleman. Dev &amp; build modes</p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/580115759768059904">March 23, 2015</a></blockquote>
 
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-<p>In this post, I&#39;ll describe how I set up the external pipeline for Webpack. I&#39;ll be showing some Webpack configuration snippets to illustrate a few points but you can see the <a href="https://github.com/rossta/rossta.github.com/blob/cc94b759ed742d571b2470777a0164ac43db9c73/webpack.config.js" target="_blank" rel="noopener noreferrer">full Webpack config file</a> for this site as of this writing as well.</p>
+<p>In this post, I&#39;ll describe how I set up the external pipeline for webpack. I&#39;ll be showing some webpack configuration snippets to illustrate a few points but you can see the <a href="https://github.com/rossta/rossta.github.com/blob/cc94b759ed742d571b2470777a0164ac43db9c73/webpack.config.js" target="_blank" rel="noopener noreferrer">full webpack config file</a> for this site as of this writing as well.</p>
 
       <h3 id="before-the-upgrade" class="title title-h3">
         <a name="before-the-upgrade" class="anchor" href="#before-the-upgrade">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -119,7 +119,7 @@ end
 <p>With Sprockets dropped in Middleman version 4, this approach would no longer be
 possible so I had to rethink the build pipeline. I preferred to support multiple
 bundles and also wanted to upgrade my custom JavaScript to ES2015 syntax. For
-this, <a href="https://webpack.github.io/" target="_blank" rel="noopener noreferrer">Webpack</a> appeared to offer some nice advantages, though, many of the
+this, <a href="https://webpack.github.io/" target="_blank" rel="noopener noreferrer">webpack</a> appeared to offer some nice advantages, though, many of the
 build tools and systems mentioned earlier would also make good choices and fit
 right into the new Middleman external pipeline feature.</p>
 
@@ -149,7 +149,7 @@ $ npm install --save-dev webpack
 
 <p>The external pipeline feature in Middleman provides a mechanism for the
 middleman development server to manage processes that live outside the Ruby
-runtime. For Webpack, this means telling Middleman how to trigger the <a href="https://webpack.github.io/docs/tutorials/getting-started/#setup-compilation" target="_blank" rel="noopener noreferrer">Webpack
+runtime. For webpack, this means telling Middleman how to trigger the <a href="https://webpack.github.io/docs/tutorials/getting-started/#setup-compilation" target="_blank" rel="noopener noreferrer">webpack
 compilation command</a>.</p>
 
 <p>In <code>config.rb</code>:</p>
@@ -165,7 +165,7 @@ compilation command</a>.</p>
 
 <p>I copied this configuration directly from the <a href="middleman/middleman-core/lib/middleman-core/extensions/external_pipeline.rb" target="_blank" rel="noopener noreferrer">Middleman guides source</a> which I learned made the same change recently.</p>
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Commit upgrading Middleman Guides from Asset Pipeline to Webpack: <a href="https://t.co/uP4LH19SfJ">https://t.co/uP4LH19SfJ</a></p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/678711274516033536">December 20, 2015</a></blockquote>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Commit upgrading Middleman Guides from Asset Pipeline to webpack: <a href="https://t.co/uP4LH19SfJ">https://t.co/uP4LH19SfJ</a></p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/678711274516033536">December 20, 2015</a></blockquote>
 
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -189,10 +189,10 @@ option :source, nil, &#39;Path to merge into sitemap&#39;, required: true
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
 </a>
-        Setting up Webpack
+        Setting up webpack
       </h3>
     
-<p>Webpack as a dizzying array of plugins and configuration options. The bare minimum to get JavaScript working with Webpack and Middleman is to set an <code>entry</code> option to declare the primary source file(s) entry point and where it should compile to as the <code>output</code>:</p>
+<p>Webpack as a dizzying array of plugins and configuration options. The bare minimum to get JavaScript working with webpack and Middleman is to set an <code>entry</code> option to declare the primary source file(s) entry point and where it should compile to as the <code>output</code>:</p>
 
 <pre><code class="javascript">// webpack.config.js
 var webpack = require(&#39;webpack&#39;);
@@ -213,9 +213,9 @@ module.exports = {
 };
 </code></pre>
 
-<p>This is not a full Webpack tutorial, but it worth noting we can use Webpack to do:</p>
+<p>This is not a full webpack tutorial, but it worth noting we can use webpack to do:</p>
 
-<p><strong>Transpile from ES2015 syntax</strong>. We can pull in Babel dependencies and desired presets from <code>npm</code> and declare <code>loaders</code> in Webpack config to customize the compilation stages. This meant I was able to rewrite much of my custom JavaScript from ES5 to ES2015 and replace Sprocket-style require comments with executable <code>import</code> statements.</p>
+<p><strong>Transpile from ES2015 syntax</strong>. We can pull in Babel dependencies and desired presets from <code>npm</code> and declare <code>loaders</code> in webpack config to customize the compilation stages. This meant I was able to rewrite much of my custom JavaScript from ES5 to ES2015 and replace Sprocket-style require comments with executable <code>import</code> statements.</p>
 
 <pre><code class="sh">$ npm install --save-dev babel babel-loader babel-preset-es2015 babel-preset-stage-0
 </code></pre>
@@ -243,7 +243,7 @@ module.exports = {
 </code></pre>
 
 <p><strong>Declare global variables</strong>. I rely on the jQuery <code>$</code> sign in enough places that
-I decided to configure Webpack to treat it as a global variable so it would be
+I decided to configure webpack to treat it as a global variable so it would be
 available in each of my JavaScript source files without declaring a separate
 <code>import</code> everywhere. This is done with the <code>webpack.ProvidePlugin</code>:</p>
 
@@ -265,7 +265,7 @@ module.exports = {
 </code></pre>
 
 <p><strong>Transpile SCSS to CSS</strong>. Though Middleman still provides an integration with
-Compass, <a href="https://benfrain.com/lightning-fast-sass-compiling-with-libsass-node-sass-and-grunt-sass/" target="_blank" rel="noopener noreferrer">word on the street</a> is that Node tools like <code>node-sass</code> out-perform the Ruby Compass implementation. With the node-sass and some additional Webpack dependencies, we can transpile SCSS with Webpack to a separate css bundle:</p>
+Compass, <a href="https://benfrain.com/lightning-fast-sass-compiling-with-libsass-node-sass-and-grunt-sass/" target="_blank" rel="noopener noreferrer">word on the street</a> is that Node tools like <code>node-sass</code> out-perform the Ruby Compass implementation. With the node-sass and some additional webpack dependencies, we can transpile SCSS with webpack to a separate css bundle:</p>
 
 <pre><code class="sh">$ npm install --save-dev node-sass sass-loader extract-text-webpack-plugin
 </code></pre>
@@ -299,7 +299,7 @@ module.exports = {
 };
 </code></pre>
 
-<p><strong>Enable feature flags</strong>. <a href="https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html" target="_blank" rel="noopener noreferrer">I love puts debugging</a> so I&#39;ve got quite a few log statements in my JavaScript code. I don&#39;t really want these log statements in the production build of the website, so I can use Webpack to allow me to enable logging only in development:</p>
+<p><strong>Enable feature flags</strong>. <a href="https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html" target="_blank" rel="noopener noreferrer">I love puts debugging</a> so I&#39;ve got quite a few log statements in my JavaScript code. I don&#39;t really want these log statements in the production build of the website, so I can use webpack to allow me to enable logging only in development:</p>
 
 <pre><code class="javascript">// webpack.config.js
 var definePlugin = new webpack.DefinePlugin({
@@ -308,7 +308,7 @@ var definePlugin = new webpack.DefinePlugin({
 });
 </code></pre>
 
-<p>I tell Webpack to make the <code>__DEVELOPMENT__</code> and <code>__PRODUCTION__</code> variables
+<p>I tell webpack to make the <code>__DEVELOPMENT__</code> and <code>__PRODUCTION__</code> variables
 available based on the presence on the <code>BUILD_DEVELOPMENT</code> and
 <code>BUILD_PRODUCTION</code> environment variables. I pass these variables to the webpack
 commands I&#39;m using in <code>config.rb</code> for the build and development Middleman
@@ -334,9 +334,9 @@ contexts respectively:</p>
 
 <p>My development experience is greatly enhanced with the auto-recompile feature of
 webpack along with the <code>middleman-livereload</code> extension. Though I haven&#39;t tried
-the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/hot-module-replacement-with-webpack.html" target="_blank" rel="noopener noreferrer">hot-reloading of Webpack modules</a>, it seems possible to set this up to work with Middleman.</p>
+the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/hot-module-replacement-with-webpack.html" target="_blank" rel="noopener noreferrer">hot-reloading of webpack modules</a>, it seems possible to set this up to work with Middleman.</p>
 
-<p>You can go much further with Webpack of course. For more info, check out the <a href="https://webpack.github.io/" target="_blank" rel="noopener noreferrer">Webpack guides</a> and Pete Hunt&#39;s <a href="https://github.com/petehunt/webpack-howto" target="_blank" rel="noopener noreferrer">Webpack How-to</a>.</p>
+<p>You can go much further with webpack of course. For more info, check out the <a href="https://webpack.github.io/" target="_blank" rel="noopener noreferrer">webpack guides</a> and Pete Hunt&#39;s <a href="https://github.com/petehunt/webpack-howto" target="_blank" rel="noopener noreferrer">webpack How-to</a>.</p>
 
       <h3 id="moving-away-from-sprockets" class="title title-h3">
         <a name="moving-away-from-sprockets" class="anchor" href="#moving-away-from-sprockets">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -353,7 +353,7 @@ the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/
   </article>
   <section class="mb-12">
     <p class="text-right">
-      <a href="https://twitter.com/intent/tweet?text=Using%20Webpack%20with%20Middleman%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fusing-webpack-with-middleman.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      <a href="https://twitter.com/intent/tweet?text=Using%20webpack%20with%20Middleman%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fusing-webpack-with-middleman.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
       &middot;
       <span class="italic font-light">
         Published on Apr 16, 2016
@@ -375,11 +375,11 @@ the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/
   <div>
     <div class="mb-4">
           <h3 class="mb-2">
-    Need help with Webpack on Rails?
+    Need help with webpack on Rails?
   </h3>
   <p class="mb-4">
     Webpacker now ships by default in Rails 6 but there's no need to stress.
-    I'm putting together a course to help you master Webpack on Rails.
+    I'm putting together a course to help you master webpack on Rails.
   </p>
   <p>
     Subscribe to stay in the loop.
@@ -470,11 +470,11 @@ the <code>webpack-dev-server</code> and <a href="https://webpack.github.io/docs/
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>
         <ul>
-            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to webpack(er)</a></li>
             <li class="mb-1"><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
             <li class="mb-1"><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
             <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
-            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
         </ul>
       </section>
       <section class="mb-8">

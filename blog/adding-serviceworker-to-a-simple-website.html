@@ -129,7 +129,7 @@ generalized version of his script in a <a href="https://gist.github.com/adactio/
         Deploying the service worker
       </h3>
     
-<p>Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. <a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html" target="_blank" rel="noopener noreferrer">As I&#39;ve said before</a>, this is a static site hosted on Github pages, <a href="/blog/using-webpack-with-middleman.html">built with Webpack and Middleman</a>.</p>
+<p>Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. <a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html" target="_blank" rel="noopener noreferrer">As I&#39;ve said before</a>, this is a static site hosted on Github pages, <a href="/blog/using-webpack-with-middleman.html">built with webpack and Middleman</a>.</p>
 
 <p>Setting up Github pages to use Cloudflare was relatively straightforward and has been <a href="https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/" target="_blank" rel="noopener noreferrer">well-documented</a>. I also wanted to make sure <code>serviceworker.js</code> is always served over HTTPS and that it would not be cached. Since I don&#39;t have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules on Cloudflare to mitigate this issue.</p>
 
@@ -137,11 +137,11 @@ generalized version of his script in a <a href="https://gist.github.com/adactio/
 
 <p><img src="/assets/images/blog/cloud-flare-page-rules-https.jpg" alt="Cloud flare page rules https" loading="lazy" /></p>
 
-<p>I&#39;m using Webpack to create <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12" target="_blank" rel="noopener noreferrer">separate bundles</a> and Middleman&#39;s <a href="https://middlemanapp.com/advanced/improving_cacheability/" target="_blank" rel="noopener noreferrer"><code>:asset_hash</code> extension</a> to add a digest to each file, similar to the <a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production" target="_blank" rel="noopener noreferrer">Rails asset pipeline production behavior</a> to improve the cacheability of CSS and JavaScript assets on rossta.net.</p>
+<p>I&#39;m using webpack to create <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12" target="_blank" rel="noopener noreferrer">separate bundles</a> and Middleman&#39;s <a href="https://middlemanapp.com/advanced/improving_cacheability/" target="_blank" rel="noopener noreferrer"><code>:asset_hash</code> extension</a> to add a digest to each file, similar to the <a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production" target="_blank" rel="noopener noreferrer">Rails asset pipeline production behavior</a> to improve the cacheability of CSS and JavaScript assets on rossta.net.</p>
 
 <p>I don&#39;t want either for serviceworker.js: it must be served separately from the main asset bundles and it should not be cached.</p>
 
-<p>Webpack supports <a href="https://webpack.github.io/docs/configuration.html#multiple-configurations" target="_blank" rel="noopener noreferrer">multiple configurations</a>, so I set up my <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80" target="_blank" rel="noopener noreferrer"><code>webpack.config.js</code></a> to use ES2015 transpilation for <code>serviceworker.js</code> but output to a different destination from the other concatenated script files.</p>
+<p>webpack supports <a href="https://webpack.github.io/docs/configuration.html#multiple-configurations" target="_blank" rel="noopener noreferrer">multiple configurations</a>, so I set up my <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80" target="_blank" rel="noopener noreferrer"><code>webpack.config.js</code></a> to use ES2015 transpilation for <code>serviceworker.js</code> but output to a different destination from the other concatenated script files.</p>
 
 <p>To make sure Cloudflare does not cache <code>serviceworker.js</code>, as it would by default for the CDN, I instructed Cloudflare to bypass the cache.</p>
 
@@ -228,11 +228,11 @@ reloading pages with images and special fonts.</p>
   <div>
     <div class="mb-4">
           <h3 class="mb-2">
-    Need help with Webpack on Rails?
+    Need help with webpack on Rails?
   </h3>
   <p class="mb-4">
     Webpacker now ships by default in Rails 6 but there's no need to stress.
-    I'm putting together a course to help you master Webpack on Rails.
+    I'm putting together a course to help you master webpack on Rails.
   </p>
   <p>
     Subscribe to stay in the loop.
@@ -300,9 +300,9 @@ reloading pages with images and special fonts.</p>
   </article>
   <article class="index-post">
     <header class="index-title">
-      <a href="/blog/using-webpack-with-middleman.html">Using Webpack with Middleman</a>
+      <a href="/blog/using-webpack-with-middleman.html">Using webpack with Middleman</a>
     </header>
-      <p>Explaining how to integrate the Webpack asset management tool with the Ruby static web framework Middleman</p>
+      <p>Explaining how to integrate the webpack asset management tool with the Ruby static web framework Middleman</p>
   </article>
 
   </section>
@@ -323,11 +323,11 @@ reloading pages with images and special fonts.</p>
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>
         <ul>
-            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to webpack(er)</a></li>
             <li class="mb-1"><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
             <li class="mb-1"><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
             <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
-            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
         </ul>
       </section>
       <section class="mb-8">

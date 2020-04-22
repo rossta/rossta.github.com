@@ -55,7 +55,7 @@
     Using Bootstrap with Rails Webpacker
   </h1>
     <h2 class="mt-4 text-gray-600 font-medium">
-      Bootstrap 4 is now more Webpack-friendly
+      Bootstrap 4 is now more webpack-friendly
     </h2>
 </header>
 
@@ -79,7 +79,7 @@ popper.js 1.16.0
 
 <p>We&#39;ll assume we&#39;re working from a recently-created Rails 6 app with the default Webpacker installation. The examples may also work with other versions Rails that support Webpacker 4.</p>
 
-<p>When the Webpacker install is run, i.e. <code>bin/rails webpacker:install</code>, it adds the file <code>app/javascript/packs/application.js</code>. Webpack calls this file an &quot;entry point&quot; and Webpacker calls it a &quot;pack&quot;. We&#39;ll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by Webpack.</p>
+<p>When the Webpacker install is run, i.e. <code>bin/rails webpacker:install</code>, it adds the file <code>app/javascript/packs/application.js</code>. webpack calls this file an &quot;entry point&quot; and Webpacker calls it a &quot;pack&quot;. We&#39;ll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by webpack.</p>
 
 <p>The file initially looks something like the following:</p>
 
@@ -122,7 +122,7 @@ require(&quot;channels&quot;)
 @import &quot;~bootstrap/scss/bootstrap.scss&quot;
 </code></pre>
 
-<p><em>Note: the file extensions are important, i.e., Webpacker configure files ending in &#39;.scss&#39; and &#39;.sass&#39; to be processed by Webpack&#39;s <code>sass-loader</code>.</em></p>
+<p><em>Note: the file extensions are important, i.e., Webpacker configure files ending in &#39;.scss&#39; and &#39;.sass&#39; to be processed by webpack&#39;s <code>sass-loader</code>.</em></p>
 
 <p>To include our new stylesheet in the build output, we must import it from somewhere in our dependency tree. Let&#39;s put this import in the entry point, our <code>application.js</code> pack:</p>
 
@@ -131,10 +131,10 @@ require(&quot;channels&quot;)
 import &#39;css/site&#39;
 </code></pre>
 
-<p>If you&#39;re new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate <code>application.css</code> and <code>application.js</code> files as the top of separate dependency trees. In Webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the <code>application.css</code> bundle is simply a by-product of the build. In other words, there is no need for a separate &quot;stylesheet pack&quot; like <code>app/javascript/packs/application.css</code>.</p>
+<p>If you&#39;re new to webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate <code>application.css</code> and <code>application.js</code> files as the top of separate dependency trees. In webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the <code>application.css</code> bundle is simply a by-product of the build. In other words, there is no need for a separate &quot;stylesheet pack&quot; like <code>app/javascript/packs/application.css</code>.</p>
 
 <blockquote>
-<p><em>Tip</em>: With Webpack, it&#39;s recommended to have only <em>one</em> entry point (or &quot;pack&quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is <code>app/javascript/packs/application.js</code>. I cannot stress this point enough.</p>
+<p><em>Tip</em>: With webpack, it&#39;s recommended to have only <em>one</em> entry point (or &quot;pack&quot; in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is <code>app/javascript/packs/application.js</code>. I cannot stress this point enough.</p>
 </blockquote>
 
       <h3 id="adding-sass-overrides" class="title title-h3">
@@ -182,7 +182,7 @@ $body-color: #111;
 <pre><code class="sh">yarn add jquery popper.js
 </code></pre>
 
-<p>These libraries need to be available in your Webpack build, so import them along with bootstrap javascript:</p>
+<p>These libraries need to be available in your webpack build, so import them along with bootstrap javascript:</p>
 
 <pre><code class="javascript">// app/javascript/packs/application.js
 
@@ -201,7 +201,7 @@ import &#39;bootstrap&#39;
         Optimizing the JavaScript bundle
       </h3>
     
-<p>An optional, advanced technique would be to import selected modules asynchronously. The benefit is to limit the size of our initial bundle and defer as much as possible to decrease latency for downloading, parsing, and evaluating JavaScript on page load. Note the <code>application.js</code> bundle (fingerprinted as <code>js/application-c67c235b5c7d8ac4f1fe.js</code>) is already 940kB in our Webpack build:</p>
+<p>An optional, advanced technique would be to import selected modules asynchronously. The benefit is to limit the size of our initial bundle and defer as much as possible to decrease latency for downloading, parsing, and evaluating JavaScript on page load. Note the <code>application.js</code> bundle (fingerprinted as <code>js/application-c67c235b5c7d8ac4f1fe.js</code>) is already 940kB in our webpack build:</p>
 
 <pre><code class="shell">Version: webpack 4.41.2
 Time: 1003ms
@@ -217,7 +217,7 @@ js/application-c67c235b5c7d8ac4f1fe.js.map   1.06 MiB  application  [emitted] [d
 
 <p>As an exercise, we might decide to defer the import and initialization of the jquery plugins. Let&#39;s consider <code>jquery</code> as a critical dependency; it is needed as part of the &quot;initial&quot; bundle that blocks the page load while it is parsed and evaluated. But <code>popper.js</code> and <code>bootstrap</code> can be deferred; since they are plugins that affect the DOM, they&#39;re not as critical, i.e., the DOM needs to be loaded first anyways.</p>
 
-<p>One such deferring technique is dynamic import. Webpack will recognize when <code>import</code> is used as a function, e.g. <code>import(&#39;some-lib&#39;)</code>, and pull out the module as a separate &quot;chunk&quot; (another file), that will be loaded asynchronously when the function is evaluated.</p>
+<p>One such deferring technique is dynamic import. webpack will recognize when <code>import</code> is used as a function, e.g. <code>import(&#39;some-lib&#39;)</code>, and pull out the module as a separate &quot;chunk&quot; (another file), that will be loaded asynchronously when the function is evaluated.</p>
 
 <p>In our demo app, we can move <code>popper.js</code> and <code>bootstrap</code> to a separate file. Critically, this file is NOT in <code>app/javascript/packs</code> but outside of this directory, such as <code>app/javascript/src</code>, where we will put all our non-entry-point js:</p>
 
@@ -235,7 +235,7 @@ import &#39;jquery&#39;
 import(&#39;src/plugins&#39;) // note the function usage!
 </code></pre>
 
-<p>When compiling, Webpack will show us a number of additional javascript &quot;chunks&quot; of smaller size than the bundle previously:</p>
+<p>When compiling, webpack will show us a number of additional javascript &quot;chunks&quot; of smaller size than the bundle previously:</p>
 
 <pre><code class="shell">Version: webpack 4.41.2
 Time: 41ms
@@ -310,11 +310,11 @@ Rails.start()
   <div>
     <div class="mb-4">
           <h3 class="mb-2">
-    Need help with Webpack on Rails?
+    Need help with webpack on Rails?
   </h3>
   <p class="mb-4">
     Webpacker now ships by default in Rails 6 but there's no need to stress.
-    I'm putting together a course to help you master Webpack on Rails.
+    I'm putting together a course to help you master webpack on Rails.
   </p>
   <p>
     Subscribe to stay in the loop.
@@ -371,7 +371,7 @@ Rails.start()
     <header class="index-title">
       <a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a>
     </header>
-      <p>Using images bundled by Webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate.</p>
+      <p>Using images bundled by webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate.</p>
   </article>
   <article class="index-post">
     <header class="index-title">
@@ -405,11 +405,11 @@ Rails.start()
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>
         <ul>
-            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to webpack(er)</a></li>
             <li class="mb-1"><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
             <li class="mb-1"><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
             <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
-            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
         </ul>
       </section>
       <section class="mb-8">

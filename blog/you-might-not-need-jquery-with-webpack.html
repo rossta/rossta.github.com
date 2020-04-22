@@ -1,19 +1,19 @@
 <!doctype html>
 <html class="antialiased" lang="en">
   <head>
-    <title>jQuery plugins in Webpack without jQuery - rossta.net</title>
-<meta name="description" content="Upgrading jQuery plugins to work with Webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all." />
+    <title>jQuery plugins in webpack without jQuery - rossta.net</title>
+<meta name="description" content="Upgrading jQuery plugins to work with webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all." />
 <meta name="keywords" content="Rails, Webpack" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
-<meta name="twitter:description" content="Upgrading jQuery plugins to work with Webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all." />
+<meta name="twitter:description" content="Upgrading jQuery plugins to work with webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all." />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/clint-patterson-exfrR9KkzlE-unsplash-resized.jpg" />
-<meta name="twitter:title" content="jQuery plugins in Webpack without jQuery" />
-<meta property="og:description" content="Upgrading jQuery plugins to work with Webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all." />
+<meta name="twitter:title" content="jQuery plugins in webpack without jQuery" />
+<meta property="og:description" content="Upgrading jQuery plugins to work with webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all." />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/stock/clint-patterson-exfrR9KkzlE-unsplash-resized.jpg" />
-<meta property="og:title" content="jQuery plugins in Webpack without jQuery" />
+<meta property="og:title" content="jQuery plugins in webpack without jQuery" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -52,22 +52,22 @@
         <article class="post mb-12">
     <header class="page-header mt-4">
   <h1>
-    jQuery plugins in Webpack without jQuery
+    jQuery plugins in webpack without jQuery
   </h1>
     <h2 class="mt-4 text-gray-600 font-medium">
-      In Webpack, some dependencies are best served vanilla
+      In webpack, some dependencies are best served vanilla
     </h2>
 </header>
 
-    <p>Have you seen this console error while trying to adopt Webpack?</p>
+    <p>Have you seen this console error while trying to adopt webpack?</p>
 
 <pre><code class="sh">Uncaught TypeError: $(...).myJqueryPlugin is not a function
 </code></pre>
 
-<p>Assuming you installed it correctly, there could be a few explanations. In this post, we&#39;ll look one possible reason: with Webpack, your jQuery plugin <em>might</em> not need jQuery.</p>
+<p>Assuming you installed it correctly, there could be a few explanations. In this post, we&#39;ll look one possible reason: with webpack, your jQuery plugin <em>might</em> not need jQuery.</p>
 
 <blockquote>
-<p><a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer">Subscribe to my newsletter</a> to learn more about using Webpack with Rails.</p>
+<p><a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer">Subscribe to my newsletter</a> to learn more about using webpack with Rails.</p>
 </blockquote>
 
       <h3 id="example-the-flickity-plugin" class="title title-h3">
@@ -91,12 +91,12 @@
 
 <p>And that works fine. Except, <code>Flickity</code> is not really a just a jQuery plugin. More on that later.</p>
 
-<p>Let&#39;s say we have a Rails application that we&#39;ve already set up to run Webpack(er) (or just plain Webpack) for compiling JavaScript source files for the browser. To add Flickity, we installed it via yarn:</p>
+<p>Let&#39;s say we have a Rails application that we&#39;ve already set up to run webpack(er) (or just plain webpack) for compiling JavaScript source files for the browser. To add Flickity, we installed it via yarn:</p>
 
 <pre><code class="sh">$ yarn add flickity
 </code></pre>
 
-<p>In our module-based Webpack build, the usage is instead ideally:</p>
+<p>In our module-based webpack build, the usage is instead ideally:</p>
 
 <pre><code class="javascript">// app/javascript/src/carousel.js
 
@@ -153,7 +153,7 @@ const flickity = new Flickity(&#39;.main-carousel&#39;, {
 });
 </code></pre>
 
-<p>We can see this exports a module, either through the <code>define</code> function, for runtimes that support <a href="https://requirejs.org/docs/whyamd.html" target="_blank" rel="noopener noreferrer">Asynchronous Module Definition (AMD)</a> format, or the <code>require</code> function, for runtimes that support <a href="https://nodejs.org/docs/latest/api/modules.html" target="_blank" rel="noopener noreferrer">CommonJS</a> format. Webpack supports both.</p>
+<p>We can see this exports a module, either through the <code>define</code> function, for runtimes that support <a href="https://requirejs.org/docs/whyamd.html" target="_blank" rel="noopener noreferrer">Asynchronous Module Definition (AMD)</a> format, or the <code>require</code> function, for runtimes that support <a href="https://nodejs.org/docs/latest/api/modules.html" target="_blank" rel="noopener noreferrer">CommonJS</a> format. webpack supports both.</p>
 
       <h3 id="jquery-not-required" class="title title-h3">
         <a name="jquery-not-required" class="anchor" href="#jquery-not-required">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -165,7 +165,7 @@ const flickity = new Flickity(&#39;.main-carousel&#39;, {
     
 <p>Note also that this file does not require the <code>&#39;jquery&#39;</code> package. An interesting consequence of this is that it&#39;s not even possible to use Flickity with jQuery (at least via the NPM package alone). This recently came up in a <a href="https://github.com/rails/webpacker/issues/2456" target="_blank" rel="noopener noreferrer">GitHub issue for the Webpacker project</a>.</p>
 
-<p>In other words, the following code with Webpack:</p>
+<p>In other words, the following code with webpack:</p>
 
 <pre><code class="javascript">// app/javascript/src/carousel.js
 import &#39;jquery&#39;
@@ -204,14 +204,14 @@ $(&#39;.main-carousel&#39;).flickity({
         Conclusion
       </h3>
     
-<p>Unfortunately, jQuery plugins come in so many different flavors so not all of them can be used <em>without</em> jQuery. In future posts, I&#39;ll discuss other techniques you can use to make jQuery work with Webpack.</p>
+<p>Unfortunately, jQuery plugins come in so many different flavors so not all of them can be used <em>without</em> jQuery. In future posts, I&#39;ll discuss other techniques you can use to make jQuery work with webpack.</p>
 
 <p>If you find yourself in this position, make sure to understand the capability of the plugins you&#39;re using. Ask &quot;do I have to use this plugin with jQuery?&quot;, consult the documentation and/or browse the source code as described in the article. If you&#39;re lucky, you may find they can work in either context such that you might not need jQuery at all.</p>
 
   </article>
   <section class="mb-12">
     <p class="text-right">
-      <a href="https://twitter.com/intent/tweet?text=jQuery%20plugins%20in%20Webpack%20without%20jQuery%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fyou-might-not-need-jquery-with-webpack.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      <a href="https://twitter.com/intent/tweet?text=jQuery%20plugins%20in%20webpack%20without%20jQuery%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fyou-might-not-need-jquery-with-webpack.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
       &middot;
       <span class="italic font-light">
         Published on Mar 26, 2020
@@ -233,11 +233,11 @@ $(&#39;.main-carousel&#39;).flickity({
   <div>
     <div class="mb-4">
           <h3 class="mb-2">
-    Need help with Webpack on Rails?
+    Need help with webpack on Rails?
   </h3>
   <p class="mb-4">
     Webpacker now ships by default in Rails 6 but there's no need to stress.
-    I'm putting together a course to help you master Webpack on Rails.
+    I'm putting together a course to help you master webpack on Rails.
   </p>
   <p>
     Subscribe to stay in the loop.
@@ -298,7 +298,7 @@ $(&#39;.main-carousel&#39;).flickity({
   </article>
   <article class="index-post">
     <header class="index-title">
-      <a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a>
+      <a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to webpack(er)</a>
     </header>
       <p>There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here.</p>
   </article>
@@ -328,11 +328,11 @@ $(&#39;.main-carousel&#39;).flickity({
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>
         <ul>
-            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to webpack(er)</a></li>
             <li class="mb-1"><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
             <li class="mb-1"><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
             <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
-            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
         </ul>
       </section>
       <section class="mb-8">

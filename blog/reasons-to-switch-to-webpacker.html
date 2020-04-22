@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="antialiased" lang="en">
   <head>
-    <title>25 reasons to switch to Webpack(er) - rossta.net</title>
+    <title>25 reasons to switch to webpack(er) - rossta.net</title>
 <meta name="description" content="There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here." />
 <meta name="keywords" content="Rails, Webpack" />
 <meta name="site" content="rossta.net" />
@@ -10,10 +10,10 @@
 <meta name="twitter:creator" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here." />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/alice-donovan-packing-unsplash.jpg" />
-<meta name="twitter:title" content="25 reasons to switch to Webpack(er)" />
+<meta name="twitter:title" content="25 reasons to switch to webpack(er)" />
 <meta property="og:description" content="There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here." />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/stock/alice-donovan-packing-unsplash.jpg" />
-<meta property="og:title" content="25 reasons to switch to Webpack(er)" />
+<meta property="og:title" content="25 reasons to switch to webpack(er)" />
     <meta charset="utf-8" />
     <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -52,7 +52,7 @@
         <article class="post mb-12">
     <header class="page-header mt-4">
   <h1>
-    25 reasons to switch to Webpack(er)
+    25 reasons to switch to webpack(er)
   </h1>
     <h2 class="mt-4 text-gray-600 font-medium">
       Leaving behind the Rails asset pipeline
@@ -61,7 +61,7 @@
 
     <p>​I&#39;ve been getting this question lately in some form or another:</p>
 
-<p><em>Is Webpack and Webpacker worth the hassle?</em></p>
+<p><em>Is webpack and Webpacker worth the hassle?</em></p>
 
 <p>It&#39;s a good question, but my short answer is <em>yes</em>.</p>
 
@@ -72,7 +72,7 @@
 <p>In this post, I will elaborate on why I think think it&#39;s a good idea to make the switch. But this will assume some prerequisites; in other words, we&#39;ll first consider why you might NOT want to switch and instead stick with the Rails asset pipeline.</p>
 
 <blockquote>
-<p><a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer">Subscribe to my newsletter</a> to learn more about using Webpack with Rails.</p>
+<p><a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer">Subscribe to my newsletter</a> to learn more about using webpack with Rails.</p>
 </blockquote>
 
       <h3 id="why-not-switch-" class="title title-h3">
@@ -83,18 +83,18 @@
         Why not switch?
       </h3>
     
-<p>If you&#39;re a Rails dev and your app is currently using the Rails asset pipeline, here are a few reasons why Webpack and Webpacker might not be a good fit for you.</p>
+<p>If you&#39;re a Rails dev and your app is currently using the Rails asset pipeline, here are a few reasons why webpack and Webpacker might not be a good fit for you.</p>
 
 <ol>
 <li><p><strong>You don&#39;t have the right application</strong></p>
 
-<p>If your application doesn&#39;t use much JavaScript, it&#39;s probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a more substantial tool like Webpack.</p></li>
+<p>If your application doesn&#39;t use much JavaScript, it&#39;s probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a more substantial tool like webpack.</p></li>
 <li><p><strong>You don&#39;t have the time</strong></p>
 
-<p>I&#39;ll be the first to admit that adopting Webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. Webpack and NPM dependencies are upgraded at a rapid pace, so you need to keep up with upgrades. You might also have to understand how JavaScript modules work—good news; those skills are transferrable.</p></li>
+<p>I&#39;ll be the first to admit that adopting webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. webpack and NPM dependencies are upgraded at a rapid pace, so you need to keep up with upgrades. You might also have to understand how JavaScript modules work—good news; those skills are transferrable.</p></li>
 <li><p><strong>You don&#39;t have the right mindset</strong></p>
 
-<p>Yes, Webpack is complex. Plenty of developers love to complain about this fact. If you think you&#39;re one of those developers, you probably won&#39;t enjoy the process of adopting Webpack. A lot of frustration can be eased through education. Make sure you&#39;ve got a positive attitude going in.</p></li>
+<p>Yes, webpack is complex. Plenty of developers love to complain about this fact. If you think you&#39;re one of those developers, you probably won&#39;t enjoy the process of adopting webpack. A lot of frustration can be eased through education. Make sure you&#39;ve got a positive attitude going in.</p></li>
 </ol>
 
 <hr>
@@ -131,7 +131,7 @@
         3. It will change the way you write JavaScript for the better
       </h3>
     
-<p>Prior to Rails support for Webpack through Webpacker, most of the Rails apps I&#39;ve worked on or seen either directly on GitHub or implicitly through tutorials or presentations, have fallen into one of the following categories:</p>
+<p>Prior to Rails support for webpack through Webpacker, most of the Rails apps I&#39;ve worked on or seen either directly on GitHub or implicitly through tutorials or presentations, have fallen into one of the following categories:</p>
 
 <ol>
 <li>jQuery spaghetti</li>
@@ -173,11 +173,11 @@
         5. $JAVASCRIPT_FRAMEWORK not required
       </h3>
     
-<p>Contrary to popular belief, you don&#39;t need to use a popular frontend framework, React, Vue, Angular, or Svelte, to take advantage of what Webpack has to offer. It works just great with &quot;vanilla JS&quot; or even jQuery-based apps.</p>
+<p>Contrary to popular belief, you don&#39;t need to use a popular frontend framework, React, Vue, Angular, or Svelte, to take advantage of what webpack has to offer. It works just great with &quot;vanilla JS&quot; or even jQuery-based apps.</p>
 
 <p><img src="/assets/images/blog/webpack/no-framework-required.png" alt="Webpack and JS" loading="lazy" /></p>
 
-<p>I don&#39;t believe single-page applications are worth the extra effort and complexity for the majority of CRUD-based apps—the Rails sweet-spot. Employing &quot;JavaScript sprinkles&quot; still makes a lot of sense in 2020, and Webpack should be considered an advantage.</p>
+<p>I don&#39;t believe single-page applications are worth the extra effort and complexity for the majority of CRUD-based apps—the Rails sweet-spot. Employing &quot;JavaScript sprinkles&quot; still makes a lot of sense in 2020, and webpack should be considered an advantage.</p>
 
       <h3 id="6-take-advantage-of-alternative-file-structures" class="title title-h3">
         <a name="6-take-advantage-of-alternative-file-structures" class="anchor" href="#6-take-advantage-of-alternative-file-structures">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -231,7 +231,7 @@ div {
 
 <p><img src="/assets/images/blog/webpack/npm-logo.png" alt="NPM logo" loading="lazy" /></p>
 
-<p>NPM has become the primary repository for distributing open-source JavaScript packages. Although initially designed for packages intended to be used with the Node.js runtime, over time, it has also become the default for browser-based packages. This means that both libraries that run on Node.js, like Webpack, and libraries in the browser, like React, Vue, and jQuery, can all be distributed over NPM. Using NPM is a vast improvement over the typical for sharing JavaScript and other assets for the Rails asset pipeline. One significant point of friction with the latter approach is having to maintain both a Ruby version along with the version of the packaged assets. This technique has always felt cumbersome and bolted on.</p>
+<p>NPM has become the primary repository for distributing open-source JavaScript packages. Although initially designed for packages intended to be used with the Node.js runtime, over time, it has also become the default for browser-based packages. This means that both libraries that run on Node.js, like webpack, and libraries in the browser, like React, Vue, and jQuery, can all be distributed over NPM. Using NPM is a vast improvement over the typical for sharing JavaScript and other assets for the Rails asset pipeline. One significant point of friction with the latter approach is having to maintain both a Ruby version along with the version of the packaged assets. This technique has always felt cumbersome and bolted on.</p>
 
 <p>It&#39;s worth mentioning that you can still try managing assets via NPM and make them available to the Rails asset pipeline by adding node_modules to the Sprockets load path. Again, this approach is cumbersome and can potentially adversely affect build times depending on scope.</p>
 
@@ -243,7 +243,7 @@ div {
         8. Stop using jQuery plugins (if you want)
       </h3>
     
-<p>One benefit of jQuery plugins before the adoption of modules is that it provided a means to add functionality without polluting the global scope. With a proper module system, as you&#39;d get with Webpack, you need not attach functionality to the jQuery instance to reference it across the application.</p>
+<p>One benefit of jQuery plugins before the adoption of modules is that it provided a means to add functionality without polluting the global scope. With a proper module system, as you&#39;d get with webpack, you need not attach functionality to the jQuery instance to reference it across the application.</p>
 
 <p>Consider the touch-responsive carousel plugin <a href="https://flickity.metafizzy.co/" target="_blank" rel="noopener noreferrer">Flickity</a>. In the Rails asset pipeline, you might use it as follows:</p>
 
@@ -256,7 +256,7 @@ $(function () {
 })
 </code></pre>
 
-<p>Flickity is also intended to work without jQuery, meaning you can implement the Flickity module in a Webpack environment:</p>
+<p>Flickity is also intended to work without jQuery, meaning you can implement the Flickity module in a webpack environment:</p>
 
 <pre><code class="javascript">import Flickity from &#39;flickity&#39;
 
@@ -399,17 +399,17 @@ import &quot;core-js/modules/web.immediate&quot;
         14. Unlock powerful new tools
       </h3>
     
-<p>The Webpack compilation and build process provide a large number of hooks to allow behavior modification at nearly any stage. Here is a shortlist of ways you can extend Webpack to meet the needs of your system:</p>
+<p>The webpack compilation and build process provide a large number of hooks to allow behavior modification at nearly any stage. Here is a shortlist of ways you can extend webpack to meet the needs of your system:</p>
 
 <ul>
 <li>Unit testing through the Rails asset pipeline has always felt like jumping through hoops; now, take your pick of JavaScript unit testing tools like <a href="https://mochajs.org/" target="_blank" rel="noopener noreferrer">Mocha</a> or <a href="https://jestjs.io/" target="_blank" rel="noopener noreferrer">Jest</a>.</li>
 <li>Integrate with <a href="https://eslint.org/" target="_blank" rel="noopener noreferrer">eslint</a> to standardize code style and syntax and automate fixes</li>
 <li>Add a plugin to analyze the size and contents of your bundles, e.g. <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer">WebpackBundlerAnalyzer</a></li>
-<li>Add a loader to parse your Rails i18n yaml files and provide them as JSON to your Webpack JavaScript modules</li>
+<li>Add a loader to parse your Rails i18n yaml files and provide them as JSON to your webpack JavaScript modules</li>
 <li>Add a plugin to produce &quot;unfingerprinted&quot; clones of your bundles, as with <a href="https://github.com/alexspeller/non-stupid-digest-assets" target="_blank" rel="noopener noreferrer">https://github.com/alexspeller/non-stupid-digest-assets</a></li>
 </ul>
 
-<p>One of my favorite Webpack-friendly addons is <a href="https://storybook.js.org" target="_blank" rel="noopener noreferrer">Storybook</a>. It&#39;s a newer tool that allows developers to build components in isolation from the Rails server. This is a great way to represent your UI in various states all in one place without having to mess with real data in your development environment.</p>
+<p>One of my favorite webpack-friendly addons is <a href="https://storybook.js.org" target="_blank" rel="noopener noreferrer">Storybook</a>. It&#39;s a newer tool that allows developers to build components in isolation from the Rails server. This is a great way to represent your UI in various states all in one place without having to mess with real data in your development environment.</p>
 
 <p><img src="/assets/images/blog/webpack/storybook-logo.png" alt="Storybook logo" loading="lazy" /></p>
 
@@ -423,7 +423,7 @@ import &quot;core-js/modules/web.immediate&quot;
     
 <p>Webpack provides some configuration options that make it easy to modify the output of a module. For example, to &quot;provide&quot; the jQuery import to all modules in your source files, you can add the <code>ProvidePlugin</code>.</p>
 
-<p>This becomes important if you&#39;re attempting to upgrade a legacy Rails app to Webpack. Many older jQuery plugins, for example, assume jQuery is available in the global scope. The <code>ProvidePlugin</code> configured as follows will instruct Webpack to &quot;shim&quot; legacy modules with a <code>require(&#39;jquery&#39;)</code> statement if necessary:</p>
+<p>This becomes important if you&#39;re attempting to upgrade a legacy Rails app to webpack. Many older jQuery plugins, for example, assume jQuery is available in the global scope. The <code>ProvidePlugin</code> configured as follows will instruct webpack to &quot;shim&quot; legacy modules with a <code>require(&#39;jquery&#39;)</code> statement if necessary:</p>
 
 <pre><code class="javascript">// config/webpack/environment.js
 
@@ -455,7 +455,7 @@ module.exports = environment;
         16. You can still &quot;require_tree&quot; and then some
       </h3>
     
-<p>Sprockets comes with a few conveniences for including files in your asset bundles, including <code>require_tree</code>. Similarly, Webpack also has a function for including multiple files in a single statement: <code>require.context</code>. Though more tedious, it&#39;s even more powerful. It provides a file filter option, say if you only want to import <code>.svg</code> files. You can also operate on the return value.</p>
+<p>Sprockets comes with a few conveniences for including files in your asset bundles, including <code>require_tree</code>. Similarly, webpack also has a function for including multiple files in a single statement: <code>require.context</code>. Though more tedious, it&#39;s even more powerful. It provides a file filter option, say if you only want to import <code>.svg</code> files. You can also operate on the return value.</p>
 
 <p>Syntax:</p>
 
@@ -506,7 +506,7 @@ context.keys().forEach(filename =&gt; {
 
 <p>One headache with this approach is having to manually account divvy up the bundles and take great care to avoid load order issues or omitting key dependencies.</p>
 
-<p>Since Webpack statically analyzes your source code to build its dependency graph(s), it can also be configured to create separate bundles for vendored and application code automatically. This means, from a single &quot;pack&quot;, Webpack will produce the vendor and application bundles for you, along with the Webpack runtime. Webpacker helpers and config can be used as follows to enable this behavior.</p>
+<p>Since webpack statically analyzes your source code to build its dependency graph(s), it can also be configured to create separate bundles for vendored and application code automatically. This means, from a single &quot;pack&quot;, webpack will produce the vendor and application bundles for you, along with the webpack runtime. Webpacker helpers and config can be used as follows to enable this behavior.</p>
 
 <pre><code class="javascript">// config/webpack/environment.js
 
@@ -541,9 +541,9 @@ module.exports = environment
         18. Automatic dynamic code splitting
       </h3>
     
-<p>An even better option to split your JavaScript code over multiple files is to use &quot;dynamic imports&quot;. This approach requires absolutely zero config changes. It is the very reason that Webpack&#39;s creator made Webpack in the first place.</p>
+<p>An even better option to split your JavaScript code over multiple files is to use &quot;dynamic imports&quot;. This approach requires absolutely zero config changes. It is the very reason that webpack&#39;s creator made webpack in the first place.</p>
 
-<p>When Webpack detects a dynamic import function, like the following, in your application code, it will create a separate bundle for that import and load it asynchronously when that code is executed in the browser.</p>
+<p>When webpack detects a dynamic import function, like the following, in your application code, it will create a separate bundle for that import and load it asynchronously when that code is executed in the browser.</p>
 
 <pre><code class="javascript">import(&#39;pdfjs/webpack&#39;).then(({default: pdfjs}) =&gt; { // async import!
   pdfjs.getDocument(&#39;https://example.com/some.pdf&#39;)  // ...
@@ -564,7 +564,7 @@ module.exports = environment
 
 <p><img src="/assets/images/blog/webpack/postcss-logo.png" alt="PostCSS logo" loading="lazy" /></p>
 
-<p>PostCSS, relatively new on the scene, allows developers to transform CSS with JavaScript. It&#39;s a pluggable tool that can be configured to enable various capabilities; Webpack configures PostCSS to apply some fixes for flexbox bugs and to use a preset-env plugin to polyfill newer CSS capabilities for older browsers, similarly to @babel/preset-env does for JavaScript.</p>
+<p>PostCSS, relatively new on the scene, allows developers to transform CSS with JavaScript. It&#39;s a pluggable tool that can be configured to enable various capabilities; webpack configures PostCSS to apply some fixes for flexbox bugs and to use a preset-env plugin to polyfill newer CSS capabilities for older browsers, similarly to @babel/preset-env does for JavaScript.</p>
 
 <p>One of my favorite PostCSS plugins is PurgeCSS, which lets you delete unused CSS by comparing your CSS with your HTML markup and/or templates. Such a tool is invaluable when adopting a framework like TailwindCSS, which provides a ton of utility classes, many of which you&#39;re unlikely to use in production code.</p>
 
@@ -578,7 +578,7 @@ module.exports = environment
     
 <p>With Sprockets in development, automatic compilation and recompilation of static assets is handled through the Rails server. This can become a bottleneck with the ruby process doing double-duty. With the webpack-dev-server, however, asset compilation moves into a separate process so asset compilation can occur independently of the Rails server responding to requests.</p>
 
-<p>The webpack-dev-server is a simple Node.js web server that watches for file changes in your source code directory, triggers Webpack to recompile when changes are detected, and serves the compiles assets from memory. It can also, via websocket listener automatically inserted in the browser, autoreload the development browser window when autocompilation completes, if desired.</p>
+<p>The webpack-dev-server is a simple Node.js web server that watches for file changes in your source code directory, triggers webpack to recompile when changes are detected, and serves the compiles assets from memory. It can also, via websocket listener automatically inserted in the browser, autoreload the development browser window when autocompilation completes, if desired.</p>
 
       <h3 id="21-update-code-in-development-without-reloading-the-page" class="title title-h3">
         <a name="21-update-code-in-development-without-reloading-the-page" class="anchor" href="#21-update-code-in-development-without-reloading-the-page">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -604,14 +604,14 @@ module.exports = environment
     
 <p>Given your JavaScript and CSS source code may be written in one form but compiled to another in development and production, source maps can help fill the gap. Most evergreen browsers support the loading and rendering of source maps in the browser dev tools to allow developers to link the code that&#39;s loaded in the browser to the code that lives in your source. It&#39;s a really good tool to have in your toolbelt.</p>
 
-<p>Sprockets recently brought source maps to the Rails asset pipeline. In Webpack, they&#39;ve been there since its early days and they&#39;re highly customizable; there are over twenty types of source maps supported in Webpack meaning there&#39;s a strategy for almost every use case. One reason for this much variety is that source maps must be generated as a separate file from your ass bundles so there&#39;s a build performance cost. You can save time with the tradeoff of fidelity.</p>
+<p>Sprockets recently brought source maps to the Rails asset pipeline. In webpack, they&#39;ve been there since its early days and they&#39;re highly customizable; there are over twenty types of source maps supported in webpack meaning there&#39;s a strategy for almost every use case. One reason for this much variety is that source maps must be generated as a separate file from your ass bundles so there&#39;s a build performance cost. You can save time with the tradeoff of fidelity.</p>
 
-<p>The main point is with Webpack you&#39;ve got a ton of choice.</p>
+<p>The main point is with webpack you&#39;ve got a ton of choice.</p>
 
 <ul>
 <li>WTF is a source map? <a href="https://schneems.com/2017/11/14/wtf-is-a-source-map/" target="_blank" rel="noopener noreferrer">https://schneems.com/2017/11/14/wtf-is-a-source-map/</a></li>
 <li>Guide to source maps in sprockets: <a href="https://github.com/rails/sprockets/blob/master/guides/source_maps.md" target="_blank" rel="noopener noreferrer">https://github.com/rails/sprockets/blob/master/guides/source_maps.md</a></li>
-<li>Webpack source map documentation: <a href="https://webpack.js.org/configuration/devtool/" target="_blank" rel="noopener noreferrer">https://webpack.js.org/configuration/devtool/</a></li>
+<li>webpack source map documentation: <a href="https://webpack.js.org/configuration/devtool/" target="_blank" rel="noopener noreferrer">https://webpack.js.org/configuration/devtool/</a></li>
 </ul>
 
       <h3 id="23-implement-performance-budgets" class="title title-h3">
@@ -628,7 +628,7 @@ module.exports = environment
 
 <p>One of his key strategies for measuring frontend performance is &quot;performance budgeting&quot; and how this relates to  &quot;time-to-interactive&quot; (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application. That value closely correlates with the amount of JavaScript you force your users&#39; browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.</p>
 
-<p>What does this have to do with Webpack? Not only does Webpack make it easier to split up your bundles, as we saw with the code splitting sections above, but it also provides built-in support for <a href="https://medium.com/webpack/webpack-performance-budgets-13d4880fbf6d" target="_blank" rel="noopener noreferrer">performance budgets</a>. You can customize Webpack to print a warning or even raise an error if any bundle exceeds the configured <code>maxEntryPointSize</code>.</p>
+<p>What does this have to do with webpack? Not only does webpack make it easier to split up your bundles, as we saw with the code splitting sections above, but it also provides built-in support for <a href="https://medium.com/webpack/webpack-performance-budgets-13d4880fbf6d" target="_blank" rel="noopener noreferrer">performance budgets</a>. You can customize webpack to print a warning or even raise an error if any bundle exceeds the configured <code>maxEntryPointSize</code>.</p>
 
 <ul>
 <li>Start performance budgeting <a href="https://addyosmani.com/blog/performance-budgets/" target="_blank" rel="noopener noreferrer">https://addyosmani.com/blog/performance-budgets/</a></li>
@@ -643,9 +643,9 @@ module.exports = environment
         24. Peek inside the bundles
       </h3>
     
-<p>One of my favorite tools for debugging Webpack is the <code>webpack-bundler-analyzer</code>. Add this to your build and it will generate an interactive treemap that visualizes the relative size and contents of all your bundles. Wondering how much <code>lodash</code> is adding to your overall bundle size? Use the bundle analyzer tool. Think there&#39;s a bug in with one of your dependencies or in your Webpack output? The bundle analyzer may help you identify it.</p>
+<p>One of my favorite tools for debugging webpack is the <code>webpack-bundler-analyzer</code>. Add this to your build and it will generate an interactive treemap that visualizes the relative size and contents of all your bundles. Wondering how much <code>lodash</code> is adding to your overall bundle size? Use the bundle analyzer tool. Think there&#39;s a bug in with one of your dependencies or in your webpack output? The bundle analyzer may help you identify it.</p>
 
-<p><img src="/assets/images/blog/webpack/webpack-bundle-analyzer.gif" alt="An example of a Webpack Bundle Analyzer treemap" loading="lazy" /></p>
+<p><img src="/assets/images/blog/webpack/webpack-bundle-analyzer.gif" alt="An example of a webpack Bundle Analyzer treemap" loading="lazy" /></p>
 
 <ul>
 <li>Project <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer">https://github.com/webpack-contrib/webpack-bundle-analyzer</a></li>
@@ -659,7 +659,7 @@ module.exports = environment
         25. Shaking the tree
       </h3>
     
-<p>I&#39;d be remiss if I didn&#39;t mention one of the favorite JavaScript bundle buzzwords, <strong>tree shaking</strong>. All this means is that Webpack can remove unused code from your build when certain conditions are met. This typically means that the module(s) in question is an ES module, that Babel is configured to handle ES modules, and that there are no side effects from importing the module.</p>
+<p>I&#39;d be remiss if I didn&#39;t mention one of the favorite JavaScript bundle buzzwords, <strong>tree shaking</strong>. All this means is that webpack can remove unused code from your build when certain conditions are met. This typically means that the module(s) in question is an ES module, that Babel is configured to handle ES modules, and that there are no side effects from importing the module.</p>
 
 <p>A good use case for tree shaking is <code>lodash</code>. When loaded in its entirety, the library adds around 75 kb to the resulting asset bundle.</p>
 
@@ -668,7 +668,7 @@ module.exports = environment
 import {map, uniq, tail} from &#39;lodash&#39;
 </code></pre>
 
-<p>The following approach allows Webpack to limit the resulting file size:</p>
+<p>The following approach allows webpack to limit the resulting file size:</p>
 
 <pre><code class="javascript">import map from &#39;lodash/map&#39;
 import uniq from &#39;lodash/uniq&#39;
@@ -677,7 +677,7 @@ import tail from &#39;lodash/tail&#39;
 </code></pre>
 
 <ul>
-<li>Lessons on tree-shaking Lodash with Webpack and Babel <a href="https://www.azavea.com/blog/2019/03/07/lessons-on-tree-shaking-lodash/" target="_blank" rel="noopener noreferrer">https://www.azavea.com/blog/2019/03/07/lessons-on-tree-shaking-lodash/</a></li>
+<li>Lessons on tree-shaking Lodash with webpack and Babel <a href="https://www.azavea.com/blog/2019/03/07/lessons-on-tree-shaking-lodash/" target="_blank" rel="noopener noreferrer">https://www.azavea.com/blog/2019/03/07/lessons-on-tree-shaking-lodash/</a></li>
 </ul>
 
       <h3 id="wrapping-up" class="title title-h3">
@@ -688,14 +688,14 @@ import tail from &#39;lodash/tail&#39;
         Wrapping up
       </h3>
     
-<p>There it is. I hope this has been a worthy introduction to some exciting possibilities and use cases for adopting Webpack in your Rails app via Webpacker. Like I said earlier, there is a tradeoff that comes with the overhead of managing many smaller JavaScript dependencies along with overcoming the &quot;barrier to entry&quot; in getting up to speed with how Webpack works.</p>
+<p>There it is. I hope this has been a worthy introduction to some exciting possibilities and use cases for adopting webpack in your Rails app via Webpacker. Like I said earlier, there is a tradeoff that comes with the overhead of managing many smaller JavaScript dependencies along with overcoming the &quot;barrier to entry&quot; in getting up to speed with how webpack works.</p>
 
 <p>I, for one, feel the tradeoffs have been worthwhile.</p>
 
   </article>
   <section class="mb-12">
     <p class="text-right">
-      <a href="https://twitter.com/intent/tweet?text=25%20reasons%20to%20switch%20to%20Webpack%28er%29%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Freasons-to-switch-to-webpacker.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      <a href="https://twitter.com/intent/tweet?text=25%20reasons%20to%20switch%20to%20webpack%28er%29%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Freasons-to-switch-to-webpacker.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
       &middot;
       <span class="italic font-light">
         Published on Mar  2, 2020
@@ -717,11 +717,11 @@ import tail from &#39;lodash/tail&#39;
   <div>
     <div class="mb-4">
           <h3 class="mb-2">
-    Need help with Webpack on Rails?
+    Need help with webpack on Rails?
   </h3>
   <p class="mb-4">
     Webpacker now ships by default in Rails 6 but there's no need to stress.
-    I'm putting together a course to help you master Webpack on Rails.
+    I'm putting together a course to help you master webpack on Rails.
   </p>
   <p>
     Subscribe to stay in the loop.
@@ -782,9 +782,9 @@ import tail from &#39;lodash/tail&#39;
   </article>
   <article class="index-post">
     <header class="index-title">
-      <a href="/blog/you-might-not-need-jquery-with-webpack.html">jQuery plugins in Webpack without jQuery</a>
+      <a href="/blog/you-might-not-need-jquery-with-webpack.html">jQuery plugins in webpack without jQuery</a>
     </header>
-      <p>Upgrading jQuery plugins to work with Webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all.</p>
+      <p>Upgrading jQuery plugins to work with webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all.</p>
   </article>
   <article class="index-post">
     <header class="index-title">
@@ -812,11 +812,11 @@ import tail from &#39;lodash/tail&#39;
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>
         <ul>
-            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to webpack(er)</a></li>
             <li class="mb-1"><a href="/blog/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a></li>
             <li class="mb-1"><a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a></li>
             <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
-            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpack</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
         </ul>
       </section>
       <section class="mb-8">
