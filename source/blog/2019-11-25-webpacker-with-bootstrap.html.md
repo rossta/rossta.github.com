@@ -2,7 +2,7 @@
 title: Using Bootstrap with Rails Webpacker
 author: Ross Kaffenberger
 published: true
-summary: Bootstrap 4 is now more Webpack-friendly
+summary: Bootstrap 4 is now more webpack-friendly
 description: Tutorial for integrating Bootstrap 4 with Rails and Webpacker 4
 pull_image: 'blog/stock/roman-kraft-crafts-unsplash.jpg'
 pull_image_caption: Photo by Roman Kraft on Unsplash
@@ -34,7 +34,7 @@ popper.js 1.16.0
 
 We'll assume we're working from a recently-created Rails 6 app with the default Webpacker installation. The examples may also work with other versions Rails that support Webpacker 4.
 
-When the Webpacker install is run, i.e. `bin/rails webpacker:install`, it adds the file `app/javascript/packs/application.js`. Webpack calls this file an "entry point" and Webpacker calls it a "pack". We'll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by Webpack.
+When the Webpacker install is run, i.e. `bin/rails webpacker:install`, it adds the file `app/javascript/packs/application.js`. webpack calls this file an "entry point" and Webpacker calls it a "pack". We'll use the terms interchangeably. Either way, this file will be the top of the dependency tree for all assets bundled by webpack.
 
 The file initially looks something like the following:
 
@@ -67,7 +67,7 @@ To get Bootstrap css working, add a stylesheet `app/javascript/css/site.scss`. H
 
 @import "~bootstrap/scss/bootstrap.scss"
 ```
-_Note: the file extensions are important, i.e., Webpacker configure files ending in '.scss' and '.sass' to be processed by Webpack's `sass-loader`._
+_Note: the file extensions are important, i.e., Webpacker configure files ending in '.scss' and '.sass' to be processed by webpack's `sass-loader`._
 
 To include our new stylesheet in the build output, we must import it from somewhere in our dependency tree. Let's put this import in the entry point, our `application.js` pack:
 ```javascript
@@ -75,9 +75,9 @@ To include our new stylesheet in the build output, we must import it from somewh
 
 import 'css/site'
 ```
-If you're new to Webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate `application.css` and `application.js` files as the top of separate dependency trees. In Webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the `application.css` bundle is simply a by-product of the build. In other words, there is no need for a separate "stylesheet pack" like `app/javascript/packs/application.css`.
+If you're new to webpack, this may comes as a surprise: yes, you import your stylesheets via javascript. In Sprockets, we typically have separate `application.css` and `application.js` files as the top of separate dependency trees. In webpack, think of your application.js pack as the lone root the dependency tree from which all static assets will be imported; the `application.css` bundle is simply a by-product of the build. In other words, there is no need for a separate "stylesheet pack" like `app/javascript/packs/application.css`.
 
-> *Tip*: With Webpack, it's recommended to have only *one* entry point (or "pack" in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is `app/javascript/packs/application.js`. I cannot stress this point enough.
+> *Tip*: With webpack, it's recommended to have only *one* entry point (or "pack" in WebpackER terminology) per page for your bundled assets. For our starter app, the entry point is `app/javascript/packs/application.js`. I cannot stress this point enough.
 
 ### Adding SASS overrides
 Since `bootstrap.scss` uses SASS variables for theme-ing, you can override the defaults with new values.
@@ -119,7 +119,7 @@ Bootstrap also ships with some JavaScript utilities that function as jQuery plug
 yarn add jquery popper.js
 ```
 
-These libraries need to be available in your Webpack build, so import them along with bootstrap javascript:
+These libraries need to be available in your webpack build, so import them along with bootstrap javascript:
 ```javascript
 // app/javascript/packs/application.js
 
@@ -132,7 +132,7 @@ import 'bootstrap'
 
 ### Optimizing the JavaScript bundle
 
-An optional, advanced technique would be to import selected modules asynchronously. The benefit is to limit the size of our initial bundle and defer as much as possible to decrease latency for downloading, parsing, and evaluating JavaScript on page load. Note the `application.js` bundle (fingerprinted as `js/application-c67c235b5c7d8ac4f1fe.js`) is already 940kB in our Webpack build:
+An optional, advanced technique would be to import selected modules asynchronously. The benefit is to limit the size of our initial bundle and defer as much as possible to decrease latency for downloading, parsing, and evaluating JavaScript on page load. Note the `application.js` bundle (fingerprinted as `js/application-c67c235b5c7d8ac4f1fe.js`) is already 940kB in our webpack build:
 ```shell
 Version: webpack 4.41.2
 Time: 1003ms
@@ -148,7 +148,7 @@ js/application-c67c235b5c7d8ac4f1fe.js.map   1.06 MiB  application  [emitted] [d
 
 As an exercise, we might decide to defer the import and initialization of the jquery plugins. Let's consider `jquery` as a critical dependency; it is needed as part of the "initial" bundle that blocks the page load while it is parsed and evaluated. But `popper.js` and `bootstrap` can be deferred; since they are plugins that affect the DOM, they're not as critical, i.e., the DOM needs to be loaded first anyways.
 
-One such deferring technique is dynamic import. Webpack will recognize when `import` is used as a function, e.g. `import('some-lib')`, and pull out the module as a separate "chunk" (another file), that will be loaded asynchronously when the function is evaluated.
+One such deferring technique is dynamic import. webpack will recognize when `import` is used as a function, e.g. `import('some-lib')`, and pull out the module as a separate "chunk" (another file), that will be loaded asynchronously when the function is evaluated.
 
 In our demo app, we can move `popper.js` and `bootstrap` to a separate file. Critically, this file is NOT in `app/javascript/packs` but outside of this directory, such as `app/javascript/src`, where we will put all our non-entry-point js:
 
@@ -167,7 +167,7 @@ import 'jquery'
 import('src/plugins') // note the function usage!
 ```
 
-When compiling, Webpack will show us a number of additional javascript "chunks" of smaller size than the bundle previously:
+When compiling, webpack will show us a number of additional javascript "chunks" of smaller size than the bundle previously:
 ```shell
 Version: webpack 4.41.2
 Time: 41ms

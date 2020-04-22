@@ -61,7 +61,7 @@ On `fetch`:
 
 ### Deploying the service worker
 
-Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. [As I've said before](https://rossta.net/blog/why-i-ditched-wordpress-for-github.html), this is a static site hosted on Github pages, [built with Webpack and Middleman](/blog/using-webpack-with-middleman.html).
+Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. [As I've said before](https://rossta.net/blog/why-i-ditched-wordpress-for-github.html), this is a static site hosted on Github pages, [built with webpack and Middleman](/blog/using-webpack-with-middleman.html).
 
 Setting up Github pages to use Cloudflare was relatively straightforward and has been [well-documented](https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/). I also wanted to make sure `serviceworker.js` is always served over HTTPS and that it would not be cached. Since I don't have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules on Cloudflare to mitigate this issue.
 
@@ -69,11 +69,11 @@ To ensure content on rossta.net is always loaded over HTTPS, I added a redirect 
 
 ![](blog/cloud-flare-page-rules-https.jpg)
 
-I'm using Webpack to create [separate bundles](https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12) and Middleman's [`:asset_hash` extension](https://middlemanapp.com/advanced/improving_cacheability/) to add a digest to each file, similar to the [Rails asset pipeline production behavior](http://guides.rubyonrails.org/asset_pipeline.html#in-production) to improve the cacheability of CSS and JavaScript assets on rossta.net.
+I'm using webpack to create [separate bundles](https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12) and Middleman's [`:asset_hash` extension](https://middlemanapp.com/advanced/improving_cacheability/) to add a digest to each file, similar to the [Rails asset pipeline production behavior](http://guides.rubyonrails.org/asset_pipeline.html#in-production) to improve the cacheability of CSS and JavaScript assets on rossta.net.
 
 I don't want either for serviceworker.js: it must be served separately from the main asset bundles and it should not be cached.
 
-Webpack supports [multiple configurations](https://webpack.github.io/docs/configuration.html#multiple-configurations), so I set up my [`webpack.config.js`](https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80) to use ES2015 transpilation for `serviceworker.js` but output to a different destination from the other concatenated script files.
+webpack supports [multiple configurations](https://webpack.github.io/docs/configuration.html#multiple-configurations), so I set up my [`webpack.config.js`](https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80) to use ES2015 transpilation for `serviceworker.js` but output to a different destination from the other concatenated script files.
 
 To make sure Cloudflare does not cache `serviceworker.js`, as it would by default for the CDN, I instructed Cloudflare to bypass the cache.
 

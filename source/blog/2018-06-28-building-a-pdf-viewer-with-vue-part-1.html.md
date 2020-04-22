@@ -3,7 +3,7 @@ title: Rendering PDF pages with PDF.js and Vue
 author: Ross Kaffenberger
 published: true
 summary: Building a PDF Viewer with Vue - Part 1
-description: This tutorial demonstrates how to create Vue.js components that can render PDFs along with tools like Webpack, PDF.js, and the canvas element.
+description: This tutorial demonstrates how to create Vue.js components that can render PDFs along with tools like webpack, PDF.js, and the canvas element.
 popular: 2
 series: 'PDF Viewer'
 category: Code
@@ -14,7 +14,7 @@ tags:
 
 I remember a time not too long ago when the possibility of rendering PDFs inline on a web page would have sounded crazy. Then [PDF.js](https://mozilla.github.io/pdf.js/) came along and changed all that.
 
-I was recently tasked with just this sort of project, and I leveraged PDF.js, [Vue](https://vuejs.org/) and [Webpack](https://webpack.js.org) to put it all together. This post is the first in a series which demonstrates how I used Vue to render PDF pages to `<canvas>` elements. Later we'll explore conditional rendering and adding paging and zoom controls.
+I was recently tasked with just this sort of project, and I leveraged PDF.js, [Vue](https://vuejs.org/) and [webpack](https://webpack.js.org) to put it all together. This post is the first in a series which demonstrates how I used Vue to render PDF pages to `<canvas>` elements. Later we'll explore conditional rendering and adding paging and zoom controls.
 
 The latest source code for this project is on Github at [rossta/vue-pdfjs-demo](https://github.com/rossta/vue-pdfjs-demo). To see the version of the project described in this post, check out the [`part-1-simple-document` branch](https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-1-simple-document). Finally, here's a link to the [project demo](https://rossta.net/vue-pdfjs-demo/).
 
@@ -28,11 +28,11 @@ Mozilla's PDF.js package ships with a web viewer ([demo](https://mozilla.github.
 
 PDF.js is a JavaScript project by Mozilla that makes it easier to parse and render PDFs in HTML. It is comprised of three key pieces: Core, Display, and Viewer.
 
-The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. This code is split out into a separate file, `pdf.worker.js`, which will run in a web worker thread in the browser. Since we're using Webpack, it handles bundling, fetching, and configuration of the worker script behind the scenes.
+The Core layer is the lower level piece that parses and interprets PDFs for use by the other layers. This code is split out into a separate file, `pdf.worker.js`, which will run in a web worker thread in the browser. Since we're using webpack, it handles bundling, fetching, and configuration of the worker script behind the scenes.
 
 The Viewer layer, as I mentioned earlier, provides a primary user interface for viewing and paging through PDFs in Firefox (or other browsers with included extensions). We won't be using this piece; in fact, this tutorial could be used as the basis for a Vue.js implementation of an alternative viewer.
 
-Most of our interaction with the PDF.js library will be at the Display layer, which provides the JavaScript API for retrieving and manipulating PDF document and page data. The API relies heavily on Promises, which we'll be incorporating into our Vue.js components. We'll also take advantage of dynamic imports to code split our use of PDF.js, since, at least for my purposes, I only want to load the PDF.js library on demand. Keeping it out of the main application Webpack bundle helps keep the initial page load time small.
+Most of our interaction with the PDF.js library will be at the Display layer, which provides the JavaScript API for retrieving and manipulating PDF document and page data. The API relies heavily on Promises, which we'll be incorporating into our Vue.js components. We'll also take advantage of dynamic imports to code split our use of PDF.js, since, at least for my purposes, I only want to load the PDF.js library on demand. Keeping it out of the main application webpack bundle helps keep the initial page load time small.
 
 ### Using PDF.js
 

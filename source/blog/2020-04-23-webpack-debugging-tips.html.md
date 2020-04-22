@@ -3,7 +3,7 @@ title: Debugging the Rails webpack config
 author: Ross Kaffenberger
 published: false
 summary: Understanding Webpacker's webpack config
-description: Webpack debugging tips
+description: webpack debugging tips
 pull_image: 'blog/stock/ingo-doerrie-dragonfly-unsplash.jpg'
 pull_image_caption: Photo by Ingo Doerrie on Unsplash
 series:
@@ -59,6 +59,54 @@ undefined
 > console.dir(config.plugins, { depth: null })
  ...
 ```
+
+You can even run the `node` REPL and inspecting the config object interactively:
+
+```js
+$ node
+> const config = require('./config/webpack/development')
+undefined
+> console.dir(config, { depth: null })
+// displays the entire webpack config
+// ...
+```
+This technique displays a live version of the `development` webpack config (we can do similar for `production` or `test`). Let's look at some of the defaults that `@rails/webpacker` provides.
+
+##### Entry
+
+The `entry` corresponds each "pack" by its canonical name and location on disk. webpack will create a separate dependency graph for each entry (without additional [optimization](#enabling-webpack-splitchunks)). Most Rails apps will not need to modify the Webpacker default.
+```js
+{
+  entry: {
+    application: '/path/to/rails/root/app/javascript/packs/application.js'
+  },
+  // ...
+}
+```
+[webpack docs](https://webpack.js.org/concepts/#entry)
+
+##### Output
+
+The `output` configuration options describe where the JavaScript bundles will be output in the `public/packs` directory. Again, most Rails apps likely don't need to modfy these Webpacker defaults:
+
+```js
+{
+  output: {
+    filename: 'js/[name]-[contenthash].js',
+    chunkFilename: 'js/[name]-[contenthash].chunk.js',
+    hotUpdateChunkFilename: 'js/[id]-[hash].hot-update.js',
+    path: '/path/to/rails/root/public/packs',
+    publicPath: '/packs/'
+  },
+  // ...
+}
+```
+
+[webpack docs](https://webpack.js.org/concepts/#output)
+
+##### Loaders
+
+##### Plugins
 
 While the above examples help inspect the config outside the context of a webpack build, it may help to debug the config within the build process itself. It's possible to [use the `debugger` provided by Chrome DevTools on a Node.js process](https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27) (as opposed to a browser's JavaScript process).
 

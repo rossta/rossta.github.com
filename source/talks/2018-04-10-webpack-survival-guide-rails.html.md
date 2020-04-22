@@ -1,8 +1,8 @@
 ---
-title: A Webpack Survival Guide for Rails Developers
+title: A webpack Survival Guide for Rails Developers
 author: Ross Kaffenberger
-summary: What to expect switching from Sprockets to Webpack
-description: Last year, I worked on a project to migrate JavaScript asset bundling over from the Rails asset pipeline over to Webpack alongside the Webpacker gem. This talk captures some of the mistakes we made, how we fixed them, and highlights general lessons to help Rails developers understand how Webpack works and how it differs from its predecessor.
+summary: What to expect switching from Sprockets to webpack
+description: Last year, I worked on a project to migrate JavaScript asset bundling over from the Rails asset pipeline over to webpack alongside the Webpacker gem. This talk captures some of the mistakes we made, how we fixed them, and highlights general lessons to help Rails developers understand how webpack works and how it differs from its predecessor.
 pull_image: 'talks/20180419-webpack-survival-guide_key.jpg'
 published: true
 category: Code
@@ -12,7 +12,7 @@ tags:
   - Webpack
 ---
 
-I learned quite a bit (the hard way) helping my team switch our frontend JavaScript application [from the Rails asset pipeline to Webpack](/blog/from-sprockets-to-webpack.html). I decided to distill what I learned into a talk I would have wanted to see before I started. This is that talk.
+I learned quite a bit (the hard way) helping my team switch our frontend JavaScript application [from the Rails asset pipeline to webpack](/blog/from-sprockets-to-webpack.html). I decided to distill what I learned into a talk I would have wanted to see before I started. This is that talk.
 
 <div class="video-container">
   <iframe src="https://www.youtube.com/embed/fKOq5_2qj54" frameborder="0" allowfullscreen></iframe>
@@ -27,7 +27,7 @@ I learned quite a bit (the hard way) helping my team switch our frontend JavaScr
 Presented at [RailsConf](https://railsconf.com/program/sessions#session-549) on April 19, 2018 and at [NYC.rb](https://www.meetup.com/NYC-rb/events/ztpmfpyxgbnb/) April 10, 2018.
 
 ### Resources
-For those interested to learn more about Webpack, here are some additional resources I've found helpful in my own learning.
+For those interested to learn more about webpack, here are some additional resources I've found helpful in my own learning.
 
 #### Tutorials
 * [SurviveJS Wepback](https://survivejs.com/webpack)
@@ -35,17 +35,17 @@ For those interested to learn more about Webpack, here are some additional resou
 * [Webpack Academy Core Concepts](https://webpack.academy/courses/104961)
 
 #### Videos
-* [Frontend Center: Webpack from First Principles](https://www.youtube.com/watch?v=WQue1AN93YU)
+* [Frontend Center: webpack from First Principles](https://www.youtube.com/watch?v=WQue1AN93YU)
 * [Core Concepts](https://www.youtube.com/watch?v=AZPYL30ozCY)
-* [Understanding Webpack](https://www.youtube.com/watch?v=bm7RlNEcQM0)
+* [Understanding webpack](https://www.youtube.com/watch?v=bm7RlNEcQM0)
 * [Webpack: It's Not Magic](https://www.youtube.com/watch?v=U_G7j-DnQCE)
-* [CSS Tricks: Let's talk about Webpack](https://css-tricks.com/video-screencasts/lets-talk-webpack/)
-* [What is Webpack How does it work?](https://www.youtube.com/watch?v=GU-2T7k9NfI)
-* [Everything is a Plugin, Mastering Webpack](https://www.youtube.com/watch?v=4tQiJaFzuJ8)
+* [CSS Tricks: Let's talk about webpack](https://css-tricks.com/video-screencasts/lets-talk-webpack/)
+* [What is webpack How does it work?](https://www.youtube.com/watch?v=GU-2T7k9NfI)
+* [Everything is a Plugin, Mastering webpack](https://www.youtube.com/watch?v=4tQiJaFzuJ8)
 * [Advanced Concepts](https://www.youtube.com/watch?v=MzVFrIAwwS8)
 * [Code-splitting with Wepback: Totally Tooling Tips](https://www.youtube.com/watch?v=QH94CXVv3UE)
 
-#### Sprockets to Webpack
+#### Sprockets to webpack
 * https://rossta.net/blog/from-sprockets-to-webpack.html
 * https://brigade.engineering/setting-up-webpack-with-rails-c62aea149679
 * https://medium.com/@chrismnicola/leaving-sprockets-for-webpack-ccf7c6993ffa

@@ -3,7 +3,7 @@ title: Importing images with Webpacker
 author: Ross Kaffenberger
 published: true
 summary: An unofficial Rails guide
-description: "Using images bundled by Webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate."
+description: "Using images bundled by webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate."
 pull_image: 'blog/stock/jr-korpa-lights-unsplash.jpg'
 pull_image_caption: Photo by JR Korpa on Unsplash
 series:
@@ -13,11 +13,11 @@ tags:
   - Rails
 ---
 
-Webpack isn't just for JavaScript. You can bundle images with it too. [Webpacker](https://github.com/rails/webpacker) makes it relatively easy to work with images, but it is admittedly confusing at first: _Images in JavaScript?_
+webpack isn't just for JavaScript. You can bundle images with it too. [Webpacker](https://github.com/rails/webpacker) makes it relatively easy to work with images, but it is admittedly confusing at first: _Images in JavaScript?_
 
 In this post, we'll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include [yarn](https://yarnpkg.com/).
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
 
 ### Folder structure
 
@@ -37,7 +37,7 @@ app/javascript
 └── packs
     └── application.js
 ```
-> Isn't weird to put images and css in a folder called "javascript"? Depends. If you consider, from Webpack's perspective, everything is a JavaScript module, it may not be so strange. Otherwise, it's possible to rename `app/javascript` or place your images elsewhere. More on that below.
+> Isn't weird to put images and css in a folder called "javascript"? Depends. If you consider, from webpack's perspective, everything is a JavaScript module, it may not be so strange. Otherwise, it's possible to rename `app/javascript` or place your images elsewhere. More on that below.
 
 ### Images in JS
 
@@ -56,7 +56,7 @@ export default function({ title }) {
   `
 }
 ```
-In the example above, Webpack will import `TacoImage` as a url to the file. In other words, an "image module" in Webpack exports a single default value, a string, representing the location of the file. Based on the default Webpacker configuration, the filename will look something like `"/packs/media/images/tacos-abcd1234.jpg"`.
+In the example above, webpack will import `TacoImage` as a url to the file. In other words, an "image module" in webpack exports a single default value, a string, representing the location of the file. Based on the default Webpacker configuration, the filename will look something like `"/packs/media/images/tacos-abcd1234.jpg"`.
 
 Importing a image also works if you're using "CSS in JS" to style a React component.
 ```jsx
@@ -79,7 +79,7 @@ export default function ({ title }) {
 
 ### Images in CSS
 
-In Sprockets, when referencing images in CSS, you would use a special `image-url()` helper. In Webpack, simply use the standard `url()` expression in CSS with a relative path.
+In Sprockets, when referencing images in CSS, you would use a special `image-url()` helper. In webpack, simply use the standard `url()` expression in CSS with a relative path.
 
 ```css
 /* app/javascript/css/main.css */
@@ -91,7 +91,7 @@ The output for the style rule will, again, look something like `background-image
 
 ### Images in CSS within NPM modules
 
-One tricky bit worth mentioning is bundling images referenced in SCSS within an imported NPM module. For example, many jQuery plugins bundle their own SCSS and image assets. When Webpack processes this vendored CSS, you may see an error like the following, like in [this question on StackOverflow](https://stackoverflow.com/questions/58727976/import-images-of-an-npm-package-with-webpacker-and-rails):
+One tricky bit worth mentioning is bundling images referenced in SCSS within an imported NPM module. For example, many jQuery plugins bundle their own SCSS and image assets. When webpack processes this vendored CSS, you may see an error like the following, like in [this question on StackOverflow](https://stackoverflow.com/questions/58727976/import-images-of-an-npm-package-with-webpacker-and-rails):
 
 ```
 Module not found: Error: Can't resolve '../img/controls.png'
@@ -114,18 +114,18 @@ environment.loaders.get('sass').use.splice(-1, 0, {
   loader: 'resolve-url-loader'
 })
 ```
-This loader rule, inserted in the loader pipeline for SASS/SCSS files, will ensure the proper url is written to the CSS output by Webpack.
+This loader rule, inserted in the loader pipeline for SASS/SCSS files, will ensure the proper url is written to the CSS output by webpack.
 
 ### Images in Rails views
 
-You may be accustomed to `<%= lazy_image_tag 'tacos.jpg' %>` to reference a image bundled in the Rails asset pipeline. Webpack has a similar tag:
+You may be accustomed to `<%= lazy_image_tag 'tacos.jpg' %>` to reference a image bundled in the Rails asset pipeline. webpack has a similar tag:
 
 ```html
 <!-- app/views/lunches/index.html.erb -->
 
 <%= image_pack_tag 'media/images/guacamole.jpg' %>
 ```
-Note, since Webpacker 4, the prefix `media/` is necessary and the remaining path represents the location from your Webpack source path.
+Note, since Webpacker 4, the prefix `media/` is necessary and the remaining path represents the location from your webpack source path.
 
 There's a catch. This change may result in the following error:
 
@@ -137,15 +137,15 @@ Webpacker can't find media/images/guacamole.jpg in /path/to/project/public/packs
 ```
 However, if you use `<%= image_pack_tag 'media/images/tacos.jpg %>`, the taco image will happily renders. What gives?
 
-Your Rails app is not being selective about cuisine. The difference is, we earlier imported the `tacos.jpg` image in Webpack, but not `guacamole.jpg`.
+Your Rails app is not being selective about cuisine. The difference is, we earlier imported the `tacos.jpg` image in webpack, but not `guacamole.jpg`.
 
-One way to fix this issue is to import the `guacamole.jpg` image somewhere in your Webpack dependency graph. It's not necessary to grab a reference to the imported variable because we only care about the side effect of emitting the file for Rails to reference in the view.
+One way to fix this issue is to import the `guacamole.jpg` image somewhere in your webpack dependency graph. It's not necessary to grab a reference to the imported variable because we only care about the side effect of emitting the file for Rails to reference in the view.
 
 ```js
 import '../images/guacamole.jpg'
 ```
 
-Another way to fix this issue is to import _all_ images in the `app/javascript/images` directory. Webpack provides a special function to import many files in a directory in one expression: `require.context`. You might add this to your `application.js` pack:
+Another way to fix this issue is to import _all_ images in the `app/javascript/images` directory. webpack provides a special function to import many files in a directory in one expression: `require.context`. You might add this to your `application.js` pack:
 
 ```javascript
 // app/javascript/packs/application.js
@@ -166,7 +166,7 @@ To rename `app/javascript`, rename the directory and tell Rails about it in `con
 default: &default
   source_path: app/frontend
 ```
-To add to the set of resolved paths where Webpack should look for assets besides in `app/javascript`:
+To add to the set of resolved paths where webpack should look for assets besides in `app/javascript`:
 ```yaml
 default: &default
   resolved_paths:
@@ -175,13 +175,13 @@ default: &default
 
 ### Diving Deeper
 
-I have to admit, a few years ago, when I first heard about Webpack, I was super-confused. I understood it to be a JavaScript module bundler. _How on Earth does it handles images?_
+I have to admit, a few years ago, when I first heard about webpack, I was super-confused. I understood it to be a JavaScript module bundler. _How on Earth does it handles images?_
 
-The short answer, of course, is _it depends_. Generally, Webpack will treat everything it can understand as a JavaScript module. To help Webpack understand images, projects would add a "loader" (or loaders) to the Webpack configuration. A suitable loader would know how to handle an image file and output a representation of something, like an inlined base64 string, that can be manipulated in JavaScript.
+The short answer, of course, is _it depends_. Generally, webpack will treat everything it can understand as a JavaScript module. To help webpack understand images, projects would add a "loader" (or loaders) to the webpack configuration. A suitable loader would know how to handle an image file and output a representation of something, like an inlined base64 string, that can be manipulated in JavaScript.
 
-To help Webpack understand images, svg files, and fonts in your Rails project, Webpacker adds the `file-loader` package. This package will emit the imported file as a side effect of the build and return a path to the file as the module contents.
+To help webpack understand images, svg files, and fonts in your Rails project, Webpacker adds the `file-loader` package. This package will emit the imported file as a side effect of the build and return a path to the file as the module contents.
 
-For more on how Webpack works with images, check out the [asset management docs](https://webpack.js.org/guides/asset-management/#loading-images).
+For more on how webpack works with images, check out the [asset management docs](https://webpack.js.org/guides/asset-management/#loading-images).
 
 I also put together a sample Rails 6 Webpacker demo project on GitHub for more context:
 

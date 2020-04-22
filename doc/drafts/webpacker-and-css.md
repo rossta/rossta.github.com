@@ -61,7 +61,7 @@ app/
 import '../index.css'
 ```
 
-You don't need an `application.css` file. Let Webpack figure out the dependency graph. This can help, among other things, de-duplicate overlapping modules used on one page. Same goes for CSS.
+You don't need an `application.css` file. Let webpack figure out the dependency graph. This can help, among other things, de-duplicate overlapping modules used on one page. Same goes for CSS.
 
 
 ### Configuration

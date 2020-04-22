@@ -25,17 +25,17 @@ Leaning on prior experience, I found the problem, moved some files around, and p
 
 ![CI Screenshot: Precompile assets, 0:44](blog/webpack/overpack-after-fix.png)
 
-The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling Webpack assets on page refreshes would take a painfully long time.
+The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling webpack assets on page refreshes would take a painfully long time.
 
 So what were the changes?
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
 
 ### A Common Problem
 
-First, let's take a step back. If you're new to Webpack and Webpacker for Rails, chances are you may be making some simple mistakes.
+First, let's take a step back. If you're new to webpack and Webpacker for Rails, chances are you may be making some simple mistakes.
 
-I know this because I was once in your shoes struggling to learn how Webpack works. I've also spent a lot of time helping others on my team, on StackOverflow, and via [`rails/webpacker`](https://github.com/rails/webpacker) Github issues.
+I know this because I was once in your shoes struggling to learn how webpack works. I've also spent a lot of time helping others on my team, on StackOverflow, and via [`rails/webpacker`](https://github.com/rails/webpacker) Github issues.
 
 One of the most frequently-reported issues I've seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation can lead to failed deploys.
 
@@ -83,11 +83,11 @@ Webpack needs at least one **entry** point to build the dependency graph for pro
 
 > The Webpacker project refers to entries as **packs**.
 
-"Entry" is listed as the first key concept on Webpack's documentation site: https://webpack.js.org/concepts/#entry.
+"Entry" is listed as the first key concept on webpack's documentation site: https://webpack.js.org/concepts/#entry.
 
-Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs Webpack has to build.
+Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs webpack has to build.
 
-Since Webpack*er*, by default, treats *every file* in the `packs` directory as a separate entry, it will build a separate dependency graph for *every file* located there.
+Since webpack*er*, by default, treats *every file* in the `packs` directory as a separate entry, it will build a separate dependency graph for *every file* located there.
 
 That also means, for *every file* in the `packs` directory, there will be at least one, possibly more, files emitted as output in the `public` directory during precompilation. If you're not linking to these files anywhere in your app, then they don't need to be emitted as output. For a large project, that could be lot of unnecessary work.
 

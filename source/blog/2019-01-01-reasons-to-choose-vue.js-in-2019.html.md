@@ -16,7 +16,7 @@ I love building applications in Vue.js and here's why I think the future is look
 
 ### 1. No build step required
 
-A critical aspect of the Vue philosophy is it be easy to get started. Unlike some other popular frameworks, it's not necessary to use a complex build tool like Webpack to build an application with it. Just include a script tag pointing to the [latest release for development or production](https://vuejs.org/v2/guide/installation.html#Direct-lt-script-gt-Include), and you have access to the Vue runtime.
+A critical aspect of the Vue philosophy is it be easy to get started. Unlike some other popular frameworks, it's not necessary to use a complex build tool like webpack to build an application with it. Just include a script tag pointing to the [latest release for development or production](https://vuejs.org/v2/guide/installation.html#Direct-lt-script-gt-Include), and you have access to the Vue runtime.
 
 ```javascript
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
@@ -32,7 +32,7 @@ npm install -g @vue/cli
 vue create my-project
 ```
 
-This past year, the Vue core team re-wrote their command line interface from the ground up, resulting in Vue CLI 3. It's designed in such a way to promote best practices and a full-featured default Webpack configuration that should be easier to extend without making it difficult to upgrade, i.e., "no need to eject." Vue CLI provides a ton of useful additional features, including an interactive project initialization wizard (available through the terminal or a web-based UI), a plugin system to support generators and configuration for community add-ons, and the ability to specify alternative build targets, like web components or as libraries.
+This past year, the Vue core team re-wrote their command line interface from the ground up, resulting in Vue CLI 3. It's designed in such a way to promote best practices and a full-featured default webpack configuration that should be easier to extend without making it difficult to upgrade, i.e., "no need to eject." Vue CLI provides a ton of useful additional features, including an interactive project initialization wizard (available through the terminal or a web-based UI), a plugin system to support generators and configuration for community add-ons, and the ability to specify alternative build targets, like web components or as libraries.
 
 ### 3. Friendly learning curve
 

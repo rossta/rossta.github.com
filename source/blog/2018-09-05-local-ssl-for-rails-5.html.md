@@ -156,7 +156,7 @@ rails s -b 'ssl://127.0.0.1:$PORT?key=config/ssl/localhost.ross.key&cert=config/
 ```
 Puma also provides a hook to [set this binding in the config file](https://github.com/puma/puma/blob/395337df4a3b27cc14eeab048016fb1ee85d2f83/examples/config.rb#L79).
 
-If you're using Webpack with the `webpacker` gem to bundle javascript and other static assets, you will want to connect to the `webpack-dev-server` in development over SSL. This can be done in the `config/webpacker.yml` file:
+If you're using webpack with the `webpacker` gem to bundle javascript and other static assets, you will want to connect to the `webpack-dev-server` in development over SSL. This can be done in the `config/webpacker.yml` file:
 
 ```yml
 # config/webpacker.yml

@@ -12,7 +12,7 @@ tags:
   - Rails
 ---
 
-Webpack isn't just for bundling JavaScript. This post aims to serve as a guide for bundling CSS with Webpack
+Webpack isn't just for bundling JavaScript. This post aims to serve as a guide for bundling CSS with webpack
 
 While it's currently possible to use Webpacker and Sprockets side-by-side
 
@@ -75,7 +75,7 @@ app/
 import '../index.css'
 ```
 
-You don't need an `application.css` file. Let Webpack figure out the dependency graph. This can help, among other things, de-duplicate overlapping modules used on one page. Same goes for CSS.
+You don't need an `application.css` file. Let webpack figure out the dependency graph. This can help, among other things, de-duplicate overlapping modules used on one page. Same goes for CSS.
 
 
 ### Configuration

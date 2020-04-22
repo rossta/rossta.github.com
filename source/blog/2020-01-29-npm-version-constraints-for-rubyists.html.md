@@ -19,7 +19,7 @@ In this post, I want to answer the following question for Rubyists:
 
 To answer this question, we'll compare how Rubyists declare Ruby project dependencies in a `Gemfile` with conventions used to declare NPM module dependencies in a `package.json` file.
 
-Of note, some projects use both Gemfile and package.json. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with Webpack and related NPM dependencies to compile JavaScript assets.
+Of note, some projects use both Gemfile and package.json. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with webpack and related NPM dependencies to compile JavaScript assets.
 
 It might include a section like this:
 
@@ -31,11 +31,11 @@ It might include a section like this:
 ```
 If you're a Rubyist and the version syntax looks odd, then this post is for you.
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
 
 ## Version constraints in Gemfile
 
-Like the `Gemfile`, package.json has a convention to specify version constraints. Both Ruby and NPM dependencies usually follow SemVer, that will format a constraint as `major.minor.patch`, i.e. the declaration `"webpack": "4.41.2"` indicates Webpack major version 4, minor version 41, and patch version 2.
+Like the `Gemfile`, package.json has a convention to specify version constraints. Both Ruby and NPM dependencies usually follow SemVer, that will format a constraint as `major.minor.patch`, i.e. the declaration `"webpack": "4.41.2"` indicates webpack major version 4, minor version 41, and patch version 2.
 
 Where they differ is in the use of special characters to declare acceptable ranges. Let's refresh the conventions used in the Gemfile.
 

@@ -1,9 +1,9 @@
 ---
-title: 3 ways Webpack surprises web developers
+title: 3 ways webpack surprises web developers
 author: Ross Kaffenberger
 published: true
-summary: What I learned answering Webpack questions on StackOverflow for a month
-description: When I first started working with Webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.
+summary: What I learned answering webpack questions on StackOverflow for a month
+description: When I first started working with webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.
 pull_image: 'blog/stock/aaron-burden-balloons-unsplash.jpg'
 pull_image_caption: Photo by Aaron Burden on Unsplash
 series:
@@ -13,15 +13,15 @@ tags:
   - Webpack
 ---
 
-When I first started working with Webpack, I didn't realize how under-prepared I was. I was tasked with [integrating Webpack into a large Rails app](/blog/from-sprockets-to-webpack.html) and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience with the Rails asset pipeline. Many of these assumptions turned out to be wrong. This was frustrating and humbling.
+When I first started working with webpack, I didn't realize how under-prepared I was. I was tasked with [integrating webpack into a large Rails app](/blog/from-sprockets-to-webpack.html) and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience with the Rails asset pipeline. Many of these assumptions turned out to be wrong. This was frustrating and humbling.
 
-And after spending the last month answering Webpack questions on StackOverflow, I've come across plenty of folks going through some of the same mental hurdles I've experienced. I came away with some perspective on what about Webpack most commonly trips up developers.
+And after spending the last month answering webpack questions on StackOverflow, I've come across plenty of folks going through some of the same mental hurdles I've experienced. I came away with some perspective on what about webpack most commonly trips up developers.
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
 
-The intended audience for this post has a general notion of "why use Webpack" or "why use an asset bundler", but for more on that, I recommend [The Many Jobs of JS Build Tools](https://www.swyx.io/writing/jobs-of-js-build-tools/) and [Webpack from Nothing: What problem are we solving?](https://what-problem-does-it-solve.com/webpack/index.html). For a rigorous technical overview of the project, I suggest [the Webpack docs](https://webpack.js.org/); they have gotten quite good.
+The intended audience for this post has a general notion of "why use webpack" or "why use an asset bundler", but for more on that, I recommend [The Many Jobs of JS Build Tools](https://www.swyx.io/writing/jobs-of-js-build-tools/) and [webpack from Nothing: What problem are we solving?](https://what-problem-does-it-solve.com/webpack/index.html). For a rigorous technical overview of the project, I suggest [the webpack docs](https://webpack.js.org/); they have gotten quite good.
 
-For this post, we're going to look at three common surprises web developers face when learning Webpack: why using global variables doesn't behave the way you might think, how Webpack treats everything as a JavaScript module, and the big learning curve for configuring Webpack effectively.
+For this post, we're going to look at three common surprises web developers face when learning webpack: why using global variables doesn't behave the way you might think, how webpack treats everything as a JavaScript module, and the big learning curve for configuring webpack effectively.
 
 ### 1. Global variables are not your friend
 
@@ -47,9 +47,9 @@ And for better or worse, every Rails I've worked on, and it's been dozens over t
 
 This approach is typical with old-school bundlers like the Rails asset pipeline because they concatenate JavaScript dependencies in the global scope. This, despite the general notion that [global variables are bad](https://stackoverflow.com/questions/2613310/ive-heard-global-variables-are-bad-what-alternative-solution-should-i-use). Notably, the Rails asset pipeline came into existence before the rise of Node.js and, subsequently, formal JavaScript modules, and it never adapted. Many prefer this way of doing things. I still lean on global variables now and then.
 
-Things work differently in Webpack. It does not expose its bundled modules to the global scope by default. To reference code in another module, it expects explicit imports that reference that module's explicit exports. The scope in which modules are evaluated is local, not global, i.e., the contents of each file are wrapped in a function.
+Things work differently in webpack. It does not expose its bundled modules to the global scope by default. To reference code in another module, it expects explicit imports that reference that module's explicit exports. The scope in which modules are evaluated is local, not global, i.e., the contents of each file are wrapped in a function.
 
-Things are trickier if we expect to access bundled JavaScript from HTML, like `MyApp.fetchPosts()` above. Options include manually attaching variables to the global scope, e.g. `window.$ = require('jquery')` or modify the Webpack configuration to "expose" variables globally, as is demonstrated in this [StackOverflow post](https://stackoverflow.com/questions/58580996/unable-to-access-jquery-from-my-views-on-ror/58751163#58751163) (and many others).
+Things are trickier if we expect to access bundled JavaScript from HTML, like `MyApp.fetchPosts()` above. Options include manually attaching variables to the global scope, e.g. `window.$ = require('jquery')` or modify the webpack configuration to "expose" variables globally, as is demonstrated in this [StackOverflow post](https://stackoverflow.com/questions/58580996/unable-to-access-jquery-from-my-views-on-ror/58751163#58751163) (and many others).
 
 This serves as an illustration of how a legacy practice would be swimming upstream in a Webpacker-enabled app: it takes effort.
 
@@ -57,7 +57,7 @@ This serves as an illustration of how a legacy practice would be swimming upstre
 
 #### Webpack is a module bundler
 
-Webpack describes itself as ["a static module bundler for modern JavaScript applications"](https://webpack.js.org/conceptsl). For developers used to unfettered access to JavaScript global scope, the switch to working in a modular system comes as a surprise. I argue that adopting Webpack effectively means understanding JavaScript modules.
+Webpack describes itself as ["a static module bundler for modern JavaScript applications"](https://webpack.js.org/conceptsl). For developers used to unfettered access to JavaScript global scope, the switch to working in a modular system comes as a surprise. I argue that adopting webpack effectively means understanding JavaScript modules.
 
 > So what then is a JavaScript module?
 
@@ -71,17 +71,17 @@ In recent years, several popular JavaScript module definitions have become widel
 
 Webpack can be configured to recognize any of these module formats.
 
-Webpack transpiles your application's source files into JavaScript modules the browser can understand. It adds code to your bundle to tie these modules together. This has implications for how developers write code which means the old-school patterns that worked with the Rails asset pipeline may not work in the Webpack context.
+Webpack transpiles your application's source files into JavaScript modules the browser can understand. It adds code to your bundle to tie these modules together. This has implications for how developers write code which means the old-school patterns that worked with the Rails asset pipeline may not work in the webpack context.
 
 #### Avoid legacy code if you can
 
-[Some](https://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack) [of the](https://stackoverflow.com/questions/59042437/gmaps-with-rails-6-webpack) [most](https://stackoverflow.com/questions/59670743/leaflet-with-webpack-in-rails-6-l-timeline-is-not-a-function) [frequent](https://stackoverflow.com/questions/40575637/how-to-use-webpack-with-google-maps-api) Webpack issues that pop up on StackOverflow highlight this disparity between the context in which Webpack works best and the context for which legacy code was written.
+[Some](https://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack) [of the](https://stackoverflow.com/questions/59042437/gmaps-with-rails-6-webpack) [most](https://stackoverflow.com/questions/59670743/leaflet-with-webpack-in-rails-6-l-timeline-is-not-a-function) [frequent](https://stackoverflow.com/questions/40575637/how-to-use-webpack-with-google-maps-api) webpack issues that pop up on StackOverflow highlight this disparity between the context in which webpack works best and the context for which legacy code was written.
 
-Consider any jQuery plugin in your app that's more than a few years old; any one of them may not play nice with Webpack. The plugin system in a way is a relic of the pre-module era; attaching to a global variable was the easy way to reuse and reference functionality across the app.
+Consider any jQuery plugin in your app that's more than a few years old; any one of them may not play nice with webpack. The plugin system in a way is a relic of the pre-module era; attaching to a global variable was the easy way to reuse and reference functionality across the app.
 
-Many jQuery plugins (or many legacy plugins in general) have been written without awareness of JavaScript modules and assume execution within the global scope. Be ready to weigh the tradeoff of learning how to configure Webpack to play nicely with legacy code or replace it with something else altogether.
+Many jQuery plugins (or many legacy plugins in general) have been written without awareness of JavaScript modules and assume execution within the global scope. Be ready to weigh the tradeoff of learning how to configure webpack to play nicely with legacy code or replace it with something else altogether.
 
-In Webpack, global variables are not your friend, my friend.
+In webpack, global variables are not your friend, my friend.
 
 ### 2. Webpack treats _everything_ as a JavaScript module
 
@@ -89,15 +89,15 @@ Webpack is so committed to its "module bundler" role it treats other static asse
 
 > Say what?
 
-When I first learned this about Webpack, I was totally confused: How does Webpack produce stylesheets out of JS? How would I reference the an image tag's `src` for bundled images? What does it mean to import an _image module_ in JavaScript?
+When I first learned this about webpack, I was totally confused: How does webpack produce stylesheets out of JS? How would I reference the an image tag's `src` for bundled images? What does it mean to import an _image module_ in JavaScript?
 
-It helps to understand that Webpack must be configured, typically with [loaders](https://webpack.js.org/loaders/) or [plugins](https://webpack.js.org/plugins/), to handle different various files types as modules. How Webpack processes various file types as output depends which loaders are used.
+It helps to understand that webpack must be configured, typically with [loaders](https://webpack.js.org/loaders/) or [plugins](https://webpack.js.org/plugins/), to handle different various files types as modules. How webpack processes various file types as output depends which loaders are used.
 
 Many projects integrate with Babel to process JavaScript files written with ES2015+ syntax. CSS files might be bundled as JavaScript Blob objects that are dynamically inserted in the DOM; otherwise it can be extracted into a CSS stylesheet a side-effect of module compilation.
 
 Webpack only needs one JavaScript file in your source code as an entry point to produce a dependency graph of all the JavaScript, CSS, images, fonts, svg, etc. that you intend to bundle as static assets for the browser.
 
-An interesting consequence of Webpack putting JavaScript first is there only needs to be one entry point to produce both a JavaScript and a CSS bundle. In the Rails asset pipeline, the JavaScript and CSS source code is kept completely separate:
+An interesting consequence of webpack putting JavaScript first is there only needs to be one entry point to produce both a JavaScript and a CSS bundle. In the Rails asset pipeline, the JavaScript and CSS source code is kept completely separate:
 
 ```
 app/assets
@@ -119,26 +119,26 @@ The mixing of CSS bundled in JavaScript and treated as JavaScript modules has is
 
 ### 3. Webpack configuration is extremely pluggable
 
-There's a reason Webpack configuration has such a high barrier to entry: Webpack is the ultimate delegator.
+There's a reason webpack configuration has such a high barrier to entry: webpack is the ultimate delegator.
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">I continue to be amazed at how many learners seem to almost deliberately avoid reading the actual official docs for the tools they&#39;re trying to use. I keep seeing folks asking for Udemy courses and &quot;best tutorials&quot; and stuff.<br><br>Why do people avoid reading actual docs?</p>&mdash; Mark Erikson (@acemarke) <a href="https://twitter.com/acemarke/status/1213898963679633411?ref_src=twsrc%5Etfw">January 5, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-Coming from Rails, which famously values "convention over configuration", the ergonomics of setting up a Webpack configuration cause discomfort. It aims to be extremely flexible and extensible; to that end, it succeeds superbly. To serve this goal, Webpack provides a large array of [configuration options](https://webpack.js.org/configuration/). On top of that, most Webpack configurations bring in a number of loader and plugins, each of which have their own configuration requirements.
+Coming from Rails, which famously values "convention over configuration", the ergonomics of setting up a webpack configuration cause discomfort. It aims to be extremely flexible and extensible; to that end, it succeeds superbly. To serve this goal, webpack provides a large array of [configuration options](https://webpack.js.org/configuration/). On top of that, most webpack configurations bring in a number of loader and plugins, each of which have their own configuration requirements.
 
-Faced having to learn Webpack, Babel, PostCSS, not to mention, Webpacker's abstractions around Webpack, it's no wonder we're intimidated. That's a lot to wrap your head around.
+Faced having to learn webpack, Babel, PostCSS, not to mention, Webpacker's abstractions around webpack, it's no wonder we're intimidated. That's a lot to wrap your head around.
 
-One of Webpacker's goals, in a similar fashion to [create-react-app](https://github.com/facebook/create-react-app) and the [vue-cli](https://cli.vuejs.org/), is to provide a Webpack config with sane defaults, i.e. the "convention". Depending on your project's needs, these "out-of-the-box" setups may get you quite far. Unfortunately, for any non-trivial modification, like getting a large legacy library to work with global variables or optimizing your build time by splitting out vendor dependencies, developers must be prepared to dive into the documentation and search for answers far and wide on StackOverflow and Medium.
+One of Webpacker's goals, in a similar fashion to [create-react-app](https://github.com/facebook/create-react-app) and the [vue-cli](https://cli.vuejs.org/), is to provide a webpack config with sane defaults, i.e. the "convention". Depending on your project's needs, these "out-of-the-box" setups may get you quite far. Unfortunately, for any non-trivial modification, like getting a large legacy library to work with global variables or optimizing your build time by splitting out vendor dependencies, developers must be prepared to dive into the documentation and search for answers far and wide on StackOverflow and Medium.
 
 ![I'm not sure if I'm a good developer or good at googling](blog/good-developer-or-good-at-googling.png)
 
 ### 4. Bonus: Webpack is a powerful tool
 
-I've grown to love Webpack and, I admit, this appreciation was hard-earned. As I've gotten over the initial hurdles of making my Webpack config work for my projects, I've come to value a number of Webpack's benefits, including optimizing bundle size through [tree-shaking](https://webpack.js.org/guides/tree-shaking/), code splitting via [asynchronous dynamic imports](https://webpack.js.org/guides/code-splitting/#dynamic-imports) and the [split chunks plugin](https://webpack.js.org/plugins/split-chunks-plugin/) and support for [preloading and prefetching](https://webpack.js.org/guides/code-splitting/#prefetchingpreloading-modules). All of these features are virtually non-existent in the Rails asset pipeline.
+I've grown to love webpack and, I admit, this appreciation was hard-earned. As I've gotten over the initial hurdles of making my webpack config work for my projects, I've come to value a number of webpack's benefits, including optimizing bundle size through [tree-shaking](https://webpack.js.org/guides/tree-shaking/), code splitting via [asynchronous dynamic imports](https://webpack.js.org/guides/code-splitting/#dynamic-imports) and the [split chunks plugin](https://webpack.js.org/plugins/split-chunks-plugin/) and support for [preloading and prefetching](https://webpack.js.org/guides/code-splitting/#prefetchingpreloading-modules). All of these features are virtually non-existent in the Rails asset pipeline.
 
-These major strengths of Webpack all boil down to improving user experience: using it effectively can help improve metrics like [Time-to-Interactive](https://calendar.perfplanet.com/2017/time-to-interactive-measuring-more-of-the-user-experience/) and [First Contentful Paint](https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics#first_paint_and_first_contentful_paint). These things matter and are ever more crucial as we lean more heavily on client-side code build rich interfaces delivered across a widening array of devices and networks.
+These major strengths of webpack all boil down to improving user experience: using it effectively can help improve metrics like [Time-to-Interactive](https://calendar.perfplanet.com/2017/time-to-interactive-measuring-more-of-the-user-experience/) and [First Contentful Paint](https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics#first_paint_and_first_contentful_paint). These things matter and are ever more crucial as we lean more heavily on client-side code build rich interfaces delivered across a widening array of devices and networks.
 
-Webpack receives a fair number of criticisms regarding its complexity and some of its surprising traits, like the ones I highlighted here. To be fair, Webpack aims to solve a complex problem and solves it quite well. Other asset bundlers are worth your consideration, but, arguably, no other bundler has been as successful.
+Webpack receives a fair number of criticisms regarding its complexity and some of its surprising traits, like the ones I highlighted here. To be fair, webpack aims to solve a complex problem and solves it quite well. Other asset bundlers are worth your consideration, but, arguably, no other bundler has been as successful.
 
-As we saw in the [recent announcement from @dhh](https://twitter.com/dhh/status/1046634277985611776) and the release of Rails 6 last year, Webpack is now the default JavaScript compiler for Rails. Looks like Rails developers will be looking to adopt Webpack in their applications, though as we've seen today, they may be in for a few surprises.
+As we saw in the [recent announcement from @dhh](https://twitter.com/dhh/status/1046634277985611776) and the release of Rails 6 last year, webpack is now the default JavaScript compiler for Rails. Looks like Rails developers will be looking to adopt webpack in their applications, though as we've seen today, they may be in for a few surprises.
 
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Webpack is now the default JavaScript compiler for the upcoming Rails 6 🎉 <a href="https://t.co/LJzCSoPfCV">https://t.co/LJzCSoPfCV</a></p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/1046634277985611776?ref_src=twsrc%5Etfw">October 1, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">webpack is now the default JavaScript compiler for the upcoming Rails 6 🎉 <a href="https://t.co/LJzCSoPfCV">https://t.co/LJzCSoPfCV</a></p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/1046634277985611776?ref_src=twsrc%5Etfw">October 1, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

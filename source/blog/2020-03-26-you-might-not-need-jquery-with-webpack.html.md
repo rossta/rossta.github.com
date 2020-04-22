@@ -1,9 +1,9 @@
 ---
-title: jQuery plugins in Webpack without jQuery
+title: jQuery plugins in webpack without jQuery
 author: Ross Kaffenberger
 published: true
-summary: In Webpack, some dependencies are best served vanilla
-description: Upgrading jQuery plugins to work with Webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all.
+summary: In webpack, some dependencies are best served vanilla
+description: Upgrading jQuery plugins to work with webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all.
 pull_image: 'blog/stock/clint-patterson-exfrR9KkzlE-unsplash-resized.jpg'
 pull_image_caption: Photo by Clint Patterson on Unsplash
 series:
@@ -13,15 +13,15 @@ tags:
   - Webpack
 ---
 
-Have you seen this console error while trying to adopt Webpack?
+Have you seen this console error while trying to adopt webpack?
 
 ```sh
 Uncaught TypeError: $(...).myJqueryPlugin is not a function
 ```
 
-Assuming you installed it correctly, there could be a few explanations. In this post, we'll look one possible reason: with Webpack, your jQuery plugin _might_ not need jQuery.
+Assuming you installed it correctly, there could be a few explanations. In this post, we'll look one possible reason: with webpack, your jQuery plugin _might_ not need jQuery.
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using Webpack with Rails.
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
 
 ### Example: the Flickity plugin
 
@@ -39,13 +39,13 @@ $('.main-carousel').flickity({
 
 And that works fine. Except, `Flickity` is not really a just a jQuery plugin. More on that later.
 
-Let's say we have a Rails application that we've already set up to run Webpack(er) (or just plain Webpack) for compiling JavaScript source files for the browser. To add Flickity, we installed it via yarn:
+Let's say we have a Rails application that we've already set up to run webpack(er) (or just plain webpack) for compiling JavaScript source files for the browser. To add Flickity, we installed it via yarn:
 
 ```sh
 $ yarn add flickity
 ```
 
-In our module-based Webpack build, the usage is instead ideally:
+In our module-based webpack build, the usage is instead ideally:
 
 ```javascript
 // app/javascript/src/carousel.js
@@ -97,13 +97,13 @@ This is saying thath the file `path/to/flickity/js/index.js` is the entry point.
   return Flickity;
 });
 ```
-We can see this exports a module, either through the `define` function, for runtimes that support [Asynchronous Module Definition (AMD)](https://requirejs.org/docs/whyamd.html) format, or the `require` function, for runtimes that support [CommonJS](https://nodejs.org/docs/latest/api/modules.html) format. Webpack supports both.
+We can see this exports a module, either through the `define` function, for runtimes that support [Asynchronous Module Definition (AMD)](https://requirejs.org/docs/whyamd.html) format, or the `require` function, for runtimes that support [CommonJS](https://nodejs.org/docs/latest/api/modules.html) format. webpack supports both.
 
 ### jQuery not required
 
 Note also that this file does not require the `'jquery'` package. An interesting consequence of this is that it's not even possible to use Flickity with jQuery (at least via the NPM package alone). This recently came up in a [GitHub issue for the Webpacker project](https://github.com/rails/webpacker/issues/2456).
 
-In other words, the following code with Webpack:
+In other words, the following code with webpack:
 ```javascript
 // app/javascript/src/carousel.js
 import 'jquery'
@@ -135,6 +135,6 @@ The main takeaway here: if the library can be initialized without jQuery, there'
 
 ### Conclusion
 
-Unfortunately, jQuery plugins come in so many different flavors so not all of them can be used _without_ jQuery. In future posts, I'll discuss other techniques you can use to make jQuery work with Webpack.
+Unfortunately, jQuery plugins come in so many different flavors so not all of them can be used _without_ jQuery. In future posts, I'll discuss other techniques you can use to make jQuery work with webpack.
 
 If you find yourself in this position, make sure to understand the capability of the plugins you're using. Ask "do I have to use this plugin with jQuery?", consult the documentation and/or browse the source code as described in the article. If you're lucky, you may find they can work in either context such that you might not need jQuery at all.

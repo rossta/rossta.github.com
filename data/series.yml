@@ -1,7 +1,7 @@
 ---
 - - PDF Viewer
   - Building a PDF Viewer with Vue.js
-  - A demo app to render PDFs using PDF.js, Vue, Webpack, and the canvas element
+  - A demo app to render PDFs using PDF.js, Vue, webpack, and the canvas element
 - - Connect Four
   - Building Connect Four with Vue.js and Phoenix
   - Tackling multi-player game rendering, animation, and realtime interaction

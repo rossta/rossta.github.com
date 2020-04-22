@@ -1,9 +1,9 @@
 ---
-title: Using Webpack with Middleman
+title: Using webpack with Middleman
 author: Ross Kaffenberger
 published: true
 summary: 'Ditch Sprockets and embrace the external pipeline'
-description: 'Explaining how to integrate the Webpack asset management tool with the Ruby static web framework Middleman'
+description: 'Explaining how to integrate the webpack asset management tool with the Ruby static web framework Middleman'
 pull_image: 'blog/stock/tundra-hike-pexels-photo.jpg'
 category: Code
 tags:
@@ -16,12 +16,12 @@ I've [hosted this site on Github Pages](/blog/why-i-ditched-wordpress-for-github
 
 By far the biggest change was the [removal of the Sprockets](https://middlemanapp.com/advanced/asset_pipeline/) dependency for the asset pipeline. Sprockets was originally a big selling point for me when choosing Middleman years ago. As a Rails developer, I had a lot of familiarity with the Sprockets style directives for bundling JavaScript and CSS assets and could use the pipeline to transpile CoffeeScript and SCSS easily.
 
-Given the "explosion of front-end language and tooling" that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like [Grunt](http://gruntjs.com/), [Gulp](http://gulpjs.com/), [Webpack](https://webpack.github.io), [Browserify](http://browserify.org/), [Brunch](http://brunch.io/), [Brocolli](http://broccolijs.com/)---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the `external_pipeline` feature which allows "subprocesses" to run alongside the development server or build process.
+Given the "explosion of front-end language and tooling" that has happened over the past few years though, Sprockets has fallen behind in terms of speed and flexibility, among other things. With so many tools like [Grunt](http://gruntjs.com/), [Gulp](http://gulpjs.com/), [webpack](https://webpack.github.io), [Browserify](http://browserify.org/), [Brunch](http://brunch.io/), [Brocolli](http://broccolijs.com/)---to name a few---it would be unfeasible to support custom integrations for everything. Instead, Middleman now employs the `external_pipeline` feature which allows "subprocesses" to run alongside the development server or build process.
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated Webpack inside Middleman. Dev &amp; build modes</p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/580115759768059904">March 23, 2015</a></blockquote>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I surpise even myself sometimes. Middleman v4’s external pipeline feature is amazing. Integrated webpack inside Middleman. Dev &amp; build modes</p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/580115759768059904">March 23, 2015</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-In this post, I'll describe how I set up the external pipeline for Webpack. I'll be showing some Webpack configuration snippets to illustrate a few points but you can see the [full Webpack config file](https://github.com/rossta/rossta.github.com/blob/cc94b759ed742d571b2470777a0164ac43db9c73/webpack.config.js) for this site as of this writing as well.
+In this post, I'll describe how I set up the external pipeline for webpack. I'll be showing some webpack configuration snippets to illustrate a few points but you can see the [full webpack config file](https://github.com/rossta/rossta.github.com/blob/cc94b759ed742d571b2470777a0164ac43db9c73/webpack.config.js) for this site as of this writing as well.
 
 ### Before the upgrade
 
@@ -67,7 +67,7 @@ This configuration made it possible to require assets in JavaScript with the
 With Sprockets dropped in Middleman version 4, this approach would no longer be
 possible so I had to rethink the build pipeline. I preferred to support multiple
 bundles and also wanted to upgrade my custom JavaScript to ES2015 syntax. For
-this, [Webpack](https://webpack.github.io/) appeared to offer some nice advantages, though, many of the
+this, [webpack](https://webpack.github.io/) appeared to offer some nice advantages, though, many of the
 build tools and systems mentioned earlier would also make good choices and fit
 right into the new Middleman external pipeline feature.
 
@@ -94,7 +94,7 @@ $ npm install --save-dev webpack
 
 The external pipeline feature in Middleman provides a mechanism for the
 middleman development server to manage processes that live outside the Ruby
-runtime. For Webpack, this means telling Middleman how to trigger the [Webpack
+runtime. For webpack, this means telling Middleman how to trigger the [webpack
 compilation command](https://webpack.github.io/docs/tutorials/getting-started/#setup-compilation).
 
 In `config.rb`:
@@ -111,7 +111,7 @@ activate :external_pipeline,
 
 I copied this configuration directly from the [Middleman guides source](middleman/middleman-core/lib/middleman-core/extensions/external_pipeline.rb) which I learned made the same change recently.
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Commit upgrading Middleman Guides from Asset Pipeline to Webpack: <a href="https://t.co/uP4LH19SfJ">https://t.co/uP4LH19SfJ</a></p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/678711274516033536">December 20, 2015</a></blockquote>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Commit upgrading Middleman Guides from Asset Pipeline to webpack: <a href="https://t.co/uP4LH19SfJ">https://t.co/uP4LH19SfJ</a></p>&mdash; Thomas Reynolds (@tdreyno) <a href="https://twitter.com/tdreyno/status/678711274516033536">December 20, 2015</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 Specifying `activate :external_pipeline` enables Middleman's external pipeline
@@ -130,9 +130,9 @@ Middleman will trigger the `:command` in a thread and buffer its output to the M
 
 An optional `:latency` can be used to set the seconds of delay between changes and refreshes.
 
-### Setting up Webpack
+### Setting up webpack
 
-Webpack as a dizzying array of plugins and configuration options. The bare minimum to get JavaScript working with Webpack and Middleman is to set an `entry` option to declare the primary source file(s) entry point and where it should compile to as the `output`:
+Webpack as a dizzying array of plugins and configuration options. The bare minimum to get JavaScript working with webpack and Middleman is to set an `entry` option to declare the primary source file(s) entry point and where it should compile to as the `output`:
 
 ```javascript
 // webpack.config.js
@@ -154,9 +154,9 @@ module.exports = {
 };
 ```
 
-This is not a full Webpack tutorial, but it worth noting we can use Webpack to do:
+This is not a full webpack tutorial, but it worth noting we can use webpack to do:
 
-__Transpile from ES2015 syntax__. We can pull in Babel dependencies and desired presets from `npm` and declare `loaders` in Webpack config to customize the compilation stages. This meant I was able to rewrite much of my custom JavaScript from ES5 to ES2015 and replace Sprocket-style require comments with executable `import` statements.
+__Transpile from ES2015 syntax__. We can pull in Babel dependencies and desired presets from `npm` and declare `loaders` in webpack config to customize the compilation stages. This meant I was able to rewrite much of my custom JavaScript from ES5 to ES2015 and replace Sprocket-style require comments with executable `import` statements.
 
 ```sh
 $ npm install --save-dev babel babel-loader babel-preset-es2015 babel-preset-stage-0
@@ -186,7 +186,7 @@ module.exports = {
 ```
 
 __Declare global variables__. I rely on the jQuery `$` sign in enough places that
-I decided to configure Webpack to treat it as a global variable so it would be
+I decided to configure webpack to treat it as a global variable so it would be
 available in each of my JavaScript source files without declaring a separate
 `import` everywhere. This is done with the `webpack.ProvidePlugin`:
 
@@ -209,7 +209,7 @@ module.exports = {
 ```
 
 __Transpile SCSS to CSS__. Though Middleman still provides an integration with
-Compass, [word on the street](https://benfrain.com/lightning-fast-sass-compiling-with-libsass-node-sass-and-grunt-sass/) is that Node tools like `node-sass` out-perform the Ruby Compass implementation. With the node-sass and some additional Webpack dependencies, we can transpile SCSS with Webpack to a separate css bundle:
+Compass, [word on the street](https://benfrain.com/lightning-fast-sass-compiling-with-libsass-node-sass-and-grunt-sass/) is that Node tools like `node-sass` out-perform the Ruby Compass implementation. With the node-sass and some additional webpack dependencies, we can transpile SCSS with webpack to a separate css bundle:
 
 ```sh
 $ npm install --save-dev node-sass sass-loader extract-text-webpack-plugin
@@ -245,7 +245,7 @@ module.exports = {
 };
 ```
 
-__Enable feature flags__. [I love puts debugging](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html) so I've got quite a few log statements in my JavaScript code. I don't really want these log statements in the production build of the website, so I can use Webpack to allow me to enable logging only in development:
+__Enable feature flags__. [I love puts debugging](https://tenderlovemaking.com/2016/02/05/i-am-a-puts-debuggerer.html) so I've got quite a few log statements in my JavaScript code. I don't really want these log statements in the production build of the website, so I can use webpack to allow me to enable logging only in development:
 
 ```javascript
 // webpack.config.js
@@ -255,7 +255,7 @@ var definePlugin = new webpack.DefinePlugin({
 });
 ```
 
-I tell Webpack to make the `__DEVELOPMENT__` and `__PRODUCTION__` variables
+I tell webpack to make the `__DEVELOPMENT__` and `__PRODUCTION__` variables
 available based on the presence on the `BUILD_DEVELOPMENT` and
 `BUILD_PRODUCTION` environment variables. I pass these variables to the webpack
 commands I'm using in `config.rb` for the build and development Middleman
@@ -283,9 +283,9 @@ function log() {
 
 My development experience is greatly enhanced with the auto-recompile feature of
 webpack along with the `middleman-livereload` extension. Though I haven't tried
-the `webpack-dev-server` and [hot-reloading of Webpack modules](https://webpack.github.io/docs/hot-module-replacement-with-webpack.html), it seems possible to set this up to work with Middleman.
+the `webpack-dev-server` and [hot-reloading of webpack modules](https://webpack.github.io/docs/hot-module-replacement-with-webpack.html), it seems possible to set this up to work with Middleman.
 
-You can go much further with Webpack of course. For more info, check out the [Webpack guides](https://webpack.github.io/) and Pete Hunt's [Webpack How-to](https://github.com/petehunt/webpack-howto).
+You can go much further with webpack of course. For more info, check out the [webpack guides](https://webpack.github.io/) and Pete Hunt's [webpack How-to](https://github.com/petehunt/webpack-howto).
 
 ### Moving away from Sprockets
 

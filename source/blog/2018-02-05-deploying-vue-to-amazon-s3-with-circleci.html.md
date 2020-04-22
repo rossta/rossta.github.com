@@ -30,7 +30,7 @@ Here's an overview of the tools involved:
 
 ### From CodePen to Github
 
-Since my version of Connect Four up to this point has been [built and hosted entirely on CodePen](https://codepen.io/rossta/pen/VydJKG), my first step was to move the source code to Github. I initialized a new `vue-cli` (version 2) using the Webpack template.
+Since my version of Connect Four up to this point has been [built and hosted entirely on CodePen](https://codepen.io/rossta/pen/VydJKG), my first step was to move the source code to Github. I initialized a new `vue-cli` (version 2) using the webpack template.
 
 ```shell
 $ yarn global install vue-cli

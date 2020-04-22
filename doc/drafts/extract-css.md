@@ -14,9 +14,9 @@ When using `extract_css: true`, you'll need the stylesheet tag: `stylesheet_pack
 extract_css: false
 ```
 
-Let Webpack figure out the dependency graph. This can help, among other things, de-duplicate overlapping modules used on one page. Same goes for CSS.
+Let webpack figure out the dependency graph. This can help, among other things, de-duplicate overlapping modules used on one page. Same goes for CSS.
 
 Remember the rule from the previous section? "one entry point per page", i.e., "don't overpack".
 
 
-> So you know what you're doing and you want to do this anyway? Great! Have at it. This post is for Webpack(er) newbies, not you. I believe they'll be better off sticking to basics starting out.
+> So you know what you're doing and you want to do this anyway? Great! Have at it. This post is for webpack(er) newbies, not you. I believe they'll be better off sticking to basics starting out.
