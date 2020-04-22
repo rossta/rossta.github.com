@@ -1,7 +1,7 @@
 ---
 title: How to customize webpack for Rails apps
 author: Ross Kaffenberger
-published: false
+published: true
 summary: A closer look at @rails/webpacker configuration
 description: "Configuring webpack is precisely the main job of Webpacker's NPM package, @rails/webpacker. This post provides an overview of how to customize its default settings for your Rails application."
 pull_image: 'blog/stock/ingo-doerrie-dragonfly-unsplash.jpg'
@@ -15,7 +15,7 @@ tags:
 
 When [adjusting webpacker.yml](/blog/how-to-use-webpacker-yml.html) is not enough, it might be necessary to modify Webpacker's default webpack configuration. Configuring webpack is precisely the main job of Webpacker's NPM package, `@rails/webpacker`.
 
-This post provides an overview of how to customize its default settings for your Rails application. It is a followup to my last post on [understanding webpacker.yml](/blog/how-to-use-webpacker-yml.html).
+This post provides an overview of how to customize its default settings for your Rails application. It's a followup to my last post on [understanding webpacker.yml](/blog/how-to-use-webpacker-yml.html).
 
 > **tl;dr**
 >
@@ -31,7 +31,7 @@ Some things you might want to modify or change:
 
 * [Handling legacy jQuery plugins](#providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope)
 * [Loading dotenv ENV vars in webpack](#loading-dotenv-env-vars-in-webpack)
-* [Enabling webpack optimization (code sharing across bundles)](#enabling-webpack-optimization)
+* [Enabling webpack optimization (i.e., sharing code across bundles)](#enabling-webpack-optimization)
 * [Using modules aliases](#using-module-aliases)
 * [Changing the identifiers for CSS modules](#overriding-the-default-options-for-compiling-css-modules)
 
@@ -48,7 +48,7 @@ config/webpack
 └── test.js
 ```
 
-For experienced frontend developers wondering _where is `webpack.config.js`?_, it's here, as `config/webpack/{development,test,production}.js`. There is a separate config file for each Rails environment.
+For experienced frontend developers wondering _where is `webpack.config.js`?_, it's here, as `config/webpack/{development,test,production}.js`; there is a separate config file for each Rails environment.
 
 Running `./bin/webpack` is similar to typing out one the following commands to run `webpack` directly, depending on your current `RAILS_ENV`:
 
@@ -82,7 +82,7 @@ module.exports = environment.toWebpackConfig()
 
 ### Under the hood
 
-There's a problem though with making changes through an abstraction layer; it's hard to see what you want to change.
+There's a problem though with making changes through an abstraction layer; it's hard to see what you want to change. Since the API is not fully documented yet, you may need to do some digging.
 
 To print it out on the command line, here's a handy one-line script:
 
@@ -93,7 +93,7 @@ $ RAILS_ENV=development node -e 'console.dir(require("./config/webpack/developme
 
 [console.dir](https://nodejs.org/api/console.html#console_console_dir_obj_options) is a nice alternative to `console.log` for inspecting JavaScript objects.
 
-To dig in deeper, you may want to checkout [the source for the `Environment` class in the `@rails/webpacker` package](https://github.com/rails/webpacker/blob/40a171021f6a89117aed1317957199cf2ca72b98/package/environments/base.js#L123).
+To go deeper, you may want to checkout [the source for the `Environment` class in the `@rails/webpacker` package](https://github.com/rails/webpacker/blob/40a171021f6a89117aed1317957199cf2ca72b98/package/environments/base.js#L123).
 
 An `environment` instance has `loaders` and `plugins` properties that are each implemented as bespoke [`ConfigList`](https://github.com/rails/webpacker/blob/40a171021f6a89117aed1317957199cf2ca72b98/package/config_types/config_list.js#L5) objects that subclass JavaScript's `Array` class ([source](https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/package/config_types/config_list.js)).
 
@@ -103,9 +103,9 @@ The `environment.config` property is also useful is you want to simply override 
 
 ### Examples
 
-Here's the rub: Webpacker, in true Rails fashion, aims to provide convention over configuration but the design of webpack skews heavily in the other direction._Webpack_ is extremely flexible and malleable through its support for plugins and a large number of configurable options. There's no way the default Webpacker configuration can suit every use case for a diverse frontend landscape.
+Here's the rub: Webpacker, in true Rails fashion, aims to provide convention over configuration, however, the design of webpack skews heavily in the other direction: it is extremely flexible and malleable through its support for plugins and a large number of configurable options. Webpack is built to support a broad range of use cases to meet the needs of a diverse frontend landscape. Webpacker's opinionated approach may leave out something you need.
 
-This means there may come a time when you need to roll up your sleeves and peel back the abstraction layer and modify the base Webpacker `environment` object. At this point, it may help to read up on [the Webpacker docs for modifying the webpack configuration](https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#configuration).
+This means there may come a time when you need to roll up your sleeves and peel back the abstraction layer and modify the base Webpacker `environment` object. At this point, it may help to read up on [the Webpacker docs for modifying the webpack configuration](https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#configuration). Below are just a few examples.
 
 #### Providing jQuery as an import to legacy plugins and exposing to global scope
 
@@ -191,7 +191,7 @@ environment.splitChunks()
 
 See the [webpack splitChunks docs](https://webpack.js.org/plugins/split-chunks-plugin/) for more info.
 
-##### Using module aliases
+#### Using module aliases
 
 The Webpacker environment API also supports a `config.merge` function to override raw webpack config options. This example would allow you to import images from the `app/assets` directory using `import 'images/path/to/image.jpg'`.
 
@@ -213,7 +213,7 @@ Learn more in the [webpack resolve docs](https://webpack.js.org/configuration/re
 
 #### Overriding the default options for compiling CSS modules
 
-This change involves modifying an existing loader
+This change involves modifying an existing loader, which can be accessed using `environment.loaders.get(key)` and replacing its options property.
 
 ```javascript
 // config/webpack/environment.js
@@ -240,6 +240,6 @@ module.exports = environment
 
 ### Wrapping up
 
-In this post, I've attempted to shed some light on the role of the `@rails/webpacker` project in your Rails app. We demonstrated how the base webpack configuration is set up along with some examples to illustrate how one might modify and extend the config for selected use cases.
+In this post, I've attempted to shed some light on the role of the `@rails/webpacker` project in your Rails app. We demonstrated how the Webpacker wraps the default webpack configuration along with some examples to illustrate how one might modify and extend the config for selected use cases.
 
 For readers who need to go even further, there's no better place to go next than webpack's [Getting Started guide](https://webpack.js.org/guides/getting-started/).
