@@ -5,10 +5,304 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2020-04-11T00:00:00+00:00</updated>
+  <updated>2020-04-18T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>How to customize webpack for Rails apps</title>
+    <link rel="alternate" href="/blog/how-to-customize-webpack-for-rails-apps.html"/>
+    <id>/blog/how-to-customize-webpack-for-rails-apps.html</id>
+    <published>2020-04-18T00:00:00+00:00</published>
+    <updated>2020-04-18T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;When &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;adjusting webpacker.yml&lt;/a&gt; is not enough, it might be necessary to modify Webpacker's default webpack configuration. Configuring webpack is precisely the main job of Webpacker's NPM package, &lt;code&gt;@rails/webpacker&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This post provides an overview of how...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;When &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;adjusting webpacker.yml&lt;/a&gt; is not enough, it might be necessary to modify Webpacker&amp;#39;s default webpack configuration. Configuring webpack is precisely the main job of Webpacker&amp;#39;s NPM package, &lt;code&gt;@rails/webpacker&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This post provides an overview of how to customize its default settings for your Rails application. It&amp;#39;s a followup to my last post on &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;understanding webpacker.yml&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Use &lt;strong&gt;&lt;code&gt;webpacker.yml&lt;/code&gt;&lt;/strong&gt; to modify a &lt;strong&gt;limited&lt;/strong&gt; number of settings, some of which are shared between Rails and webpack.&lt;/p&gt;
+
+&lt;p&gt;Modify the base &lt;strong&gt;&lt;code&gt;@rails/webpacker&lt;/code&gt;&lt;/strong&gt; configuration for &lt;strong&gt;any&lt;/strong&gt; webpack-specific config options in JavaScript.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+      &lt;h2 id="at-a-glance" class="title title-h2"&gt;
+        &lt;a name="at-a-glance" class="anchor" href="#at-a-glance"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        At a glance
+      &lt;/h2&gt;
+    
+&lt;p&gt;In an ideal world, webpack configuration would be transparent to Rails developers. Let&amp;#39;s face it, most developers would rather spend their time building features than configuring their asset compilation process. Still, the base webpack configuration provided by &lt;code&gt;@rails/webpacker&lt;/code&gt; may not satisfy your application&amp;#39;s needs, so modifications may be inevitable.&lt;/p&gt;
+
+&lt;p&gt;Some things you might want to modify or change:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="#providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope"&gt;Handling legacy jQuery plugins&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#loading-dotenv-env-vars-in-webpack"&gt;Loading dotenv ENV vars in webpack&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#enabling-webpack-optimization"&gt;Enabling webpack optimization (i.e., sharing code across bundles)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#using-module-aliases"&gt;Using modules aliases&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="#overriding-the-default-options-for-compiling-css-modules"&gt;Changing the identifiers for CSS modules&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So, where to start?&lt;/p&gt;
+
+&lt;p&gt;First, we&amp;#39;ll take a look at the environment-specific JavaScript files Webpacker installs in the &lt;code&gt;config/webpack/&lt;/code&gt; directory within your Rails application:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ tree config/webpack
+config/webpack
+├── development.js
+├── environment.js
+├── production.js
+└── test.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For experienced frontend developers wondering &lt;em&gt;where is &lt;code&gt;webpack.config.js&lt;/code&gt;?&lt;/em&gt;, it&amp;#39;s here, as &lt;code&gt;config/webpack/{development,test,production}.js&lt;/code&gt;; there is a separate config file for each Rails environment.&lt;/p&gt;
+
+&lt;p&gt;Running &lt;code&gt;./bin/webpack&lt;/code&gt; is similar to typing out one the following commands to run &lt;code&gt;webpack&lt;/code&gt; directly, depending on your current &lt;code&gt;RAILS_ENV&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;RAILS_ENV=development yarn webpack --config ./config/webpack/development.js
+RAILS_ENV=test yarn webpack --config ./config/webpack/test.js
+RAILS_ENV=production yarn webpack --config ./config/webpack/production.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;These files are to webpack configuration what Ruby config files &lt;code&gt;config/environments/{development,test,production}.rb&lt;/code&gt; are Rails configuration: the place to customize environment-specific needs. Just as &lt;code&gt;config/application.rb&lt;/code&gt; is the shared configuration for all Rails environments, so is &lt;code&gt;config/webpack/environment.js&lt;/code&gt; for each of the environment-specific webpack config files.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;config/environment.js&lt;/code&gt; file is where the default webpack configuration is imported via &lt;code&gt;@rails/webpacker&lt;/code&gt;. The named import &lt;code&gt;environment&lt;/code&gt; is an abstraction around the webpack config. It provides &lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#configuration" target="_blank" rel="noopener noreferrer"&gt;its own API to support modification and extension&lt;/a&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
+
+module.exports = environment
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Each of the environment-specific files are more or less the same; they import the base &lt;code&gt;environment&lt;/code&gt; object and must convert it to a JavaScript object that matches the webpack configuration schema:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/development.js
+process.env.NODE_ENV = process.env.NODE_ENV || &amp;#39;development&amp;#39;
+
+const environment = require(&amp;#39;./environment&amp;#39;)
+
+module.exports = environment.toWebpackConfig()
+&lt;/code&gt;&lt;/pre&gt;
+
+      &lt;h3 id="under-the-hood" class="title title-h3"&gt;
+        &lt;a name="under-the-hood" class="anchor" href="#under-the-hood"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Under the hood
+      &lt;/h3&gt;
+    
+&lt;p&gt;There&amp;#39;s a problem though with making changes through an abstraction layer; it&amp;#39;s hard to see what you want to change. Since the API is not fully documented yet, you may need to do some digging.&lt;/p&gt;
+
+&lt;p&gt;To print it out on the command line, here&amp;#39;s a handy one-line script:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ RAILS_ENV=development node -e &amp;#39;console.dir(require(&amp;quot;./config/webpack/development&amp;quot;), { depth: null })&amp;#39;
+# displays entire webpack config object
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href="https://nodejs.org/api/console.html#console_console_dir_obj_options" target="_blank" rel="noopener noreferrer"&gt;console.dir&lt;/a&gt; is a nice alternative to &lt;code&gt;console.log&lt;/code&gt; for inspecting JavaScript objects.&lt;/p&gt;
+
+&lt;p&gt;To go deeper, you may want to checkout &lt;a href="https://github.com/rails/webpacker/blob/40a171021f6a89117aed1317957199cf2ca72b98/package/environments/base.js#L123" target="_blank" rel="noopener noreferrer"&gt;the source for the &lt;code&gt;Environment&lt;/code&gt; class in the &lt;code&gt;@rails/webpacker&lt;/code&gt; package&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;An &lt;code&gt;environment&lt;/code&gt; instance has &lt;code&gt;loaders&lt;/code&gt; and &lt;code&gt;plugins&lt;/code&gt; properties that are each implemented as bespoke &lt;a href="https://github.com/rails/webpacker/blob/40a171021f6a89117aed1317957199cf2ca72b98/package/config_types/config_list.js#L5" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;ConfigList&lt;/code&gt;&lt;/a&gt; objects that subclass JavaScript&amp;#39;s &lt;code&gt;Array&lt;/code&gt; class (&lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/package/config_types/config_list.js" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;).&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://webpack.js.org/concepts/#loaders" target="_blank" rel="noopener noreferrer"&gt;Loaders in webpack&lt;/a&gt; define transforms based on file type or name; they are analogous to preprocessors in the Sprockets. &lt;a href="https://webpack.js.org/concepts/#plugins" target="_blank" rel="noopener noreferrer"&gt;Plugins in webpack&lt;/a&gt; support a wider range of tasks, like optimization or moving/copying assets, by leveraging webpack&amp;#39;s exhaustive list of hooks to tap into the compilation process.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The &lt;code&gt;environment.config&lt;/code&gt; property is also useful is you want to simply override defaults with a raw object matching a portion of the webpack config schema.&lt;/p&gt;
+
+      &lt;h3 id="examples" class="title title-h3"&gt;
+        &lt;a name="examples" class="anchor" href="#examples"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Examples
+      &lt;/h3&gt;
+    
+&lt;p&gt;Here&amp;#39;s the rub: Webpacker, in true Rails fashion, aims to provide convention over configuration, however, the design of webpack skews heavily in the other direction: it is extremely flexible and malleable through its support for plugins and a large number of configurable options. Webpack is built to support a broad range of use cases to meet the needs of a diverse frontend landscape. Webpacker&amp;#39;s opinionated approach may leave out something you need.&lt;/p&gt;
+
+&lt;p&gt;This means there may come a time when you need to roll up your sleeves and peel back the abstraction layer and modify the base Webpacker &lt;code&gt;environment&lt;/code&gt; object. At this point, it may help to read up on &lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#configuration" target="_blank" rel="noopener noreferrer"&gt;the Webpacker docs for modifying the webpack configuration&lt;/a&gt;. Below are just a few examples.&lt;/p&gt;
+
+      &lt;h4 id="providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope" class="title title-h4"&gt;
+        &lt;a name="providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope" class="anchor" href="#providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Providing jQuery as an import to legacy plugins and exposing to global scope
+      &lt;/h4&gt;
+    
+&lt;p&gt;Here&amp;#39;s an example of how to &amp;quot;provide&amp;quot; a jQuery import to a legacy package that doesn&amp;#39;t understand modules and to &amp;quot;expose&amp;quot; the &lt;code&gt;$&lt;/code&gt; variable for the global scope (so you can use &lt;code&gt;$(...)&lt;/code&gt; expressions in raw &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; tags).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ yarn add expose-loader
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
+const webpack = require(&amp;#39;webpack&amp;#39;)
+
+// Adds `var jQuery = require(&amp;#39;jquery&amp;#39;) to legacy jQuery plugins
+environment.plugins.append(
+  &amp;#39;Provide&amp;#39;,
+  new webpack.ProvidePlugin({
+    $: &amp;#39;jquery&amp;#39;,
+    jQuery: &amp;#39;jquery&amp;#39;,
+    jquery: &amp;#39;jquery&amp;#39;,
+  }),
+)
+
+// Adds window.$ = require(&amp;#39;jquery&amp;#39;)
+environment.loaders.append(&amp;#39;jquery&amp;#39;, {
+  test: require.resolve(&amp;#39;jquery&amp;#39;),
+  use: [
+    {
+      loader: &amp;#39;expose-loader&amp;#39;,
+      options: &amp;#39;$&amp;#39;,
+    },
+  ],
+})
+
+module.exports = environment
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href="https://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack" target="_blank" rel="noopener noreferrer"&gt;This StackOverflow post&lt;/a&gt; provides more general context on making legacy jQuery play nice with webpack.&lt;/p&gt;
+
+      &lt;h4 id="loading-dotenv-env-vars-in-webpack" class="title title-h4"&gt;
+        &lt;a name="loading-dotenv-env-vars-in-webpack" class="anchor" href="#loading-dotenv-env-vars-in-webpack"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Loading dotenv ENV vars in webpack
+      &lt;/h4&gt;
+    
+&lt;p&gt;A nice feature of webpack and the default webpack configuration is that it will make ENV vars available to the build process. For example, using &lt;code&gt;process.ENV.MY_API_KEY&lt;/code&gt; will be compiled to &lt;code&gt;&amp;quot;my-api-key-value&amp;quot;&lt;/code&gt; in your webpack build. To emulate the behavior of the popular &lt;code&gt;dotenv-rails&lt;/code&gt; project, which can load ENV vars defined in &lt;code&gt;.env*&lt;/code&gt; files, you could add configuration as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;yarn add dotenv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+
+const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
+const webpack = require(&amp;#39;webpack&amp;#39;)
+const dotenv = require(&amp;#39;dotenv&amp;#39;)
+
+const dotenvFiles = [
+  `.env.${process.env.NODE_ENV}.local`,
+  &amp;#39;.env.local&amp;#39;,
+  `.env.${process.env.NODE_ENV}`,
+  &amp;#39;.env&amp;#39;,
+]
+dotenvFiles.forEach((dotenvFile) =&amp;gt; {
+  dotenv.config({ path: dotenvFile, silent: true })
+})
+
+module.exports = environment
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/env.md#environment-variables" target="_blank" rel="noopener noreferrer"&gt;Original source in the Webpacker docs&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h4 id="enabling-webpack-optimization" class="title title-h4"&gt;
+        &lt;a name="enabling-webpack-optimization" class="anchor" href="#enabling-webpack-optimization"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Enabling webpack optimization
+      &lt;/h4&gt;
+    
+&lt;p&gt;The &lt;code&gt;splitChunks&lt;/code&gt; API instructs webpack to share dependencies across bundles. Using this optimization step must be combined with different view helpers; see the&lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#add-splitchunks-webpack-v4" target="_blank" rel="noopener noreferrer"&gt;Webpacker docs&lt;/a&gt; for more info.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+
+// Enable the default config
+environment.splitChunks()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Tip: Use the &lt;code&gt;splitChunks&lt;/code&gt; API for solving the &amp;quot;page-specific JavaScript&amp;quot; problem with Webpacker.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;See the &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer"&gt;webpack splitChunks docs&lt;/a&gt; for more info.&lt;/p&gt;
+
+      &lt;h4 id="using-module-aliases" class="title title-h4"&gt;
+        &lt;a name="using-module-aliases" class="anchor" href="#using-module-aliases"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Using module aliases
+      &lt;/h4&gt;
+    
+&lt;p&gt;The Webpacker environment API also supports a &lt;code&gt;config.merge&lt;/code&gt; function to override raw webpack config options. This example would allow you to import images from the &lt;code&gt;app/assets&lt;/code&gt; directory using &lt;code&gt;import &amp;#39;images/path/to/image.jpg&amp;#39;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+const { resolve } = require(&amp;#39;path&amp;#39;);
+
+// Enable the default config
+environment.config.merge({
+  resolve: {
+    alias: {
+      images: resolve(&amp;#39;app/assets/images&amp;#39;),
+    }
+  }
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Learn more in the &lt;a href="https://webpack.js.org/configuration/resolve/" target="_blank" rel="noopener noreferrer"&gt;webpack resolve docs&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h4 id="overriding-the-default-options-for-compiling-css-modules" class="title title-h4"&gt;
+        &lt;a name="overriding-the-default-options-for-compiling-css-modules" class="anchor" href="#overriding-the-default-options-for-compiling-css-modules"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Overriding the default options for compiling CSS modules
+      &lt;/h4&gt;
+    
+&lt;p&gt;This change involves modifying an existing loader, which can be accessed using &lt;code&gt;environment.loaders.get(key)&lt;/code&gt; and replacing its options property.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
+const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
+
+const myCssLoaderOptions = {
+  modules: {
+    localIdentName: &amp;#39;[name]__[local]___[hash:base64:10]&amp;#39;,
+  },
+  sourceMap: true,
+}
+
+const CSSLoader = environment.loaders
+  .get(&amp;#39;moduleSass&amp;#39;)
+  .use
+  .find((el) =&amp;gt; el.loader === &amp;#39;css-loader&amp;#39;)
+
+CSSLoader.options = { ...CSSLoader.options, ...myCssLoaderOptions }
+
+module.exports = environment
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#overriding-loader-options-in-webpack-3-for-css-modules-etc" target="_blank" rel="noopener noreferrer"&gt;Original source in the Webpacker docs&lt;/a&gt;.&lt;/p&gt;
+
+      &lt;h3 id="wrapping-up" class="title title-h3"&gt;
+        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Wrapping up
+      &lt;/h3&gt;
+    
+&lt;p&gt;In this post, I&amp;#39;ve attempted to shed some light on the role of the &lt;code&gt;@rails/webpacker&lt;/code&gt; project in your Rails app. We demonstrated how the Webpacker wraps the default webpack configuration along with some examples to illustrate how one might modify and extend the config for selected use cases.&lt;/p&gt;
+
+&lt;p&gt;For readers who need to go even further, there&amp;#39;s no better place to go next than webpack&amp;#39;s &lt;a href="https://webpack.js.org/guides/getting-started/" target="_blank" rel="noopener noreferrer"&gt;Getting Started guide&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>Understanding webpacker.yml</title>
     <link rel="alternate" href="/blog/how-to-use-webpacker-yml.html"/>
@@ -1563,246 +1857,6 @@ import tail from &amp;#39;lodash/tail&amp;#39;
 &lt;p&gt;As we saw in the &lt;a href="https://twitter.com/dhh/status/1046634277985611776" target="_blank" rel="noopener noreferrer"&gt;recent announcement from @dhh&lt;/a&gt; and the release of Rails 6 last year, webpack is now the default JavaScript compiler for Rails. Looks like Rails developers will be looking to adopt webpack in their applications, though as we&amp;#39;ve seen today, they may be in for a few surprises.&lt;/p&gt;
 
 &lt;p&gt;&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;webpack is now the default JavaScript compiler for the upcoming Rails 6 🎉 &lt;a href="https://t.co/LJzCSoPfCV"&gt;&lt;a href="https://t.co/LJzCSoPfCV" target="_blank" rel="noopener noreferrer"&gt;https://t.co/LJzCSoPfCV&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&amp;mdash; DHH (@dhh) &lt;a href="https://twitter.com/dhh/status/1046634277985611776?ref_src=twsrc%5Etfw"&gt;October 1, 2018&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>Importing images with Webpacker</title>
-    <link rel="alternate" href="/blog/importing-images-with-webpacker.html"/>
-    <id>/blog/importing-images-with-webpacker.html</id>
-    <published>2019-12-18T00:00:00+00:00</published>
-    <updated>2019-12-18T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;webpack isn't just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;In this post, we'll demonstrate how to reference Webpacker...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;webpack isn&amp;#39;t just for JavaScript. You can bundle images with it too. &lt;a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"&gt;Webpacker&lt;/a&gt; makes it relatively easy to work with images, but it is admittedly confusing at first: &lt;em&gt;Images in JavaScript?&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;In this post, we&amp;#39;ll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include &lt;a href="https://yarnpkg.com/" target="_blank" rel="noopener noreferrer"&gt;yarn&lt;/a&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using webpack with Rails.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-      &lt;h3 id="folder-structure" class="title title-h3"&gt;
-        &lt;a name="folder-structure" class="anchor" href="#folder-structure"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Folder structure
-      &lt;/h3&gt;
-    
-&lt;p&gt;First, where should you put your images? It doesn&amp;#39;t matter. The easiest place to start is under your &lt;code&gt;app/javascript&lt;/code&gt; folder, the default source path for Webpacker, such as &lt;code&gt;app/javascript/images&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;For the rest of this guide, we&amp;#39;ll assume the following directory structure and files:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;app/javascript
-├── components
-│   └── Taco.js
-├── css
-│   ├── main.css
-├── images
-│   ├── burritos.jpg
-│   ├── guacamole.jpg
-│   └── tacos.jpg
-└── packs
-    └── application.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Isn&amp;#39;t weird to put images and css in a folder called &amp;quot;javascript&amp;quot;? Depends. If you consider, from webpack&amp;#39;s perspective, everything is a JavaScript module, it may not be so strange. Otherwise, it&amp;#39;s possible to rename &lt;code&gt;app/javascript&lt;/code&gt; or place your images elsewhere. More on that below.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-      &lt;h3 id="images-in-js" class="title title-h3"&gt;
-        &lt;a name="images-in-js" class="anchor" href="#images-in-js"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Images in JS
-      &lt;/h3&gt;
-    
-&lt;p&gt;To reference an image from JavaScript in your Webpacker build, simply import it like any other module. React is not required for this to work ;)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascripts/components/Taco.js
-import TacoImage from &amp;#39;../images/tacos.jpg&amp;#39;
-
-export default function({ title }) {
-  return `
-  &amp;lt;div&amp;gt;
-    &amp;lt;h1&amp;gt;${title}&amp;lt;/h1&amp;gt;
-    &amp;lt;p&amp;gt;&amp;lt;img src=${TacoImage} alt=&amp;quot;Tacos, yum&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
-  &amp;lt;/div&amp;gt;
-  `
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In the example above, webpack will import &lt;code&gt;TacoImage&lt;/code&gt; as a url to the file. In other words, an &amp;quot;image module&amp;quot; in webpack exports a single default value, a string, representing the location of the file. Based on the default Webpacker configuration, the filename will look something like &lt;code&gt;&amp;quot;/packs/media/images/tacos-abcd1234.jpg&amp;quot;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Importing a image also works if you&amp;#39;re using &amp;quot;CSS in JS&amp;quot; to style a React component.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="jsx"&gt;import React from &amp;#39;react&amp;#39;
-
-import TacoImage from &amp;#39;../images/tacos.jpg&amp;#39;
-
-const styles = {
-  backgroundImage: `url(${TacoImage})`,
-}
-
-export default function ({ title }) {
-  return (
-    &amp;lt;div style={styles}&amp;gt;
-      {title}!
-    &amp;lt;/div&amp;gt;
-  )
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="images-in-css" class="title title-h3"&gt;
-        &lt;a name="images-in-css" class="anchor" href="#images-in-css"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Images in CSS
-      &lt;/h3&gt;
-    
-&lt;p&gt;In Sprockets, when referencing images in CSS, you would use a special &lt;code&gt;image-url()&lt;/code&gt; helper. In webpack, simply use the standard &lt;code&gt;url()&lt;/code&gt; expression in CSS with a relative path.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="css"&gt;/* app/javascript/css/main.css */
-.burritos {
-  background-image: url(&amp;quot;../images/burritos.jpg&amp;quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The output for the style rule will, again, look something like &lt;code&gt;background-image: url(/packs/media/images/burritos-efgh5678.jpg);&lt;/code&gt;. This technique will also work for image paths in CSS Modules.&lt;/p&gt;
-
-      &lt;h3 id="images-in-css-within-npm-modules" class="title title-h3"&gt;
-        &lt;a name="images-in-css-within-npm-modules" class="anchor" href="#images-in-css-within-npm-modules"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Images in CSS within NPM modules
-      &lt;/h3&gt;
-    
-&lt;p&gt;One tricky bit worth mentioning is bundling images referenced in SCSS within an imported NPM module. For example, many jQuery plugins bundle their own SCSS and image assets. When webpack processes this vendored CSS, you may see an error like the following, like in &lt;a href="https://stackoverflow.com/questions/58727976/import-images-of-an-npm-package-with-webpacker-and-rails" target="_blank" rel="noopener noreferrer"&gt;this question on StackOverflow&lt;/a&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Module not found: Error: Can&amp;#39;t resolve &amp;#39;../img/controls.png&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The problem is the path does not resolve properly relative to the output for this vendored SCSS. From the &lt;a href="https://github.com/rails/webpacker/blob/76b491750993fada8b0b0cc2546dfcfbc4aaae13/docs/css.md#resolve-url-loader" target="_blank" rel="noopener noreferrer"&gt;Webpacker docs&lt;/a&gt;:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Since Sass/libsass does not provide url rewriting, all linked assets must be relative to the output. Add the missing url rewriting using the resolve-url-loader. Place it directly after the sass-loader in the loader chain.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;To fix this, you may need to get your hands dirty with some Webpacker configuration. Add the &lt;code&gt;resolve-url-loader&lt;/code&gt; and configure in &lt;code&gt;config/webpack/environment.js&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="shell"&gt;yarn add resolve-url-loader
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
-const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
-
-// resolve-url-loader must be used before sass-loader
-environment.loaders.get(&amp;#39;sass&amp;#39;).use.splice(-1, 0, {
-  loader: &amp;#39;resolve-url-loader&amp;#39;
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This loader rule, inserted in the loader pipeline for SASS/SCSS files, will ensure the proper url is written to the CSS output by webpack.&lt;/p&gt;
-
-      &lt;h3 id="images-in-rails-views" class="title title-h3"&gt;
-        &lt;a name="images-in-rails-views" class="anchor" href="#images-in-rails-views"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Images in Rails views
-      &lt;/h3&gt;
-    
-&lt;p&gt;You may be accustomed to &lt;code&gt;&amp;lt;%= lazy_image_tag &amp;#39;tacos.jpg&amp;#39; %&amp;gt;&lt;/code&gt; to reference a image bundled in the Rails asset pipeline. webpack has a similar tag:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;!-- app/views/lunches/index.html.erb --&amp;gt;
-
-&amp;lt;%= image_pack_tag &amp;#39;media/images/guacamole.jpg&amp;#39; %&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note, since Webpacker 4, the prefix &lt;code&gt;media/&lt;/code&gt; is necessary and the remaining path represents the location from your webpack source path.&lt;/p&gt;
-
-&lt;p&gt;There&amp;#39;s a catch. This change may result in the following error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Webpacker::Manifest::MissingEntryError in Lunches#index
-Showing /path/to/project/app/views/lunches/index.html.erb where line #4 raised:
-
-Webpacker can&amp;#39;t find media/images/guacamole.jpg in /path/to/project/public/packs/manifest.json.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;However, if you use &lt;code&gt;&amp;lt;%= image_pack_tag &amp;#39;media/images/tacos.jpg %&amp;gt;&lt;/code&gt;, the taco image will happily renders. What gives?&lt;/p&gt;
-
-&lt;p&gt;Your Rails app is not being selective about cuisine. The difference is, we earlier imported the &lt;code&gt;tacos.jpg&lt;/code&gt; image in webpack, but not &lt;code&gt;guacamole.jpg&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;One way to fix this issue is to import the &lt;code&gt;guacamole.jpg&lt;/code&gt; image somewhere in your webpack dependency graph. It&amp;#39;s not necessary to grab a reference to the imported variable because we only care about the side effect of emitting the file for Rails to reference in the view.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="js"&gt;import &amp;#39;../images/guacamole.jpg&amp;#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Another way to fix this issue is to import &lt;em&gt;all&lt;/em&gt; images in the &lt;code&gt;app/javascript/images&lt;/code&gt; directory. webpack provides a special function to import many files in a directory in one expression: &lt;code&gt;require.context&lt;/code&gt;. You might add this to your &lt;code&gt;application.js&lt;/code&gt; pack:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/packs/application.js
-
-require.context(&amp;#39;../images&amp;#39;, true)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This expression will recursively require all the files in the &lt;code&gt;images&lt;/code&gt; directory. As a result, we can now render &lt;code&gt;guacamole.jpg&lt;/code&gt; in a Rails view.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Note: I only recommend using &lt;code&gt;require.context&lt;/code&gt; for your images if you need to render them in your Rails views; &lt;code&gt;require.context&lt;/code&gt; is NOT necessary to import images into JS files like your React components, as illustrated earlier.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-      &lt;h3 id="reconfiguring" class="title title-h3"&gt;
-        &lt;a name="reconfiguring" class="anchor" href="#reconfiguring"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Reconfiguring
-      &lt;/h3&gt;
-    
-&lt;p&gt;If you don&amp;#39;t feel comfortable with &lt;code&gt;app/javascript&lt;/code&gt; as the source directory for &lt;code&gt;images&lt;/code&gt;, you can either rename the source path or add to the set of resolved paths.&lt;/p&gt;
-
-&lt;p&gt;To rename &lt;code&gt;app/javascript&lt;/code&gt;, rename the directory and tell Rails about it in &lt;code&gt;config/webpacker.yml&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;default: &amp;amp;default
-  source_path: app/frontend
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To add to the set of resolved paths where webpack should look for assets besides in &lt;code&gt;app/javascript&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;default: &amp;amp;default
-  resolved_paths:
-    - app/assets
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="diving-deeper" class="title title-h3"&gt;
-        &lt;a name="diving-deeper" class="anchor" href="#diving-deeper"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Diving Deeper
-      &lt;/h3&gt;
-    
-&lt;p&gt;I have to admit, a few years ago, when I first heard about webpack, I was super-confused. I understood it to be a JavaScript module bundler. &lt;em&gt;How on Earth does it handles images?&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;The short answer, of course, is &lt;em&gt;it depends&lt;/em&gt;. Generally, webpack will treat everything it can understand as a JavaScript module. To help webpack understand images, projects would add a &amp;quot;loader&amp;quot; (or loaders) to the webpack configuration. A suitable loader would know how to handle an image file and output a representation of something, like an inlined base64 string, that can be manipulated in JavaScript.&lt;/p&gt;
-
-&lt;p&gt;To help webpack understand images, svg files, and fonts in your Rails project, Webpacker adds the &lt;code&gt;file-loader&lt;/code&gt; package. This package will emit the imported file as a side effect of the build and return a path to the file as the module contents.&lt;/p&gt;
-
-&lt;p&gt;For more on how webpack works with images, check out the &lt;a href="https://webpack.js.org/guides/asset-management/#loading-images" target="_blank" rel="noopener noreferrer"&gt;asset management docs&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I also put together a sample Rails 6 Webpacker demo project on GitHub for more context:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/images" target="_blank" rel="noopener noreferrer"&gt;Images in JS, CSS, and Rails&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/react-image" target="_blank" rel="noopener noreferrer"&gt;Images with CSS-in-JS in a React app&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </content>
   </entry>
 </feed>
