@@ -1,5 +1,5 @@
 ---
-title: '25 reasons to switch to webpack(er)'
+title: '25 reasons to switch to Webpack(er)'
 author: Ross Kaffenberger
 published: true
 summary: Leaving behind the Rails asset pipeline

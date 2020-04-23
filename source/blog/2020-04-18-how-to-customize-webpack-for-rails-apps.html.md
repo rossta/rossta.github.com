@@ -60,7 +60,7 @@ RAILS_ENV=production yarn webpack --config ./config/webpack/production.js
 
 These files are to webpack configuration what Ruby config files `config/environments/{development,test,production}.rb` are Rails configuration: the place to customize environment-specific needs. Just as `config/application.rb` is the shared configuration for all Rails environments, so is `config/webpack/environment.js` for each of the environment-specific webpack config files.
 
-The `config/environment.js` file is where the default webpack configuration is imported via `@rails/webpacker`. The named import `environment` is an abstraction around the webpack config. It provides [its own API to support modification and extension](https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#configuration).
+The `config/webpack/environment.js` file is where the default webpack configuration is imported via `@rails/webpacker`. The named import `environment` is an abstraction around the webpack config. It provides [its own API to support modification and extension](https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#configuration).
 
 ```javascript
 // config/webpack/environment.js
