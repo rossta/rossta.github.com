@@ -1,5 +1,5 @@
 ---
-title: How to customize webpack for Rails apps
+title: How to customize webpack in Rails apps
 author: Ross Kaffenberger
 published: true
 summary: A closer look at @rails/webpacker configuration
