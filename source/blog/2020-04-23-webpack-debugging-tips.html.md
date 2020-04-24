@@ -13,6 +13,8 @@ tags:
   - Webpack
 ---
 
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
+
 The Webpacker configuration is JavaScript module consumable in Node.js. To print it out on the command line, here's a handy one-line script:
 
 ```sh

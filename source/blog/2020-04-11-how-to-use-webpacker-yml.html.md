@@ -32,6 +32,8 @@ That's where `webpacker.yml` comes in.
 
 This file is read both Ruby code supplied by the Webpacker gem in the Rails server process and the JavaScript process that generates the webpack configuration via the `@rails/webpacker` NPM package. It supports a number of YAML entries which I'll describe in more detail in the [reference guide](#reference-guide).
 
+> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
+
 ### Creating and updating
 
 Webpacker expects to find this file at `config/webpacker.yml` within your Rails project. It is installed via the following command, provided by the Webpacker gem.
