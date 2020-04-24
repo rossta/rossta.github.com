@@ -20,8 +20,14 @@
     </author>
     <summary type="html">&lt;p&gt;When &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;adjusting webpacker.yml&lt;/a&gt; is not enough, it might be necessary to modify Webpacker's default webpack configuration. Configuring webpack is precisely the main job of Webpacker's NPM package, &lt;code&gt;@rails/webpacker&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;This post provides an overview of how...&lt;/p&gt;</summary>
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn...&lt;/p&gt;
+&lt;/blockquote&gt;</summary>
     <content type="html">&lt;p&gt;When &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;adjusting webpacker.yml&lt;/a&gt; is not enough, it might be necessary to modify Webpacker&amp;#39;s default webpack configuration. Configuring webpack is precisely the main job of Webpacker&amp;#39;s NPM package, &lt;code&gt;@rails/webpacker&lt;/code&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using webpack with Rails.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;This post provides an overview of how to customize its default settings for your Rails application. It&amp;#39;s a followup to my last post on &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;understanding webpacker.yml&lt;/a&gt;.&lt;/p&gt;
 
@@ -336,6 +342,10 @@ module.exports = environment
 &lt;p&gt;That&amp;#39;s where &lt;code&gt;webpacker.yml&lt;/code&gt; comes in.&lt;/p&gt;
 
 &lt;p&gt;This file is read both Ruby code supplied by the Webpacker gem in the Rails server process and the JavaScript process that generates the webpack configuration via the &lt;code&gt;@rails/webpacker&lt;/code&gt; NPM package. It supports a number of YAML entries which I&amp;#39;ll describe in more detail in the &lt;a href="#reference-guide"&gt;reference guide&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using webpack with Rails.&lt;/p&gt;
+&lt;/blockquote&gt;
 
       &lt;h3 id="creating-and-updating" class="title title-h3"&gt;
         &lt;a name="creating-and-updating" class="anchor" href="#creating-and-updating"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
