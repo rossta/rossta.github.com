@@ -1,5 +1,5 @@
 ---
-title: Inspect the Rails webpack config on the console
+title: Debugging the Rails webpack config
 author: Ross Kaffenberger
 published: false
 summary: Webpack on Rails quick tip
@@ -13,9 +13,11 @@ tags:
   - Webpack
 ---
 
+It's nice that Rails Webpack abstracts away the webpack config until you need to peek inside to make changes. In [the previous post](/blog/how-to-customize-webpack-for-rails-apps.html), I demonstrated _how_ you can make changes. To verify those changes or inspect the config for its current settings, read on.
+
 > [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
 
-It's nice that Rails Webpack abstracts away the webpack config until you need to peek inside to make changes. In [the previous post](/blog/how-to-customize-webpack-for-rails-apps.html), I demonstrated _how_ you can make changes. To verify those changes or inspect the config for its current settings, read on.
+> For the following examples, I'm using Node v12.13.1.
 
 ### The one-liner
 
@@ -68,9 +70,20 @@ undefined
 ```
 As with the script I showed earlier, use `test` or `production` for `RAILS_ENV` and `NODE_ENV` when starting node to inspect the configs for the other environments.
 
-### The node debugger
+From the node console, you can also access and play around with the Webpack `environment` object directly:
 
-While the above examples help inspect the config outside the context of a webpack build, it may help to debug the config within the build process itself. It's possible to [use the `debugger` provided by Chrome DevTools on a Node.js process](https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27) (as opposed to a browser's JavaScript process).
+```javascript
+> const { environment } = require('@rails/webpacker')
+undefined
+> environment.plugins.get('Manifest')
+// displays configured WebpackAssestsManifest plugin
+```
+
+### Debugging with DevTools
+
+While the above examples help inspect the webpack config in a REPL, it may help to debug the config within the build process itself. It's possible to [use the `debugger` provided by Chrome DevTools on a Node.js process](https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27) (as opposed to a browser's JavaScript process).
+
+> For the following examples, I'm using Chrome Version 80.0.3987.163
 
 We could, for example, drop a `debugger;` statement into our Webpacker webpack config:
 
@@ -108,9 +121,55 @@ Visit `chrome://inspect` in your Chrome browser and we can find a link for our r
 ![Screenshot of the chrome://inspect page](blog/webpack/chrome-inspect-main.png)
 
 This will start a instance of the DevTools for your Node process where we can click "Play" to resume execution:
-![Screenshot of webpack debugger start](blog/webpack/chrome-inspect-webpack-debug-1.png)
+![Screenshot of Chrome DevTools debugger start](blog/webpack/chrome-inspect-webpack-debug-1.png)
 
 The process halts when it hits our `debugger` statement and we can modify values on the console:
-![Screenshot of webpack debugger console](blog/webpack/chrome-inspect-webpack-debug-2.png)
+![Screenshot of Chrome DevTools console](blog/webpack/chrome-inspect-webpack-debug-2.png)
+
+For larger (or misconfigured) projects, you may experience memory usage issues with the webpack build. The DevTools debugger also provides a Memory tab for taking heap snapshots and tracking down the memory hogs in your build process.
+
+![Screenshot of DevTools Memory tab](blog/webpack/chrome-inpsect-memory-tab.png)
+![Screenshot of DevTools heap snapshot](blog/webpack/chrome-inpsect-heap-snapshot.png)
+
+### Speed measure plugin
+
+```
+yarn add speed-measure-webpack-plugin
+```
+
+```javascript
+process.env.NODE_ENV = process.env.NODE_ENV || 'production'
+
+const environment = require('./environment')
+
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
+const smp = new SpeedMeasurePlugin()
+
+module.exports = smp.wrap(environment.toWebpackConfig())
+```
+
+```
+$ RAILS_ENV=production NODE_ENV=production ./bin/webpack
+```
+
+```
+ SMP  ⏱
+General output time took 3.094 secs
+
+ SMP  ⏱  Plugins
+CaseSensitivePathsPlugin took 0.391 secs
+TerserPlugin took 0.306 secs
+WebpackAssetsManifest took 0.066 secs
+CompressionPlugin took 0.019 secs
+MiniCssExtractPlugin took 0.001 secs
+OptimizeCssAssetsWebpackPlugin took 0.001 secs
+EnvironmentPlugin took 0 secs
+
+ SMP  ⏱  Loaders
+modules with no loaders took 1.27 secs
+  module count = 365
+babel-loader took 0.824 secs
+  module count = 4
+```
 
 ### Wrapping up
