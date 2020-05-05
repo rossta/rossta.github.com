@@ -1,9 +1,9 @@
 ---
-title: Debugging the Rails webpack config
+title: How to debug webpack on Rails
 author: Ross Kaffenberger
 published: false
-summary: Webpack on Rails quick tip
-description: webpack debugging tips
+summary: Tips for debugging your Webpacker config and build output
+description: Understanding your Rails webpack configuration and build output can be a little confusing, especially if you're new to either Rails or webpack. This post contains a few tips for debugging your Webpacker setup, some specific to Rails Webpacker, some generally applicable to webpack.
 pull_image: 'blog/stock/alan-emery-beetle-unsplash.jpg'
 pull_image_caption: Photo by Alan Emery on Unsplash
 series:
@@ -13,7 +13,7 @@ tags:
   - Webpack
 ---
 
-It's nice that Rails Webpack abstracts away the webpack config until you need to peek inside to make changes. In [the previous post](/blog/how-to-customize-webpack-for-rails-apps.html), I demonstrated _how_ you can make changes. To verify those changes or inspect the config for its current settings, read on.
+It's nice that the Rails Webpacker gem and NPM package abstracts your webpack config... that is until you need to peek inside to make changes. In [the previous post](/blog/how-to-customize-webpack-for-rails-apps.html), I demonstrated _how_ you can make changes. To verify those changes or inspect the config for its current settings, read on.
 
 > [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
 
@@ -21,7 +21,7 @@ It's nice that Rails Webpack abstracts away the webpack config until you need to
 
 ### The one-liner
 
-Here's a quick one-liner for printing the entire webpack config in development:
+Here's a quick one-liner for printing the entire Rails webpack config in development:
 ```sh
 $ RAILS_ENV=development node -e 'console.dir(require("./config/webpack/development"), { depth: null })'
 ```
@@ -129,14 +129,19 @@ The process halts when it hits our `debugger` statement and we can modify values
 For larger (or misconfigured) projects, you may experience memory usage issues with the webpack build. The DevTools debugger also provides a Memory tab for taking heap snapshots and tracking down the memory hogs in your build process.
 
 ![Screenshot of DevTools Memory tab](blog/webpack/chrome-inpsect-memory-tab.png)
-![Screenshot of DevTools heap snapshot](blog/webpack/chrome-inpsect-heap-snapshot.png)
+![Screenshot of DevTools heap snapshot](blog/webpack/chrome-inspect-heap-snapshot.png)
 
 ### Speed measure plugin
 
-```
+To help isolate slow parts of your build, I highly recommend the [Speed Measure Plugin](https://github.com/stephencookdev/speed-measure-webpack-plugin#readme) for webpack. This is a plugin you would install and configure in your project temporarily to get feedback about individual parts of the build process.
+
+First install:
+
+```sh
 yarn add speed-measure-webpack-plugin
 ```
 
+Then configure your production build (you could also do something similar for development or test):
 ```javascript
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
@@ -148,28 +153,61 @@ const smp = new SpeedMeasurePlugin()
 module.exports = smp.wrap(environment.toWebpackConfig())
 ```
 
-```
+And then run the production build:
+
+```sh
 $ RAILS_ENV=production NODE_ENV=production ./bin/webpack
 ```
 
-```
- SMP  ⏱
-General output time took 3.094 secs
+The Speed Measure plugin will print additional output that may help identify the slow parts:
+
+```sh
+SMP  ⏱
+General output time took 4 mins, 5.68 secs
 
  SMP  ⏱  Plugins
-CaseSensitivePathsPlugin took 0.391 secs
-TerserPlugin took 0.306 secs
-WebpackAssetsManifest took 0.066 secs
-CompressionPlugin took 0.019 secs
-MiniCssExtractPlugin took 0.001 secs
-OptimizeCssAssetsWebpackPlugin took 0.001 secs
-EnvironmentPlugin took 0 secs
+IgnorePlugin took 57.73 secs
+TerserPlugin took 39.022 secs
+ExtractCssChunksPlugin took 3.13 secs
+OptimizeCssAssetsWebpackPlugin took 1.6 secs
+ManifestPlugin took 1.55 secs
+WebpackPwaManifest took 0.326 secs
+ContextReplacementPlugin took 0.129 secs
+HashedModuleIdsPlugin took 0.127 secs
+GenerateSW took 0.059 secs
+DefinePlugin took 0.047 secs
+EnvironmentPlugin took 0.04 secs
+LoadablePlugin took 0.033 secs
+Object took 0.024 secs
 
  SMP  ⏱  Loaders
-modules with no loaders took 1.27 secs
-  module count = 365
-babel-loader took 0.824 secs
-  module count = 4
+babel-loader, and
+rev-replace-loader took 2 mins, 11.99 secs
+  module count = 2222
+modules with no loaders took 1 min, 57.86 secs
+  module count = 2071
+extract-css-chunks-webpack-plugin, and
+css-loader, and
+postcss-loader, and
+sass-loader took 1 min, 43.74 secs
+  module count = 95
+css-loader, and
+postcss-loader, and
+sass-loader took 1 min, 43.61 secs
+  module count = 95
+file-loader, and
+rev-replace-loader took 4.86 secs
+  module count = 43
+file-loader took 2.67 secs
+  module count = 32
+raw-loader took 0.446 secs
+  module count = 1
+@bedrock/package-json-loader took 0.005 secs
+  module count = 1
+script-loader took 0.003 secs
+  module count = 1
 ```
+
+See [How to boost the speed of your webpack build](https://dev.to/slashgear_/how-to-boost-the-speed-of-your-webpack-build-16h0) and the [official webpack build performance docs](https://webpack.js.org/guides/build-performance/) for a number of useful tips for improving build/compilation performance.
 
 ### Wrapping up
