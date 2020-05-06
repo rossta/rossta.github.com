@@ -1,8 +1,8 @@
 ---
 title: How to debug webpack on Rails
 author: Ross Kaffenberger
-published: false
-summary: Tips for debugging your Webpacker config and build output
+published: true
+summary: Tips for debugging your Webpacker config
 description: Understanding your Rails webpack configuration and build output can be a little confusing, especially if you're new to either Rails or webpack. This post contains a few tips for debugging your Webpacker setup, some specific to Rails Webpacker, some generally applicable to webpack.
 pull_image: 'blog/stock/alan-emery-beetle-unsplash.jpg'
 pull_image_caption: Photo by Alan Emery on Unsplash
@@ -13,49 +13,60 @@ tags:
   - Webpack
 ---
 
-It's nice that the Rails Webpacker gem and NPM package abstracts your webpack config... that is until you need to peek inside to make changes. In [the previous post](/blog/how-to-customize-webpack-for-rails-apps.html), I demonstrated _how_ you can make changes. To verify those changes or inspect the config for its current settings, read on.
+It's nice that the Rails Webpacker gem and NPM package abstracts your webpack config... that is until you need to make changes.
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
+In [my previous post](/blog/how-to-customize-webpack-for-rails-apps.html), I talked about how to customize the webpack config... but how can you be sure you're making the right change? The webpack config is JavaScript, so you can't simply jump into the Rails console to poke around. But you do have some other tools at your disposal though.
 
-> For the following examples, I'm using Node v12.13.1.
+In this post, I'll share some tips for debugging the webpack config in your Rails app.
 
 ### The one-liner
 
+> For the following examples, I'm using Node v12.13.1.
+
 Here's a quick one-liner for printing the entire Rails webpack config in development:
+
 ```sh
 $ RAILS_ENV=development node -e 'console.dir(require("./config/webpack/development"), { depth: null })'
 ```
+
 I like [`console.dir`](https://nodejs.org/api/console.html#console_console_dir_obj_options) as a nice alternative to `console.log` for inspecting JavaScript objects.
 
 For inspecting the test or production configs, just update the RAILS_ENV and the target file:
+
 ```sh
 $ RAILS_ENV=development node -e 'console.dir(require("./config/webpack/development"), { depth: null })'
-# or
+# OR
 $ RAILS_ENV=test node -e 'console.dir(require("./config/webpack/test"), { depth: null })'
-# or
+# OR
 $ RAILS_ENV=production node -e 'console.dir(require("./config/webpack/production"), { depth: null })'
 ```
 
+We ensure the RAILS_ENV is set so Webpacker's NPM package will load the correct settings from your `config/webpacker.yml` file.
+
 To make it even easier, I'll put this into a script file in `bin/inspect_webpack` with my Rails projects.
+
 ```sh
 #!/usr/bin/env sh
 
 env=${RAILS_ENV:-development}
-RAILS_ENV=${env} NODE_ENV=${env} node -e "console.dir(require(\"./config/webpack/${env}\"), { depth: null })"
+RAILS_ENV=${env} node -e "console.dir(require(\"./config/webpack/${env}\"), { depth: null })"
 ```
 Then to run:
 ```sh
 $ chmod a+x ./bin/inspect_webpack
-$ ./bin/inspect_webpack # or
-$ RAILS_ENV=test ./bin/inspect_webpack # or
+$ ./bin/inspect_webpack
+# OR
+$ RAILS_ENV=test ./bin/inspect_webpack
+# OR
 $ RAILS_ENV=production ./bin/inspect_webpack
 ```
 
 ### On the console
 
 For an interactive experience, you can run `node` to pull up the Node.js REPL. This is especially helpful for isolating pieces of the webpack config "tree":
-```js
-$ RAILS_ENV=development NODE_ENV=development node
+
+```javascript
+$ RAILS_ENV=development node
 > const config = require('./config/webpack/development')
 undefined
 > console.dir(config, { depth: null })
@@ -68,7 +79,8 @@ undefined
 // displays the plugins ...
 // ...
 ```
-As with the script I showed earlier, use `test` or `production` for `RAILS_ENV` and `NODE_ENV` when starting node to inspect the configs for the other environments.
+
+As with the script I showed earlier, change the RAILS_ENV to inspect the configs for the other environments.
 
 From the node console, you can also access and play around with the Webpack `environment` object directly:
 
@@ -76,7 +88,7 @@ From the node console, you can also access and play around with the Webpack `env
 > const { environment } = require('@rails/webpacker')
 undefined
 > environment.plugins.get('Manifest')
-// displays configured WebpackAssestsManifest plugin
+// displays configured WebpackAssetsManifest plugin
 ```
 
 ### Debugging with DevTools
@@ -113,7 +125,7 @@ Running the webpack process in debug mode will open up a websocket to communicat
 
 ```sh
 $ ./bin/webpack --debug
-Debugger listening on ws://127.0.0.1:9229/861b81ed-6f2f-4bf5-nnnn-nnnnnnnnnnnn
+Debugger listening on ws://127.0.0.1:9229/861b81ed-6f2f....
 For help, see: https://nodejs.org/en/docs/inspector
 ```
 
@@ -131,17 +143,20 @@ For larger (or misconfigured) projects, you may experience memory usage issues w
 ![Screenshot of DevTools Memory tab](blog/webpack/chrome-inpsect-memory-tab.png)
 ![Screenshot of DevTools heap snapshot](blog/webpack/chrome-inspect-heap-snapshot.png)
 
+There's more on [using DevTools with webpack on the webpack blog](https://medium.com/webpack/webpack-bits-learn-and-debug-webpack-with-chrome-dev-tools-da1c5b19554).
+
 ### Speed measure plugin
 
 To help isolate slow parts of your build, I highly recommend the [Speed Measure Plugin](https://github.com/stephencookdev/speed-measure-webpack-plugin#readme) for webpack. This is a plugin you would install and configure in your project temporarily to get feedback about individual parts of the build process.
 
-First install:
+First, install the plugin:
 
 ```sh
 yarn add speed-measure-webpack-plugin
 ```
 
-Then configure your production build (you could also do something similar for development or test):
+Then temporarily configure your production build (you could also do something similar for development or test):
+
 ```javascript
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
@@ -159,55 +174,30 @@ And then run the production build:
 $ RAILS_ENV=production NODE_ENV=production ./bin/webpack
 ```
 
-The Speed Measure plugin will print additional output that may help identify the slow parts:
+The Speed Measure plugin will print information to $stdout which may help identify the slow parts:
 
 ```sh
-SMP  ⏱
-General output time took 4 mins, 5.68 secs
+ SMP  ⏱
+General output time took 3.094 secs
 
  SMP  ⏱  Plugins
-IgnorePlugin took 57.73 secs
-TerserPlugin took 39.022 secs
-ExtractCssChunksPlugin took 3.13 secs
-OptimizeCssAssetsWebpackPlugin took 1.6 secs
-ManifestPlugin took 1.55 secs
-WebpackPwaManifest took 0.326 secs
-ContextReplacementPlugin took 0.129 secs
-HashedModuleIdsPlugin took 0.127 secs
-GenerateSW took 0.059 secs
-DefinePlugin took 0.047 secs
-EnvironmentPlugin took 0.04 secs
-LoadablePlugin took 0.033 secs
-Object took 0.024 secs
+CaseSensitivePathsPlugin took 0.391 secs
+TerserPlugin took 0.306 secs
+WebpackAssetsManifest took 0.066 secs
+CompressionPlugin took 0.019 secs
+MiniCssExtractPlugin took 0.001 secs
+OptimizeCssAssetsWebpackPlugin took 0.001 secs
+EnvironmentPlugin took 0 secs
 
  SMP  ⏱  Loaders
-babel-loader, and
-rev-replace-loader took 2 mins, 11.99 secs
-  module count = 2222
-modules with no loaders took 1 min, 57.86 secs
-  module count = 2071
-extract-css-chunks-webpack-plugin, and
-css-loader, and
-postcss-loader, and
-sass-loader took 1 min, 43.74 secs
-  module count = 95
-css-loader, and
-postcss-loader, and
-sass-loader took 1 min, 43.61 secs
-  module count = 95
-file-loader, and
-rev-replace-loader took 4.86 secs
-  module count = 43
-file-loader took 2.67 secs
-  module count = 32
-raw-loader took 0.446 secs
-  module count = 1
-@bedrock/package-json-loader took 0.005 secs
-  module count = 1
-script-loader took 0.003 secs
-  module count = 1
+modules with no loaders took 1.27 secs
+  module count = 365
+babel-loader took 0.824 secs
+  module count = 4
 ```
 
 See [How to boost the speed of your webpack build](https://dev.to/slashgear_/how-to-boost-the-speed-of-your-webpack-build-16h0) and the [official webpack build performance docs](https://webpack.js.org/guides/build-performance/) for a number of useful tips for improving build/compilation performance.
 
 ### Wrapping up
+
+Even though Webpacker hides away much of the complexity of webpack configuration, sometimes it's necessary to peel back the abstraction layer. Like anything else that's new, wrapping your head around webpack build can be intimidating, especially if you don't know where to start. If things go wrong, all is not lost. Hopefully this post helped illustrate some ways you can get insight into what's happening in your Rails webpack config.
