@@ -3,26 +3,37 @@ title: Why does Rails 6 include both Webpacker and Sprockets?
 author: Ross Kaffenberger
 published: false
 summary: "Spoiler: Because DHH says so… but you can still choose"
-description: Why does Rails install both Webpacker and Sprockets
+description: A new Rails 6 application will install both Webpacker and Sprockets by default. Don't they solve the same problem? This article dives into why Sprockets lives on even though webpack has surpassed most of its features and why you might want to choose one over the other.
 pull_image: 'blog/stock/louvre-pexels-photo.jpg'
-pull_image_caption: Photo by Yoyo Ma on Unsplash
+pull_image_caption: Photo by Julian Ebert on Unsplash
 series:
 category: Code
 tags:
   - Rails
 ---
 
-I know why you're here. Things have gotten a little confusing lately. Rails 6 is getting more complex. It's [a May of WTFs](https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/). Among other things, you've heard Rails 6 installs both Webpacker and Sprockets.
+I know why you're here. Things have gotten a little confusing lately. Rails 6 is getting more complex.
+Among other things, you've heard Rails 6 installs both Webpacker and Sprockets. You're wondering WTF is going on. By the way, it's [a whole May of WTFs](https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/).
 
-*Wait, don't they do basically the same thing?*
+*Wait, don't Sprockets and Webpacker basically do the same thing?*
 
-You're not alone.
+If this is what you're thinking, you're not alone.
+
+> Curious about or need help with webpack? I may be able to help! I'm developing a course for webpack on Rails and I frequently write about it on this blog.
+>
+> [**Subscribe to my newsletter to get updates**](https://little-fog-6985.ck.page/9c5bc129d8).
 
 The question keeps coming up, like in this [Reddit post](https://www.reddit.com/r/rails/comments/9zg7fe/confused_about_the_difference_between_sprockets/), or this [StackOverflow question](https://stackoverflow.com/questions/55232591/rails-5-2-why-still-use-assets-pipeline-with-webpacker), or this [other Reddit post](https://www.reddit.com/r/rails/comments/dfww82/best_practice_for_webpacker_in_rails_6_do_i_need/). Even [@avdi](https://twitter.com/avdi) just last week:
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Will someone please explain to me why after all the foofaraw about Rails 6 going to webpack, I&#39;m still having to unfuck Sprockets in my application.rb</p>&mdash; Avdi Grimm (@avdi) <a href="https://twitter.com/avdi/status/1256742291890413570?ref_src=twsrc%5Etfw">May 3, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-It's clear that many are surprised by the co-existence. There's good reason for that too. You wouldn't be wrong to think Sprockets and webpack solve the same general problem: packaging assets (like JavaScript, CSS, images, and fonts) for the browser.
+It's clear the Webpacker-Sprockets co-existence is catching many by surprise. There's good reason for that too.
+
+###
+
+You wouldn't be wrong to think Sprockets and webpack solve the same general problem:
+
+*Packaging assets (JavaScript, CSS, images, fonts, etc.) for the browser.*
 
 The similarities go deeper. Both Sprockets and webpack will:
 
@@ -36,7 +47,7 @@ Despite these similarities, Sprockets and webpack implement these problems in ve
 
 Webpack, on the other hand, fully embraces the concept of JavaScript modules. It supports a number of module syntaxes, including dynamic imports for code splitting. It's also extremely modular and customizable.
 
-So why would Rails include both? Here's the answer plain and simple straight from @dhh himself back in 2016 when Webpack was first introduced as the recommended JavaScript compiler with Rails 5.1.
+So why would Rails include both? Here's the answer plain and simple straight from DHH back in 2016 when Webpack was first introduced as the recommended JavaScript compiler with Rails 5.1.
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">We will continue to use the asset pipeline for JavaScript sprinkles, CSS, images, and other static stuff. The two approaches coexist great.</p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/808349072734027776?ref_src=twsrc%5Etfw">December 12, 2016</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -58,46 +69,66 @@ DHH calls webpack's approach to handling non-JavaScript assets *awkward*. Now, I
 
 The reason he says this stems from the fact that webpack wants to treat **everything** as a JavaScript module. I mean everything.
 
-To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this is surprising—I think especially for "occasional frontend" Rails developers.
+To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this may be unusual—I think especially for "occasional-frontend" Rails developers.
 
-Perhaps they're not the only ones. Consider this recent tweet from a prominent voice in the React community, [@ryanflorence](https://twitter.com/ryanflorence):
+Perhaps they're not the only ones. Consider this recent tweet from a prominent voice in the React community, [Ryan Florence](https://twitter.com/ryanflorence):
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">import url from &quot;./whatever.jpg&quot;<br>import html from &quot;./some.md&quot;<br>import str from &quot;raw!./some.js&quot;<br><br>So ... I gotta admit I love this stuff, but did we jump the shark here with JavaScript build tools? Should this stuff happen outside the JavaScript module bundler?</p>&mdash; Ryan Florence (@ryanflorence) <a href="https://twitter.com/ryanflorence/status/1258966331572928514?ref_src=twsrc%5Etfw">May 9, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-Sounds a lot like discovering Sprockets in reverse.
+Sounds a lot like discovering Sprockets in reverse?
 
-What should you do then? Personally, I want to leave Sprockets behind. It languishes while webpack's key features, such as performance optimizations through code-splitting, are first class. Though awkward to some, webpack's "everything is a module" mindset is also extremely powerful. There are some interesting possibilities when a tool goes "all in" with such a mental model. Think of what "everything is an object" has done for Ruby.
+Though awkward to some, webpack's "Everything is a Module" mindset is also extremely powerful. There are some interesting possibilities when a tool goes **all in** with such a mental model. Think of what "Everything is an Object" has done for Ruby.
 
-### Why Sprockets?
+### Choosing Webpacker or Sprockets (or both)
+
+The good news is there's no need to stress about it. Rails follows the preferred approach of the Basecamp team, but that doesn't mean you have to agree or that it's the right way to do things for your application. You can use both, as Basecamp does, or choose one over the other.
+
+To help you decide, I adapted [this excellent guide from the react-rails project](https://github.com/reactjs/react-rails/wiki/Choosing-Sprockets-or-Webpacker):
+
+#### Why Sprockets?
 
 * My Rails app does not need much JavaScript
-* I prefer using global scripts and jQuery plugin enhancement
-* Upgrading my legacy Rails app would be too costly
+* I prefer global scripts and jQuery plugin enhancement, i.e. I don't need a proper JavaScript module system
+* Upgrading my legacy Rails app to Webpacker would be too costly
+* I don't need advanced tooling for local development
+* It just works and I don't have time to ramp up on alternatives
 
-### Why not Sprockets?
+#### Why not Sprockets?
 
-* I prefer to
 * Sprockets is slowing down my local development experience
-* I want more control over the build process
-* If I need to use node packages that are not common enough to be 'gemified' or simple enough to be included as vendored JS
+* I need more control over aspects of our asset compilation
+* My app has a lot of JavaScript and needs code-splitting features to avoid massive payloads
+* I'm concerned about long-term support
 
-### Why Webpacker?
+#### Why Webpacker?
 
-If I need to use node packages
-If I want to build Single Page Apps
-If I would prefer to modify my asset build process in the same language I build it
-If I have assets outside of Rails
-If I want the latest ES6 or Babel features
-leverage npm modules
-limit global scope pollution and have an explicit dependency tree with import/export and require
-generate source maps (for more useful stack traces)
-customize es2015 transpile settings and upgrade to babel 6
-implement hot module replacement in development
-fine tune all aspects of our asset compilation in ways that sprockets falls short
+* I want to use a proper JavaScript module system to manage dependencies, i.e., limit global scope pollution and have an explicit dependency graph with import/export and require
+* I want to take advantage of the cutting edge features from ES6+, Babel, PostCSS
+* I want intelligent code-splitting features such as dynamic imports and webpack's splitChunks optimization
+* I want more flexibility with how my build system generates source maps
+* I want advanced tooling for local development including hot module replacement
+* I want to build Single Page Apps*
 
-### Why not Webpacker?
+*You don't need to have a Single Page App to use webpack; it works quite well for "Multi Page Apps".
 
-You have a simple rails app that doesn't need advanced JS features
-If I am a backend developer with limited knowledge of JS ecosystem
+#### Why not Webpacker?
 
-### Why use both?
+* My Rails app does not need much JavaScript
+* I am a backend developer with limited knowledge of JavaScript ecosystem
+* I am not ready to invest time to understand webpack and Webpacker
+* It seems to complicated
+
+#### Why use both?
+
+* I prefer the "Rails way": Webpacker to compile JavaScript, Sprockets for CSS, images, and fonts
+* I'm upgrading from Sprockets to Webpacker incrementally
+
+### On a personal note
+
+I want to leave Sprockets behind. Sprockets was a huge leap forward for asset management when it was first introduced but it hasn't taken advantage of newer possibilities. It languishes while webpack's key features, such as performance optimizations through code-splitting, are first class.
+
+Webpack is more complex and does require some investment. For me, it's been worth it.
+
+I think webpack is a great choice for any application with a significant amount of JavaScript.
+
+Which is right for you?
