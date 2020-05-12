@@ -31,9 +31,9 @@ It's clear the Webpacker-Sprockets co-existence is catching many by surprise. Th
 
 ### You wouldn't be wrong to think Sprockets and webpack solve the same general problem:
 
-*Packaging assets (JavaScript, CSS, images, fonts, etc.) for the browser.*
+_Packaging assets (JavaScript, CSS, images, fonts) for the browser_
 
-The similarities go deeper. Both Sprockets and webpack will:
+The similarities exist. Both Sprockets and webpack will:
 
 * combine many source files into one or a few destination bundles for production
 * transpile source files from one syntax to another
@@ -41,9 +41,11 @@ The similarities go deeper. Both Sprockets and webpack will:
 * rebuild modified source files in development incrementally
 * do all of the above for both JavaScript and CSS
 
-Despite these similarities, Sprockets and webpack implement these problems in very different ways. Sprockets was introduced way back in 2007 (!), before Node.js, before the Cambrian explosion of JavaScript, before module specifications like CommonJS, AMD, and EcmaScript modules, before webpack, browserify and $ANY_MODULE_AWARE_ASSET_BUNDLER. Sprockets has never embraced truly embraced what's now taken for granted in the JavaScript community.
+However, Sprockets and webpack solve asset bundling in very different ways.
 
-Webpack, on the other hand, fully embraces the concept of JavaScript modules. It supports a number of module syntaxes, including dynamic imports for code splitting. It's also extremely modular and customizable.
+Sprockets was introduced way back in 2007 (!), before Node.js, before the Cambrian explosion of JavaScript, before module specifications like CommonJS, AMD, and EcmaScript modules, before webpack, browserify and $ANY_MODULE_AWARE_ASSET_BUNDLER. Sprockets has never embraced truly embraced what's now taken for granted in the JavaScript community.
+
+Webpack, on the other hand, fully embraces the concept of JavaScript modules. It integrates with Babel, PostCSS, and just about any recent web framework. It supports a number of module syntaxes, including dynamic imports for code splitting. It's extremely modular and customizable.
 
 ### So why would Rails include both?
 
@@ -51,7 +53,9 @@ Here's the answer plain and simple straight from DHH back in 2016 when Webpack w
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">We will continue to use the asset pipeline for JavaScript sprinkles, CSS, images, and other static stuff. The two approaches coexist great.</p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/808349072734027776?ref_src=twsrc%5Etfw">December 12, 2016</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-To elaborate on this decision, there was a telling response from DHH on his GitHub pull request to [make Webpacker the default JavaScript compiler in Rails 6](https://github.com/rails/rails/pull/33079#issuecomment-400140840)
+> We will continue to use the asset pipeline for JavaScript sprinkles, CSS, images, and other static stuff. The two approaches coexist great.
+
+To elaborate on this decision, there was a telling response from DHH on his GitHub pull request to [make Webpacker the default JavaScript compiler in Rails 6](https://github.com/rails/rails/pull/33079#issuecomment-400140840):
 
 [![DHH: Webpack’s support is awkward in my opinion and does not offer any benefits over Sprockets. Unlike in the realm of JavaScript compilation.](blog/webpack/dhh-awkward.png)](https://github.com/rails/rails/pull/33079#issuecomment-400140840)
 
@@ -59,7 +63,7 @@ To elaborate on this decision, there was a telling response from DHH on his GitH
 
 > **@dhh** Webpack’s support is awkward in my opinion and does not offer any benefits over Sprockets. Unlike in the realm of JavaScript compilation.
 
-Ok, there's a lot to unpack there.
+There's a lot to unpack there.
 
 When it comes to asset bundling, the "Rails way" is webpack for JavaScript and Sprockets for everything else. The default setup in a fresh Rail 6 install, similar to what Basecamp uses, still compiles CSS, images, and fonts with Sprockets.
 
@@ -75,9 +79,9 @@ DHH calls webpack's approach to handling non-JavaScript assets *awkward*. Now, I
 
 The reason he says this stems from the fact that webpack wants to treat **everything** as a JavaScript module. I mean _everything_.
 
-All JavaScript imports are treated as JavaScript modules. To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this may be unusual—I think especially for "occasional-frontend" Rails developers.
+All JavaScript imports are treated as JavaScript modules. To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this may be unusual—perhaps especially for Rails developers coming from Sprockets.
 
-Perhaps they're not the only ones. Consider this recent tweet from a prominent voice in the React community, [Ryan Florence](https://twitter.com/ryanflorence):
+This isn't just a "Rails opinion". Consider this recent tweet from a prominent voice in the React community, [Ryan Florence](https://twitter.com/ryanflorence):
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">import url from &quot;./whatever.jpg&quot;<br>import html from &quot;./some.md&quot;<br>import str from &quot;raw!./some.js&quot;<br><br>So ... I gotta admit I love this stuff, but did we jump the shark here with JavaScript build tools? Should this stuff happen outside the JavaScript module bundler?</p>&mdash; Ryan Florence (@ryanflorence) <a href="https://twitter.com/ryanflorence/status/1258966331572928514?ref_src=twsrc%5Etfw">May 9, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -135,6 +139,6 @@ I want to leave Sprockets behind. Sprockets was a huge leap forward for asset ma
 
 Webpack is more complex and does require some investment. For me, it's been worth it.
 
-I think webpack is a great choice for any application with a significant amount of JavaScript.
+[I think webpack is a great choice for any application with a significant amount of JavaScript.](https://rossta.net/blog/reasons-to-switch-to-webpacker.html)
 
 Which is right for you?
