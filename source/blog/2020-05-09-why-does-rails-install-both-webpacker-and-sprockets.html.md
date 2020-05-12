@@ -13,9 +13,9 @@ tags:
 ---
 
 I know why you're here. Things have gotten a little confusing lately. Rails 6 is getting more complex.
-Among other things, you've heard Rails 6 installs both Webpacker and Sprockets. You're wondering WTF is going on. By the way, it's [a whole May of WTFs](https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/).
+Among other things, you've heard Rails 6 installs both Webpacker and Sprockets. You're wondering WTF is going on. By the way, it's [a whole May of WTFs for Rails](https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/).
 
-*Wait, don't Sprockets and Webpacker basically do the same thing?*
+**Wait, don't Sprockets and Webpacker basically do the same thing?**
 
 If this is what you're thinking, you're not alone.
 
@@ -29,9 +29,7 @@ The question keeps coming up, like in this [Reddit post](https://www.reddit.com/
 
 It's clear the Webpacker-Sprockets co-existence is catching many by surprise. There's good reason for that too.
 
-###
-
-You wouldn't be wrong to think Sprockets and webpack solve the same general problem:
+### You wouldn't be wrong to think Sprockets and webpack solve the same general problem:
 
 *Packaging assets (JavaScript, CSS, images, fonts, etc.) for the browser.*
 
@@ -47,7 +45,9 @@ Despite these similarities, Sprockets and webpack implement these problems in ve
 
 Webpack, on the other hand, fully embraces the concept of JavaScript modules. It supports a number of module syntaxes, including dynamic imports for code splitting. It's also extremely modular and customizable.
 
-So why would Rails include both? Here's the answer plain and simple straight from DHH back in 2016 when Webpack was first introduced as the recommended JavaScript compiler with Rails 5.1.
+### So why would Rails include both?
+
+Here's the answer plain and simple straight from DHH back in 2016 when Webpack was first introduced as the recommended JavaScript compiler with Rails 5.1.
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">We will continue to use the asset pipeline for JavaScript sprinkles, CSS, images, and other static stuff. The two approaches coexist great.</p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/808349072734027776?ref_src=twsrc%5Etfw">December 12, 2016</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
@@ -65,23 +65,29 @@ When it comes to asset bundling, the "Rails way" is webpack for JavaScript and S
 
 This means, if you're a member of the Basecamp camp, all your webpack JavaScript source files would live in `app/javascript` and all your Sprockets CSS and images would remain in `app/assets`.
 
+To be very clear, this does not mean you need to run both Sprockets and Webpacker to serve assets for the browser. The two processes for bundling assets are completely separate and they do not share dependencies. Different helpers, different implementations, different directories, different, different, different. They are built in such a way that they can cohabitate a Rails application.
+
+You could use just Sprockets or just Webpacker to bundle **all** your assets.
+
+### Feeling, awkward?
+
 DHH calls webpack's approach to handling non-JavaScript assets *awkward*. Now, I happen to like webpack a lot. But he's not wrong.
 
-The reason he says this stems from the fact that webpack wants to treat **everything** as a JavaScript module. I mean everything.
+The reason he says this stems from the fact that webpack wants to treat **everything** as a JavaScript module. I mean _everything_.
 
-To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this may be unusual—I think especially for "occasional-frontend" Rails developers.
+All JavaScript imports are treated as JavaScript modules. To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this may be unusual—I think especially for "occasional-frontend" Rails developers.
 
 Perhaps they're not the only ones. Consider this recent tweet from a prominent voice in the React community, [Ryan Florence](https://twitter.com/ryanflorence):
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">import url from &quot;./whatever.jpg&quot;<br>import html from &quot;./some.md&quot;<br>import str from &quot;raw!./some.js&quot;<br><br>So ... I gotta admit I love this stuff, but did we jump the shark here with JavaScript build tools? Should this stuff happen outside the JavaScript module bundler?</p>&mdash; Ryan Florence (@ryanflorence) <a href="https://twitter.com/ryanflorence/status/1258966331572928514?ref_src=twsrc%5Etfw">May 9, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-Sounds a lot like discovering Sprockets in reverse?
+Sounds a lot like discovering Sprockets in reverse? (I'm not surprised at that 50/50 split either).
 
-Though awkward to some, webpack's "Everything is a Module" mindset is also extremely powerful. There are some interesting possibilities when a tool goes **all in** with such a mental model. Think of what "Everything is an Object" has done for Ruby.
+While awkward to some, webpack's "Everything is a Module" mindset is also extremely powerful. There are some interesting possibilities when a tool goes **all in** with such a mental model. Think of what "Everything is an Object" has done for Ruby.
 
 ### Choosing Webpacker or Sprockets (or both)
 
-The good news is there's no need to stress about it. Rails follows the preferred approach of the Basecamp team, but that doesn't mean you have to agree or that it's the right way to do things for your application. You can use both, as Basecamp does, or choose one over the other.
+The good news is there's no need to stress about it. Rails defaults mirror the preferred approach of the Basecamp team, but that doesn't mean you have to agree or that it's the right way to do things for your application. You can use both, as Basecamp does, or choose one over the other.
 
 To help you decide, I adapted [this excellent guide from the react-rails project](https://github.com/reactjs/react-rails/wiki/Choosing-Sprockets-or-Webpacker):
 
