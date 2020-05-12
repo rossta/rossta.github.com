@@ -1,10 +1,10 @@
 ---
 title: Why does Rails 6 include both Webpacker and Sprockets?
 author: Ross Kaffenberger
-published: false
+published: true
 summary: "Spoiler: Because DHH says so… but you can still choose"
 description: A new Rails 6 application will install both Webpacker and Sprockets by default. Don't they solve the same problem? This article dives into why Sprockets lives on even though webpack has surpassed most of its features and why you might want to choose one over the other.
-pull_image: 'blog/stock/louvre-pexels-photo.jpg'
+pull_image: 'blog/stock/julian-ebert-farmland-unsplash.jpg'
 pull_image_caption: Photo by Julian Ebert on Unsplash
 series:
 category: Code
@@ -23,13 +23,19 @@ If this is what you're thinking, you're not alone.
 >
 > [**Subscribe to my newsletter to get updates**](https://little-fog-6985.ck.page/9c5bc129d8).
 
-The question keeps coming up, like in this [Reddit post](https://www.reddit.com/r/rails/comments/9zg7fe/confused_about_the_difference_between_sprockets/), or this [StackOverflow question](https://stackoverflow.com/questions/55232591/rails-5-2-why-still-use-assets-pipeline-with-webpacker), or this [other Reddit post](https://www.reddit.com/r/rails/comments/dfww82/best_practice_for_webpacker_in_rails_6_do_i_need/). Even [@avdi](https://twitter.com/avdi) just last week:
+The question keeps coming up, like in this [Reddit post](https://www.reddit.com/r/rails/comments/9zg7fe/confused_about_the_difference_between_sprockets/), or this [StackOverflow question](https://stackoverflow.com/questions/55232591/rails-5-2-why-still-use-assets-pipeline-with-webpacker), or this [other Reddit post](https://www.reddit.com/r/rails/comments/dfww82/best_practice_for_webpacker_in_rails_6_do_i_need/).
+
+Here's my colleague [@danmayer](https://twitter.com/danmayer):
+
+<blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">How and where to handle assets is in a confusing state, 1 foot in asset pipeline and one foot in webpacker... If that is going to be a long last direction vs a transition we should make the best practices more clear in guides and how to ensure they play nicely together</p>&mdash; Dan Mayer (@danmayer) <a href="https://twitter.com/danmayer/status/1258577270760804353?ref_src=twsrc%5Etfw">May 8, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+Even [@avdi](https://twitter.com/avdi) just last week:
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Will someone please explain to me why after all the foofaraw about Rails 6 going to webpack, I&#39;m still having to unfuck Sprockets in my application.rb</p>&mdash; Avdi Grimm (@avdi) <a href="https://twitter.com/avdi/status/1256742291890413570?ref_src=twsrc%5Etfw">May 3, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 It's clear the Webpacker-Sprockets co-existence is catching many by surprise. There's good reason for that too.
 
-### You wouldn't be wrong to think Sprockets and webpack solve the same general problem:
+You wouldn't be wrong to think Sprockets and webpack solve the same general problem:
 
 _Packaging assets (JavaScript, CSS, images, fonts) for the browser_
 
