@@ -5,10 +5,231 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2020-05-04T00:00:00+00:00</updated>
+  <updated>2020-05-09T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Why does Rails 6 include both Webpacker and Sprockets?</title>
+    <link rel="alternate" href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html"/>
+    <id>/blog/why-does-rails-install-both-webpacker-and-sprockets.html</id>
+    <published>2020-05-09T00:00:00+00:00</published>
+    <updated>2020-05-09T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;I know why you're here. Things have gotten a little confusing lately. Rails 6 is getting more complex.
+Among other things, you've heard Rails 6 installs both Webpacker and Sprockets. You're wondering WTF is going on. By the way, it's &lt;a href="https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/" target="_blank" rel="noopener noreferrer"&gt;a whole May of...&lt;/a&gt;&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;I know why you&amp;#39;re here. Things have gotten a little confusing lately. Rails 6 is getting more complex.
+Among other things, you&amp;#39;ve heard Rails 6 installs both Webpacker and Sprockets. You&amp;#39;re wondering WTF is going on. By the way, it&amp;#39;s &lt;a href="https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/" target="_blank" rel="noopener noreferrer"&gt;a whole May of WTFs for Rails&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Wait, don&amp;#39;t Sprockets and Webpacker basically do the same thing?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If this is what you&amp;#39;re thinking, you&amp;#39;re not alone.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Curious about or need help with webpack? I may be able to help! I&amp;#39;m developing a course for webpack on Rails and I frequently write about it on this blog.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter to get updates&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The question keeps coming up, like in this &lt;a href="https://www.reddit.com/r/rails/comments/9zg7fe/confused_about_the_difference_between_sprockets/" target="_blank" rel="noopener noreferrer"&gt;Reddit post&lt;/a&gt;, or this &lt;a href="https://stackoverflow.com/questions/55232591/rails-5-2-why-still-use-assets-pipeline-with-webpacker" target="_blank" rel="noopener noreferrer"&gt;StackOverflow question&lt;/a&gt;, or this &lt;a href="https://www.reddit.com/r/rails/comments/dfww82/best_practice_for_webpacker_in_rails_6_do_i_need/" target="_blank" rel="noopener noreferrer"&gt;other Reddit post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s my colleague &lt;a href="https://twitter.com/danmayer" target="_blank" rel="noopener noreferrer"&gt;@danmayer&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class="twitter-tweet" data-conversation="none"&gt;&lt;p lang="en" dir="ltr"&gt;How and where to handle assets is in a confusing state, 1 foot in asset pipeline and one foot in webpacker... If that is going to be a long last direction vs a transition we should make the best practices more clear in guides and how to ensure they play nicely together&lt;/p&gt;&amp;mdash; Dan Mayer (@danmayer) &lt;a href="https://twitter.com/danmayer/status/1258577270760804353?ref_src=twsrc%5Etfw"&gt;May 8, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Even &lt;a href="https://twitter.com/avdi" target="_blank" rel="noopener noreferrer"&gt;@avdi&lt;/a&gt; just last week:&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;Will someone please explain to me why after all the foofaraw about Rails 6 going to webpack, I&amp;#39;m still having to unfuck Sprockets in my application.rb&lt;/p&gt;&amp;mdash; Avdi Grimm (@avdi) &lt;a href="https://twitter.com/avdi/status/1256742291890413570?ref_src=twsrc%5Etfw"&gt;May 3, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s clear the Webpacker-Sprockets co-existence is catching many by surprise. There&amp;#39;s good reason for that too.&lt;/p&gt;
+
+&lt;p&gt;You wouldn&amp;#39;t be wrong to think Sprockets and webpack solve the same general problem:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Packaging assets (JavaScript, CSS, images, fonts) for the browser&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The similarities exist. Both Sprockets and webpack will:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;combine many source files into one or a few destination bundles for production&lt;/li&gt;
+&lt;li&gt;transpile source files from one syntax to another&lt;/li&gt;
+&lt;li&gt;minify and fingerprint assets when building for production&lt;/li&gt;
+&lt;li&gt;rebuild modified source files in development incrementally&lt;/li&gt;
+&lt;li&gt;do all of the above for both JavaScript and CSS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;However, Sprockets and webpack solve asset bundling in very different ways.&lt;/p&gt;
+
+&lt;p&gt;Sprockets was introduced way back in 2007 (!), before Node.js, before the Cambrian explosion of JavaScript, before module specifications like CommonJS, AMD, and EcmaScript modules, before webpack, browserify and $ANY_MODULE_AWARE_ASSET_BUNDLER. Sprockets has never embraced truly embraced what&amp;#39;s now taken for granted in the JavaScript community.&lt;/p&gt;
+
+&lt;p&gt;Webpack, on the other hand, fully embraces the concept of JavaScript modules. It integrates with Babel, PostCSS, and just about any recent web framework. It supports a number of module syntaxes, including dynamic imports for code splitting. It&amp;#39;s extremely modular and customizable.&lt;/p&gt;
+
+      &lt;h3 id="so-why-would-rails-include-both-" class="title title-h3"&gt;
+        &lt;a name="so-why-would-rails-include-both-" class="anchor" href="#so-why-would-rails-include-both-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        So why would Rails include both?
+      &lt;/h3&gt;
+    
+&lt;p&gt;Here&amp;#39;s the answer plain and simple straight from DHH back in 2016 when Webpack was first introduced as the recommended JavaScript compiler with Rails 5.1.&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;We will continue to use the asset pipeline for JavaScript sprinkles, CSS, images, and other static stuff. The two approaches coexist great.&lt;/p&gt;&amp;mdash; DHH (@dhh) &lt;a href="https://twitter.com/dhh/status/808349072734027776?ref_src=twsrc%5Etfw"&gt;December 12, 2016&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;We will continue to use the asset pipeline for JavaScript sprinkles, CSS, images, and other static stuff. The two approaches coexist great.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To elaborate on this decision, there was a telling response from DHH on his GitHub pull request to &lt;a href="https://github.com/rails/rails/pull/33079#issuecomment-400140840" target="_blank" rel="noopener noreferrer"&gt;make Webpacker the default JavaScript compiler in Rails 6&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/rails/rails/pull/33079#issuecomment-400140840" target="_blank" rel="noopener noreferrer"&gt;&lt;img src="/assets/images/blog/webpack/dhh-awkward.png" alt="DHH: Webpack’s support is awkward in my opinion and does not offer any benefits over Sprockets. Unlike in the realm of JavaScript compilation." loading="lazy" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;@dwightwatson&lt;/strong&gt; Out of curiousity, what is the argument to continue using Sprockets for CSS/static assets when Webpacker supports them by default out of the box?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;@dhh&lt;/strong&gt; Webpack’s support is awkward in my opinion and does not offer any benefits over Sprockets. Unlike in the realm of JavaScript compilation.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;There&amp;#39;s a lot to unpack there.&lt;/p&gt;
+
+&lt;p&gt;When it comes to asset bundling, the &amp;quot;Rails way&amp;quot; is webpack for JavaScript and Sprockets for everything else. The default setup in a fresh Rail 6 install, similar to what Basecamp uses, still compiles CSS, images, and fonts with Sprockets.&lt;/p&gt;
+
+&lt;p&gt;This means, if you&amp;#39;re a member of the Basecamp camp, all your webpack JavaScript source files would live in &lt;code&gt;app/javascript&lt;/code&gt; and all your Sprockets CSS and images would remain in &lt;code&gt;app/assets&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To be very clear, this does not mean you need to run both Sprockets and Webpacker to serve assets for the browser. The two processes for bundling assets are completely separate and they do not share dependencies. Different helpers, different implementations, different directories, different, different, different. They are built in such a way that they can cohabitate a Rails application.&lt;/p&gt;
+
+&lt;p&gt;You could use just Sprockets or just Webpacker to bundle &lt;strong&gt;all&lt;/strong&gt; your assets.&lt;/p&gt;
+
+      &lt;h3 id="feeling-awkward-" class="title title-h3"&gt;
+        &lt;a name="feeling-awkward-" class="anchor" href="#feeling-awkward-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Feeling, awkward?
+      &lt;/h3&gt;
+    
+&lt;p&gt;DHH calls webpack&amp;#39;s approach to handling non-JavaScript assets &lt;em&gt;awkward&lt;/em&gt;. Now, I happen to like webpack a lot. But he&amp;#39;s not wrong.&lt;/p&gt;
+
+&lt;p&gt;The reason he says this stems from the fact that webpack wants to treat &lt;strong&gt;everything&lt;/strong&gt; as a JavaScript module. I mean &lt;em&gt;everything&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;All JavaScript imports are treated as JavaScript modules. To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this may be unusual—perhaps especially for Rails developers coming from Sprockets.&lt;/p&gt;
+
+&lt;p&gt;This isn&amp;#39;t just a &amp;quot;Rails opinion&amp;quot;. Consider this recent tweet from a prominent voice in the React community, &lt;a href="https://twitter.com/ryanflorence" target="_blank" rel="noopener noreferrer"&gt;Ryan Florence&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class="twitter-tweet"&gt;&lt;p lang="en" dir="ltr"&gt;import url from &amp;quot;./whatever.jpg&amp;quot;&lt;br&gt;import html from &amp;quot;./some.md&amp;quot;&lt;br&gt;import str from &amp;quot;raw!./some.js&amp;quot;&lt;br&gt;&lt;br&gt;So ... I gotta admit I love this stuff, but did we jump the shark here with JavaScript build tools? Should this stuff happen outside the JavaScript module bundler?&lt;/p&gt;&amp;mdash; Ryan Florence (@ryanflorence) &lt;a href="https://twitter.com/ryanflorence/status/1258966331572928514?ref_src=twsrc%5Etfw"&gt;May 9, 2020&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;Sounds a lot like discovering Sprockets in reverse? (I&amp;#39;m not surprised at that 50/50 split either).&lt;/p&gt;
+
+&lt;p&gt;While awkward to some, webpack&amp;#39;s &amp;quot;Everything is a Module&amp;quot; mindset is also extremely powerful. There are some interesting possibilities when a tool goes &lt;strong&gt;all in&lt;/strong&gt; with such a mental model. Think of what &amp;quot;Everything is an Object&amp;quot; has done for Ruby.&lt;/p&gt;
+
+      &lt;h3 id="choosing-webpacker-or-sprockets-or-both-" class="title title-h3"&gt;
+        &lt;a name="choosing-webpacker-or-sprockets-or-both-" class="anchor" href="#choosing-webpacker-or-sprockets-or-both-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Choosing Webpacker or Sprockets (or both)
+      &lt;/h3&gt;
+    
+&lt;p&gt;The good news is there&amp;#39;s no need to stress about it. Rails defaults mirror the preferred approach of the Basecamp team, but that doesn&amp;#39;t mean you have to agree or that it&amp;#39;s the right way to do things for your application. You can use both, as Basecamp does, or choose one over the other.&lt;/p&gt;
+
+&lt;p&gt;To help you decide, I adapted &lt;a href="https://github.com/reactjs/react-rails/wiki/Choosing-Sprockets-or-Webpacker" target="_blank" rel="noopener noreferrer"&gt;this excellent guide from the react-rails project&lt;/a&gt;:&lt;/p&gt;
+
+      &lt;h4 id="why-sprockets-" class="title title-h4"&gt;
+        &lt;a name="why-sprockets-" class="anchor" href="#why-sprockets-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Why Sprockets?
+      &lt;/h4&gt;
+    
+&lt;ul&gt;
+&lt;li&gt;My Rails app does not need much JavaScript&lt;/li&gt;
+&lt;li&gt;I prefer global scripts and jQuery plugin enhancement, i.e. I don&amp;#39;t need a proper JavaScript module system&lt;/li&gt;
+&lt;li&gt;Upgrading my legacy Rails app to Webpacker would be too costly&lt;/li&gt;
+&lt;li&gt;I don&amp;#39;t need advanced tooling for local development&lt;/li&gt;
+&lt;li&gt;It just works and I don&amp;#39;t have time to ramp up on alternatives&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h4 id="why-not-sprockets-" class="title title-h4"&gt;
+        &lt;a name="why-not-sprockets-" class="anchor" href="#why-not-sprockets-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Why not Sprockets?
+      &lt;/h4&gt;
+    
+&lt;ul&gt;
+&lt;li&gt;Sprockets is slowing down my local development experience&lt;/li&gt;
+&lt;li&gt;I need more control over aspects of our asset compilation&lt;/li&gt;
+&lt;li&gt;My app has a lot of JavaScript and needs code-splitting features to avoid massive payloads&lt;/li&gt;
+&lt;li&gt;I&amp;#39;m concerned about long-term support&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h4 id="why-webpacker-" class="title title-h4"&gt;
+        &lt;a name="why-webpacker-" class="anchor" href="#why-webpacker-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Why Webpacker?
+      &lt;/h4&gt;
+    
+&lt;ul&gt;
+&lt;li&gt;I want to use a proper JavaScript module system to manage dependencies, i.e., limit global scope pollution and have an explicit dependency graph with import/export and require&lt;/li&gt;
+&lt;li&gt;I want to take advantage of the cutting edge features from ES6+, Babel, PostCSS&lt;/li&gt;
+&lt;li&gt;I want intelligent code-splitting features such as dynamic imports and webpack&amp;#39;s splitChunks optimization&lt;/li&gt;
+&lt;li&gt;I want more flexibility with how my build system generates source maps&lt;/li&gt;
+&lt;li&gt;I want advanced tooling for local development including hot module replacement&lt;/li&gt;
+&lt;li&gt;I want to build Single Page Apps*&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;*You don&amp;#39;t need to have a Single Page App to use webpack; it works quite well for &amp;quot;Multi Page Apps&amp;quot;.&lt;/p&gt;
+
+      &lt;h4 id="why-not-webpacker-" class="title title-h4"&gt;
+        &lt;a name="why-not-webpacker-" class="anchor" href="#why-not-webpacker-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Why not Webpacker?
+      &lt;/h4&gt;
+    
+&lt;ul&gt;
+&lt;li&gt;My Rails app does not need much JavaScript&lt;/li&gt;
+&lt;li&gt;I am a backend developer with limited knowledge of JavaScript ecosystem&lt;/li&gt;
+&lt;li&gt;I am not ready to invest time to understand webpack and Webpacker&lt;/li&gt;
+&lt;li&gt;It seems to complicated&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h4 id="why-use-both-" class="title title-h4"&gt;
+        &lt;a name="why-use-both-" class="anchor" href="#why-use-both-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Why use both?
+      &lt;/h4&gt;
+    
+&lt;ul&gt;
+&lt;li&gt;I prefer the &amp;quot;Rails way&amp;quot;: Webpacker to compile JavaScript, Sprockets for CSS, images, and fonts&lt;/li&gt;
+&lt;li&gt;I&amp;#39;m upgrading from Sprockets to Webpacker incrementally&lt;/li&gt;
+&lt;/ul&gt;
+
+      &lt;h3 id="on-a-personal-note" class="title title-h3"&gt;
+        &lt;a name="on-a-personal-note" class="anchor" href="#on-a-personal-note"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        On a personal note
+      &lt;/h3&gt;
+    
+&lt;p&gt;I want to leave Sprockets behind. Sprockets was a huge leap forward for asset management when it was first introduced but it hasn&amp;#39;t taken advantage of newer possibilities. It languishes while webpack&amp;#39;s key features, such as performance optimizations through code-splitting, are first class.&lt;/p&gt;
+
+&lt;p&gt;Webpack is more complex and does require some investment. For me, it&amp;#39;s been worth it.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://rossta.net/blog/reasons-to-switch-to-webpacker.html" target="_blank" rel="noopener noreferrer"&gt;I think webpack is a great choice for any application with a significant amount of JavaScript.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Which is right for you?&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>How to debug webpack on Rails</title>
     <link rel="alternate" href="/blog/how-to-debug-webpack-on-rails.html"/>
@@ -1685,230 +1906,6 @@ import tail from &amp;#39;lodash/tail&amp;#39;
 &lt;p&gt;There it is. I hope this has been a worthy introduction to some exciting possibilities and use cases for adopting webpack in your Rails app via Webpacker. Like I said earlier, there is a tradeoff that comes with the overhead of managing many smaller JavaScript dependencies along with overcoming the &amp;quot;barrier to entry&amp;quot; in getting up to speed with how webpack works.&lt;/p&gt;
 
 &lt;p&gt;I, for one, feel the tradeoffs have been worthwhile.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>A guide to NPM version constraints for Rubyists</title>
-    <link rel="alternate" href="/blog/npm-version-constraints-for-rubyists.html"/>
-    <id>/blog/npm-version-constraints-for-rubyists.html</id>
-    <published>2020-01-29T00:00:00+00:00</published>
-    <updated>2020-01-29T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;In this post, I want to answer the following question for Rubyists:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;What do the tilde &lt;code&gt;~&lt;/code&gt; and caret &lt;code&gt;^&lt;/code&gt; designations mean for version constraints in a &lt;code&gt;package.json&lt;/code&gt; file?&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;To answer this question, we'll compare how Rubyists declare Ruby project dependencies...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;In this post, I want to answer the following question for Rubyists:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;What do the tilde &lt;code&gt;~&lt;/code&gt; and caret &lt;code&gt;^&lt;/code&gt; designations mean for version constraints in a &lt;code&gt;package.json&lt;/code&gt; file?&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;To answer this question, we&amp;#39;ll compare how Rubyists declare Ruby project dependencies in a &lt;code&gt;Gemfile&lt;/code&gt; with conventions used to declare NPM module dependencies in a &lt;code&gt;package.json&lt;/code&gt; file.&lt;/p&gt;
-
-&lt;p&gt;Of note, some projects use both Gemfile and package.json. For example, a newly created Rails 6 application will have generated a package.json file because, by default, it ships with webpack and related NPM dependencies to compile JavaScript assets.&lt;/p&gt;
-
-&lt;p&gt;It might include a section like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;&amp;quot;dependencies&amp;quot;: {
-  &amp;quot;@rails/ujs&amp;quot;: &amp;quot;^6.0.0&amp;quot;,
-  &amp;quot;@rails/webpacker&amp;quot;: &amp;quot;~4.2.1&amp;quot;,
-},
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If you&amp;#39;re a Rubyist and the version syntax looks odd, then this post is for you.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using webpack with Rails.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-      &lt;h2 id="version-constraints-in-gemfile" class="title title-h2"&gt;
-        &lt;a name="version-constraints-in-gemfile" class="anchor" href="#version-constraints-in-gemfile"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Version constraints in Gemfile
-      &lt;/h2&gt;
-    
-&lt;p&gt;Like the &lt;code&gt;Gemfile&lt;/code&gt;, package.json has a convention to specify version constraints. Both Ruby and NPM dependencies usually follow SemVer, that will format a constraint as &lt;code&gt;major.minor.patch&lt;/code&gt;, i.e. the declaration &lt;code&gt;&amp;quot;webpack&amp;quot;: &amp;quot;4.41.2&amp;quot;&lt;/code&gt; indicates webpack major version 4, minor version 41, and patch version 2.&lt;/p&gt;
-
-&lt;p&gt;Where they differ is in the use of special characters to declare acceptable ranges. Let&amp;#39;s refresh the conventions used in the Gemfile.&lt;/p&gt;
-
-&lt;p&gt;To lock a gem dependency to an exact version, we would declare the gem&amp;#39;s name and its version as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;, &amp;quot;4.7.1&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A more optimistic constraint would be to provide an open-ended range that will install or update to a version of the gem that satisfies the range.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;, &amp;quot;&amp;gt;= 4.7&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To limit the upper end of the range, say, to allow minor updates up to the next major version:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;, &amp;quot;&amp;gt;= 4.7&amp;quot;, &amp;quot;&amp;lt; 5&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This format has a shorthand notation, the squiggly arrow &lt;code&gt;~&amp;gt;&lt;/code&gt;, or the pessimistic version constraint.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;, &amp;quot;~&amp;gt; 4.7&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The upper end of the range is determined by the smallest level of the declared constraint. For example,&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;~&amp;gt; 4.7.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;= 4.7.1&amp;quot;, &amp;quot;&amp;lt; 4.8.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;~&amp;gt; 4.7&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;&amp;gt;= 4.7.0&amp;quot;, &amp;quot;&amp;lt; 5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;~&amp;gt; 4&amp;quot;&lt;/code&gt;     matches &lt;code&gt;&amp;quot;&amp;gt;= 4.0.0&amp;quot;, &amp;quot;&amp;lt; 5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;To specify &amp;quot;no constraint&amp;quot;, simply omit the version argument.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="ruby"&gt;gem &amp;quot;devise&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For more info, check out &lt;a href="https://guides.rubygems.org/patterns/#declaring-dependencies" target="_blank" rel="noopener noreferrer"&gt;the guide on RubyGems&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h2 id="version-constraints-in-package-json" class="title title-h2"&gt;
-        &lt;a name="version-constraints-in-package-json" class="anchor" href="#version-constraints-in-package-json"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Version constraints in package.json
-      &lt;/h2&gt;
-    
-&lt;p&gt;NPM conventions provide similar flexibility with alternate syntax.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;#39;s consider a package.json file that declares &lt;code&gt;@rails/webpacker&lt;/code&gt; as a dependency, the following would enforce an exact version:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;&amp;quot;@rails/webpacker&amp;quot;: &amp;quot;4.2.1&amp;quot;,
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As with the Gemfile, comparison operators can be used as in the following examples:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;&amp;gt;=4.2.1&amp;quot;&lt;/code&gt; matches greater or equal to 4.2.1&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;&amp;gt;4.2.1&amp;quot;&lt;/code&gt; matches greater than 4.2.1&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;&amp;gt;=4.2.1 &amp;lt;5&amp;quot;&lt;/code&gt; matches greater or equal to 4.2.1 and less than 5&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;&amp;lt;5&amp;quot;&lt;/code&gt; matches less than 5&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;NPM supports alternate syntaxes for specifying ranges, including, but not limited to, caret &lt;code&gt;^&lt;/code&gt; and tilde &lt;code&gt;~&lt;/code&gt;.&lt;/p&gt;
-
-      &lt;h3 id="tilde-ranges" class="title title-h3"&gt;
-        &lt;a name="tilde-ranges" class="anchor" href="#tilde-ranges"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Tilde ranges
-      &lt;/h3&gt;
-    
-&lt;blockquote&gt;
-&lt;p&gt;NPM ~ is like Gemfile ~&amp;gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Tilde ranges for NPM are equivalent to Ruby&amp;#39;s pessimistic version constraint, the squiggly arrow &lt;code&gt;~&amp;gt;&lt;/code&gt;. In other words, the upper end of the range is determined by the smallest level of the declared constraint:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;~4.2.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;= 4.2.1 &amp;lt;4.3.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;~4.2&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;&amp;gt;= 4.2.0 &amp;lt;5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;~4&amp;quot;&lt;/code&gt;     matches &lt;code&gt;&amp;quot;&amp;gt;= 4.0.0 &amp;lt;5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-      &lt;h3 id="caret-ranges" class="title title-h3"&gt;
-        &lt;a name="caret-ranges" class="anchor" href="#caret-ranges"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Caret ranges
-      &lt;/h3&gt;
-    
-&lt;blockquote&gt;
-&lt;p&gt;NPM ^ is like Gemfile ~&amp;gt; x.0 for versions 1 and up and ~&amp;gt; 0.x.0 for versions less than 1 and greater than 0.0.1&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Caret ranges are another take on pessimistic version constraints that do not have a shorthand equivalent in Ruby, i.e., to my knowledge, they&amp;#39;re a special breed. They allow patch and minor updates for versions &lt;code&gt;&amp;gt;1.0.0&lt;/code&gt;, patch updates for versions &lt;code&gt;&amp;lt;1.0.0 &amp;gt;=0.1.0&lt;/code&gt;, and no updates for versions &lt;code&gt;&amp;lt;0.1.0&lt;/code&gt; (except preleases, e.g. &lt;code&gt;0.0.3-beta&lt;/code&gt;). My understanding is that the caret is the answer for traditional SemVer, i.e., there will be breaking changes prior to 0.1.0, there may be breaking changes between minor versions prior to 1.0.0, and there may only be breaking changes between major versions above 1.0.0. Examples:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;^4.2.1&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.1 &amp;lt;5.0.0&amp;quot;&lt;/code&gt; or &lt;code&gt;&amp;quot;~4.2&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;^0.2.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=0.2.2 &amp;lt;0.3.0&amp;quot;&lt;/code&gt; or &lt;code&gt;&amp;quot;~0.2.2&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;^0.0.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=0.0.2 &amp;lt;0.0.3&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-      &lt;h2 id="bonus-syntax-in-package-json" class="title title-h2"&gt;
-        &lt;a name="bonus-syntax-in-package-json" class="anchor" href="#bonus-syntax-in-package-json"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Bonus syntax in package.json
-      &lt;/h2&gt;
-    
-&lt;p&gt;NPM also supports hyphen ranges and x-ranges, neither of which have Gemfile equivalents as well.&lt;/p&gt;
-
-      &lt;h3 id="hyphen-ranges" class="title title-h3"&gt;
-        &lt;a name="hyphen-ranges" class="anchor" href="#hyphen-ranges"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Hyphen ranges
-      &lt;/h3&gt;
-    
-&lt;blockquote&gt;
-&lt;p&gt;NPM hyphen-ranges are like separate comparison operators in a Gemfile&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;For hyphen ranges, range inclusivity is tied to specificity of the declared versions:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;4.2.1 - 5.4.2&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.1 &amp;lt;=5.4.2&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;4.2 - 5.4.2&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.0 &amp;lt;=5.4.2&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;4.2 - 5&amp;quot;&lt;/code&gt;       matches &lt;code&gt;&amp;quot;&amp;gt;=4.2.0 &amp;lt;=6.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-      &lt;h3 id="x-ranges" class="title title-h3"&gt;
-        &lt;a name="x-ranges" class="anchor" href="#x-ranges"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        X-ranges
-      &lt;/h3&gt;
-    
-&lt;blockquote&gt;
-&lt;p&gt;NPM x-ranges behave like Gemfile ~&amp;gt; with exceptions&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;X-ranges are mostly self-explanatory as the &lt;code&gt;x&lt;/code&gt; denotes any value:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;4.2.x&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;~4.2.0&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;&amp;gt;= 4.2.0 &amp;lt;4.3.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;4.x&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;~4.0&amp;quot;&lt;/code&gt;   matches &lt;code&gt;&amp;quot;&amp;gt;= 4.0.0 &amp;lt;5.0.0&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;4.x.x&amp;quot;&lt;/code&gt; matches &lt;code&gt;&amp;quot;4.x&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;A partial version range is treated as an x-range:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;4.2&amp;quot;&lt;/code&gt; matches &amp;quot;&lt;code&gt;4.2.x&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;4&amp;quot;&lt;/code&gt;   matches &amp;quot;&lt;code&gt;4.x.x&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;    matches &amp;quot;&lt;code&gt;*&lt;/code&gt;&amp;quot; matches any version&lt;/li&gt;
-&lt;/ul&gt;
-
-      &lt;h2 id="conclusion" class="title title-h2"&gt;
-        &lt;a name="conclusion" class="anchor" href="#conclusion"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Conclusion
-      &lt;/h2&gt;
-    
-&lt;p&gt;For Rubyists out there who needed an introduction to NPM version constraints, I hope this was a helpful guide, or perhaps a future cheatsheet.&lt;/p&gt;
-
-&lt;p&gt;Mostly I wrote this for myself because I tend to forget 😅.&lt;/p&gt;
 </content>
   </entry>
 </feed>
