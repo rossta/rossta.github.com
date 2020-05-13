@@ -48,9 +48,9 @@ The similarities exist. Both Sprockets and webpack will:
 
 However, Sprockets and webpack solve asset bundling in very different ways.
 
-Sprockets was introduced way back in 2007 (!), before Node.js, before the Cambrian explosion of JavaScript, before module specifications like CommonJS, AMD, and EcmaScript modules, before webpack, browserify and $ANY_MODULE_AWARE_ASSET_BUNDLER. Sprockets has never embraced truly embraced what's now taken for granted in the JavaScript community.
+Sprockets was introduced way back in 2007 (!), before Node.js, before the Cambrian explosion of JavaScript, before module specifications like CommonJS, AMD, and EcmaScript modules, before webpack, browserify and $ANY_MODULE_AWARE_ASSET_BUNDLER. Sprockets has not attempted to keep up with improvements in tooling, language features, and browser capabilities (save for source maps) as other projects in JavaScript community have.
 
-Webpack, on the other hand, fully embraces the concept of JavaScript modules. It integrates with Babel, PostCSS, and just about any recent web framework. It supports a number of module syntaxes, including dynamic imports for code splitting. It's extremely modular and customizable.
+Webpack, on the other hand, fully embraces the concept of JavaScript modules. It integrates with Babel, PostCSS, and just about any recent web framework. It supports a number of module syntaxes, including [dynamic imports](https://webpack.js.org/guides/code-splitting/#dynamic-imports) for [code splitting](https://webpack.js.org/guides/code-splitting/). There are a wide variety of [configurable source map options](https://webpack.js.org/configuration/devtool/). Top to bottom, the webpack compilation process is extremely modular and customizable.
 
 ### So why would Rails include both?
 
