@@ -12,8 +12,7 @@ tags:
   - Rails
 ---
 
-I know why you're here. Things have gotten a little confusing lately. Rails 6 is getting more complex.
-Among other things, you've heard Rails 6 installs both Webpacker and Sprockets. You're wondering WTF is going on. By the way, it's [a whole May of WTFs for Rails](https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/).
+Since you're reading this post, chances are you've heard Rails 6 installs both Webpacker and Sprockets and you're wondering WTF is going on. By the way, it's [a whole May of WTFs for Rails](https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/).
 
 **Wait, don't Sprockets and Webpacker basically do the same thing?**
 
