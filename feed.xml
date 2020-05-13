@@ -18,10 +18,10 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;I know why you're here. Things have gotten a little confusing lately. Rails 6 is getting more complex.
-Among other things, you've heard Rails 6 installs both Webpacker and Sprockets. You're wondering WTF is going on. By the way, it's &lt;a href="https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/" target="_blank" rel="noopener noreferrer"&gt;a whole May of...&lt;/a&gt;&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;I know why you&amp;#39;re here. Things have gotten a little confusing lately. Rails 6 is getting more complex.
-Among other things, you&amp;#39;ve heard Rails 6 installs both Webpacker and Sprockets. You&amp;#39;re wondering WTF is going on. By the way, it&amp;#39;s &lt;a href="https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/" target="_blank" rel="noopener noreferrer"&gt;a whole May of WTFs for Rails&lt;/a&gt;.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;Since you're reading this post, chances are you've heard Rails 6 installs both Webpacker and Sprockets and you're wondering WTF is going on. By the way, it's &lt;a href="https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/" target="_blank" rel="noopener noreferrer"&gt;a whole May of WTFs for Rails&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Wait, don't Sprockets and Webpacker basically do the same...&lt;/strong&gt;&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Since you&amp;#39;re reading this post, chances are you&amp;#39;ve heard Rails 6 installs both Webpacker and Sprockets and you&amp;#39;re wondering WTF is going on. By the way, it&amp;#39;s &lt;a href="https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/" target="_blank" rel="noopener noreferrer"&gt;a whole May of WTFs for Rails&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Wait, don&amp;#39;t Sprockets and Webpacker basically do the same thing?&lt;/strong&gt;&lt;/p&gt;
 
