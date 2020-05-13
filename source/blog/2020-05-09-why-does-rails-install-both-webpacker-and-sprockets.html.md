@@ -72,17 +72,25 @@ There's a lot to unpack there.
 
 When it comes to asset bundling, the "Rails way" is webpack for JavaScript and Sprockets for everything else. The default setup in a fresh Rail 6 install, similar to what Basecamp uses, still compiles CSS, images, and fonts with Sprockets.
 
-This means, if you're a member of the Basecamp camp, all your webpack JavaScript source files would live in `app/javascript` and all your Sprockets CSS and images would remain in `app/assets`.
+This means, if you're a member of the Basecamp camp, all your webpack JavaScript source files would live in `app/javascript` and all your Sprockets CSS and images would remain in `app/assets`. Running `rails assets:precompile` will first build all the Sprockets assets into the `public/assets` directory, then will build all the webpack assets into the `public/packs` directory.
 
 To be very clear, this does not mean you need to run both Sprockets and Webpacker to serve assets for the browser. The two processes for bundling assets are completely separate and they do not share dependencies. Different helpers, different implementations, different directories, different, different, different. They are built in such a way that they can cohabitate a Rails application.
 
-You could use just Sprockets or just Webpacker to bundle **all** your assets.
+On the other hand, you could use _only_ Sprockets or _only_ Webpacker to bundle all your assets.
 
 ### Feeling, awkward?
 
 DHH calls webpack's approach to handling non-JavaScript assets *awkward*. Now, I happen to like webpack a lot. But he's not wrong.
 
-The reason he says this stems from the fact that webpack wants to treat **everything** as a JavaScript module. I mean _everything_.
+He says this because, to bundle CSS and images in webpack, you need to _import CSS and images from your JavaScript files_.
+
+```javascript
+import '../application.css'
+
+import myImageUrl from '../images/my-image.jpg'
+```
+
+The reason for this is that webpack wants to treat **everything** as a JavaScript module. I mean _everything_.
 
 All JavaScript imports are treated as JavaScript modules. To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this may be unusual—perhaps especially for Rails developers coming from Sprockets.
 
