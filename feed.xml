@@ -61,9 +61,9 @@
 
 &lt;p&gt;However, Sprockets and webpack solve asset bundling in very different ways.&lt;/p&gt;
 
-&lt;p&gt;Sprockets was introduced way back in 2007 (!), before Node.js, before the Cambrian explosion of JavaScript, before module specifications like CommonJS, AMD, and EcmaScript modules, before webpack, browserify and $ANY_MODULE_AWARE_ASSET_BUNDLER. Sprockets has never embraced truly embraced what&amp;#39;s now taken for granted in the JavaScript community.&lt;/p&gt;
+&lt;p&gt;Sprockets was introduced way back in 2007 (!), before Node.js, before the Cambrian explosion of JavaScript, before module specifications like CommonJS, AMD, and EcmaScript modules, before webpack, browserify and $ANY_MODULE_AWARE_ASSET_BUNDLER. Sprockets has not attempted to keep up with improvements in tooling, language features, and browser capabilities (save for source maps) as other projects in JavaScript community have.&lt;/p&gt;
 
-&lt;p&gt;Webpack, on the other hand, fully embraces the concept of JavaScript modules. It integrates with Babel, PostCSS, and just about any recent web framework. It supports a number of module syntaxes, including dynamic imports for code splitting. It&amp;#39;s extremely modular and customizable.&lt;/p&gt;
+&lt;p&gt;Webpack, on the other hand, fully embraces the concept of JavaScript modules. It integrates with Babel, PostCSS, and just about any recent web framework. It supports a number of module syntaxes, including &lt;a href="https://webpack.js.org/guides/code-splitting/#dynamic-imports" target="_blank" rel="noopener noreferrer"&gt;dynamic imports&lt;/a&gt; for &lt;a href="https://webpack.js.org/guides/code-splitting/" target="_blank" rel="noopener noreferrer"&gt;code splitting&lt;/a&gt;. There are a wide variety of &lt;a href="https://webpack.js.org/configuration/devtool/" target="_blank" rel="noopener noreferrer"&gt;configurable source map options&lt;/a&gt;. Top to bottom, the webpack compilation process is extremely modular and customizable.&lt;/p&gt;
 
       &lt;h3 id="so-why-would-rails-include-both-" class="title title-h3"&gt;
         &lt;a name="so-why-would-rails-include-both-" class="anchor" href="#so-why-would-rails-include-both-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
