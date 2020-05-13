@@ -95,11 +95,11 @@
 
 &lt;p&gt;When it comes to asset bundling, the &amp;quot;Rails way&amp;quot; is webpack for JavaScript and Sprockets for everything else. The default setup in a fresh Rail 6 install, similar to what Basecamp uses, still compiles CSS, images, and fonts with Sprockets.&lt;/p&gt;
 
-&lt;p&gt;This means, if you&amp;#39;re a member of the Basecamp camp, all your webpack JavaScript source files would live in &lt;code&gt;app/javascript&lt;/code&gt; and all your Sprockets CSS and images would remain in &lt;code&gt;app/assets&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This means, if you&amp;#39;re a member of the Basecamp camp, all your webpack JavaScript source files would live in &lt;code&gt;app/javascript&lt;/code&gt; and all your Sprockets CSS and images would remain in &lt;code&gt;app/assets&lt;/code&gt;. Running &lt;code&gt;rails assets:precompile&lt;/code&gt; will first build all the Sprockets assets into the &lt;code&gt;public/assets&lt;/code&gt; directory, then will build all the webpack assets into the &lt;code&gt;public/packs&lt;/code&gt; directory.&lt;/p&gt;
 
 &lt;p&gt;To be very clear, this does not mean you need to run both Sprockets and Webpacker to serve assets for the browser. The two processes for bundling assets are completely separate and they do not share dependencies. Different helpers, different implementations, different directories, different, different, different. They are built in such a way that they can cohabitate a Rails application.&lt;/p&gt;
 
-&lt;p&gt;You could use just Sprockets or just Webpacker to bundle &lt;strong&gt;all&lt;/strong&gt; your assets.&lt;/p&gt;
+&lt;p&gt;On the other hand, you could use &lt;em&gt;only&lt;/em&gt; Sprockets or &lt;em&gt;only&lt;/em&gt; Webpacker to bundle all your assets.&lt;/p&gt;
 
       &lt;h3 id="feeling-awkward-" class="title title-h3"&gt;
         &lt;a name="feeling-awkward-" class="anchor" href="#feeling-awkward-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -111,7 +111,14 @@
     
 &lt;p&gt;DHH calls webpack&amp;#39;s approach to handling non-JavaScript assets &lt;em&gt;awkward&lt;/em&gt;. Now, I happen to like webpack a lot. But he&amp;#39;s not wrong.&lt;/p&gt;
 
-&lt;p&gt;The reason he says this stems from the fact that webpack wants to treat &lt;strong&gt;everything&lt;/strong&gt; as a JavaScript module. I mean &lt;em&gt;everything&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;He says this because, to bundle CSS and images in webpack, you need to &lt;em&gt;import CSS and images from your JavaScript files&lt;/em&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;import &amp;#39;../application.css&amp;#39;
+
+import myImageUrl from &amp;#39;../images/my-image.jpg&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The reason for this is that webpack wants to treat &lt;strong&gt;everything&lt;/strong&gt; as a JavaScript module. I mean &lt;em&gt;everything&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;All JavaScript imports are treated as JavaScript modules. To use CSS with webpack, you import it as you would a JavaScript module. To use an image with webpack, you import it as you would a JavaScript module. Depending on your perspective, this may be unusual—perhaps especially for Rails developers coming from Sprockets.&lt;/p&gt;
 
