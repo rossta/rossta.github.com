@@ -115,6 +115,7 @@ To help you decide, I adapted [this excellent guide from the react-rails project
 * Upgrading my legacy Rails app to Webpacker would be too costly
 * I don't need advanced tooling for local development
 * It just works and I don't have time to ramp up on alternatives
+* My Rails app relies on specific asset gems and I don't have NPM alternatives
 
 #### Why not Sprockets?
 
@@ -139,7 +140,7 @@ To help you decide, I adapted [this excellent guide from the react-rails project
 * My Rails app does not need much JavaScript
 * I am a backend developer with limited knowledge of JavaScript ecosystem
 * I am not ready to invest time to understand webpack and Webpacker
-* It seems to complicated
+* It seems too complicated
 
 #### Why use both?
 
