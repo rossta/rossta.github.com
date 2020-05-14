@@ -156,6 +156,7 @@ import myImageUrl from &amp;#39;../images/my-image.jpg&amp;#39;
 &lt;li&gt;Upgrading my legacy Rails app to Webpacker would be too costly&lt;/li&gt;
 &lt;li&gt;I don&amp;#39;t need advanced tooling for local development&lt;/li&gt;
 &lt;li&gt;It just works and I don&amp;#39;t have time to ramp up on alternatives&lt;/li&gt;
+&lt;li&gt;My Rails app relies on specific asset gems and I don&amp;#39;t have NPM alternatives&lt;/li&gt;
 &lt;/ul&gt;
 
       &lt;h4 id="why-not-sprockets-" class="title title-h4"&gt;
@@ -204,7 +205,7 @@ import myImageUrl from &amp;#39;../images/my-image.jpg&amp;#39;
 &lt;li&gt;My Rails app does not need much JavaScript&lt;/li&gt;
 &lt;li&gt;I am a backend developer with limited knowledge of JavaScript ecosystem&lt;/li&gt;
 &lt;li&gt;I am not ready to invest time to understand webpack and Webpacker&lt;/li&gt;
-&lt;li&gt;It seems to complicated&lt;/li&gt;
+&lt;li&gt;It seems too complicated&lt;/li&gt;
 &lt;/ul&gt;
 
       &lt;h4 id="why-use-both-" class="title title-h4"&gt;
