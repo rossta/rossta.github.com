@@ -10,6 +10,7 @@ series:
 category: Code
 tags:
   - Rails
+  - Webpack
 ---
 
 Since you're reading this post, chances are you've heard Rails 6 installs both Webpacker and Sprockets and you're wondering WTF is going on. By the way, it's [a whole May of WTFs for Rails](https://weblog.rubyonrails.org/2020/5/7/A-May-of-WTFs/).
