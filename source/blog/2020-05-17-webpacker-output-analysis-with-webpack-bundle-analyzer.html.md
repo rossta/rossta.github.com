@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: false
 summary: The tool every Rails team should be using with Webpacker
 description: Webpacker output analysis with webpack-bundle-analyzer
-pull_image: 'blog/stock/louvre-pexels-photo.jpg'
-pull_image_caption: Photo by Yoyo Ma on Unsplash
+pull_image: 'blog/stock/neonbrand-stained-glass-unsplash.jpg'
+pull_image_caption: Photo by NeONBRAND on Unsplash
 series:
 category: Code
 tags:
