@@ -7,6 +7,7 @@ description: A new Rails 6 application will install both Webpacker and Sprockets
 pull_image: 'blog/stock/julian-ebert-farmland-unsplash.jpg'
 pull_image_caption: Photo by Julian Ebert on Unsplash
 series:
+popular: 1
 category: Code
 tags:
   - Rails

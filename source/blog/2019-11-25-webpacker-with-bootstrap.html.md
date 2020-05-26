@@ -6,7 +6,7 @@ summary: Bootstrap 4 is now more webpack-friendly
 description: This time we'll walk through the steps for integrating Bootstrap 4 with Rails and Webpacker 4.
 pull_image: 'blog/stock/roman-kraft-crafts-unsplash.jpg'
 pull_image_caption: Photo by Roman Kraft on Unsplash
-popular: 4
+popular: 3
 series:
 category: Code
 tags:

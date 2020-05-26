@@ -211,7 +211,7 @@ helpers do
   end
 
   def top_curated_tags
-    top_tags.keys & %w[Rails Vue Ruby Webpack JavaScript]
+    top_tags.keys & %w[Webpack Rails Ruby JavaScript Vue]
   end
 
   def top_articles
