@@ -33,7 +33,7 @@ _It was right there in front of me the whole time._
 
 Now you might call me crazy to say, "you should read the source of your bundled output," even assuming we're talking about the unminified/unobfuscated development build, so I'm not going to tell you to go do that. (Not without some guidance; let's save that for a future project).
 
-But you can use a tool, right now, to _visualize_ what's in your bundle. And that could be enough to make all the difference in helping you understand, at least at a high level, how webpack does its thing.
+But you can use a tool _right now_ to **visualize** what's in your bundle. And that could be enough to make all the difference in helping you understand, at least at a high level, how webpack does its thing.
 
 ### Introducing the webpack-bundle-analyzer
 
