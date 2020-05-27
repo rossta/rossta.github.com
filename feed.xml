@@ -158,7 +158,7 @@
 
 &lt;p&gt;In a Rails project, we might typically first run the webpack build:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="sh"&gt;bin/webpack --stats &amp;gt; tmp/webpack-stats.json
+&lt;pre&gt;&lt;code class="sh"&gt;bin/webpack --profile --json &amp;gt; tmp/webpack-stats.json
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Then we would analyze the output with the command &lt;code&gt;webpack-bundle-analyzer [stats file] [output directory]&lt;/code&gt;:&lt;/p&gt;
@@ -178,7 +178,7 @@ Get this: with &lt;code&gt;npx&lt;/code&gt;, the package script you&amp;#39;re t
   // ...
   &amp;quot;scripts&amp;quot;: {
     &amp;quot;webpack:analyze&amp;quot;: &amp;quot;yarn webpack:build_json &amp;amp;&amp;amp; yarn webpack:analyze_json&amp;quot;,
-    &amp;quot;webpack:build_json&amp;quot;: &amp;quot;RAILS_ENV=${RAILS_ENV:-production} NODE_ENV=${NODE_ENV:-production} bin/webpack &amp;gt; tmp/webpack-stats.json&amp;quot;,
+    &amp;quot;webpack:build_json&amp;quot;: &amp;quot;RAILS_ENV=${RAILS_ENV:-production} NODE_ENV=${NODE_ENV:-production} bin/webpack --profile --json &amp;gt; tmp/webpack-stats.json&amp;quot;,
     &amp;quot;webpack:analyze_json&amp;quot;: &amp;quot;webpack-bundle-analyzer tmp/webpack-stats.json public/packs&amp;quot;
   }
 }
@@ -198,7 +198,7 @@ Get this: with &lt;code&gt;npx&lt;/code&gt;, the package script you&amp;#39;re t
   task :build_json do
     system &amp;quot;RAILS_ENV=#{ENV.fetch(&amp;#39;RAILS_ENV&amp;#39;, &amp;#39;production&amp;#39;)} \
      NODE_ENV=#{ENV.fetch(&amp;#39;NODE_ENV&amp;#39;, &amp;#39;production&amp;#39;)} \
-     bin/webpack --json &amp;gt; tmp/webpack-stats.json&amp;quot;
+     bin/webpack --profile --json &amp;gt; tmp/webpack-stats.json&amp;quot;
   end
 
   task :analyze_json do

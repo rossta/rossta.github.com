@@ -192,7 +192,7 @@
 
 <p>In a Rails project, we might typically first run the webpack build:</p>
 
-<pre><code class="sh">bin/webpack --stats &gt; tmp/webpack-stats.json
+<pre><code class="sh">bin/webpack --profile --json &gt; tmp/webpack-stats.json
 </code></pre>
 
 <p>Then we would analyze the output with the command <code>webpack-bundle-analyzer [stats file] [output directory]</code>:</p>
@@ -212,7 +212,7 @@ Get this: with <code>npx</code>, the package script you&#39;re trying to run <em
   // ...
   &quot;scripts&quot;: {
     &quot;webpack:analyze&quot;: &quot;yarn webpack:build_json &amp;&amp; yarn webpack:analyze_json&quot;,
-    &quot;webpack:build_json&quot;: &quot;RAILS_ENV=${RAILS_ENV:-production} NODE_ENV=${NODE_ENV:-production} bin/webpack &gt; tmp/webpack-stats.json&quot;,
+    &quot;webpack:build_json&quot;: &quot;RAILS_ENV=${RAILS_ENV:-production} NODE_ENV=${NODE_ENV:-production} bin/webpack --profile --json &gt; tmp/webpack-stats.json&quot;,
     &quot;webpack:analyze_json&quot;: &quot;webpack-bundle-analyzer tmp/webpack-stats.json public/packs&quot;
   }
 }
@@ -232,7 +232,7 @@ Get this: with <code>npx</code>, the package script you&#39;re trying to run <em
   task :build_json do
     system &quot;RAILS_ENV=#{ENV.fetch(&#39;RAILS_ENV&#39;, &#39;production&#39;)} \
      NODE_ENV=#{ENV.fetch(&#39;NODE_ENV&#39;, &#39;production&#39;)} \
-     bin/webpack --json &gt; tmp/webpack-stats.json&quot;
+     bin/webpack --profile --json &gt; tmp/webpack-stats.json&quot;
   end
 
   task :analyze_json do
