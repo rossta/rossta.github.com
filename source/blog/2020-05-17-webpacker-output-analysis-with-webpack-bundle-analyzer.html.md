@@ -13,7 +13,7 @@ tags:
   - Webpack
 ---
 
-> tl;dr Install the [`webpack-bundle-analyzer`](https://github.com/webpack-contrib/webpack-bundle-analyzer) to visualize what's included in your webpack bundles and debug common problems".
+> tl;dr Install the [`webpack-bundle-analyzer`](https://github.com/webpack-contrib/webpack-bundle-analyzer) to visualize what's included in your webpack bundles and debug common problems.
 
 Does webpack feel still a bit scary? Maybe a bit too magical? Too much of _WTF is going on here?_
 
@@ -27,7 +27,7 @@ Yeah, you and me both.
 
 Then one day, it all clicked for me.
 
-My main problem was _I didn't have a good mental model how webpack worked._ To form that mental model, I researched dozens of articles, watched numerous screencasts, and read a lot of source code. One thing helped "flip the switch" more than anything else, and it was understanding the product of a webpack build: the output.
+My main problem was _I didn't have a good mental model how webpack worked._ To form that mental model, I researched dozens of articles, watched numerous screencasts, and read a lot of source code. One thing helped "flip the switch" more than anything else: understanding the product of a webpack build, the output.
 
 _It was right there in front of me the whole time._
 
@@ -38,6 +38,11 @@ But you can use a tool _right now_ to **visualize** what's in your bundle. And t
 ### Introducing the webpack-bundle-analyzer
 
 But, there is something else you can do that requires a lot less work: you can use the `webpack-bundle-analyzer`. You can probably get it up-and-running in less time than it takes to read this article.
+
+> Curious about or need help with webpack? I may be able to help! I'm developing a course for webpack on Rails and I frequently write about it on this blog.
+>
+> [**Subscribe to my newsletter to get updates**](https://little-fog-6985.ck.page/9c5bc129d8).
+
 
 The webpack-bundle-analyzer is a tool that you can use to visualize the contents of a webpack build. It parses the "stats" output of a webpack build and constructs an interactive [Voronoi treemap](https://www.jasondavies.com/voronoi-treemap/) using the [FoamTree](https://carrotsearch.com/foamtree/) library.
 
