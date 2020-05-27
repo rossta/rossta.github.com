@@ -48,7 +48,7 @@
 
 &lt;p&gt;Now you might call me crazy to say, &amp;quot;you should read the source of your bundled output,&amp;quot; even assuming we&amp;#39;re talking about the unminified/unobfuscated development build, so I&amp;#39;m not going to tell you to go do that. (Not without some guidance; let&amp;#39;s save that for a future project).&lt;/p&gt;
 
-&lt;p&gt;But you can use a tool, right now, to &lt;em&gt;visualize&lt;/em&gt; what&amp;#39;s in your bundle. And that could be enough to make all the difference in helping you understand, at least at a high level, how webpack does its thing.&lt;/p&gt;
+&lt;p&gt;But you can use a tool &lt;em&gt;right now&lt;/em&gt; to &lt;strong&gt;visualize&lt;/strong&gt; what&amp;#39;s in your bundle. And that could be enough to make all the difference in helping you understand, at least at a high level, how webpack does its thing.&lt;/p&gt;
 
       &lt;h3 id="introducing-the-webpack-bundle-analyzer" class="title title-h3"&gt;
         &lt;a name="introducing-the-webpack-bundle-analyzer" class="anchor" href="#introducing-the-webpack-bundle-analyzer"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
