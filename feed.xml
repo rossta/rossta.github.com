@@ -19,14 +19,14 @@
       <name>Ross Kaffenberger</name>
     </author>
     <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;tl;dr Install the &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;webpack-bundle-analyzer&lt;/code&gt;&lt;/a&gt; to visualize what's included in your webpack bundles and debug common problems".&lt;/p&gt;
+&lt;p&gt;tl;dr Install the &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;webpack-bundle-analyzer&lt;/code&gt;&lt;/a&gt; to visualize what's included in your webpack bundles and debug common problems.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;Does webpack feel still a bit scary? Maybe a bit too magical? Too much of &lt;em&gt;WTF is going on here?&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;It felt that way for me once...&lt;/p&gt;</summary>
     <content type="html">&lt;blockquote&gt;
-&lt;p&gt;tl;dr Install the &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;webpack-bundle-analyzer&lt;/code&gt;&lt;/a&gt; to visualize what&amp;#39;s included in your webpack bundles and debug common problems&amp;quot;.&lt;/p&gt;
+&lt;p&gt;tl;dr Install the &lt;a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;webpack-bundle-analyzer&lt;/code&gt;&lt;/a&gt; to visualize what&amp;#39;s included in your webpack bundles and debug common problems.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;Does webpack feel still a bit scary? Maybe a bit too magical? Too much of &lt;em&gt;WTF is going on here?&lt;/em&gt;&lt;/p&gt;
@@ -42,7 +42,7 @@
 
 &lt;p&gt;Then one day, it all clicked for me.&lt;/p&gt;
 
-&lt;p&gt;My main problem was &lt;em&gt;I didn&amp;#39;t have a good mental model how webpack worked.&lt;/em&gt; To form that mental model, I researched dozens of articles, watched numerous screencasts, and read a lot of source code. One thing helped &amp;quot;flip the switch&amp;quot; more than anything else, and it was understanding the product of a webpack build: the output.&lt;/p&gt;
+&lt;p&gt;My main problem was &lt;em&gt;I didn&amp;#39;t have a good mental model how webpack worked.&lt;/em&gt; To form that mental model, I researched dozens of articles, watched numerous screencasts, and read a lot of source code. One thing helped &amp;quot;flip the switch&amp;quot; more than anything else: understanding the product of a webpack build, the output.&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;It was right there in front of me the whole time.&lt;/em&gt;&lt;/p&gt;
 
@@ -59,6 +59,12 @@
       &lt;/h3&gt;
     
 &lt;p&gt;But, there is something else you can do that requires a lot less work: you can use the &lt;code&gt;webpack-bundle-analyzer&lt;/code&gt;. You can probably get it up-and-running in less time than it takes to read this article.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Curious about or need help with webpack? I may be able to help! I&amp;#39;m developing a course for webpack on Rails and I frequently write about it on this blog.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter to get updates&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;The webpack-bundle-analyzer is a tool that you can use to visualize the contents of a webpack build. It parses the &amp;quot;stats&amp;quot; output of a webpack build and constructs an interactive &lt;a href="https://www.jasondavies.com/voronoi-treemap/" target="_blank" rel="noopener noreferrer"&gt;Voronoi treemap&lt;/a&gt; using the &lt;a href="https://carrotsearch.com/foamtree/" target="_blank" rel="noopener noreferrer"&gt;FoamTree&lt;/a&gt; library.&lt;/p&gt;
 
