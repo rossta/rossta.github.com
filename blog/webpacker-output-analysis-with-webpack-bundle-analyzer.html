@@ -2,16 +2,16 @@
 <html class="antialiased" lang="en">
   <head>
     <title>The webpack plugin I can't live without - rossta.net</title>
-<meta name="description" content="In this post, we'll take a look installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
+<meta name="description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
 <meta name="keywords" content="Rails, Webpack" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
-<meta name="twitter:description" content="In this post, we'll take a look installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
+<meta name="twitter:description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/neonbrand-stained-glass-unsplash.jpg" />
 <meta name="twitter:title" content="The webpack plugin I can't live without" />
-<meta property="og:description" content="In this post, we'll take a look installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
+<meta property="og:description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/stock/neonbrand-stained-glass-unsplash.jpg" />
 <meta property="og:title" content="The webpack plugin I can't live without" />
     <meta charset="utf-8" />
@@ -63,9 +63,9 @@
 <p>tl;dr Install the <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer"><code>webpack-bundle-analyzer</code></a> to visualize what&#39;s included in your webpack bundles and debug common problems&quot;.</p>
 </blockquote>
 
-<p>Does webpack feel still a bit scary? Maybe a bit too magical? Maybe a bit too much like <em>WTF is going on here?</em></p>
+<p>Does webpack feel still a bit scary? Maybe a bit too magical? Too much of <em>WTF is going on here?</em></p>
 
-<p>It felt that way for me once. I was struggling to <a href="https://rossta.net/blog/from-sprockets-to-webpack.html" target="_blank" rel="noopener noreferrer">switch from Sprockets to Webpacker in a large Rails app</a>. With Sprockets, I could require a jQuery plugin through Sprockets&#39; magic comment, the require directive, and it would &quot;Just Work&quot;.</p>
+<p>It felt that way for me once. I was struggling to <a href="https://rossta.net/blog/from-sprockets-to-webpack.html" target="_blank" rel="noopener noreferrer">switch from Sprockets to Webpacker in a large Rails app</a>. With Sprockets, I could require a jQuery plugin through a magic comment (the require directive), and it would &quot;Just Work.&quot;</p>
 
 <p>Such was not the case when I first started using webpack; ever seen an error like on the console?</p>
 
@@ -74,13 +74,15 @@
 
 <p>Yeah, you and me both.</p>
 
-<p>Then one day it all clicked for me.</p>
+<p>Then one day, it all clicked for me.</p>
 
-<p>My main problem was <em>I didn&#39;t have a good mental model how webpack worked.</em> To form that mental model, I researched a ton articles, watched countless screencasts, and read a lot of source code. One thing helped &quot;flip the switch&quot; more than anything else and it was understanding the product of a webpack build: the output.</p>
+<p>My main problem was <em>I didn&#39;t have a good mental model how webpack worked.</em> To form that mental model, I researched dozens of articles, watched numerous screencasts, and read a lot of source code. One thing helped &quot;flip the switch&quot; more than anything else, and it was understanding the product of a webpack build: the output.</p>
 
-<p>It was right there in front of me the whole time.</p>
+<p><em>It was right there in front of me the whole time.</em></p>
 
-<p>Now I could tell you to go read the source of your bundled output and you might call me crazy, even assuming we&#39;re talking about the unminified/unobfuscated development build. So I&#39;m not going to tell you to go do that without some guidance; let&#39;s save that for a future project.</p>
+<p>Now you might call me crazy to say, &quot;you should read the source of your bundled output,&quot; even assuming we&#39;re talking about the unminified/unobfuscated development build, so I&#39;m not going to tell you to go do that. (Not without some guidance; let&#39;s save that for a future project).</p>
+
+<p>But you can use a tool, right now, to <em>visualize</em> what&#39;s in your bundle. And that could be enough to make all the difference in helping you understand, at least at a high level, how webpack does its thing.</p>
 
       <h3 id="introducing-the-webpack-bundle-analyzer" class="title title-h3">
         <a name="introducing-the-webpack-bundle-analyzer" class="anchor" href="#introducing-the-webpack-bundle-analyzer">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -99,7 +101,7 @@
 <p><img src="/assets/images/blog/webpack/analyzer-single-bundle-1.png" alt="An example of a Voronoi treemap output by the webpack-bundle-analyzer" loading="lazy" /></p>
 
 <blockquote>
-<p>Funny story, this wasn&#39;t the first time I&#39;ve come across Voronoi diagrams. The hands-down best Computer Science class I took at NYU was <a href="https://cs.nyu.edu/courses/fall16/CSCI-GA.2965-001/" target="_blank" rel="noopener noreferrer">Heuristics</a> with Dennis Shasha in which we learned algorithms for approximating solutions to NP-hard problems and applied them to compete in automated 2-player competitive battles including a <a href="https://cs.nyu.edu/courses/fall16/CSCI-GA.2965-001/voronoi_gravitational.html" target="_blank" rel="noopener noreferrer">gravitation Voronoi game</a>. My source code is up on GitHub somewhere useful to no one else serving mostly as a reminder to myself that I can accomplish big things under challenging constraints.</p>
+<p>Funny story, this wasn&#39;t the first time I&#39;ve come across Voronoi diagrams. The hands-down best Computer Science class I took at NYU was <a href="https://cs.nyu.edu/courses/fall16/CSCI-GA.2965-001/" target="_blank" rel="noopener noreferrer">Heuristics</a> with Dennis Shasha in which we learned algorithms for approximating solutions to NP-hard problems and applied them to compete in automated 2-player competitive battles including a <a href="https://cs.nyu.edu/courses/fall16/CSCI-GA.2965-001/voronoi_gravitational.html" target="_blank" rel="noopener noreferrer">gravitation Voronoi game</a>. My source code is up on GitHub somewhere useful to no one else, serving mostly as a reminder I can accomplish big things under challenging constraints.</p>
 </blockquote>
 
 <p>The analyzer will represent multiple bundles as distinct colors with relative sizes:
@@ -108,7 +110,7 @@
 <p>Individual modules are displayed in their relative sizes. Hover over bundles and modules to view statistics. Click or scroll to zoom in:
 <img src="/assets/images/blog/webpack/analyzer-module-closeup.png" alt="webpack-bundle-analyzer module closeup" loading="lazy" /></p>
 
-<p>Use the slide-out menu on the left to toggle the gzipped and parsed (&quot;un&quot;-gzipped) sizes of the bundles:
+<p>Use the slide-out menu on the left to toggle the gzipped and parsed (&quot;un&quot;-gzipped) bundles:
 <img src="/assets/images/blog/webpack/analyzer-menu-closeup.png" alt="webpack-bundle-analyzer close up of menu" loading="lazy" /></p>
 
 <p>Highlight modules that match a search phrase, like &quot;react&quot;:
@@ -117,8 +119,17 @@
 <p>Are you using Moment.js? It might be including translations for all its locales by default at enormous cost. <a href="https://github.com/jmblog/how-to-optimize-momentjs-with-webpack" target="_blank" rel="noopener noreferrer">Consider using only the locales you need</a>.
 <img src="/assets/images/blog/webpack/analyzer-moment-locales.png" alt="webpack-bundle-analyzer moment locales" loading="lazy" /></p>
 
+      <h4 id="key-questions" class="title title-h4">
+        <a name="key-questions" class="anchor" href="#key-questions">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Key questions
+      </h4>
+    
 <p>Here are just some examples of questions the webpack-bundle-analyzer can help answer:</p>
 
+<blockquote>
 <ol>
 <li>Why is this bundle so large?</li>
 <li>What are the relative sizes of each <em>bundle</em> in the webpack build?</li>
@@ -133,11 +144,10 @@
 <li>WTF is in this bundle?</li>
 </ol>
 
-<blockquote>
-<p><strong>Glossary alert</strong> &quot;Tree shaking&quot; is lingo for dead code elimination: the process of removing unreferenced code from your build. Webpack will perform tree shaking when running in &quot;production&quot; mode which is enabled when building assets using <code>rake assets:precompile</code> or via <code>./bin/webpack</code> with <code>RAILS_ENV=production</code> and <code>NODE_ENV=production</code>. I&#39;ll share more about how to take full advantage of tree shaking in future posts.</p>
+<p><strong>Glossary alert</strong> &quot;Tree shaking&quot; is jargon for dead code elimination: the process of removing unreferenced code from your build. Webpack will perform tree shaking when running in &quot;production&quot; mode which is enabled when building assets using <code>rake assets:precompile</code> or via <code>./bin/webpack</code> with <code>RAILS_ENV=production</code> and <code>NODE_ENV=production</code>. I&#39;ll share more about how to take full advantage of tree shaking in future posts.</p>
 </blockquote>
 
-<p>The key point here is that webpack-bundle-analyzer can help you figure out what exactly is happening in your build and support efforts to debug unexpected behavior or optimize your build output to reduce bundle size (thereby speeding up user experience!)</p>
+<p>In short, webpack-bundle-analyzer graphs what is happening in your build. It can help you debug unexpected behavior or optimize your build output to reduce bundle size. All that, in service of better user experience!</p>
 
       <h3 id="installation" class="title title-h3">
         <a name="installation" class="anchor" href="#installation">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -147,7 +157,7 @@
         Installation
       </h3>
     
-<p>To use the webpack-bundler-analyzer, you can either integrate it as plugin to your Webpacker configuration or you use a two-step command line process.</p>
+<p>To use the webpack-bundler-analyzer, you can either integrate it as a plugin to your Webpacker configuration or you use a two-step command line process.</p>
 
 <p>To install via yarn:</p>
 
@@ -166,11 +176,11 @@
     
 <p>Below I&#39;ll describe the two options for using the webpack-bundle-analyzer.</p>
 
-<p>Typically, it makes most sense to analyze the output of production builds, since they will be what&#39;s delivered t the client and may contain a number of optimizations that will make the output differ significantly from the development build. Analyzing the development build can still be useful for additional context when debugging.</p>
+<p>Typically, it makes the most sense to analyze the output of production builds since they will be what&#39;s delivered t the client and may contain several optimizations that will make the output differ significantly from the development build. Analyzing the development build can still be useful for additional context when debugging.</p>
 
 <p>Though the instructions are tailored to a Rails project using <a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer">Webpacker</a>, you could adapt them to any webpack project.</p>
 
-<p>When the analyzer is run, it will launch a local webserver; visit <a href="http://locahost:8888" target="_blank" rel="noopener noreferrer">http://locahost:8888</a> to view the treemap. The <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin" target="_blank" rel="noopener noreferrer">port is configurable</a> and you&#39;ll need to hit Ctrl+C to stop the server.</p>
+<p>When the analyzer is run, it will launch a local webserver; visit <a href="http://locahost:8888" target="_blank" rel="noopener noreferrer">http://locahost:8888</a> to view the treemap. The <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin" target="_blank" rel="noopener noreferrer">port is configurable</a>, and you&#39;ll need to hit Ctrl+C to stop the server.</p>
 
       <h4 id="option-1-analyze-json-from-command-line" class="title title-h4">
         <a name="option-1-analyze-json-from-command-line" class="anchor" href="#option-1-analyze-json-from-command-line">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -180,7 +190,7 @@
         Option 1: Analyze JSON from command line
       </h4>
     
-<p>The <code>webpack-bundle-analyzer</code> package ships with a command-line interface (CLI) that can ingest a webpack json stats file. In other words, it&#39;s a two step process in which we first generate a webpack build thats outputs build stats to a json file and then we run the <code>webpack-bundle-analzyer</code> CLI to analyze the build stats and the output bundles generated in the build:</p>
+<p>The <code>webpack-bundle-analyzer</code> package ships with a command-line interface (CLI) that can ingest a webpack JSON stats file. In other words, it&#39;s a two-step process in which we generate a webpack build that&#39;s outputs build stats to a JSON file and then run the <code>webpack-bundle-analyzer</code> CLI to analyze the build stats and the output bundles generated in the build:</p>
 
 <p>In a Rails project, we might typically first run the webpack build:</p>
 
@@ -193,8 +203,8 @@
 </code></pre>
 
 <blockquote>
-<p><code>npx</code> is a separate command-line interface that is installed along with <code>node</code>. It will look for the command you specify in your locally installed <code>node_modules</code>. In other words, this replaces <code>./bin/node_modules/webpack-bundle-analzyer ...</code>.
-Get this: with <code>npx</code>, the package script you&#39;re trying to run <em>doesn&#39;t even need to be installed</em>! Yes, that&#39;s right, if you want, you can skip <code>yarn add webpack-bundle-analyzer</code> and use <code>npx webpack-bundler-analyzer</code> as if its installed globally. <code>npx</code> will search your locally installed packages and, in case of a miss, it will look up the package on the remote npm registry. Pretty cool!</p>
+<p><code>npx</code> is a separate command-line interface that is installed along with <code>node</code>. It will look for the command you specify in your locally installed <code>node_modules</code>. In other words, this replaces <code>./bin/node_modules/webpack-bundle-analyzer ...</code>.
+Get this: with <code>npx</code>, the package script you&#39;re trying to run <em>doesn&#39;t even need to be installed</em>! Yes, that&#39;s right: if you want, you can skip <code>yarn add webpack-bundle-analyzer</code>. Use <code>npx webpack-bundler-analyzer</code> as if it&#39;s installed globally. <code>npx</code> will search your locally installed packages and will look up the package on the remote npm registry when not found locally. Pretty cool!</p>
 </blockquote>
 
 <p>Since I don&#39;t want to type all that out every time, I put those commands in the <code>scripts</code> section of my <code>package.json</code>:</p>
@@ -247,7 +257,7 @@ end
         Option 2: Integrated setup
       </h4>
     
-<p>Instead of using separate scripts to trigger the bundle analyzer, you can instead incorporate the webpack-bundle-analyzer into your webpack configuration. This would enable you to turn on the webpack-bundle-analyzer localhost server as a side effect of running the build command.</p>
+<p>Instead of using separate scripts to trigger the bundle analyzer, you can instead incorporate the webpack-bundle-analyzer into your webpack configuration. Doing so runs the webpack-bundle-analyzer localhost server as a side effect of running the build command.</p>
 
 <pre><code class="javascript">// config/webpack/environment.js
 const { environment } = require(&#39;@rails/webpacker&#39;)
@@ -260,14 +270,14 @@ if (process.env.WEBPACK_ANALYZE === &#39;true&#39;) {
 module.exports = environment
 </code></pre>
 
-<p>Note that the plugin is incorporated into the webpack config only with the environment variable <code>WEBPACK_ANALYZE=true</code> so it is only added to the configuration as an opt-in feature.</p>
+<p>Note that the plugin is incorporated into the webpack config only with the environment variable <code>WEBPACK_ANALYZE=true</code>, so it is only added to the configuration as an opt-in feature.</p>
 
 <p>To visualize the production build, run this command instead:</p>
 
 <pre><code class="sh">WEBPACK_ANALYZE=true RAILS_ENV=production NODE_ENV=production ./bin/webpack
 </code></pre>
 
-<p>You could even run the analyzer server alongside your webpack-dev server with <code>WEBPACK_ANALYZE=true ./bin/webpack-dev-server</code> to get instant feedback. Just keep in mind that the bundle analysis while in development mode will yield different results from the the production build.</p>
+<p>You could even run the analyzer server alongside your webpack-dev server with <code>WEBPACK_ANALYZE=true ./bin/webpack-dev-server</code> to get instant feedback. Keep in mind that the bundle analysis while in development mode will yield different results from the production build.</p>
 
       <h4 id="rails-template" class="title title-h4">
         <a name="rails-template" class="anchor" href="#rails-template">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -292,7 +302,7 @@ module.exports = environment
         What&#39;s next?
       </h3>
     
-<p>So you&#39;ve set up the webpack-bundle-analyzer and started understanding what&#39;s happening in your webpack bundles... what now? You may have noticed some things you don&#39;t like. In future posts, I&#39;ll be examining some ways you can deal with some of the excess, including:</p>
+<p>So you&#39;ve set up the webpack-bundle-analyzer and started understanding what&#39;s happening in your webpack bundles, what now? You may have noticed some things you don&#39;t like. In future posts, I&#39;ll be examining how you can deal with the excesses, including:</p>
 
 <ul>
 <li>Replacing libraries with built-in browser functionality or smaller packages</li>
