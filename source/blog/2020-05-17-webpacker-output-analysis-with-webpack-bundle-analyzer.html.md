@@ -1,9 +1,9 @@
 ---
-title: Webpacker output analysis with webpack-bundle-analyzer
+title: The webpack plugin I can't live without
 author: Ross Kaffenberger
-published: false
-summary: The tool every Rails team should be using with Webpacker
-description: Webpacker output analysis with webpack-bundle-analyzer
+published: true
+summary: Get to know your bundles with the webpack-bundle-analyzer
+description: In this post, we'll take a look installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker.
 pull_image: 'blog/stock/neonbrand-stained-glass-unsplash.jpg'
 pull_image_caption: Photo by NeONBRAND on Unsplash
 series:
@@ -13,23 +13,154 @@ tags:
   - Webpack
 ---
 
-The output of the development and production builds will be differ, possibly significantly; webpack will include a number of optimizations to improve output size and performance in the production build which would be omitted in the development build.
+> tl;dr Install the [`webpack-bundle-analyzer`](https://github.com/webpack-contrib/webpack-bundle-analyzer) to visualize what's included in your webpack bundles and debug common problems".
 
-### Installation and usage
+Does webpack feel still a bit scary? Maybe a bit too magical? Maybe a bit too much like _WTF is going on here?_
 
+It felt that way for me once. I was struggling to [switch from Sprockets to Webpacker in a large Rails app](https://rossta.net/blog/from-sprockets-to-webpack.html). With Sprockets, I could require a jQuery plugin through Sprockets' magic comment, the require directive, and it would "Just Work".
+
+Such was not the case when I first started using webpack; ever seen an error like on the console?
+```js
+'Uncaught TypeError: $(...).fancybox is not a function'
 ```
-yarn add --dev webpack-bundle-analyzer
-```
+Yeah, you and me both.
+
+Then one day it all clicked for me.
+
+My main problem was _I didn't have a good mental model how webpack worked._ To form that mental model, I researched a ton articles, watched countless screencasts, and read a lot of source code. One thing helped "flip the switch" more than anything else and it was understanding the product of a webpack build: the output.
+
+It was right there in front of me the whole time.
+
+Now I could tell you to go read the source of your bundled output and you might call me crazy, even assuming we're talking about the unminified/unobfuscated development build. So I'm not going to tell you to go do that without some guidance; let's save that for a future project.
+
+### Introducing the webpack-bundle-analyzer
+
+But, there is something else you can do that requires a lot less work: you can use the `webpack-bundle-analyzer`. You can probably get it up-and-running in less time than it takes to read this article.
+
+The webpack-bundle-analyzer is a tool that you can use to visualize the contents of a webpack build. It parses the "stats" output of a webpack build and constructs an interactive [Voronoi treemap](https://www.jasondavies.com/voronoi-treemap/) using the [FoamTree](https://carrotsearch.com/foamtree/) library.
+
+It might look a little something like this:
+
+![An example of a Voronoi treemap output by the webpack-bundle-analyzer](blog/webpack/analyzer-single-bundle-1.png)
+
+> Funny story, this wasn't the first time I've come across Voronoi diagrams. The hands-down best Computer Science class I took at NYU was [Heuristics](https://cs.nyu.edu/courses/fall16/CSCI-GA.2965-001/) with Dennis Shasha in which we learned algorithms for approximating solutions to NP-hard problems and applied them to compete in automated 2-player competitive battles including a [gravitation Voronoi game](https://cs.nyu.edu/courses/fall16/CSCI-GA.2965-001/voronoi_gravitational.html). My source code is up on GitHub somewhere useful to no one else serving mostly as a reminder to myself that I can accomplish big things under challenging constraints.
+
+The analyzer will represent multiple bundles as distinct colors with relative sizes:
+![webpack-bundle-analyzer multiple bundles](blog/webpack/analyzer-multiple-bundles.png)
+
+Individual modules are displayed in their relative sizes. Hover over bundles and modules to view statistics. Click or scroll to zoom in:
+![webpack-bundle-analyzer module closeup](blog/webpack/analyzer-module-closeup.png)
+
+Use the slide-out menu on the left to toggle the gzipped and parsed ("un"-gzipped) sizes of the bundles:
+![webpack-bundle-analyzer close up of menu](blog/webpack/analyzer-menu-closeup.png)
+
+Highlight modules that match a search phrase, like "react":
+![webpack-bundle-analyzer module highlight](blog/webpack/analyzer-module-highlight.png)
+
+Are you using Moment.js? It might be including translations for all its locales by default at enormous cost. [Consider using only the locales you need](https://github.com/jmblog/how-to-optimize-momentjs-with-webpack).
+![webpack-bundle-analyzer moment locales](blog/webpack/analyzer-moment-locales.png)
+
+Here are just some examples of questions the webpack-bundle-analyzer can help answer:
+
+1. Why is this bundle so large?
+1. What are the relative sizes of each _bundle_ in the webpack build?
+1. What are the relative sizes of each _module_ in the webpack build?
+1. Where is my business logic bundled?
+1. Are the modules I expect included?
+1. Are any modules included more than once?
+1. Are there modules I expect to be excluded?
+1. Which third-party libraries are bundled?
+1. Which bundle contains $MODULE_NAME?
+1. Is [tree-shaking](https://webpack.js.org/guides/tree-shaking/)* working?
+1. WTF is in this bundle?
+
+> **Glossary alert** "Tree shaking" is lingo for dead code elimination: the process of removing unreferenced code from your build. Webpack will perform tree shaking when running in "production" mode which is enabled when building assets using `rake assets:precompile` or via `./bin/webpack` with `RAILS_ENV=production` and `NODE_ENV=production`. I'll share more about how to take full advantage of tree shaking in future posts.
+
+The key point here is that webpack-bundle-analyzer can help you figure out what exactly is happening in your build and support efforts to debug unexpected behavior or optimize your build output to reduce bundle size (thereby speeding up user experience!)
+
+### Installation
 
 To use the webpack-bundler-analyzer, you can either integrate it as plugin to your Webpacker configuration or you use a two-step command line process.
 
-#### Option 1: Integrated setup
+To install via yarn:
+```sh
+yarn add --dev webpack-bundle-analyzer
+```
+Since this tool is typically only useful for local development, we add it to `devDependencies` using the `--dev` flag.
+
+### Usage
+
+Below I'll describe the two options for using the webpack-bundle-analyzer.
+
+Typically, it makes most sense to analyze the output of production builds, since they will be what's delivered t the client and may contain a number of optimizations that will make the output differ significantly from the development build. Analyzing the development build can still be useful for additional context when debugging.
+
+Though the instructions are tailored to a Rails project using [Webpacker](https://github.com/rails/webpacker), you could adapt them to any webpack project.
+
+When the analyzer is run, it will launch a local webserver; visit http://locahost:8888 to view the treemap. The [port is configurable](https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin) and you'll need to hit Ctrl+C to stop the server.
+
+#### Option 1: Analyze JSON from command line
+
+The `webpack-bundle-analyzer` package ships with a command-line interface (CLI) that can ingest a webpack json stats file. In other words, it's a two step process in which we first generate a webpack build thats outputs build stats to a json file and then we run the `webpack-bundle-analzyer` CLI to analyze the build stats and the output bundles generated in the build:
+
+In a Rails project, we might typically first run the webpack build:
+```sh
+bin/webpack --stats > tmp/webpack-stats.json
+```
+Then we would analyze the output with the command `webpack-bundle-analyzer [stats file] [output directory]`:
+```sh
+npx webpack-bundle-analyzer tmp/webpack-stats.json public/packs
+```
+> `npx` is a separate command-line interface that is installed along with `node`. It will look for the command you specify in your locally installed `node_modules`. In other words, this replaces `./bin/node_modules/webpack-bundle-analzyer ...`.
+> Get this: with `npx`, the package script you're trying to run _doesn't even need to be installed_! Yes, that's right, if you want, you can skip `yarn add webpack-bundle-analyzer` and use `npx webpack-bundler-analyzer` as if its installed globally. `npx` will search your locally installed packages and, in case of a miss, it will look up the package on the remote npm registry. Pretty cool!
+
+Since I don't want to type all that out every time, I put those commands in the `scripts` section of my `package.json`:
+```json
+// package.json
+{
+  // ...
+  "scripts": {
+    "webpack:analyze": "yarn webpack:build_json && yarn webpack:analyze_json",
+    "webpack:build_json": "RAILS_ENV=${RAILS_ENV:-production} NODE_ENV=${NODE_ENV:-production} bin/webpack > tmp/webpack-stats.json",
+    "webpack:analyze_json": "webpack-bundle-analyzer tmp/webpack-stats.json public/packs"
+  }
+}
+```
+To analyze the build using these npm scripts, run:
+```sh
+yarn webpack:analyze
+```
+You could instead write this as a rake tasks as follows:
+```ruby
+namespace :webpack do
+  desc "Analyze the webpack build"
+  task :analyze => [:build_json, :analyze_json]
+
+  task :build_json do
+    system "RAILS_ENV=#{ENV.fetch('RAILS_ENV', 'production')} \
+     NODE_ENV=#{ENV.fetch('NODE_ENV', 'production')} \
+     bin/webpack --json > tmp/webpack-stats.json"
+  end
+
+  task :analyze_json do
+    system "npx webpack-bundle-analyzer tmp/webpack-stats.json public/packs"
+  rescue Interrupt
+  end
+end
+```
+To analyze the build using these rake tasks, run:
+```sh
+rake webpack:analyze
+```
+
+#### Option 2: Integrated setup
+
+Instead of using separate scripts to trigger the bundle analyzer, you can instead incorporate the webpack-bundle-analyzer into your webpack configuration. This would enable you to turn on the webpack-bundle-analyzer localhost server as a side effect of running the build command.
 
 ```javascript
 // config/webpack/environment.js
 const { environment } = require('@rails/webpacker')
 
-if (process.env.WEBPACK_ANALYZE) {
+if (process.env.WEBPACK_ANALYZE === 'true') {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   environment.plugins.append('BundleAnalyzerPlugin', new BundleAnalyzerPlugin())
 }
@@ -37,30 +168,39 @@ if (process.env.WEBPACK_ANALYZE) {
 module.exports = environment
 ```
 
-Note that the plugin is added only when the `WEBPACK_ANALYZE` enviroment variable is present.
-
-To visualize the development build, run the following command:
-
-```sh
-$ WEBPACK_ANALYZE=true RAILS_ENV=development NODE_ENV=development ./bin/webpack
-```
+Note that the plugin is incorporated into the webpack config only with the environment variable `WEBPACK_ANALYZE=true` so it is only added to the configuration as an opt-in feature.
 
 To visualize the production build, run this command instead:
-
 ```sh
-$ WEBPACK_ANALYZE=true RAILS_ENV=production NODE_ENV=production ./bin/webpack
+WEBPACK_ANALYZE=true RAILS_ENV=production NODE_ENV=production ./bin/webpack
 ```
 
-#### Option 2: Analyze JSON from command line
+You could even run the analyzer server alongside your webpack-dev server with `WEBPACK_ANALYZE=true ./bin/webpack-dev-server` to get instant feedback. Just keep in mind that the bundle analysis while in development mode will yield different results from the the production build.
 
-If you're reluctant to modify your webpack config for a development tool (or at all), you can take advantage of the command-line interface to webpack-bundle-analyzer instead.
+#### Rails template
+
+For your convenience, I packaged [this changeset as a Rails template](https://railsbytes.com/public/templates/Xo5sYr) on [railsbytes.com](https://railsbytes.com).
+
+You can preview this template at https://railsbytes.com/public/templates/Xo5sYr. To use the template, skip the steps above and run the following command:
 
 ```sh
-RAILS_ENV=production NODE_ENV=production bin/webpack --profile --json > tmp/webpack-stats-production.json
-```
-Analyze the stats.json file:
-```sh
-npx webpack-bundler-analyzer tmp/webpack-stats-production.json
+rails app:template LOCATION="https://railsbytes.com/script/Xo5sYr"
 ```
 
-### Interpreting the results
+### What's next?
+
+So you've set up the webpack-bundle-analyzer and started understanding what's happening in your webpack bundles... what now? You may have noticed some things you don't like. In future posts, I'll be examining some ways you can deal with some of the excess, including:
+
+* Replacing libraries with built-in browser functionality or smaller packages
+* Taking full advantage of tree-shaking with imports
+* Using webpack to filter out unnecessary imports
+* The "right way" to split bundles for multi-page applications
+* Code-splitting with dynamic imports
+
+Until then, here are some more resources you can use:
+
+* [Google: Monitor and analyze the app](https://developers.google.com/web/fundamentals/performance/webpack/monitor-and-analyze)
+* [Video: How to use the webpack bundle analyzer](https://www.youtube.com/watch?v=ltlxjq4YEKU)
+* [How to optimize momentjs with webpack](https://github.com/jmblog/how-to-optimize-momentjs-with-webpack)
+* [The correct wat to import lodash](https://www.blazemeter.com/blog/the-correct-way-to-import-lodash-libraries-a-benchmark)
+* [Managing your bundle size (video)](https://www.youtube.com/watch?v=Da6VxdGU2Ig)
