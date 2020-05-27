@@ -106,7 +106,7 @@ The `webpack-bundle-analyzer` package ships with a command-line interface (CLI) 
 
 In a Rails project, we might typically first run the webpack build:
 ```sh
-bin/webpack --stats > tmp/webpack-stats.json
+bin/webpack --profile --json > tmp/webpack-stats.json
 ```
 Then we would analyze the output with the command `webpack-bundle-analyzer [stats file] [output directory]`:
 ```sh
@@ -122,7 +122,7 @@ Since I don't want to type all that out every time, I put those commands in the 
   // ...
   "scripts": {
     "webpack:analyze": "yarn webpack:build_json && yarn webpack:analyze_json",
-    "webpack:build_json": "RAILS_ENV=${RAILS_ENV:-production} NODE_ENV=${NODE_ENV:-production} bin/webpack > tmp/webpack-stats.json",
+    "webpack:build_json": "RAILS_ENV=${RAILS_ENV:-production} NODE_ENV=${NODE_ENV:-production} bin/webpack --profile --json > tmp/webpack-stats.json",
     "webpack:analyze_json": "webpack-bundle-analyzer tmp/webpack-stats.json public/packs"
   }
 }
@@ -140,7 +140,7 @@ namespace :webpack do
   task :build_json do
     system "RAILS_ENV=#{ENV.fetch('RAILS_ENV', 'production')} \
      NODE_ENV=#{ENV.fetch('NODE_ENV', 'production')} \
-     bin/webpack --json > tmp/webpack-stats.json"
+     bin/webpack --profile --json > tmp/webpack-stats.json"
   end
 
   task :analyze_json do
