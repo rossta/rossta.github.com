@@ -2,16 +2,16 @@
 <html class="antialiased" lang="en">
   <head>
     <title>The webpack plugin I can't live without - rossta.net</title>
-<meta name="description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
+<meta name="description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer, perhaps the most invaluable webpack plugin, to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
 <meta name="keywords" content="Rails, Webpack" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:creator" content="Ross Kaffenberger" />
-<meta name="twitter:description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
+<meta name="twitter:description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer, perhaps the most invaluable webpack plugin, to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
 <meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/neonbrand-stained-glass-unsplash.jpg" />
 <meta name="twitter:title" content="The webpack plugin I can't live without" />
-<meta property="og:description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
+<meta property="og:description" content="In this post, we'll take a look at installing and using the webpack-bundle-analyzer, perhaps the most invaluable webpack plugin, to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker." />
 <meta property="og:image" content="https://rossta.net/assets/images/blog/stock/neonbrand-stained-glass-unsplash.jpg" />
 <meta property="og:title" content="The webpack plugin I can't live without" />
     <meta charset="utf-8" />
@@ -157,9 +157,7 @@
         Installation
       </h3>
     
-<p>To use the webpack-bundler-analyzer, you can either integrate it as a plugin to your Webpacker configuration or you use a two-step command line process.</p>
-
-<p>To install via yarn:</p>
+<p>The <code>webpack-bundle-analyzer</code> is distributed as an NPM package. To install via yarn:</p>
 
 <pre><code class="sh">yarn add --dev webpack-bundle-analyzer
 </code></pre>
@@ -174,7 +172,7 @@
         Usage
       </h3>
     
-<p>Below I&#39;ll describe the two options for using the webpack-bundle-analyzer.</p>
+<p>To use the webpack-bundler-analyzer, you can either integrate it as a plugin to your Webpacker configuration or you use a two-step command line process.</p>
 
 <p>Typically, it makes the most sense to analyze the output of production builds since they will be what&#39;s delivered t the client and may contain several optimizations that will make the output differ significantly from the development build. Analyzing the development build can still be useful for additional context when debugging.</p>
 
@@ -258,6 +256,8 @@ end
       </h4>
     
 <p>Instead of using separate scripts to trigger the bundle analyzer, you can instead incorporate the webpack-bundle-analyzer into your webpack configuration. Doing so runs the webpack-bundle-analyzer localhost server as a side effect of running the build command.</p>
+
+<p>Below, we&#39;ll look at how you can integrate the analyzer into a Rails using <a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer">Webpacker</a>.</p>
 
 <pre><code class="javascript">// config/webpack/environment.js
 const { environment } = require(&#39;@rails/webpacker&#39;)

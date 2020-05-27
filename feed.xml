@@ -123,9 +123,7 @@
         Installation
       &lt;/h3&gt;
     
-&lt;p&gt;To use the webpack-bundler-analyzer, you can either integrate it as a plugin to your Webpacker configuration or you use a two-step command line process.&lt;/p&gt;
-
-&lt;p&gt;To install via yarn:&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;webpack-bundle-analyzer&lt;/code&gt; is distributed as an NPM package. To install via yarn:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="sh"&gt;yarn add --dev webpack-bundle-analyzer
 &lt;/code&gt;&lt;/pre&gt;
@@ -140,7 +138,7 @@
         Usage
       &lt;/h3&gt;
     
-&lt;p&gt;Below I&amp;#39;ll describe the two options for using the webpack-bundle-analyzer.&lt;/p&gt;
+&lt;p&gt;To use the webpack-bundler-analyzer, you can either integrate it as a plugin to your Webpacker configuration or you use a two-step command line process.&lt;/p&gt;
 
 &lt;p&gt;Typically, it makes the most sense to analyze the output of production builds since they will be what&amp;#39;s delivered t the client and may contain several optimizations that will make the output differ significantly from the development build. Analyzing the development build can still be useful for additional context when debugging.&lt;/p&gt;
 
@@ -224,6 +222,8 @@ end
       &lt;/h4&gt;
     
 &lt;p&gt;Instead of using separate scripts to trigger the bundle analyzer, you can instead incorporate the webpack-bundle-analyzer into your webpack configuration. Doing so runs the webpack-bundle-analyzer localhost server as a side effect of running the build command.&lt;/p&gt;
+
+&lt;p&gt;Below, we&amp;#39;ll look at how you can integrate the analyzer into a Rails using &lt;a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"&gt;Webpacker&lt;/a&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
 const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
