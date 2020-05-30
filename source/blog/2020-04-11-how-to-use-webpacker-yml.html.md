@@ -65,7 +65,7 @@ Following is reference guide for supported Webpacker configuration options as of
 
 #### source_path
 
-The primary subdirectory within your Rails application where your webpack source code is located. Your [`source_entry_path`](#source_entry_path) directory should be located here. You can add to the list of source paths using [`resolved_paths`](#resolved_paths). Change this directory to something like `app/frontend` if you use webpack for non-JavaScript assets like CSS, images, fonts, etc.
+The primary subdirectory within your Rails application where your webpack source code is located. Your [`source_entry_path`](#source_entry_path) directory should be located here. You can add to the list of source paths using [`additional_paths`](#additional_paths). Change this directory to something like `app/frontend` if you use webpack for non-JavaScript assets like CSS, images, fonts, etc.
 
 ```yaml
 source_path: app/javascript
@@ -103,12 +103,12 @@ The subdirectory where webpack, webpacker, babel, etc. will write cache files to
 cache_path: tmp/cache/webpacker
 ```
 
-#### resolved_paths
+#### additional_paths
 
-This option expects an array of subdirectories where webpack should resolve modules. Given `resolved_paths` of `["app/assets/images"]`, webpack will lookup modules in your [`source_path`](#source_path), `node_modules`, and `app/assets/images`. When watching for file changes in development, webpack watched paths would include the `source_path` and `resolved_paths`.
+This option expects an array of subdirectories where webpack should resolve modules. Given `additional_paths` of `["app/assets/images"]`, webpack will lookup modules in your [`source_path`](#source_path), `node_modules`, and `app/assets/images`. When watching for file changes in development, webpack watched paths would include the `source_path` and `additional_paths`. The `additional_paths` key replaces the `resolved_paths` key in earlier versions of Webpacker, so this is a key you'll want to rename when upgrading to Webpacker 5+.
 
 ```yaml
-resolved_paths:
+additional_paths:
   - app/assets/images
 ```
 
