@@ -1,23 +1,18 @@
-<% tags = current_page.data.tags || [] %>
-<% if current_page_tagged?(%w[Rails Webpack]) %>
-  <h3 class="mb-2">
-    Need help with webpack on Rails?
-  </h3>
-  <p class="mb-4">
-    Webpacker now ships by default in Rails 6 but there's no need to stress.
-    I'm putting together a course to help you master webpack on Rails.
-  </p>
-  <p>
-    Subscribe to stay in the loop.
-  </p>
-<% else %>
-  <h3 class="mb-2">
-    Did you like this post?
-  </h3>
-  <p>
-    Please
-    <%= discuss_article_on_twitter_link_to(current_article, prompt: "share it on twitter", class: "font-bold") %>
-    and enter your email below to subscribe to my newsletter on
-    <%= current_page_tags.join(', ') + (current_page_tags.length > 1 ? "," : "") %> and the web. Thank you!
-  </p>
-<% end %>
+<h2 class="mb-8">
+  Need help with webpack on Rails?
+</h2>
+<p class="mb-4">My name is <strong>Ross Kaffenberger</strong>.</p>
+
+<p class="mb-4">
+  Webpacker now ships by default in Rails 6 but there's no need to stress.
+  I'm putting together a course to help you master <strong>webpack on Rails</strong>.
+</p>
+
+<p class="mb-4">
+  I teach full stack web developers about the frontend tools and performance,
+  especially at the intersection of <strong>JavaScript</strong> and <strong>Ruby on Rails</strong>.
+</p>
+
+<p>
+  Subscribe to stay in the loop.
+</p>
