@@ -17,7 +17,6 @@
     <main id="main" role="main" class="layout container">
       <%= yield %>
     </main>
-    <%= partial "partials/zen" %>
     <%= partial "partials/footer" %>
     <%= javascript_pack_tag "runtime", "vendors~app", "app" %>
     <%= yield_content :javascripts %>

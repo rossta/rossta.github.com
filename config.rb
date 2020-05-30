@@ -269,12 +269,4 @@ helpers do
   def convertkit_campaign
     explicit_page_tags.first || "Homepage"
   end
-
-  def nozen?
-    @nozen
-  end
-
-  def nozen!
-    @nozen = true
-  end
 end
