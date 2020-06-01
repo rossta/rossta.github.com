@@ -80,6 +80,15 @@ source_entry_path: packs
 ```
 **!!!Warning!!!** Only use this directory for webpack entry points! [A common webpacker mistake](https://rossta.net/blog/overpacking-a-common-webpacker-mistake.html) is placing too many files in this directory.
 
+#### additional_paths
+
+This option expects an array of subdirectories where webpack should resolve modules. Given `additional_paths` of `["app/assets/images"]`, webpack will lookup modules in your [`source_path`](#source_path), `node_modules`, and `app/assets/images`. When watching for file changes in development, webpack watched paths would include the `source_path` and `additional_paths`. The `additional_paths` key replaces the `resolved_paths` key in earlier versions of Webpacker, so this is a key you'll want to rename when upgrading to Webpacker 5+.
+
+```yaml
+additional_paths:
+  - app/assets/images
+```
+
 #### public_root_path
 
 The primary destination within your Rail application where your compiled webpack assets are output. For most applications this should be `public`, i.e., corresponding to `Rails.public_path`. When [configuring webpacker for a Rails engine](https://github.com/rails/webpacker/blob/master/docs/engines.md), this value could be relative to the engine root, such as `../public`.
@@ -101,15 +110,6 @@ The subdirectory where webpack, webpacker, babel, etc. will write cache files to
 
 ```yaml
 cache_path: tmp/cache/webpacker
-```
-
-#### additional_paths
-
-This option expects an array of subdirectories where webpack should resolve modules. Given `additional_paths` of `["app/assets/images"]`, webpack will lookup modules in your [`source_path`](#source_path), `node_modules`, and `app/assets/images`. When watching for file changes in development, webpack watched paths would include the `source_path` and `additional_paths`. The `additional_paths` key replaces the `resolved_paths` key in earlier versions of Webpacker, so this is a key you'll want to rename when upgrading to Webpacker 5+.
-
-```yaml
-additional_paths:
-  - app/assets/images
 ```
 
 #### webpack_compile_output
