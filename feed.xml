@@ -1163,6 +1163,20 @@ module.exports = environment
 
 &lt;p&gt;&lt;strong&gt;!!!Warning!!!&lt;/strong&gt; Only use this directory for webpack entry points! &lt;a href="https://rossta.net/blog/overpacking-a-common-webpacker-mistake.html" target="_blank" rel="noopener noreferrer"&gt;A common webpacker mistake&lt;/a&gt; is placing too many files in this directory.&lt;/p&gt;
 
+      &lt;h4 id="additional_paths" class="title title-h4"&gt;
+        &lt;a name="additional_paths" class="anchor" href="#additional_paths"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        additional_paths
+      &lt;/h4&gt;
+    
+&lt;p&gt;This option expects an array of subdirectories where webpack should resolve modules. Given &lt;code&gt;additional_paths&lt;/code&gt; of &lt;code&gt;[&amp;quot;app/assets/images&amp;quot;]&lt;/code&gt;, webpack will lookup modules in your &lt;a href="#source_path"&gt;&lt;code&gt;source_path&lt;/code&gt;&lt;/a&gt;, &lt;code&gt;node_modules&lt;/code&gt;, and &lt;code&gt;app/assets/images&lt;/code&gt;. When watching for file changes in development, webpack watched paths would include the &lt;code&gt;source_path&lt;/code&gt; and &lt;code&gt;additional_paths&lt;/code&gt;. The &lt;code&gt;additional_paths&lt;/code&gt; key replaces the &lt;code&gt;resolved_paths&lt;/code&gt; key in earlier versions of Webpacker, so this is a key you&amp;#39;ll want to rename when upgrading to Webpacker 5+.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="yaml"&gt;additional_paths:
+  - app/assets/images
+&lt;/code&gt;&lt;/pre&gt;
+
       &lt;h4 id="public_root_path" class="title title-h4"&gt;
         &lt;a name="public_root_path" class="anchor" href="#public_root_path"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
@@ -1200,20 +1214,6 @@ module.exports = environment
 &lt;p&gt;The subdirectory where webpack, webpacker, babel, etc. will write cache files to enhance recompilation times. For example, given a &lt;code&gt;cache_path&lt;/code&gt; of &lt;code&gt;tmp/cache/webpacker&lt;/code&gt;, webpacker will write a SHA1 digest on each compilation of your source files in development to a file &lt;code&gt;tmp/cache/webpacker/last-compilation-digest-development&lt;/code&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="yaml"&gt;cache_path: tmp/cache/webpacker
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h4 id="additional_paths" class="title title-h4"&gt;
-        &lt;a name="additional_paths" class="anchor" href="#additional_paths"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        additional_paths
-      &lt;/h4&gt;
-    
-&lt;p&gt;This option expects an array of subdirectories where webpack should resolve modules. Given &lt;code&gt;additional_paths&lt;/code&gt; of &lt;code&gt;[&amp;quot;app/assets/images&amp;quot;]&lt;/code&gt;, webpack will lookup modules in your &lt;a href="#source_path"&gt;&lt;code&gt;source_path&lt;/code&gt;&lt;/a&gt;, &lt;code&gt;node_modules&lt;/code&gt;, and &lt;code&gt;app/assets/images&lt;/code&gt;. When watching for file changes in development, webpack watched paths would include the &lt;code&gt;source_path&lt;/code&gt; and &lt;code&gt;additional_paths&lt;/code&gt;. The &lt;code&gt;additional_paths&lt;/code&gt; key replaces the &lt;code&gt;resolved_paths&lt;/code&gt; key in earlier versions of Webpacker, so this is a key you&amp;#39;ll want to rename when upgrading to Webpacker 5+.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="yaml"&gt;additional_paths:
-  - app/assets/images
 &lt;/code&gt;&lt;/pre&gt;
 
       &lt;h4 id="webpack_compile_output" class="title title-h4"&gt;

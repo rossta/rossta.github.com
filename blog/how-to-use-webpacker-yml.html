@@ -163,6 +163,20 @@
 
 <p><strong>!!!Warning!!!</strong> Only use this directory for webpack entry points! <a href="https://rossta.net/blog/overpacking-a-common-webpacker-mistake.html" target="_blank" rel="noopener noreferrer">A common webpacker mistake</a> is placing too many files in this directory.</p>
 
+      <h4 id="additional_paths" class="title title-h4">
+        <a name="additional_paths" class="anchor" href="#additional_paths">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        additional_paths
+      </h4>
+    
+<p>This option expects an array of subdirectories where webpack should resolve modules. Given <code>additional_paths</code> of <code>[&quot;app/assets/images&quot;]</code>, webpack will lookup modules in your <a href="#source_path"><code>source_path</code></a>, <code>node_modules</code>, and <code>app/assets/images</code>. When watching for file changes in development, webpack watched paths would include the <code>source_path</code> and <code>additional_paths</code>. The <code>additional_paths</code> key replaces the <code>resolved_paths</code> key in earlier versions of Webpacker, so this is a key you&#39;ll want to rename when upgrading to Webpacker 5+.</p>
+
+<pre><code class="yaml">additional_paths:
+  - app/assets/images
+</code></pre>
+
       <h4 id="public_root_path" class="title title-h4">
         <a name="public_root_path" class="anchor" href="#public_root_path">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
@@ -200,20 +214,6 @@
 <p>The subdirectory where webpack, webpacker, babel, etc. will write cache files to enhance recompilation times. For example, given a <code>cache_path</code> of <code>tmp/cache/webpacker</code>, webpacker will write a SHA1 digest on each compilation of your source files in development to a file <code>tmp/cache/webpacker/last-compilation-digest-development</code>.</p>
 
 <pre><code class="yaml">cache_path: tmp/cache/webpacker
-</code></pre>
-
-      <h4 id="additional_paths" class="title title-h4">
-        <a name="additional_paths" class="anchor" href="#additional_paths">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        additional_paths
-      </h4>
-    
-<p>This option expects an array of subdirectories where webpack should resolve modules. Given <code>additional_paths</code> of <code>[&quot;app/assets/images&quot;]</code>, webpack will lookup modules in your <a href="#source_path"><code>source_path</code></a>, <code>node_modules</code>, and <code>app/assets/images</code>. When watching for file changes in development, webpack watched paths would include the <code>source_path</code> and <code>additional_paths</code>. The <code>additional_paths</code> key replaces the <code>resolved_paths</code> key in earlier versions of Webpacker, so this is a key you&#39;ll want to rename when upgrading to Webpacker 5+.</p>
-
-<pre><code class="yaml">additional_paths:
-  - app/assets/images
 </code></pre>
 
       <h4 id="webpack_compile_output" class="title title-h4">
