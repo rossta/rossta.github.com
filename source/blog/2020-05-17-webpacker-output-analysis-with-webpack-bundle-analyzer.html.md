@@ -99,7 +99,7 @@ Since this tool is typically only useful for local development, we add it to `de
 
 To use the webpack-bundler-analyzer, you can either integrate it as a plugin to your Webpacker configuration or you use a two-step command line process.
 
-Typically, it makes the most sense to analyze the output of production builds since they will be what's delivered t the client and may contain several optimizations that will make the output differ significantly from the development build. Analyzing the development build can still be useful for additional context when debugging.
+Typically, it makes the most sense to analyze the output of production builds since they will be what's delivered to the client and may contain several optimizations that will make the output differ significantly from the development build. Analyzing the development build can still be useful for additional context when debugging.
 
 Though the instructions are tailored to a Rails project using [Webpacker](https://github.com/rails/webpacker), you could adapt them to any webpack project.
 
