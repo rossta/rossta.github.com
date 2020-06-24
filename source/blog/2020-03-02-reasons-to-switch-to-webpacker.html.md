@@ -404,7 +404,7 @@ Imagine being able to replace the implementation of a JavaScript module in the b
 
 Given your JavaScript and CSS source code may be written in one form but compiled to another in development and production, source maps can help fill the gap. Most evergreen browsers support the loading and rendering of source maps in the browser dev tools to allow developers to link the code that's loaded in the browser to the code that lives in your source. It's a really good tool to have in your toolbelt.
 
-Sprockets recently brought source maps to the Rails asset pipeline. In webpack, they've been there since its early days and they're highly customizable; there are over twenty types of source maps supported in webpack meaning there's a strategy for almost every use case. One reason for this much variety is that source maps must be generated as a separate file from your ass bundles so there's a build performance cost. You can save time with the tradeoff of fidelity.
+Sprockets recently brought source maps to the Rails asset pipeline. In webpack, they've been there since its early days and they're highly customizable; there are over twenty types of source maps supported in webpack meaning there's a strategy for almost every use case. One reason for this much variety is that source maps must be generated as a separate file from your asset bundles so there's a build performance cost. You can save time with the tradeoff of fidelity.
 
 The main point is with webpack you've got a ton of choice.
 
