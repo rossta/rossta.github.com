@@ -132,7 +132,7 @@ a. overrides the defaults so that the test config is loaded in your Rails tests 
 &lt;table style="font-size:85%; margin-bottom: 2em;"&gt;
   &lt;thead&gt;
     &lt;tr style="border-bottom: 1px solid #CCC"&gt;
-      &lt;th&gt;Mode&lt;/th&gt;
+      &lt;th&gt;Context&lt;/th&gt;
       &lt;th&gt;RAILS_ENV&lt;/th&gt;
       &lt;th&gt;webpacker.yml&lt;/th&gt;
       &lt;th&gt;NODE_ENV&lt;/th&gt;
@@ -164,9 +164,9 @@ a. overrides the defaults so that the test config is loaded in your Rails tests 
     &lt;tr style="border-bottom: 1px solid #CCC"&gt;
       &lt;td&gt;JS unit tests&lt;/td&gt;
       &lt;td&gt;n/a&lt;/td&gt;
-      &lt;td&gt;test&lt;/td&gt;
       &lt;td&gt;n/a&lt;/td&gt;
-      &lt;td&gt;config/webpack/test.js&lt;/td&gt;
+      &lt;td&gt;test&lt;/td&gt;
+      &lt;td&gt;config/webpack/test.js &lt;i&gt;if&lt;/i&gt; test runner is configured to use webpack&lt;/td&gt;
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
