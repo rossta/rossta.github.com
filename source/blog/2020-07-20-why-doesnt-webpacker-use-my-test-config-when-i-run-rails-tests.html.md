@@ -14,7 +14,7 @@ tags:
   - Webpack
 ---
 
-Here's something you might not expect: when running Rails tests the Webpacker config specified by `config/webpack/development.js` will be loaded by default.
+Here's something you might not expect: when running Rails tests, Webpacker will load the _development_ webpack config instead of the test config by default.
 
 To demonstrate, I'll use some "puts" debugging. Here's a `console.log` statement in the development config.
 ```javascript
@@ -34,7 +34,7 @@ $ RAILS_LOG_TO_STDOUT=true RAILS_ENV=test bin/rspec
 ```
 If you've noticed this before, you're not the only one; this is a [recently reported issue](https://github.com/rails/webpacker/issues/2654) on the Webpacker GitHub repository.
 
-It turns out, even though `RAILS_ENV=test`, the default NODE_ENV is set to [set to `'development'`](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4). It is the NODE_ENV that determines which webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., `NODE_ENV=nonsense bin/webpack`).
+It turns out, even though RAILS_ENV is set to "test", NODE_ENV is set to 'development' ([source](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4)). The webpack config use is determined by the NODE_ENV, which means, and this is especially pertinent to your Rails system and integration test, the development webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., `NODE_ENV=nonsense bin/webpack`).
 
 ### What gives?
 
@@ -48,7 +48,7 @@ This is useful for debugging; for example, you can compile your production webpa
 NODE_ENV=production RAILS_ENV=development bin/rails s
 ```
 
-When running `rails assets:precompile` to compile your build, you don't have to set NODE_ENV to production explicity because [Webpacker does this for you](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/tasks/webpacker/compile.rake#L21). Otherwise, development is the default.
+Speaking of production, when running `rails assets:precompile` to compile your build, you don't have to set NODE_ENV to production explicitly because [Webpacker does this for you](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/tasks/webpacker/compile.rake#L21). Otherwise, development is the default.
 
 Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, [they share the same browser-focused Babel config](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38) which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.
 
@@ -72,7 +72,7 @@ You can see the potential problem then if you explicitly set `NODE_ENV=test` for
 
 ### The more you know
 
-You can [setup Jest to compile your JavaScript through your webpack configuration](https://jestjs.io/docs/en/webpack). If you follow the [general setup instructions for Jest](https://jestjs.io/docs/en/getting-started), it's possible to integrate to run your unit tests without webpack at all... meaning your `config/webpack/test.js` file is useless. Other test runners like [karma](https://karma-runner.github.io/latest/index.html) offer similar options for running with or without webpack.
+You can [setup Jest to compile your JavaScript through your webpack configuration](https://jestjs.io/docs/en/webpack). If you follow the [general setup instructions for Jest](https://jestjs.io/docs/en/getting-started), it's possible to integrate to run your unit tests without webpack at all... meaning your test webpack config, specified by `config/webpack/test.js`, is useless. Other test runners like [karma](https://karma-runner.github.io/latest/index.html) offer similar options for running with or without webpack.
 
 Also, as I've described previously in [Understanding webpacker.yml](/blog/how-to-use-webpacker-yml.html), Webpacker provides a webpack configuration while merging settings declared in `config/webpacker.yml` from YAML to JavaScript. This file contains settings for production, development, and test environments as do most Rails-y YAML files. Unlike the webpack config, webpacker.yml settings are determined by the current RAILS_ENV.
 
@@ -80,7 +80,7 @@ This means, webpacker.yml test settings are merged into the development webpack 
 
 ### Wrapping up
 
-In review, here's a breakdown of how webpack configuration maps to RAILS_ENV and NODE_ENV in various contexts.
+Does all of this seem a little confusing? I agree. Here's a breakdown of how webpack configuration maps to RAILS_ENV and NODE_ENV in various contexts.
 
 <table style="font-size:85%; margin-bottom: 2em;">
   <thead>
@@ -127,6 +127,8 @@ In review, here's a breakdown of how webpack configuration maps to RAILS_ENV and
 Stated more simply:
 
 RAILS_ENV determines which Webpacker YAML settings are used and NODE_ENV determines which webpack configuration is used.
+
+Whether or not you find the use case for JavaScript unit tests compelling, it helps to know that Webpacker does not make any distinction between your development and test environments beyond the settings in your webpacker.yml; both are local concerns that target the same runtime, i.e., the browser.
 
 ---
 
