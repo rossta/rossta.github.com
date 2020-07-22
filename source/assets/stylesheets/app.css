@@ -71,6 +71,11 @@ hr {
   @apply mb-6;
 }
 
+th, td {
+  text-align: left;
+  padding-right: 1em;
+}
+
 .bg-silver {
   background-color: #f8f8ff;
 }
