@@ -126,8 +126,8 @@ Does all of this seem a little confusing? I agree. Here's a breakdown of how web
     <tr style="border-bottom: 1px solid #CCC">
       <td>JS unit tests</td>
       <td>n/a</td>
-      <td>test</td>
       <td>n/a</td>
+      <td>test</td>
       <td>config/webpack/test.js</td>
     </tr>
   </tbody>
