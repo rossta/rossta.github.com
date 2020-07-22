@@ -52,6 +52,8 @@ Speaking of production, when running `rails assets:precompile` to compile your b
 
 Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, [they share the same browser-focused Babel config](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38) which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.
 
+So to recap so far, with Webpacker, NODE_ENV determines which webpack config it will use, i.e., `config/webpack/{development,test,production}.js` and will impact behavior in your Babel config, i.e., `babel.config.js`.
+
 ### Testing 1-2-3
 
 This finally brings us to the use case for `NODE_ENV=test`:
