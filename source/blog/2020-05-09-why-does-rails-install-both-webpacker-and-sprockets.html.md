@@ -20,7 +20,7 @@ Since you're reading this post, chances are you've heard Rails 6 installs both W
 
 If this is what you're thinking, you're not alone.
 
-> Curious about or need help with webpack? I may be able to help! I'm developing a course for webpack on Rails and I frequently write about it on this blog.
+> Curious about or need help with webpack? I may be able to help! I'm developing a course for Webpack on Rails and I frequently write about it on this blog.
 >
 > [**Subscribe to my newsletter to get updates**](https://little-fog-6985.ck.page/9c5bc129d8).
 

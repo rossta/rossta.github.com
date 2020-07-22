@@ -46,7 +46,7 @@ Let's say you've been developing with Rails a long enough time and you've genera
 * resolving dependencies
 * transforming dependencies (configuration)
 
-In this article, we'll illustrate how you can avoid common pitfalls in a new world of webpack on Rails.
+In this article, we'll illustrate how you can avoid common pitfalls in a new world of Webpack on Rails.
 
 # Expecting your bundled code to be available in an unbundled context
 ## Unbundled code
