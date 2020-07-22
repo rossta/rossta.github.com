@@ -18,10 +18,10 @@
     <author>
       <name>Ross Kaffenberger</name>
     </author>
-    <summary type="html">&lt;p&gt;Here's something you might not expect: when running Rails tests the Webpacker config specified by &lt;code&gt;config/webpack/development.js&lt;/code&gt; will be loaded by default.&lt;/p&gt;
+    <summary type="html">&lt;p&gt;Here's something you might not expect: when running Rails tests, Webpacker will load the &lt;em&gt;development&lt;/em&gt; webpack config instead of the test config by default.&lt;/p&gt;
 
 &lt;p&gt;To demonstrate, I'll use some "puts" debugging. Here's a &lt;code&gt;console.log&lt;/code&gt; statement in the development...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Here&amp;#39;s something you might not expect: when running Rails tests the Webpacker config specified by &lt;code&gt;config/webpack/development.js&lt;/code&gt; will be loaded by default.&lt;/p&gt;
+    <content type="html">&lt;p&gt;Here&amp;#39;s something you might not expect: when running Rails tests, Webpacker will load the &lt;em&gt;development&lt;/em&gt; webpack config instead of the test config by default.&lt;/p&gt;
 
 &lt;p&gt;To demonstrate, I&amp;#39;ll use some &amp;quot;puts&amp;quot; debugging. Here&amp;#39;s a &lt;code&gt;console.log&lt;/code&gt; statement in the development config.&lt;/p&gt;
 
@@ -43,7 +43,7 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 
 &lt;p&gt;If you&amp;#39;ve noticed this before, you&amp;#39;re not the only one; this is a &lt;a href="https://github.com/rails/webpacker/issues/2654" target="_blank" rel="noopener noreferrer"&gt;recently reported issue&lt;/a&gt; on the Webpacker GitHub repository.&lt;/p&gt;
 
-&lt;p&gt;It turns out, even though &lt;code&gt;RAILS_ENV=test&lt;/code&gt;, the default NODE_ENV is set to &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4" target="_blank" rel="noopener noreferrer"&gt;set to &lt;code&gt;&amp;#39;development&amp;#39;&lt;/code&gt;&lt;/a&gt;. It is the NODE_ENV that determines which webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., &lt;code&gt;NODE_ENV=nonsense bin/webpack&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;It turns out, even though RAILS_ENV is set to &amp;quot;test&amp;quot;, NODE_ENV is set to &amp;#39;development&amp;#39; (&lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;). The webpack config use is determined by the NODE_ENV, which means, and this is especially pertinent to your Rails system and integration test, the development webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., &lt;code&gt;NODE_ENV=nonsense bin/webpack&lt;/code&gt;).&lt;/p&gt;
 
       &lt;h3 id="what-gives-" class="title title-h3"&gt;
         &lt;a name="what-gives-" class="anchor" href="#what-gives-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -62,7 +62,7 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 &lt;pre&gt;&lt;code class="sh"&gt;NODE_ENV=production RAILS_ENV=development bin/rails s
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;When running &lt;code&gt;rails assets:precompile&lt;/code&gt; to compile your build, you don&amp;#39;t have to set NODE_ENV to production explicity because &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/tasks/webpacker/compile.rake#L21" target="_blank" rel="noopener noreferrer"&gt;Webpacker does this for you&lt;/a&gt;. Otherwise, development is the default.&lt;/p&gt;
+&lt;p&gt;Speaking of production, when running &lt;code&gt;rails assets:precompile&lt;/code&gt; to compile your build, you don&amp;#39;t have to set NODE_ENV to production explicitly because &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/tasks/webpacker/compile.rake#L21" target="_blank" rel="noopener noreferrer"&gt;Webpacker does this for you&lt;/a&gt;. Otherwise, development is the default.&lt;/p&gt;
 
 &lt;p&gt;Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38" target="_blank" rel="noopener noreferrer"&gt;they share the same browser-focused Babel config&lt;/a&gt; which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.&lt;/p&gt;
 
@@ -98,7 +98,7 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
         The more you know
       &lt;/h3&gt;
     
-&lt;p&gt;You can &lt;a href="https://jestjs.io/docs/en/webpack" target="_blank" rel="noopener noreferrer"&gt;setup Jest to compile your JavaScript through your webpack configuration&lt;/a&gt;. If you follow the &lt;a href="https://jestjs.io/docs/en/getting-started" target="_blank" rel="noopener noreferrer"&gt;general setup instructions for Jest&lt;/a&gt;, it&amp;#39;s possible to integrate to run your unit tests without webpack at all... meaning your &lt;code&gt;config/webpack/test.js&lt;/code&gt; file is useless. Other test runners like &lt;a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer"&gt;karma&lt;/a&gt; offer similar options for running with or without webpack.&lt;/p&gt;
+&lt;p&gt;You can &lt;a href="https://jestjs.io/docs/en/webpack" target="_blank" rel="noopener noreferrer"&gt;setup Jest to compile your JavaScript through your webpack configuration&lt;/a&gt;. If you follow the &lt;a href="https://jestjs.io/docs/en/getting-started" target="_blank" rel="noopener noreferrer"&gt;general setup instructions for Jest&lt;/a&gt;, it&amp;#39;s possible to integrate to run your unit tests without webpack at all... meaning your test webpack config, specified by &lt;code&gt;config/webpack/test.js&lt;/code&gt;, is useless. Other test runners like &lt;a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer"&gt;karma&lt;/a&gt; offer similar options for running with or without webpack.&lt;/p&gt;
 
 &lt;p&gt;Also, as I&amp;#39;ve described previously in &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;Understanding webpacker.yml&lt;/a&gt;, Webpacker provides a webpack configuration while merging settings declared in &lt;code&gt;config/webpacker.yml&lt;/code&gt; from YAML to JavaScript. This file contains settings for production, development, and test environments as do most Rails-y YAML files. Unlike the webpack config, webpacker.yml settings are determined by the current RAILS_ENV.&lt;/p&gt;
 
@@ -112,7 +112,7 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
         Wrapping up
       &lt;/h3&gt;
     
-&lt;p&gt;In review, here&amp;#39;s a breakdown of how webpack configuration maps to RAILS_ENV and NODE_ENV in various contexts.&lt;/p&gt;
+&lt;p&gt;Does all of this seem a little confusing? I agree. Here&amp;#39;s a breakdown of how webpack configuration maps to RAILS_ENV and NODE_ENV in various contexts.&lt;/p&gt;
 
 &lt;table style="font-size:85%; margin-bottom: 2em;"&gt;
   &lt;thead&gt;
@@ -159,6 +159,8 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 &lt;p&gt;Stated more simply:&lt;/p&gt;
 
 &lt;p&gt;RAILS_ENV determines which Webpacker YAML settings are used and NODE_ENV determines which webpack configuration is used.&lt;/p&gt;
+
+&lt;p&gt;Whether or not you find the use case for JavaScript unit tests compelling, it helps to know that Webpacker does not make any distinction between your development and test environments beyond the settings in your webpacker.yml; both are local concerns that target the same runtime, i.e., the browser.&lt;/p&gt;
 
 &lt;hr&gt;
 
