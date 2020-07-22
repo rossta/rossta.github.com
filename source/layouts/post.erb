@@ -34,7 +34,11 @@
       <figure>
         <%= lazy_image_tag current_page.data.pull_image if current_page.data.pull_image %>
         <% if current_page.data.pull_image_caption %>
-          <figcaption><%= current_page.data.pull_image_caption %></figcaption>
+          <% if current_page.data.pull_image_link %>
+            <figcaption><%= link_to current_page.data.pull_image_caption, current_page.data.pull_image_link %></figcaption>
+          <% else %>
+            <figcaption><%= current_page.data.pull_image_caption %></figcaption>
+          <% end %>
         <% end %>
       </figure>
     <% end %>
