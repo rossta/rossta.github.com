@@ -105,12 +105,12 @@ console.log(&#39;Loading config/webpack/development.js...&#39;)
 
 <p>Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, <a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38" target="_blank" rel="noopener noreferrer">they share the same browser-focused Babel config</a> which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.</p>
 
-      <h3 id="test-1-2-3" class="title title-h3">
-        <a name="test-1-2-3" class="anchor" href="#test-1-2-3">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+      <h3 id="testing-1-2-3" class="title title-h3">
+        <a name="testing-1-2-3" class="anchor" href="#testing-1-2-3">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
 </a>
-        Test 1-2-3
+        Testing 1-2-3
       </h3>
     
 <p>This finally brings us to the use case for <code>NODE_ENV=test</code>:</p>
@@ -127,18 +127,31 @@ console.log(&#39;Loading config/webpack/development.js...&#39;)
 
 <p>Webpacker opens the door to JavaScript unit test runners that can run in a Node.js process instead of a real browser (typically for speed). Jest, for example, <a href="https://jestjs.io/docs/en/configuration#testenvironment-string" target="_blank" rel="noopener noreferrer">executes tests against a &quot;browser-like&quot; environment called jsdom by default</a>. To support these node.js test runners, Webpacker&#39;s <a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L20-L27" target="_blank" rel="noopener noreferrer">default Babel config targets the node.js runtime instead of a browser when <code>NODE_ENV=test</code></a>; this means Babel will transform your nice ES6+ syntax into JavaScript your current node version will understand assuming you set <code>NODE_ENV=test</code> for running your JavaScript unit tests.</p>
 
-<p>You can see the potential problem then if you explicitly set <code>NODE_ENV=test</code> for your Rails system and integration tests without considering your Babel config; compiling your JavaScript for the Node.js runtime and loading in the browser may lead to some surprising issues. You can, of course, override this behavior if you really want; at least with this introduction provides some awareness of what you&#39;d be getting yourself into.</p>
-
-      <h3 id="the-more-you-know" class="title title-h3">
-        <a name="the-more-you-know" class="anchor" href="#the-more-you-know">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+      <h3 id="what-this-means-for-your-application" class="title title-h3">
+        <a name="what-this-means-for-your-application" class="anchor" href="#what-this-means-for-your-application">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
        <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
        </svg>
 </a>
-        The more you know
+        What this means for your application
       </h3>
     
-<p>You can <a href="https://jestjs.io/docs/en/webpack" target="_blank" rel="noopener noreferrer">setup Jest to compile your JavaScript through your webpack configuration</a>. If you follow the <a href="https://jestjs.io/docs/en/getting-started" target="_blank" rel="noopener noreferrer">general setup instructions for Jest</a>, it&#39;s possible to integrate to run your unit tests without webpack at all... meaning your test webpack config, specified by <code>config/webpack/test.js</code>, is useless. Other test runners like <a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer">karma</a> offer similar options for running with or without webpack.</p>
+<p>You can see the potential problem then if you explicitly set <code>NODE_ENV=test</code> for your Rails system and integration tests without considering your Babel config; compiling your JavaScript for the Node.js runtime and loading in the browser may lead to some surprising issues. You can, of course, override this behavior if you really want; at least with this introduction provides some awareness of what you&#39;d be getting yourself into.</p>
 
+<p>You can <a href="https://jestjs.io/docs/en/webpack" target="_blank" rel="noopener noreferrer">setup Jest to compile your JavaScript through your webpack configuration</a>. If you follow the <a href="https://jestjs.io/docs/en/getting-started" target="_blank" rel="noopener noreferrer">general setup instructions for Jest</a>, it&#39;s possible to integrate to run your unit tests without webpack at all. Other test runners like <a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer">karma</a> offer similar options for running with or without webpack.</p>
+
+<p>All this to say: your webpack test config, i.e. <code>config/webpack/test.js</code>, is essentially useless unless your application:</p>
+
+<p>a. uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config
+a. overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)</p>
+
+      <h3 id="what-about-webpacker-yml-" class="title title-h3">
+        <a name="what-about-webpacker-yml-" class="anchor" href="#what-about-webpacker-yml-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        What about webpacker.yml?
+      </h3>
+    
 <p>Also, as I&#39;ve described previously in <a href="/blog/how-to-use-webpacker-yml.html">Understanding webpacker.yml</a>, Webpacker provides a webpack configuration while merging settings declared in <code>config/webpacker.yml</code> from YAML to JavaScript. This file contains settings for production, development, and test environments as do most Rails-y YAML files. Unlike the webpack config, webpacker.yml settings are determined by the current RAILS_ENV.</p>
 
 <p>This means, webpacker.yml test settings are merged into the development webpack config when running your Rails tests.</p>

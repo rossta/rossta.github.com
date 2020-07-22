@@ -66,12 +66,12 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 
 &lt;p&gt;Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38" target="_blank" rel="noopener noreferrer"&gt;they share the same browser-focused Babel config&lt;/a&gt; which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.&lt;/p&gt;
 
-      &lt;h3 id="test-1-2-3" class="title title-h3"&gt;
-        &lt;a name="test-1-2-3" class="anchor" href="#test-1-2-3"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+      &lt;h3 id="testing-1-2-3" class="title title-h3"&gt;
+        &lt;a name="testing-1-2-3" class="anchor" href="#testing-1-2-3"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
 &lt;/a&gt;
-        Test 1-2-3
+        Testing 1-2-3
       &lt;/h3&gt;
     
 &lt;p&gt;This finally brings us to the use case for &lt;code&gt;NODE_ENV=test&lt;/code&gt;:&lt;/p&gt;
@@ -88,18 +88,31 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 
 &lt;p&gt;Webpacker opens the door to JavaScript unit test runners that can run in a Node.js process instead of a real browser (typically for speed). Jest, for example, &lt;a href="https://jestjs.io/docs/en/configuration#testenvironment-string" target="_blank" rel="noopener noreferrer"&gt;executes tests against a &amp;quot;browser-like&amp;quot; environment called jsdom by default&lt;/a&gt;. To support these node.js test runners, Webpacker&amp;#39;s &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L20-L27" target="_blank" rel="noopener noreferrer"&gt;default Babel config targets the node.js runtime instead of a browser when &lt;code&gt;NODE_ENV=test&lt;/code&gt;&lt;/a&gt;; this means Babel will transform your nice ES6+ syntax into JavaScript your current node version will understand assuming you set &lt;code&gt;NODE_ENV=test&lt;/code&gt; for running your JavaScript unit tests.&lt;/p&gt;
 
-&lt;p&gt;You can see the potential problem then if you explicitly set &lt;code&gt;NODE_ENV=test&lt;/code&gt; for your Rails system and integration tests without considering your Babel config; compiling your JavaScript for the Node.js runtime and loading in the browser may lead to some surprising issues. You can, of course, override this behavior if you really want; at least with this introduction provides some awareness of what you&amp;#39;d be getting yourself into.&lt;/p&gt;
-
-      &lt;h3 id="the-more-you-know" class="title title-h3"&gt;
-        &lt;a name="the-more-you-know" class="anchor" href="#the-more-you-know"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+      &lt;h3 id="what-this-means-for-your-application" class="title title-h3"&gt;
+        &lt;a name="what-this-means-for-your-application" class="anchor" href="#what-this-means-for-your-application"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
        &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
        &lt;/svg&gt;
 &lt;/a&gt;
-        The more you know
+        What this means for your application
       &lt;/h3&gt;
     
-&lt;p&gt;You can &lt;a href="https://jestjs.io/docs/en/webpack" target="_blank" rel="noopener noreferrer"&gt;setup Jest to compile your JavaScript through your webpack configuration&lt;/a&gt;. If you follow the &lt;a href="https://jestjs.io/docs/en/getting-started" target="_blank" rel="noopener noreferrer"&gt;general setup instructions for Jest&lt;/a&gt;, it&amp;#39;s possible to integrate to run your unit tests without webpack at all... meaning your test webpack config, specified by &lt;code&gt;config/webpack/test.js&lt;/code&gt;, is useless. Other test runners like &lt;a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer"&gt;karma&lt;/a&gt; offer similar options for running with or without webpack.&lt;/p&gt;
+&lt;p&gt;You can see the potential problem then if you explicitly set &lt;code&gt;NODE_ENV=test&lt;/code&gt; for your Rails system and integration tests without considering your Babel config; compiling your JavaScript for the Node.js runtime and loading in the browser may lead to some surprising issues. You can, of course, override this behavior if you really want; at least with this introduction provides some awareness of what you&amp;#39;d be getting yourself into.&lt;/p&gt;
 
+&lt;p&gt;You can &lt;a href="https://jestjs.io/docs/en/webpack" target="_blank" rel="noopener noreferrer"&gt;setup Jest to compile your JavaScript through your webpack configuration&lt;/a&gt;. If you follow the &lt;a href="https://jestjs.io/docs/en/getting-started" target="_blank" rel="noopener noreferrer"&gt;general setup instructions for Jest&lt;/a&gt;, it&amp;#39;s possible to integrate to run your unit tests without webpack at all. Other test runners like &lt;a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer"&gt;karma&lt;/a&gt; offer similar options for running with or without webpack.&lt;/p&gt;
+
+&lt;p&gt;All this to say: your webpack test config, i.e. &lt;code&gt;config/webpack/test.js&lt;/code&gt;, is essentially useless unless your application:&lt;/p&gt;
+
+&lt;p&gt;a. uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config
+a. overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)&lt;/p&gt;
+
+      &lt;h3 id="what-about-webpacker-yml-" class="title title-h3"&gt;
+        &lt;a name="what-about-webpacker-yml-" class="anchor" href="#what-about-webpacker-yml-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        What about webpacker.yml?
+      &lt;/h3&gt;
+    
 &lt;p&gt;Also, as I&amp;#39;ve described previously in &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;Understanding webpacker.yml&lt;/a&gt;, Webpacker provides a webpack configuration while merging settings declared in &lt;code&gt;config/webpacker.yml&lt;/code&gt; from YAML to JavaScript. This file contains settings for production, development, and test environments as do most Rails-y YAML files. Unlike the webpack config, webpacker.yml settings are determined by the current RAILS_ENV.&lt;/p&gt;
 
 &lt;p&gt;This means, webpacker.yml test settings are merged into the development webpack config when running your Rails tests.&lt;/p&gt;
