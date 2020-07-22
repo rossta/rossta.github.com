@@ -52,7 +52,7 @@ Speaking of production, when running `rails assets:precompile` to compile your b
 
 Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, [they share the same browser-focused Babel config](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38) which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.
 
-### Test 1-2-3
+### Testing 1-2-3
 
 This finally brings us to the use case for `NODE_ENV=test`:
 
@@ -68,11 +68,18 @@ The Rails unit testing for asset-pipeline compiled JavaScript is a bit cumbersom
 
 Webpacker opens the door to JavaScript unit test runners that can run in a Node.js process instead of a real browser (typically for speed). Jest, for example, [executes tests against a "browser-like" environment called jsdom by default](https://jestjs.io/docs/en/configuration#testenvironment-string). To support these node.js test runners, Webpacker's [default Babel config targets the node.js runtime instead of a browser when `NODE_ENV=test`](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L20-L27); this means Babel will transform your nice ES6+ syntax into JavaScript your current node version will understand assuming you set `NODE_ENV=test` for running your JavaScript unit tests.
 
+### What this means for your application
+
 You can see the potential problem then if you explicitly set `NODE_ENV=test` for your Rails system and integration tests without considering your Babel config; compiling your JavaScript for the Node.js runtime and loading in the browser may lead to some surprising issues. You can, of course, override this behavior if you really want; at least with this introduction provides some awareness of what you'd be getting yourself into.
 
-### The more you know
+You can [setup Jest to compile your JavaScript through your webpack configuration](https://jestjs.io/docs/en/webpack). If you follow the [general setup instructions for Jest](https://jestjs.io/docs/en/getting-started), it's possible to integrate to run your unit tests without webpack at all. Other test runners like [karma](https://karma-runner.github.io/latest/index.html) offer similar options for running with or without webpack.
 
-You can [setup Jest to compile your JavaScript through your webpack configuration](https://jestjs.io/docs/en/webpack). If you follow the [general setup instructions for Jest](https://jestjs.io/docs/en/getting-started), it's possible to integrate to run your unit tests without webpack at all... meaning your test webpack config, specified by `config/webpack/test.js`, is useless. Other test runners like [karma](https://karma-runner.github.io/latest/index.html) offer similar options for running with or without webpack.
+All this to say: your webpack test config, i.e. `config/webpack/test.js`, is essentially useless unless your application:
+
+a. uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config
+a. overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)
+
+### What about webpacker.yml?
 
 Also, as I've described previously in [Understanding webpacker.yml](/blog/how-to-use-webpacker-yml.html), Webpacker provides a webpack configuration while merging settings declared in `config/webpacker.yml` from YAML to JavaScript. This file contains settings for production, development, and test environments as do most Rails-y YAML files. Unlike the webpack config, webpacker.yml settings are determined by the current RAILS_ENV.
 
