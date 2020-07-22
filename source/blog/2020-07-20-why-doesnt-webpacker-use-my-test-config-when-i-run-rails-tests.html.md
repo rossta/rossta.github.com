@@ -94,7 +94,7 @@ Does all of this seem a little confusing? I agree. Here's a breakdown of how web
 <table style="font-size:85%; margin-bottom: 2em;">
   <thead>
     <tr style="border-bottom: 1px solid #CCC">
-      <th>Mode</th>
+      <th>Context</th>
       <th>RAILS_ENV</th>
       <th>webpacker.yml</th>
       <th>NODE_ENV</th>
@@ -128,7 +128,7 @@ Does all of this seem a little confusing? I agree. Here's a breakdown of how web
       <td>n/a</td>
       <td>n/a</td>
       <td>test</td>
-      <td>config/webpack/test.js</td>
+      <td>config/webpack/test.js <i>if</i> test runner is configured to use webpack</td>
     </tr>
   </tbody>
 </table>
