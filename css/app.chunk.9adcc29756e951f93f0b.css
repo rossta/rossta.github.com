@@ -1275,6 +1275,11 @@ hr {
   margin-bottom: 1.5rem;
 }
 
+th, td {
+  text-align: left;
+  padding-right: 1em;
+}
+
 .bg-silver {
   background-color: #f8f8ff;
 }

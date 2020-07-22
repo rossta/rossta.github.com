@@ -5,10 +5,166 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2020-05-17T00:00:00+00:00</updated>
+  <updated>2020-07-20T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>Why doesn't Webpacker use my test config when I run Rails tests?</title>
+    <link rel="alternate" href="/blog/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html"/>
+    <id>/blog/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html</id>
+    <published>2020-07-20T00:00:00+00:00</published>
+    <updated>2020-07-20T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;Here's something you might not expect: when running Rails tests the Webpacker config specified by &lt;code&gt;config/webpack/development.js&lt;/code&gt; will be loaded by default.&lt;/p&gt;
+
+&lt;p&gt;To demonstrate, I'll use some "puts" debugging. Here's a &lt;code&gt;console.log&lt;/code&gt; statement in the development...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;Here&amp;#39;s something you might not expect: when running Rails tests the Webpacker config specified by &lt;code&gt;config/webpack/development.js&lt;/code&gt; will be loaded by default.&lt;/p&gt;
+
+&lt;p&gt;To demonstrate, I&amp;#39;ll use some &amp;quot;puts&amp;quot; debugging. Here&amp;#39;s a &lt;code&gt;console.log&lt;/code&gt; statement in the development config.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/development.js
+// ...
+console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When I run my RSpec tests while logging to STDOUT and RAILS_ENV set to test, the log line is displayed.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ RAILS_LOG_TO_STDOUT=true RAILS_ENV=test bin/rspec
+
+# ...
+[Webpacker] Compiling...
+# ...
+[Webpacker] Loading config/webpack/development.js...
+# ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you&amp;#39;ve noticed this before, you&amp;#39;re not the only one; this is a &lt;a href="https://github.com/rails/webpacker/issues/2654" target="_blank" rel="noopener noreferrer"&gt;recently reported issue&lt;/a&gt; on the Webpacker GitHub repository.&lt;/p&gt;
+
+&lt;p&gt;It turns out, even though &lt;code&gt;RAILS_ENV=test&lt;/code&gt;, the default NODE_ENV is set to &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4" target="_blank" rel="noopener noreferrer"&gt;set to &lt;code&gt;&amp;#39;development&amp;#39;&lt;/code&gt;&lt;/a&gt;. It is the NODE_ENV that determines which webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., &lt;code&gt;NODE_ENV=nonsense bin/webpack&lt;/code&gt;).&lt;/p&gt;
+
+      &lt;h3 id="what-gives-" class="title title-h3"&gt;
+        &lt;a name="what-gives-" class="anchor" href="#what-gives-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        What gives?
+      &lt;/h3&gt;
+    
+&lt;p&gt;If the &amp;quot;test&amp;quot; NODE_ENV isn&amp;#39;t used when I run my Rails tests, what is it good for?&lt;/p&gt;
+
+&lt;p&gt;First, let&amp;#39;s make it clear that NODE_ENV has no explicit relationship to RAILS_ENV. Setting one of the ENV variables will have no effect on the other.&lt;/p&gt;
+
+&lt;p&gt;This is useful for debugging; for example, you can compile your production webpack build locally:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;NODE_ENV=production RAILS_ENV=development bin/rails s
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When running &lt;code&gt;rails assets:precompile&lt;/code&gt; to compile your build, you don&amp;#39;t have to set NODE_ENV to production explicity because &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/tasks/webpacker/compile.rake#L21" target="_blank" rel="noopener noreferrer"&gt;Webpacker does this for you&lt;/a&gt;. Otherwise, development is the default.&lt;/p&gt;
+
+&lt;p&gt;Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38" target="_blank" rel="noopener noreferrer"&gt;they share the same browser-focused Babel config&lt;/a&gt; which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.&lt;/p&gt;
+
+      &lt;h3 id="test-1-2-3" class="title title-h3"&gt;
+        &lt;a name="test-1-2-3" class="anchor" href="#test-1-2-3"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Test 1-2-3
+      &lt;/h3&gt;
+    
+&lt;p&gt;This finally brings us to the use case for &lt;code&gt;NODE_ENV=test&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;JavaScript unit testing&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;By this I mean executing tests, written in JavaScript, against your application JavaScript code &lt;em&gt;within a Node.js process&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;We&amp;#39;re talking &lt;a href="https://github.com/mochajs/mocha" target="_blank" rel="noopener noreferrer"&gt;Mocha&lt;/a&gt;, &lt;a href="https://github.com/facebook/jest" target="_blank" rel="noopener noreferrer"&gt;Jest&lt;/a&gt;, &lt;a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer"&gt;Karma&lt;/a&gt;, and more.&lt;/p&gt;
+
+&lt;p&gt;For some applications, JavaScript unit tests may not add much value, say if you&amp;#39;re just doing a little DOM-manipulation with jQuery here and there. However, there may be some benefit to structuring your JavaScript utilities and components into discrete units which can be tested in isolation. And where there are discrete, testable units, there is room for unit testing. That&amp;#39;s where JavaScript test runners come in.&lt;/p&gt;
+
+&lt;p&gt;The Rails unit testing for asset-pipeline compiled JavaScript is a bit cumbersome; it typically requires a gem, like &lt;a href="https://github.com/jejacks0n/teaspoon" target="_blank" rel="noopener noreferrer"&gt;teaspoon&lt;/a&gt; or &lt;a href="https://github.com/searls/jasmine-rails" target="_blank" rel="noopener noreferrer"&gt;jasmine-rails&lt;/a&gt;, that integrates tightly with the Rails asset pipeline by booting up both Rails and a browser to compile JavaScript and execute tests.&lt;/p&gt;
+
+&lt;p&gt;Webpacker opens the door to JavaScript unit test runners that can run in a Node.js process instead of a real browser (typically for speed). Jest, for example, &lt;a href="https://jestjs.io/docs/en/configuration#testenvironment-string" target="_blank" rel="noopener noreferrer"&gt;executes tests against a &amp;quot;browser-like&amp;quot; environment called jsdom by default&lt;/a&gt;. To support these node.js test runners, Webpacker&amp;#39;s &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L20-L27" target="_blank" rel="noopener noreferrer"&gt;default Babel config targets the node.js runtime instead of a browser when &lt;code&gt;NODE_ENV=test&lt;/code&gt;&lt;/a&gt;; this means Babel will transform your nice ES6+ syntax into JavaScript your current node version will understand assuming you set &lt;code&gt;NODE_ENV=test&lt;/code&gt; for running your JavaScript unit tests.&lt;/p&gt;
+
+&lt;p&gt;You can see the potential problem then if you explicitly set &lt;code&gt;NODE_ENV=test&lt;/code&gt; for your Rails system and integration tests without considering your Babel config; compiling your JavaScript for the Node.js runtime and loading in the browser may lead to some surprising issues. You can, of course, override this behavior if you really want; at least with this introduction provides some awareness of what you&amp;#39;d be getting yourself into.&lt;/p&gt;
+
+      &lt;h3 id="the-more-you-know" class="title title-h3"&gt;
+        &lt;a name="the-more-you-know" class="anchor" href="#the-more-you-know"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The more you know
+      &lt;/h3&gt;
+    
+&lt;p&gt;You can &lt;a href="https://jestjs.io/docs/en/webpack" target="_blank" rel="noopener noreferrer"&gt;setup Jest to compile your JavaScript through your webpack configuration&lt;/a&gt;. If you follow the &lt;a href="https://jestjs.io/docs/en/getting-started" target="_blank" rel="noopener noreferrer"&gt;general setup instructions for Jest&lt;/a&gt;, it&amp;#39;s possible to integrate to run your unit tests without webpack at all... meaning your &lt;code&gt;config/webpack/test.js&lt;/code&gt; file is useless. Other test runners like &lt;a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer"&gt;karma&lt;/a&gt; offer similar options for running with or without webpack.&lt;/p&gt;
+
+&lt;p&gt;Also, as I&amp;#39;ve described previously in &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;Understanding webpacker.yml&lt;/a&gt;, Webpacker provides a webpack configuration while merging settings declared in &lt;code&gt;config/webpacker.yml&lt;/code&gt; from YAML to JavaScript. This file contains settings for production, development, and test environments as do most Rails-y YAML files. Unlike the webpack config, webpacker.yml settings are determined by the current RAILS_ENV.&lt;/p&gt;
+
+&lt;p&gt;This means, webpacker.yml test settings are merged into the development webpack config when running your Rails tests.&lt;/p&gt;
+
+      &lt;h3 id="wrapping-up" class="title title-h3"&gt;
+        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Wrapping up
+      &lt;/h3&gt;
+    
+&lt;p&gt;In review, here&amp;#39;s a breakdown of how webpack configuration maps to RAILS_ENV and NODE_ENV in various contexts.&lt;/p&gt;
+
+&lt;table style="font-size:85%; margin-bottom: 2em;"&gt;
+  &lt;thead&gt;
+    &lt;tr style="border-bottom: 1px solid #CCC"&gt;
+      &lt;th&gt;Mode&lt;/th&gt;
+      &lt;th&gt;RAILS_ENV&lt;/th&gt;
+      &lt;th&gt;webpacker.yml&lt;/th&gt;
+      &lt;th&gt;NODE_ENV&lt;/th&gt;
+      &lt;th&gt;webpack config&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr style="border-bottom: 1px solid #CCC"&gt;
+      &lt;td&gt;Deployed app&lt;/td&gt;
+      &lt;td&gt;production&lt;/td&gt;
+      &lt;td&gt;production&lt;/td&gt;
+      &lt;td&gt;production&lt;/td&gt;
+      &lt;td&gt;config/webpack/production.js&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr style="border-bottom: 1px solid #CCC"&gt;
+      &lt;td&gt;Local server&lt;/td&gt;
+      &lt;td&gt;development&lt;/td&gt;
+      &lt;td&gt;development&lt;/td&gt;
+      &lt;td&gt;development&lt;/td&gt;
+      &lt;td&gt;config/webpack/development.js&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr style="border-bottom: 1px solid #CCC"&gt;
+      &lt;td&gt;Rails tests&lt;/td&gt;
+      &lt;td&gt;test&lt;/td&gt;
+      &lt;td&gt;test&lt;/td&gt;
+      &lt;td&gt;development&lt;/td&gt;
+      &lt;td&gt;config/webpack/development.js&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr style="border-bottom: 1px solid #CCC"&gt;
+      &lt;td&gt;JS unit tests&lt;/td&gt;
+      &lt;td&gt;n/a&lt;/td&gt;
+      &lt;td&gt;test&lt;/td&gt;
+      &lt;td&gt;n/a&lt;/td&gt;
+      &lt;td&gt;config/webpack/test.js&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Stated more simply:&lt;/p&gt;
+
+&lt;p&gt;RAILS_ENV determines which Webpacker YAML settings are used and NODE_ENV determines which webpack configuration is used.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;If you found this helpful, please consider subscribing to my newsletter to stay tuned for more on upping your &amp;quot;JavaScript on Rails&amp;quot; game.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>The webpack plugin I can't live without</title>
     <link rel="alternate" href="/blog/webpacker-output-analysis-with-webpack-bundle-analyzer.html"/>
@@ -314,7 +470,7 @@ module.exports = environment
 &lt;p&gt;If this is what you&amp;#39;re thinking, you&amp;#39;re not alone.&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;Curious about or need help with webpack? I may be able to help! I&amp;#39;m developing a course for webpack on Rails and I frequently write about it on this blog.&lt;/p&gt;
+&lt;p&gt;Curious about or need help with webpack? I may be able to help! I&amp;#39;m developing a course for Webpack on Rails and I frequently write about it on this blog.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter to get updates&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -1385,171 +1541,6 @@ WEBPACKER_ASSET_HOST
 &lt;p&gt;Did you find this guide useful? Please &lt;a href="https://twitter.com/intent/tweet?text=How+to+use+webpacker.yml%3A+An+unofficial+guide+to+Rails+Webpacker+YAML+configuration&amp;amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fhow-to-use-webpacker-yml.html" target="_blank" rel="noopener noreferrer"&gt;share it&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Just like with the official Rails guides, you&amp;#39;re encouraged to help improve the quality of this one. &lt;a href="https://github.com/rossta/rossta.github.com/blob/develop/source/blog/2020-04-01-configuring-webpacker.html.md" target="_blank" rel="noopener noreferrer"&gt;Please contribute&lt;/a&gt; if you see any typos or factual errors.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>jQuery plugins in webpack without jQuery</title>
-    <link rel="alternate" href="/blog/you-might-not-need-jquery-with-webpack.html"/>
-    <id>/blog/you-might-not-need-jquery-with-webpack.html</id>
-    <published>2020-03-26T00:00:00+00:00</published>
-    <updated>2020-03-26T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;Have you seen this console error while trying to adopt webpack?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;Uncaught TypeError: $(...).myJqueryPlugin is not a function
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Assuming you installed it correctly, there could be a few explanations. In this post, we'll look one possible reason: with...&lt;/p&gt;</summary>
-    <content type="html">&lt;p&gt;Have you seen this console error while trying to adopt webpack?&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;Uncaught TypeError: $(...).myJqueryPlugin is not a function
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Assuming you installed it correctly, there could be a few explanations. In this post, we&amp;#39;ll look one possible reason: with webpack, your jQuery plugin &lt;em&gt;might&lt;/em&gt; not need jQuery.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using webpack with Rails.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-      &lt;h3 id="example-the-flickity-plugin" class="title title-h3"&gt;
-        &lt;a name="example-the-flickity-plugin" class="anchor" href="#example-the-flickity-plugin"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Example: the Flickity plugin
-      &lt;/h3&gt;
-    
-&lt;p&gt;To take advantage of this distinction, more plugins are being written without the assumption of jQuery as a dependency, but with the ability to use a plugin to support (what&amp;#39;s becoming) the legacy pattern.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s an example. The popular jQuery plugin &lt;a href="https://flickity.metafizzy.co/" target="_blank" rel="noopener noreferrer"&gt;Flickity&lt;/a&gt; makes it easy to construct &amp;quot;responsive, flickable carousels&amp;quot; as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;$(&amp;#39;.main-carousel&amp;#39;).flickity({
-  // options
-  cellAlign: &amp;#39;left&amp;#39;,
-  contain: true
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And that works fine. Except, &lt;code&gt;Flickity&lt;/code&gt; is not really a just a jQuery plugin. More on that later.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;#39;s say we have a Rails application that we&amp;#39;ve already set up to run webpack(er) (or just plain webpack) for compiling JavaScript source files for the browser. To add Flickity, we installed it via yarn:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;$ yarn add flickity
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;In our module-based webpack build, the usage is instead ideally:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/src/carousel.js
-
-import Flickity from &amp;#39;flickity&amp;#39;;
-
-const flickity = new Flickity(&amp;#39;.main-carousel&amp;#39;, {
-  // options
-  cellAlign: &amp;#39;left&amp;#39;,
-  contain: true
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For this plugin, jQuery is not required. How do we know that though?&lt;/p&gt;
-
-      &lt;h3 id="package-perusal" class="title title-h3"&gt;
-        &lt;a name="package-perusal" class="anchor" href="#package-perusal"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Package perusal
-      &lt;/h3&gt;
-    
-&lt;p&gt;The first place to check is the documentation. As is the case for Flickty, there is a great documentation site with examples for both jQuery and vanilla JS initialization.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s a screenshot from the &lt;a href="https://flickity.metafizzy.co/" target="_blank" rel="noopener noreferrer"&gt;Flickity homepage&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src="/assets/images/blog/flickity-documentation-example.png" alt="Flickity documentation example" loading="lazy" /&gt;&lt;/p&gt;
-
-&lt;p&gt;This is a great hint that we can import the &lt;code&gt;Flickity&lt;/code&gt; constructor without requiring jQuery on the page or in our build.&lt;/p&gt;
-
-&lt;p&gt;If that&amp;#39;s still not enough, the next place to look is the library&amp;#39;s &lt;a href="https://nodesource.com/blog/the-basics-of-package-json-in-node-js-and-npm/#themainproperty" target="_blank" rel="noopener noreferrer"&gt;package.json &lt;code&gt;main&lt;/code&gt; property&lt;/a&gt;. This property describes the &lt;em&gt;entry point&lt;/em&gt; to the package, meaning this is the file that&amp;#39;s loaded when &lt;code&gt;require&lt;/code&gt; or &lt;code&gt;import&lt;/code&gt; statement is used to access the module.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;#39;s an excerpt from Flickity&amp;#39;s &lt;code&gt;package.json&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="json"&gt;{
-  &amp;quot;name&amp;quot;: &amp;quot;flickity&amp;quot;,
-  &amp;quot;main&amp;quot;: &amp;quot;js/index.js&amp;quot;,
-  // ...
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This is saying thath the file &lt;code&gt;path/to/flickity/js/index.js&lt;/code&gt; is the entry point. On my machine from the root of my project, I can open that file at &lt;code&gt;./node_modules/flickity/js/index.js&lt;/code&gt; or on GitHub (&lt;a href="https://github.com/metafizzy/flickity/blob/c67b28accbe0642352c706cb470a8f607fa5861b/js/index.js" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;) (slightly modified for this article).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;( function( window, factory ) {
-  if ( typeof define == &amp;#39;function&amp;#39; &amp;amp;&amp;amp; define.amd ) {
-    // AMD
-    define( [ &amp;#39;./flickity&amp;#39;, &amp;#39;./drag&amp;#39;, &amp;#39;./prev-next-button&amp;#39;, &amp;#39;./page-dots&amp;#39;, &amp;#39;./player&amp;#39;, &amp;#39;./add-remove-cell&amp;#39;, &amp;#39;./lazyload&amp;#39; ], factory );
-  } else if ( typeof module == &amp;#39;object&amp;#39; &amp;amp;&amp;amp; module.exports ) {
-    // CommonJS
-    module.exports = factory( require(&amp;#39;./flickity&amp;#39;), require(&amp;#39;./drag&amp;#39;), require(&amp;#39;./prev-next-button&amp;#39;), require(&amp;#39;./page-dots&amp;#39;), require(&amp;#39;./player&amp;#39;), require(&amp;#39;./add-remove-cell&amp;#39;), require(&amp;#39;./lazyload&amp;#39;));
-  }
-})( window, function factory( Flickity ) {
-  return Flickity;
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can see this exports a module, either through the &lt;code&gt;define&lt;/code&gt; function, for runtimes that support &lt;a href="https://requirejs.org/docs/whyamd.html" target="_blank" rel="noopener noreferrer"&gt;Asynchronous Module Definition (AMD)&lt;/a&gt; format, or the &lt;code&gt;require&lt;/code&gt; function, for runtimes that support &lt;a href="https://nodejs.org/docs/latest/api/modules.html" target="_blank" rel="noopener noreferrer"&gt;CommonJS&lt;/a&gt; format. webpack supports both.&lt;/p&gt;
-
-      &lt;h3 id="jquery-not-required" class="title title-h3"&gt;
-        &lt;a name="jquery-not-required" class="anchor" href="#jquery-not-required"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        jQuery not required
-      &lt;/h3&gt;
-    
-&lt;p&gt;Note also that this file does not require the &lt;code&gt;&amp;#39;jquery&amp;#39;&lt;/code&gt; package. An interesting consequence of this is that it&amp;#39;s not even possible to use Flickity with jQuery (at least via the NPM package alone). This recently came up in a &lt;a href="https://github.com/rails/webpacker/issues/2456" target="_blank" rel="noopener noreferrer"&gt;GitHub issue for the Webpacker project&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In other words, the following code with webpack:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// app/javascript/src/carousel.js
-import &amp;#39;jquery&amp;#39;
-import &amp;#39;flickity&amp;#39;
-
-$(&amp;#39;.main-carousel&amp;#39;).flickity({
-  // options
-  cellAlign: &amp;#39;left&amp;#39;,
-  contain: true
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;would result in this error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;Uncaught TypeError: $(...).flickity is not a function
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This project can produce a separate distribution from the package available via NPM. It takes the form of a file, here called &lt;a href="https://github.com/metafizzy/flickity/blob/c67b28accbe0642352c706cb470a8f607fa5861b/dist/flickity.pkgd.js" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;flickity.pkgd.js&lt;/code&gt;&lt;/a&gt; that is intended for the browser via a script tag. This file contains a &amp;quot;jQuery-fied&amp;quot; version of the underlying vanilla JS constructor which makes it possible to use with jQuery in the browser. For more details, see the &lt;a href="https://github.com/desandro/jquery-bridget" target="_blank" rel="noopener noreferrer"&gt;jquery-bridget&lt;/a&gt; project.&lt;/p&gt;
-
-&lt;p&gt;A similar approach exists in other plugins including:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/desandro/masonry" target="_blank" rel="noopener noreferrer"&gt;masonry&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/metafizzy/infinite-scroll" target="_blank" rel="noopener noreferrer"&gt;infinite-scroll&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/metafizzy/isotope" target="_blank" rel="noopener noreferrer"&gt;isotope&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/desandro/draggabilly" target="_blank" rel="noopener noreferrer"&gt;draggabilly&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The main takeaway here: if the library can be initialized without jQuery, there&amp;#39;s not much reason to use jQuery for that plugin in the first place.&lt;/p&gt;
-
-      &lt;h3 id="conclusion" class="title title-h3"&gt;
-        &lt;a name="conclusion" class="anchor" href="#conclusion"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Conclusion
-      &lt;/h3&gt;
-    
-&lt;p&gt;Unfortunately, jQuery plugins come in so many different flavors so not all of them can be used &lt;em&gt;without&lt;/em&gt; jQuery. In future posts, I&amp;#39;ll discuss other techniques you can use to make jQuery work with webpack.&lt;/p&gt;
-
-&lt;p&gt;If you find yourself in this position, make sure to understand the capability of the plugins you&amp;#39;re using. Ask &amp;quot;do I have to use this plugin with jQuery?&amp;quot;, consult the documentation and/or browse the source code as described in the article. If you&amp;#39;re lucky, you may find they can work in either context such that you might not need jQuery at all.&lt;/p&gt;
 </content>
   </entry>
 </feed>
