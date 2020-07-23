@@ -41,7 +41,7 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 # ...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;If you&amp;#39;ve noticed this before, you&amp;#39;re not the only one; this is a &lt;a href="https://github.com/rails/webpacker/issues/2654" target="_blank" rel="noopener noreferrer"&gt;recently reported issue&lt;/a&gt; on the Webpacker GitHub repository.&lt;/p&gt;
+&lt;p&gt;If you&amp;#39;ve noticed this before, there&amp;#39;s nothing wrong with your setup; this is the way Webpacker is setup to work out-of-the-box. Nevertheless, this is quite confusing and has lead to &lt;a href="https://github.com/rails/webpacker/issues/2654" target="_blank" rel="noopener noreferrer"&gt;a recently reported issue&lt;/a&gt; on the Webpacker GitHub repository.&lt;/p&gt;
 
 &lt;p&gt;It turns out, even though RAILS_ENV is set to &amp;quot;test&amp;quot;, NODE_ENV is set to &amp;#39;development&amp;#39; (&lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;). The webpack config use is determined by the NODE_ENV, which means, and this is especially pertinent to your Rails system and integration test, the development webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., &lt;code&gt;NODE_ENV=nonsense bin/webpack&lt;/code&gt;).&lt;/p&gt;
 
