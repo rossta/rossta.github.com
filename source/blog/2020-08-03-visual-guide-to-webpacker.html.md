@@ -28,6 +28,8 @@ With the asset pipeline, when an HTML request is processed (1), bundling takes p
 <script src="/assets/application-3b2c...a7e.js">
 ```
 
+> Note: Please consider the diagrams in this post as approximations of how the pieces fit together. Much of the detail has been omitted for simplicity and to draw attention to the salient aspects. For example, the browser does not get the response directly from the view as depicted above or from file server as in the following diagram; the actual request flow from these points is mostly irrelevant to the goal of this post.
+
 #### Asset request with the asset pipeline
 
 ![Rails request with the asset pipeline](blog/visual-guide-to-webpacker/webpacker-asset-pipeline-2.png)
