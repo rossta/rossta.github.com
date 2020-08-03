@@ -1,7 +1,7 @@
 ---
 title: A Visual Guide to Webpacker
 author: Ross Kaffenberger
-published: false
+published: true
 summary: How webpack and Rails work together in boxes and arrows
 description: Navigate the world of Webpacker and webpack on Rails with confidence using this helpful set of mental maps I put together.
 pull_image: 'blog/stock/ian-map-unsplash.jpg'
