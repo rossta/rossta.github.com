@@ -25,6 +25,7 @@ activate(:blog) do |blog|
   blog.per_page = 25
   blog.default_extension = ".md"
   blog.custom_collections = {series: {link: "/series/{series}.html", template: "series.html"}}
+  blog.publish_future_dated = true
 end
 
 ###########################
