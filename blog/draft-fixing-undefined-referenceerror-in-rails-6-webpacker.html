@@ -1,0 +1,452 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <title>How to fix Undefined ReferenceError in Rails 6 Webpacker - rossta.net</title>
+<meta name="description" content="Fixing Undefined ReferenceError in Rails 6 Webpacker" />
+<meta name="keywords" content="Ross Kaffenberger, software, software developer, software engineering, computer programming, web development, test driven development, TDD, Ruby, Javascript, Ruby on Rails, Rails, Webpack, Service Worker, Progressive Web Apps, RSpec, Elixir, Clojure, HTML, CSS" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Fixing Undefined ReferenceError in Rails 6 Webpacker" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.jpg" />
+<meta name="twitter:title" content="How to fix Undefined ReferenceError in Rails 6 Webpacker" />
+<meta property="og:description" content="Fixing Undefined ReferenceError in Rails 6 Webpacker" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.jpg" />
+<meta property="og:title" content="How to fix Undefined ReferenceError in Rails 6 Webpacker" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <link href='/css/app.chunk.41fdf5105f8aac1adef0.css' rel='stylesheet' media='all'></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2" href="/blog">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/series">series</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/talks">talks</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/projects">projects</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+      <p>New Outline</p>
+
+<p>The Pain: Webpack doesn&#39;t play nice with the Global Scope
+The Promise: Recognizing global scope issues and know how to deal with them will save you a lot of heartache.</p>
+
+<ul>
+<li>Visualize what webpack does to your code
+The Fix:
+
+<ul>
+<li>Avoid global scope</li>
+</ul></li>
+<li>replacing <script> tag with webpack &quot;initializer&quot;</li>
+<li>use callback instead of js.erb
+
+<ul>
+<li>Repair global scope issues</li>
+</ul></li>
+<li>Visualize what the desired fix to your code would be</li>
+<li>ProvidePlugin</li>
+<li>Make note of imports-loader
+
+<ul>
+<li>Accept global scope issues, recognize the drawbacks, deal with them in a sane way</li>
+</ul></li>
+<li>treating your build as a library</li>
+<li>assigning global references from webpack</li>
+<li>assigning global data from Rails (gon)</li>
+</ul>
+
+      <h1 id="what-you-think-and-you-39-re-wrong" class="title title-h1">
+        <a name="what-you-think-and-you-39-re-wrong" class="anchor" href="#what-you-think-and-you-39-re-wrong">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        What you think and you&#39;re wrong
+      </h1>
+    
+<p>If you&#39;re making the switch from Sprockets to Webpacker and expecting everything will &quot;just work&quot;, you&#39;re going to have a bad time. Making this transition effectively means adopting a new mental framework for how your code is packaged for use in the browser.</p>
+
+<p>Though Sprockets and Webpacker fill the same general space in the Rails stack—bundling JavaScript, CSS, images, and other static assets for the browser—they are very different beasts.</p>
+
+<p>Let&#39;s say you&#39;ve been developing with Rails a long enough time and you&#39;ve generally steered clear of the fast-paced churn in the JavaScript community. You&#39;ve likely built up a bunch of assumptions about how an asset bundler works based on your experience with Sprockets and the Rails asset pipeline. Meanwhile, webpack has evolved from a set of concerns, including JavaScript module formats and dependency management through NPM, that are completely foreign in the Rails-asset-pipeline world. Problems arise when developers assume Webpacker will be a drop-in replacement for Sprockets;</p>
+
+      <h1 id="things-to-understand-about-webpack" class="title title-h1">
+        <a name="things-to-understand-about-webpack" class="anchor" href="#things-to-understand-about-webpack">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Things to understand about webpack
+      </h1>
+    
+<ul>
+<li>JavaScript modules</li>
+<li>the Dependency Graph</li>
+<li>resolving dependencies</li>
+<li>transforming dependencies (configuration)</li>
+</ul>
+
+<p>In this article, we&#39;ll illustrate how you can avoid common pitfalls in a new world of Webpack on Rails.</p>
+
+      <h1 id="expecting-your-bundled-code-to-be-available-in-an-unbundled-context" class="title title-h1">
+        <a name="expecting-your-bundled-code-to-be-available-in-an-unbundled-context" class="anchor" href="#expecting-your-bundled-code-to-be-available-in-an-unbundled-context">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Expecting your bundled code to be available in an unbundled context
+      </h1>
+    
+      <h2 id="unbundled-code" class="title title-h2">
+        <a name="unbundled-code" class="anchor" href="#unbundled-code">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Unbundled code
+      </h2>
+    
+<p>One pitfall is attempting to call a JavaScript function within an embedded script tag.
+  A slight variation of this would be calling a JavaScript function within a js.erb template.</p>
+
+<p>## Undefined Reference Error Example</p>
+
+      <h1 id="bundled-code-that-doesn-39-t-work-the-way-you-think-it-should" class="title title-h1">
+        <a name="bundled-code-that-doesn-39-t-work-the-way-you-think-it-should" class="anchor" href="#bundled-code-that-doesn-39-t-work-the-way-you-think-it-should">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Bundled Code that doesn&#39;t work the way you think it should
+      </h1>
+    
+<p>Another common issue is using code that assumes it&#39;s being evaluated in the global scope. This might happen in your code legacy code though I frequently see questions about problems using jQuery plugins.</p>
+
+      <h1 id="packaging-asset-gems" class="title title-h1">
+        <a name="packaging-asset-gems" class="anchor" href="#packaging-asset-gems">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Packaging asset gems
+      </h1>
+    
+<p>There&#39;s also the problem of packaging asset gems. Currently there&#39;s no great workaround. The correct solution, I believe, is for engine maintainers to publish the frontend pieces, including JavaScript, CSS, images, etc. as a complementary package on NPM. Unfortunately, this approach hasn&#39;t been widely adopted and may require momentum in the community and acceptance by maintainers, but I don&#39;t see this happening anytime soon.</p>
+
+      <h1 id="page-specific-javascript" class="title title-h1">
+        <a name="page-specific-javascript" class="anchor" href="#page-specific-javascript">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Page-specific JavaScript
+      </h1>
+    
+<p>One more common problem is more subtle and potentially dangerous. It&#39;s common and confusing enough to warrant its own post or serious of posts. I&#39;m speaking of page-specific JavaScript, which is the practice of separating out JavaScript (and maybe CSS) specific to one set of pages from the main application bundle. There&#39;s nothing wrong with idea per se; it absolutely should be a goal to send a little JavaScript to your users as possible; if you lump everything in application.js, browsers are forced to download, parse, and evaluate the</p>
+
+<p>===
+Much of your frustration with webpack can be alleviated once you understand this key point:</p>
+
+<p>Here&#39;s a common refrain from Rails developers lately:</p>
+
+<blockquote>
+<p>In Sprockets, everything &quot;just worked!&quot; I don&#39;t understand why webpack is so complicated.</p>
+</blockquote>
+
+<p>Why? Turns out, for certain libraries and some legacy projects, you may run into some issues upgrading your JavaScript &quot;as is&quot; from Sprockets to Webpacker. In this post, I&#39;ll describe some common causes and what you might be able to do to fix them.</p>
+
+<p>Let&#39;s first review: webpack is the new default JavaScript compiler in Rails 6. This means, for the default installation settings, Rails will install JavaScript dependencies via yarn from the NPM (Node Package Manager) registry and will invoke the <code>webpack</code> executable with the webpack configuration provided by Webpacker.</p>
+
+<p>This change has prompted developers to move their Sprockets-based JavaScript code to be compiled by Webpacker. This, unfortunately, will not always &quot;just work.&quot;</p>
+
+<p>A common error you may run into when bundling legacy code with webpack is <code>Undefined ReferenceError</code>.</p>
+
+<p>In this post, I&#39;ll describe a few scenarios that may lead to this error and how you can fix it.</p>
+
+<p>First,
+By default, webpack does not expose your JavaScript code to the global scope.</p>
+
+<p>This is a HUGE departure from what life was like with Sprockets. All your code was bundled in the global scope. You could access the jQuery <code>$</code> from anywhere: from any file in <code>app/assets/javascripts</code>, from your ERB templates, from the Devtools browser console. Life was great.</p>
+
+<p>But all that&#39;s changes once you start making the switch to webpack through Webpacker. Webpack wants to treat <em>everything</em> as a JavaScript module. In practice, this means <em>every file</em> in your JavaScript build will have function-level scope.</p>
+
+<p>In other words, <code>this</code> is not what it used to be.</p>
+
+<p>Aren&#39;t global variables bad? This is a good thing, right?</p>
+
+<p>Yes, I agree, this change is fundamentally better. But it&#39;s still causing you headaches in the transition. See, a lot of the code you&#39;ve been writing and code from libraries and gems you&#39;ve been depending on has been assuming unfettered access to that global scope as well as the presence of important dependencies on that global scope.</p>
+
+<p>I can tell it&#39;s a problem because I keep answering the same question, asked numerous ways, on StackOverflow, on Twitter, and on GitHub.</p>
+
+<p>The symptoms of these issues surface in a variety of ways.</p>
+
+<p>With webpack:</p>
+
+<p>Your code and your favorite libraries, like jQuery, no longer available in the DevTools console.</p>
+
+<p>When adding a JavaScript &quot;sprinkle&quot; in a <script> tag in a Rails view template, you now get an <code>UncaughtReference</code> error and the code is broken.</p>
+
+<p>Selected jQuery plugins don&#39;t work; instead you see <code>Uncaught ReferenceError: jQuery is not defined</code> even though you&#39;ve used <code>yarn add jquery</code> and imported jquery in your Webpacker &quot;pack&quot; already.</p>
+
+<p>WTF?</p>
+
+<blockquote>
+<p>Can someone please help me find an explanation that clarifies the correct way to add js packages for rails 6 using webpacker so that the added package is accessible globally?</p>
+</blockquote>
+
+<p>Good news is, there are steps you can take to address these issues.</p>
+
+<ol>
+<li>Stop relying on global scope</li>
+</ol>
+
+<p>The idea here is simple. Stop using jQuery and jQuery plugins that rely on jQuery being available in the global scope.</p>
+
+<p>Stop putting code in your <script> tags embedded in your Rails templates. Stop using javascript.erb responses.</p>
+
+<p>With webpack, most, if not all, of your frontend logic can now live in pure JavaScript where it&#39;s more easily unit-testable with tools like Jest. (The Rails asset pipeline never had a great solution for JavaScript unit testing, though I really appreciated the efforts of projects like teaspoon, etc.)</p>
+
+      <h3 id="module-shimming" class="title title-h3">
+        <a name="module-shimming" class="anchor" href="#module-shimming">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Module shimming
+      </h3>
+    
+<p>While avoiding the global scope altogether is a worthy goal, rewriting lots of legacy JavaScript not a realistic option for many of you, at least, not in the near term.</p>
+
+<p>The good news is, you can make your legacy code with webpack.</p>
+
+<p>Webpack offers quite a few tools to help you augment the behavior of your imported code at build time. With a little patience, you can &quot;rewire&quot; your legacy code to play nice with webpack and the global scope at the same time. It does require some patience and learning a few webpack concepts. Below I&#39;ll demonstrate a few recipes for success: how to module shim in webpack.</p>
+
+      <h3 id="surgical-repair-with-imports-loader" class="title title-h3">
+        <a name="surgical-repair-with-imports-loader" class="anchor" href="#surgical-repair-with-imports-loader">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Surgical repair with imports-loader
+      </h3>
+    
+<p>Shim selected modules with an import to replace reliance on a global variable.</p>
+
+<p>When an <code>Undefined ReferenceError</code> occurs <em>within</em> one of your third-party libraries, like a jQuery plugin, it may mean that you have legacy code that doesn&#39;t know how to import its dependencies.</p>
+
+<p>For example, it&#39;s common for old jQuery plugins to rely on jQuery being available to the global scope.</p>
+
+<p>Take <a href="https://github.com/harvesthq/chosen" target="_blank" rel="noopener noreferrer"><code>chosen-js</code></a>. At the very top of its Coffeescript source file, is a reference to jQuery which the code expects to be available in the global scope.</p>
+
+<pre><code class="javascript">$ = jQuery
+
+$.fn.extend({
+  chosen: (options) -&gt;
+
+  # ...
+</code></pre>
+
+<p>Since webpack doesn&#39;t add code to the global scope, that plugin wouldn&#39;t be able to find jQuery, even if you&#39;ve imported it elsewhere in your build.</p>
+
+<p>We can fix this though using a webpack add-on called <code>imports-loader</code>. In webpack, a &quot;loader&quot; performs a specific, targeted file transform. With the <code>imports-loader</code>, we can add missing import statements to the build output at build time. For chosen-js, we want to add something like <code>import jQuery from &#39;jquery&#39;</code> to the top of the chosen-js module.</p>
+
+<pre><code class="sh">yarn add imports-loader
+</code></pre>
+
+<pre><code class="javascript">// config/webpack/environment.js
+environment.loaders.append(&#39;chosen-js&#39;, {
+  test: require.resolve(&#39;chosen-js&#39;),
+  use: [{
+    loader: &#39;imports-loader&#39;,
+    options: &#39;jQuery=jquery,$=jquery,this=&gt;window&#39;,
+  }],
+})
+</code></pre>
+
+<p>Let&#39;s breakdown this configuration. The <code>test</code> option for a webpack loader allows us to target which file(s) this transform should apply to. We set the value using <code>require.resolve</code>, which returns the path to the file that would get required by using <code>require(&#39;chosen-js&#39;)</code>. Now this loader configuration will only run when this specific file is required in your build.</p>
+
+<p>The <code>options</code> value is specific to the <code>imports-loader</code> API. <code>jQuery=jquery</code> means that the webpack will add the equivalent of <code>var jQuery = require(&quot;jquery&quot;)</code> to the output of the chosen-js module in the build. Likewise for <code>$=jquery</code>.</p>
+
+<p>Some legacy modules may assume the <code>this</code> reference in scope is equivalent to <code>window</code> in the browser. This is common for files written in CoffeeScript (as is the case with chosen-js); when CoffeeScript is transpiled to JavaScript, each file is wrapped in an anonymous function: <code>function() { /* source */ }).call(this);</code>. With the option <code>this=&gt;window</code>, the <code>imports-loader</code> will add an additional wrapper function, <code>function() { /* source */ }).call(window);</code> to the chosen-js source to ensure <code>this</code> refers to <code>window</code>.</p>
+
+<p>To reiterate, using <code>imports-loader</code> does not make the imported references globally available; it instead repairs the modules you&#39;ve targeted in the resulting webpack output. Use this technique with any third-party library that depends on implicit global variables that you can make available through NPM.</p>
+
+<p><a href="#">See the webpack docs for more information on what&#39;s possible with imports-loader</a>.</p>
+
+<ol>
+<li>Blanket immunization with ProvidePlugin</li>
+</ol>
+
+<p>While the <code>imports-loader</code> allows for targeted substitution of global references with imports, the webpack <code>ProvidePlugin</code> provides a similar fix by applying the change everywhere in your build.</p>
+
+<p>In other words, ProvidePlugin says, &quot;Automatically load the specified module <em>anywhere</em> the reference is encountered.&quot;</p>
+
+<p>For example, instead of the <code>imports-loader</code> fix for a single file we described in the previous section, we could use the following configuration with <code>ProvidePlugin</code>:</p>
+
+<pre><code class="javascript">// config/webpack/environment.js
+
+const webpack = require(&#39;webpack&#39;)
+environment.plugins.append(&#39;jQuery&#39;, new webpack.ProvidePlugin({
+  &quot;jQuery&quot;: &quot;jquery&quot;,
+  &quot;$&quot;: &quot;jquery&quot;
+}))
+</code></pre>
+
+<p>Notably, the above configuration (or something similar) will show up in just about every &quot;Using jQuery with webpack&quot; tutorial you&#39;ll find online. Hopefully you&#39;ll understand that this configuration is not strictly necessary to make jQuery work with webpack; it&#39;s just one tool you <em>might</em> want to use if you&#39;re struggling to get legacy jQuery plugins to work with webpack when those plugins assume jQuery is available in the global scope.</p>
+
+<p><a href="https://webpack.js.org/plugins/provide-plugin/" target="_blank" rel="noopener noreferrer">Check out the webpack docs for more information on ProvidePlugin</a>.</p>
+
+<p>Example</p>
+
+<ol>
+<li><p>Export app code as a library</p></li>
+<li><p>Set window</p></li>
+</ol>
+
+<p>To make any reference available to the global scope from within your webpack build, assign the reference to the window object.</p>
+
+<pre><code class="sh">yarn add jquery
+</code></pre>
+
+<pre><code class="javascript">// app/javascript/packs/application.js
+
+import $ from &quot;jquery&quot;
+window.$ = window.jQuery = $
+</code></pre>
+
+<pre><code class="javascript">app/javascript/packs/application.js:
+
+import jQuery from &#39;jquery&#39;
+
+const jQueryProp = {
+  value: jQuery,
+  configurable: false,
+  writable: false
+}
+
+Object.defineProperties(window, { jQuery: jQueryProp, $: jQueryProp })
+</code></pre>
+
+<p>This change make jQuery available as <code>$</code> or <code>jQuery</code> in Rails template <script> tags and in the console. It <em>might</em> fix an <code>Uncaught ReferenceError: jQuery is not defined</code> in a jQuery plugin that assumes jQuery is available in the global scope.</p>
+
+<p>Of course, you can do this for your own code as well. It&#39;d be typical to introduce a namespace to avoid polluting the <code>window</code> with a bundle of extra properties.</p>
+
+<pre><code class="javascript">// app/javascript/src/edit_map.js
+
+export default function editMap() {
+  // ...
+}
+
+window.App = window.App || {}
+window.App.editMap = editMap
+</code></pre>
+
+<p>This example makes the <code>editMap</code> function available to the global scope as <code>App.editMap</code>.</p>
+
+<p>To be clear, I&#39;m not recommending this approach. But, it&#39;s one of the easiest to implement. Consider this approach a blunt instrument. It may not fix all your global variable problems.</p>
+
+<p>I prefer to use webpack configuration techniques, as described below, to limit the side effects present in my own JavaScript code.</p>
+
+<ol>
+<li>Use expose-loader to add to make variables available to the global scope</li>
+</ol>
+
+<p>Some scripts expect a variable to be in the global scope</p>
+
+<p>Example:
+<a href="https://github.com/rossta/rails6-webpacker-demo/compare/example/open-tok-layout" target="_blank" rel="noopener noreferrer">https://github.com/rossta/rails6-webpacker-demo/compare/example/open-tok-layout</a></p>
+
+<p>Another technique is to make a reference available to all the code within the webpack bundle. This is not equivalent to adding the reference to the global scope; the reference will not be visible to script tags and the devtools console, for example. Within your webpack modules though, the reference will behave as if it’s globally visible. Webpack will “provide” the reference throughout the build without having to explicitly import it. This is useful for handling legacy plugins you don’t want to directly modify. It’s most commonly show in tutorials that describe how to make jQuery work with webpack. Just know that this is not strictly necessary nor is it the only way to make jQuery and jQuery plugins compatible with webpack.</p>
+
+<p>What if you really need a reference in the global scope? It can be done. Here are a few techniques to consider as part of your tool belt.</p>
+
+<p>The expose-loader is one option for exposing selected references to the global scope. This approach is especially effective for targeting a specific library. If there’s a reference in the top of the module’s scope, you can configure webpack with the expose-loader to make this reference available to the global scope. Again jQuery is a common example you’ll see but it could work for any reference.</p>
+
+<p>One of my favorite approaches</p>
+
+<p>Bug links
+<a href="https://stackoverflow.com/questions/62631682/rails-6-webpacker-with-cropperjs-or-any-javascript-package" target="_blank" rel="noopener noreferrer">https://stackoverflow.com/questions/62631682/rails-6-webpacker-with-cropperjs-or-any-javascript-package</a></p>
+
+<p><a href="https://stackoverflow.com/questions/62649100/why-is-an-existing-javascript-function-not-found-generating-uncaught-referenceer" target="_blank" rel="noopener noreferrer">https://stackoverflow.com/questions/62649100/why-is-an-existing-javascript-function-not-found-generating-uncaught-referenceer</a>
+<a href="https://stackoverflow.com/questions/56022108/migrating-rails-from-asset-pipeline-to-webpacker-uncaught-referenceerror-is" target="_blank" rel="noopener noreferrer">https://stackoverflow.com/questions/56022108/migrating-rails-from-asset-pipeline-to-webpacker-uncaught-referenceerror-is</a>
+<a href="https://www.reddit.com/r/rails/comments/dg2c0z/cant_get_action_specific_javascript_working_in/" target="_blank" rel="noopener noreferrer">https://www.reddit.com/r/rails/comments/dg2c0z/cant_get_action_specific_javascript_working_in/</a></p>
+
+<p><a href="https://www.reddit.com/r/rails/comments/dzgr0z/uncaught_referenceerror_or_how_to_work_with_js_in/" target="_blank" rel="noopener noreferrer">https://www.reddit.com/r/rails/comments/dzgr0z/uncaught_referenceerror_or_how_to_work_with_js_in/</a></p>
+
+<p><a href="https://www.highcharts.com/forum/viewtopic.php?t=42351" target="_blank" rel="noopener noreferrer">https://www.highcharts.com/forum/viewtopic.php?t=42351</a></p>
+
+<blockquote>
+<p>Technically, if you use CoffeeScript with Sprockets, each file will be wrapped within an immediately-invoked function expression, so your application code would not be exposed to the global scope in this case.</p>
+
+<p>Again, this is an oversimplification. In production, webpack will concatenate ES6 modules in your bundle into a single scope, when possible, a process also known as &quot;scope hoisting&quot; to improve execution times; otherwise, it can be costly to wrap every file in the application in separate functions in practice. See the webpack docs for more information.</p>
+</blockquote>
+
+<p>Resources:
+<a href="https://inopinatus.org/2019/09/14/webpacker-jquery-and-jquery-plugins/" target="_blank" rel="noopener noreferrer">https://inopinatus.org/2019/09/14/webpacker-jquery-and-jquery-plugins/</a></p>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2020 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src='/js/runtime.be1555700fe3c257b41b.js'></script><script src='/js/vendors~app.chunk.6c6b7f30d28c87e9d1b2.js'></script><script src='/js/app.chunk.6ea60510f3639c2920d8.js'></script>
+    
+  </body>
+</html>

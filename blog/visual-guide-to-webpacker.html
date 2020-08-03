@@ -1,0 +1,439 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <title>A visual guide to Webpacker - rossta.net</title>
+<meta name="description" content="Navigate the world of Webpacker and webpack on Rails with confidence using this helpful set of mental maps I put together." />
+<meta name="keywords" content="Rails, Webpack" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Navigate the world of Webpacker and webpack on Rails with confidence using this helpful set of mental maps I put together." />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/ian-map-unsplash.jpg" />
+<meta name="twitter:title" content="A visual guide to Webpacker" />
+<meta property="og:description" content="Navigate the world of Webpacker and webpack on Rails with confidence using this helpful set of mental maps I put together." />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/ian-map-unsplash.jpg" />
+<meta property="og:title" content="A visual guide to Webpacker" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <link href='/css/app.chunk.41fdf5105f8aac1adef0.css' rel='stylesheet' media='all'></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2" href="/blog">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/series">series</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/talks">talks</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/projects">projects</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    A visual guide to Webpacker
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      How webpack and Rails work together in boxes and arrows
+    </h2>
+</header>
+
+    <p>Confused about how Webpacker works in Rails? Let&#39;s unpack it with some diagrams.</p>
+
+<p>Before we get to Webpacker, a quick word on how things look when requests are served with the Rails asset pipeline in development, as a comparison.</p>
+
+      <h4 id="html-request-with-the-asset-pipeline" class="title title-h4">
+        <a name="html-request-with-the-asset-pipeline" class="anchor" href="#html-request-with-the-asset-pipeline">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        HTML request with the asset pipeline
+      </h4>
+    
+<p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-asset-pipeline-1.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
+
+<p>With the asset pipeline, when an HTML request is processed (1), bundling takes place within your Rails server (2). The asset pipeline is responsible for creating the bundled assets in the <code>public/assets/</code> directory and providing URLs to those assets to be rendered in the View.</p>
+
+<pre><code>&lt;script src=&quot;/assets/application-3b2c...a7e.js&quot;&gt;
+</code></pre>
+
+<blockquote>
+<p>Note: Please consider the diagrams in this post as approximations of how the pieces fit together. Much of the detail has been omitted for simplicity and to draw attention to the salient aspects. For example, the browser does not get the response directly from the view as depicted above or from file server as in the following diagram; the actual request flow from these points is mostly irrelevant to the goal of this post.</p>
+</blockquote>
+
+      <h4 id="asset-request-with-the-asset-pipeline" class="title title-h4">
+        <a name="asset-request-with-the-asset-pipeline" class="anchor" href="#asset-request-with-the-asset-pipeline">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Asset request with the asset pipeline
+      </h4>
+    
+<p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-asset-pipeline-2.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
+
+<p>Subsequently, the browser fetches that resource from your Rails server (1) where the <code>ActionDispatch::Static</code> middleware serves the asset from the <code>public/assets/</code> directory (2).</p>
+
+<p>Good so far?</p>
+
+      <h3 id="understanding-webpacker" class="title title-h3">
+        <a name="understanding-webpacker" class="anchor" href="#understanding-webpacker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Understanding Webpacker
+      </h3>
+    
+<p>With Webpacker, things work differently. Webpacker uses webpack to compile assets. Since webpack is written in JavaScript, not Ruby, and runs on the Node.js runtime, Rails can&#39;t interact with it the same way it could with Sprockets and the Rails asset pipeline.</p>
+
+<p>Webpacker provides the glue to help Rails communicate with webpacker and locate the assets webpack produces. This &quot;glue&quot; includes</p>
+
+<ul>
+<li>webpack configuration,
+
+<ul>
+<li>i.e., <code>config/webpacker.yml</code> and <code>config/webpack/{production,development,test}.js</code></li>
+</ul></li>
+<li>helpers,
+
+<ul>
+<li>e.g. <code>javascript_pack_tag</code> and <code>stylesheet_link_tag</code></li>
+</ul></li>
+<li>executables,
+
+<ul>
+<li>i.e. <code>bin/webpack</code> and <code>bin/webpack-dev-server</code></li>
+</ul></li>
+<li>and middleware</li>
+</ul>
+
+<p>Webpacker supports two modes for using Webpacker in development:</p>
+
+<ul>
+<li>compile on demand</li>
+<li>dev server</li>
+</ul>
+
+      <h3 id="compile-on-demand" class="title title-h3">
+        <a name="compile-on-demand" class="anchor" href="#compile-on-demand">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Compile on demand
+      </h3>
+    
+<p>Let&#39;s look at &quot;compile on demand&quot; first.</p>
+
+<p>This mode is enabled when the <code>compile</code> option is set to <code>true</code> in <code>config/webpacker.yml</code>.</p>
+
+<pre><code class="yaml">development:
+  compile: true
+</code></pre>
+
+<p>Here&#39;s how webpack fits into the picture.</p>
+
+      <h4 id="html-request-with-webpacker-compile" class="title title-h4">
+        <a name="html-request-with-webpacker-compile" class="anchor" href="#html-request-with-webpacker-compile">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        HTML request with Webpacker compile
+      </h4>
+    
+<p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-compile-1.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
+
+<p>As it processes an HTML request (1), Rails will render the View, including &quot;pack&quot; tags such as the following:</p>
+
+<pre><code class="erb">&lt;%= stylesheet_pack_tag &#39;application&#39;, media: &#39;all&#39; %&gt;
+
+&lt;%= javascript_pack_tag &#39;application&#39; %&gt;
+
+&lt;%= image_pack_tag(&#39;media/images/apple-touch-icon.png&#39;) %&gt;
+</code></pre>
+
+<p>Rails must be able to determine the URL for webpack JS, CSS, and image assets.</p>
+
+<p>To do so, the Rails server will run webpack in a child process if the compiled assets are missing or stale (2).</p>
+
+<p>The webpack config used to invoke webpack, <code>config/webpack/development.js</code> merges settings from <code>config/webpacker.yml</code> and the config provided by the <code>@rails/webpacker</code> NPM package (3).</p>
+
+<p>Executing webpack will generate assets in the <code>public/packs/</code> directory along with the important <code>manifest.json</code> (4).</p>
+
+<p>The <code>manifest.json</code> file is the key communication point from webpack to Rails: it provides a simple mapping to look up asset paths from their canonical names.</p>
+
+<pre><code class="json">{
+  &quot;application.js&quot;: &quot;/packs/js/application-7efac57c4de0539bb941.js&quot;,
+  &quot;application.css&quot;: &quot;/packs/css/application-7526fd011c9ea132a45f.css&quot;,
+  &quot;media/images/apple-touch-icon.png&quot;: &quot;/packs/media/images/apple-touch-icon-b8d7025d5da762a9c1dd30980f412c92.png&quot;
+}
+</code></pre>
+
+<p>Rails will read this file via the Webpacker view helpers to render the correct URL to the assets.</p>
+
+      <h4 id="asset-request-with-webpacker-compile" class="title title-h4">
+        <a name="asset-request-with-webpacker-compile" class="anchor" href="#asset-request-with-webpacker-compile">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Asset request with Webpacker compile
+      </h4>
+    
+<p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-compile-2.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
+
+<p>Once the browser has received the HTML response, it must make additional request to retrieve the assets. In &quot;compile-on-demand&quot; mode, this is identical to the asset pipeline:</p>
+
+<p>The <code>ActionDispatch::Static</code> middleware (2) locates the asset on the file system in the <code>public/</code> directory (2) which is returned to the browser, short-circuiting the rest of the Rails process.</p>
+
+<p>In production, of course, the role of the middleware may likely be played instead by a web server, such as Nginx, and/or a CDN.</p>
+
+      <h3 id="dev-server" class="title title-h3">
+        <a name="dev-server" class="anchor" href="#dev-server">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Dev server
+      </h3>
+    
+<p>The &quot;compile on-demand&quot; mode is similar to using the Rails asset pipeline in that you need only run the Rails server explicitly to get started. In development, I prefer &quot;dev server&quot; mode. This approach involves using the <code>webpack-dev-server</code> as a standalone HTTP server to compile assets and serve asset requests. Advantages include auto-recompilation, live-reloading, and <a href="https://webpack.js.org/concepts/hot-module-replacement/" target="_blank" rel="noopener noreferrer">hot module replacement</a>.</p>
+
+<p>Let&#39;s see how requests are processed in &quot;dev server&quot; mode.</p>
+
+      <h4 id="html-request-with-dev-server" class="title title-h4">
+        <a name="html-request-with-dev-server" class="anchor" href="#html-request-with-dev-server">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        HTML request with dev server
+      </h4>
+    
+<p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-dev-server-1.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
+
+<p>Using a tool like foreman or overmind, we can boot up both the Rails server and the webpack-dev-server with a single command using a Procfile such as:</p>
+
+<pre><code class="yaml"># Procfile.dev
+rails: bin/rails server
+webpack: bin/webpack-dev-server
+</code></pre>
+
+<p>We&#39;ll also set the <code>compile</code> option to <code>false</code> in <code>config/webpacker.yml</code>; Rails won&#39;t shell out to the webpack executable if it detects the dev-server is running.</p>
+
+<pre><code class="yaml">development:
+  compile: false
+</code></pre>
+
+<p>When the dev-server boots up (1), it &quot;pre-compiles&quot; assets in memory, instead of writing them to disk, for performance. It does still write the <code>manifest.json</code> file to disk in the <code>public/packs/</code> directory (2), where Rails can find it.</p>
+
+<p>As with the other examples, as the request (3) is processed, the View will attempt to render javascript, stylesheet, and image tags. Rails will determine asset URLs from <code>manifest.json</code> (4). If the webpack-dev-server is not running or hasn&#39;t finished compiling as the request comes in, you may see the infamous <a href="https://github.com/rails/webpacker/issues/1730" target="_blank" rel="noopener noreferrer">Webpacker::Manifest::MissingEntryError</a>.</p>
+
+      <h4 id="asset-request-with-dev-server" class="title title-h4">
+        <a name="asset-request-with-dev-server" class="anchor" href="#asset-request-with-dev-server">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Asset request with dev server
+      </h4>
+    
+<p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-dev-server-2.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
+
+<p>As before, Rails middleware (1) locates the asset, this time, by proxying to the webpack-dev-server (2).</p>
+
+<p>Recall that with the asset pipeline or webpack &quot;compile on demand&quot;, the <code>ActionDispatch::Static</code> middleware located the assets on the file system in the <code>public/</code> directory. However, when using the webpack-dev-server, assets on not written to disk, they&#39;re created in memory; <code>ActionDispatch::Static</code> doesn&#39;t work in this case.</p>
+
+<p>To solve this problem, Webpacker provides its own middleware: <code>Webpacker::DevServerProxy</code> (<a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/webpacker/dev_server_proxy.rb#L3" target="_blank" rel="noopener noreferrer">source</a>). This allows Rails to act as an intermediary between the browser and the webpack-dev-server in development.</p>
+
+<blockquote>
+<p>As a side note, if Rails output the local dev-server host in the asset URLs, say as <code>http://localhost:3035/packs/js/application...js</code> instead of just <code>/packs/js/application...js</code>, I don&#39;t think the proxy middleware would be necessary. I&#39;m not entirely sure why they went this direction if only to make it seem more like the asset pipeline from the browser&#39;s perspective.</p>
+</blockquote>
+
+<p>At times, Rails can feel like a black box. I hope these mental maps help make it easier to navigate the world of Webpacker and webpack on Rails with confidence.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=A%20visual%20guide%20to%20Webpacker%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Fblog%2Fvisual-guide-to-webpacker.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Aug  3, 2020
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/1268949/subscriptions?ref=Rails"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="1268949"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+        <h2 class="mb-8">
+  Need help with webpack on Rails?
+</h2>
+<p class="mb-4">My name is <strong>Ross Kaffenberger</strong>.</p>
+
+<p class="mb-4">
+  Webpacker now ships by default in Rails 6 but there's no need to stress.
+  I'm putting together a course to help you master <strong>Webpack on Rails</strong>.
+</p>
+
+<p class="mb-4">
+  I teach full stack web developers about frontend tools and performance,
+  especially at the intersection of <strong>JavaScript</strong> and <strong>Ruby on Rails</strong>.
+</p>
+
+<p>
+  Subscribe to stay in the loop.
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+    <a
+      href="https://convertkit.com/?utm_source=dynamic&amp;utm_medium=referral&amp;utm_campaign=poweredby&amp;utm_content=form"
+      class="formkit-powered-by"
+      data-element="powered-by"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Powered By ConvertKit</a
+    >
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733966" />
+    <input type="hidden" name="tags[]" value="733964" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/blog/2020-08-03-visual-guide-to-webpacker.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html">Why doesn't Webpacker use my test config when I run Rails tests?</a>
+    </header>
+      <p>When running Rails system or integration tests, you might be surprised to learn that Webpacker will load your development webpack config. What's the deal?</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/webpacker-output-analysis-with-webpack-bundle-analyzer.html">The webpack plugin I can't live without</a>
+    </header>
+      <p>In this post, we'll take a look at installing and using the webpack-bundle-analyzer, perhaps the most invaluable webpack plugin, to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a>
+    </header>
+      <p>A new Rails 6 application will install both Webpacker and Sprockets by default. Don't they solve the same problem? This article dives into why Sprockets lives on even though webpack has surpassed most of its features and why you might want to choose one over the other.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/stock/ian-map-unsplash.jpg" loading="lazy" alt="" />
+            <figcaption><a href="https://unsplash.com/@travelsnips">Photo by Ian on Unsplash</a></figcaption>
+      </figure>
+  </article>
+    <!-- Webpack on Rails course popup form -->
+    <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2020 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src='/js/runtime.be1555700fe3c257b41b.js'></script><script src='/js/vendors~app.chunk.6c6b7f30d28c87e9d1b2.js'></script><script src='/js/app.chunk.6ea60510f3639c2920d8.js'></script>
+    
+  </body>
+</html>

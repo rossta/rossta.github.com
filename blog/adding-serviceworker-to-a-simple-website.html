@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/css/app.chunk.9adcc29756e951f93f0b.css' rel='stylesheet' media='all'></link>
+    <link href='/css/app.chunk.41fdf5105f8aac1adef0.css' rel='stylesheet' media='all'></link>
     <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.js"></script>
   </head>
   <body id="application" class="leading-relaxed">
@@ -136,7 +136,7 @@ generalized version of his script in a <a href="https://gist.github.com/adactio/
 
 <p>To ensure content on rossta.net is always loaded over HTTPS, I added a redirect page rule:</p>
 
-<p><img src="/assets/images/blog/cloud-flare-page-rules-https.jpg" alt="Cloud flare page rules https" loading="lazy" /></p>
+<p><img src="/assets/images/blog/cloud-flare-page-rules-https.jpg" alt="" loading="lazy" /></p>
 
 <p>I&#39;m using webpack to create <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12" target="_blank" rel="noopener noreferrer">separate bundles</a> and Middleman&#39;s <a href="https://middlemanapp.com/advanced/improving_cacheability/" target="_blank" rel="noopener noreferrer"><code>:asset_hash</code> extension</a> to add a digest to each file, similar to the <a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production" target="_blank" rel="noopener noreferrer">Rails asset pipeline production behavior</a> to improve the cacheability of CSS and JavaScript assets on rossta.net.</p>
 
@@ -146,7 +146,7 @@ generalized version of his script in a <a href="https://gist.github.com/adactio/
 
 <p>To make sure Cloudflare does not cache <code>serviceworker.js</code>, as it would by default for the CDN, I instructed Cloudflare to bypass the cache.</p>
 
-<p><img src="/assets/images/blog/cloud-flare-page-rules-serviceworker.jpg" alt="Cloud flare page rules serviceworker" loading="lazy" /></p>
+<p><img src="/assets/images/blog/cloud-flare-page-rules-serviceworker.jpg" alt="" loading="lazy" /></p>
 
 <p>Github pages currently adds 10-minute <code>Expires</code> and <code>Cache-Control</code> headers to resource requests meaning browsers and proxies may choose to cache <code>serviceworker.js</code> past an update I&#39;ve just deployed. This is a tradeoff I&#39;ll have to live with until I move rossta.net to another host.</p>
 
@@ -317,7 +317,7 @@ reloading pages with images and special fonts.</p>
   </section>
   <article class="mb-24">
       <figure>
-        <img src="/assets/images/blog/stock/cyclists-unsplash-photo.jpg" loading="lazy" alt="Cyclists unsplash photo" />
+        <img src="/assets/images/blog/stock/cyclists-unsplash-photo.jpg" loading="lazy" alt="" />
       </figure>
   </article>
     <!-- Webpack on Rails course popup form -->
@@ -326,7 +326,7 @@ reloading pages with images and special fonts.</p>
     </main>
     <footer class="bg-silver text-xs">
   <div class="layout container p-6">
-    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="Turtle logo" />
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
     <section class="lg:flex lg:justify-between">
       <section class="mb-8">
         <h5 class="font-bold mb-4">Most Popular</h5>
@@ -347,8 +347,8 @@ reloading pages with images and special fonts.</p>
         <ul>
             <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
             <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
-            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
             <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
             <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
         </ul>
       </section>

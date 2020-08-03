@@ -1385,6 +1385,11 @@ th, td {
   margin-bottom: 2rem;
 }
 
+.post ul li ul,
+.post ol li ol {
+  margin-bottom: 0.5rem;
+}
+
 .post ul li {
   list-style-type: disc;
   margin-left: 1rem;
