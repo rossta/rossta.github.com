@@ -12,10 +12,10 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Configure Bundler
-        command: |
-          gem update --system
-          gem install bundler
+          name: Configure Bundler
+          command: |
+            gem update --system
+            gem install bundler
 
       - run: ruby --version
       - run: node --version
