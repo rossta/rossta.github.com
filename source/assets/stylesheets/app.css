@@ -159,6 +159,11 @@ th, td {
   @apply mb-8;
 }
 
+.post ul li ul,
+.post ol li ol {
+  @apply mb-2;
+}
+
 .post ul li {
   list-style-type: disc;
 
