@@ -1,5 +1,5 @@
 ---
-title: A Visual Guide to Webpacker
+title: A visual guide to Webpacker
 author: Ross Kaffenberger
 published: true
 summary: How webpack and Rails work together in boxes and arrows
