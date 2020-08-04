@@ -16,7 +16,7 @@ tags:
 
 Confused about how Webpacker works in Rails? Let's unpack it with some diagrams.
 
-Before we get to Webpacker, a quick word on how things look when requests are served with the Rails asset pipeline in development, as a comparison.
+First, we'll see how things look when requests are served with the Rails asset pipeline in development, as a comparison.
 
 #### HTML request with the asset pipeline
 
@@ -40,9 +40,11 @@ Good so far?
 
 ### Understanding Webpacker
 
-With Webpacker, things work differently. Webpacker uses webpack to compile assets. Since webpack is written in JavaScript, not Ruby, and runs on the Node.js runtime, Rails can't interact with it the same way it could with Sprockets and the Rails asset pipeline.
+With Webpacker, things work differently.
 
-Webpacker provides the glue to help Rails communicate with webpacker and locate the assets webpack produces. This "glue" includes
+While the Rails asset pipeline lives _within_ the Rails server process, webpack, as you may know, is written in JavaScript and executes within the Node.js runtime. Therefore, webpack must run in a separate process.
+
+Rails needs some "glue" to help it communicate with webpack. Webpacker provides the glue, which includes:
 
 - webpack configuration,
   - i.e., `config/webpacker.yml` and `config/webpack/{production,development,test}.js`
@@ -52,7 +54,7 @@ Webpacker provides the glue to help Rails communicate with webpacker and locate 
   - i.e. `bin/webpack` and `bin/webpack-dev-server`
 - and middleware
 
-Webpacker supports two modes for using Webpacker in development:
+For the purpose of illustration, we'll focus on how Webpacker works in development. Webpacker supports two development "modes":
 
 - compile on demand
 - dev server
@@ -124,7 +126,7 @@ Let's see how requests are processed in "dev server" mode.
 
 ![Rails request with the asset pipeline](blog/visual-guide-to-webpacker/webpacker-dev-server-1.png)
 
-Using a tool like foreman or overmind, we can boot up both the Rails server and the webpack-dev-server with a single command using a Procfile such as:
+Using a tool like [foreman](https://github.com/ddollar/foreman) or [overmind](https://github.com/DarthSim/overmind), we can boot up both the Rails server and the webpack-dev-server with a single command using a Procfile such as:
 
 ```yaml
 # Procfile.dev
@@ -132,12 +134,14 @@ rails: bin/rails server
 webpack: bin/webpack-dev-server
 ```
 
-We'll also set the `compile` option to `false` in `config/webpacker.yml`; Rails won't shell out to the webpack executable if it detects the dev-server is running.
+We'll also set the `compile` option to `false` in `config/webpacker.yml`.
 
 ```yaml
 development:
   compile: false
 ```
+
+This way, Rails won't shell out to the webpack executable if the dev-server is running. The dev-server will be responsible for detecting changes to assets and recompiling automatically.
 
 When the dev-server boots up (1), it "pre-compiles" assets in memory, instead of writing them to disk, for performance. It does still write the `manifest.json` file to disk in the `public/packs/` directory (2), where Rails can find it.
 
@@ -153,6 +157,8 @@ Recall that with the asset pipeline or webpack "compile on demand", the `ActionD
 
 To solve this problem, Webpacker provides its own middleware: `Webpacker::DevServerProxy` ([source](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/webpacker/dev_server_proxy.rb#L3)). This allows Rails to act as an intermediary between the browser and the webpack-dev-server in development.
 
-> As a side note, if Rails output the local dev-server host in the asset URLs, say as `http://localhost:3035/packs/js/application...js` instead of just `/packs/js/application...js`, I don't think the proxy middleware would be necessary. I'm not entirely sure why they went this direction if only to make it seem more like the asset pipeline from the browser's perspective.
+> As a side note, I'm not entirely sure why the proxy middleware would be necessary. Rails could point asset urls directly at webpack-dev-server by prepending the host, i.e., `http://localhost:3035/...`. Instead, by default in development, asset paths are produced so that the browser will direct its assets requests to the Rails server. I'm not entirely sure why the maintainers went this direction if only to make it seem more like the asset pipeline from the browser's perspective.
+
+### Wrapping up
 
 At times, Rails can feel like a black box. I hope these mental maps help make it easier to navigate the world of Webpacker and webpack on Rails with confidence.
