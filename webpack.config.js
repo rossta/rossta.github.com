@@ -21,7 +21,10 @@ module.exports = {
   },
 
   resolve: {
-    modules: [path.join(__dirname, 'source', 'assets', 'javascripts'), 'node_modules'],
+    modules: [
+      path.join(__dirname, 'source', 'assets', 'javascripts'),
+      'node_modules',
+    ],
   },
 
   output: {

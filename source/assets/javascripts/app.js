@@ -6,11 +6,13 @@ import './formkit'
 
 const log = debug('app:app')
 
-import(/* webpackChunkName: "highlight" */ 'syntax-highlight').then(({ default: highlight }) =>
-  highlight.initHighlighting()
-)
+import(
+  /* webpackChunkName: "highlight" */ 'syntax-highlight'
+).then(({ default: highlight }) => highlight.initHighlighting())
 
-import(/* webpackChunkName: "convertkit-form" */ '../stylesheets/convertkit-form.css')
+import(
+  /* webpackChunkName: "convertkit-form" */ '../stylesheets/convertkit-form.css'
+)
 
 if (__DEVELOPMENT__) {
   log('Running in development mode!')

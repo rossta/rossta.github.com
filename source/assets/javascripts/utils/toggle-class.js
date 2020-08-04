@@ -1,4 +1,4 @@
-export default function(el, className) {
+export default function (el, className) {
   if (el.classList.contains(className)) {
     el.classList.remove(className)
   } else {
