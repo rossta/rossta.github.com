@@ -22,3 +22,6 @@ source/blog/.Ulysses-Group.plist
 /vendor
 .vscode
 .ruby-gemset
+
+# Local Netlify folder
+.netlify
