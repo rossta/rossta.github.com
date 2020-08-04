@@ -245,14 +245,17 @@ webpack: bin/webpack-dev-server
     </author>
     <summary type="html">&lt;p&gt;Confused about how Webpacker works in Rails? Let's unpack it with some diagrams.&lt;/p&gt;
 
-&lt;p&gt;Before we get to Webpacker, a quick word on how things look when requests are served with the Rails asset pipeline in development, as a comparison.&lt;/p&gt;
+&lt;p&gt;First, we'll see how things look when requests are served with the Rails asset pipeline in development, as a comparison.&lt;/p&gt;
 
       &lt;h4 id="html-request-with-the-asset-pipeline" class="title title-h4"&gt;
-        &lt;a name="html-request-with-the-asset-pipeline" class="anchor" href="#html-request-with-the-asset-pipeline"&gt; ...&lt;/a&gt;
-&lt;/h4&gt;</summary>
+        &lt;a name="html-request-with-the-asset-pipeline" class="anchor" href="#html-request-with-the-asset-pipeline"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewbox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+   ...&lt;/h4&gt;</summary>
     <content type="html">&lt;p&gt;Confused about how Webpacker works in Rails? Let&amp;#39;s unpack it with some diagrams.&lt;/p&gt;
 
-&lt;p&gt;Before we get to Webpacker, a quick word on how things look when requests are served with the Rails asset pipeline in development, as a comparison.&lt;/p&gt;
+&lt;p&gt;First, we&amp;#39;ll see how things look when requests are served with the Rails asset pipeline in development, as a comparison.&lt;/p&gt;
 
       &lt;h4 id="html-request-with-the-asset-pipeline" class="title title-h4"&gt;
         &lt;a name="html-request-with-the-asset-pipeline" class="anchor" href="#html-request-with-the-asset-pipeline"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -295,9 +298,11 @@ webpack: bin/webpack-dev-server
         Understanding Webpacker
       &lt;/h3&gt;
     
-&lt;p&gt;With Webpacker, things work differently. Webpacker uses webpack to compile assets. Since webpack is written in JavaScript, not Ruby, and runs on the Node.js runtime, Rails can&amp;#39;t interact with it the same way it could with Sprockets and the Rails asset pipeline.&lt;/p&gt;
+&lt;p&gt;With Webpacker, things work differently.&lt;/p&gt;
 
-&lt;p&gt;Webpacker provides the glue to help Rails communicate with webpacker and locate the assets webpack produces. This &amp;quot;glue&amp;quot; includes&lt;/p&gt;
+&lt;p&gt;While the Rails asset pipeline lives &lt;em&gt;within&lt;/em&gt; the Rails server process, webpack, as you may know, is written in JavaScript and executes within the Node.js runtime. Therefore, webpack must run in a separate process.&lt;/p&gt;
+
+&lt;p&gt;Rails needs some &amp;quot;glue&amp;quot; to help it communicate with webpack. Webpacker provides the glue, which includes:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;webpack configuration,
@@ -318,7 +323,7 @@ webpack: bin/webpack-dev-server
 &lt;li&gt;and middleware&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Webpacker supports two modes for using Webpacker in development:&lt;/p&gt;
+&lt;p&gt;For the purpose of illustration, we&amp;#39;ll focus on how Webpacker works in development. Webpacker supports two development &amp;quot;modes&amp;quot;:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;compile on demand&lt;/li&gt;
@@ -419,18 +424,20 @@ webpack: bin/webpack-dev-server
     
 &lt;p&gt;&lt;img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-dev-server-1.png" alt="Rails request with the asset pipeline" loading="lazy" /&gt;&lt;/p&gt;
 
-&lt;p&gt;Using a tool like foreman or overmind, we can boot up both the Rails server and the webpack-dev-server with a single command using a Procfile such as:&lt;/p&gt;
+&lt;p&gt;Using a tool like &lt;a href="https://github.com/ddollar/foreman" target="_blank" rel="noopener noreferrer"&gt;foreman&lt;/a&gt; or &lt;a href="https://github.com/DarthSim/overmind" target="_blank" rel="noopener noreferrer"&gt;overmind&lt;/a&gt;, we can boot up both the Rails server and the webpack-dev-server with a single command using a Procfile such as:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="yaml"&gt;# Procfile.dev
 rails: bin/rails server
 webpack: bin/webpack-dev-server
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;We&amp;#39;ll also set the &lt;code&gt;compile&lt;/code&gt; option to &lt;code&gt;false&lt;/code&gt; in &lt;code&gt;config/webpacker.yml&lt;/code&gt;; Rails won&amp;#39;t shell out to the webpack executable if it detects the dev-server is running.&lt;/p&gt;
+&lt;p&gt;We&amp;#39;ll also set the &lt;code&gt;compile&lt;/code&gt; option to &lt;code&gt;false&lt;/code&gt; in &lt;code&gt;config/webpacker.yml&lt;/code&gt;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="yaml"&gt;development:
   compile: false
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This way, Rails won&amp;#39;t shell out to the webpack executable if the dev-server is running. The dev-server will be responsible for detecting changes to assets and recompiling automatically.&lt;/p&gt;
 
 &lt;p&gt;When the dev-server boots up (1), it &amp;quot;pre-compiles&amp;quot; assets in memory, instead of writing them to disk, for performance. It does still write the &lt;code&gt;manifest.json&lt;/code&gt; file to disk in the &lt;code&gt;public/packs/&lt;/code&gt; directory (2), where Rails can find it.&lt;/p&gt;
 
@@ -453,9 +460,17 @@ webpack: bin/webpack-dev-server
 &lt;p&gt;To solve this problem, Webpacker provides its own middleware: &lt;code&gt;Webpacker::DevServerProxy&lt;/code&gt; (&lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/webpacker/dev_server_proxy.rb#L3" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;). This allows Rails to act as an intermediary between the browser and the webpack-dev-server in development.&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;As a side note, if Rails output the local dev-server host in the asset URLs, say as &lt;code&gt;http://localhost:3035/packs/js/application...js&lt;/code&gt; instead of just &lt;code&gt;/packs/js/application...js&lt;/code&gt;, I don&amp;#39;t think the proxy middleware would be necessary. I&amp;#39;m not entirely sure why they went this direction if only to make it seem more like the asset pipeline from the browser&amp;#39;s perspective.&lt;/p&gt;
+&lt;p&gt;As a side note, I&amp;#39;m not entirely sure why the proxy middleware would be necessary. Rails could point asset urls directly at webpack-dev-server by prepending the host, i.e., &lt;code&gt;http://localhost:3035/...&lt;/code&gt;. Instead, by default in development, asset paths are produced so that the browser will direct its assets requests to the Rails server. I&amp;#39;m not entirely sure why the maintainers went this direction if only to make it seem more like the asset pipeline from the browser&amp;#39;s perspective.&lt;/p&gt;
 &lt;/blockquote&gt;
 
+      &lt;h3 id="wrapping-up" class="title title-h3"&gt;
+        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Wrapping up
+      &lt;/h3&gt;
+    
 &lt;p&gt;At times, Rails can feel like a black box. I hope these mental maps help make it easier to navigate the world of Webpacker and webpack on Rails with confidence.&lt;/p&gt;
 </content>
   </entry>
