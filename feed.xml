@@ -48,7 +48,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;Note: Please consider the diagrams in this post as approximations of how the pieces fit together. Much of the detail has been omitted for simplicity and to draw attention to the salient aspects. For example, the browser does not get the response directly from the view as depicted above or from file server as in the following diagram; the actual request flow from these points is mostly irrelevant to the goal of this post.&lt;/p&gt;
+&lt;p&gt;Note: Please consider the diagrams in this post as approximations of how the pieces fit together. Much of the detail has been omitted for simplicity and to draw attention to the salient aspects.&lt;/p&gt;
 &lt;/blockquote&gt;
 
       &lt;h4 id="asset-request-with-the-asset-pipeline" class="title title-h4"&gt;
