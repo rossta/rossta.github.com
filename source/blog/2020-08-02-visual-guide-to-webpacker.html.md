@@ -112,7 +112,7 @@ Rails will read this file via the Webpacker view helpers to render the correct U
 
 Once the browser has received the HTML response, it must make additional request to retrieve the assets. In "compile-on-demand" mode, this is identical to the asset pipeline:
 
-The `ActionDispatch::Static` middleware (2) locates the asset on the file system in the `public/` directory (2) which is returned to the browser, short-circuiting the rest of the Rails process.
+The `ActionDispatch::Static` middleware (1) locates the asset on the file system in the `public/` directory (2) which is returned to the browser, short-circuiting the rest of the Rails process.
 
 In production, of course, the role of the middleware may likely be played instead by a web server, such as Nginx, and/or a CDN.
 
