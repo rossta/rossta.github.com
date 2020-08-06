@@ -205,7 +205,7 @@
 
 <p>Once the browser has received the HTML response, it must make additional request to retrieve the assets. In &quot;compile-on-demand&quot; mode, this is identical to the asset pipeline:</p>
 
-<p>The <code>ActionDispatch::Static</code> middleware (2) locates the asset on the file system in the <code>public/</code> directory (2) which is returned to the browser, short-circuiting the rest of the Rails process.</p>
+<p>The <code>ActionDispatch::Static</code> middleware (1) locates the asset on the file system in the <code>public/</code> directory (2) which is returned to the browser, short-circuiting the rest of the Rails process.</p>
 
 <p>In production, of course, the role of the middleware may likely be played instead by a web server, such as Nginx, and/or a CDN.</p>
 
