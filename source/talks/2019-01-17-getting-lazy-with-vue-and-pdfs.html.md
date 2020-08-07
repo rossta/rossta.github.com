@@ -2,7 +2,7 @@
 title: Getting Lazy with Vue and PDFs
 author: Ross Kaffenberger
 summary: A roundabout way of discovering IntersectionObserver
-description: Here's a lightning talk I gave at VueDC in which I share the most important lesson I learned while building a PDF Viewer in Vue.
+description: Here's a lightning talk I gave at VueDC in which I share the most important lesson I learned while building a PDF Viewer in Vue. January, 2019.
 pull_image: 'screenshots/screenshot-pdf-viewer.png'
 published: true
 category: Code
@@ -25,11 +25,12 @@ Check out the [demo project](https://rossta.net/vue-pdfjs-demo) and the [source 
 [![Vue PDF.js Demo](screenshots/screenshot-pdf-viewer.png)](https://github.com/rossta/vue-pdfjs-demo)
 
 ### Resources
+
 I covered a lot of ground in a short time during this talk. Here are some links to learn more about what I shared:
 
-* [Vue PDF.js Demo](https://rossta.net/vue-pdfjs-demo)
-* [Vue PDF.js Demo source code on GitHub](https://github.com/rossta/vue-pdfjs-demo)
-* [Blog series on building a PDF Viewer in Vue](https://rossta.net/blog/series/pdf-viewer.html)
-* [Intersection Observer API | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
-* [PDF.js](https://mozilla.github.io/pdf.js/)
-* [Related: Lazy loading images with Vue.js directives and IntersectionObserver](https://itnext.io/lazy-loading-images-with-vue-js-directives-and-intersectionobserver-d0eb390cad9)
+- [Vue PDF.js Demo](https://rossta.net/vue-pdfjs-demo)
+- [Vue PDF.js Demo source code on GitHub](https://github.com/rossta/vue-pdfjs-demo)
+- [Blog series on building a PDF Viewer in Vue](https://rossta.net/blog/series/pdf-viewer.html)
+- [Intersection Observer API | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+- [PDF.js](https://mozilla.github.io/pdf.js/)
+- [Related: Lazy loading images with Vue.js directives and IntersectionObserver](https://itnext.io/lazy-loading-images-with-vue-js-directives-and-intersectionobserver-d0eb390cad9)

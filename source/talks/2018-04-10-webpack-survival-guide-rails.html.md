@@ -1,8 +1,8 @@
 ---
 title: A Webpack Survival Guide for Rails Developers
 author: Ross Kaffenberger
-summary: What to expect switching from Sprockets to webpack
-description: Last year, I worked on a project to migrate JavaScript asset bundling over from the Rails asset pipeline over to webpack alongside the Webpacker gem. This talk captures some of the mistakes we made, how we fixed them, and highlights general lessons to help Rails developers understand how webpack works and how it differs from its predecessor.
+summary: In 2018, I worked on a project to migrate JavaScript asset bundling over from the Rails asset pipeline over to webpack alongside the Webpacker gem. This talk captures some of the mistakes we made, how we fixed them, and highlights general lessons to help Rails developers understand how webpack works and how it differs from its predecessor.
+description: I set out to give the talk I would have wanted to see before making the switch from Sprockets to Webpacker in a large Rails application. This talk captures some of the mistakes we made, how we fixed them, and highlights general lessons to help Rails developers understand how webpack works and how it differs from its predecessor. RailsConf 2018, Pittsburgh, PA.
 pull_image: 'talks/20180419-webpack-survival-guide_key.jpg'
 published: true
 category: Code
