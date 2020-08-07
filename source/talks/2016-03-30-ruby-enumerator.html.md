@@ -1,8 +1,8 @@
 ---
-title: Enumerator - Enumerable's Ugly Cousin
+title: Enumerator - Enumerable's Ugly Cousin In-Depth
 author: Ross Kaffenberger
 summary: Talk at Ancient City Ruby Conf, 2016
-description: Learn about the fundamental concepts of Ruby's Enumerator class from Ross Kaffenberger's talk at Ancient City Ruby Conf, 2016, in St Augustine, Florida.
+description: A deep-drive on the fundamental concepts of Ruby's Enumerator class from Ross Kaffenberger's talk at Ancient City Ruby Conf, 2016, in St Augustine, Florida.
 pull_image: 'blog/enumerator_ancient_city_2016.jpg'
 published: true
 category: Code
@@ -29,19 +29,19 @@ practical takeaways for your daily work.
 
 When and where:
 
-* [Arlington Ruby meetup](http://www.meetup.com/Arlington-Ruby/events/227707241/), March 30, 2016
-* [Ancient City Ruby](http://www.ancientcityruby.com/), April 7, 2016
+- [Arlington Ruby meetup](http://www.meetup.com/Arlington-Ruby/events/227707241/), March 30, 2016
+- [Ancient City Ruby](http://www.ancientcityruby.com/), April 7, 2016
 
 ### Credits
 
 Icons in this talk were created by the following talented folks:
 
-* Abacus by anbileru adaleru from the Noun Project
-* Gears by Dominik Minet from the Noun Project
-* Loop by useiconic.com from the Noun Project
-* cancel by ermankutlu from the Noun Project
-* clock by Christian Shannon from the Noun Project
-* documents by Simon Mettler from the Noun Project
-* electric generator by lastspark from the Noun Project
-* question-mark by Cris Dobbins from the Noun Project
-* wave by mohit arora from the Noun Project
+- Abacus by anbileru adaleru from the Noun Project
+- Gears by Dominik Minet from the Noun Project
+- Loop by useiconic.com from the Noun Project
+- cancel by ermankutlu from the Noun Project
+- clock by Christian Shannon from the Noun Project
+- documents by Simon Mettler from the Noun Project
+- electric generator by lastspark from the Noun Project
+- question-mark by Cris Dobbins from the Noun Project
+- wave by mohit arora from the Noun Project
