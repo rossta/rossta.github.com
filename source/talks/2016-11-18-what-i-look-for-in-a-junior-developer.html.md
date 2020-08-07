@@ -2,7 +2,7 @@
 title: What I look for in a Junior Developer
 author: Ross Kaffenberger
 summary: Common software interview questions and what the interviewer really means
-description: Common software interview questions and what the interviewer really means. Talk given at CodeNewbie NYC and DC meetups in November, 2016.
+description: Common software interview questions and what the interviewer really means. NYC and DC CodeNewbie meetups, November 2016.
 pull_image: 'talks/20161118-codenewbie-nyc.jpg'
 published: true
 category: Code
