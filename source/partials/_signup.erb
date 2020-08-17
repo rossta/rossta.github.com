@@ -1,1 +1,2 @@
-<%= partial "partials/convertkit_signup" %>
+<% prompt ||= :generic %>
+<%= partial "partials/convertkit_signup", locals: {prompt: prompt} %>

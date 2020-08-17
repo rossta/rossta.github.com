@@ -1,0 +1,28 @@
+---
+pageable: true
+per_page: 5
+---
+<% content_for(:section) { "Webpack on Rails" } %>
+
+<%= page_header "Webpack on Rails", "The Missing Guide" %>
+
+<section class="mb-16">
+  <p class="mb-4">
+    Webpacker now ships by default in Rails 6 but there's no need to stress.
+    I'm putting together a course to help you master <strong>Webpack on Rails</strong>.
+  </p>
+
+  <p class="mb-4">
+    I teach full stack web developers about frontend tools and performance,
+    especially at the intersection of <strong>JavaScript</strong> and <strong>Ruby on Rails</strong>.
+  </p>
+</section>
+
+<section id="webpack-on-rails-articles" class="index-posts">
+  <h2 class="mb-8">Recent posts</h2>
+  <%= partial "partials/article_index", locals: { local_articles: webpack_on_rails_articles } %>
+</section>
+
+<section class="signup-form-standalone hero">
+  <%= partial "partials/signup", locals: {prompt: :webpack_on_rails} %>
+</section>

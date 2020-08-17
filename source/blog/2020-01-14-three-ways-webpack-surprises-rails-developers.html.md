@@ -83,7 +83,7 @@ Many jQuery plugins (or many legacy plugins in general) have been written withou
 
 In webpack, global variables are not your friend, my friend.
 
-### 2. Webpack treats _everything_ as a JavaScript module
+### 2. Webpack treats everything as a JavaScript module
 
 Webpack is so committed to its "module bundler" role it treats other static assets, including CSS, images, fonts, etc., as JavaScript modules too.
 
