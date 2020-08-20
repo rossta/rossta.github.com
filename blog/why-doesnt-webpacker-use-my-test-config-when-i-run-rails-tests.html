@@ -82,7 +82,7 @@ console.log(&#39;Loading config/webpack/development.js...&#39;)
 
 <p>If you&#39;ve noticed this before, there&#39;s nothing wrong with your setup; this is the way Webpacker is setup to work out-of-the-box. Nevertheless, this is quite confusing and has lead to <a href="https://github.com/rails/webpacker/issues/2654" target="_blank" rel="noopener noreferrer">a recently reported issue</a> on the Webpacker GitHub repository.</p>
 
-<p>It turns out, even though RAILS_ENV is set to &quot;test&quot;, NODE_ENV is set to &#39;development&#39; (<a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4" target="_blank" rel="noopener noreferrer">source</a>). The webpack config use is determined by the NODE_ENV, which means, and this is especially pertinent to your Rails system and integration test, the development webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., <code>NODE_ENV=nonsense bin/webpack</code>).</p>
+<p>It turns out, even though RAILS_ENV is set to &#39;test&#39;, NODE_ENV is set to &#39;development&#39; (<a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4" target="_blank" rel="noopener noreferrer">source</a>) and the webpack config is determined directly from NODE_ENV.</p>
 
       <h3 id="what-gives-" class="title title-h3">
         <a name="what-gives-" class="anchor" href="#what-gives-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -105,7 +105,7 @@ console.log(&#39;Loading config/webpack/development.js...&#39;)
 
 <p>Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, <a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38" target="_blank" rel="noopener noreferrer">they share the same browser-focused Babel config</a> which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.</p>
 
-<p>So to recap so far, with Webpacker, NODE_ENV determines which webpack config it will use, i.e., <code>config/webpack/{development,test,production}.js</code> and will impact behavior in your Babel config, i.e., <code>babel.config.js</code>.</p>
+<p>To recap so far: with Webpacker, NODE_ENV determines which webpack config it will use, i.e., <code>config/webpack/{development,test,production}.js</code> and will impact behavior in your Babel config, i.e., <code>babel.config.js</code>.</p>
 
       <h3 id="testing-1-2-3" class="title title-h3">
         <a name="testing-1-2-3" class="anchor" href="#testing-1-2-3">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -143,8 +143,10 @@ console.log(&#39;Loading config/webpack/development.js...&#39;)
 
 <p>All this to say: your webpack test config, i.e. <code>config/webpack/test.js</code>, is essentially useless unless your application:</p>
 
-<p>a. uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config
-a. overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)</p>
+<ol>
+<li>uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config</li>
+<li>overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)</li>
+</ol>
 
       <h3 id="what-about-webpacker-yml-" class="title title-h3">
         <a name="what-about-webpacker-yml-" class="anchor" href="#what-about-webpacker-yml-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -210,9 +212,11 @@ a. overrides the defaults so that the test config is loaded in your Rails tests 
   </tbody>
 </table>
 
-<p>Stated more simply:</p>
+<p><em>In summary</em>:</p>
 
+<blockquote>
 <p>RAILS_ENV determines which Webpacker YAML settings are used and NODE_ENV determines which webpack configuration is used.</p>
+</blockquote>
 
 <p>Whether or not you find the use case for JavaScript unit tests compelling, it helps to know that Webpacker does not make any distinction between your development and test environments beyond the settings in your webpacker.yml; both are local concerns that target the same runtime, i.e., the browser.</p>
 

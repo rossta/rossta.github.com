@@ -283,7 +283,7 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 
 &lt;p&gt;If you&amp;#39;ve noticed this before, there&amp;#39;s nothing wrong with your setup; this is the way Webpacker is setup to work out-of-the-box. Nevertheless, this is quite confusing and has lead to &lt;a href="https://github.com/rails/webpacker/issues/2654" target="_blank" rel="noopener noreferrer"&gt;a recently reported issue&lt;/a&gt; on the Webpacker GitHub repository.&lt;/p&gt;
 
-&lt;p&gt;It turns out, even though RAILS_ENV is set to &amp;quot;test&amp;quot;, NODE_ENV is set to &amp;#39;development&amp;#39; (&lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;). The webpack config use is determined by the NODE_ENV, which means, and this is especially pertinent to your Rails system and integration test, the development webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., &lt;code&gt;NODE_ENV=nonsense bin/webpack&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;It turns out, even though RAILS_ENV is set to &amp;#39;test&amp;#39;, NODE_ENV is set to &amp;#39;development&amp;#39; (&lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;) and the webpack config is determined directly from NODE_ENV.&lt;/p&gt;
 
       &lt;h3 id="what-gives-" class="title title-h3"&gt;
         &lt;a name="what-gives-" class="anchor" href="#what-gives-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -306,7 +306,7 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 
 &lt;p&gt;Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, &lt;a href="https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38" target="_blank" rel="noopener noreferrer"&gt;they share the same browser-focused Babel config&lt;/a&gt; which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.&lt;/p&gt;
 
-&lt;p&gt;So to recap so far, with Webpacker, NODE_ENV determines which webpack config it will use, i.e., &lt;code&gt;config/webpack/{development,test,production}.js&lt;/code&gt; and will impact behavior in your Babel config, i.e., &lt;code&gt;babel.config.js&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To recap so far: with Webpacker, NODE_ENV determines which webpack config it will use, i.e., &lt;code&gt;config/webpack/{development,test,production}.js&lt;/code&gt; and will impact behavior in your Babel config, i.e., &lt;code&gt;babel.config.js&lt;/code&gt;.&lt;/p&gt;
 
       &lt;h3 id="testing-1-2-3" class="title title-h3"&gt;
         &lt;a name="testing-1-2-3" class="anchor" href="#testing-1-2-3"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -344,8 +344,10 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 
 &lt;p&gt;All this to say: your webpack test config, i.e. &lt;code&gt;config/webpack/test.js&lt;/code&gt;, is essentially useless unless your application:&lt;/p&gt;
 
-&lt;p&gt;a. uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config
-a. overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config&lt;/li&gt;
+&lt;li&gt;overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)&lt;/li&gt;
+&lt;/ol&gt;
 
       &lt;h3 id="what-about-webpacker-yml-" class="title title-h3"&gt;
         &lt;a name="what-about-webpacker-yml-" class="anchor" href="#what-about-webpacker-yml-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -411,9 +413,11 @@ a. overrides the defaults so that the test config is loaded in your Rails tests 
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;Stated more simply:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;In summary&lt;/em&gt;:&lt;/p&gt;
 
+&lt;blockquote&gt;
 &lt;p&gt;RAILS_ENV determines which Webpacker YAML settings are used and NODE_ENV determines which webpack configuration is used.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;Whether or not you find the use case for JavaScript unit tests compelling, it helps to know that Webpacker does not make any distinction between your development and test environments beyond the settings in your webpacker.yml; both are local concerns that target the same runtime, i.e., the browser.&lt;/p&gt;
 
