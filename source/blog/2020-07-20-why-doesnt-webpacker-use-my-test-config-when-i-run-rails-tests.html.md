@@ -78,8 +78,8 @@ You can [setup Jest to compile your JavaScript through your webpack configuratio
 
 All this to say: your webpack test config, i.e. `config/webpack/test.js`, is essentially useless unless your application:
 
-a. uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config
-a. overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)
+1. uses a Node.js test runner for JavaScript unit test AND configure it to use your webpack config
+1. overrides the defaults so that the test config is loaded in your Rails tests (just be sure to change Babel behavior)
 
 ### What about webpacker.yml?
 
@@ -133,9 +133,9 @@ Does all of this seem a little confusing? I agree. Here's a breakdown of how web
   </tbody>
 </table>
 
-Stated more simply:
+_In summary_:
 
-RAILS_ENV determines which Webpacker YAML settings are used and NODE_ENV determines which webpack configuration is used.
+> RAILS_ENV determines which Webpacker YAML settings are used and NODE_ENV determines which webpack configuration is used.
 
 Whether or not you find the use case for JavaScript unit tests compelling, it helps to know that Webpacker does not make any distinction between your development and test environments beyond the settings in your webpacker.yml; both are local concerns that target the same runtime, i.e., the browser.
 
