@@ -34,7 +34,7 @@ $ RAILS_LOG_TO_STDOUT=true RAILS_ENV=test bin/rspec
 ```
 If you've noticed this before, there's nothing wrong with your setup; this is the way Webpacker is setup to work out-of-the-box. Nevertheless, this is quite confusing and has lead to [a recently reported issue](https://github.com/rails/webpacker/issues/2654) on the Webpacker GitHub repository.
 
-It turns out, even though RAILS_ENV is set to "test", NODE_ENV is set to 'development' ([source](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4)). The webpack config use is determined by the NODE_ENV, which means, and this is especially pertinent to your Rails system and integration test, the development webpack config is loaded. (You can confirm this by setting NODE_ENV, i.e., `NODE_ENV=nonsense bin/webpack`).
+It turns out, even though RAILS_ENV is set to 'test', NODE_ENV is set to 'development' ([source](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/bin/webpack#L4)) and the webpack config is determined directly from NODE_ENV.
 
 ### What gives?
 
@@ -52,7 +52,7 @@ Speaking of production, when running `rails assets:precompile` to compile your b
 
 Another key point the production and development configurations are designed for compiling your JS for a real browser. Though they have different optimization characteristics, [they share the same browser-focused Babel config](https://github.com/rails/webpacker/blob/bf278f9787704ed0f78038ad7d36c008abc2edfd/lib/install/config/babel.config.js#L28-L38) which will transform your nice ES6+ syntax into JavaScript your supported browsers will understand.
 
-So to recap so far, with Webpacker, NODE_ENV determines which webpack config it will use, i.e., `config/webpack/{development,test,production}.js` and will impact behavior in your Babel config, i.e., `babel.config.js`.
+To recap so far: with Webpacker, NODE_ENV determines which webpack config it will use, i.e., `config/webpack/{development,test,production}.js` and will impact behavior in your Babel config, i.e., `babel.config.js`.
 
 ### Testing 1-2-3
 
