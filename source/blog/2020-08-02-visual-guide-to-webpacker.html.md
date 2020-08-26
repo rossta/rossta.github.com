@@ -34,7 +34,7 @@ With the asset pipeline, when an HTML request is processed (1), bundling takes p
 
 ![Rails request with the asset pipeline](blog/visual-guide-to-webpacker/webpacker-asset-pipeline-2.png)
 
-Subsequently, the browser fetches that resource from your Rails server (1) where the `ActionDispatch::Static` middleware serves the asset from the `public/assets/` directory (2).
+As the browser parses the HTML response and finds that script tag, it must make an additional request to fetch the linked JavaScript resource from your Rails server. This time, the request is processed by (1) the `ActionDispatch::Static` middleware, which recognizes the asset lives on disk in the `public/assets/` directory (2).
 
 Good so far?
 
@@ -52,7 +52,8 @@ Rails needs some "glue" to help it communicate with webpack. Webpacker provides 
   - e.g. `javascript_pack_tag` and `stylesheet_link_tag`
 - executables,
   - i.e. `bin/webpack` and `bin/webpack-dev-server`
-- and middleware
+- and middleware for development
+  - i.e., `Webpacker::DevServerProxy`
 
 For the purpose of illustration, we'll focus on how Webpacker works in development. Webpacker supports two development "modes":
 
