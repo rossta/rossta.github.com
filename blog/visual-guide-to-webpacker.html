@@ -93,7 +93,7 @@
     
 <p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-asset-pipeline-2.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
 
-<p>Subsequently, the browser fetches that resource from your Rails server (1) where the <code>ActionDispatch::Static</code> middleware serves the asset from the <code>public/assets/</code> directory (2).</p>
+<p>As the browser parses the HTML response and finds that script tag, it must make an additional request to fetch the linked JavaScript resource from your Rails server. This time, the request is processed by (1) the <code>ActionDispatch::Static</code> middleware, which recognizes the asset lives on disk in the <code>public/assets/</code> directory (2).</p>
 
 <p>Good so far?</p>
 
@@ -127,7 +127,11 @@
 <ul>
 <li>i.e. <code>bin/webpack</code> and <code>bin/webpack-dev-server</code></li>
 </ul></li>
-<li>and middleware</li>
+<li>and middleware for development
+
+<ul>
+<li>i.e., <code>Webpacker::DevServerProxy</code></li>
+</ul></li>
 </ul>
 
 <p>For the purpose of illustration, we&#39;ll focus on how Webpacker works in development. Webpacker supports two development &quot;modes&quot;:</p>

@@ -54,7 +54,7 @@
     
 &lt;p&gt;&lt;img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-asset-pipeline-2.png" alt="Rails request with the asset pipeline" loading="lazy" /&gt;&lt;/p&gt;
 
-&lt;p&gt;Subsequently, the browser fetches that resource from your Rails server (1) where the &lt;code&gt;ActionDispatch::Static&lt;/code&gt; middleware serves the asset from the &lt;code&gt;public/assets/&lt;/code&gt; directory (2).&lt;/p&gt;
+&lt;p&gt;As the browser parses the HTML response and finds that script tag, it must make an additional request to fetch the linked JavaScript resource from your Rails server. This time, the request is processed by (1) the &lt;code&gt;ActionDispatch::Static&lt;/code&gt; middleware, which recognizes the asset lives on disk in the &lt;code&gt;public/assets/&lt;/code&gt; directory (2).&lt;/p&gt;
 
 &lt;p&gt;Good so far?&lt;/p&gt;
 
@@ -88,7 +88,11 @@
 &lt;ul&gt;
 &lt;li&gt;i.e. &lt;code&gt;bin/webpack&lt;/code&gt; and &lt;code&gt;bin/webpack-dev-server&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;and middleware&lt;/li&gt;
+&lt;li&gt;and middleware for development
+
+&lt;ul&gt;
+&lt;li&gt;i.e., &lt;code&gt;Webpacker::DevServerProxy&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;For the purpose of illustration, we&amp;#39;ll focus on how Webpacker works in development. Webpacker supports two development &amp;quot;modes&amp;quot;:&lt;/p&gt;
