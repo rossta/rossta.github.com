@@ -260,7 +260,7 @@ require.context(&#39;../images&#39;, true)
 <p>To add to the set of resolved paths where webpack should look for assets besides in <code>app/javascript</code>:</p>
 
 <pre><code class="yaml">default: &amp;default
-  resolved_paths:
+  additional_paths:
     - app/assets
 </code></pre>
 
@@ -272,7 +272,7 @@ require.context(&#39;../images&#39;, true)
         Diving Deeper
       </h3>
     
-<p>I have to admit, a few years ago, when I first heard about webpack, I was super-confused. I understood it to be a JavaScript module bundler. <em>How on Earth does it handles images?</em></p>
+<p>I have to admit, a few years ago, when I first heard about webpack, I was super-confused. I understood it to be a JavaScript module bundler. <em>How on Earth does it handle images?</em></p>
 
 <p>The short answer, of course, is <em>it depends</em>. Generally, webpack will treat everything it can understand as a JavaScript module. To help webpack understand images, projects would add a &quot;loader&quot; (or loaders) to the webpack configuration. A suitable loader would know how to handle an image file and output a representation of something, like an inlined base64 string, that can be manipulated in JavaScript.</p>
 
