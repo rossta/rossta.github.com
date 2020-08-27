@@ -170,13 +170,13 @@ default: &default
 To add to the set of resolved paths where webpack should look for assets besides in `app/javascript`:
 ```yaml
 default: &default
-  resolved_paths:
+  additional_paths:
     - app/assets
 ```
 
 ### Diving Deeper
 
-I have to admit, a few years ago, when I first heard about webpack, I was super-confused. I understood it to be a JavaScript module bundler. _How on Earth does it handles images?_
+I have to admit, a few years ago, when I first heard about webpack, I was super-confused. I understood it to be a JavaScript module bundler. _How on Earth does it handle images?_
 
 The short answer, of course, is _it depends_. Generally, webpack will treat everything it can understand as a JavaScript module. To help webpack understand images, projects would add a "loader" (or loaders) to the webpack configuration. A suitable loader would know how to handle an image file and output a representation of something, like an inlined base64 string, that can be manipulated in JavaScript.
 
