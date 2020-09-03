@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+source_glob = ARGV
+
+unless source_glob
+  warn "\nUsage: \n./bin/convert_all $SOURCE_GLOB"
+  exit(1)
+end
+
+Dir.glob(source_glob).each do |source|
+  destination = source.gsub(/(\.png|\.jpg|\.jpeg)$/, "-optimized\\1")
+
+  puts "convert #{source} -quality 75 -resize '1200x>' #{destination}"
+  `convert #{source} -quality 75 -resize '1200x>' #{destination}`
+end
