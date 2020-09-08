@@ -5,10 +5,425 @@
   <id>https://rossta.net/</id>
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
-  <updated>2020-08-02T00:00:00+00:00</updated>
+  <updated>2020-09-08T00:00:00+00:00</updated>
   <author>
     <name>Ross Kaffenberger</name>
   </author>
+  <entry>
+    <title>These Rails apps are overpacking with Webpacker</title>
+    <link rel="alternate" href="/blog/rails-apps-overpacking-with-webpacker.html"/>
+    <id>/blog/rails-apps-overpacking-with-webpacker.html</id>
+    <published>2020-09-08T00:00:00+00:00</published>
+    <updated>2020-09-08T00:00:00+00:00</updated>
+    <author>
+      <name>Ross Kaffenberger</name>
+    </author>
+    <summary type="html">&lt;p&gt;You might think dividing your JavaScript into multiple bundles will help improve page load performance. When done incorrectly with Webpacker, it's possible to make things worse.&lt;/p&gt;
+
+&lt;p&gt;This mistake appears relatively common. As I'll share in this post, I...&lt;/p&gt;</summary>
+    <content type="html">&lt;p&gt;You might think dividing your JavaScript into multiple bundles will help improve page load performance. When done incorrectly with Webpacker, it&amp;#39;s possible to make things worse.&lt;/p&gt;
+
+&lt;p&gt;This mistake appears relatively common. As I&amp;#39;ll share in this post, I&amp;#39;ve discovered several of my favorite Rails applications are making browsers download and parse &lt;em&gt;more&lt;/em&gt; JavaScript than necessary even while attempting to send less.&lt;/p&gt;
+
+&lt;p&gt;I believe Rails developers may think the mechanics of packaging JavaScript for the browsers work similarly in Webpacker as it does with the Rails asset pipeline. This assumption is fraught with peril!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/crash.gif" alt="Crash bang warehouse accident" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;As we&amp;#39;ll see, Webpacker is a very different beast than the Rails asset pipeline. We need a different mental model to understand how it works. We also need to follow a few basic guidelines to deliver JavaScript correctly and avoid falling victim to overpacking.&lt;/p&gt;
+
+&lt;p&gt;First, let&amp;#39;s take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild`.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Help me help them&lt;/strong&gt;: My aim in highlighting these apps is to educate, not criticize!&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;If you know anyone who works at any of the following companies, please share this post or ask them to reach out to me at ross at rossta dot net.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+      &lt;h2 id="case-study-podia" class="title title-h2"&gt;
+        &lt;a name="case-study-podia" class="anchor" href="#case-study-podia"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Case study: Podia
+      &lt;/h2&gt;
+    
+&lt;p&gt;Podia is a fantastic service that provides content creators with a platform to sell digital content, including e-books, online courses, and webinars.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/podia-homepage.png" alt="Podia homepage" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;We can tell Podia uses Webpacker to bundle assets because it renders a Webpacker manifest at &lt;code&gt;https://app.podia.com/packs/manifest.json&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="json"&gt;{
+  &amp;quot;admin/ui.css&amp;quot;: &amp;quot;/packs/css/admin/ui-59291053.css&amp;quot;,
+  &amp;quot;admin/ui.js&amp;quot;: &amp;quot;/packs/js/admin/ui-931ad01f76a9c8b4c1af.js&amp;quot;,
+  &amp;quot;admin/ui.js.map&amp;quot;: &amp;quot;/packs/js/admin/ui-931ad01f76a9c8b4c1af.js.map&amp;quot;,
+  &amp;quot;application.js&amp;quot;: &amp;quot;/packs/js/application-42b89cd8ec22763d95ae.js&amp;quot;,
+  &amp;quot;application.js.map&amp;quot;: &amp;quot;/packs/js/application-42b89cd8ec22763d95ae.js.map&amp;quot;,
+//...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The manifest contains URLs to many Webpacker &amp;quot;packs,&amp;quot; also described as &lt;a href="https://webpack.js.org/concepts/#entry" target="_blank" rel="noopener noreferrer"&gt;&lt;em&gt;entry points&lt;/em&gt; in the webpack docs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;When I visit the public-facing storefront, my browser downloads the following &amp;quot;packs&amp;quot; from the Podia CDN:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;/packs/js/storefront/index-1d9e9c36f5f9ab7056d1.js
+/packs/js/storefront/current_time_ago-0c5c682d173647ef3199.js
+/packs/js/storefront/messaging-60ddf6567eb7b74a1083.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By splitting JavaScript up across multiple files on this page, I believe Podia intends to deliver only required JavaScript to the client&amp;#39;s browser. For example, there&amp;#39;s no need to send JavaScript for the CMS UI to the public-facing storefront page.&lt;/p&gt;
+
+&lt;p&gt;As we said earlier, the intent here is good.&lt;/p&gt;
+
+      &lt;h2 id="the-problem" class="title title-h2"&gt;
+        &lt;a name="the-problem" class="anchor" href="#the-problem"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The problem
+      &lt;/h2&gt;
+    
+&lt;p&gt;On closer look, though, something doesn&amp;#39;t seem quite right. The payloads for these individual packs are, in fact, rather large.&lt;/p&gt;
+
+&lt;p&gt;Take the &amp;quot;storefront/current_time_ago.js&amp;quot; bundle. It transfers as 73KB gzipped and comes out to 396KB of parsed JavaScript.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Does Podia&amp;#39;s &amp;quot;storefront/current_time_ago&amp;quot; functionality need to be nearly 400KB?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;If so, I&amp;#39;d be shocked. I imagine this pack&amp;#39;s primary responsibility is similar to the tiny jQuery plugin &lt;a href="https://timeago.org/" target="_blank" rel="noopener noreferrer"&gt;timeago&lt;/a&gt;, which claims a 2KB size. As a comparison, a bundled version of &lt;code&gt;react-dom&lt;/code&gt; module parses at around ~150KB.&lt;/p&gt;
+
+&lt;p&gt;Something&amp;#39;s not right here.&lt;/p&gt;
+
+      &lt;h3 id="exploring-source-maps" class="title title-h3"&gt;
+        &lt;a name="exploring-source-maps" class="anchor" href="#exploring-source-maps"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Exploring source maps
+      &lt;/h3&gt;
+    
+&lt;p&gt;I don&amp;#39;t work at Podia, so I can&amp;#39;t use my favorite tool, &lt;a href="/blog/webpacker-output-analysis-with-webpack-bundle-analyzer.html"&gt;the webpack-bundle-analyzer&lt;/a&gt;, to peek inside the bundled JavaScript; this requires access to source code.&lt;/p&gt;
+
+&lt;p&gt;But, there&amp;#39;s another trick we can use. We can find out what&amp;#39;s happening inside these bundles from Podia&amp;#39;s source maps. It&amp;#39;s like magic.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/magic.gif" alt="Corny magician gif" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Source maps are included in production by default with Webpacker. You can find the URLs to source maps in the Webpacker manifest file, as shown above.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;If you&amp;#39;re curious about why source maps in production are enabled by default in Webpacker, you may be interested in &lt;a href="https://github.com/rails/webpacker/issues/769" target="_blank" rel="noopener noreferrer"&gt;this GitHub issue thread&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Another place to find the URL to a source map is in the corresponding source file&amp;#39;s last line:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;//# sourceMappingURL=application-42b89cd8ec22763d95ae.js.map
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can analyze Podia&amp;#39;s publicly available source maps using &lt;a href="https://github.com/danvk/source-map-explorer" target="_blank" rel="noopener noreferrer"&gt;source-map-explorer&lt;/a&gt;. It can provide a visualization of all the modules bundled on this page. Here&amp;#39;s an example:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/podia-source-map-explorer-bare.png" alt="Treemap image example of webpack JavaScript bundles" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Podia storefront editor&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s a screenshot of the source-map-explorer treemap for the three Webpacker packs rendered on the storefront editor page, with my annotations for emphasis:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/podia-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Podia's storefront editor" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can see the JavaScript bundles in purple, blue, and orange, and with each, you can see included modules such as &lt;code&gt;actioncable&lt;/code&gt;, &lt;code&gt;stimulus&lt;/code&gt;, &lt;code&gt;moment.js&lt;/code&gt;, &lt;code&gt;core-js&lt;/code&gt;, and &lt;code&gt;cableready&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;#39;s the problem: &lt;strong&gt;some modules appear twice on the same page!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/mrbean.gif" alt="Mr. Bean is shocked" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Two bundles include both moment.js and all the 100+ moment-locale modules. That means the browser has to download and parse moment.js (52KB) and moment-locales (326KB) twice on the same page!&lt;/p&gt;
+
+&lt;p&gt;Same for actioncable, cableready, stimulus, and core-js.&lt;/p&gt;
+
+&lt;p&gt;In an attempt to deliver less JavaScript to the browser with page-specific bundles, they&amp;#39;ve ended up with even bigger payloads. Podia is &lt;a href="/blog/overpacking-a-common-webpacker-mistake.html"&gt;&amp;quot;overpacking&amp;quot;&lt;/a&gt;, and it&amp;#39;s resulting in the &lt;strong&gt;redundant module problem&lt;/strong&gt;.&lt;/p&gt;
+
+      &lt;h2 id="more-case-studies" class="title title-h2"&gt;
+        &lt;a name="more-case-studies" class="anchor" href="#more-case-studies"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        More case studies
+      &lt;/h2&gt;
+    
+&lt;p&gt;It&amp;#39;s not just Podia. I&amp;#39;ve recently discovered several other Rails applications with the same problem.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Funny or Die&lt;/strong&gt;
+&lt;img src="/assets/images/blog/overpacking-case-studies/page-funnyordie.png" alt="Funny or Die home page" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;m always up for a laugh, but you know what&amp;#39;s &lt;em&gt;not&lt;/em&gt; funny? Duplicate &lt;code&gt;jquery&lt;/code&gt; on the &lt;a href="https://www.funnyordie.com" target="_blank" rel="noopener noreferrer"&gt;Funny or Die&lt;/a&gt; home page.&lt;/p&gt;
+
+&lt;p&gt;That&amp;#39;s an extra 80KB and, I would presume, a potential source of bugs for jquery plugins that assume only one instance of &lt;code&gt;$&lt;/code&gt; in the page scope.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/funnyordie-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Funny or Die's home page" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Dribbble&lt;/strong&gt;
+&lt;img src="/assets/images/blog/overpacking-case-studies/page-dribbble.png" alt="Dribbble profile page" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;I&amp;#39;m whistling the &lt;a href="https://dribbble.com/dribbble" target="_blank" rel="noopener noreferrer"&gt;Dribbble profile page&lt;/a&gt; for multiple infractions, including duplicate instances of &lt;code&gt;vue&lt;/code&gt; and &lt;code&gt;axios&lt;/code&gt;. They could reduce their total payload size by up to 150KB.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/dribbble-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Dribbble's profile page" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Teachable&lt;/strong&gt;
+&lt;img src="/assets/images/blog/overpacking-case-studies/page-teachable.png" alt="Teachable course page" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href="https://www.jessicasprague.com/p/digibeginnerbundle" target="_blank" rel="noopener noreferrer"&gt;course page on Teachable&lt;/a&gt; must love &lt;code&gt;jquery&lt;/code&gt; and &lt;code&gt;lodash&lt;/code&gt;. They&amp;#39;re both bundled twice across the three Webpacker packs rendered on this page.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/teachable-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Teachable's student course page" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Drizly&lt;/strong&gt;
+&lt;img src="/assets/images/blog/overpacking-case-studies/page-drizly.png" alt="Drizly search page" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s raining JavaScript at &lt;a href="https://drizly.com/beer/c2" target="_blank" rel="noopener noreferrer"&gt;Drizly&lt;/a&gt;! The product search page renders three packs, each of which includes instances &lt;code&gt;material-ui&lt;/code&gt;, &lt;code&gt;react&lt;/code&gt;, and &lt;code&gt;lodash&lt;/code&gt;, among others. If Drizly were to introduce React hooks, I am relatively sure &lt;a href="https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react" target="_blank" rel="noopener noreferrer"&gt;multiple instances of React will cause issues&lt;/a&gt; if they haven&amp;#39;t already.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/drizly-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Drizly's profile page" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Strava&amp;#39;s activity feed&lt;/strong&gt;
+&lt;img src="/assets/images/blog/overpacking-case-studies/page-strava.png" alt="Strava activity feed" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;As an endurance athlete in my spare time, I use Strava almost daily, where the activity feed forces me to render four instances of &lt;code&gt;react&lt;/code&gt;! Strava could reduce their activity feed payloads by a whopping 500KB by getting rid of their duplicated modules.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/strava-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Strava's activity feed" loading="lazy" /&gt;&lt;/p&gt;
+
+      &lt;h3 id="analyzing-javascript-usage" class="title title-h3"&gt;
+        &lt;a name="analyzing-javascript-usage" class="anchor" href="#analyzing-javascript-usage"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Analyzing JavaScript usage
+      &lt;/h3&gt;
+    
+&lt;p&gt;Another tool I recommend is &lt;a href="https://github.com/aholachek/bundle-wizard" target="_blank" rel="noopener noreferrer"&gt;bundle-wizard&lt;/a&gt;, which can be used to find unused JavaScript modules on page load.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="sh"&gt;$ npx -p puppeteer -p bundle-wizard bundle-wizard --interact
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This tool turns the source-map-explorer into a heatmap representing code coverage across the bundled modules from high (green) to low (red).&lt;/p&gt;
+
+&lt;p&gt;Here are the source maps from the Strava activity feed visualized again with bundle-wizard coverage heatmap:
+&lt;img src="/assets/images/blog/overpacking-case-studies/bundle-wizard-strava-optimized.png" alt="Bundle wizard treemap with heatmap overlay" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;See all that red? Those extra React modules are unused on page load.&lt;/p&gt;
+
+      &lt;h3 id="measuring-end-user-performance" class="title title-h3"&gt;
+        &lt;a name="measuring-end-user-performance" class="anchor" href="#measuring-end-user-performance"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Measuring end user performance
+      &lt;/h3&gt;
+    
+&lt;p&gt;We can also see whether Google&amp;#39;s &lt;a href="https://developers.google.com/web/tools/lighthouse" target="_blank" rel="noopener noreferrer"&gt;Lighthouse&lt;/a&gt; performance auditing tool would back these findings.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Lighthouse is an open-source, automated tool that can perform web page audits for performance, accessibility, among other quality indicators. &lt;a href="https://developers.google.com/web/tools/lighthouse" target="_blank" rel="noopener noreferrer"&gt;You can generate a Lighthouse report for almost any page you can access on the web through Chrome DevTools or a Firefox extension&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I generated &lt;a href="https://googlechrome.github.io/lighthouse/viewer/?gist=2a3785da1cfa4922190f3924d02edf39" target="_blank" rel="noopener noreferrer"&gt;this Lighthouse report for my Strava dashboard&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://googlechrome.github.io/lighthouse/viewer/?gist=2a3785da1cfa4922190f3924d02edf39" target="_blank" rel="noopener noreferrer"&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/lighthouse-strava-optimized.png" alt="Lighthouse report screenshot for strava.com/dashboard" loading="lazy" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The page scores 23/100 based on &lt;a href="https://web.dev/performance-scoring/" target="_blank" rel="noopener noreferrer"&gt;Lighthouse&amp;#39;s performance metric scoring rubric&lt;/a&gt;, and, by far, the &lt;em&gt;biggest opportunity&lt;/em&gt; for improving page load performance is to remove unused JavaScript.&lt;/p&gt;
+
+&lt;p&gt;This much is clear: JavaScript bloat is hampering the performance of these Rails apps.&lt;/p&gt;
+
+      &lt;h2 id="why-the-redundant-modules-" class="title title-h2"&gt;
+        &lt;a name="why-the-redundant-modules-" class="anchor" href="#why-the-redundant-modules-"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Why the redundant modules?
+      &lt;/h2&gt;
+    
+&lt;p&gt;It should be clear by now some Rails apps using Webpacker are bundling some modules unnecessarily across multiple bundles on a single page. As a result:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;JavaScript payloads are larger—not smaller—causing increased download and parse times for the end user&lt;/li&gt;
+&lt;li&gt;Logic may assume &amp;quot;singleton&amp;quot; behavior or touch global concerns leading to confounding bugs&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;So why is this happening?&lt;/p&gt;
+
+&lt;p&gt;These Rails applications aren&amp;#39;t intentionally bundling all this extra JavaScript. The fact that they are splitting up their bundles indicates they are attempting to be selective about what JavaScript is delivered on a given page.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Wait, so we can&amp;#39;t split code into multiple bundles without duplicating modules in Webpacker?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s be clear that the practice of code-splitting isn&amp;#39;t wrong; &lt;a href="https://web.dev/reduce-javascript-payloads-with-code-splitting/" target="_blank" rel="noopener noreferrer"&gt;it&amp;#39;s a recommended best practice&lt;/a&gt; for improving page load performance.&lt;/p&gt;
+
+&lt;p&gt;The problem with these examples is in the execution; it&amp;#39;s not happening &lt;em&gt;the way webpack expects&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Consider &lt;a href="https://cookpad.com" target="_blank" rel="noopener noreferrer"&gt;Cookpad.com&lt;/a&gt;. It&amp;#39;s a Rails app that renders numerous Webpacker packs on its home page, yet no modules are duplicated across the packs:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/cookpad-source-map-explorer-annotated-optimized.png" alt="Treemap of Cookpad source mapsl" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;When it comes to Webpacker, the Cookpad recipe is top-notch.&lt;/p&gt;
+
+      &lt;h2 id="a-new-mental-model" class="title title-h2"&gt;
+        &lt;a name="a-new-mental-model" class="anchor" href="#a-new-mental-model"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        A new mental model
+      &lt;/h2&gt;
+    
+&lt;p&gt;The redundant module problem highlights that although the Rails asset pipeline and webpack solve the same general problem, they do so in &lt;em&gt;fundamentally different ways&lt;/em&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Webpack is a module bundler.&lt;/p&gt;
+
+&lt;p&gt;The asset pipeline is a file concatenator.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The asset pipeline builds a list of what the developer explicitly requires. Think of it as a stack. &amp;quot;What you see is what you get.&amp;quot;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/analog-sprockets-stack.png" alt="St.&amp;quot;ck" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Webpack, on the other hand, recursively parses the import statements in all the dependencies within a single pack, such as &lt;code&gt;app/javascript/packs/application.js&lt;/code&gt;, like a directed graph.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/analog-webpack-graph.png" alt="Directed graph" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Webpack will include all imported modules in the output, ensuring that no import is included in the same bundle twice.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;If that&amp;#39;s true, why are there multiple instances modules in Podia&amp;#39;s output, for example?&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The reason: &lt;strong&gt;each pack is a separate dependency graph.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Consider this illustration of an imaginary project with multiple packs. One pack imports &lt;code&gt;moment&lt;/code&gt; explicitly, and the other pack imports a made-up &lt;code&gt;timeago&lt;/code&gt; plugin that depends on &lt;code&gt;moment&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/imports-webpacker.png" alt="Image of Webpacker bundling assets with multiple packs" loading="lazy" /&gt;&lt;/p&gt;
+
+&lt;p&gt;See that the &lt;code&gt;moment&lt;/code&gt; package is imported in both packs. There is an explicit import in the first pack, and an implicit import via &lt;code&gt;timeago&lt;/code&gt; in the other.&lt;/p&gt;
+
+&lt;p&gt;So splitting your code into multiple packs can lead to this problem &lt;em&gt;if&lt;/em&gt; you don&amp;#39;t configure webpack properly.&lt;/p&gt;
+
+&lt;p&gt;What we want is a way to split code up into smaller pieces without all the overhead and potential bugs. It turns out, webpack was initially created to address precisely this: code-splitting.&lt;/p&gt;
+
+&lt;p&gt;It&amp;#39;s just done differently than you expect.&lt;/p&gt;
+
+      &lt;h2 id="the-webpacker-packing-checklist" class="title title-h2"&gt;
+        &lt;a name="the-webpacker-packing-checklist" class="anchor" href="#the-webpacker-packing-checklist"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        The Webpacker Packing Checklist
+      &lt;/h2&gt;
+    
+&lt;p&gt;Now that we know what the problem is and how to diagnose it, what can we do about it?&lt;/p&gt;
+
+&lt;p&gt;The key to addressing this kind of Webpacker code bloat is to keep &lt;em&gt;all dependencies in the same dependency graph&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Below, I summarize the steps I would take to help these companies, which you can apply in your applications. These steps are iterative; you need not complete all these actions to begin seeing benefits.&lt;/p&gt;
+
+      &lt;h3 id="step-1-start-with-one-entry-point-per-page" class="title title-h3"&gt;
+        &lt;a name="step-1-start-with-one-entry-point-per-page" class="anchor" href="#step-1-start-with-one-entry-point-per-page"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Step 1: Start with one entry point per page
+      &lt;/h3&gt;
+    
+&lt;p&gt;Webpack recommends one entry point per page. &lt;a href="https://webpack.js.org/concepts/entry-points" target="_blank" rel="noopener noreferrer"&gt;From the webpack docs&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;As a rule of thumb: Use precisely one entry point for each HTML document.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;That&amp;#39;s how webpack assumes your application will work out-of-the-box. Practically speaking, that means there would be only one usage of &lt;code&gt;javascript_pack_tag&lt;/code&gt; per page:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="html"&gt;&amp;lt;%= javascript_pack_tag &amp;quot;application&amp;quot; %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For the companies described in this post, that would mean consolidating those separate packs into one on a page. Rendering multiple entry points on a single page &lt;em&gt;correctly&lt;/em&gt; requires additional configuration. We&amp;#39;ll get to that, but &amp;quot;one pack per page&amp;quot; is how I recommend starting.&lt;/p&gt;
+
+&lt;p&gt;Does this mean you have to put &lt;strong&gt;all&lt;/strong&gt; your JavaScript in one pack? No, but:&lt;/p&gt;
+
+      &lt;h3 id="step-2-keep-the-number-of-packs-small" class="title title-h3"&gt;
+        &lt;a name="step-2-keep-the-number-of-packs-small" class="anchor" href="#step-2-keep-the-number-of-packs-small"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Step 2: Keep the number of packs small
+      &lt;/h3&gt;
+    
+&lt;p&gt;Don&amp;#39;t split your JavaScript into a ton of little packs/entry points unless you understand the tradeoffs, and you&amp;#39;re comfortable with webpack.&lt;/p&gt;
+
+&lt;p&gt;For smaller applications, just an &amp;quot;application.js&amp;quot; may be well worth the tradeoff of having an application that&amp;#39;s easier to maintain over the added cost of learning how to best split up JS code with webpack with little performance gain.&lt;/p&gt;
+
+&lt;p&gt;Think of packs as the entry points to &lt;em&gt;distinct&lt;/em&gt; experiences rather than page-specific bundles.&lt;/p&gt;
+
+&lt;p&gt;For Podia, this could be one pack for the public-facing storefront, one for the storefront editor, one for the customer dashboard. Maybe an employee admin area pack. That&amp;#39;s it.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Render one pack per page?... Keep the number of packs small? ... these bundles could get huge!&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, now we&amp;#39;ve come to webpack&amp;#39;s sweet spot:&lt;/p&gt;
+
+      &lt;h3 id="step-3-use-dynamic-imports" class="title title-h3"&gt;
+        &lt;a name="step-3-use-dynamic-imports" class="anchor" href="#step-3-use-dynamic-imports"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Step 3: Use dynamic imports
+      &lt;/h3&gt;
+    
+&lt;p&gt;Webpack has several automated features for code-splitting that will never be supported in the Rails asset pipeline. The primary example of this is &lt;a href="https://webpack.js.org/guides/code-splitting/#dynamic-imports" target="_blank" rel="noopener noreferrer"&gt;dynamic imports&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Dynamic imports allow you to define split points &lt;em&gt;in code&lt;/em&gt; rather than by configuration or multiple entry points. Note the &lt;code&gt;import()&lt;/code&gt; function syntax:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="javascript"&gt;// Contrived examples
+
+// Import page-specific chunks
+if (currentPage === &amp;#39;storefront&amp;#39;) {
+  import(&amp;#39;../src/pages/storefront&amp;#39;)
+}
+
+// Import progressive enhancement chunks
+if (document.querySelector(&amp;#39;[data-timeago]&amp;#39;).length) {
+  import(&amp;#39;../src/initializer/current_time_ago&amp;#39;)
+}
+
+// Import bigger on-demand chunks following user interaction
+document.addEventListener(&amp;#39;[data-open-trix-editor]&amp;#39;, &amp;#39;click&amp;#39;, () =&amp;gt; {
+  import(&amp;#39;../src/components/trix_editor&amp;#39;)
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the example above, the imported modules are not separate packs. They are modules included in the same dependency graph but compiled as &lt;em&gt;separate files&lt;/em&gt;. Webpack will load dynamic imports asynchronously at runtime.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Dynamic imports allow you to divide your &amp;quot;packs&amp;quot; into smaller pieces while avoiding the redundant module problem.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Does this mean import every little module in little dynamic chunks? No. Measure, experiment. Consider the tradeoffs with handling asynchronous code loading. Timebox your efforts&lt;/p&gt;
+
+      &lt;h3 id="step-4-go-further-with-splitchunks-but-only-when-you-39-re-ready" class="title title-h3"&gt;
+        &lt;a name="step-4-go-further-with-splitchunks-but-only-when-you-39-re-ready" class="anchor" href="#step-4-go-further-with-splitchunks-but-only-when-you-39-re-ready"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Step 4: Go further with splitChunks, but only when you&amp;#39;re ready
+      &lt;/h3&gt;
+    
+&lt;p&gt;For a more powerful combination, use page-specific dynamic imports combined with &lt;a href="https://help.github.com/en/github/managing-files-in-a-repository/getting-permanent-links-to-files" target="_blank" rel="noopener noreferrer"&gt;the splitChunks configuration API&lt;/a&gt; to split out bundles for vendor code that can be shared across packs. In other words, browsers wouldn&amp;#39;t have to pay the cost of re-downloading bundles containing moment.js, lodash.js, etc., across multiple pages with a warm cache.&lt;/p&gt;
+
+&lt;p&gt;Beware, though; this technique is a bit more advanced. It requires the use of separate Rails helpers, &lt;code&gt;javascript_packs_with_chunks_tag&lt;/code&gt; and &lt;code&gt;stylesheet_packs_with_chunks_tag&lt;/code&gt;, which will output multiple bundles produced from a single pack and these helpers should only be used once during the page render. It may take some &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer"&gt;reading up on the webpack docs&lt;/a&gt; and some experimentation with the chunking logic to achieve optimal results.&lt;/p&gt;
+
+&lt;p&gt;Check out the open-source &lt;a href="https://github.com/forem/forem" target="_blank" rel="noopener noreferrer"&gt;Forem&lt;/a&gt; application (formerly dev.to) for an excellent example of how to do &amp;quot;splitChunks.&amp;quot;&lt;/p&gt;
+
+      &lt;h2 id="summing-up" class="title title-h2"&gt;
+        &lt;a name="summing-up" class="anchor" href="#summing-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+&lt;/a&gt;
+        Summing up
+      &lt;/h2&gt;
+    
+&lt;p&gt;Webpack can be a bit confusing to understand at first. Webpacker goes a long way toward providing that &amp;quot;conceptual compression&amp;quot; to get developers up-and-running on Rails. Unfortunately, Webpacker doesn&amp;#39;t yet offer &lt;em&gt;all&lt;/em&gt; the guard rails required to avoid problems like overpacking. As we&amp;#39;ve seen, some Rails apps are using Webpacker with an asset-pipeline mindset.&lt;/p&gt;
+
+&lt;p&gt;Embracing new tools may mean a little more investment, along with letting go of the way we used to do things.&lt;/p&gt;
+
+&lt;p&gt;Apply the Webpacker Packing Checklist to ensure a good experience for clients who desire faster webpages and developers who want fewer bugs.&lt;/p&gt;
+</content>
+  </entry>
   <entry>
     <title>A visual guide to Webpacker</title>
     <link rel="alternate" href="/blog/visual-guide-to-webpacker.html"/>
@@ -24,6 +439,12 @@
     <content type="html">&lt;p&gt;Confused about how Webpacker works in Rails? Let&amp;#39;s unpack it with some diagrams.&lt;/p&gt;
 
 &lt;p&gt;First, we&amp;#39;ll take a look at the &amp;quot;classic&amp;quot; way of bundling assets with Rails: the Rails asset pipeline. Let&amp;#39;s see how things look when requests are served with the Rails asset pipeline in development.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Struggling with webpack and Webpacker?&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter for occasional emails with new content.&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
 
       &lt;h4 id="html-request-with-the-asset-pipeline" class="title title-h4"&gt;
         &lt;a name="html-request-with-the-asset-pipeline" class="anchor" href="#html-request-with-the-asset-pipeline"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
@@ -1160,306 +1581,6 @@ babel-loader took 0.824 secs
       &lt;/h3&gt;
     
 &lt;p&gt;Even though Webpacker hides away much of the complexity of webpack configuration, sometimes it&amp;#39;s necessary to peel back the abstraction layer. Like anything else that&amp;#39;s new, wrapping your head around webpack build can be intimidating, especially if you don&amp;#39;t know where to start. If things go wrong, all is not lost. Hopefully this post helped illustrate some ways you can get insight into what&amp;#39;s happening in your Rails webpack config.&lt;/p&gt;
-</content>
-  </entry>
-  <entry>
-    <title>How to customize webpack in Rails apps</title>
-    <link rel="alternate" href="/blog/how-to-customize-webpack-for-rails-apps.html"/>
-    <id>/blog/how-to-customize-webpack-for-rails-apps.html</id>
-    <published>2020-04-18T00:00:00+00:00</published>
-    <updated>2020-04-18T00:00:00+00:00</updated>
-    <author>
-      <name>Ross Kaffenberger</name>
-    </author>
-    <summary type="html">&lt;p&gt;When &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;adjusting webpacker.yml&lt;/a&gt; is not enough, it might be necessary to modify Webpacker's default webpack configuration. Configuring webpack is precisely the main job of Webpacker's NPM package, &lt;code&gt;@rails/webpacker&lt;/code&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn...&lt;/p&gt;
-&lt;/blockquote&gt;</summary>
-    <content type="html">&lt;p&gt;When &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;adjusting webpacker.yml&lt;/a&gt; is not enough, it might be necessary to modify Webpacker&amp;#39;s default webpack configuration. Configuring webpack is precisely the main job of Webpacker&amp;#39;s NPM package, &lt;code&gt;@rails/webpacker&lt;/code&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;Subscribe to my newsletter&lt;/a&gt; to learn more about using webpack with Rails.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This post provides an overview of how to customize its default settings for your Rails application. It&amp;#39;s a followup to my last post on &lt;a href="/blog/how-to-use-webpacker-yml.html"&gt;understanding webpacker.yml&lt;/a&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;tl;dr&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Use &lt;strong&gt;&lt;code&gt;webpacker.yml&lt;/code&gt;&lt;/strong&gt; to modify a &lt;strong&gt;limited&lt;/strong&gt; number of settings, some of which are shared between Rails and webpack.&lt;/p&gt;
-
-&lt;p&gt;Modify the base &lt;strong&gt;&lt;code&gt;@rails/webpacker&lt;/code&gt;&lt;/strong&gt; configuration for &lt;strong&gt;any&lt;/strong&gt; webpack-specific config options in JavaScript.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-      &lt;h2 id="at-a-glance" class="title title-h2"&gt;
-        &lt;a name="at-a-glance" class="anchor" href="#at-a-glance"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        At a glance
-      &lt;/h2&gt;
-    
-&lt;p&gt;In an ideal world, webpack configuration would be transparent to Rails developers. Let&amp;#39;s face it, most developers would rather spend their time building features than configuring their asset compilation process. Still, the base webpack configuration provided by &lt;code&gt;@rails/webpacker&lt;/code&gt; may not satisfy your application&amp;#39;s needs, so modifications may be inevitable.&lt;/p&gt;
-
-&lt;p&gt;Some things you might want to modify or change:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href="#providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope"&gt;Handling legacy jQuery plugins&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#loading-dotenv-env-vars-in-webpack"&gt;Loading dotenv ENV vars in webpack&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#enabling-webpack-optimization"&gt;Enabling webpack optimization (i.e., sharing code across bundles)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#using-module-aliases"&gt;Using modules aliases&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="#overriding-the-default-options-for-compiling-css-modules"&gt;Changing the identifiers for CSS modules&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;So, where to start?&lt;/p&gt;
-
-&lt;p&gt;First, we&amp;#39;ll take a look at the environment-specific JavaScript files Webpacker installs in the &lt;code&gt;config/webpack/&lt;/code&gt; directory within your Rails application:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;$ tree config/webpack
-config/webpack
-├── development.js
-├── environment.js
-├── production.js
-└── test.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For experienced frontend developers wondering &lt;em&gt;where is &lt;code&gt;webpack.config.js&lt;/code&gt;?&lt;/em&gt;, it&amp;#39;s here, as &lt;code&gt;config/webpack/{development,test,production}.js&lt;/code&gt;; there is a separate config file for each Rails environment.&lt;/p&gt;
-
-&lt;p&gt;Running &lt;code&gt;./bin/webpack&lt;/code&gt; is similar to typing out one the following commands to run &lt;code&gt;webpack&lt;/code&gt; directly, depending on your current &lt;code&gt;RAILS_ENV&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;RAILS_ENV=development yarn webpack --config ./config/webpack/development.js
-RAILS_ENV=test yarn webpack --config ./config/webpack/test.js
-RAILS_ENV=production yarn webpack --config ./config/webpack/production.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;These files are to webpack configuration what Ruby config files &lt;code&gt;config/environments/{development,test,production}.rb&lt;/code&gt; are Rails configuration: the place to customize environment-specific needs. Just as &lt;code&gt;config/application.rb&lt;/code&gt; is the shared configuration for all Rails environments, so is &lt;code&gt;config/webpack/environment.js&lt;/code&gt; for each of the environment-specific webpack config files.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;config/webpack/environment.js&lt;/code&gt; file is where the default webpack configuration is imported via &lt;code&gt;@rails/webpacker&lt;/code&gt;. The named import &lt;code&gt;environment&lt;/code&gt; is an abstraction around the webpack config. It provides &lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#configuration" target="_blank" rel="noopener noreferrer"&gt;its own API to support modification and extension&lt;/a&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
-const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
-
-module.exports = environment
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Each of the environment-specific files are more or less the same; they import the base &lt;code&gt;environment&lt;/code&gt; object and must convert it to a JavaScript object that matches the webpack configuration schema:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/development.js
-process.env.NODE_ENV = process.env.NODE_ENV || &amp;#39;development&amp;#39;
-
-const environment = require(&amp;#39;./environment&amp;#39;)
-
-module.exports = environment.toWebpackConfig()
-&lt;/code&gt;&lt;/pre&gt;
-
-      &lt;h3 id="under-the-hood" class="title title-h3"&gt;
-        &lt;a name="under-the-hood" class="anchor" href="#under-the-hood"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Under the hood
-      &lt;/h3&gt;
-    
-&lt;p&gt;There&amp;#39;s a problem though with making changes through an abstraction layer; it&amp;#39;s hard to see what you want to change. Since the API is not fully documented yet, you may need to do some digging.&lt;/p&gt;
-
-&lt;p&gt;To print it out on the command line, here&amp;#39;s a handy one-line script:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;$ RAILS_ENV=development node -e &amp;#39;console.dir(require(&amp;quot;./config/webpack/development&amp;quot;), { depth: null })&amp;#39;
-# displays entire webpack config object
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href="https://nodejs.org/api/console.html#console_console_dir_obj_options" target="_blank" rel="noopener noreferrer"&gt;console.dir&lt;/a&gt; is a nice alternative to &lt;code&gt;console.log&lt;/code&gt; for inspecting JavaScript objects.&lt;/p&gt;
-
-&lt;p&gt;To go deeper, you may want to checkout &lt;a href="https://github.com/rails/webpacker/blob/40a171021f6a89117aed1317957199cf2ca72b98/package/environments/base.js#L123" target="_blank" rel="noopener noreferrer"&gt;the source for the &lt;code&gt;Environment&lt;/code&gt; class in the &lt;code&gt;@rails/webpacker&lt;/code&gt; package&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;An &lt;code&gt;environment&lt;/code&gt; instance has &lt;code&gt;loaders&lt;/code&gt; and &lt;code&gt;plugins&lt;/code&gt; properties that are each implemented as bespoke &lt;a href="https://github.com/rails/webpacker/blob/40a171021f6a89117aed1317957199cf2ca72b98/package/config_types/config_list.js#L5" target="_blank" rel="noopener noreferrer"&gt;&lt;code&gt;ConfigList&lt;/code&gt;&lt;/a&gt; objects that subclass JavaScript&amp;#39;s &lt;code&gt;Array&lt;/code&gt; class (&lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/package/config_types/config_list.js" target="_blank" rel="noopener noreferrer"&gt;source&lt;/a&gt;).&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href="https://webpack.js.org/concepts/#loaders" target="_blank" rel="noopener noreferrer"&gt;Loaders in webpack&lt;/a&gt; define transforms based on file type or name; they are analogous to preprocessors in the Sprockets. &lt;a href="https://webpack.js.org/concepts/#plugins" target="_blank" rel="noopener noreferrer"&gt;Plugins in webpack&lt;/a&gt; support a wider range of tasks, like optimization or moving/copying assets, by leveraging webpack&amp;#39;s exhaustive list of hooks to tap into the compilation process.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The &lt;code&gt;environment.config&lt;/code&gt; property is also useful is you want to simply override defaults with a raw object matching a portion of the webpack config schema.&lt;/p&gt;
-
-      &lt;h3 id="examples" class="title title-h3"&gt;
-        &lt;a name="examples" class="anchor" href="#examples"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Examples
-      &lt;/h3&gt;
-    
-&lt;p&gt;Here&amp;#39;s the rub: Webpacker, in true Rails fashion, aims to provide convention over configuration, however, the design of webpack skews heavily in the other direction: it is extremely flexible and malleable through its support for plugins and a large number of configurable options. Webpack is built to support a broad range of use cases to meet the needs of a diverse frontend landscape. Webpacker&amp;#39;s opinionated approach may leave out something you need.&lt;/p&gt;
-
-&lt;p&gt;This means there may come a time when you need to roll up your sleeves and peel back the abstraction layer and modify the base Webpacker &lt;code&gt;environment&lt;/code&gt; object. At this point, it may help to read up on &lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#configuration" target="_blank" rel="noopener noreferrer"&gt;the Webpacker docs for modifying the webpack configuration&lt;/a&gt;. Below are just a few examples.&lt;/p&gt;
-
-      &lt;h4 id="providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope" class="title title-h4"&gt;
-        &lt;a name="providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope" class="anchor" href="#providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Providing jQuery as an import to legacy plugins and exposing to global scope
-      &lt;/h4&gt;
-    
-&lt;p&gt;Here&amp;#39;s an example of how to &amp;quot;provide&amp;quot; a jQuery import to a legacy package that doesn&amp;#39;t understand modules and to &amp;quot;expose&amp;quot; the &lt;code&gt;$&lt;/code&gt; variable for the global scope (so you can use &lt;code&gt;$(...)&lt;/code&gt; expressions in raw &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; tags).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;$ yarn add expose-loader
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
-const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
-const webpack = require(&amp;#39;webpack&amp;#39;)
-
-// Adds `var jQuery = require(&amp;#39;jquery&amp;#39;) to legacy jQuery plugins
-environment.plugins.append(
-  &amp;#39;Provide&amp;#39;,
-  new webpack.ProvidePlugin({
-    $: &amp;#39;jquery&amp;#39;,
-    jQuery: &amp;#39;jquery&amp;#39;,
-    jquery: &amp;#39;jquery&amp;#39;,
-  }),
-)
-
-// Adds window.$ = require(&amp;#39;jquery&amp;#39;)
-environment.loaders.append(&amp;#39;jquery&amp;#39;, {
-  test: require.resolve(&amp;#39;jquery&amp;#39;),
-  use: [
-    {
-      loader: &amp;#39;expose-loader&amp;#39;,
-      options: &amp;#39;$&amp;#39;,
-    },
-  ],
-})
-
-module.exports = environment
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href="https://stackoverflow.com/questions/28969861/managing-jquery-plugin-dependency-in-webpack" target="_blank" rel="noopener noreferrer"&gt;This StackOverflow post&lt;/a&gt; provides more general context on making legacy jQuery play nice with webpack.&lt;/p&gt;
-
-      &lt;h4 id="loading-dotenv-env-vars-in-webpack" class="title title-h4"&gt;
-        &lt;a name="loading-dotenv-env-vars-in-webpack" class="anchor" href="#loading-dotenv-env-vars-in-webpack"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Loading dotenv ENV vars in webpack
-      &lt;/h4&gt;
-    
-&lt;p&gt;A nice feature of webpack and the default webpack configuration is that it will make ENV vars available to the build process. For example, using &lt;code&gt;process.ENV.MY_API_KEY&lt;/code&gt; will be compiled to &lt;code&gt;&amp;quot;my-api-key-value&amp;quot;&lt;/code&gt; in your webpack build. To emulate the behavior of the popular &lt;code&gt;dotenv-rails&lt;/code&gt; project, which can load ENV vars defined in &lt;code&gt;.env*&lt;/code&gt; files, you could add configuration as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="sh"&gt;yarn add dotenv
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
-
-const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
-const webpack = require(&amp;#39;webpack&amp;#39;)
-const dotenv = require(&amp;#39;dotenv&amp;#39;)
-
-const dotenvFiles = [
-  `.env.${process.env.NODE_ENV}.local`,
-  &amp;#39;.env.local&amp;#39;,
-  `.env.${process.env.NODE_ENV}`,
-  &amp;#39;.env&amp;#39;,
-]
-dotenvFiles.forEach((dotenvFile) =&amp;gt; {
-  dotenv.config({ path: dotenvFile, silent: true })
-})
-
-module.exports = environment
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/env.md#environment-variables" target="_blank" rel="noopener noreferrer"&gt;Original source in the Webpacker docs&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h4 id="enabling-webpack-optimization" class="title title-h4"&gt;
-        &lt;a name="enabling-webpack-optimization" class="anchor" href="#enabling-webpack-optimization"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Enabling webpack optimization
-      &lt;/h4&gt;
-    
-&lt;p&gt;The &lt;code&gt;splitChunks&lt;/code&gt; API instructs webpack to share dependencies across bundles. Using this optimization step must be combined with different view helpers; see the&lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#add-splitchunks-webpack-v4" target="_blank" rel="noopener noreferrer"&gt;Webpacker docs&lt;/a&gt; for more info.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
-
-// Enable the default config
-environment.splitChunks()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Tip: Use the &lt;code&gt;splitChunks&lt;/code&gt; API for solving the &amp;quot;page-specific JavaScript&amp;quot; problem with Webpacker.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;See the &lt;a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer"&gt;webpack splitChunks docs&lt;/a&gt; for more info.&lt;/p&gt;
-
-      &lt;h4 id="using-module-aliases" class="title title-h4"&gt;
-        &lt;a name="using-module-aliases" class="anchor" href="#using-module-aliases"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Using module aliases
-      &lt;/h4&gt;
-    
-&lt;p&gt;The Webpacker environment API also supports a &lt;code&gt;config.merge&lt;/code&gt; function to override raw webpack config options. This example would allow you to import images from the &lt;code&gt;app/assets&lt;/code&gt; directory using &lt;code&gt;import &amp;#39;images/path/to/image.jpg&amp;#39;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
-const { resolve } = require(&amp;#39;path&amp;#39;);
-
-// Enable the default config
-environment.config.merge({
-  resolve: {
-    alias: {
-      images: resolve(&amp;#39;app/assets/images&amp;#39;),
-    }
-  }
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Learn more in the &lt;a href="https://webpack.js.org/configuration/resolve/" target="_blank" rel="noopener noreferrer"&gt;webpack resolve docs&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h4 id="overriding-the-default-options-for-compiling-css-modules" class="title title-h4"&gt;
-        &lt;a name="overriding-the-default-options-for-compiling-css-modules" class="anchor" href="#overriding-the-default-options-for-compiling-css-modules"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Overriding the default options for compiling CSS modules
-      &lt;/h4&gt;
-    
-&lt;p&gt;This change involves modifying an existing loader, which can be accessed using &lt;code&gt;environment.loaders.get(key)&lt;/code&gt; and replacing its options property.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class="javascript"&gt;// config/webpack/environment.js
-const { environment } = require(&amp;#39;@rails/webpacker&amp;#39;)
-
-const myCssLoaderOptions = {
-  modules: {
-    localIdentName: &amp;#39;[name]__[local]___[hash:base64:10]&amp;#39;,
-  },
-  sourceMap: true,
-}
-
-const CSSLoader = environment.loaders
-  .get(&amp;#39;moduleSass&amp;#39;)
-  .use
-  .find((el) =&amp;gt; el.loader === &amp;#39;css-loader&amp;#39;)
-
-CSSLoader.options = { ...CSSLoader.options, ...myCssLoaderOptions }
-
-module.exports = environment
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href="https://github.com/rails/webpacker/blob/a84a4bb6b385ae17dd775a6034a0b159b88c6ea9/docs/webpack.md#overriding-loader-options-in-webpack-3-for-css-modules-etc" target="_blank" rel="noopener noreferrer"&gt;Original source in the Webpacker docs&lt;/a&gt;.&lt;/p&gt;
-
-      &lt;h3 id="wrapping-up" class="title title-h3"&gt;
-        &lt;a name="wrapping-up" class="anchor" href="#wrapping-up"&gt;       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-&lt;/a&gt;
-        Wrapping up
-      &lt;/h3&gt;
-    
-&lt;p&gt;In this post, I&amp;#39;ve attempted to shed some light on the role of the &lt;code&gt;@rails/webpacker&lt;/code&gt; project in your Rails app. We demonstrated how the Webpacker wraps the default webpack configuration along with some examples to illustrate how one might modify and extend the config for selected use cases.&lt;/p&gt;
-
-&lt;p&gt;For readers who need to go even further, there&amp;#39;s no better place to go next than webpack&amp;#39;s &lt;a href="https://webpack.js.org/guides/getting-started/" target="_blank" rel="noopener noreferrer"&gt;Getting Started guide&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>

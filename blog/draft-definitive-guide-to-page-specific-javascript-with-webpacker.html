@@ -1,0 +1,931 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <title>Definitive Guide to Page-Specific JavaScript with Webpacker - rossta.net</title>
+<meta name="description" content="Definitive Guide to Page-Specific JavaScript with Webpacker" />
+<meta name="keywords" content="Ross Kaffenberger, software, software developer, software engineering, computer programming, web development, test driven development, TDD, Ruby, Javascript, Ruby on Rails, Rails, Webpack, Service Worker, Progressive Web Apps, RSpec, Elixir, Clojure, HTML, CSS" />
+<meta name="site" content="rossta.net" />
+<meta property="og:site_name" content="rossta.net" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:creator" content="Ross Kaffenberger" />
+<meta name="twitter:description" content="Definitive Guide to Page-Specific JavaScript with Webpacker" />
+<meta name="twitter:image:src" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.jpg" />
+<meta name="twitter:title" content="Definitive Guide to Page-Specific JavaScript with Webpacker" />
+<meta property="og:description" content="Definitive Guide to Page-Specific JavaScript with Webpacker" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/louvre-pexels-photo.jpg" />
+<meta property="og:title" content="Definitive Guide to Page-Specific JavaScript with Webpacker" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+
+    <link href='/css/app.chunk.adf8a6bd0be6bdc18aa2.css' rel='stylesheet' media='all'></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2" href="/blog">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/series">series</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/talks">talks</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/projects">projects</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+      <p>If you&#39;re using Webpacker and dividing your JavaScript into multiple packs without awareness of how webpack works, there&#39;s a good chance you&#39;re doing it wrong.</p>
+
+<p>Prior experience with the Rails asset pipeline may lead developers to assume the mechanics of asset bundling works similarly with webpack when it most certainly does not.</p>
+
+<p>These legacy assumptions are fraught with peril!</p>
+
+<p>Using multiple packs, also known as &quot;entry points&quot;, without proper configuration on a single page, modules may be duplicated. This poses a couple key problems for developers and their end users:</p>
+
+<ol>
+<li>JavaScript payloads are larger—not smaller—causing increased download and parse times for the end user</li>
+<li>Modules may assume &quot;singleton&quot; behavior or touch global concerns leading to confounding bugs when duplicated</li>
+</ol>
+
+<blockquote>
+<p>Having trouble understanding and optimizing webpack on Rails?</p>
+
+<p><a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"><strong>Subscribe to my newsletter for occasional emails with new content.</strong></a>.</p>
+</blockquote>
+
+<p>Let&#39;s unravel this mystery.</p>
+
+<p>First, we&#39;ll illustrate the problem in detail and demonstrate how developers can diagnose the problem in their own Rails applications.</p>
+
+<p>Next, we&#39;ll develop an appropriate mental model for understanding how webpack bundles code. This will reveal why the problem arises when we apply an outdated mindset, one informed by the Rails asset pipeline, when integrating with Webpacker.</p>
+
+<p>Finally, we&#39;ll come away with practical guidelines and tools and guidelines that will help us avoid the problem as we optimize webpack bundles the RIGHT WAY.</p>
+
+      <h2 id="case-study-podia" class="title title-h2">
+        <a name="case-study-podia" class="anchor" href="#case-study-podia">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Case study: Podia
+      </h2>
+    
+<p>Podia is a fantastic service that provides a platform for content creators to sell digital content including e-books, online courses, and webinars.</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/podia-homepage.png" alt="Podia homepage" loading="lazy" /></p>
+
+<p>I call attention to Podia because</p>
+
+<p>a. it&#39;s built with Rails
+a. it uses webpack via Webpacker to bundle JavaScript
+a. it&#39;s sending more JavaScript to your browser than it should</p>
+
+<p>I&#39;ll aim to prove this last point and argue why I believe it&#39;s making a simple bundling mistake that you&#39;ll want to avoid if you&#39;re using Webpacker to bundle assets too.</p>
+
+<p>When you sign up for an account on Podia as a content creator, you get a public-facing storefront and tools for administering your content, such as a dashboard for analytics and messaging and a storefront editor app.</p>
+
+<p>Normal users may have access to at least three distinct areas of functionality:</p>
+
+<ol>
+<li>The public-facing storefront</li>
+<li>The dashboard</li>
+<li>The storefront editor</li>
+</ol>
+
+<p>I can tell Podia uses Webpacker to bundle assets from a few asset urls hosted by its site and CDN.</p>
+
+<p>When I view source on such pages, I can find <script> tags for urls containing the default path to Webpacker assets, i.e., <code>/packs/js/...</code>. I can also navigate to the Webpacker manifest at <code>https://app.podia.com/packs/manifest.json</code>. This file is necessary for Rails to be able to locate Webpacker-bundled all the JavaScript, CSS, and images on disk or on CDN.</p>
+
+<p>TODO: Excerpt</p>
+
+<p>It a number of distinct entrypoints that map roughly to different sections of the site, like &quot;cms/ui&quot; and &quot;storefront/index&quot;, or by feature, &quot;comments&quot; and &quot;current_time_ago&quot;.</p>
+
+<p>TODO: Excerpt:</p>
+
+<p>In Webpacker, entrypoints are known as &quot;packs.&quot;</p>
+
+<p>A pack, or entrypoint, is intended to be the root of the webpack dependency graph of all the JavaScript modules to be included on a single page. Webpack typically recommends using <em>one entrypoint per page</em> (TODO: link).</p>
+
+<p>However, when I visit various pages, I find that sometimes multiple packs are loaded on the same page. Take, for example, the public-facing storefront. When I visit this page, my browser downloads the following &quot;packs&quot; from the Podia CDN:</p>
+
+<pre><code class="sh">/packs/js/storefront/index-1d9e9c36f5f9ab7056d1.js
+/packs/js/storefront/current_time_ago-0c5c682d173647ef3199.js
+/packs/js/storefront/messaging-60ddf6567eb7b74a1083.js
+</code></pre>
+
+<p>When I visit the Podia dashboard, I also see multiple packs are included on the page:</p>
+
+<pre><code class="sh">/packs/js/cms/ui-e5936b30e10be7bc4694.js
+/packs/js/cms/messaging-15d4165b22948f023f63.js
+</code></pre>
+
+<p>The intent, I believe, is that Podia wants to deliver only required JavaScript to the client&#39;s browser. For example, there&#39;s no need to send JavaScript for the CMS UI to the public-facing storefront page.</p>
+
+<p>This intent is good! Plenty of teams ignore this and are happy to deliver multi-megabyte JavaScript payloads on every page render.</p>
+
+      <h2 id="the-problem" class="title title-h2">
+        <a name="the-problem" class="anchor" href="#the-problem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The problem
+      </h2>
+    
+<p>On closer look, though, something doesn&#39;t seem quite right. The payloads for these individual packs are rather large. Take the &quot;storefront/current_time_ago.js&quot; pack. It transfers as 73KB gzipped and 396KB parsed. I can&#39;t say for sure, but I imagine this pack&#39;s primary responsibility is to dynamically change database timestamps to human-friendly text like &quot;2 hours ago&quot; in the browser, much like the tiny jQuery plugin <a href="https://timeago.org/" target="_blank" rel="noopener noreferrer">timeago</a> which claims a 2KB size.</p>
+
+<p>Does Podia&#39;s &quot;current_time_ago&quot; functionality need to be nearly 400KB?</p>
+
+<p>Fortunately, we can take a closer look to see what&#39;s going on.</p>
+
+<p>Here&#39;s a graphical analysis of the packs for the storefront editor.</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/podia-source-map-explorer-bare.png" alt="Treemap image of webpack JavaScript bundles loaded on Podia's storefont editor" loading="lazy" /></p>
+
+<p>That&#39;s a little hard to read on the web, so I&#39;ve annotated the important bits:</p>
+
+<p><strong>Podia storefront editor</strong></p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/podia-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Podia's storefront editor" loading="lazy" /></p>
+
+<p>This image displays a tree-map of each JavaScript bundle on the storefront editor. The image presents three bundles (purple, blue, orange) and their relatively-sized modules.</p>
+
+<p>You can see bundled modules such as <code>actioncable</code>, <code>stimulus</code>, <code>moment.js</code>, <code>core-js</code>, and <code>cableready</code>.</p>
+
+<p>Here&#39;s the problem: <strong>some modules are bundled twice!</strong></p>
+
+<p>All three of these bundles are included on the same page. Two of them include both moment.js and all the moment-locales. The browser has to download and parse moment.js (52KB) and moment-locales (326KB) twice!</p>
+
+<p>Same for actioncable, cableready, stimulus, and core-js.</p>
+
+<p>In an attempt to deliver less JavaScript to the browser with page-specific packs, they&#39;ve ended up with even bigger payloads. Podia is <a href="https://rossta.net/blog/overpacking-a-common-webpacker-mistake.html" target="_blank" rel="noopener noreferrer">&quot;overpacking!&quot;</a></p>
+
+      <h2 id="more-examples-" class="title title-h2">
+        <a name="more-examples-" class="anchor" href="#more-examples-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        More examples!
+      </h2>
+    
+<p>It&#39;s not just Podia here. It&#39;s happened at my company, Stitch Fix.</p>
+
+<p>Here&#39;s source map analysis from the Dribbble profile page which loads two Webpacker packs with several duplicated modules including Vue, vuex, tippy, and axios.</p>
+
+<p><strong>Funny or Die&#39;s home page</strong></p>
+
+<p>You know what&#39;s not funny? Duplicate jQuery on the <a href="https://www.funnyordie.com" target="_blank" rel="noopener noreferrer">Funny or Die</a> home page.</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/funnyordie-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Funny or Die's home page" loading="lazy" /></p>
+
+<p><strong>Drizly product search page</strong></p>
+
+<p>It&#39;s raining JavaScript at <a href="https://drizly.com/beer/c2" target="_blank" rel="noopener noreferrer">Drizly</a>! The product search page renders three packs, each of which includes instances <code>material-ui</code>, <code>react</code>, and <code>lodash</code> among others. If Drizly were to introduce React hooks, <a href="https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react" target="_blank" rel="noopener noreferrer">I am relatively certain multiple instances of React will cause issues if it hasn&#39;t already</a>.</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/drizly-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Drizly's profile page" loading="lazy" /></p>
+
+<p><strong>Teachable&#39;s course page</strong></p>
+
+<p>The <a href="https://www.jessicasprague.com/p/digibeginnerbundle" target="_blank" rel="noopener noreferrer">course page on Teachable</a> loves <code>jQuery</code> and <code>lodash</code> two times.</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/teachable-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Teachable's student course page" loading="lazy" /></p>
+
+<p><strong>Strava&#39;s activity feed</strong></p>
+
+<p>As an endurance athlete in my spare time, I use Strava almost daily. Each page load of the activity feed forces me to render <code>React</code> four times! <a href="https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react" target="_blank" rel="noopener noreferrer">Invalid React hook warnings apply</a>.</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/strava-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Strava's activity feed" loading="lazy" /></p>
+
+<p><strong>Dribbble profile page</strong></p>
+
+<p>I&#39;m whistling the <a href="https://dribbble.com/_rossta" target="_blank" rel="noopener noreferrer">Dribbble profile page</a> for multiple infractions, including <code>Vue</code> and <code>axios</code>.</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/dribbble-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Dribbble's profile page" loading="lazy" /></p>
+
+      <h2 id="why-the-duplicate-modules-" class="title title-h2">
+        <a name="why-the-duplicate-modules-" class="anchor" href="#why-the-duplicate-modules-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Why the duplicate modules?
+      </h2>
+    
+<p>Let&#39;s be clear that the intent—to split code up into into smaller bundles—isn&#39;t wrong; it&#39;s just not happening the <em>webpack way</em>.</p>
+
+<p>To optimize the Rails asset pipeline, we would divide up our bundles as needed and that&#39;s it. The story is not quite as straightforward with webpack.</p>
+
+<p>If there&#39;s one thing you take away from this post, it&#39;s this:</p>
+
+<blockquote>
+<p>The Rails asset pipeline and webpack solve the same general problem, in <em>fundamentally different ways</em>:</p>
+
+<p>Webpack is a module bundler.</p>
+
+<p>The asset pipleine is a file concatenator.</p>
+</blockquote>
+
+<p>The asset pipeline simply builds up list of what the developer explicitly requires and those files are pasted together, in order of inclusion, in the output.</p>
+
+<p>Webpack will build up a dependency graph of all the imported module. Starting from the entry point, such as <code>app/javascript/packs/application.js</code>, webpack will parse the source file for and track each <code>import</code> and <code>require</code> statement. Webpack will then locate the source files for those imported modules and parse those files their imports, &quot;walking the tree&quot;, so to speak. It&#39;s ok if a given module has been imported from multiple source files; webpack will make sure each module within the dependency graph is only imported once.</p>
+
+<p>(TODO: image?)</p>
+
+<p><em>If that&#39;s true, why are there multiple instances of moment.js, @rails/stimulus, lodash, and so on, in Podias output?</em></p>
+
+<p>The answer: each pack is a separate dependency graph.</p>
+
+<p>By default, webpack expects applications to render only one entry point per page. With that expectation in mind, if a developer imports lodash in pack one and pack two, webpack will bundle lodash in pack one and pack two.</p>
+
+<p>What could be at play here is a broken mental model of how webpack bundles assets for the browser.</p>
+
+<p>For Rails developers familiar with Sprockets, this is what the mental model could look like. Imagine requiring the &quot;moment&quot; library in one bundle and an imaginary moment plugin called &quot;timeago&quot; in another bundle.
+(TODO: image?)
+The resulting output mirrors the require statements in the source code. Since this is how things work in Sprockets, it might be reasonable to assume this is how things work in webpack.</p>
+
+<p>However, the picture is much different. Consider that the &quot;timeago&quot; plugin provides its own import of &quot;moment&quot;. Webpack recursively parses the import statements in all the dependencies within a single pack and will include those imports in the output.
+(TODO: image?)
+This means moment can end up in more than one bundle, even if you didn&#39;t explicitly import it; one of your dependencies did.</p>
+
+<p>The legacy Rails asset pipeline mental model is holding us back.</p>
+
+<p>In webpack/Webpacker, each pack is a separate dependency graph by default: all imported modules within a pack are included in the pack&#39;s output, regardless of whether that module is imported in another pack.</p>
+
+<p>Keep in mind, webpack has no knowledge of Rails and, by default, no knowledge we might intend to render multiple packs on a single page. We can do this if we want, but we have to configure webpack to do so; that&#39;s not happening in the cases I&#39;ve described in this post.</p>
+
+<p>What we want is a way to split code up into smaller pieces without all the overhead and potential bugs. It turns out, webpack was originally created to address exactly this, the problem of code-splitting. It&#39;s just done in a fundamentally different way than what you might be used to.</p>
+
+      <h2 id="a-note-on-performance" class="title title-h2">
+        <a name="a-note-on-performance" class="anchor" href="#a-note-on-performance">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        A note on performance
+      </h2>
+    
+<p>Let&#39;s acknowledge: <em>time is precious</em>.</p>
+
+<p>When an end user visits a page on your site, time is needed to request data from your servers and more time is needed for the browser to process and render that data. Decreasing that time is good for you and good for your end users.</p>
+
+<p>We all want faster websites. <a href="https://www.speedshop.co/" target="_blank" rel="noopener noreferrer">Nate Berkopec has made a career of it</a>.</p>
+
+<p><a href="https://www.railsspeed.com/" target="_blank" rel="noopener noreferrer"><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/complete-guide-to-rails-performance.png" alt="Screenshot of Complete Guide to Rails Performance home page" loading="lazy" /></a></p>
+
+<p>It goes without saying that the more JavaScript you bundle on a given page, more time will be needed for end users to download and parse that JavaScript. While this post isn&#39;t strictly a performance tutorial it will certainly help you avoid some common bottlenecks and helpful techniques related to minimizing asset bundle size.</p>
+
+      <h2 id="measurement" class="title title-h2">
+        <a name="measurement" class="anchor" href="#measurement">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Measurement
+      </h2>
+    
+<p>Any discussion of performance optimization should include some data analysis. I&#39;d recommend having a baseline of frontend user metrics, which you may be able to get with a monitoring tool like New Relic or even Google Analytics. There&#39;s also <a href="https://developers.google.com/web/tools/lighthouse" target="_blank" rel="noopener noreferrer">Lighthouse</a> which can give you some solid recommendations and estimate user metric scores over an emulated throttled network connection.</p>
+
+<p><em>A word about DevTools profiling</em></p>
+
+<p>You&#39;ll want to be able to back your choices with data rather than blind guessing or copy &amp; paste.</p>
+
+      <h3 id="visualization" class="title title-h3">
+        <a name="visualization" class="anchor" href="#visualization">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Visualization
+      </h3>
+    
+<p>I would also (right away) install the <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer">webpack-bundle-analyzer</a>. I&#39;d want to know what&#39;s going on in each of these packs you&#39;re using. As you saw in the other thread, you&#39;d want to run this tool against your production build.</p>
+
+<p>Pay close attention to what you see in the bundle analysis. When you start using multiple packs, you might be surprised what you see, namely, that you are bundling some of the same modules, like React in your case, <em>in every pack</em>. Why? Because you haven&#39;t instructed webpack to share modules across your bundles, i.e., webpack doesn&#39;t assume by default you have a multi-page application.</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/bundle-analysis-duplicate-modules.png" alt="Treemap diagram produced by webpack-bundle-analyzer with proper code-splitting" loading="lazy" /></p>
+
+<p>Look closely at the example above, which was generated from a demo app with three separate packs that render React components, and you can see react-dom in all three bundles. This is, at best, a bad UX, since you&#39;re forcing the user to download the same module(s) on different pages in different bundles, and at worst, a source of confounding bugs, especially when using multiple packs on a single page.</p>
+
+      <h2 id="assumptions" class="title title-h2">
+        <a name="assumptions" class="anchor" href="#assumptions">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Assumptions
+      </h2>
+    
+<p>We&#39;re at a point where we our main &quot;application.js&quot; pack has grown to large. We&#39;ve seen how manually splitting into multiple packs can lead to the duplicate module problem. If they way we&#39;ve been doing is wrong, <em>what&#39;s the right way?</em></p>
+
+<p>Before we can answer that question, we need to establish a few assumptions I&#39;ll have to make without knowing your application.</p>
+
+<p>I&#39;ll assume, from what you&#39;ve described, that you are building a &quot;multi-page application&quot;: server-side routing and a separate HTML views with some client-side rendering.</p>
+
+<p>This is different from a single-page application in which all the routing and rendering is performed on the client side. The reason for the distinction is that bundling advice may differ depending on the context.</p>
+
+<p>To start, what we need is one or very few entrypoint(s), i.e., packs. For smaller applications, just an &quot;application.js&quot; may be well worth the tradeoff of having an application that&#39;s easier to maintain over the added cost of learning how to best split up JS code with Webpack with little performance gain. For a larger application like Podia, I could envision a pack each for distinct sections of the site, like the public-facing storefront, the storefront editor, and the customer dashboard.</p>
+
+      <h2 id="dynamic-imports-webpack-39-s-superpower" class="title title-h2">
+        <a name="dynamic-imports-webpack-39-s-superpower" class="anchor" href="#dynamic-imports-webpack-39-s-superpower">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Dynamic Imports: webpack&#39;s superpower
+      </h2>
+    
+<p>Once JavaScript has been consolidated into one or a few packs, we should use <a href="https://webpack.js.org/guides/code-splitting/#dynamic-imports" target="_blank" rel="noopener noreferrer">dynamic imports</a> to lazy load page-specific code.</p>
+
+<p>What is a dynamic import? It&#39;s a declarative way of importing a JavaScript module asynchrously. Let&#39;s say you have just one pack, &quot;application.js&quot;; you would still place all your JavaScript within the &quot;application.js&quot; dependency graph, but not all of this code would be loaded up-front.</p>
+
+<p><strong>Before:</strong></p>
+
+<pre><code class="javascript">import &#39;../src/pages/storefront&#39;
+</code></pre>
+
+<p><strong>After:</strong></p>
+
+<pre><code class="javascript">import(&#39;../src/pages/storefront&#39;)
+</code></pre>
+
+<p>Webpack recognizes the dynamic <code>import()</code> function when it compiles your JS and will split the imported &quot;chunk&quot; into a separate file that can be loaded on-demand in the browser using a JS framework router or a simple trigger.</p>
+
+<p>One way to conditionally load a dynamic import based on the controller action is to use <a href="https://github.com/gazay/gon" target="_blank" rel="noopener noreferrer">the gon gem</a> bridge the Ruby-JavaScript divide:</p>
+
+<pre><code class="ruby">// storefront_controller.rb
+before_action :initialize_gon_pages
+
+def initialize_gon_pages
+  gon.pages ||= []
+  gon.pages &lt;&lt; &quot;storefront-editor&quot;
+end
+</code></pre>
+
+<pre><code class="javascript">// app/javascript/src/initializers.js
+const pages = gon.pages || []
+
+pages.forEach((page) =&gt; {
+  import(`../src/pages/${page}`)
+})
+</code></pre>
+
+<p>Another approach is push the logic into JavaScript:</p>
+
+<pre><code class="javascript">// app/javascript/src/initializers.js
+
+const path = window.location.pathname
+
+if (path === &#39;/storefront&#39;) {
+  import(&#39;../pages/storefront&#39;)
+} else if (path === &#39;/dashboard&#39; || path === &#39;/messages&#39;) {
+  import(&#39;../pages/cms&#39;)
+} // ...
+</code></pre>
+
+<p>One thing to note is that dynamic imports are asynchronously loaded (by design). This means you may need to adjust logic if your application currently assumes JavaScript will already be downloaded and parsed at a certain point, say when the <code>&#39;DOMContentLoaded&#39;</code> event fires.</p>
+
+<p>You could take advantage of the fact that dynamic imports return a Promise that resolves when the imported module had been loaded:</p>
+
+<pre><code class="javascript">const loaded = false
+
+import(&#39;../pages/storefront&#39;).then(() =&gt; (loaded = true))
+</code></pre>
+
+<p>Dynamic imports can also be used for more general &quot;initializers&quot;. The current_time_ago pack could just be a dynamic import to run on every page:</p>
+
+<pre><code class="javascript">// app/javascript/src/initializers.js
+
+import(&#39;./current-time-ago&#39;)
+</code></pre>
+
+<p>or make it conditional with an event listener:</p>
+
+<pre><code class="javascript">// app/javascript/src/initializers.js
+
+if (document.querySelector(&#39;.time-ago&#39;)) {
+  import(&#39;./current-time-ago&#39;)
+}
+</code></pre>
+
+<p>The promise resolves to imported module, which is useful for calling functions once loaded. Note also the use of the <code>webpackChunkName:</code> comment which is can be used to determine the name of the asynchronous JavaScript &quot;chunk&quot; that webpack will excise from the main bundle. See the <a href="https://webpack.js.org/api/module-methods/#magic-comments" target="_blank" rel="noopener noreferrer">webpack docs for the full-list of magic comments to augment dynamic import behavior</a>.</p>
+
+<pre><code class="javascript">function getDocument(src) {
+  return import(
+    /* webpackChunkName: &#39;pdfjs-dist&#39; */
+    &#39;pdfjs-dist/webpack&#39;
+  ).then((pdfjs) =&gt; {
+    return pdfjs.getDocument(src)
+  })
+}
+
+getDocument(&#39;my-document.pdf&#39;).then(/*...*/)
+</code></pre>
+
+      <h3 id="react-dynamic-imports" class="title title-h3">
+        <a name="react-dynamic-imports" class="anchor" href="#react-dynamic-imports">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        React 💜 dynamic imports
+      </h3>
+    
+<p>Many of the popular client-side frameworks offer support for dynamic imports.</p>
+
+<p>For example, React recently introduced the <code>React.Lazy</code> API which allows</p>
+
+<p><strong>Before:</strong></p>
+
+<pre><code class="javascript">import OtherComponent from &#39;./OtherComponent&#39;
+</code></pre>
+
+<p><strong>After:</strong></p>
+
+<pre><code class="javascript">const OtherComponent = React.lazy(() =&gt; import(&#39;./OtherComponent&#39;))
+</code></pre>
+
+<p>See also <a href="https://ui.dev/react-router-v4-code-splitting/" target="_blank" rel="noopener noreferrer">this terrific guide on UI.dev</a> that demonstrates how to use dynamic imports with React.Lazy and React router to provide code-splitting across client-side route boundaries.</p>
+
+      <h3 id="vue-dynamic-imports" class="title title-h3">
+        <a name="vue-dynamic-imports" class="anchor" href="#vue-dynamic-imports">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Vue 💜 dynamic imports
+      </h3>
+    
+<p>You may know I&#39;m a big fan of Vue, especially for frontends on Rails, and Vue has been dynamic-import friendly for what seems like ages.</p>
+
+<p><strong>Before:</strong></p>
+
+<pre><code class="javascript">import OtherComponent from &#39;./OtherComponent&#39;
+
+export default {
+  components: {
+    OtherComponent,
+  },
+}
+</code></pre>
+
+<p><strong>After:</strong></p>
+
+<pre><code class="javascript">export default {
+  components: {
+    OtherComponent: () =&gt; import(&#39;./OtherComponent&#39;),
+  },
+}
+</code></pre>
+
+<p>I love the elegance of the async component syntax there.</p>
+
+<p>Dynamic imports are also nicely integrated into the Vue router:</p>
+
+<p><strong>Before:</strong></p>
+
+<pre><code class="javascript">import Home from &#39;./Home&#39;
+const router = new VueRouter({
+  routes: [{ path: &#39;/home&#39;, component: Home }],
+})
+</code></pre>
+
+<p><strong>After</strong></p>
+
+<pre><code class="javascript">const Home = () =&gt; import(&#39;./OtherComponent&#39;)
+
+const router = new VueRouter({
+  routes: [{ path: &#39;/home&#39;, component: Home }],
+})
+</code></pre>
+
+<p>The key point is this: dynamic imports will keep your dependencies in the same dependency graph but across multiple packaged files. Webpack provides the glue to load these files on-demand.</p>
+
+<p>All the modules within to the original pack are shared across files regardless of whehter they were rendered as part of the initial page load or asynchronously through a dynamic import.</p>
+
+<p>No more overpacking.</p>
+
+      <h3 id="going-further-with-splitchunks" class="title title-h3">
+        <a name="going-further-with-splitchunks" class="anchor" href="#going-further-with-splitchunks">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Going further with splitChunks
+      </h3>
+    
+<p>The next step in the webpack optimization journey is to use <a href="https://help.github.com/en/github/managing-files-in-a-repository/getting-permanent-links-to-files" target="_blank" rel="noopener noreferrer">the splitChunks configuration API</a> to split out bundles for vendor code that can be shared across packs. In other words, browsers wouldn&#39;t have to pay the cost of re-downloading bundles containing moment.js, lodash.js, etc., across multiple pages with a warm cache.</p>
+
+<p>Let&#39;s assume you&#39;ve got your head wrapped around the problem... how do you solve it? For a multi-page application, <a href="https://webpack.js.org/concepts/entry-points/#multi-page-application" target="_blank" rel="noopener noreferrer">webpack recommends</a> the <a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer">splitChunks optimization</a>.</p>
+
+<p>I won&#39;t go into too much detail about this API, which provides a number of options to play with, but it&#39;s easy enough to <a href="https://github.com/rails/webpacker/blob/master/docs/webpack.md#add-splitchunks-webpack-v4" target="_blank" rel="noopener noreferrer">enable it through the Webpacker config</a>:</p>
+
+<pre><code class="js">environment.splitChunks()
+</code></pre>
+
+<p>The result might looks something like this:
+<img src="/assets/images/blog/draft-guide-to-page-specific-javascript/bundle-analysis-split-chunks.png" alt="Treemap diagram produced by webpack-bundle-analyzer with proper splitChunks code-splitting" loading="lazy" /></p>
+
+<p>Notice it created <em>more bundles</em> without the duplication. To correctly render a given page, there are some &quot;vendor&quot; packs and some shared bundles that webpack spits out to go with your explicit entry points. This is why the splitChunks optimization requires separate view helpers for rendering the javascript and stylesheet tags, e.g. <a href="https://github.com/rails/webpacker/blob/22ab02b7c84e917f985ecc76f5916d144f43bfbf/lib/webpacker/helper.rb#L102-L104" target="_blank" rel="noopener noreferrer">https://github.com/rails/webpacker/blob/22ab02b7c84e917f985ecc76f5916d144f43bfbf/lib/webpacker/helper.rb#L102-L104</a></p>
+
+<p>Webpack does the splitting in away so that the modules can be shared across bundles. Your application will now render <em>more</em> bundles at a reduced cost across multiple pages (and even more so in a single page if your CDN provider has HTTP/2 enabled).</p>
+
+<p>Beware though, this technique is a bit more advanced. It requires the use of separate Rails helpers, <code>javascript_packs_with_chunks_tag</code> and <code>stylesheet_packs_with_chunks_tag</code> which will output multiple bundles produced from a single pack and these helpers should only be used once during the page render. It may take some <a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer">reading up on the webpack docs</a> and some experimentation with the chunking logic to achieve optimal results.</p>
+
+      <h2 id="summing-up" class="title title-h2">
+        <a name="summing-up" class="anchor" href="#summing-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Summing up
+      </h2>
+    
+<p>Webpack can be a bit confusing to understand at first and Webpacker goes a long way toward providing that &quot;conceptual compression&quot; to get developers up-and-running with webpack on Rails. Unfortunately, Webpacker doesn&#39;t yet provide the all the guard rails we need to avoid problems like overpacking.</p>
+
+<p>Embracing new tools may mean a little more investment along with letting go of the way we used to do things. Applying the techniques described here can help ensure both a good experience for clients, who want faster web pages, and for developers, who want faster builds and fewer bugs.</p>
+
+<p>Resources</p>
+
+<p><a href="https://stackoverflow.com/questions/59493803/using-rails-6-where-do-you-put-your-page-specific-javascript-code/59495659#59495659" target="_blank" rel="noopener noreferrer">Where do you put your page specific javascript</a></p>
+
+<p><a href="https://ui.dev/react-router-v4-code-splitting/" target="_blank" rel="noopener noreferrer">Code Splitting with React Router</a></p>
+
+<p><a href="https://dev.to/goenning/how-we-reduced-our-initial-jscss-size-by-67-3ac0#code-splitting-on-route-level" target="_blank" rel="noopener noreferrer">How we reduced our initial JS/CSS size by 67%</a></p>
+
+<p><a href="https://what-problem-does-it-solve.com/webpack/intro.html" target="_blank" rel="noopener noreferrer">https://what-problem-does-it-solve.com/webpack/intro.html</a></p>
+
+<p>Optimizing Podia&#39;s page</p>
+
+<p>Github: example/podia-overpacking</p>
+
+<p>Commit: 332b82a
+Add Podia example with multiple packs, duplicate modules</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/demo-podia/duplicate-modules-main.png" alt="Bundle-analyzer treemap with duplicate modules" loading="lazy" /></p>
+
+<p>Commit: b38b343
+Refactoring to dynamic imports with pages and initializers</p>
+
+<p>&lt;%= Gon::Base.render_data %&gt;</p>
+
+<script>
+//<![CDATA[
+window.gon={};gon.pages=["welcome"];
+//]]>
+</script>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/demo-podia/dynamic-imports-main.png" alt="Bundle-analyzer treemap with dynamic imports" loading="lazy" /></p>
+
+<p>Commit: 059058a
+Ignoring moment locales</p>
+
+<pre><code class="javascript">const { environment } = require(&#39;@rails/webpacker&#39;)
+const webpack = require(&#39;webpack&#39;)
+
+environment.plugins.append(
+  &#39;IgnoreMomentLocales&#39;,
+  new webpack.ContextReplacementPlugin(
+    /moment[/\\]locale$/,
+    /(en-us|en-gb)/,
+  ),
+)
+</code></pre>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/demo-podia/ignore-moment-locales-main.png" alt="Bundle-analyzer treemap with moment locales ignored" loading="lazy" /></p>
+
+<p>Commit: 91803a6
+Adding splitChunks</p>
+
+<pre><code class="javascript">environment.splitChunks((config) =&gt; {
+  return {
+    ...config,
+    ...{
+      optimization: {
+        runtimeChunk: &#39;single&#39;,
+        splitChunks: {
+          chunks: &#39;all&#39;,
+          name: true,
+          cacheGroups: {
+            vendors: {
+              test: /[\\/]node_modules[\\/]/,
+              priority: -10,
+            },
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      },
+    },
+  }
+})
+</code></pre>
+
+<pre><code class="html">&lt;%= javascript_packs_with_chunks_tag &#39;application&#39; %&gt;
+&lt;script src=&quot;/packs/js/runtime~application-7c7f8f4da27353dce15d.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/packs/js/vendors~application-04bdba7d463b54124aa6.chunk.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/packs/js/application-fe887f69b6ce75f78b20.chunk.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/demo-podia/split-chunks-main.png" alt="Bundle analyzer treemap with splitChunks optimization" loading="lazy" /></p>
+
+<p>Commit: 86780fe
+Multiple packs with split chunks</p>
+
+<pre><code class="ruby">class WebpackerHelper
+  def javascript_packs
+    @javascript_packs ||= %w[application]
+  end
+
+  def add_javascript_pack(pack_name)
+    javascript_packs &lt;&lt; pack_name
+  end
+end
+</code></pre>
+
+<pre><code class="html">&lt;%= add_javascript_pack &#39;welcome&#39; %&gt;
+</code></pre>
+
+<pre><code class="html">&lt;%= javascript_packs_with_chunks_tag *javascript_packs %&gt;
+&lt;script src=&quot;/packs/js/runtime-e286e4ca3b88c69b473f.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/packs/js/vendors~application~welcome-98f508416b8ba6b66d62.chunk.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/packs/js/vendors~application-1c7a4ba8dc1716143987.chunk.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/packs/js/application-8d58c7b893b6b1951a2e.chunk.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/packs/js/welcome-fb37443e0ecdb8bb2456.chunk.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<hr>
+
+      <h3 id="rule-1-use-the-webpack-bundle-analyzer" class="title title-h3">
+        <a name="rule-1-use-the-webpack-bundle-analyzer" class="anchor" href="#rule-1-use-the-webpack-bundle-analyzer">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Rule 1: Use the webpack-bundle-analyzer
+      </h3>
+    
+<p>If there&#39;s one thing you should do right now, it&#39;s install the <a href="https://github.com/webpack-contrib/webpack-bundle-analyzer" target="_blank" rel="noopener noreferrer">webpack-bundle-analyzer</a>.</p>
+
+<p>With it, you&#39;ll be able to generate a</p>
+
+<p><img src="/assets/images/blog/draft-guide-to-page-specific-javascript/bundle-analysis-duplicate-modules.png" alt="Treemap diagram produced by webpack-bundle-analyzer with proper code-splitting" loading="lazy" /></p>
+
+<p>No tool has helped me better understand what&#39;s happening when I bundle my source code with webpack.</p>
+
+<p>If you must divide your code into multiple packs this tool is a <em>must-have</em> to ensure you avoid duplicating modules on the same page.</p>
+
+      <h3 id="rule-2-render-one-pack-per-page-to-start" class="title title-h3">
+        <a name="rule-2-render-one-pack-per-page-to-start" class="anchor" href="#rule-2-render-one-pack-per-page-to-start">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Rule 2: Render one pack per page to start
+      </h3>
+    
+<p>If you&#39;re just getting started with webpack through Webpacker, take baby steps towards optimization. As we&#39;ve seen, rendering multiple packs on a single page.</p>
+
+<p>If you&#39;re know what you&#39;re doing with webpack, you can absolutely use more than one pack on a single page. There are ways to configure webpack to share modules across entry points, which we&#39;ll get to later. Until you reach a certain comfort level, use one pack per page. That way, you&#39;ll ensure you won&#39;t duplicate modules on the same page.</p>
+
+      <h2 id="rule-3-code-split-with-dynamic-imports-webpack-39-s-superpower" class="title title-h2">
+        <a name="rule-3-code-split-with-dynamic-imports-webpack-39-s-superpower" class="anchor" href="#rule-3-code-split-with-dynamic-imports-webpack-39-s-superpower">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Rule 3: Code-split with dynamic imports, webpack&#39;s superpower
+      </h2>
+    
+<p>Ok, at this point, you might be wondering</p>
+
+<p>Once JavaScript has been consolidated into one or a few packs, we should use <a href="https://webpack.js.org/guides/code-splitting/#dynamic-imports" target="_blank" rel="noopener noreferrer">dynamic imports</a> to lazy load page-specific code.</p>
+
+<p>What is a dynamic import? It&#39;s a declarative way of importing a JavaScript module asynchrously. Let&#39;s say you have just one pack, &quot;application.js&quot;; you would still place all your JavaScript within the &quot;application.js&quot; dependency graph, but not all of this code would be loaded up-front.</p>
+
+<p><strong>Before:</strong></p>
+
+<pre><code class="javascript">import &#39;../src/pages/storefront&#39;
+</code></pre>
+
+<p><strong>After:</strong></p>
+
+<pre><code class="javascript">import(&#39;../src/pages/storefront&#39;)
+</code></pre>
+
+<p>Webpack recognizes the dynamic <code>import()</code> function when it compiles your JS and will split the imported &quot;chunk&quot; into a separate file that can be loaded on-demand in the browser using a JS framework router or a simple trigger. The dynamic import can be triggered conditionally like any other function, and unlike traditional imports.</p>
+
+<p>The key point is this: dynamic imports will keep your dependencies in the same dependency graph but across multiple packaged files. Webpack provides the glue to load these files on-demand.</p>
+
+<p>All the modules within to the original pack are shared across files regardless of whehter they were rendered as part of the initial page load or asynchronously through a dynamic import.</p>
+
+      <h3 id="rule-4-enable-quot-splitchunks-quot-if-you-must-use-multiple-packs-per-page" class="title title-h3">
+        <a name="rule-4-enable-quot-splitchunks-quot-if-you-must-use-multiple-packs-per-page" class="anchor" href="#rule-4-enable-quot-splitchunks-quot-if-you-must-use-multiple-packs-per-page">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Rule 4: Enable &quot;splitChunks&quot; if you must use multiple packs per page
+      </h3>
+    
+<p>The next step in the webpack optimization journey is to use <a href="https://help.github.com/en/github/managing-files-in-a-repository/getting-permanent-links-to-files" target="_blank" rel="noopener noreferrer">the splitChunks configuration API</a> to split out bundles for vendor code that can be shared across packs. In other words, browsers wouldn&#39;t have to pay the cost of re-downloading bundles containing moment.js, lodash.js, etc., across multiple pages with a warm cache.</p>
+
+<p>Let&#39;s assume you&#39;ve got your head wrapped around the problem... how do you solve it? For a multi-page application, <a href="https://webpack.js.org/concepts/entry-points/#multi-page-application" target="_blank" rel="noopener noreferrer">webpack recommends</a> the <a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer">splitChunks optimization</a>.</p>
+
+<p>I won&#39;t go into too much detail about this API, which provides a number of options to play with, but it&#39;s easy enough to <a href="https://github.com/rails/webpacker/blob/master/docs/webpack.md#add-splitchunks-webpack-v4" target="_blank" rel="noopener noreferrer">enable it through the Webpacker config</a>:</p>
+
+<pre><code class="js">environment.splitChunks()
+</code></pre>
+
+<p>The result might looks something like this:
+<img src="/assets/images/blog/draft-guide-to-page-specific-javascript/bundle-analysis-split-chunks.png" alt="Treemap diagram produced by webpack-bundle-analyzer with proper splitChunks code-splitting" loading="lazy" /></p>
+
+<p>Notice it created <em>more bundles</em> without the duplication. To correctly render a given page, there are some &quot;vendor&quot; packs and some shared bundles that webpack spits out to go with your explicit entry points. This is why the splitChunks optimization requires separate view helpers for rendering the javascript and stylesheet tags, e.g. <a href="https://github.com/rails/webpacker/blob/22ab02b7c84e917f985ecc76f5916d144f43bfbf/lib/webpacker/helper.rb#L102-L104" target="_blank" rel="noopener noreferrer">https://github.com/rails/webpacker/blob/22ab02b7c84e917f985ecc76f5916d144f43bfbf/lib/webpacker/helper.rb#L102-L104</a></p>
+
+<p>Webpack does the splitting in away so that the modules can be shared across bundles. Your application will now render <em>more</em> bundles at a reduced cost across multiple pages (and even more so in a single page if your CDN provider has HTTP/2 enabled).</p>
+
+<p>Beware though, this technique is a bit more advanced. It requires the use of separate Rails helpers, <code>javascript_packs_with_chunks_tag</code> and <code>stylesheet_packs_with_chunks_tag</code> which will output multiple bundles produced from a single pack and these helpers should only be used once during the page render. It may take some <a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer">reading up on the webpack docs</a> and some experimentation with the chunking logic to achieve optimal results.</p>
+
+      <h2 id="summing-up_1" class="title title-h2">
+        <a name="summing-up_1" class="anchor" href="#summing-up_1">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Summing up
+      </h2>
+    
+<p>Webpack can be a bit confusing to understand at first and Webpacker goes a long way toward providing that &quot;conceptual compression&quot; to get developers up-and-running with webpack on Rails. Unfortunately, Webpacker doesn&#39;t yet provide the all the guard rails we need to avoid problems like overpacking.</p>
+
+<p>Embracing new tools may mean a little more investment along with letting go of the way we used to do things. Applying the techniques described here can help ensure both a good experience for clients, who want faster web pages, and for developers, who want faster builds and fewer bugs.</p>
+
+<p>Resources</p>
+
+<p><a href="https://stackoverflow.com/questions/59493803/using-rails-6-where-do-you-put-your-page-specific-javascript-code/59495659#59495659" target="_blank" rel="noopener noreferrer">Where do you put your page specific javascript</a></p>
+
+<p><a href="https://ui.dev/react-router-v4-code-splitting/" target="_blank" rel="noopener noreferrer">Code Splitting with React Router</a></p>
+
+<p><a href="https://dev.to/goenning/how-we-reduced-our-initial-jscss-size-by-67-3ac0#code-splitting-on-route-level" target="_blank" rel="noopener noreferrer">How we reduced our initial JS/CSS size by 67%</a></p>
+
+<p><a href="https://what-problem-does-it-solve.com/webpack/intro.html" target="_blank" rel="noopener noreferrer">https://what-problem-does-it-solve.com/webpack/intro.html</a></p>
+
+<hr>
+
+      <h2 id="guidelines-for-effective-bundling" class="title title-h2">
+        <a name="guidelines-for-effective-bundling" class="anchor" href="#guidelines-for-effective-bundling">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Guidelines for effective bundling
+      </h2>
+    
+<p>Now that we know what the problem is and how to diagnose it, what can we do about it?</p>
+
+<p>In a future post, I&#39;ll go into detail about how to fix</p>
+
+<p>Below, I summarize the steps I recommend taking to address code bloat in a Webpacker + Rails application. I have the webpack newbie in mind rather than folks more experienced with JavaScript module bundlers who may prioritize differently. The good news is, we can address these issues in stages and you may not need to work through all these concerns to reap benefits.</p>
+
+      <h3 id="step-1-start-with-one-entry-point-per-page" class="title title-h3">
+        <a name="step-1-start-with-one-entry-point-per-page" class="anchor" href="#step-1-start-with-one-entry-point-per-page">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Step 1: Start with one entry point per page
+      </h3>
+    
+<p>Webpack recommends one entry point per page. <a href="https://webpack.js.org/concepts/entry-points" target="_blank" rel="noopener noreferrer">From the webpack docs</a>:</p>
+
+<blockquote>
+<p>As a rule of thumb: Use exactly one entry point for each HTML document.</p>
+</blockquote>
+
+<p>That&#39;s how webpack assumes your application will work out-of-the-box.</p>
+
+<p>Practically speaking, that means there would be only one usage of <code>javascript_pack_tag</code> per page:</p>
+
+<pre><code class="html">&lt;%= javascript_pack_tag &quot;application&quot; %&gt;
+</code></pre>
+
+<p>Rendering multiple entry points on a single page requires additional configuration; and lead to the issues we&#39;ve highlighted in this post. We&#39;ll get to that, but this is how what I recommend as you start out.</p>
+
+<p>Does this mean you have to put everything in one pack? No, but...</p>
+
+      <h3 id="step-2-keep-the-number-of-packs-small" class="title title-h3">
+        <a name="step-2-keep-the-number-of-packs-small" class="anchor" href="#step-2-keep-the-number-of-packs-small">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Step 2: Keep the number of packs small
+      </h3>
+    
+<p>Don&#39;t split your JavaScript into a ton of little packs/entry points unless you understand the tradeoffs and you&#39;re comfortable with webpack.</p>
+
+<p>For smaller applications, just an &quot;application.js&quot; may be well worth the tradeoff of having an application that&#39;s easier to maintain over the added cost of learning how to best split up JS code with webpack with little performance gain.</p>
+
+<p>For a larger application, I could envision a small number of packs to organize JavaScript for distinct sections of the application, like a public-facing storefront, a storefront editor, and a customer dashboard.</p>
+
+<p><em>Ok Ross, this sounds ridiculous. Render one pack per page, keep the number of packs small... these bundles could get huge!</em></p>
+
+<p>Ah, now we&#39;ve come to webpack&#39;s sweet spot</p>
+
+      <h3 id="step-3-use-dynamic-imports" class="title title-h3">
+        <a name="step-3-use-dynamic-imports" class="anchor" href="#step-3-use-dynamic-imports">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Step 3: Use dynamic imports
+      </h3>
+    
+<p>Webpack&#39;s original creator famously built it primarily to solve this problem of code-splitting. The result is <a href="https://webpack.js.org/guides/code-splitting/#dynamic-imports" target="_blank" rel="noopener noreferrer">dynamic imports</a>.</p>
+
+<p>Dynamic imports allow you to define split points <em>in code</em> rather than by configuration or through multiple entry points.</p>
+
+<pre><code class="javascript">// Contrived examples
+
+// Import page-specific chunks
+if (currentPage === &#39;storefront&#39;) {
+  import(&#39;../src/pages/storefront&#39;)
+}
+
+// Import progressive enhancement chunks
+if (document.querySelector(&#39;[data-timeago]&#39;).length) {
+  import(&#39;../src/initializer/current_time_ago&#39;)
+}
+
+// Import bigger on-demand chunks following user interaction
+document.addEventListener(&#39;[data-open-trix-editor]&#39;, &#39;click&#39;, () =&gt; {
+  import(&#39;../src/components/trix_editor&#39;)
+})
+</code></pre>
+
+<p>In the example above, the imported modules are not separate packs. They are simply additional modules that get included in the same dependency graph but are compiled as <em>separate files</em> which webpack will load asynchronously at runtime.</p>
+
+<p>This is the first step in achieving code-splitting with webpack/Webpacker while avoiding the duplicate module problem.</p>
+
+<p>Does this mean import every little module in little dynamic chunks? Absolutely not. Measure, experiment. Consider the tradeoffs with handling asynchronous code loading. Time box your efforts</p>
+
+      <h3 id="step-4-go-further-with-splitchunks-when-you-39-re-ready" class="title title-h3">
+        <a name="step-4-go-further-with-splitchunks-when-you-39-re-ready" class="anchor" href="#step-4-go-further-with-splitchunks-when-you-39-re-ready">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Step 4: Go further with splitChunks... when you&#39;re ready
+      </h3>
+    
+<p>For a more powerful combination, use page-specific dynamic imports combined with <a href="https://help.github.com/en/github/managing-files-in-a-repository/getting-permanent-links-to-files" target="_blank" rel="noopener noreferrer">the splitChunks configuration API</a> to split out bundles for vendor code that can be shared across packs. In other words, browsers wouldn&#39;t have to pay the cost of re-downloading bundles containing moment.js, lodash.js, etc., across multiple pages with a warm cache.</p>
+
+<p>Beware though, this technique is a bit more advanced. It requires the use of separate Rails helpers, <code>javascript_packs_with_chunks_tag</code> and <code>stylesheet_packs_with_chunks_tag</code> which will output multiple bundles produced from a single pack and these helpers should only be used once during the page render. It may take some <a href="https://webpack.js.org/plugins/split-chunks-plugin/" target="_blank" rel="noopener noreferrer">reading up on the webpack docs</a> and some experimentation with the chunking logic to achieve optimal results.</p>
+
+<p>Check out the open-source <a href="https://github.com/forem/forem" target="_blank" rel="noopener noreferrer">Forem</a> application (formerly dev.to) for a good example of how to do &quot;splitChunks&quot;.</p>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to webpack</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2020 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src='/js/runtime.be1555700fe3c257b41b.js'></script><script src='/js/vendors~app.chunk.6c6b7f30d28c87e9d1b2.js'></script><script src='/js/app.chunk.6ea60510f3639c2920d8.js'></script>
+    
+  </body>
+</html>

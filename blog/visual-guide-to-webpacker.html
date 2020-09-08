@@ -22,7 +22,7 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
 
-    <link href='/css/app.chunk.41fdf5105f8aac1adef0.css' rel='stylesheet' media='all'></link>
+    <link href='/css/app.chunk.adf8a6bd0be6bdc18aa2.css' rel='stylesheet' media='all'></link>
     <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.js"></script>
   </head>
   <body id="application" class="leading-relaxed">
@@ -63,6 +63,12 @@
     <p>Confused about how Webpacker works in Rails? Let&#39;s unpack it with some diagrams.</p>
 
 <p>First, we&#39;ll take a look at the &quot;classic&quot; way of bundling assets with Rails: the Rails asset pipeline. Let&#39;s see how things look when requests are served with the Rails asset pipeline in development.</p>
+
+<blockquote>
+<p>Struggling with webpack and Webpacker?</p>
+
+<p><a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"><strong>Subscribe to my newsletter for occasional emails with new content.</strong></a>.</p>
+</blockquote>
 
       <h4 id="html-request-with-the-asset-pipeline" class="title title-h4">
         <a name="html-request-with-the-asset-pipeline" class="anchor" href="#html-request-with-the-asset-pipeline">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
@@ -376,6 +382,12 @@ webpack: bin/webpack-dev-server
     <h2 class="mb-8">More posts</h2>
       <article class="index-post">
     <header class="index-title">
+      <a href="/blog/rails-apps-overpacking-with-webpacker.html">These Rails apps are overpacking with Webpacker</a>
+    </header>
+      <p>A case study of Rails applications making a common Webpacker mistake of rendering modules multiple times on a single page. We'll describe why the problem happens and present a Webpacker Packing Checklist for proper code-splitting.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
       <a href="/blog/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html">Why doesn't Webpacker use my test config when I run Rails tests?</a>
     </header>
       <p>When running Rails system or integration tests, you might be surprised to learn that Webpacker will load your development webpack config. What's the deal?</p>
@@ -385,12 +397,6 @@ webpack: bin/webpack-dev-server
       <a href="/blog/webpacker-output-analysis-with-webpack-bundle-analyzer.html">The webpack plugin I can't live without</a>
     </header>
       <p>In this post, we'll take a look at installing and using the webpack-bundle-analyzer, perhaps the most invaluable webpack plugin, to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker.</p>
-  </article>
-  <article class="index-post">
-    <header class="index-title">
-      <a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a>
-    </header>
-      <p>A new Rails 6 application will install both Webpacker and Sprockets by default. Don't they solve the same problem? This article dives into why Sprockets lives on even though webpack has surpassed most of its features and why you might want to choose one over the other.</p>
   </article>
 
   </section>
