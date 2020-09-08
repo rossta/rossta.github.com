@@ -18,6 +18,10 @@ Confused about how Webpacker works in Rails? Let's unpack it with some diagrams.
 
 First, we'll take a look at the "classic" way of bundling assets with Rails: the Rails asset pipeline. Let's see how things look when requests are served with the Rails asset pipeline in development.
 
+> Struggling with webpack and Webpacker?
+>
+> [**Subscribe to my newsletter for occasional emails with new content.**](https://little-fog-6985.ck.page/9c5bc129d8).
+
 #### HTML request with the asset pipeline
 
 ![Rails request with the asset pipeline](blog/visual-guide-to-webpacker/webpacker-asset-pipeline-1.png)
