@@ -1,5 +1,5 @@
 ---
-title: These Rails apps are overpacking JavaScript bundles
+title: These Rails apps are overpacking their JavaScript bundles
 author: Ross Kaffenberger
 published: true
 summary: How to diagnose and prevent the "redundant module" problem with Webpacker
