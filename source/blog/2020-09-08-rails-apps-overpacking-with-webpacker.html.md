@@ -1,8 +1,8 @@
 ---
-title: These Rails apps are overpacking with Webpacker
+title: These Rails apps are overpacking JavaScript bundles
 author: Ross Kaffenberger
 published: true
-summary: How to diagnose and prevent the "redundant module" problem
+summary: How to diagnose and prevent the "redundant module" problem with Webpacker
 description: A case study of Rails applications making a common Webpacker mistake of rendering modules multiple times on a single page. We'll describe why the problem happens and present a Webpacker Packing Checklist for proper code-splitting.
 pull_image: 'blog/stock/jorgen-haland-sheep-unsplash.jpg'
 pull_image_caption: Photo by Jørgen Håland on Unsplash
