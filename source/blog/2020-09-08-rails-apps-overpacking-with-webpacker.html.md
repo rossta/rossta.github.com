@@ -102,7 +102,7 @@ Here's a screenshot of the source-map-explorer treemap for the three Webpacker p
 
 ![Treemap image of duplicated JavaScript bundles loaded on Podia's storefront editor](blog/overpacking-case-studies/podia-source-map-explorer-annotated.png)
 
-You can see the JavaScript bundles in purple, blue, and orange, and with each, you can see included modules such as `actioncable`, `stimulus`, `moment.js`, `core-js`, and `cableready`.
+You can see the three JavaScript bundles in purple, blue, and orange, and with each, you can see included modules such as `actioncable`, `stimulus`, `moment.js`, `core-js`, and `cableready`.
 
 Here's the problem: **some modules appear twice on the same page!**
 
