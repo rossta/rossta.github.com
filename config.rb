@@ -220,10 +220,11 @@ helpers do
   end
 
   def webpack_on_rails_articles
-    tags = %w[Webpack Rails]
-    blog("blog").articles.select { |a| (tags & a.tags) == tags }
+    @webpack_on_rails_articles ||= begin
+      tags = %w[Webpack Rails]
+      blog("blog").articles.select { |a| (tags & a.tags) == tags }
+    end
   end
-
 
   # Look for similar articles published since and prior to current
   # Fall back to different articles

@@ -11,6 +11,7 @@ category: Code
 tags:
   - Rails
   - Webpack
+  - WTF
 ---
 
 Have you seen this console error while trying to adopt webpack?

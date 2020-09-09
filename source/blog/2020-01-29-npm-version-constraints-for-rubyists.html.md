@@ -12,6 +12,7 @@ tags:
   - Rails
   - Webpack
   - JavaScript
+  - Guide
 ---
 In this post, I want to answer the following question for Rubyists:
 

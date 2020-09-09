@@ -11,6 +11,7 @@ category: Code
 tags:
   - Webpack
   - Rails
+  - WTF
 ---
 
 I recently encountered a Rails app at work that was spending nearly seven minutes precompiling assets:

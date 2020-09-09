@@ -11,6 +11,7 @@ category: Code
 tags:
   - Rails
   - Webpack
+  - Debugging
 ---
 
 It's nice that the Rails Webpacker gem and NPM package abstracts your webpack config... that is until you need to make changes.

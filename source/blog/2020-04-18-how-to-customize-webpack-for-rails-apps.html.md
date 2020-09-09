@@ -11,6 +11,7 @@ category: Code
 tags:
   - Rails
   - Webpack
+  - Guide
 ---
 
 When [adjusting webpacker.yml](/blog/how-to-use-webpacker-yml.html) is not enough, it might be necessary to modify Webpacker's default webpack configuration. Configuring webpack is precisely the main job of Webpacker's NPM package, `@rails/webpacker`.

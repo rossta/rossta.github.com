@@ -12,6 +12,7 @@ category: Code
 tags:
   - Webpack
   - Rails
+  - Guide
 ---
 
 Webpack isn't just for JavaScript. You can bundle images with it too. [Webpacker](https://github.com/rails/webpacker) makes it relatively easy to work with images, but it is admittedly confusing at first: _Images in JavaScript?_
