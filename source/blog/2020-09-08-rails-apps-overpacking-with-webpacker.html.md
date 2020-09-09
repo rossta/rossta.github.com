@@ -24,7 +24,7 @@ I believe Rails developers may think the mechanics of packaging JavaScript for t
 
 As we'll see, Webpacker is a very different beast than the Rails asset pipeline. We need a different mental model to understand how it works. We should also follow a few basic guidelines to deliver JavaScript correctly and avoid falling victim to overpacking.
 
-First, let's take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild`.
+First, let's take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild.
 
 > **Help me help them**: My aim in highlighting these apps is to educate, not criticize!
 >
