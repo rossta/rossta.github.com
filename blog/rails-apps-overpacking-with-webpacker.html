@@ -70,7 +70,7 @@
 
 <p>As we&#39;ll see, Webpacker is a very different beast than the Rails asset pipeline. We need a different mental model to understand how it works. We should also follow a few basic guidelines to deliver JavaScript correctly and avoid falling victim to overpacking.</p>
 
-<p>First, let&#39;s take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild`.</p>
+<p>First, let&#39;s take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild.</p>
 
 <blockquote>
 <p><strong>Help me help them</strong>: My aim in highlighting these apps is to educate, not criticize!</p>
@@ -167,7 +167,7 @@
 
 <p><img src="/assets/images/blog/overpacking-case-studies/podia-source-map-explorer-annotated.png" alt="Treemap image of duplicated JavaScript bundles loaded on Podia's storefront editor" loading="lazy" /></p>
 
-<p>You can see the JavaScript bundles in purple, blue, and orange, and with each, you can see included modules such as <code>actioncable</code>, <code>stimulus</code>, <code>moment.js</code>, <code>core-js</code>, and <code>cableready</code>.</p>
+<p>You can see the three JavaScript bundles in purple, blue, and orange, and with each, you can see included modules such as <code>actioncable</code>, <code>stimulus</code>, <code>moment.js</code>, <code>core-js</code>, and <code>cableready</code>.</p>
 
 <p>Here&#39;s the problem: <strong>some modules appear twice on the same page!</strong></p>
 
