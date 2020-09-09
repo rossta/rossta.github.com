@@ -1,3 +1,4 @@
+<% prompt ||= nil %>
 <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
 <form
   action="https://app.convertkit.com/forms/<%= convertkit_inline_form_id %>/subscriptions?ref=<%= convertkit_campaign %>"
@@ -11,8 +12,10 @@
 >
   <div>
     <div class="mb-4">
-      <% if current_article.present? %>
-        <%= partial "partials/signup_post_prompt" %>
+      <% if prompt %>
+        <%= partial "partials/signup_prompt_#{prompt}" %>
+      <% elsif current_article.present? %>
+        <%= partial "partials/signup_prompt_webpack_on_rails_landing" %>
       <% else %>
         <%= partial "partials/signup_prompt" %>
       <% end %>

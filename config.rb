@@ -219,6 +219,13 @@ helpers do
     blog("blog").articles.select { |a| a.data[:popular] }.sort_by { |a| a.data[:popular] }
   end
 
+  def webpack_on_rails_articles
+    @webpack_on_rails_articles ||= begin
+      tags = %w[Webpack Rails]
+      blog("blog").articles.select { |a| (tags & a.tags) == tags }
+    end
+  end
+
   # Look for similar articles published since and prior to current
   # Fall back to different articles
   def related_articles(article, count = 3)

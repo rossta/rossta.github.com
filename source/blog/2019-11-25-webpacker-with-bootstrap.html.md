@@ -12,6 +12,7 @@ category: Code
 tags:
   - Rails
   - Webpack
+  - Guide
 ---
 
 In this post, I'll demonstrate how to set up a Rails application with Bootstrap for Webpacker.

@@ -11,6 +11,7 @@ category: Code
 tags:
   - Rails
   - Webpack
+  - Guide
 ---
 Though Webpacker adds a layer of "convention over configuration" in regards to webpack integration with Rails, the need for configuration remains. In this post, I'll describe the role of the `webpacker.yml` file for Webpacker configuration.
 

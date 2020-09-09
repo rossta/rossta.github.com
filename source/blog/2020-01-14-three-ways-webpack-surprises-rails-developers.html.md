@@ -11,6 +11,7 @@ category: Code
 tags:
   - Rails
   - Webpack
+  - WTF
 ---
 
 When I first started working with webpack, I didn't realize how under-prepared I was. I was tasked with [integrating webpack into a large Rails app](/blog/from-sprockets-to-webpack.html) and I made a lot of mistakes along the way. I assumed how things should behave based on my previous experience with the Rails asset pipeline. Many of these assumptions turned out to be wrong. This was frustrating and humbling.
@@ -83,7 +84,7 @@ Many jQuery plugins (or many legacy plugins in general) have been written withou
 
 In webpack, global variables are not your friend, my friend.
 
-### 2. Webpack treats _everything_ as a JavaScript module
+### 2. Webpack treats everything as a JavaScript module
 
 Webpack is so committed to its "module bundler" role it treats other static assets, including CSS, images, fonts, etc., as JavaScript modules too.
 
