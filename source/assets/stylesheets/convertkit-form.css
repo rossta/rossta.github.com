@@ -316,9 +316,6 @@
     transform: scale(1);
   }
 }
-.formkit-form[data-uid='cda82aafbf'] {
-  max-width: 700px;
-}
 .formkit-form[data-uid='cda82aafbf'] [data-style='clean'] {
   width: 100%;
 }
