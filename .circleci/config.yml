@@ -23,16 +23,15 @@ jobs:
 
       - restore_cache:
           keys:
-            - gem-cache-v1-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ .Branch }}
-            - gem-cache-v1-
-            - gem-cache-
+            - bundle-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - bundle-cache-{{ .Branch }}
+            - bundle-cache-
 
       - run: bundle config set path 'vendor/bundle'
       - run: bundle install
 
       - save_cache:
-          key: gem-cache-v1-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          key: bundle-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
