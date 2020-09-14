@@ -29,7 +29,7 @@
 
 &lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/crash.gif" alt="Crash bang warehouse accident" loading="lazy" /&gt;&lt;/p&gt;
 
-&lt;p&gt;As we&amp;#39;ll see, Webpacker is a very different beast than the Rails asset pipeline. We need a different mental model to understand how it works. We should also follow a few basic guidelines to deliver JavaScript correctly and avoid falling victim to overpacking.&lt;/p&gt;
+&lt;p&gt;As we&amp;#39;ll see, Webpacker is a very different beast than the Rails asset pipeline. We need a different mental model to understand how it works. We should also follow a few basic guidelines to deliver JavaScript correctly and avoid falling victim to &amp;quot;bundle bloat.&amp;quot;&lt;/p&gt;
 
 &lt;p&gt;First, let&amp;#39;s take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild.&lt;/p&gt;
 
@@ -103,7 +103,9 @@
     
 &lt;p&gt;I don&amp;#39;t work at Podia, so I can&amp;#39;t use my favorite tool, &lt;a href="/blog/webpacker-output-analysis-with-webpack-bundle-analyzer.html"&gt;the webpack-bundle-analyzer&lt;/a&gt;, to peek inside the bundled JavaScript; this requires access to source code.&lt;/p&gt;
 
-&lt;p&gt;But, there&amp;#39;s another trick we can use. We can find out what&amp;#39;s happening inside these bundles from Podia&amp;#39;s source maps. It&amp;#39;s like magic.&lt;/p&gt;
+&lt;p&gt;But, there&amp;#39;s another trick we can use. We can find out what&amp;#39;s happening inside these bundles from Podia&amp;#39;s source maps.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;It&amp;#39;s like magic.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/magic.gif" alt="Corny magician gif" loading="lazy" /&gt;&lt;/p&gt;
 
@@ -254,7 +256,7 @@
 
 &lt;p&gt;The problem with these examples is in the execution; it&amp;#39;s not happening &lt;em&gt;the way webpack expects&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;Consider &lt;a href="https://cookpad.com" target="_blank" rel="noopener noreferrer"&gt;Cookpad.com&lt;/a&gt;. It&amp;#39;s a Rails app that renders numerous Webpacker packs on its home page, yet no modules are duplicated across the packs:&lt;/p&gt;
+&lt;p&gt;Consider &lt;a href="https://cookpad.com" target="_blank" rel="noopener noreferrer"&gt;Cookpad.com&lt;/a&gt;. It&amp;#39;s a Rails app that renders numerous Webpacker bundles on its home page, yet no modules are duplicated:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src="/assets/images/blog/overpacking-case-studies/cookpad-source-map-explorer-annotated-optimized.png" alt="Treemap of Cookpad source mapsl" loading="lazy" /&gt;&lt;/p&gt;
 
