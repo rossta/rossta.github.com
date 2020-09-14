@@ -23,23 +23,18 @@ jobs:
 
       - restore_cache:
           keys:
-            - gem-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-{{ .Branch }}
-            - gem-cache
+            - gem-cache-v1-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v1-{{ .Branch }}
+            - gem-cache-v1-
+            - gem-cache-
 
       - run: bundle config set path 'vendor/bundle'
       - run: bundle install
 
       - save_cache:
-          key: gem-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          key: gem-cache-v1-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-
-      - restore_cache:
-          keys:
-            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-cache-{{ .Branch }}
-            - yarn-cache
 
       - run: npm rebuild node-sass
       - run: yarn install --frozen-lockfile
