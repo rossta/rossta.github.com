@@ -23,7 +23,7 @@ I believe Rails developers may think the mechanics of packaging JavaScript for t
 
 ![Crash bang warehouse accident](blog/overpacking-case-studies/crash.gif)
 
-As we'll see, Webpacker is a very different beast than the Rails asset pipeline. We need a different mental model to understand how it works. We should also follow a few basic guidelines to deliver JavaScript correctly and avoid falling victim to overpacking.
+As we'll see, Webpacker is a very different beast than the Rails asset pipeline. We need a different mental model to understand how it works. We should also follow a few basic guidelines to deliver JavaScript correctly and avoid falling victim to "bundle bloat."
 
 First, let's take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild.
 
@@ -79,7 +79,9 @@ Something's not right here.
 
 I don't work at Podia, so I can't use my favorite tool, [the webpack-bundle-analyzer](/blog/webpacker-output-analysis-with-webpack-bundle-analyzer.html), to peek inside the bundled JavaScript; this requires access to source code.
 
-But, there's another trick we can use. We can find out what's happening inside these bundles from Podia's source maps. It's like magic.
+But, there's another trick we can use. We can find out what's happening inside these bundles from Podia's source maps.
+
+_It's like magic._
 
 ![Corny magician gif](blog/overpacking-case-studies/magic.gif)
 
@@ -202,7 +204,7 @@ Let's be clear that the practice of code-splitting isn't wrong; [it's a recommen
 
 The problem with these examples is in the execution; it's not happening _the way webpack expects_.
 
-Consider [Cookpad.com](https://cookpad.com). It's a Rails app that renders numerous Webpacker packs on its home page, yet no modules are duplicated across the packs:
+Consider [Cookpad.com](https://cookpad.com). It's a Rails app that renders numerous Webpacker bundles on its home page, yet no modules are duplicated:
 
 ![Treemap of Cookpad source mapsl](blog/overpacking-case-studies/cookpad-source-map-explorer-annotated-optimized.png)
 
