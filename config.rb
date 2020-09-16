@@ -264,10 +264,13 @@ helpers do
     ((current_page.data.tags || []) & tagged_with).any?
   end
 
+  CONVERTKIT_WEBPACK_LANDING_PAGE_FORM_ID = "1672590"
   CONVERTKIT_WEBPACK_INLINE_FORM_ID = "1268949"
   CONVERTKIT_STANDARD_INLINE_FORM_ID = "818387"
   def convertkit_inline_form_id
-    if current_page_tagged?(%w[Rails Webpack])
+    if current_page.path =~ /webpack-on-rails\/index/
+      CONVERTKIT_WEBPACK_LANDING_PAGE_FORM_ID
+    elsif current_page_tagged?(%w[Rails Webpack])
       CONVERTKIT_WEBPACK_INLINE_FORM_ID
     else
       CONVERTKIT_STANDARD_INLINE_FORM_ID
