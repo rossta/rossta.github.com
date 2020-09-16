@@ -22,9 +22,7 @@ By far, this course was the most difficult class I’ve taken in grad school, bo
 I’ve posted my class solutions in a single project on github:
 
 My code for the Sudokill game server:
-
-Check out the game too:
-[http://rosskaff.github.com/sudokill][6]
+[https://github.com/rossta/sudokill][6]
 [Game rules][7]
 
 [1]:	http://cs.nyu.edu/courses/fall10/G22.2965-001/index.html
@@ -32,5 +30,5 @@ Check out the game too:
 [3]:	http://cs.nyu.edu/courses/fall10/G22.2965-001/ambulance.html
 [4]:	http://cs.nyu.edu/courses/fall10/G22.2965-001/voronoi.html
 [5]:	http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html
-[6]:	http://rosskaff.github.com/sudokill/
+[6]:	https://github.com/rossta/sudokill
 [7]:	http://cs.nyu.edu/courses/fall10/G22.2965-001/sudokill.html
