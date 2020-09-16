@@ -30,7 +30,7 @@ The build step dropped from nearly seven minutes to less than one. Big improveme
 
 So what were the changes?
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](/webpack-on-rails/) to learn more about using webpack with Rails.
 
 ### A Common Problem
 

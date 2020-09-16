@@ -18,7 +18,7 @@ When I first started working with webpack, I didn't realize how under-prepared I
 
 And after spending the last month answering webpack questions on StackOverflow, I've come across plenty of folks going through some of the same mental hurdles I've experienced. I came away with some perspective on what about webpack most commonly trips up developers.
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](/webpack-on-rails/) to learn more about using webpack with Rails.
 
 The intended audience for this post has a general notion of "why use webpack" or "why use an asset bundler", but for more on that, I recommend [The Many Jobs of JS Build Tools](https://www.swyx.io/writing/jobs-of-js-build-tools/) and [webpack from Nothing: What problem are we solving?](https://what-problem-does-it-solve.com/webpack/index.html). For a rigorous technical overview of the project, I suggest [the webpack docs](https://webpack.js.org/); they have gotten quite good.
 

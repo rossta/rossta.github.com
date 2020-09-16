@@ -19,7 +19,7 @@ Webpack isn't just for JavaScript. You can bundle images with it too. [Webpacker
 
 In this post, we'll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include [yarn](https://yarnpkg.com/).
 
-> [Subscribe to my newsletter](https://little-fog-6985.ck.page/9c5bc129d8) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](/webpack-on-rails/) to learn more about using webpack with Rails.
 
 ### Folder structure
 
