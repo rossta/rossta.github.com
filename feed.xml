@@ -31,6 +31,12 @@
 
 &lt;p&gt;As we&amp;#39;ll see, Webpacker is a very different beast than the Rails asset pipeline. We need a different mental model to understand how it works. We should also follow a few basic guidelines to deliver JavaScript correctly and avoid falling victim to &amp;quot;bundle bloat.&amp;quot;&lt;/p&gt;
 
+&lt;blockquote&gt;
+&lt;p&gt;Struggling with webpack and Webpacker?&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="/webpack-on-rails/"&gt;&lt;strong&gt;Subscribe to my newsletter for occasional emails with new content.&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
 &lt;p&gt;First, let&amp;#39;s take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild.&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -445,7 +451,7 @@ document.addEventListener(&amp;#39;[data-open-trix-editor]&amp;#39;, &amp;#39;cl
 &lt;blockquote&gt;
 &lt;p&gt;Struggling with webpack and Webpacker?&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter for occasional emails with new content.&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="/webpack-on-rails/"&gt;&lt;strong&gt;Subscribe to my newsletter for occasional emails with new content.&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
       &lt;h4 id="html-request-with-the-asset-pipeline" class="title title-h4"&gt;
