@@ -66,7 +66,7 @@ To get Bootstrap css working, add a stylesheet `app/javascript/css/site.scss`. H
 ```scss
 // app/javascript/css/site.scss
 
-@import "~bootstrap/scss/bootstrap.scss"
+@import "~bootstrap/scss/bootstrap.scss";
 ```
 _Note: the file extensions are important, i.e., Webpacker configure files ending in '.scss' and '.sass' to be processed by webpack's `sass-loader`._
 
@@ -92,7 +92,7 @@ For example, you can change the background and font colors as follows:
 $body-bg: aliceblue;
 $body-color: #111;
 
-@import "~bootstrap/scss/bootstrap.scss"
+@import "~bootstrap/scss/bootstrap.scss";
 ```
 
 You may also surgically import selected parts of bootstrap to limit bundle size:
