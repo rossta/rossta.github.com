@@ -356,23 +356,6 @@ template {
  */
 
 /**
- * 1. Prevent padding and border from affecting element width
- * https://goo.gl/pYtbK7
- * 2. Change the default font family in all browsers (opinionated)
- */
-
-html {
-  box-sizing: border-box; /* 1 */
-  font-family: sans-serif; /* 2 */
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-/**
  * Removes the default spacing and border for appropriate elements.
  */
 
@@ -393,8 +376,8 @@ pre {
 }
 
 button {
-  background: transparent;
-  padding: 0;
+  background-color: transparent;
+  background-image: none;
 }
 
 /**
@@ -424,38 +407,50 @@ ul {
  */
 
 /**
- * 1. Use the system font stack as a sane default.
+ * 1. Use the user's configured `sans` font-family (with Tailwind's default
+ *    sans-serif font stack as a fallback) as a sane default.
  * 2. Use Tailwind's default "normal" line-height so the user isn't forced
- * to override it to ensure consistency even when using the default theme.
+ *    to override it to ensure consistency even when using the default theme.
  */
 
 html {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 1 */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 1 */
   line-height: 1.5; /* 2 */
 }
 
 /**
- * Allow adding a border to an element by just adding a border-width.
+ * 1. Prevent padding and border from affecting element width.
  *
- * By default, the way the browser specifies that an element should have no
- * border is by setting it's border-style to `none` in the user-agent
- * stylesheet.
+ *    We used to set this in the html element and inherit from
+ *    the parent element for everything else. This caused issues
+ *    in shadow-dom-enhanced elements like <details> where the content
+ *    is wrapped by a div with box-sizing set to `content-box`.
  *
- * In order to easily add borders to elements by just setting the `border-width`
- * property, we change the default border-style for all elements to `solid`, and
- * use border-width to hide them instead. This way our `border` utilities only
- * need to set the `border-width` property instead of the entire `border`
- * shorthand, making our border utilities much more straightforward to compose.
+ *    https://github.com/mozdevs/cssremedy/issues/4
  *
- * https://github.com/tailwindcss/tailwindcss/pull/116
+ *
+ * 2. Allow adding a border to an element by just adding a border-width.
+ *
+ *    By default, the way the browser specifies that an element should have no
+ *    border is by setting it's border-style to `none` in the user-agent
+ *    stylesheet.
+ *
+ *    In order to easily add borders to elements by just setting the `border-width`
+ *    property, we change the default border-style for all elements to `solid`, and
+ *    use border-width to hide them instead. This way our `border` utilities only
+ *    need to set the `border-width` property instead of the entire `border`
+ *    shorthand, making our border utilities much more straightforward to compose.
+ *
+ *    https://github.com/tailwindcss/tailwindcss/pull/116
  */
 
 *,
-*::before,
-*::after {
-  border-width: 0;
-  border-style: solid;
-  border-color: #e2e8f0;
+::before,
+::after {
+  box-sizing: border-box; /* 1 */
+  border-width: 0; /* 2 */
+  border-style: solid; /* 2 */
+  border-color: #e2e8f0; /* 2 */
 }
 
 /*
@@ -484,19 +479,11 @@ textarea {
   resize: vertical;
 }
 
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-  color: #a0aec0;
-}
-
 input::-moz-placeholder, textarea::-moz-placeholder {
   color: #a0aec0;
 }
 
 input:-ms-input-placeholder, textarea:-ms-input-placeholder {
-  color: #a0aec0;
-}
-
-input::-ms-input-placeholder, textarea::-ms-input-placeholder {
   color: #a0aec0;
 }
 
@@ -577,7 +564,6 @@ samp {
 img,
 svg,
 video,
-canvas,
 audio,
 iframe,
 embed,
@@ -640,19 +626,27 @@ video {
 }
 
 .bg-orange-200 {
+  --bg-opacity: 1;
   background-color: #feebc8;
+  background-color: rgba(254, 235, 200, var(--bg-opacity));
 }
 
 .bg-blue-800 {
+  --bg-opacity: 1;
   background-color: #2c5282;
+  background-color: rgba(44, 82, 130, var(--bg-opacity));
 }
 
 .bg-purple-100 {
+  --bg-opacity: 1;
   background-color: #faf5ff;
+  background-color: rgba(250, 245, 255, var(--bg-opacity));
 }
 
 .hover\:bg-green-200:hover {
+  --bg-opacity: 1;
   background-color: #c6f6d5;
+  background-color: rgba(198, 246, 213, var(--bg-opacity));
 }
 
 .rounded {
@@ -680,7 +674,6 @@ video {
 }
 
 .flex {
-  display: -webkit-box;
   display: flex;
 }
 
@@ -688,18 +681,24 @@ video {
   display: table;
 }
 
+.grid {
+  display: grid;
+}
+
+.contents {
+  display: contents;
+}
+
 .hidden {
   display: none;
 }
 
 .items-center {
-  -webkit-box-align: center;
-          align-items: center;
+  align-items: center;
 }
 
 .justify-between {
-  -webkit-box-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
 
 .float-right {
@@ -730,6 +729,26 @@ video {
 
 .h-6 {
   height: 1.5rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
 }
 
 .leading-relaxed {
@@ -801,7 +820,8 @@ video {
 }
 
 .focus\:outline-none:focus {
-  outline: 0;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 .p-4 {
@@ -895,55 +915,51 @@ video {
 }
 
 .text-gray-200 {
+  --text-opacity: 1;
   color: #edf2f7;
+  color: rgba(237, 242, 247, var(--text-opacity));
 }
 
 .text-gray-500 {
+  --text-opacity: 1;
   color: #a0aec0;
+  color: rgba(160, 174, 192, var(--text-opacity));
 }
 
 .text-gray-600 {
+  --text-opacity: 1;
   color: #718096;
+  color: rgba(113, 128, 150, var(--text-opacity));
 }
 
 .text-gray-800 {
+  --text-opacity: 1;
   color: #2d3748;
+  color: rgba(45, 55, 72, var(--text-opacity));
 }
 
 .text-gray-900 {
+  --text-opacity: 1;
   color: #1a202c;
+  color: rgba(26, 32, 44, var(--text-opacity));
 }
 
 .text-purple-800 {
+  --text-opacity: 1;
   color: #553c9a;
+  color: rgba(85, 60, 154, var(--text-opacity));
 }
 
 .hover\:text-gray-700:hover {
+  --text-opacity: 1;
   color: #4a5568;
+  color: rgba(74, 85, 104, var(--text-opacity));
 }
 
 .focus\:text-gray-700:focus {
+  --text-opacity: 1;
   color: #4a5568;
-}
-
-.text-xs {
-  font-size: 0.75rem;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-}
-
-.text-xl {
-  font-size: 1.25rem;
-}
-
-.text-2xl {
-  font-size: 1.5rem;
-}
-
-.text-4xl {
-  font-size: 2.25rem;
+  color: rgba(74, 85, 104, var(--text-opacity));
 }
 
 .italic {
@@ -975,6 +991,19 @@ video {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ordinal {
+  --font-variant-numeric-ordinal: var(--tailwind-empty,/*!*/ /*!*/);
+  --font-variant-numeric-slashed-zero: var(--tailwind-empty,/*!*/ /*!*/);
+  --font-variant-numeric-figure: var(--tailwind-empty,/*!*/ /*!*/);
+  --font-variant-numeric-spacing: var(--tailwind-empty,/*!*/ /*!*/);
+  --font-variant-numeric-fraction: var(--tailwind-empty,/*!*/ /*!*/);
+  font-variant-numeric: var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction);
+}
+
+.ordinal {
+  --font-variant-numeric-ordinal: ordinal;
+}
+
 .visible {
   visibility: visible;
 }
@@ -997,6 +1026,60 @@ video {
   width: 50%;
 }
 
+.transform {
+  --transform-translate-x: 0;
+  --transform-translate-y: 0;
+  --transform-rotate: 0;
+  --transform-skew-x: 0;
+  --transform-skew-y: 0;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
+  transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+}
+
+.transition {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+}
+
+@-webkit-keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    -webkit-animation-timing-function: cubic-bezier(0.8,0,1,1);
+            animation-timing-function: cubic-bezier(0.8,0,1,1);
+  }
+
+  50% {
+    transform: none;
+    -webkit-animation-timing-function: cubic-bezier(0,0,0.2,1);
+            animation-timing-function: cubic-bezier(0,0,0.2,1);
+  }
+}
+
 html {
   color: rgb(34, 36, 38);
   text-rendering: optimizelegibility;
@@ -1009,7 +1092,9 @@ html {
 }
 
 .button {
+  --text-opacity: 1;
   color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
   font-weight: 700;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -1019,23 +1104,33 @@ html {
 }
 
 .button:hover {
+  --text-opacity: 1;
   color: #fff;
+  color: rgba(255, 255, 255, var(--text-opacity));
 }
 
 .button-green {
+  --bg-opacity: 1;
   background-color: #2f855a;
+  background-color: rgba(47, 133, 90, var(--bg-opacity));
 }
 
 .button-green:hover {
+  --bg-opacity: 1;
   background-color: #38a169;
+  background-color: rgba(56, 161, 105, var(--bg-opacity));
 }
 
 .button-blue {
+  --bg-opacity: 1;
   background-color: #3182ce;
+  background-color: rgba(49, 130, 206, var(--bg-opacity));
 }
 
 .button-blue:hover {
+  --bg-opacity: 1;
   background-color: #4299e1;
+  background-color: rgba(66, 153, 225, var(--bg-opacity));
 }
 
 input:not([type]),
@@ -1168,7 +1263,9 @@ http://zenorocha.mit-license.org
 }
 
 code {
+  --bg-opacity: 1;
   background-color: #cbd5e0;
+  background-color: rgba(203, 213, 224, var(--bg-opacity));
   padding: 0.25rem;
   font-size: 0.875rem;
   background-color: ghostwhite;
@@ -1287,7 +1384,9 @@ h2,
 h3 {
   font-weight: 700;
   line-height: 1.375;
+  --text-opacity: 1;
   color: #1a202c;
+  color: rgba(26, 32, 44, var(--text-opacity));
 }
 
 h1 {
@@ -1326,7 +1425,9 @@ footer a {
 }
 
 main header a {
+  --text-opacity: 1;
   color: #2d3748;
+  color: rgba(45, 55, 72, var(--text-opacity));
 }
 
 main a:hover,
@@ -1358,14 +1459,18 @@ th, td {
 }
 
 .index-alt-title {
+  --text-opacity: 1;
   color: #4a5568;
+  color: rgba(74, 85, 104, var(--text-opacity));
 }
 
 .page-header {
   margin-bottom: 2rem;
   padding-bottom: 2rem;
   border-bottom-width: 1px;
+  --border-opacity: 1;
   border-color: #cbd5e0;
+  border-color: rgba(203, 213, 224, var(--border-opacity));
 }
 
 .post a:hover {
@@ -1380,10 +1485,8 @@ th, td {
 
 .post .title {
   margin-bottom: 1rem;
-  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
-          align-items: center;
+  align-items: center;
 }
 
 .post .title .anchor {
@@ -1409,7 +1512,9 @@ th, td {
 
 .post blockquote {
   font-style: italic;
+  --text-opacity: 1;
   color: #4a5568;
+  color: rgba(74, 85, 104, var(--text-opacity));
   padding: 1rem;
   background-color: aliceblue;
 }
@@ -1435,7 +1540,9 @@ th, td {
 
 .post blockquote p {
   border-left-width: 1px;
+  --border-opacity: 1;
   border-color: #63b3ed;
+  border-color: rgba(99, 179, 237, var(--border-opacity));
   padding-left: 1.5rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
@@ -1456,13 +1563,17 @@ th, td {
 .post ul li {
   list-style-type: disc;
   margin-left: 1rem;
+  --text-opacity: 1;
   color: #1a202c;
+  color: rgba(26, 32, 44, var(--text-opacity));
 }
 
 .post ol li {
   list-style-type: decimal;
   margin-left: 1rem;
+  --text-opacity: 1;
   color: #1a202c;
+  color: rgba(26, 32, 44, var(--text-opacity));
 }
 
 .signup-form-standalone {
@@ -1497,7 +1608,6 @@ figcaption {
   }
 
   .sm\:flex {
-    display: -webkit-box;
     display: flex;
   }
 
@@ -1506,13 +1616,11 @@ figcaption {
   }
 
   .sm\:items-center {
-    -webkit-box-align: center;
-            align-items: center;
+    align-items: center;
   }
 
   .sm\:justify-between {
-    -webkit-box-pack: justify;
-            justify-content: space-between;
+    justify-content: space-between;
   }
 
   .sm\:justify-around {
@@ -1545,13 +1653,11 @@ figcaption {
 @media (min-width: 1024px) {
 
   .lg\:flex {
-    display: -webkit-box;
     display: flex;
   }
 
   .lg\:justify-between {
-    -webkit-box-pack: justify;
-            justify-content: space-between;
+    justify-content: space-between;
   }
 
   .lg\:-mx-12 {
