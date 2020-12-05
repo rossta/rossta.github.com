@@ -24,8 +24,10 @@ activate(:blog) do |blog|
   blog.paginate = true
   blog.per_page = 25
   blog.default_extension = ".md"
-  blog.custom_collections = {series: {link: "/series/{series}.html", template: "series.html"}}
   blog.publish_future_dated = true
+
+  # examples
+  # blog.custom_collections = {series: {link: "/series/{series}.html", template: "series.html"}}
 end
 
 ###########################
@@ -157,7 +159,7 @@ helpers do
     Addressable::URI.new({
       scheme: config[:protocol],
       host: config[:host],
-      port: build? ? nil : config[:port],
+      port: build? ? nil : config[:port]
     }.merge(opts))
   end
 
@@ -203,7 +205,7 @@ helpers do
     prompt = opts.fetch(:prompt, "Discuss it on Twitter")
     tweet_link_to prompt, {
       text: [article.title, "rossta.net"].join(" - "),
-      url: to_url(path: article.url),
+      url: to_url(path: article.url)
     }, options
   end
 
@@ -268,7 +270,7 @@ helpers do
   CONVERTKIT_WEBPACK_INLINE_FORM_ID = "1268949"
   CONVERTKIT_STANDARD_INLINE_FORM_ID = "818387"
   def convertkit_inline_form_id
-    if current_page.path =~ /webpack-on-rails\/index/
+    if /webpack-on-rails\/index/.match?(current_page.path)
       CONVERTKIT_WEBPACK_LANDING_PAGE_FORM_ID
     elsif current_page_tagged?(%w[Rails Webpack])
       CONVERTKIT_WEBPACK_INLINE_FORM_ID
