@@ -32,7 +32,7 @@ For those interested to learn more about webpack, here are some additional resou
 
 #### Tutorials
 
-- [SurviveJS Wepback](https://survivejs.com/webpack)
+- [SurviveJS webpack](https://survivejs.com/webpack)
 - [Webpack from Nothing](https://what-problem-does-it-solve.com/webpack)
 - [Webpack Academy Core Concepts](https://webpack.academy/courses/104961)
 
@@ -46,7 +46,7 @@ For those interested to learn more about webpack, here are some additional resou
 - [What is webpack How does it work?](https://www.youtube.com/watch?v=GU-2T7k9NfI)
 - [Everything is a Plugin, Mastering webpack](https://www.youtube.com/watch?v=4tQiJaFzuJ8)
 - [Advanced Concepts](https://www.youtube.com/watch?v=MzVFrIAwwS8)
-- [Code-splitting with Wepback: Totally Tooling Tips](https://www.youtube.com/watch?v=QH94CXVv3UE)
+- [Code-splitting with webpack: Totally Tooling Tips](https://www.youtube.com/watch?v=QH94CXVv3UE)
 
 #### Sprockets to webpack
 

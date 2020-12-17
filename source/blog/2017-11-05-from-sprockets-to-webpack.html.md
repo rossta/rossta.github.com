@@ -26,24 +26,25 @@ That said, if you're working in a legacy Rails application and considering webpa
 
 ## Table of Contents
 
-1. [Why](#why-switch-)
-1. [Webpack, the Rails Way](#webpack-the-rails-way)
-1. [Making a plan](#making-a-plan)
-1. [Setting up webpack entries](#setting-up-webpack-entries)
-1. [Maintaining backwards compatibility](#maintaining-backwards-compatibility)
-1. [Migrating a JavaScript module](#migrating-a-javascript-module)
-1. [Exporting from webpack](#exporting-from-webpack)
-1. [Resolving application modules](#resolving-application-modules)
-1. [Extending the webpack configuration](#extending-the-webpack-configuration)
-1. [Importing libraries and global scope](#importing-libraries-and-global-scope)
-1. [Discovering webpack chunks](#discovering-webpack-chunks)
-1. [Extracting common chunks](#extracting-common-chunks)
-1. [Adding predictable long-term caching](#adding-predictable-long-term-caching)
-1. [Third party stylesheets, images, and fonts](#third-party-stylesheets-images-and-fonts)
-1. [Deploying with Capistrano and Nginx](#deploying-with-capistrano-and-nginx)
-1. [Unit testing with Karma](#unit-testing-with-karma)
-1. [Local development with SSL](#local-development-with-ssl)
-1. [Wrapping up](#wrapping-up)
+- [Table of Contents](#table-of-contents)
+- [Why switch?](#why-switch)
+- [Webpack, the Rails Way](#webpack-the-rails-way)
+- [Making a plan](#making-a-plan)
+- [Setting up webpack entries](#setting-up-webpack-entries)
+- [Maintaining backwards compatibility](#maintaining-backwards-compatibility)
+- [Migrating a Javascript Module](#migrating-a-javascript-module)
+- [Exporting from webpack](#exporting-from-webpack)
+- [Resolving application modules](#resolving-application-modules)
+- [Extending the webpack configuration](#extending-the-webpack-configuration)
+- [Importing libraries and global scope](#importing-libraries-and-global-scope)
+- [Discovering webpack chunks](#discovering-webpack-chunks)
+- [Extracting common chunks](#extracting-common-chunks)
+- [Adding predictable long term caching](#adding-predictable-long-term-caching)
+- [Third-party stylesheets, images, and fonts](#third-party-stylesheets-images-and-fonts)
+- [Deploying with Capistrano and Nginx](#deploying-with-capistrano-and-nginx)
+- [Unit Testing with Karma](#unit-testing-with-karma)
+- [Local development with SSL](#local-development-with-ssl)
+- [Wrapping up](#wrapping-up)
 
 ## Why switch?
 
@@ -495,7 +496,7 @@ Through our debugging sessions we came to learn a good lesson the hard way:
 
 > Importing a new webpack dependency may have side effects you did not anticipate
 
-To avoid any misunderstanding about the affects of adding new dependencies to Wepback, it helps to have a visual model of the webpack "chunks". The `webpack-bundle-analyzer` is a good place to start.
+To avoid any misunderstanding about the affects of adding new dependencies to webpack, it helps to have a visual model of the webpack "chunks". The `webpack-bundle-analyzer` is a good place to start.
 
 ## Extracting common chunks
 
