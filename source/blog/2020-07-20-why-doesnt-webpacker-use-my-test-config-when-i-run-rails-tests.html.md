@@ -12,7 +12,7 @@ category: Code
 tags:
   - Rails
   - Webpack
-  - WTF
+type: WTF
 ---
 
 Here's something you might not expect: when running Rails tests, Webpacker will load the _development_ webpack config instead of the test config by default.

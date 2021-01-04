@@ -11,7 +11,7 @@ category: Code
 tags:
   - Rails
   - Webpack
-  - Guide
+type: Guide
 ---
 
 When [adjusting webpacker.yml](/blog/how-to-use-webpacker-yml.html) is not enough, it might be necessary to modify Webpacker's default webpack configuration. Configuring webpack is precisely the main job of Webpacker's NPM package, `@rails/webpacker`.
@@ -32,11 +32,11 @@ In an ideal world, webpack configuration would be transparent to Rails developer
 
 Some things you might want to modify or change:
 
-* [Handling legacy jQuery plugins](#providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope)
-* [Loading dotenv ENV vars in webpack](#loading-dotenv-env-vars-in-webpack)
-* [Enabling webpack optimization (i.e., sharing code across bundles)](#enabling-webpack-optimization)
-* [Using modules aliases](#using-module-aliases)
-* [Changing the identifiers for CSS modules](#overriding-the-default-options-for-compiling-css-modules)
+- [Handling legacy jQuery plugins](#providing-jquery-as-an-import-to-legacy-plugins-and-exposing-to-global-scope)
+- [Loading dotenv ENV vars in webpack](#loading-dotenv-env-vars-in-webpack)
+- [Enabling webpack optimization (i.e., sharing code across bundles)](#enabling-webpack-optimization)
+- [Using modules aliases](#using-module-aliases)
+- [Changing the identifiers for CSS modules](#overriding-the-default-options-for-compiling-css-modules)
 
 So, where to start?
 
@@ -200,15 +200,15 @@ The Webpacker environment API also supports a `config.merge` function to overrid
 
 ```javascript
 // config/webpack/environment.js
-const { resolve } = require('path');
+const { resolve } = require('path')
 
 // Enable the default config
 environment.config.merge({
   resolve: {
     alias: {
       images: resolve('app/assets/images'),
-    }
-  }
+    },
+  },
 })
 ```
 
@@ -231,8 +231,7 @@ const myCssLoaderOptions = {
 
 const CSSLoader = environment.loaders
   .get('moduleSass')
-  .use
-  .find((el) => el.loader === 'css-loader')
+  .use.find((el) => el.loader === 'css-loader')
 
 CSSLoader.options = { ...CSSLoader.options, ...myCssLoaderOptions }
 

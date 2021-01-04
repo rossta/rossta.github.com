@@ -120,11 +120,11 @@ per_page: 5
     'Debugging' => 'Debugging tips'
   }
 %>
-<% article_groups.each do |tag, title| %>
+<% article_groups.each do |type, title| %>
   <section class="index-posts mb-8">
     <h2 class="mb-4 text-gray-600"><%= title %></h2>
     <%= partial "partials/article_index", locals: {
-    local_articles: webpack_on_rails_articles.select { |a| a.tags.include?(tag) }
+    local_articles: webpack_on_rails_articles.select { |a| a.data.type == type }
     } %>
   </section>
 <% end %>

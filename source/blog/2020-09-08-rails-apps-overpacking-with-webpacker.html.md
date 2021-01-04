@@ -12,7 +12,7 @@ category: Code
 tags:
   - Rails
   - Webpack
-  - Feature
+type: Feature
 ---
 
 You might think dividing your JavaScript into multiple bundles will help improve page load performance. When done incorrectly with Webpacker, it's possible to make things worse.

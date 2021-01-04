@@ -12,7 +12,7 @@ category: Code
 tags:
   - Rails
   - Webpack
-  - Feature
+type: Feature
 ---
 
 Confused about how Webpacker works in Rails? Let's unpack it with some diagrams.

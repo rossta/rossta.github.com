@@ -13,10 +13,10 @@ tags:
   - Rails
   - JavaScript
   - Webpack
-  - Feature
+type: Feature
 ---
 
-In case you missed the news, [Rails is loving JavaScript](http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/) and Rails 5.1 ships with the option to compile JavaScript with [webpack](https://webpack.js.org) via the [Webpacker gem](https://github.com/rails/webpacker). This is a big change after years of the Rails asset pipeline running on Sprockets. My team at [LearnZillion](https://learnzillion.com) recently decided to embrace this change and make the switch to webpack with Webpacker to compile our clientside JavasScript for our Rails 4.2 application. *Gulp!*
+In case you missed the news, [Rails is loving JavaScript](http://weblog.rubyonrails.org/2017/4/27/Rails-5-1-final/) and Rails 5.1 ships with the option to compile JavaScript with [webpack](https://webpack.js.org) via the [Webpacker gem](https://github.com/rails/webpacker). This is a big change after years of the Rails asset pipeline running on Sprockets. My team at [LearnZillion](https://learnzillion.com) recently decided to embrace this change and make the switch to webpack with Webpacker to compile our clientside JavasScript for our Rails 4.2 application. _Gulp!_
 
 This post describes the challenges we encountered while switching from Sprockets to webpack, how we solved those issues, and what we learned along the way.
 
@@ -52,9 +52,9 @@ The asset pipeline was revolutionary in the Rails community when it was first in
 
 Given this context, here are a few reasons we decided to switch (paraphrasing):
 
-* Sprockets is too slow, i.e., in development, we don't want to run JavaScript compilation through our Rails process
-* To adopt ES6 syntax and [Sprockets support for ES6 is experimental](https://github.com/TannerRogalsky/sprockets-es6#sprockets-es6)
-* For advanced features not available in Sprockets (or without extra effort), i.e., modularity, tree-shaking, live-reload, configurable source-maps, etc.
+- Sprockets is too slow, i.e., in development, we don't want to run JavaScript compilation through our Rails process
+- To adopt ES6 syntax and [Sprockets support for ES6 is experimental](https://github.com/TannerRogalsky/sprockets-es6#sprockets-es6)
+- For advanced features not available in Sprockets (or without extra effort), i.e., modularity, tree-shaking, live-reload, configurable source-maps, etc.
 
 Though there are number of JavaScript tools that we could have chosen instead webpack, our decision here was pretty simple. As a team policy, we aim to stick with Rails conventions where possible. Given the official support in Rails and the general momentum in the webpack community, this was the appropriate choice for our team.
 
@@ -64,7 +64,7 @@ Though there are number of JavaScript tools that we could have chosen instead we
 
 Why does Webpacker exist?
 
-First, Webpacker helps make webpack *Rails-friendly*. webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes *convention over configuration*. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through integration with [Babel](https://babeljs.io/).
+First, Webpacker helps make webpack _Rails-friendly_. webpack is powerful tool built to be extremely flexible. As a consequence, it is fairly complex to configure from scratch making it somewhat of an odd choice for Rails, which promotes _convention over configuration_. Webpacker fills the gap. The gem introduces some conventions and abstracts away a default configuration to make it easier to get up-and-running with, for example, out-of-the-box ES6 syntax support through integration with [Babel](https://babeljs.io/).
 
 Also, Webpacker helps form the bridge between the webpack build and the Rails application. Rails needs to be able to render `<script>` tags for webpack assets in views. Webpacker provides helpers, including `javascript_pack_tag`, for this purpose.
 
@@ -80,29 +80,31 @@ The key feature of Webpacker critical to our decision to making the switch is th
 
 > Webpacker allows webpack and Sprockets to be used side-by-side.
 
-The ability to compile `some_module.js` via webpack and `another_module.js` via Sprockets allowed us to move dependencies over to webpack gradually, in small changesets. With any upgrade, our primary goal is *Don't break the site.* and the incremental adoption of webpack allowed us to more easily address issues through our continuous integration and QA process.
+The ability to compile `some_module.js` via webpack and `another_module.js` via Sprockets allowed us to move dependencies over to webpack gradually, in small changesets. With any upgrade, our primary goal is _Don't break the site._ and the incremental adoption of webpack allowed us to more easily address issues through our continuous integration and QA process.
 
 Here's a high level overview of how we broke down the move to webpack from Sprockets:
 
-1. *Prep phase*
-  	- Add Webpacker and setup dependencies in development and remote servers (upgrade `node.js`, install `yarn`)
-  	- Deploy a small webpack bundle (with no critical code) to iron out deployment concerns, including Nginx and capistrano configuration
+1. _Prep phase_
 
-1. *Migration phase*
-  	- Move our third-party dependencies from Rails asset gems to NPM packages via webpack
-  	- Move our application code to webpack
-  	- Modify webpack configuration as needed to support new dependencies
+   - Add Webpacker and setup dependencies in development and remote servers (upgrade `node.js`, install `yarn`)
+   - Deploy a small webpack bundle (with no critical code) to iron out deployment concerns, including Nginx and capistrano configuration
 
-1. *Cleanup phase*
-	- Remove Rails assets gems and redundant Sprockets configuration
-	- Optimize our webpack bundles
+1. _Migration phase_
+
+   - Move our third-party dependencies from Rails asset gems to NPM packages via webpack
+   - Move our application code to webpack
+   - Modify webpack configuration as needed to support new dependencies
+
+1. _Cleanup phase_
+   - Remove Rails assets gems and redundant Sprockets configuration
+   - Optimize our webpack bundles
 
 Our gradual approach to the migration had its downsides:
 
-* We needed to figure out how to reference modules across two scopes
-* We had a large suite of JavaScript unit tests to support in two separate testing environments
-* We assumed global variables our in Sprockets-based JavaScript, so any module bundled by webpack would need to be exposed to the global scope somehow
-* We had a learning curve with webpack such that simply moving a dependency from a Sprockets bundle to a webpack bundle was not always straightforward
+- We needed to figure out how to reference modules across two scopes
+- We had a large suite of JavaScript unit tests to support in two separate testing environments
+- We assumed global variables our in Sprockets-based JavaScript, so any module bundled by webpack would need to be exposed to the global scope somehow
+- We had a learning curve with webpack such that simply moving a dependency from a Sprockets bundle to a webpack bundle was not always straightforward
 
 Supporting both Sprockets or webpack while we rolled out incremental changes required more effort and time. Given the rapid development cycle of Webpacker, webpack, and its various plugins and utilities, we were continually upgrading and smoothing wrinkles throughout the process. Ultimately, this approach worked for us as it allowed time to wade into the webpack waters while adopting new conventions along the way.
 
@@ -150,6 +152,7 @@ app/javascript
 	|-- vendor.js
 	|-- application.js
 ```
+
 We added script tags to the application layout using the helper provided by Webpacker `javascript_pack_tag` to render webpack bundles.
 
 ```erb
@@ -166,6 +169,7 @@ We added script tags to the application layout using the helper provided by Webp
   </body>
 </html>
 ```
+
 The idea was that we could port dependencies from `app/assets/javascripts` to `app/javascript` one-by-one. So, we'd move `some_module.js` from `app/assets/javascripts` to `app/javascript`, update its syntax to ES6.
 
 ```shell
@@ -199,8 +203,8 @@ For more background on this topic, checkout <a href="https://twitter.com/davetro
 
 We decided, as a policy. we did not want our webpack modules to depend on global variables. This meant we would have no references to Sprockets-compiled code in our webpack pipeline. Therefore, to migrate an individual file, `some_module.js`, we needed to answer two questions first:
 
-* can we import all third party dependencies of `some_module.js` from webpack?
-* can we import all application dependencies of `some_module.js` from webpack?
+- can we import all third party dependencies of `some_module.js` from webpack?
+- can we import all application dependencies of `some_module.js` from webpack?
 
 In reality, we had to compromise in some cases. While most of our third party JavaScript could be moved to `node_modules`, we also relied on a number of vendor JavaScript APIs loaded via script tags in the browser. For example, since we don't compile our Google Analytics script via webpack and instead load this script from Google's servers, we left global references to `window.ga` in our codebase.
 
@@ -211,14 +215,14 @@ Our legacy JavaScript application consistently followed a pattern of defining an
 ```javascript
 // app/assets/javascripts/some_module.js
 
-App = App || {};
+App = App || {}
 
 App.SomeModule = {
-  someMethod: function() {
-    var timestamp = moment();
-    return App.AnotherModule.method(timestamp);
-  }
-};
+  someMethod: function () {
+    var timestamp = moment()
+    return App.AnotherModule.method(timestamp)
+  },
+}
 ```
 
 As we moved them over to webpack, the new version of the file above might look like the example below as we converted to ES6 syntax and replaced global references with imports:
@@ -226,17 +230,17 @@ As we moved them over to webpack, the new version of the file above might look l
 ```javascript
 // app/javascript/some_module.js
 
-import moment from 'moment';
-import AnotherModule from './another_module';
+import moment from 'moment'
+import AnotherModule from './another_module'
 
 const SomeModule = {
   someMethod() {
-    const timestamp = moment();
-    return AnotherModule.method(timestamp);
-  }
-};
+    const timestamp = moment()
+    return AnotherModule.method(timestamp)
+  },
+}
 
-export default SomeModule;
+export default SomeModule
 ```
 
 There's a problem though. Once `SomeModule` moved to webpack, it was no longer available in the global scope as a property of `App`. References to `App.SomeModule` in Sprockets would be `undefined`. To maintain backwards compatibility, we had to find a way to make `SomeModule` available in both webpack and Sprockets.
@@ -244,14 +248,15 @@ There's a problem though. Once `SomeModule` moved to webpack, it was no longer a
 Practically, this meant `SomeModule` could be available both as an import in webpack...
 
 ```javascript
-import SomeModule from '../some_module';
+import SomeModule from '../some_module'
 
-SomeModule.someMethod();
+SomeModule.someMethod()
 ```
+
 ...and in the global scope as a property the global `App` instance:
 
 ```javascript
-App.SomeModule.someMethod();
+App.SomeModule.someMethod()
 ```
 
 In other words, we wanted to have our ES6 module cake and eat it too. Luckily, webpack provides a mechanism to do this.
@@ -280,6 +285,7 @@ output: {
 
 // ...
 ```
+
 With the above configuration, webpack will export a module called `Packs` to the global scope. The `Packs` variable will have a property corresponding to each `entry` by name. In our case, this means webpack exports a `Packs.vendor` and `Packs.application` properties.
 
 To add modules to the library, we export them from our entry files. For example:
@@ -297,8 +303,8 @@ This `Packs` variable gets exported to the global scope. We added some glue code
 ```javascript
 // app/assets/javascripts/application.js
 
-App = App || {};
-_.assign(App, Packs.application);
+App = App || {}
+_.assign(App, Packs.application)
 ```
 
 Boom! Now, we'd be able to use our webpack-compiled module as `App.SomeModule` in Sprockets without making any other changes to our legacy JavaScript.
@@ -333,9 +339,10 @@ We now have a shared file in the `config/webpack` directory that imports the web
 ```javascript
 // config/webpack/environment.js
 
-const {environment} = require('@rails/webpacker');
-module.exports = environment;
+const { environment } = require('@rails/webpacker')
+module.exports = environment
 ```
+
 ```javascript
 // config/webpack/shared.js
 
@@ -360,6 +367,7 @@ const additionalConfig = {
 
 module.exports = merge(config, additionalConfig);
 ```
+
 ```
 // config/webpack/development.js
 
@@ -398,6 +406,7 @@ module: {
 
 // ...
 ```
+
 We have similar `expose-loader` rules for each of our commonly-used libraries such as `knockout` and `lodash`.
 
 ## Discovering webpack chunks
@@ -409,44 +418,51 @@ Consider the following where we import jQuery in `vendor.js`. Then we've added t
 ```javascript
 // app/javascript/packs/vendor.js
 
-import 'jquery';
+import 'jquery'
 ```
+
 ```javascript
 // app/javascript/packs/application.js
 
-import 'chosen-js';
+import 'chosen-js'
 ```
+
 We can show that this works on the Dev Tools console:
 
 ```shell
 > typeof $.fn.chosen
 "function"
 ```
+
 Then, we installed another jQuery plugin, like `slick-carousel`:
 
 ```javascript
 // app/javascript/packs/vendor.js
 
-import 'jquery';
+import 'jquery'
 ```
+
 ```javascript
 // app/javascript/packs/application.js
 
-import 'chosen-js';
-import 'slick-carousel';
+import 'chosen-js'
+import 'slick-carousel'
 ```
+
 On the Dev Tools console, we can test for the new plugin:
 
 ```shell
 > typeof $.fn.slick
 "function"
 ```
+
 But something happened. The `chosen` plugin is missing:
 
 ```shell
 > typeof $.fn.chosen
 "undefined"
 ```
+
 Not expected! Clearly, there are some side effects from importing these packages in webpack. Turns out, there were a couple issues here converging at once.
 
 At this point, it would help to visualize what's happening in our webpack bundles. We can do this in development with [`webpack-bundle-analyzer`](https://github.com/webpack-contrib/webpack-bundle-analyzer). Adding this plugin to our webpack config produces a separate local webserver that graphs the packages used in each bundle.
@@ -464,20 +480,19 @@ Two jQuerys! (You may have noticed some other modules are duplicated as well.)
 It turns out that `slick-carousel` employs a common pattern in modern JavaScript packages to detect the presence of a JavaScript module loader API, such as Asynchronous Module Definition (AMD) or CommonJS. The pattern looks something like this, [excerpted from the `slick-carousel` source](https://github.com/kenwheeler/slick/blob/ee7d37faeb92c4619ffeefeba2cc4c733f39b1b3/slick/slick.js#L18):
 
 ```javascript
-;(function(factory) {
-    'use strict';
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
-    } else if (typeof exports !== 'undefined') {
-        module.exports = factory(require('jquery'));
-    } else {
-        factory(jQuery);
-    }
-
-}(function($) {
+;(function (factory) {
+  'use strict'
+  if (typeof define === 'function' && define.amd) {
+    define(['jquery'], factory)
+  } else if (typeof exports !== 'undefined') {
+    module.exports = factory(require('jquery'))
+  } else {
+    factory(jQuery)
+  }
+})(function ($) {
   // library code
   // ...
-}));
+})
 ```
 
 webpack recognizes both AMD `define` and CommonJs style `require` to resolve modules. Since `slick-carousel` imports `jQuery`, as seen in the except above, it's now included in the `application.js` bundle. webpack knows nothing about how we're including both `vendor.js` and `application.js` in the same HTML page, so it happily includes `jQuery` in both bundles—exactly as it's been instructed to do.
@@ -531,13 +546,15 @@ To demonstrate, let's say all we did was import jQuery in our vendor bundle and 
 ```javascript
 // app/javascript/packs/vendor.js
 
-import 'jquery';
+import 'jquery'
 ```
+
 ```javascript
 // app/javascript/packs/application.js
 
-import SomeModule from '../some_module';
+import SomeModule from '../some_module'
 ```
+
 Here's the output of the webpack build, using the `CommonsChunkPlugin` setup as described in the previous section:
 
 ```shell
@@ -559,9 +576,10 @@ Now let's make only a change to `application.js` as below. `AnotherModule` bring
 ```javascript
 // app/javascript/packs/application.js
 
-import SomeModule from '../some_module';
-import AnotherModule from '../another_module';
+import SomeModule from '../some_module'
+import AnotherModule from '../another_module'
 ```
+
 Rebuilding now, we might expect only the digest for `application.js` would change:
 
 ```shell
@@ -625,6 +643,7 @@ We also needed to set `public/packs` and `node_modules` as shared directories to
 
 set :linked_dirs, fetch(:linked_dirs, []).push('public/packs', 'node_modules')
 ```
+
 It also helps to be aware of that Webpacker uses the `NODE_ENV` environment variable to select the right webpack configuration. If `NODE_ENV` is not set, it will infer its value from `RAILS_ENV`. We also have a staging environment where we use the environment variable `RAILS_ENV=staging`. Our initial webpack deploy to staging failed because we did not have a webpack config for staging. Since our webpack configuration for staging would be identical to production, we simply set `NODE_ENV=production` on our staging environments:
 
 ```ruby
@@ -632,6 +651,7 @@ It also helps to be aware of that Webpacker uses the `NODE_ENV` environment vari
 
 set :default_env, { 'NODE_ENV' => 'production' }
 ```
+
 Finally, since we use Nginx as a reverse proxy to our Rails application, we want to be sure the proper HTTP response headers are added for anything webpack compiles to `public/packs` to improve cacheability. So we added "packs" to our Nginx location block for assets, similar to below:
 
 ```nginx
@@ -668,22 +688,20 @@ To make Karma work with our Webpacker setup, we started with the default `karma.
 // karma.conf.js
 
 // Require our webpack test configuration
-const webpackConfig = require('./config/webpack/test.js');
+const webpackConfig = require('./config/webpack/test.js')
 
 // Remove the plugins to workaround for several issues
 // https://github.com/webpack-contrib/karma-webpack/issues/22
 // https://github.com/rails/webpacker/issues/435
-const {assign} = require('lodash');
-assign(webpackConfig, { plugins: [] });
+const { assign } = require('lodash')
+assign(webpackConfig, { plugins: [] })
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     frameworks: ['jasmine'],
 
     // list of files / patterns to load in the browser
-    files: [
-      { pattern: 'spec/javascript/**/*.js', watched: false },
-    ],
+    files: [{ pattern: 'spec/javascript/**/*.js', watched: false }],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -693,9 +711,10 @@ module.exports = function(config) {
 
     // For karma-webpack extension
     webpack: webpackConfig,
-  });
-};
+  })
+}
 ```
+
 We ran into few problems using Karma with certain webpack plugins, including [this issue](https://github.com/webpack-contrib/karma-webpack/issues/22) with `karma-webpack` plus the `CommonsChunkPlugin` and [this issue](https://github.com/rails/webpacker/issues/435) with Webpacker's use of the `ManifestPlugin`. Turns out, to run unit tests in the Karma context, our webpack plugins are irrelevant, so we've opted to remove them altogether in the Karma configuration for now. The downside is that our unit testing setup does not exercise our webpack plugin configuration, but any issue there would be caught by our integration testing workflow.
 
 Another problem we needed to solve was to keep our legacy specs in jasmine-rails passing during the transition. As soon as we moved our first critical dependency from the asset pipeline to webpack, all of our jasmine-rails specs broke. This is because jasmine-rails assumes you're just using Sprockets and knows nothing about our webpack output.
@@ -708,16 +727,18 @@ Fortunately, jasmine-rails allowed us to override the Rails template `spec_runne
 <!DOCTYPE html>
 <html>
   <head>
-    <meta content="text/html;charset=UTF-8" http-equiv="Content-Type"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta
+      content="text/html;charset=UTF-8"
+      http-equiv="Content-Type"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Jasmine Specs</title>
 
     <%= stylesheet_link_tag *jasmine_css_files %>
 
     <!-- add the packs! -->
-    <%= javascript_pack_tag "vendor", "application" %>
-
-    <%= javascript_include_tag *jasmine_js_files, :defer => "defer" %>
+    <%= javascript_pack_tag "vendor", "application" %> <%=
+    javascript_include_tag *jasmine_js_files, :defer => "defer" %>
   </head>
   <body data-no-turbolink>
     <div id="jasmine_content"></div>

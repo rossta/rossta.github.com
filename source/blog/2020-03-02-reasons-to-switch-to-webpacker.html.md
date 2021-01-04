@@ -12,7 +12,7 @@ category: Code
 tags:
   - Rails
   - Webpack
-  - Overview
+type: Overview
 ---
 
 ​I've been getting this question lately in some form or another:
@@ -35,15 +35,15 @@ If you're a Rails dev and your app is currently using the Rails asset pipeline, 
 
 1. **You don't have the right application**
 
-    If your application doesn't use much JavaScript, it's probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a more substantial tool like webpack.
+   If your application doesn't use much JavaScript, it's probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a more substantial tool like webpack.
 
 1. **You don't have the time**
 
-    I'll be the first to admit that adopting webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. webpack and NPM dependencies are upgraded at a rapid pace, so you need to keep up with upgrades. You might also have to understand how JavaScript modules work—good news; those skills are transferrable.
+   I'll be the first to admit that adopting webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. webpack and NPM dependencies are upgraded at a rapid pace, so you need to keep up with upgrades. You might also have to understand how JavaScript modules work—good news; those skills are transferrable.
 
 1. **You don't have the right mindset**
 
-    Yes, webpack is complex. Plenty of developers love to complain about this fact. If you think you're one of those developers, you probably won't enjoy the process of adopting webpack. A lot of frustration can be eased through education. Make sure you've got a positive attitude going in.
+   Yes, webpack is complex. Plenty of developers love to complain about this fact. If you think you're one of those developers, you probably won't enjoy the process of adopting webpack. A lot of frustration can be eased through education. Make sure you've got a positive attitude going in.
 
 ---
 
@@ -51,7 +51,7 @@ All that said, given a little time, the need, and the right mindset, you'll be s
 
 ### 1. Webpacker is the future of Rails
 
-  Webpacker is now the default JavaScript compiler for new Rails apps. Rails 6 apps will still include both Sprockets for managing CSS and images, but JavaScript dependencies are meant to be bundled by Webpacker. The Rails defaults fall in line with how Basecamp builds web applications, and it may benefit your team to "go with the herd" to stay closer to Rails edge and attract candidates who are looking to work with more advanced tools.
+Webpacker is now the default JavaScript compiler for new Rails apps. Rails 6 apps will still include both Sprockets for managing CSS and images, but JavaScript dependencies are meant to be bundled by Webpacker. The Rails defaults fall in line with how Basecamp builds web applications, and it may benefit your team to "go with the herd" to stay closer to Rails edge and attract candidates who are looking to work with more advanced tools.
 
 ### 2. Sprockets is dead; Long live Sprockets
 
@@ -100,6 +100,7 @@ Webpack opens the door to a great deal of customization of how JavaScript source
 Vue.js is famous, in part, for its support for Single File Components, which allows developers to co-locate HTML, CSS, and JavaScript as separate portions of a single file.
 
 Example:
+
 ```vue
 <template>
   <div>Hello, {{ name }}!</div>
@@ -109,9 +110,9 @@ Example:
 export default {
   data() {
     return {
-      name: "World"
+      name: 'World',
     }
-  }
+  },
 }
 </script>
 
@@ -148,8 +149,8 @@ Consider the touch-responsive carousel plugin [Flickity](https://flickity.metafi
 
 $(function () {
   $('.main-carousel').flickity({
-    contain: true
-  });
+    contain: true,
+  })
 })
 ```
 
@@ -159,10 +160,10 @@ Flickity is also intended to work without jQuery, meaning you can implement the 
 import Flickity from 'flickity'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const elem = document.querySelector('.main-carousel');
+  const elem = document.querySelector('.main-carousel')
   const flkty = new Flickity(elem, {
-    contain: true
-  });
+    contain: true,
+  })
 })
 ```
 
@@ -209,20 +210,21 @@ Imagine how great it would be if you could code-ify your application's supported
 Babel integrates with a package called browserlist, which allows projects to codify the browsers they wish to target with their transpiled code. Developers set their version lists using queries, which can target specific browser versions or use semantics like `last 2 versions` to avoid updating versions manually. Browserslist uses data provided by [Can I Use](https://caniuse.com/) to determine browser support for newer frontend APIs.
 
 Now we can write future JS syntax:
+
 ```javascript
-const array = [1, 2, 3];
-const [first, second] = array;
+const array = [1, 2, 3]
+const [first, second] = array
 ```
 
 Babel will compile it for Edge 16:
 
 ```javascript
-const array = [1, 2, 3];
+const array = [1, 2, 3]
 const first = array[0],
-      second = array[1];
+  second = array[1]
 ```
 
-* Browserlist: https://github.com/browserslist/browserslist
+- Browserlist: https://github.com/browserslist/browserslist
 
 ### 12. Polyfill newer browser APIs
 
@@ -237,10 +239,10 @@ import 'core-js/stable'
 If `chrome 71` is targeted, then this will get replaced with:
 
 ```javascript
-import "core-js/modules/es.array.unscopables.flat"
-import "core-js/modules/es.array.unscopables.flat-map"
-import "core-js/modules/es.object.from-entries"
-import "core-js/modules/web.immediate"
+import 'core-js/modules/es.array.unscopables.flat'
+import 'core-js/modules/es.array.unscopables.flat-map'
+import 'core-js/modules/es.object.from-entries'
+import 'core-js/modules/web.immediate'
 ```
 
 Now you can start removing those conditionals you've been adding to test for browser support.
@@ -276,20 +278,20 @@ This becomes important if you're attempting to upgrade a legacy Rails app to web
 ```javascript
 // config/webpack/environment.js
 
-const webpack = require('webpack');
+const webpack = require('webpack')
 
-const {environment} = require('@rails/webpacker');
+const { environment } = require('@rails/webpacker')
 
 environment.plugins.append(
   'jquery', // arbitrary name
-   new webpack.ProvidePlugin({
+  new webpack.ProvidePlugin({
     $: 'jquery',
     jQuery: 'jquery',
-    'window.jQuery': 'jquery'
-   }),
-);
+    'window.jQuery': 'jquery',
+  }),
+)
 
-module.exports = environment;
+module.exports = environment
 ```
 
 - Documentation: https://webpack.js.org/guides/shimming/
@@ -299,16 +301,24 @@ module.exports = environment;
 Sprockets comes with a few conveniences for including files in your asset bundles, including `require_tree`. Similarly, webpack also has a function for including multiple files in a single statement: `require.context`. Though more tedious, it's even more powerful. It provides a file filter option, say if you only want to import `.svg` files. You can also operate on the return value.
 
 Syntax:
+
 ```javascript
-require.context(directory, useSubdirectories = true, regExp = /^\.\/.*$/, mode = 'sync');
+require.context(
+  directory,
+  (useSubdirectories = true),
+  (regExp = /^\.\/.*$/),
+  (mode = 'sync'),
+)
 ```
 
 Example: require all the test files in the current and nested directories.
+
 ```javascript
-require.context('.', true, /\.test\.js$/);
+require.context('.', true, /\.test\.js$/)
 ```
 
 Example: import all the default exports in the current directory and re-export as named modules
+
 ```javascript
 const requireModule = require.context('.', false, /.js$/)
 
@@ -337,6 +347,7 @@ In Sprockets, a common technique to reduce bundle size and improve cacheability 
 <%= javascript_include_tag "vendor" %>
 <%= javascript_include_tag "application" %>
 ```
+
 One headache with this approach is having to manually account divvy up the bundles and take great care to avoid load order issues or omitting key dependencies.
 
 Since webpack statically analyzes your source code to build its dependency graph(s), it can also be configured to create separate bundles for vendored and application code automatically. This means, from a single "pack", webpack will produce the vendor and application bundles for you, along with the webpack runtime. Webpacker helpers and config can be used as follows to enable this behavior.
@@ -350,6 +361,7 @@ environment.splitChunks()
 
 module.exports = environment
 ```
+
 ```erb
 <!-- app/views/layouts/application.html.erb -->
 
@@ -372,8 +384,9 @@ An even better option to split your JavaScript code over multiple files is to us
 When webpack detects a dynamic import function, like the following, in your application code, it will create a separate bundle for that import and load it asynchronously when that code is executed in the browser.
 
 ```javascript
-import('pdfjs/webpack').then(({default: pdfjs}) => { // async import!
-  pdfjs.getDocument('https://example.com/some.pdf')  // ...
+import('pdfjs/webpack').then(({ default: pdfjs }) => {
+  // async import!
+  pdfjs.getDocument('https://example.com/some.pdf') // ...
 })
 ```
 
@@ -419,7 +432,7 @@ The first rule of optimization is "Measure first." When it comes to optimizing f
 
 ![Performance Budget Images](blog/webpack/perf-budget-metrics.png)
 
-One of his key strategies for measuring frontend performance is "performance budgeting" and how this relates to  "time-to-interactive" (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application. That value closely correlates with the amount of JavaScript you force your users' browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.
+One of his key strategies for measuring frontend performance is "performance budgeting" and how this relates to "time-to-interactive" (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application. That value closely correlates with the amount of JavaScript you force your users' browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.
 
 What does this have to do with webpack? Not only does webpack make it easier to split up your bundles, as we saw with the code splitting sections above, but it also provides built-in support for [performance budgets](https://medium.com/webpack/webpack-performance-budgets-13d4880fbf6d). You can customize webpack to print a warning or even raise an error if any bundle exceeds the configured `maxEntryPointSize`.
 
@@ -443,15 +456,15 @@ A good use case for tree shaking is `lodash`. When loaded in its entirety, the l
 ```javascript
 import _ from 'lodash' // OR
 
-import {map, uniq, tail} from 'lodash'
+import { map, uniq, tail } from 'lodash'
 ```
 
 The following approach allows webpack to limit the resulting file size:
+
 ```javascript
 import map from 'lodash/map'
 import uniq from 'lodash/uniq'
 import tail from 'lodash/tail'
-
 ```
 
 - Lessons on tree-shaking Lodash with webpack and Babel https://www.azavea.com/blog/2019/03/07/lessons-on-tree-shaking-lodash/

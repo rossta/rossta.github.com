@@ -11,7 +11,7 @@ category: Code
 tags:
   - Rails
   - Webpack
-  - Debugging
+type: Debugging
 ---
 
 > tl;dr Install the [`webpack-bundle-analyzer`](https://github.com/webpack-contrib/webpack-bundle-analyzer) to visualize what's included in your webpack bundles and debug common problems.
