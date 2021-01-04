@@ -3,7 +3,7 @@
   <head>
     <title>How we switched from Sprockets to webpack - rossta.net</title>
 <meta name="description" content="In this post, we describe the challenges we faced while replacing the Rails asset pipeline with webpack, how we solved those issues, and what we learned along the way." />
-<meta name="keywords" content="Rails, JavaScript, Webpack, Feature" />
+<meta name="keywords" content="Rails, JavaScript, Webpack" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
@@ -23,7 +23,7 @@
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
     <link rel="canonical" href="https://rossta.net/blog/from-sprockets-to-webpack.html" />
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"How we switched from Sprockets to webpack","url":"https://rossta.net/blog/from-sprockets-to-webpack.html","datePublished":"2017-11-05T00:00:00Z","keywords":"rails, javascript, webpack, feature","description":"In this post, we describe the challenges we faced while replacing the Rails asset pipeline with webpack, how we solved those issues, and what we learned along the way.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"How we switched from Sprockets to webpack","url":"https://rossta.net/blog/from-sprockets-to-webpack.html","datePublished":"2017-11-05T00:00:00Z","keywords":"rails, javascript, webpack","description":"In this post, we describe the challenges we faced while replacing the Rails asset pipeline with webpack, how we solved those issues, and what we learned along the way.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
     </script>
 
 
@@ -164,20 +164,26 @@
 <p>Here&#39;s a high level overview of how we broke down the move to webpack from Sprockets:</p>
 
 <ol>
-<li><p><em>Prep phase</em></p>
+<li><em>Prep phase</em></li>
+</ol>
 
 <ul>
 <li>Add Webpacker and setup dependencies in development and remote servers (upgrade <code>node.js</code>, install <code>yarn</code>)</li>
 <li>Deploy a small webpack bundle (with no critical code) to iron out deployment concerns, including Nginx and capistrano configuration</li>
-</ul></li>
-<li><p><em>Migration phase</em></p>
+</ul>
+
+<ol>
+<li><em>Migration phase</em></li>
+</ol>
 
 <ul>
 <li>Move our third-party dependencies from Rails asset gems to NPM packages via webpack</li>
 <li>Move our application code to webpack</li>
 <li>Modify webpack configuration as needed to support new dependencies</li>
-</ul></li>
-<li><p><em>Cleanup phase</em></p>
+</ul>
+
+<ol>
+<li><em>Cleanup phase</em>
 
 <ul>
 <li>Remove Rails assets gems and redundant Sprockets configuration</li>
@@ -319,45 +325,45 @@ For more background on this topic, checkout <a href="https://twitter.com/davetro
 
 <pre><code class="javascript">// app/assets/javascripts/some_module.js
 
-App = App || {};
+App = App || {}
 
 App.SomeModule = {
-  someMethod: function() {
-    var timestamp = moment();
-    return App.AnotherModule.method(timestamp);
-  }
-};
+  someMethod: function () {
+    var timestamp = moment()
+    return App.AnotherModule.method(timestamp)
+  },
+}
 </code></pre>
 
 <p>As we moved them over to webpack, the new version of the file above might look like the example below as we converted to ES6 syntax and replaced global references with imports:</p>
 
 <pre><code class="javascript">// app/javascript/some_module.js
 
-import moment from &#39;moment&#39;;
-import AnotherModule from &#39;./another_module&#39;;
+import moment from &#39;moment&#39;
+import AnotherModule from &#39;./another_module&#39;
 
 const SomeModule = {
   someMethod() {
-    const timestamp = moment();
-    return AnotherModule.method(timestamp);
-  }
-};
+    const timestamp = moment()
+    return AnotherModule.method(timestamp)
+  },
+}
 
-export default SomeModule;
+export default SomeModule
 </code></pre>
 
 <p>There&#39;s a problem though. Once <code>SomeModule</code> moved to webpack, it was no longer available in the global scope as a property of <code>App</code>. References to <code>App.SomeModule</code> in Sprockets would be <code>undefined</code>. To maintain backwards compatibility, we had to find a way to make <code>SomeModule</code> available in both webpack and Sprockets.</p>
 
 <p>Practically, this meant <code>SomeModule</code> could be available both as an import in webpack...</p>
 
-<pre><code class="javascript">import SomeModule from &#39;../some_module&#39;;
+<pre><code class="javascript">import SomeModule from &#39;../some_module&#39;
 
-SomeModule.someMethod();
+SomeModule.someMethod()
 </code></pre>
 
 <p>...and in the global scope as a property the global <code>App</code> instance:</p>
 
-<pre><code class="javascript">App.SomeModule.someMethod();
+<pre><code class="javascript">App.SomeModule.someMethod()
 </code></pre>
 
 <p>In other words, we wanted to have our ES6 module cake and eat it too. Luckily, webpack provides a mechanism to do this.</p>
@@ -407,8 +413,8 @@ export { default as SomeModule } from &#39;./some_module`;
 
 <pre><code class="javascript">// app/assets/javascripts/application.js
 
-App = App || {};
-_.assign(App, Packs.application);
+App = App || {}
+_.assign(App, Packs.application)
 </code></pre>
 
 <p>Boom! Now, we&#39;d be able to use our webpack-compiled module as <code>App.SomeModule</code> in Sprockets without making any other changes to our legacy JavaScript.</p>
@@ -452,8 +458,8 @@ _.assign(App, Packs.application);
 
 <pre><code class="javascript">// config/webpack/environment.js
 
-const {environment} = require(&#39;@rails/webpacker&#39;);
-module.exports = environment;
+const { environment } = require(&#39;@rails/webpacker&#39;)
+module.exports = environment
 </code></pre>
 
 <pre><code class="javascript">// config/webpack/shared.js
@@ -539,12 +545,12 @@ module: {
 
 <pre><code class="javascript">// app/javascript/packs/vendor.js
 
-import &#39;jquery&#39;;
+import &#39;jquery&#39;
 </code></pre>
 
 <pre><code class="javascript">// app/javascript/packs/application.js
 
-import &#39;chosen-js&#39;;
+import &#39;chosen-js&#39;
 </code></pre>
 
 <p>We can show that this works on the Dev Tools console:</p>
@@ -557,13 +563,13 @@ import &#39;chosen-js&#39;;
 
 <pre><code class="javascript">// app/javascript/packs/vendor.js
 
-import &#39;jquery&#39;;
+import &#39;jquery&#39;
 </code></pre>
 
 <pre><code class="javascript">// app/javascript/packs/application.js
 
-import &#39;chosen-js&#39;;
-import &#39;slick-carousel&#39;;
+import &#39;chosen-js&#39;
+import &#39;slick-carousel&#39;
 </code></pre>
 
 <p>On the Dev Tools console, we can test for the new plugin:</p>
@@ -594,20 +600,19 @@ import &#39;slick-carousel&#39;;
 
 <p>It turns out that <code>slick-carousel</code> employs a common pattern in modern JavaScript packages to detect the presence of a JavaScript module loader API, such as Asynchronous Module Definition (AMD) or CommonJS. The pattern looks something like this, <a href="https://github.com/kenwheeler/slick/blob/ee7d37faeb92c4619ffeefeba2cc4c733f39b1b3/slick/slick.js#L18" target="_blank" rel="noopener noreferrer">excerpted from the <code>slick-carousel</code> source</a>:</p>
 
-<pre><code class="javascript">;(function(factory) {
-    &#39;use strict&#39;;
-    if (typeof define === &#39;function&#39; &amp;&amp; define.amd) {
-        define([&#39;jquery&#39;], factory);
-    } else if (typeof exports !== &#39;undefined&#39;) {
-        module.exports = factory(require(&#39;jquery&#39;));
-    } else {
-        factory(jQuery);
-    }
-
-}(function($) {
+<pre><code class="javascript">;(function (factory) {
+  &#39;use strict&#39;
+  if (typeof define === &#39;function&#39; &amp;&amp; define.amd) {
+    define([&#39;jquery&#39;], factory)
+  } else if (typeof exports !== &#39;undefined&#39;) {
+    module.exports = factory(require(&#39;jquery&#39;))
+  } else {
+    factory(jQuery)
+  }
+})(function ($) {
   // library code
   // ...
-}));
+})
 </code></pre>
 
 <p>webpack recognizes both AMD <code>define</code> and CommonJs style <code>require</code> to resolve modules. Since <code>slick-carousel</code> imports <code>jQuery</code>, as seen in the except above, it&#39;s now included in the <code>application.js</code> bundle. webpack knows nothing about how we&#39;re including both <code>vendor.js</code> and <code>application.js</code> in the same HTML page, so it happily includes <code>jQuery</code> in both bundles—exactly as it&#39;s been instructed to do.</p>
@@ -673,12 +678,12 @@ import &#39;slick-carousel&#39;;
 
 <pre><code class="javascript">// app/javascript/packs/vendor.js
 
-import &#39;jquery&#39;;
+import &#39;jquery&#39;
 </code></pre>
 
 <pre><code class="javascript">// app/javascript/packs/application.js
 
-import SomeModule from &#39;../some_module&#39;;
+import SomeModule from &#39;../some_module&#39;
 </code></pre>
 
 <p>Here&#39;s the output of the webpack build, using the <code>CommonsChunkPlugin</code> setup as described in the previous section:</p>
@@ -700,8 +705,8 @@ application-5b435b20467ae799d8e6.js    3.42 kB       0  [emitted]         applic
 
 <pre><code class="javascript">// app/javascript/packs/application.js
 
-import SomeModule from &#39;../some_module&#39;;
-import AnotherModule from &#39;../another_module&#39;;
+import SomeModule from &#39;../some_module&#39;
+import AnotherModule from &#39;../another_module&#39;
 </code></pre>
 
 <p>Rebuilding now, we might expect only the digest for <code>application.js</code> would change:</p>
@@ -821,22 +826,20 @@ set :default_env, { &#39;NODE_ENV&#39; =&gt; &#39;production&#39; }
 <pre><code class="javascript">// karma.conf.js
 
 // Require our webpack test configuration
-const webpackConfig = require(&#39;./config/webpack/test.js&#39;);
+const webpackConfig = require(&#39;./config/webpack/test.js&#39;)
 
 // Remove the plugins to workaround for several issues
 // https://github.com/webpack-contrib/karma-webpack/issues/22
 // https://github.com/rails/webpacker/issues/435
-const {assign} = require(&#39;lodash&#39;);
-assign(webpackConfig, { plugins: [] });
+const { assign } = require(&#39;lodash&#39;)
+assign(webpackConfig, { plugins: [] })
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     frameworks: [&#39;jasmine&#39;],
 
     // list of files / patterns to load in the browser
-    files: [
-      { pattern: &#39;spec/javascript/**/*.js&#39;, watched: false },
-    ],
+    files: [{ pattern: &#39;spec/javascript/**/*.js&#39;, watched: false }],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -846,8 +849,8 @@ module.exports = function(config) {
 
     // For karma-webpack extension
     webpack: webpackConfig,
-  });
-};
+  })
+}
 </code></pre>
 
 <p>We ran into few problems using Karma with certain webpack plugins, including <a href="https://github.com/webpack-contrib/karma-webpack/issues/22" target="_blank" rel="noopener noreferrer">this issue</a> with <code>karma-webpack</code> plus the <code>CommonsChunkPlugin</code> and <a href="https://github.com/rails/webpacker/issues/435" target="_blank" rel="noopener noreferrer">this issue</a> with Webpacker&#39;s use of the <code>ManifestPlugin</code>. Turns out, to run unit tests in the Karma context, our webpack plugins are irrelevant, so we&#39;ve opted to remove them altogether in the Karma configuration for now. The downside is that our unit testing setup does not exercise our webpack plugin configuration, but any issue there would be caught by our integration testing workflow.</p>
@@ -861,16 +864,18 @@ module.exports = function(config) {
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
-    &lt;meta content=&quot;text/html;charset=UTF-8&quot; http-equiv=&quot;Content-Type&quot;/&gt;
-    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;/&gt;
+    &lt;meta
+      content=&quot;text/html;charset=UTF-8&quot;
+      http-equiv=&quot;Content-Type&quot;
+    /&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot; /&gt;
     &lt;title&gt;Jasmine Specs&lt;/title&gt;
 
     &lt;%= stylesheet_link_tag *jasmine_css_files %&gt;
 
     &lt;!-- add the packs! --&gt;
-    &lt;%= javascript_pack_tag &quot;vendor&quot;, &quot;application&quot; %&gt;
-
-    &lt;%= javascript_include_tag *jasmine_js_files, :defer =&gt; &quot;defer&quot; %&gt;
+    &lt;%= javascript_pack_tag &quot;vendor&quot;, &quot;application&quot; %&gt; &lt;%=
+    javascript_include_tag *jasmine_js_files, :defer =&gt; &quot;defer&quot; %&gt;
   &lt;/head&gt;
   &lt;body data-no-turbolink&gt;
     &lt;div id=&quot;jasmine_content&quot;&gt;&lt;/div&gt;
@@ -1017,7 +1022,6 @@ module.exports = function(config) {
     <input type="hidden" name="tags[]" value="733966" />
     <input type="hidden" name="tags[]" value="733959" />
     <input type="hidden" name="tags[]" value="733964" />
-    <input type="hidden" name="tags[]" value="" />
   <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/blog/from-sprockets-to-webpack.html" />
 </form>
 

@@ -3,7 +3,7 @@
   <head>
     <title>25 reasons to switch to Webpack(er) - rossta.net</title>
 <meta name="description" content="There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here." />
-<meta name="keywords" content="Rails, Webpack, Overview" />
+<meta name="keywords" content="Rails, Webpack" />
 <meta name="site" content="rossta.net" />
 <meta property="og:site_name" content="rossta.net" />
 <meta name="twitter:card" content="summary" />
@@ -23,7 +23,7 @@
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
     <link rel="canonical" href="https://rossta.net/blog/reasons-to-switch-to-webpacker.html" />
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"25 reasons to switch to Webpack(er)","url":"https://rossta.net/blog/reasons-to-switch-to-webpacker.html","datePublished":"2020-03-02T00:00:00Z","keywords":"rails, webpack, overview","description":"There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"25 reasons to switch to Webpack(er)","url":"https://rossta.net/blog/reasons-to-switch-to-webpacker.html","datePublished":"2020-03-02T00:00:00Z","keywords":"rails, webpack","description":"There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
     </script>
 
 
@@ -92,16 +92,22 @@
 <p>If you&#39;re a Rails dev and your app is currently using the Rails asset pipeline, here are a few reasons why webpack and Webpacker might not be a good fit for you.</p>
 
 <ol>
-<li><p><strong>You don&#39;t have the right application</strong></p>
-
-<p>If your application doesn&#39;t use much JavaScript, it&#39;s probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a more substantial tool like webpack.</p></li>
-<li><p><strong>You don&#39;t have the time</strong></p>
-
-<p>I&#39;ll be the first to admit that adopting webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. webpack and NPM dependencies are upgraded at a rapid pace, so you need to keep up with upgrades. You might also have to understand how JavaScript modules work—good news; those skills are transferrable.</p></li>
-<li><p><strong>You don&#39;t have the right mindset</strong></p>
-
-<p>Yes, webpack is complex. Plenty of developers love to complain about this fact. If you think you&#39;re one of those developers, you probably won&#39;t enjoy the process of adopting webpack. A lot of frustration can be eased through education. Make sure you&#39;ve got a positive attitude going in.</p></li>
+<li><strong>You don&#39;t have the right application</strong></li>
 </ol>
+
+<p>If your application doesn&#39;t use much JavaScript, it&#39;s probably not worth the switch. Do you spend less than 5-10% of your development time working on JavaScript? Your app might not warrant a more substantial tool like webpack.</p>
+
+<ol>
+<li><strong>You don&#39;t have the time</strong></li>
+</ol>
+
+<p>I&#39;ll be the first to admit that adopting webpack for the first time requires patience. Things work differently than with Sprockets. You may need to invest time learning a new paradigm. webpack and NPM dependencies are upgraded at a rapid pace, so you need to keep up with upgrades. You might also have to understand how JavaScript modules work—good news; those skills are transferrable.</p>
+
+<ol>
+<li><strong>You don&#39;t have the right mindset</strong></li>
+</ol>
+
+<p>Yes, webpack is complex. Plenty of developers love to complain about this fact. If you think you&#39;re one of those developers, you probably won&#39;t enjoy the process of adopting webpack. A lot of frustration can be eased through education. Make sure you&#39;ve got a positive attitude going in.</p>
 
 <hr>
 
@@ -207,9 +213,9 @@
 export default {
   data() {
     return {
-      name: &quot;World&quot;
+      name: &#39;World&#39;,
     }
-  }
+  },
 }
 &lt;/script&gt;
 
@@ -257,8 +263,8 @@ div {
 
 $(function () {
   $(&#39;.main-carousel&#39;).flickity({
-    contain: true
-  });
+    contain: true,
+  })
 })
 </code></pre>
 
@@ -267,10 +273,10 @@ $(function () {
 <pre><code class="javascript">import Flickity from &#39;flickity&#39;
 
 document.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
-  const elem = document.querySelector(&#39;.main-carousel&#39;);
+  const elem = document.querySelector(&#39;.main-carousel&#39;)
   const flkty = new Flickity(elem, {
-    contain: true
-  });
+    contain: true,
+  })
 })
 </code></pre>
 
@@ -343,15 +349,15 @@ document.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
 
 <p>Now we can write future JS syntax:</p>
 
-<pre><code class="javascript">const array = [1, 2, 3];
-const [first, second] = array;
+<pre><code class="javascript">const array = [1, 2, 3]
+const [first, second] = array
 </code></pre>
 
 <p>Babel will compile it for Edge 16:</p>
 
-<pre><code class="javascript">const array = [1, 2, 3];
+<pre><code class="javascript">const array = [1, 2, 3]
 const first = array[0],
-      second = array[1];
+  second = array[1]
 </code></pre>
 
 <ul>
@@ -375,10 +381,10 @@ const first = array[0],
 
 <p>If <code>chrome 71</code> is targeted, then this will get replaced with:</p>
 
-<pre><code class="javascript">import &quot;core-js/modules/es.array.unscopables.flat&quot;
-import &quot;core-js/modules/es.array.unscopables.flat-map&quot;
-import &quot;core-js/modules/es.object.from-entries&quot;
-import &quot;core-js/modules/web.immediate&quot;
+<pre><code class="javascript">import &#39;core-js/modules/es.array.unscopables.flat&#39;
+import &#39;core-js/modules/es.array.unscopables.flat-map&#39;
+import &#39;core-js/modules/es.object.from-entries&#39;
+import &#39;core-js/modules/web.immediate&#39;
 </code></pre>
 
 <p>Now you can start removing those conditionals you&#39;ve been adding to test for browser support.</p>
@@ -433,20 +439,20 @@ import &quot;core-js/modules/web.immediate&quot;
 
 <pre><code class="javascript">// config/webpack/environment.js
 
-const webpack = require(&#39;webpack&#39;);
+const webpack = require(&#39;webpack&#39;)
 
-const {environment} = require(&#39;@rails/webpacker&#39;);
+const { environment } = require(&#39;@rails/webpacker&#39;)
 
 environment.plugins.append(
   &#39;jquery&#39;, // arbitrary name
-   new webpack.ProvidePlugin({
+  new webpack.ProvidePlugin({
     $: &#39;jquery&#39;,
     jQuery: &#39;jquery&#39;,
-    &#39;window.jQuery&#39;: &#39;jquery&#39;
-   }),
-);
+    &#39;window.jQuery&#39;: &#39;jquery&#39;,
+  }),
+)
 
-module.exports = environment;
+module.exports = environment
 </code></pre>
 
 <ul>
@@ -465,12 +471,17 @@ module.exports = environment;
 
 <p>Syntax:</p>
 
-<pre><code class="javascript">require.context(directory, useSubdirectories = true, regExp = /^\.\/.*$/, mode = &#39;sync&#39;);
+<pre><code class="javascript">require.context(
+  directory,
+  (useSubdirectories = true),
+  (regExp = /^\.\/.*$/),
+  (mode = &#39;sync&#39;),
+)
 </code></pre>
 
 <p>Example: require all the test files in the current and nested directories.</p>
 
-<pre><code class="javascript">require.context(&#39;.&#39;, true, /\.test\.js$/);
+<pre><code class="javascript">require.context(&#39;.&#39;, true, /\.test\.js$/)
 </code></pre>
 
 <p>Example: import all the default exports in the current directory and re-export as named modules</p>
@@ -551,8 +562,9 @@ module.exports = environment
 
 <p>When webpack detects a dynamic import function, like the following, in your application code, it will create a separate bundle for that import and load it asynchronously when that code is executed in the browser.</p>
 
-<pre><code class="javascript">import(&#39;pdfjs/webpack&#39;).then(({default: pdfjs}) =&gt; { // async import!
-  pdfjs.getDocument(&#39;https://example.com/some.pdf&#39;)  // ...
+<pre><code class="javascript">import(&#39;pdfjs/webpack&#39;).then(({ default: pdfjs }) =&gt; {
+  // async import!
+  pdfjs.getDocument(&#39;https://example.com/some.pdf&#39;) // ...
 })
 </code></pre>
 
@@ -632,7 +644,7 @@ module.exports = environment
 
 <p><img src="/assets/images/blog/webpack/perf-budget-metrics.png" alt="Performance Budget Images" loading="lazy" /></p>
 
-<p>One of his key strategies for measuring frontend performance is &quot;performance budgeting&quot; and how this relates to  &quot;time-to-interactive&quot; (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application. That value closely correlates with the amount of JavaScript you force your users&#39; browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.</p>
+<p>One of his key strategies for measuring frontend performance is &quot;performance budgeting&quot; and how this relates to &quot;time-to-interactive&quot; (TTI). The thinking is you may be able to put a value on the TTI experienced by users of your application. That value closely correlates with the amount of JavaScript you force your users&#39; browsers to download and execute. By limiting the payload size of the initial download, you may be able to improve TTI.</p>
 
 <p>What does this have to do with webpack? Not only does webpack make it easier to split up your bundles, as we saw with the code splitting sections above, but it also provides built-in support for <a href="https://medium.com/webpack/webpack-performance-budgets-13d4880fbf6d" target="_blank" rel="noopener noreferrer">performance budgets</a>. You can customize webpack to print a warning or even raise an error if any bundle exceeds the configured <code>maxEntryPointSize</code>.</p>
 
@@ -671,7 +683,7 @@ module.exports = environment
 
 <pre><code class="javascript">import _ from &#39;lodash&#39; // OR
 
-import {map, uniq, tail} from &#39;lodash&#39;
+import { map, uniq, tail } from &#39;lodash&#39;
 </code></pre>
 
 <p>The following approach allows webpack to limit the resulting file size:</p>
@@ -679,7 +691,6 @@ import {map, uniq, tail} from &#39;lodash&#39;
 <pre><code class="javascript">import map from &#39;lodash/map&#39;
 import uniq from &#39;lodash/uniq&#39;
 import tail from &#39;lodash/tail&#39;
-
 </code></pre>
 
 <ul>
@@ -773,7 +784,6 @@ import tail from &#39;lodash/tail&#39;
   </style>
     <input type="hidden" name="tags[]" value="733966" />
     <input type="hidden" name="tags[]" value="733964" />
-    <input type="hidden" name="tags[]" value="" />
   <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/blog/reasons-to-switch-to-webpacker.html" />
 </form>
 
