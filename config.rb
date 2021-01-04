@@ -308,7 +308,7 @@ helpers do
       "headline": current_article.title,
       "url": current_url,
       "datePublished": current_article.date.iso8601,
-      "keywords": current_page.data.tags.join(', ').downcase,
+      "keywords": (current_page.data.tags || []).join(', ').downcase,
       "description": current_page.data.description,
       "mainEntityOfPage": {
         "@type": "WebPage",
