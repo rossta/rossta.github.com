@@ -27,9 +27,7 @@ As we'll see, Webpacker is a very different beast than the Rails asset pipeline.
 
 First, let's take a little safari and see what we can do to help a few companies correct their Webpacker usage out in the wild.
 
-> **Help me help them**: My aim in highlighting these apps is to educate, not criticize!
->
-> _If you know anyone who works at any of the following companies, please share this post or ask them to reach out to me at ross at rossta dot net._
+> **Help me help them**: _If you know anyone who works at any of the following companies, please share this post or ask them to reach out to me at ross at rossta dot net._
 
 ## Case study: Podia
 
