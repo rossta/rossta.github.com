@@ -22,6 +22,10 @@
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
     <link rel="canonical" href="https://rossta.net/blog/visual-guide-to-webpacker.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"A visual guide to Webpacker","url":"https://rossta.net/blog/visual-guide-to-webpacker.html","datePublished":"2020-08-02T00:00:00Z","keywords":"rails, webpack, feature","description":"Navigate the world of Webpacker and webpack on Rails with confidence using this collection of mental maps I put together.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
 
     <link rel="stylesheet" href="/css/app.chunk.7923a6f6122e0746b14d.css" media="all"></link>
     <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.js"></script>
@@ -230,18 +234,6 @@
     
 <p>The &quot;compile on-demand&quot; mode is similar to using the Rails asset pipeline in that you need only run the Rails server explicitly to get started. In development, I prefer &quot;dev server&quot; mode. This approach involves using the <code>webpack-dev-server</code> as a standalone HTTP server to compile assets and serve asset requests. Advantages include auto-recompilation, live-reloading, and <a href="https://webpack.js.org/concepts/hot-module-replacement/" target="_blank" rel="noopener noreferrer">hot module replacement</a>.</p>
 
-<p>Let&#39;s see how requests are processed in &quot;dev server&quot; mode.</p>
-
-      <h4 id="html-request-with-dev-server" class="title title-h4">
-        <a name="html-request-with-dev-server" class="anchor" href="#html-request-with-dev-server">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
-       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
-       </svg>
-</a>
-        HTML request with dev server
-      </h4>
-    
-<p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-dev-server-1.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
-
 <p>Using a tool like <a href="https://github.com/ddollar/foreman" target="_blank" rel="noopener noreferrer">foreman</a> or <a href="https://github.com/DarthSim/overmind" target="_blank" rel="noopener noreferrer">overmind</a>, we can boot up both the Rails server and the webpack-dev-server with a single command using a Procfile such as:</p>
 
 <pre><code class="yaml"># Procfile.dev
@@ -256,6 +248,18 @@ webpack: bin/webpack-dev-server
 </code></pre>
 
 <p>This way, Rails won&#39;t shell out to the webpack executable if the dev-server is running. The dev-server will be responsible for detecting changes to assets and recompiling automatically.</p>
+
+<p>Let&#39;s see how requests are processed in &quot;dev server&quot; mode.</p>
+
+      <h4 id="html-request-with-dev-server" class="title title-h4">
+        <a name="html-request-with-dev-server" class="anchor" href="#html-request-with-dev-server">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        HTML request with dev server
+      </h4>
+    
+<p><img src="/assets/images/blog/visual-guide-to-webpacker/webpacker-dev-server-1.png" alt="Rails request with the asset pipeline" loading="lazy" /></p>
 
 <p>When the dev-server boots up (1), it &quot;pre-compiles&quot; assets in memory, instead of writing them to disk, for performance. It does still write the <code>manifest.json</code> file to disk in the <code>public/packs/</code> directory (2), where Rails can find it.</p>
 
