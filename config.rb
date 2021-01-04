@@ -146,7 +146,7 @@ helpers do
   end
 
   def stylesheet_pack_tag(*names)
-    names.map { |name| "<link href='#{webpack_manifest[name + ".css"]}' rel='stylesheet' media='all'></link>" }.join("")
+    names.map { |name| %Q|<link rel="stylesheet" href="#{webpack_manifest[name + ".css"]}" media="all"></link>| }.join("")
   end
 
   def javascript_pack_tag(*names)
@@ -164,6 +164,7 @@ helpers do
   def current_url
     path = current_page.path
     path = "/" if homepage?
+    path = current_article.url if current_article
     to_url(path: path)
   end
 

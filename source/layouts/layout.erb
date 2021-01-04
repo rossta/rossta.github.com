@@ -9,6 +9,9 @@
 
     <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
     <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <% if current_article %>
+    <link rel="canonical" href="<%= current_url %>" />
+    <% end %>
 
     <%= stylesheet_pack_tag "app" %>
     <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.js"></script>
