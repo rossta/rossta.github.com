@@ -126,12 +126,6 @@ In production, of course, the role of the middleware may likely be played instea
 
 The "compile on-demand" mode is similar to using the Rails asset pipeline in that you need only run the Rails server explicitly to get started. In development, I prefer "dev server" mode. This approach involves using the `webpack-dev-server` as a standalone HTTP server to compile assets and serve asset requests. Advantages include auto-recompilation, live-reloading, and [hot module replacement](https://webpack.js.org/concepts/hot-module-replacement/).
 
-Let's see how requests are processed in "dev server" mode.
-
-#### HTML request with dev server
-
-![Rails request with the asset pipeline](blog/visual-guide-to-webpacker/webpacker-dev-server-1.png)
-
 Using a tool like [foreman](https://github.com/ddollar/foreman) or [overmind](https://github.com/DarthSim/overmind), we can boot up both the Rails server and the webpack-dev-server with a single command using a Procfile such as:
 
 ```yaml
@@ -148,6 +142,12 @@ development:
 ```
 
 This way, Rails won't shell out to the webpack executable if the dev-server is running. The dev-server will be responsible for detecting changes to assets and recompiling automatically.
+
+Let's see how requests are processed in "dev server" mode.
+
+#### HTML request with dev server
+
+![Rails request with the asset pipeline](blog/visual-guide-to-webpacker/webpacker-dev-server-1.png)
 
 When the dev-server boots up (1), it "pre-compiles" assets in memory, instead of writing them to disk, for performance. It does still write the `manifest.json` file to disk in the `public/packs/` directory (2), where Rails can find it.
 
