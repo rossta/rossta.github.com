@@ -146,7 +146,7 @@ helpers do
   end
 
   def stylesheet_pack_tag(*names)
-    names.map { |name| %Q|<link rel="stylesheet" href="#{webpack_manifest[name + ".css"]}" media="all"></link>| }.join("")
+    names.map { |name| %(<link rel="stylesheet" href="#{webpack_manifest[name + ".css"]}" media="all"></link>) }.join("")
   end
 
   def javascript_pack_tag(*names)
@@ -157,7 +157,7 @@ helpers do
     Addressable::URI.new({
       scheme: config[:protocol],
       host: config[:host],
-      port: build? ? nil : config[:port],
+      port: build? ? nil : config[:port]
     }.merge(opts))
   end
 
@@ -204,7 +204,7 @@ helpers do
     prompt = opts.fetch(:prompt, "Discuss it on Twitter")
     tweet_link_to prompt, {
       text: [article.title, "rossta.net"].join(" - "),
-      url: to_url(path: article.url),
+      url: to_url(path: article.url)
     }, options
   end
 
@@ -269,7 +269,7 @@ helpers do
   CONVERTKIT_WEBPACK_INLINE_FORM_ID = "1268949"
   CONVERTKIT_STANDARD_INLINE_FORM_ID = "818387"
   def convertkit_inline_form_id
-    if current_page.path =~ /webpack-on-rails\/index/
+    if /webpack-on-rails\/index/.match?(current_page.path)
       CONVERTKIT_WEBPACK_LANDING_PAGE_FORM_ID
     elsif current_page_tagged?(%w[Rails Webpack])
       CONVERTKIT_WEBPACK_INLINE_FORM_ID
@@ -280,5 +280,40 @@ helpers do
 
   def convertkit_campaign
     explicit_page_tags.first || "Homepage"
+  end
+
+  def current_article_ld_json
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Ross Kaffenberger",
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Ross Kaffenberger",
+        "image": {
+          "@type": "ImageObject",
+          "url": "https://rossta.net/assets/images/me.jpg",
+          "width": 400,
+          "height": 400
+        },
+        "url": "https://rossta.net",
+        "sameAs": [
+          "https://rossta.net/about/",
+          "https://twitter.com/rossta"
+        ]
+      },
+      "headline": current_article.title,
+      "url": current_url,
+      "datePublished": current_article.date.iso8601,
+      "keywords": current_page.data.tags.join(', ').downcase,
+      "description": current_page.data.description,
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://rossta.net"
+      }
+    }
   end
 end
