@@ -2,6 +2,7 @@
 title: How to Test Your Eventmachine Code with RSpec
 author: Ross Kaffenberger
 summary: Test an eventmachine server-client socket connection with rspec
+description: Test an eventmachine server-client socket connection with rspec
 pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:

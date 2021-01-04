@@ -2,6 +2,7 @@
 title: Just-in-Time CSS
 author: Ross Kaffenberger
 summary: Defer CSS requests to reduce payload size on initial page load
+description: Defer CSS requests to reduce payload size on initial page load
 pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:

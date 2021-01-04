@@ -1,6 +1,7 @@
 ---
 title: Create and Deploy an Ember App in 5 Minutes
 summary: Deploying a static site Ember app on Heroku
+description: Deploying a static site Ember app on Heroku
 author: Ross Kaffenberger
 pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Code

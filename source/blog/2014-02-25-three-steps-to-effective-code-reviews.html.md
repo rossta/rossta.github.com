@@ -1,6 +1,7 @@
 ---
 title: Three Steps to Effective Code Reviews
-summary: Exchanging feedback doesn&#8217;t have to be painful
+summary: Exchanging feedback doesn't have to be painful
+description: Exchanging feedback doesn't have to be painful
 author: Ross Kaffenberger
 published: true
 pull_image: 'blog/stock/logs-pexels-photo.jpg'

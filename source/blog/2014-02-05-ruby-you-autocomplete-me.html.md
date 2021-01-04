@@ -2,6 +2,7 @@
 title: Ruby, You Autocomplete Me
 author: Ross Kaffenberger
 summary: Hacking on a smarter ruby console
+description: Hacking on a smarter ruby console
 pull_image: 'blog/stock/logs-pexels-photo.jpg'
 published: true
 category: Code

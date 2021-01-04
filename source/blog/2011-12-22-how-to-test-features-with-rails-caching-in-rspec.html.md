@@ -45,4 +45,3 @@ Happy testing.
 [SD Card](https://thenounproject.com/term/sd-card/6185/) by Thomas Le Bas from the Noun Project
 
 [1]:	https://github.com/jnicklas/capybara
-

@@ -2,6 +2,7 @@
 title: Lean Startup Meetup Ignited
 author: Ross Kaffenberger
 summary: Notes on a recent Lean Startup meetup in NYC
+description: Notes on a recent Lean Startup meetup in NYC
 pull_image: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 ---
