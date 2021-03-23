@@ -1,5 +1,5 @@
 ---
-title: How we switched from Sprockets to webpack
+title: How we switched from Sprockets to Webpacker
 author: Ross Kaffenberger
 published: true
 summary: Lessons learned adopting the Webpacker gem in an existing Rails app
