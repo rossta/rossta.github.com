@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: In webpack, some dependencies are best served vanilla
 description: Upgrading jQuery plugins to work with webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all.
-pull_image: 'blog/stock/clint-patterson-exfrR9KkzlE-unsplash-resized.jpg'
-pull_image_caption: Photo by Clint Patterson on Unsplash
+thumbnail: 'blog/stock/clint-patterson-exfrR9KkzlE-unsplash-resized.jpg'
+thumbnail_caption: Photo by Clint Patterson on Unsplash
 series:
 category: Code
 tags:

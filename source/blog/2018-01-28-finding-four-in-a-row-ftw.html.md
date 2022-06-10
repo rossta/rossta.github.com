@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: A win algorithm for Vue.js Connect Four
 description: In this post for the Building Connect Four with Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components.
-pull_image: 'blog/purple-circles.jpg'
-pull_image_caption: Background Photo by Peter Clarkson on Unsplash
+thumbnail: 'blog/purple-circles.jpg'
+thumbnail_caption: Background Photo by Peter Clarkson on Unsplash
 series: 'Connect Four'
 category: Code
 tags:

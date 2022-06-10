@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Using to_enum with block methods
 description: This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful.
-pull_image: 'blog/stock/chutternsnap-containers-unsplash.jpg'
-pull_image_caption: Photo by chuttersnap on Unsplash
+thumbnail: 'blog/stock/chutternsnap-containers-unsplash.jpg'
+thumbnail_caption: Photo by chuttersnap on Unsplash
 series: Enumerable
 category: Code
 tags:

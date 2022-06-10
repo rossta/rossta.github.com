@@ -4,7 +4,7 @@ summary: Exchanging feedback doesn't have to be painful
 description: Exchanging feedback doesn't have to be painful
 author: Ross Kaffenberger
 published: true
-pull_image: 'blog/stock/logs-pexels-photo.jpg'
+thumbnail: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:
   - Process

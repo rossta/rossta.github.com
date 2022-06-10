@@ -3,7 +3,7 @@ title: Heuristics
 author: Ross Kaffenberger
 summary: Applying Ruby to heuristics-based solutions to NP-hard problems in computer science
 description: Applying Ruby to heuristics-based solutions to NP-hard problems in computer science
-pull_image: 'blog/stock/logs-pexels-photo.jpg'
+thumbnail: 'blog/stock/logs-pexels-photo.jpg'
 cateogory: Code
 tags:
   - Ruby

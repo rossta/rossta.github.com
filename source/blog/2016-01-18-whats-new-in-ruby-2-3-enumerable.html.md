@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: A closer look at Enumerable's grep_v and chunk_while
 description: Ruby 2.3 introduced a couple new additions to the Enumerable API that provide some nice variations on existing methods
-pull_image: 'blog/stock/dark-brown-milk-candy-pexels-photo.jpg'
+thumbnail: 'blog/stock/dark-brown-milk-candy-pexels-photo.jpg'
 series: Enumerable
 category: Code
 tags:

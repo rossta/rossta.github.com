@@ -3,7 +3,7 @@ title: Connect Four
 author: Ross Kaffenberger
 summary: Play the classic game online in realtime; built with Vue.js and Elixir
 description: Demonstrates how Vue.js and Elixir can be used to build a realtime online multiplayer game.
-pull_image: 'screenshots/screenshot-connectfour.png'
+thumbnail: 'screenshots/screenshot-connectfour.png'
 published: true
 homepage: 'http://connectfour.rossta.me/'
 links:

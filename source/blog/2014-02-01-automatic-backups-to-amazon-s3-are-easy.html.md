@@ -3,7 +3,7 @@ title: Automatic Backups to Amazon S3 are Easy
 summary: Push important files to the cloud with s3cmd and cron
 description: Push important files to the cloud with s3cmd and cron
 author: Ross Kaffenberger
-pull_image: 'blog/stock/logs-pexels-photo.jpg'
+thumbnail: 'blog/stock/logs-pexels-photo.jpg'
 published: true
 category: Code
 tags:

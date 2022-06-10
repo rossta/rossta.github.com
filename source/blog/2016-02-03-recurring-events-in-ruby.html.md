@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: Introducing the Montrose gem
 description: Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available in the Recurrence gem.
-pull_image: 'blog/stock/clock-pexels-photo.jpg'
+thumbnail: 'blog/stock/clock-pexels-photo.jpg'
 series: Enumerable
 category: Code
 tags:

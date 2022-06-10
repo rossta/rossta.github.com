@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: Using CasperJS to automate webpage interaction
 description: A tutorial for writing a CasperJS script to fill out a Google Form, which is also available now as an npm package called "form-to-terminal"
-pull_image: 'blog/stock/coding-a-pexels-photo.jpg'
+thumbnail: 'blog/stock/coding-a-pexels-photo.jpg'
 series:
 category: Code
 tags:

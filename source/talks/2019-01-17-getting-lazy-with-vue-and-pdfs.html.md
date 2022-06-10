@@ -3,7 +3,7 @@ title: Getting Lazy with Vue and PDFs
 author: Ross Kaffenberger
 summary: A roundabout way of discovering IntersectionObserver
 description: Here's a lightning talk in which I share the most important lesson I learned while building a PDF Viewer in Vue. VueDC meetup, January 2019.
-pull_image: 'screenshots/screenshot-pdf-viewer.png'
+thumbnail: 'screenshots/screenshot-pdf-viewer.png'
 published: true
 category: Code
 tags:

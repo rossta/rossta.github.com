@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: Using Rails::Generators::TestCase to test drive your own generators
 description: This tutorial shows how to use Rails::Generators::TestCase to test drive your own Rails generators
-pull_image: 'blog/stock/brooklyn-bridge-suspension-pexels-photo.jpg'
+thumbnail: 'blog/stock/brooklyn-bridge-suspension-pexels-photo.jpg'
 series:
 category: Code
 tags:

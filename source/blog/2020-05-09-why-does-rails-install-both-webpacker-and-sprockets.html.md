@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: "Spoiler: Because DHH says so… but you can still choose"
 description: A new Rails 6 application will install both Webpacker and Sprockets by default. Don't they solve the same problem? This article dives into why Sprockets lives on even though webpack has surpassed most of its features and why you might want to choose one over the other.
-pull_image: 'blog/stock/julian-ebert-farmland-unsplash.jpg'
-pull_image_caption: Photo by Julian Ebert on Unsplash
+thumbnail: 'blog/stock/julian-ebert-farmland-unsplash.jpg'
+thumbnail_caption: Photo by Julian Ebert on Unsplash
 series:
 popular: 1
 category: Code

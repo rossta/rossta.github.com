@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Get to know your bundles with the webpack-bundle-analyzer
 description: In this post, we'll take a look at installing and using the webpack-bundle-analyzer, perhaps the most invaluable webpack plugin, to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker.
-pull_image: 'blog/stock/neonbrand-stained-glass-unsplash.jpg'
-pull_image_caption: Photo by NeONBRAND on Unsplash
+thumbnail: 'blog/stock/neonbrand-stained-glass-unsplash.jpg'
+thumbnail_caption: Photo by NeONBRAND on Unsplash
 series:
 category: Code
 tags:

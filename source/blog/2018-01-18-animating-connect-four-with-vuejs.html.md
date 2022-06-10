@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: How the Vue transition component "drops" things into place
 description: Continuing our series on building Connect Four with Vue and Phoenix, we'll use Vue transitions and a third party library to animate the SVG checkers falling and bouncing into place when added to the game board.
-pull_image: 'blog/connect-four-nightsky.png'
-pull_image_caption: Background Photo by Andrew Preble on Unsplash
+thumbnail: 'blog/connect-four-nightsky.png'
+thumbnail_caption: Background Photo by Andrew Preble on Unsplash
 series: 'Connect Four'
 category: Code
 tags:

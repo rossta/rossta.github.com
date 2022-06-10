@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Rendering transparent masks or making the impossible possible with SVG
 description: An application of the technique of SVG pattern transparent to render a Connect Four board with transparent portholes.
-pull_image: 'blog/connect-four-splash.png'
-pull_image_caption: Background Photo by Matthew Kane on Unsplash
+thumbnail: 'blog/connect-four-splash.png'
+thumbnail_caption: Background Photo by Matthew Kane on Unsplash
 series: 'Connect Four'
 category: Code
 tags:

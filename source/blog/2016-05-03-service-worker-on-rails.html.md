@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: Integrating Service Worker with the Rails asset pipeline
 description: This blog post describes how to integrate JavasScript for the new Service Worker API into Ruby and Rails applications that use Sprockets for the Rails asset pipeline.
-pull_image: 'blog/stock/blue-buildings-pexels-photo.jpeg'
+thumbnail: 'blog/stock/blue-buildings-pexels-photo.jpeg'
 series: Service Worker
 category: Code
 tags:

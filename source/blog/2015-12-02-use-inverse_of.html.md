@@ -3,7 +3,7 @@ title: Use inverse_of
 summary: Skip the Rails magic and set the :inverse_of option on your ActiveRecord associations
 author: Ross Kaffenberger
 description: ActiveRecord will try hard to infer the inverse relation for your associations, but you may benefit from setting the inverse_of option wherever possible
-pull_image: 'blog/stock/fall-leaves-pexels-photo.jpg'
+thumbnail: 'blog/stock/fall-leaves-pexels-photo.jpg'
 published: true
 category: Code
 tags:

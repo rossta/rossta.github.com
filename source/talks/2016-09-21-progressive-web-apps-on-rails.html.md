@@ -3,7 +3,7 @@ title: Progressive Web Apps on Rails
 author: Ross Kaffenberger
 summary: Use this little gem for integrating Service Workers with Rails
 description: A brief lightning talk on how to set up Rails as a Progressive Web App using the serviceworker-rails gem for the Rails asset pipeline. Arlington Ruby Meetup, September 2016.
-pull_image: 'blog/progressive_web_apps_on_rails.jpg'
+thumbnail: 'blog/progressive_web_apps_on_rails.jpg'
 published: true
 category: Code
 tags:

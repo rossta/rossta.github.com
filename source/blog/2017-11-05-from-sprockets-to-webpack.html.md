@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Lessons learned adopting the Webpacker gem in an existing Rails app
 description: In this post, we describe the challenges we faced while replacing the Rails asset pipeline with webpack, how we solved those issues, and what we learned along the way.
-pull_image: 'blog/stock/denisse-leon-mixer-board-unsplash.jpg'
-pull_image_caption: Photo by Denisse Leon on Unsplash
+thumbnail: 'blog/stock/denisse-leon-mixer-board-unsplash.jpg'
+thumbnail_caption: Photo by Denisse Leon on Unsplash
 popular: 5
 series:
 category: Code

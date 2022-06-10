@@ -3,7 +3,7 @@ title: ServiceWorker::Rails
 author: Ross Kaffenberger
 summary: Turn your Rails app into a Progressive Web App
 description: Turn your Rails app into a Progressive Web App. Use Service Worker with the Rails asset pipeline.
-pull_image: 'screenshots/screenshot-serviceworker-rails.png'
+thumbnail: 'screenshots/screenshot-serviceworker-rails.png'
 published: true
 homepage: 'https://rossta.net/'
 links:

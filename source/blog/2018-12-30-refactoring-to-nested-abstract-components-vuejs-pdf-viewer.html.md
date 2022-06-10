@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Building a PDF Viewer with Vue - Part 4
 description: Though it's often more easier to extract shared behavior as mixins to be used across components in Vue.js, this post describes at a high level how I used abstract components to achieve the same goal and the advantages of doing so.
-pull_image: 'blog/stock/ak-n-cakiner-tree-branch-unsplash.jpg'
-pull_image_caption: Photo by AK¥N Cakiner on Unsplash
+thumbnail: 'blog/stock/ak-n-cakiner-tree-branch-unsplash.jpg'
+thumbnail_caption: Photo by AK¥N Cakiner on Unsplash
 series: 'PDF Viewer'
 category: Code
 tags:

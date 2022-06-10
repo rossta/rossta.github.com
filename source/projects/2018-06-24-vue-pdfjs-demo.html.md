@@ -3,7 +3,7 @@ title: PDF Viewer
 author: Ross Kaffenberger
 summary: A demo application built with Vue.js and PDF.js
 description: 'This application explores how the Vue framework makes it easier to tackle challenges in building a PDF viewer for the web.'
-pull_image: 'screenshots/screenshot-pdf-viewer.png'
+thumbnail: 'screenshots/screenshot-pdf-viewer.png'
 published: true
 homepage: 'https://rossta.net/vue-pdfjs-demo'
 links:

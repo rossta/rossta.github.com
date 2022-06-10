@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Level up your feature tests
 description: This post explains why RSpec/Rails users should upgrade to Rails 5.1 and drop the DatabaseCleaner gem for JavaScript-enabled acceptance tests.
-pull_image: 'blog/stock/paola-galimberti-mountains-unsplash.jpg'
-pull_image_caption: Photo by Paola Galimberti on Unsplash
+thumbnail: 'blog/stock/paola-galimberti-mountains-unsplash.jpg'
+thumbnail_caption: Photo by Paola Galimberti on Unsplash
 series:
 category: Code
 tags:

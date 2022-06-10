@@ -4,9 +4,9 @@ author: Ross Kaffenberger
 published: true
 summary: Understanding how NODE_ENV is used with Webpacker
 description: When running Rails system or integration tests, you might be surprised to learn that Webpacker will load your development webpack config. What's the deal?
-pull_image: 'blog/stock/green-chameleon-testing-unsplash.jpg'
-pull_image_caption: Photo by Green Chameleon
-pull_image_link: "https://unsplash.com/s/photos/test?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
+thumbnail: 'blog/stock/green-chameleon-testing-unsplash.jpg'
+thumbnail_caption: Photo by Green Chameleon
+thumbnail_link: "https://unsplash.com/s/photos/test?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText"
 series:
 category: Code
 tags:

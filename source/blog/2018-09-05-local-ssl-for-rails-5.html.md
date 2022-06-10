@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Self-signed certificates, wildcard domains, Pumas, and Capybaras—oh my!
 description: Is your Rails app on SSL in production? It may be a good idea to use SSL locally too. It's just that it's typically been a pain to set up. Using SSL for Rails acceptance tests with Capybara has traditionally been even more challenging— until now.
-pull_image: 'blog/stock/james-sutton-padlock-unsplash.jpg'
-pull_image_caption: Photo by James Sutton on Unsplash
+thumbnail: 'blog/stock/james-sutton-padlock-unsplash.jpg'
+thumbnail_caption: Photo by James Sutton on Unsplash
 series:
 category: Code
 tags:

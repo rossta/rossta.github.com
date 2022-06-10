@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: Comparing mathematical, iterative, and recursive solutions
 description: 'Comparing mathematical, iterative, and recursive solutions to the Snake Case challenge posed during the Ancient City Ruby Conference'
-pull_image: 'blog/stock/snakes-pexels-photo.jpg'
+thumbnail: 'blog/stock/snakes-pexels-photo.jpg'
 series: Enumerable
 category: Code
 tags:

@@ -5,7 +5,7 @@ published: true
 summary: 'Where "simple" is a static website hosted on Github pages and Cloudflare'
 description: 'Described how I added a Service Worker script to rossta.net with
 some considerations concerning cache-busting strategies and deployment'
-pull_image: 'blog/stock/cyclists-unsplash-photo.jpg'
+thumbnail: 'blog/stock/cyclists-unsplash-photo.jpg'
 series: Service Worker
 category: Code
 tags:

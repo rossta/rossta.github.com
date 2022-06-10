@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: An unofficial guide to Rails Webpacker YAML configuration
 description: Configuring Webpacker can be a daunting task. In this guide, we will take a look at the options provided via the webpacker.yml file and supported environment variable overrides.
-pull_image: 'blog/stock/adi-goldstein-mixer-unsplash.jpg'
-pull_image_caption: Photo by Adi Goldstein on Unsplash
+thumbnail: 'blog/stock/adi-goldstein-mixer-unsplash.jpg'
+thumbnail_caption: Photo by Adi Goldstein on Unsplash
 series:
 category: Code
 tags:

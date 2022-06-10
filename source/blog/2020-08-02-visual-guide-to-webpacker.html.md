@@ -4,9 +4,9 @@ author: Ross Kaffenberger
 published: true
 summary: How webpack and Rails work together in boxes and arrows
 description: Navigate the world of Webpacker and webpack on Rails with confidence using this collection of mental maps I put together.
-pull_image: 'blog/stock/ian-map-unsplash.jpg'
-pull_image_caption: Photo by Ian on Unsplash
-pull_image_link: https://unsplash.com/@travelsnips
+thumbnail: 'blog/stock/ian-map-unsplash.jpg'
+thumbnail_caption: Photo by Ian on Unsplash
+thumbnail_link: https://unsplash.com/@travelsnips
 series:
 category: Code
 tags:

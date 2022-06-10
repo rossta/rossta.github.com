@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Tips for debugging your Webpacker config
 description: Understanding your Rails webpack configuration and build output can be a little confusing, especially if you're new to either Rails or webpack. This post contains a few tips for debugging your Webpacker setup, some specific to Rails Webpacker, some generally applicable to webpack.
-pull_image: 'blog/stock/alan-emery-beetle-unsplash.jpg'
-pull_image_caption: Photo by Alan Emery on Unsplash
+thumbnail: 'blog/stock/alan-emery-beetle-unsplash.jpg'
+thumbnail_caption: Photo by Alan Emery on Unsplash
 series:
 category: Code
 tags:

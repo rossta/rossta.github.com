@@ -3,7 +3,7 @@ title: Ruby Rogues - Surviving Webpack
 author: Ross Kaffenberger
 summary: Podcast appearance with Ruby Rogues to discuss the challenges of adopting webpack for Rails developers
 description: I joined the Ruby Rogues podcast as a guest to discuss the challenges of adopting webpack for Rails developers. October 2019.
-pull_image: 'screenshots/screenshot-pdf-viewer.png'
+thumbnail: 'screenshots/screenshot-pdf-viewer.png'
 published: true
 category: Code
 tags:

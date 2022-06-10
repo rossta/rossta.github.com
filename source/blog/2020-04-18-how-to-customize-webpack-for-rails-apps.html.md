@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: A closer look at @rails/webpacker configuration
 description: "Configuring webpack is precisely the main job of Webpacker's NPM package, @rails/webpacker. This post provides an overview of how to customize its default settings for your Rails application."
-pull_image: 'blog/stock/ingo-doerrie-dragonfly-unsplash.jpg'
-pull_image_caption: Photo by Ingo Doerrie on Unsplash
+thumbnail: 'blog/stock/ingo-doerrie-dragonfly-unsplash.jpg'
+thumbnail_caption: Photo by Ingo Doerrie on Unsplash
 series:
 category: Code
 tags:

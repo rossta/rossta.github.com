@@ -3,7 +3,7 @@ title: Enumerable's Ugly Cousin at GORUCO 2016
 author: Ross Kaffenberger
 summary: How Ruby's Enumerator helped me solve recurring events
 description: A brief introduction to the fundamental concepts of Ruby's Enumerator class and how it helped me model recurring events. Gotham Ruby Conference, June 2016.
-pull_image: 'blog/enumerable_s_ugly_cousin_at_GORUCO_2016.jpg'
+thumbnail: 'blog/enumerable_s_ugly_cousin_at_GORUCO_2016.jpg'
 published: true
 category: Code
 tags:

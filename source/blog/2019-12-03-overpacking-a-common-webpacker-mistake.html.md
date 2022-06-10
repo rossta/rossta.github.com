@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: i.e., How I saved 6 minutes in a Rails team's deploy time
 description: A big issue that comes up with Webpacker is "where to put the JavaScript files". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.
-pull_image: 'blog/stock/brandless-packing-unsplash.jpg'
-pull_image_caption: Photo by Brandless on Unsplash
+thumbnail: 'blog/stock/brandless-packing-unsplash.jpg'
+thumbnail_caption: Photo by Brandless on Unsplash
 series:
 category: Code
 tags:

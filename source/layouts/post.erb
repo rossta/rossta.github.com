@@ -30,14 +30,14 @@
     <%= partial "partials/article_index", locals: { local_articles: related_articles(current_article, 3) } %>
   </section>
   <article class="mb-24">
-    <% if current_page.data.pull_image %>
+    <% if current_page.data.thumbnail %>
       <figure>
-        <%= lazy_image_tag current_page.data.pull_image if current_page.data.pull_image %>
-        <% if current_page.data.pull_image_caption %>
-          <% if current_page.data.pull_image_link %>
-            <figcaption><%= link_to current_page.data.pull_image_caption, current_page.data.pull_image_link %></figcaption>
+        <%= lazy_image_tag current_page.data.thumbnail if current_page.data.thumbnail %>
+        <% if current_page.data.thumbnail_caption %>
+          <% if current_page.data.thumbnail_link %>
+            <figcaption><%= link_to current_page.data.thumbnail_caption, current_page.data.thumbnail_link %></figcaption>
           <% else %>
-            <figcaption><%= current_page.data.pull_image_caption %></figcaption>
+            <figcaption><%= current_page.data.thumbnail_caption %></figcaption>
           <% end %>
         <% end %>
       </figure>

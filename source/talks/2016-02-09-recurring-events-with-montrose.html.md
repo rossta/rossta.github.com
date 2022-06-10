@@ -3,7 +3,7 @@ title: Recurring events in Ruby
 author: Ross Kaffenberger
 summary: Modeling recurrence with the Montrose gem
 description: A talk on how to define, enumerate, and query recurrence objects in Ruby using the Montrose gem. NYC Ruby Meetup, February 2016.
-pull_image: 'blog/stock/clock-pexels-photo.jpg'
+thumbnail: 'blog/stock/clock-pexels-photo.jpg'
 published: true
 category: Code
 tags:

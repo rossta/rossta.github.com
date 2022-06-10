@@ -3,7 +3,7 @@ title: Mott Hall III School Career Day
 author: Ross Kaffenberger
 summary: Helping out at Career Day at Bronx middle school
 description: Helping out at Career Day at Bronx middle school
-pull_image: 'blog/stock/logs-pexels-photo.jpg'
+thumbnail: 'blog/stock/logs-pexels-photo.jpg'
 category: Life
 tags:
   - JavaScript

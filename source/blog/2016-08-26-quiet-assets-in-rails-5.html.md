@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: How to configure your Rails app to silence asset request logging
 description: Recent changes to the sprockets-rails gem adds the ability to silence asset request logging in Rails 5
-pull_image: 'blog/stock/outerspace-unsplash.jpg'
+thumbnail: 'blog/stock/outerspace-unsplash.jpg'
 series:
 category: Code
 tags:

@@ -4,7 +4,7 @@ author: Ross Kaffenberger
 published: true
 summary: 'Ditch Sprockets and embrace the external pipeline'
 description: 'Explaining how to integrate the webpack asset management tool with the Ruby static web framework Middleman'
-pull_image: 'blog/stock/tundra-hike-pexels-photo.jpg'
+thumbnail: 'blog/stock/tundra-hike-pexels-photo.jpg'
 category: Code
 tags:
   - Ruby

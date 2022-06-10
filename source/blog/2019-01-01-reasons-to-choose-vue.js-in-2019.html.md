@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: i.e., Because it's so darn fun
 description: This post describes a bunch of reasons why developers might enjoy choosing Vue.js as the next JavaScript framework to learn in the coming year.
-pull_image: 'blog/stock/john-moeses-bauan-skyline-unsplash.jpg'
-pull_image_caption: Photo by John Moeses Bauan on Unsplash
+thumbnail: 'blog/stock/john-moeses-bauan-skyline-unsplash.jpg'
+thumbnail_caption: Photo by John Moeses Bauan on Unsplash
 series:
 category: Code
 tags:

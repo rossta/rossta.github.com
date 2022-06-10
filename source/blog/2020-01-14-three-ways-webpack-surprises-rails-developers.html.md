@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: What I learned answering webpack questions on StackOverflow for a month
 description: When I first started working with webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.
-pull_image: 'blog/stock/aaron-burden-balloons-unsplash.jpg'
-pull_image_caption: Photo by Aaron Burden on Unsplash
+thumbnail: 'blog/stock/aaron-burden-balloons-unsplash.jpg'
+thumbnail_caption: Photo by Aaron Burden on Unsplash
 series:
 category: Code
 tags:

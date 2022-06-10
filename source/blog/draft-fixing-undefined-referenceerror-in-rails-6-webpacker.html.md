@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: false
 summary: Why some JavaScript libraries don't work with webpack the way you think they should
 description: Fixing Undefined ReferenceError in Rails 6 Webpacker
-pull_image: 'blog/stock/louvre-pexels-photo.jpg'
-pull_image_caption: Photo by Yoyo Ma on Unsplash
+thumbnail: 'blog/stock/louvre-pexels-photo.jpg'
+thumbnail_caption: Photo by Yoyo Ma on Unsplash
 series:
 category: Code
 tags:

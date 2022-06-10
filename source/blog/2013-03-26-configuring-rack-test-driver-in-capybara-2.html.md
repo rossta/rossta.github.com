@@ -3,7 +3,7 @@ title: Configuring Rack Test Driver in Capybara 2
 author: Ross Kaffenberger
 summary: Helpful hint for dealing with a common Capybara limit
 description: Helpful hint for dealing with a common Capybara limit
-pull_image: 'blog/stock/logs-pexels-photo.jpg'
+thumbnail: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:
   - Ruby

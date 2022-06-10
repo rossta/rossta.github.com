@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: false
 summary: Fixing the duplicate module problem
 description: Fixing the duplicate module problem
-pull_image: 'blog/stock/louvre-pexels-photo.jpg'
-pull_image_caption: Photo by Yoyo Ma on Unsplash
+thumbnail: 'blog/stock/louvre-pexels-photo.jpg'
+thumbnail_caption: Photo by Yoyo Ma on Unsplash
 series:
 category: Code
 tags:

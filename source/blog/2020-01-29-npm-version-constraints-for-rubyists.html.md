@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: Mind your carets and tildes
 description: A reference guide to NPM version constraints for dependencies declared in the package.json file of a Rails project from the perspective of a Ruby developer familiar with similar conventions used to specify Ruby dependencies in a Gemfile.
-pull_image: 'blog/stock/lulu-blue-mountain-unsplash.jpg'
-pull_image_caption: Photo by 拴 张 on Unsplash
+thumbnail: 'blog/stock/lulu-blue-mountain-unsplash.jpg'
+thumbnail_caption: Photo by 拴 张 on Unsplash
 series:
 category: Code
 tags:

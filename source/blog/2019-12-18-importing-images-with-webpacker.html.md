@@ -4,8 +4,8 @@ author: Ross Kaffenberger
 published: true
 summary: An unofficial Rails guide
 description: "Using images bundled by webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate."
-pull_image: 'blog/stock/jr-korpa-lights-unsplash.jpg'
-pull_image_caption: Photo by JR Korpa on Unsplash
+thumbnail: 'blog/stock/jr-korpa-lights-unsplash.jpg'
+thumbnail_caption: Photo by JR Korpa on Unsplash
 popular: 4
 series:
 category: Code

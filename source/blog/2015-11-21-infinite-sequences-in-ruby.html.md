@@ -3,7 +3,7 @@ title: Infinite Sequences in Ruby
 author: Ross Kaffenberger
 summary: Treat your algorithms like enumerables with Enumerator
 description: Wrap algorithms in Enumerable or Enumerator to have them behave like infinite collections.
-pull_image: 'blog/enumerator-1-2-3.jpg'
+thumbnail: 'blog/enumerator-1-2-3.jpg'
 published: true
 series: Enumerable
 category: Code

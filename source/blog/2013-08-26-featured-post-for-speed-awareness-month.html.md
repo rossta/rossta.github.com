@@ -3,7 +3,7 @@ title: Featured Post for Speed Awareness Month
 author: Ross Kaffenberger
 summary: Helpful techniques for serving static assets from a website
 description: Helpful techniques for serving static assets from a website
-pull_image: 'blog/stock/logs-pexels-photo.jpg'
+thumbnail: 'blog/stock/logs-pexels-photo.jpg'
 category: Code
 tags:
   - Performance
