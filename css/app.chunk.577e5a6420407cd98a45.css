@@ -82,6 +82,13 @@ a {
  * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
  */
 
+abbr[title] {
+  border-bottom: none; /* 1 */
+  text-decoration: underline; /* 2 */
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted; /* 2 */
+}
+
 /**
  * Add the correct font weight in Chrome, Edge, and Safari.
  */
@@ -96,7 +103,9 @@ strong {
  * 2. Correct the odd `em` font sizing in all browsers.
  */
 
-code {
+code,
+kbd,
+samp {
   font-family: monospace, monospace; /* 1 */
   font-size: 1em; /* 2 */
 }
@@ -105,10 +114,30 @@ code {
  * Add the correct font size in all browsers.
  */
 
+small {
+  font-size: 80%;
+}
+
 /**
  * Prevent `sub` and `sup` elements from affecting the line height in
  * all browsers.
  */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
 
 /* Embedded content
    ========================================================================== */
@@ -131,6 +160,7 @@ img {
 
 button,
 input,
+optgroup,
 select,
 textarea {
   font-family: inherit; /* 1 */
@@ -197,6 +227,10 @@ button:-moz-focusring,
  * Correct the padding in Firefox.
  */
 
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+
 /**
  * 1. Correct the text wrapping in Edge and IE.
  * 2. Correct the color inheritance from `fieldset` elements in IE.
@@ -204,9 +238,22 @@ button:-moz-focusring,
  *    `fieldset` elements in all browsers.
  */
 
+legend {
+  box-sizing: border-box; /* 1 */
+  color: inherit; /* 2 */
+  display: table; /* 1 */
+  max-width: 100%; /* 1 */
+  padding: 0; /* 3 */
+  white-space: normal; /* 1 */
+}
+
 /**
  * Add the correct vertical alignment in Chrome, Firefox, and Opera.
  */
+
+progress {
+  vertical-align: baseline;
+}
 
 /**
  * Remove the default vertical scrollbar in IE 10+.
@@ -271,6 +318,10 @@ textarea {
  * Add the correct display in Edge, IE 10+, and Firefox.
  */
 
+details {
+  display: block;
+}
+
 /*
  * Add the correct display in all browsers.
  */
@@ -309,9 +360,12 @@ template {
  */
 
 blockquote,
+dl,
+dd,
 h1,
 h2,
 h3,
+h4,
 h5,
 h6,
 hr,
@@ -334,6 +388,11 @@ button {
 button:focus {
   outline: 1px dotted;
   outline: 5px auto -webkit-focus-ring-color;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
 }
 
 ol,
@@ -438,9 +497,14 @@ button,
   cursor: pointer;
 }
 
+table {
+  border-collapse: collapse;
+}
+
 h1,
 h2,
 h3,
+h4,
 h5,
 h6 {
   font-size: inherit;
@@ -467,6 +531,7 @@ a {
 
 button,
 input,
+optgroup,
 select,
 textarea {
   padding: 0;
@@ -482,7 +547,9 @@ textarea {
  */
 
 pre,
-code {
+code,
+kbd,
+samp {
   font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -496,6 +563,10 @@ code {
 
 img,
 svg,
+video,
+audio,
+iframe,
+embed,
 object {
   display: block;
   vertical-align: middle;
@@ -508,7 +579,8 @@ object {
  * https://github.com/mozdevs/cssremedy/issues/14
  */
 
-img {
+img,
+video {
   max-width: 100%;
   height: auto;
 }
@@ -581,12 +653,20 @@ img {
   border-radius: 0.25rem;
 }
 
+.border {
+  border-width: 1px;
+}
+
 .border-t {
   border-top-width: 1px;
 }
 
 .block {
   display: block;
+}
+
+.inline-block {
+  display: inline-block;
 }
 
 .inline {
@@ -597,8 +677,16 @@ img {
   display: flex;
 }
 
+.table {
+  display: table;
+}
+
 .grid {
   display: grid;
+}
+
+.contents {
+  display: contents;
 }
 
 .hidden {
@@ -665,6 +753,10 @@ img {
 
 .leading-relaxed {
   line-height: 1.625;
+}
+
+.m-1 {
+  margin: 0.25rem;
 }
 
 .mt-1 {
@@ -793,6 +885,23 @@ img {
   position: absolute;
 }
 
+.relative {
+  position: relative;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+.resize {
+  resize: both;
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
 .fill-current {
   fill: currentColor;
 }
@@ -857,9 +966,56 @@ img {
   font-style: italic;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.ordinal {
+  --font-variant-numeric-ordinal: var(--tailwind-empty,/*!*/ /*!*/);
+  --font-variant-numeric-slashed-zero: var(--tailwind-empty,/*!*/ /*!*/);
+  --font-variant-numeric-figure: var(--tailwind-empty,/*!*/ /*!*/);
+  --font-variant-numeric-spacing: var(--tailwind-empty,/*!*/ /*!*/);
+  --font-variant-numeric-fraction: var(--tailwind-empty,/*!*/ /*!*/);
+  font-variant-numeric: var(--font-variant-numeric-ordinal) var(--font-variant-numeric-slashed-zero) var(--font-variant-numeric-figure) var(--font-variant-numeric-spacing) var(--font-variant-numeric-fraction);
+}
+
+.ordinal {
+  --font-variant-numeric-ordinal: ordinal;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .w-6 {
@@ -1249,7 +1405,7 @@ h3 {
   font-size: 1.125rem;
 }
 
- h5 {
+h4, h5 {
   font-weight: 700;
 }
 
@@ -1285,6 +1441,11 @@ footer a:hover {
 
 hr {
   margin-bottom: 1.5rem;
+}
+
+th, td {
+  text-align: left;
+  padding-right: 1em;
 }
 
 .bg-silver {
