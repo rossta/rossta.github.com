@@ -22,6 +22,7 @@ source/blog/.Ulysses-Group.plist
 /vendor
 .vscode
 .ruby-gemset
+/yarn-error.log
 
 # Local Netlify folder
 .netlify
