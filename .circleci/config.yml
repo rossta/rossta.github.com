@@ -5,9 +5,7 @@ jobs:
       USER_NAME: rossta
       USER_EMAIL: ross@rossta.net
     docker:
-      - image: circleci/ruby:2.6-node-browsers
-        environment:
-          BUNDLER_VERSION: 2.1.4
+      - image: cimg/ruby:3.1.2-node
 
     steps:
       - checkout
