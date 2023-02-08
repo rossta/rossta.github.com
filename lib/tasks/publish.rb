@@ -73,4 +73,4 @@ task :publish do |t, args|
   end
 end
 
-task :deploy => :publish
+task deploy: :publish

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+set -o xtrace
+bundle exec standardrb --fix --format progress "$@"

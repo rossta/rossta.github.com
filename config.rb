@@ -97,30 +97,6 @@ page("/playground.html", layout: false)
 page("/feed.xml", layout: false)
 page("/sitemap.xml", layout: false)
 
-#
-# With alternative layout
-# page "/path/to/file.html", :layout => :otherlayout
-#
-# A path which all have the same layout
-# with_layout :admin do
-#   page "/admin/*"
-# end
-# Proxy (fake) files
-# page "/this-page-has-no-template.html", :proxy => "/template-file.html" do
-#   @which_fake_page = "Rendering a fake page with a variable"
-# end
-###
-# Helpers
-###
-# Automatic image dimensions on image_tag helper
-# activate :automatic_image_sizes
-# Methods defined in the helpers block are available in templates
-# helpers do
-#   def some_helper
-#     "Helping"
-#   end
-# end
-# rubocop:disable
 helpers do
   def page_title
     yield_content(:title)
@@ -243,10 +219,8 @@ helpers do
     (similar_ordered + different).take(count)
   end
 
-  Series = Struct.new(:id, :title, :summary)
-
   def blog_series
-    data.series.map { |attrs| Series.new(*attrs) }
+    data.series.map { |attrs| Struct.new(:id, :title, :summary).new(*attrs) }
   end
 
   def current_page_tags
@@ -265,16 +239,16 @@ helpers do
     ((current_page.data.tags || []) & tagged_with).any?
   end
 
-  CONVERTKIT_WEBPACK_LANDING_PAGE_FORM_ID = "1672590"
-  CONVERTKIT_WEBPACK_INLINE_FORM_ID = "1268949"
-  CONVERTKIT_STANDARD_INLINE_FORM_ID = "818387"
   def convertkit_inline_form_id
+    convertkit_webpack_landing_page_form_id = "1672590"
+    convertkit_webpack_inline_form_id = "1268949"
+    convertkit_standard_inline_form_id = "818387"
     if /webpack-on-rails\/index/.match?(current_page.path)
-      CONVERTKIT_WEBPACK_LANDING_PAGE_FORM_ID
+      convertkit_webpack_landing_page_form_id
     elsif current_page_tagged?(%w[Rails Webpack])
-      CONVERTKIT_WEBPACK_INLINE_FORM_ID
+      convertkit_webpack_inline_form_id
     else
-      CONVERTKIT_STANDARD_INLINE_FORM_ID
+      convertkit_standard_inline_form_id
     end
   end
 
@@ -286,31 +260,31 @@ helpers do
     {
       "@context": "https://schema.org",
       "@type": "Article",
-      "publisher": {
+      publisher: {
         "@type": "Organization",
-        "name": "Ross Kaffenberger",
+        name: "Ross Kaffenberger"
       },
-      "author": {
+      author: {
         "@type": "Person",
-        "name": "Ross Kaffenberger",
-        "image": {
+        name: "Ross Kaffenberger",
+        image: {
           "@type": "ImageObject",
-          "url": "https://rossta.net/assets/images/me.jpg",
-          "width": 400,
-          "height": 400
+          url: "https://rossta.net/assets/images/me.jpg",
+          width: 400,
+          height: 400
         },
-        "url": "https://rossta.net",
-        "sameAs": [
+        url: "https://rossta.net",
+        sameAs: [
           "https://rossta.net/about/",
           "https://twitter.com/rossta"
         ]
       },
-      "headline": current_article.title,
-      "url": current_url,
-      "datePublished": current_article.date.iso8601,
-      "keywords": (current_page.data.tags || []).join(', ').downcase,
-      "description": current_page.data.description,
-      "mainEntityOfPage": {
+      headline: current_article.title,
+      url: current_url,
+      datePublished: current_article.date.iso8601,
+      keywords: (current_page.data.tags || []).join(", ").downcase,
+      description: current_page.data.description,
+      mainEntityOfPage: {
         "@type": "WebPage",
         "@id": "https://rossta.net"
       }
