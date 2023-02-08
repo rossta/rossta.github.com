@@ -1,4 +1,4 @@
-import highlight from 'highlight.js/lib/highlight'
+import highlight from 'highlight.js/lib/core'
 
 import bash from 'highlight.js/lib/languages/bash'
 import css from 'highlight.js/lib/languages/css'

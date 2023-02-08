@@ -20,6 +20,10 @@ module.exports = {
     app: './source/assets/javascripts/app.js',
   },
 
+  devtool: env.__DEVELOPMENT__
+    ? 'cheap-module-source-map'
+    : 'source-map',
+
   resolve: {
     modules: [
       path.join(__dirname, 'source', 'assets', 'javascripts'),
@@ -68,10 +72,6 @@ module.exports = {
       chunks: 'all',
     },
     minimizer,
-  },
-
-  node: {
-    console: true,
   },
 
   plugins: sitePlugins,
