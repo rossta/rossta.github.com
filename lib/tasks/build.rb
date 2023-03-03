@@ -43,7 +43,9 @@ def git_update
 end
 
 def build
-  system "NODE_ENV=production bundle exec middleman build"
+  Dir.chdir PROJECT_ROOT do
+    system "NODE_ENV=production bundle exec middleman build"
+  end
 end
 
 desc "Deploy the website to github pages"
@@ -58,12 +60,7 @@ task :publish do |t, args|
     git_update
   end
 
-  Dir.chdir PROJECT_ROOT do
-    unless build
-      puts "The build failed, stopping deploy. Please fix build errors before re-deploying."
-      exit 1
-    end
-  end
+  build or raise "The build failed, stopping deploy. Please fix build errors before re-deploying."
 
   Dir.chdir "build" do
     system "mkdir -p .circleci && cp ../.circleci/config.yml .circleci"
@@ -73,4 +70,7 @@ task :publish do |t, args|
   end
 end
 
-task deploy: :publish
+desc "Build site"
+task :build do
+  build or raise "The build failed!"
+end
