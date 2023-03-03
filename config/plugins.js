@@ -37,17 +37,14 @@ let sitePlugins = [
 
 if (env.__BUILD__) {
   const compressionPluginGzip = new CompressionPlugin({
-    filename: '[path].gz[query]',
+    filename: '[file].gz[query]',
     algorithm: 'gzip',
     test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
   })
 
-  const hashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin()
-
   sitePlugins = [
     ...sitePlugins,
     compressionPluginGzip,
-    hashedModuleIdsPlugin,
   ]
 }
 
