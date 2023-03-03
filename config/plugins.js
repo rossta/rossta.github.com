@@ -39,7 +39,6 @@ if (env.__BUILD__) {
   const compressionPluginGzip = new CompressionPlugin({
     filename: '[path].gz[query]',
     algorithm: 'gzip',
-    cache: true,
     test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
   })
 
