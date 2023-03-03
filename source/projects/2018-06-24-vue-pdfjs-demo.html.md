@@ -17,6 +17,6 @@ tech:
   - javascript
 ---
 
-Coming soon: a behind-the-scenes look at how I built the PDF Viewer with Vue.js
+I've published an in-depth [series on Building this PDF Viewer in Vue.js](https://rossta.net/blog/series/pdf-viewer.html) for those who want to learn more.
 
 [![Online demo](screenshots/screenshot-pdf-viewer.png)](https://rossta.net/vue-pdfjs-demo/)
