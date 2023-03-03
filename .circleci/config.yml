@@ -1,56 +1,77 @@
-version: 2
-jobs:
-  build:
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@2.0.0
+  node: circleci/node@5.1.0
+
+executors:
+  rossta-ruby-node:
+    working_directory: ~/rossta/rossta.github.com
+    docker:
+      - image: cimg/ruby:3.1.2-node
     environment:
       USER_NAME: rossta
       USER_EMAIL: ross@rossta.net
-    docker:
-      - image: cimg/ruby:3.1.2-node
 
+commands:
+  install-node-dependencies:
+    description: Install and cache npm dependencies
+    steps:
+      - node/install-packages:
+          pkg-manager: yarn
+          include-branch-in-cache-key: false
+      - run:
+          name: Which yarn?
+          command: yarn --version
+      - run:
+          name: Which node?
+          command: node --version
+      - run:
+          name: Which npm?
+          command: npm --version
+  install-ruby-dependencies:
+    description: Install and cache Bundler dependencies
+    steps:
+      - ruby/install-deps
+      - run:
+          name: Which ruby?
+          command: ruby --version
+      - run:
+          name: Which bundler?
+          command: bundle --version
+
+jobs:
+  build:
+    executor: rossta-ruby-node
     steps:
       - checkout
-      - run:
-          name: Configure Bundler
-          command: |
-            gem update --system
-            gem install bundler
+      - install-node-dependencies
+      - install-ruby-dependencies
+      - run: bin/rake build
 
-      - run: ruby --version
-      - run: node --version
-      - run: bundle --version
-
-      - restore_cache:
-          keys:
-            - bundle-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - bundle-cache-{{ .Branch }}
-            - bundle-cache-
-
-      - run: bundle config set path 'vendor/bundle'
-      - run: bundle install
-
-      - save_cache:
-          key: bundle-cache-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-
-      - run: npm rebuild node-sass
-      - run: yarn install --frozen-lockfile
-
-      - save_cache:
-          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules
-
+  publish:
+    executor: rossta-ruby-node
+    steps:
+      - checkout
+      - install-node-dependencies
+      - install-ruby-dependencies
       - run: git config --global -l # debug
       - run: git config --global user.email circleci@circleci
       - run: git config --global user.name CircleCI
-      - run: bin/rake deploy
+      - run: bin/rake publish
 
 workflows:
   version: 2
-  deploy-site:
+  build-site:
     jobs:
       - build:
+          filters:
+            branches:
+              ignore: develop
+
+  publish-site:
+    jobs:
+      - publish:
           filters:
             branches:
               only: develop

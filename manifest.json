@@ -1,18 +1,34 @@
 {
-  "app.css": "/css/app.chunk.577e5a6420407cd98a45.css",
-  "app.js": "/js/app.chunk.dc9c2dc1e5f3c9a44082.js",
-  "convertkit-form.css": "/css/convertkit-form.chunk.66d20e725060ec11191e.css",
-  "convertkit-form.js": "/js/convertkit-form.chunk.ea9c2db57bd26ea4ce60.js",
-  "highlight.js": "/js/highlight.chunk.dd3cb501477541833f35.js",
-  "runtime.js": "/js/runtime.f71de5d5f35481edbdd9.js",
-  "vendors~app.js": "/js/vendors~app.chunk.db0f050edc2413ca10b0.js",
-  "vendors~highlight.js": "/js/vendors~highlight.chunk.b5bec7e78c765a794863.js",
-  "css/app.chunk.577e5a6420407cd98a45.css.gz": "/css/app.chunk.577e5a6420407cd98a45.css.gz",
-  "css/convertkit-form.chunk.66d20e725060ec11191e.css.gz": "/css/convertkit-form.chunk.66d20e725060ec11191e.css.gz",
-  "js/app.chunk.dc9c2dc1e5f3c9a44082.js.gz": "/js/app.chunk.dc9c2dc1e5f3c9a44082.js.gz",
-  "js/highlight.chunk.dd3cb501477541833f35.js.gz": "/js/highlight.chunk.dd3cb501477541833f35.js.gz",
-  "js/runtime.f71de5d5f35481edbdd9.js.gz": "/js/runtime.f71de5d5f35481edbdd9.js.gz",
-  "js/vendors~app.chunk.db0f050edc2413ca10b0.js.LICENSE.txt": "/js/vendors~app.chunk.db0f050edc2413ca10b0.js.LICENSE.txt",
-  "js/vendors~app.chunk.db0f050edc2413ca10b0.js.gz": "/js/vendors~app.chunk.db0f050edc2413ca10b0.js.gz",
-  "js/vendors~highlight.chunk.b5bec7e78c765a794863.js.gz": "/js/vendors~highlight.chunk.b5bec7e78c765a794863.js.gz"
+  "app.css": "/css/app.f7bb33b95ea908b47d5f.css",
+  "app.js": "/js/app.d1ef27c9a26cf7bc4240.js",
+  "convertkit-form.css": "/css/convertkit-form.chunk.b81b643dd862ab3c5b47.css",
+  "convertkit-form.js": "/js/convertkit-form.chunk.54aa52f7d216f7d86a78.js",
+  "css/app.f7bb33b95ea908b47d5f.css.gz": "/css/app.f7bb33b95ea908b47d5f.css.gz",
+  "css/app.f7bb33b95ea908b47d5f.css.map": "/css/app.f7bb33b95ea908b47d5f.css.map",
+  "css/convertkit-form.chunk.b81b643dd862ab3c5b47.css.gz": "/css/convertkit-form.chunk.b81b643dd862ab3c5b47.css.gz",
+  "css/convertkit-form.chunk.b81b643dd862ab3c5b47.css.map": "/css/convertkit-form.chunk.b81b643dd862ab3c5b47.css.map",
+  "entrypoints": {
+    "app": {
+      "assets": {
+        "js": [
+          "/js/runtime.5be4ddc4f7ddf44ecbe4.js",
+          "/js/app.d1ef27c9a26cf7bc4240.js"
+        ],
+        "css": [
+          "/css/app.f7bb33b95ea908b47d5f.css"
+        ]
+      }
+    }
+  },
+  "highlight.js": "/js/highlight.chunk.d60302873f954e18470f.js",
+  "js/889.chunk.d93d1358d8c98986af71.js": "/js/889.chunk.d93d1358d8c98986af71.js",
+  "js/889.chunk.d93d1358d8c98986af71.js.gz": "/js/889.chunk.d93d1358d8c98986af71.js.gz",
+  "js/889.chunk.d93d1358d8c98986af71.js.map": "/js/889.chunk.d93d1358d8c98986af71.js.map",
+  "js/app.d1ef27c9a26cf7bc4240.js.gz": "/js/app.d1ef27c9a26cf7bc4240.js.gz",
+  "js/app.d1ef27c9a26cf7bc4240.js.map": "/js/app.d1ef27c9a26cf7bc4240.js.map",
+  "js/highlight.chunk.d60302873f954e18470f.js.gz": "/js/highlight.chunk.d60302873f954e18470f.js.gz",
+  "js/highlight.chunk.d60302873f954e18470f.js.map": "/js/highlight.chunk.d60302873f954e18470f.js.map",
+  "js/runtime.5be4ddc4f7ddf44ecbe4.js.gz": "/js/runtime.5be4ddc4f7ddf44ecbe4.js.gz",
+  "js/runtime.5be4ddc4f7ddf44ecbe4.js.map": "/js/runtime.5be4ddc4f7ddf44ecbe4.js.map",
+  "runtime.js": "/js/runtime.5be4ddc4f7ddf44ecbe4.js"
 }

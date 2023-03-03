@@ -93,10 +93,6 @@
   color: #848585;
 }
 
-.formkit-form[data-uid='cda82aafbf'] .formkit-input:-ms-input-placeholder {
-  color: #848585;
-}
-
 .formkit-form[data-uid='cda82aafbf'] .formkit-input::placeholder {
   color: #848585;
 }
@@ -290,18 +286,14 @@
   opacity: 0.3;
   border-radius: 100%;
   display: inline-block;
-  -webkit-animation: formkit-bouncedelay-formkit-form-data-uid-cda82aafbf- 1.4s infinite ease-in-out
-    both;
   animation: formkit-bouncedelay-formkit-form-data-uid-cda82aafbf- 1.4s infinite ease-in-out both;
 }
 
 .formkit-form[data-uid='cda82aafbf'] .formkit-spinner > div:nth-child(1) {
-  -webkit-animation-delay: -0.32s;
   animation-delay: -0.32s;
 }
 
 .formkit-form[data-uid='cda82aafbf'] .formkit-spinner > div:nth-child(2) {
-  -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
 }
 
@@ -445,3 +437,5 @@
   }
 }
 
+
+/*# sourceMappingURL=convertkit-form.chunk.b81b643dd862ab3c5b47.css.map*/
