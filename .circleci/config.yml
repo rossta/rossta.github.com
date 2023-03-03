@@ -67,7 +67,7 @@ workflows:
       - build:
           filters:
             branches:
-              ignore: main
+              ignore: develop
 
   publish-site:
     jobs:
