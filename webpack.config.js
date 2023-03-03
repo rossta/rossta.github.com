@@ -3,22 +3,16 @@ const path = require('path')
 const { sitePlugins, styleLoader } = require('./config/plugins')
 const env = require('./config/env')
 
-const TerserPlugin = require('terser-webpack-plugin')
-
-const minimizer = env.__BUILD__
-  ? [
-      new TerserPlugin({
-        parallel: true,
-        cache: true,
-        sourceMap: true,
-      }),
-    ]
-  : undefined
-
 module.exports = {
+  mode: env.__DEVELOPMENT__ ? 'development' : 'production',
+
   entry: {
     app: './source/assets/javascripts/app.js',
   },
+
+  devtool: env.__DEVELOPMENT__
+    ? 'cheap-module-source-map'
+    : 'source-map',
 
   resolve: {
     modules: [
@@ -67,11 +61,6 @@ module.exports = {
     splitChunks: {
       chunks: 'all',
     },
-    minimizer,
-  },
-
-  node: {
-    console: true,
   },
 
   plugins: sitePlugins,

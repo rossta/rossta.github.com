@@ -1,4 +1,4 @@
-@import 'highlight.js/styles/dracula';
+@import 'highlight.js/styles/base16/dracula';
 
 /* Dracula-specific override */
 .hljs-comment {

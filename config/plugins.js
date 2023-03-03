@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
-const ManifestPlugin = require('webpack-manifest-plugin')
+const WebpackAssetsManifest = require('webpack-assets-manifest')
 
 const env = require('./env')
 
@@ -20,8 +20,12 @@ const miniCssExtractPlugin = new MiniCssExtractPlugin({
   chunkFilename: 'css/[name].chunk.[contenthash].css',
 })
 
-const manifestPlugin = new ManifestPlugin({
-  writeToFileEmit: true,
+const manifestPlugin = new WebpackAssetsManifest({
+  entrypoints: true,
+  writeToDisk: true,
+  output: 'manifest.json',
+  entrypointsUseAssets: true,
+  publicPath: true,
 })
 
 let sitePlugins = [
@@ -33,18 +37,14 @@ let sitePlugins = [
 
 if (env.__BUILD__) {
   const compressionPluginGzip = new CompressionPlugin({
-    filename: '[path].gz[query]',
+    filename: '[file].gz[query]',
     algorithm: 'gzip',
-    cache: true,
     test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
   })
-
-  const hashedModuleIdsPlugin = new webpack.HashedModuleIdsPlugin()
 
   sitePlugins = [
     ...sitePlugins,
     compressionPluginGzip,
-    hashedModuleIdsPlugin,
   ]
 }
 
