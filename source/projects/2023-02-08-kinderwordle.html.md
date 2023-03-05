@@ -8,7 +8,7 @@ published: true
 homepage: 'https://github.com/rossta/kinderwordle'
 links:
   'Online demo': 'https://kinderwordle.onrender.com'
-  'Source code on GitHub': 'https://github.com/rossta/kinderwordle'
+  'Source code on GitHub': 'https://github.com/rossta/react-kinderwordle'
 tags:
   - Code
   - JavaScript
@@ -17,6 +17,6 @@ tech:
   - javascript
 ---
 
-I've published an in-depth [series on Building this PDF Viewer in Vue.js](https://rossta.net/blog/series/pdf-viewer.html) for those who want to learn more.
+I created Kinderwordle to help my son learn his "important words" word list he brought home from school.
 
 [![Online demo](https://raw.githubusercontent.com/rossta/react-kinderwordle/main/screenshot.png)](https://kinderwordle.onrender.com)
