@@ -92,7 +92,7 @@ GEM
       middleman-core (>= 3.0.0)
     mini_portile2 (2.8.1)
     minitest (5.17.0)
-    nokogiri (1.14.1)
+    nokogiri (1.14.3)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     padrino-helpers (0.15.2)
