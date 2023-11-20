@@ -1,0 +1,366 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Adding Service Worker to a simple website - rossta.net</title>
+<meta name="description" content="Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment" />
+<meta name="keywords" content="JavaScript, Service Worker, Webpack" />
+<meta itemprop="name" content="Adding Service Worker to a simple website" />
+<meta itemprop="description" content="Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment" />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/stock/cyclists-unsplash-photo.jpg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/adding-serviceworker-to-a-simple-website.html" />
+<meta name="twitter:title" content="Adding Service Worker to a simple website" />
+<meta name="twitter:description" content="Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment" />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/stock/cyclists-unsplash-photo.jpg" />
+<meta property="og:url" content="https://rossta.net/archive/adding-serviceworker-to-a-simple-website.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Adding Service Worker to a simple website" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/cyclists-unsplash-photo.jpg" />
+<meta property="og:description" content="Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment" />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/adding-serviceworker-to-a-simple-website.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"Adding Service Worker to a simple website","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/adding-serviceworker-to-a-simple-website.html","query":null,"fragment":null},"datePublished":"2016-04-20T00:00:00Z","keywords":"javascript, service worker, webpack","description":"Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    Adding Service Worker to a simple website
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Where "simple" is a static website hosted on Github pages and Cloudflare
+    </h2>
+</header>
+
+    <p>Service Worker is well-suited to enhance a simple website like this blog. The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank" rel="noopener noreferrer">Service Worker API</a> has been designed in such as a way that developers can pick and choose the features they want without reworking their sites or committing to a (or another) JavaScript framework.</p>
+
+<p>I recently added a service worker to rossta.net. You can read
+the <a href="https://github.com/rossta/rossta.github.com/blob/efbb4d41697a64543f5d4870c9915e633dda962d/source/assets/javascripts/serviceworker.js" target="_blank" rel="noopener noreferrer">full source of my serviceworker.js implementation</a> here.</p>
+
+      <h3 id="requirements" class="title title-h3">
+        <a name="requirements" class="anchor" href="#requirements">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Requirements
+      </h3>
+    
+<p>To get my first service worker running, I did the following:</p>
+
+<p><strong>HTTPS everywhere</strong> I moved rossta.net to <a href="https://en.wikipedia.org/wiki/HTTPS_Everywhere" target="_blank" rel="noopener noreferrer">&quot;HTTPS everywhere&quot;</a> with <a href="https://www.cloudflare.com/" target="_blank" rel="noopener noreferrer">Cloudflare</a>. Service workers will only run on sites served over HTTPS (or <code>localhost</code> for development). If you&#39;re considering Cloudflare for SSL, <a href="https://scotthelme.co.uk/tls-conundrum-and-leaving-cloudflare/" target="_blank" rel="noopener noreferrer">be aware of the drawbacks</a>.</p>
+
+<p><strong>Registration</strong> Though the Service Worker runs in its own thread outside the context of a webpage, we need to initiate its use from the webpage we&#39;re on. So when you hit a page on rossta.net, there&#39;s a snippet of JavaScript that checks for browser support and registers a service worker script for the root scope of the website.</p>
+
+<pre><code class="javascript">// index.js
+if(&#39;serviceWorker&#39; in navigator) {
+  navigator.serviceWorker.register(&#39;/serviceworker.js&#39;, {
+    scope: &#39;/&#39;
+  });
+}
+</code></pre>
+
+      <h3 id="the-script" class="title title-h3">
+        <a name="the-script" class="anchor" href="#the-script">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The script
+      </h3>
+    
+<p>For the code in my first service worker script, I followed the strategy outlined by Jeremy Keith&#39;s excellent
+<a href="https://adactio.com/journal/9775" target="_blank" rel="noopener noreferrer">My first Service Worker</a>. He also provided a
+generalized version of his script in a <a href="https://gist.github.com/adactio/fbaa3a5952774553f5e7" target="_blank" rel="noopener noreferrer">service worker gist</a> that&#39;s definitely worth a look.</p>
+
+<p>Here&#39;s a general summary of the Service Worker&#39;s responsibilities at various stages in its life cycle:</p>
+
+<p>On <code>install</code>:</p>
+
+<ul>
+<li>&quot;Pre-cache&quot; any desired resource, primarily for rendering in an offline context</li>
+</ul>
+
+<p>On <code>activate</code>:</p>
+
+<ul>
+<li>Clean up old cache when activating an update to the Service Worker</li>
+</ul>
+
+<p>On <code>fetch</code>:</p>
+
+<ul>
+<li>Render HTML from the network while adding it to the local cache for use when offline</li>
+<li>Render JavaScript and CSS assets immediately from cache while updating the cache from the network when possible</li>
+<li>Render an offline page when a visitor can&#39;t connect to rossta.net</li>
+<li>Allow normal pass-through network request of non-GET and white-listed resources like Twitter embeds and analytics tracking</li>
+</ul>
+
+      <h3 id="deploying-the-service-worker" class="title title-h3">
+        <a name="deploying-the-service-worker" class="anchor" href="#deploying-the-service-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Deploying the service worker
+      </h3>
+    
+<p>Below I describe how I deployed my service worker, but your mileage may vary depending on your own production needs. <a href="https://rossta.net/blog/why-i-ditched-wordpress-for-github.html" target="_blank" rel="noopener noreferrer">As I&#39;ve said before</a>, this is a static site hosted on Github pages, <a href="/blog/using-webpack-with-middleman.html">built with webpack and Middleman</a>.</p>
+
+<p>Setting up Github pages to use Cloudflare was relatively straightforward and has been <a href="https://www.benburwell.com/posts/configuring-cloudflare-universal-ssl/" target="_blank" rel="noopener noreferrer">well-documented</a>. I also wanted to make sure <code>serviceworker.js</code> is always served over HTTPS and that it would not be cached. Since I don&#39;t have any control on Github pages over related concerns like redirects and response headers. However, with Cloudflare, I set up Page Rules on Cloudflare to mitigate this issue.</p>
+
+<p>To ensure content on rossta.net is always loaded over HTTPS, I added a redirect page rule:</p>
+
+<p><img src="/assets/images/blog/cloud-flare-page-rules-https.jpg" alt="" loading="lazy" /></p>
+
+<p>I&#39;m using webpack to create <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L12" target="_blank" rel="noopener noreferrer">separate bundles</a> and Middleman&#39;s <a href="https://middlemanapp.com/advanced/improving_cacheability/" target="_blank" rel="noopener noreferrer"><code>:asset_hash</code> extension</a> to add a digest to each file, similar to the <a href="http://guides.rubyonrails.org/asset_pipeline.html#in-production" target="_blank" rel="noopener noreferrer">Rails asset pipeline production behavior</a> to improve the cacheability of CSS and JavaScript assets on rossta.net.</p>
+
+<p>I don&#39;t want either for serviceworker.js: it must be served separately from the main asset bundles and it should not be cached.</p>
+
+<p>webpack supports <a href="https://webpack.github.io/docs/configuration.html#multiple-configurations" target="_blank" rel="noopener noreferrer">multiple configurations</a>, so I set up my <a href="https://github.com/rossta/rossta.github.com/blob/09131d3adeb161747fa0cfc624db3ae12ab211fd/webpack.config.js#L80" target="_blank" rel="noopener noreferrer"><code>webpack.config.js</code></a> to use ES2015 transpilation for <code>serviceworker.js</code> but output to a different destination from the other concatenated script files.</p>
+
+<p>To make sure Cloudflare does not cache <code>serviceworker.js</code>, as it would by default for the CDN, I instructed Cloudflare to bypass the cache.</p>
+
+<p><img src="/assets/images/blog/cloud-flare-page-rules-serviceworker.jpg" alt="" loading="lazy" /></p>
+
+<p>Github pages currently adds 10-minute <code>Expires</code> and <code>Cache-Control</code> headers to resource requests meaning browsers and proxies may choose to cache <code>serviceworker.js</code> past an update I&#39;ve just deployed. This is a tradeoff I&#39;ll have to live with until I move rossta.net to another host.</p>
+
+      <h3 id="caching-considerations" class="title title-h3">
+        <a name="caching-considerations" class="anchor" href="#caching-considerations">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Caching considerations
+      </h3>
+    
+<p>There are some key considerations regarding the browser cache when setting up your first service worker with
+an approach like the one <a href="https://adactio.com/journal/9775" target="_blank" rel="noopener noreferrer">Jeremy Keith</a> outlines and that I&#39;ve used here in
+rossta.net. Jeff Posnick, maintainer of Google Chrome&#39;s <a href="https://github.com/GoogleChrome/sw-precache" target="_blank" rel="noopener noreferrer">sw-precache</a>, highlights some of these points <a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker" target="_blank" rel="noopener noreferrer">in a recent comment</a>.</p>
+
+<blockquote>
+<p>Any of the following would be safe, though they each have certain drawbacks:</p>
+
+<ol>
+<li>Serving all of the local assets with browser caching disabled.</li>
+<li>Cache-busting the requests that are used to populate the SW cache, using the non-cache-busted URL as the SW cache key.</li>
+<li>Explicitly versioning all of your local assets using something like gulp-rev, and then using long-lived browser caching headers.</li>
+</ol>
+
+<p>Some drawbacks of each:</p>
+
+<p>Approach 1. Means that all requests, even those coming from browsers without SW support, will bypass the browser cache, and that&#39;s can be a lot of wasteful traffic.</p>
+
+<p>Approach 2. Can mean some extra code that makes the simple copy and paste example look a bit more complicated.</p>
+
+<p>Approach 3. Is a good practice to follow in general, but there&#39;s an extra build-time step that you need to introduce, and it only applies to subresources, not URLs used as navigation targets (you&#39;d likely just have to serve those bypassing the browser cache completely).</p>
+</blockquote>
+
+<p>Realize that the browser cache is separate from the local cache used by the
+service worker. So, when caching resources in your service worker, you may need
+to consider the &quot;cache busting&quot; strategy for both your service worker and the
+browser and <a href="https://github.com/GoogleChrome/css-triggers/issues/14" target="_blank" rel="noopener noreferrer">how users may be affected when pushing updates to the site</a>.</p>
+
+<p>If browser cache is disabled, then you can happily use your service worker to
+cache resources without conflict, albeit, without the obvious benefits of a browser cache.</p>
+
+<p>In other words, take a moment to consider how your assets may (or may not) be cached by
+browsers before <a href="https://remysharp.com/2016/03/22/the-copy--paste-guide-to-your-first-service-worker" target="_blank" rel="noopener noreferrer">copying and pasting your first service worker</a>.</p>
+
+      <h3 id="onward" class="title title-h3">
+        <a name="onward" class="anchor" href="#onward">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Onward
+      </h3>
+    
+<p>There&#39;s a lot more that can be done with the Service Worker API, but this was a
+good start to see some impressive perceived performance improvements, especially when
+reloading pages with images and special fonts.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=Adding%20Service%20Worker%20to%20a%20simple%20website%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Fadding-serviceworker-to-a-simple-website.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
+        Published on Apr 20, 2016
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/1268949/subscriptions?ref=JavaScript"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="1268949"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733959" />
+    <input type="hidden" name="tags[]" value="733965" />
+    <input type="hidden" name="tags[]" value="733964" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/adding-serviceworker-to-a-simple-website.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/offline-page-for-your-rails-application.html">An offline page for your Rails application</a>
+    </header>
+      <p>This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to precache and render an offline page for your Rails application when visitors have no network connection.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/service-worker-on-rails.html">Service Worker on Rails</a>
+    </header>
+      <p>This blog post describes how to integrate JavasScript for the new Service Worker API into Ruby and Rails applications that use Sprockets for the Rails asset pipeline.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/adding-serviceworker-to-a-simple-website.html">Adding Service Worker to a simple website</a>
+    </header>
+      <p>Described how I added a Service Worker script to rossta.net with some considerations concerning cache-busting strategies and deployment</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/stock/cyclists-unsplash-photo.jpg" loading="lazy" alt="" />
+      </figure>
+  </article>
+    <!-- Webpack on Rails course popup form -->
+    <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

@@ -1,0 +1,520 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>An offline page for your Rails application - rossta.net</title>
+<meta name="description" content="This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to precache and render an offline page for your Rails application when visitors have no network connection." />
+<meta name="keywords" content="Rails, JavaScript, Service Worker" />
+<meta itemprop="name" content="An offline page for your Rails application" />
+<meta itemprop="description" content="This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to precache and render an offline page for your Rails application when visitors have no network connection." />
+<meta itemprop="image" content="https://rossta.net/assets/images/screenshots/screenshot-offline-chrome.jpg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/offline-page-for-your-rails-application.html" />
+<meta name="twitter:title" content="An offline page for your Rails application" />
+<meta name="twitter:description" content="This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to precache and render an offline page for your Rails application when visitors have no network connection." />
+<meta name="twitter:image" content="https://rossta.net/assets/images/screenshots/screenshot-offline-chrome.jpg" />
+<meta property="og:url" content="https://rossta.net/archive/offline-page-for-your-rails-application.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="An offline page for your Rails application" />
+<meta property="og:image" content="https://rossta.net/assets/images/screenshots/screenshot-offline-chrome.jpg" />
+<meta property="og:description" content="This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to precache and render an offline page for your Rails application when visitors have no network connection." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/offline-page-for-your-rails-application.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"An offline page for your Rails application","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/offline-page-for-your-rails-application.html","query":null,"fragment":null},"datePublished":"2016-05-09T00:00:00Z","keywords":"rails, javascript, service worker","description":"This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to precache and render an offline page for your Rails application when visitors have no network connection.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    An offline page for your Rails application
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Use Service Worker to connect with your users even when they're not
+    </h2>
+</header>
+
+    <p>When you visit a website without an internet connection in Chrome, you see the
+offline dinosaur.</p>
+
+<p>No wonder we tend to think of websites as less reliable than mobile applications - we can&#39;t use them without the network.</p>
+
+<p>At least, not typically. We could use <a href="http://diveintohtml5.info/offline.html" target="_blank" rel="noopener noreferrer">App Cache</a> and the Cache Manifest to create an offline experience. For <a href="http://alistapart.com/article/application-cache-is-a-douchebag" target="_blank" rel="noopener noreferrer">a number of reasons</a>, developers have found App Cache difficult to work with.</p>
+
+<p>Luckily, there&#39;s a new web standard, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank" rel="noopener noreferrer">Service Worker</a>, that potentially supplants App Cache by providing more granular control over networking in JavaScript, as opposed to manifest files.</p>
+
+<p>For now, we use a service worker to render a simple error page with our own branding
+when a user attempts to come back to our site without a connection. Keep in
+mind, the techniques used here are building blocks that can be taken further to enhance functionality.</p>
+
+<aside class="callout panel">
+  <p>
+Sidebar: I've wondered: should the offline response be associated with an HTTP status code? I don't believe one exists for "No network connection". If the potential for service workers is fully realized, then in theory, web developers will be able to create rich experiences for users regardless of connectivity - so perhaps question won't be relevant. But our use case for a singular offline response - one in which we give visitors feedback about why their request cannot be fulfilled - correlates with statuses like "Not found", "Moved permanently", and "Site offline for maintenance". Philosophically, is a request that never reaches the server a request at all?
+</p>
+</aside>
+
+<p>To do this, we&#39;re going to use a service worker to precache the offline
+assets on the first visit to the site. Later, during a return visit without a
+network connection, we can use our service worker to render the offline page.</p>
+
+<p>This is possible because Service Worker acts as a liason between your
+visitor&#39;s browser and your servers <em>outside the lifecycle of a page</em>.</p>
+
+<p>Keep in mind also, will be a <em>progressive enhancement</em>. Since service workers are <a href="https://jakearchibald.github.io/isserviceworkerready/" target="_blank" rel="noopener noreferrer">not available in all browsers</a>, this approach won&#39;t work for everyone, but the experience won&#39;t degrade for those visitors either.</p>
+
+      <h3 id="produce-the-assets" class="title title-h3">
+        <a name="produce-the-assets" class="anchor" href="#produce-the-assets">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Produce the assets
+      </h3>
+    
+<p>First we need an offline page. We could simply use an HTML page in the public directory with embedded styles like the generated Rails 404 and 500 pages.</p>
+
+<p><a href="https://gist.github.com/rossta/c4f6de214a138a355a9993c7cdadbdc0" target="_blank" rel="noopener noreferrer">Source: /offline.html</a></p>
+
+<p>Alternatively, set up a route to a controller action as a <a href="https://mattbrictson.com/dynamic-rails-error-pages" target="_blank" rel="noopener noreferrer">dynamic Rails error page</a>.</p>
+
+      <h3 id="add-a-service-worker-file" class="title title-h3">
+        <a name="add-a-service-worker-file" class="anchor" href="#add-a-service-worker-file">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Add a service worker file
+      </h3>
+    
+<p>We&#39;re going to cache this offline HTML on the client side during their first
+visit so that it&#39;s available later. We can of course add links
+to external CSS, JavaScript, and images in our offline pages - we just need to
+remember to cache those resources as well.</p>
+
+<p>(The following assumes Sprockets, so if using something else, we&#39;ll need to adjust accordingly where the asset pipeline is concerned.)</p>
+
+<p>The service worker script file must live outside our <code>application.js</code> or other
+bundled assets. It can live in any path from which Sprockets can load assets,
+but for now, we&#39;ll add a new JavaScript file in <code>app/assets/javascripts/serviceworker.js</code>.</p>
+
+<p>Since it won&#39;t be bundled with <code>application.js</code>, we&#39;ll need to let our Rails
+configuration know to precompile our serviceworker separately:</p>
+
+<pre><code class="ruby"># config/initializers/assets.rb
+
+Rails.application.config.assets.precompile += %w[serviceworker.js]
+</code></pre>
+
+      <h3 id="declare-an-39-install-39-event" class="title title-h3">
+        <a name="declare-an-39-install-39-event" class="anchor" href="#declare-an-39-install-39-event">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Declare an &#39;install&#39; event
+      </h3>
+    
+<p>Since service workers are event driven, we&#39;ll provide callbacks to three key events in the servive worker lifecycle: <code>install</code>, <code>activate</code>, and <code>fetch</code>.</p>
+
+<p>The <code>install</code> event will be invoked just the first time the service worker is
+requested or any time it is updated and redeployed prior to being activated. Here, we&#39;ll precache our offline assets:</p>
+
+<pre><code class="ruby">var version = &#39;v1::&#39;;
+
+self.addEventListener(&#39;install&#39;, function onInstall(event) {
+  event.waitUntil(
+    caches.open(version + &#39;offline&#39;).then(function prefill(cache) {
+      return cache.addAll([
+        &#39;/offline.html&#39;,
+        // etc
+      ]);
+    })
+  );
+});
+</code></pre>
+
+<p><code>event.waitUntil</code> accepts <a href="http://www.html5rocks.com/en/tutorials/es6/promises/" target="_blank" rel="noopener noreferrer">a promise</a> which must succeed for the <code>install</code> event to install the service worker successfully. We use <code>caches.open</code> to return a promise that adds our static offline assets to a named cache associated with our site and the user&#39;s browser. The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank" rel="noopener noreferrer">Cache API</a> provides client-side storage for request/response pairs, a lot like a built in HTTP cache.</p>
+
+<p>We can also cache precompiled assets by renaming our <code>serviceworker.js</code> to <code>serviceworker.js.erb</code> and embedding helper methods:</p>
+
+<pre><code class="javascript">return cache.addAll([
+  &#39;/offline.html&#39;,
+  &#39;&lt;%= asset_path &quot;application.css&quot; %&gt;&#39;,
+]);
+</code></pre>
+
+      <h3 id="-39-fetch-39-or-fallback" class="title title-h3">
+        <a name="-39-fetch-39-or-fallback" class="anchor" href="#-39-fetch-39-or-fallback">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        &#39;fetch&#39; or fallback
+      </h3>
+    
+<p>Our service worker can intercept any external network request from our visitor&#39;s
+browser - even to cross-origin hosts - within the fetch event.</p>
+
+<p>There are <a href="https://jakearchibald.com/2014/offline-cookbook/" target="_blank" rel="noopener noreferrer">a ton of strategies we can
+employ</a> to give the service
+worker power to respond to various requests, for our simple offline page</p>
+
+<pre><code class="javascript">self.addEventListener(&#39;fetch&#39;, function onFetch(event) {
+  var request = event.request;
+
+  if (!request.url.match(/^https?:\/\/example.com/) ) { return; }
+  if (request.method !== &#39;GET&#39;) { return; }
+
+  event.respondWith(
+    fetch(request).                                      // first, the network
+      .catch(function fallback() {
+        caches.match(request).then(function(response) {  // then, the cache
+          response || caches.match(&quot;/offline.html&quot;);     // then, /offline cache
+        })
+      })
+  );
+});
+</code></pre>
+
+<p>This code will filter for GET requests to our host. Ignored <code>fetch</code> events will simply proceed to the network. When we may want to provide the offline fallback, we&#39;ll then ask then network to <code>fetch</code> the
+request. If that doesn&#39;t resolve, our <code>catch</code> handler will be invoked and
+attempt to match the request in the cache or simply return our cached offline
+page.</p>
+
+      <h3 id="clean-up-during-39-activate-39-" class="title title-h3">
+        <a name="clean-up-during-39-activate-39-" class="anchor" href="#clean-up-during-39-activate-39-">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Clean up during &#39;activate&#39;
+      </h3>
+    
+<p>The <code>activate</code> event is useful to clean up old caches, say when the offline page
+or any of the linked static resources changes.</p>
+
+<pre><code class="javascript">// var version = &quot;v2::&quot;;
+
+self.addEventListener(&#39;activate&#39;, function onActivate(event) {
+  event.waitUntil(
+    caches.keys().then(function deleteOldCache(cacheNames) {
+      return Promise.all(
+        cacheNames.filter(function(cacheName) {
+          return key.indexOf(version) !== 0;
+        }).map(function(cacheName) {
+          return caches.delete(cacheName);
+        })
+      );
+    })
+  );
+});
+</code></pre>
+
+<p>If we deploy a service worker with a new version number, the <code>install</code> event
+will be invoked again to re-cache the static resources for the offline page.
+During <code>activate</code>, any cache names that don&#39;t match the new version number will
+be removed.</p>
+
+      <h3 id="register-that-worker" class="title title-h3">
+        <a name="register-that-worker" class="anchor" href="#register-that-worker">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Register that worker
+      </h3>
+    
+<p>With our service worker event handling in place, we must register the script
+from the main page. In any file included in <code>application.js</code>:</p>
+
+<pre><code class="javascript">// app/assets/application.js
+
+if (&#39;serviceWorker&#39; in navigator) {
+  navigator.serviceWorker.register(&#39;/serviceworker.js&#39;);
+}
+</code></pre>
+
+<p>It&#39;s important for this script to be available at the scope for which we want
+the service worker to be active. In other words, registering the service worker
+at its precompiled path <code>/assets/serviceworker.js</code>, won&#39;t be helpful since we
+won&#39;t be able to intercept requests to the root path.</p>
+
+      <h3 id="sprinkle-in-some-middleware" class="title title-h3">
+        <a name="sprinkle-in-some-middleware" class="anchor" href="#sprinkle-in-some-middleware">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Sprinkle in some middleware
+      </h3>
+    
+<p>To make this work with the Rails asset pipeline, we can use the
+<a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer"><code>serviceworker-rails</code></a> gem.</p>
+
+<pre><code class="ruby"># Gemfile
+
+gem &quot;serviceworker-rails&quot;
+</code></pre>
+
+<p><code>ServiceWorker::Rails</code> will insert middleware into the Rails stack that we can
+configure to route requests to bundled assets.</p>
+
+<pre><code class="ruby"># config/initializers/serviceworker.rb
+
+Rails.application.configure do
+  config.serviceworker.routes.draw do
+    match &quot;/serviceworker.js&quot;
+  end
+end
+</code></pre>
+
+<p>Now, any request to the path <code>/serviceworker.js</code> will match an asset of that
+name. If your service worker script is in a nested directory, you&#39;d use this
+instead:</p>
+
+<pre><code class="ruby">match &quot;/serviceworker.js&quot; =&gt; &quot;nested/directory/serviceworker.js&quot;
+</code></pre>
+
+<p>See the project <a href="https://github.com/rossta/serviceworker-rails/blob/master/README.md" target="_blank" rel="noopener noreferrer">README</a> for more info on how to configure the middleware.</p>
+
+<p>While you&#39;re at it, <a href="https://github.com/rossta/serviceworker-rails" target="_blank" rel="noopener noreferrer">star the project on GitHub</a>!</p>
+
+      <h3 id="moment-of-truth" class="title title-h3">
+        <a name="moment-of-truth" class="anchor" href="#moment-of-truth">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Moment of truth
+      </h3>
+    
+<p>Phew! That took some setup. Our offline page should now be ready for consumption. Try disabling your
+network connection to test it out. You can use the <em>Network</em> tab in Chrome and
+Chrome Canary to take your browser offline while Firefox has the <em>Work Offline</em> mode under the File menu.</p>
+
+<p><img src="/assets/images/screenshots/screenshot-dev-tools-network-offline.jpg" alt="" loading="lazy" /></p>
+
+<p>To see a working demo of an offline page, check out the <a href="https://serviceworker-rails.herokuapp.com/offline-fallback/" target="_blank" rel="noopener noreferrer">Service Worker Rails
+Sandbox app</a>. You
+can find its <a href="https://github.com/rossta/serviceworker-rails-sandbox" target="_blank" rel="noopener noreferrer">source code on GitHub</a>.</p>
+
+<p><img src="/assets/images/screenshots/screenshot-offline-custom.jpg" alt="" loading="lazy" /></p>
+
+      <h3 id="debugging" class="title title-h3">
+        <a name="debugging" class="anchor" href="#debugging">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Debugging
+      </h3>
+    
+<p>Chrome also provides some useful debugging tools for service workers under the
+<em>Resources</em>. It&#39;s helpful to read up on the Service Worker life cycle since it is treated
+differently than other JavaScript resources. For example, a hard refresh isn&#39;t
+enough to get your browser to install an updated service worker -- the browser
+will keep the current worker active while any tab to your browser is currently
+open.</p>
+
+<p>You can navigate to a different host and back or close and reopen
+the tab(s). The <code>self.skipWaiting</code> function will also instruct the browser to
+let a new service worker take control immediately when used during <code>install</code>.</p>
+
+<pre><code class="javascript">self.addEventListener(&#39;install&#39;, function(event) {
+  event.waitUntil(self.skipWaiting());
+});
+</code></pre>
+
+      <h3 id="final-word" class="title title-h3">
+        <a name="final-word" class="anchor" href="#final-word">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Final word
+      </h3>
+    
+<p>I believe it&#39;s important for web developers to start thinking about ways to make
+our application more reliable in the eyes of consumers. While rendering an
+offline page isn&#39;t a game changer by itself, it is a low-risk way to begin
+experimenting with the Service Worker API which has the potential for <a href="http://serviceworke.rs/" target="_blank" rel="noopener noreferrer">many more
+advanced use cases</a> and can help the web get
+closer to an even playing field with mobile apps.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=An%20offline%20page%20for%20your%20Rails%20application%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Foffline-page-for-your-rails-application.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/service-worker.html">Service Worker</a> series.
+        Published on May  9, 2016
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/1268949/subscriptions?ref=Rails"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="1268949"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733966" />
+    <input type="hidden" name="tags[]" value="733959" />
+    <input type="hidden" name="tags[]" value="733965" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/offline-page-for-your-rails-application.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/quiet-assets-in-rails-5.html">Quiet assets in Rails 5</a>
+    </header>
+      <p>Recent changes to the sprockets-rails gem adds the ability to silence asset request logging in Rails 5</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/web-push-notifications-from-rails.html">Sending Web Push Notifications from Rails</a>
+    </header>
+      <p>This blog post describes how to set up a simple demonstration of the Web Push and Service Worker JavaScript APIs to send notifications to users from a Ruby on Rails application.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/offline-page-for-your-rails-application.html">An offline page for your Rails application</a>
+    </header>
+      <p>This post demonstrates how to integrate the Service Worker Javascript API with the Rails asset pipeline to precache and render an offline page for your Rails application when visitors have no network connection.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/screenshots/screenshot-offline-chrome.jpg" loading="lazy" alt="" />
+      </figure>
+  </article>
+    <!-- Webpack on Rails course popup form -->
+    <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

@@ -1,0 +1,393 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>How to specify local Ruby gems in your Gemfile - rossta.net</title>
+<meta name="description" content="Use the &quot;bundle config&quot; command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile." />
+<meta name="keywords" content="Ruby" />
+<meta itemprop="name" content="How to specify local Ruby gems in your Gemfile" />
+<meta itemprop="description" content="Use the &quot;bundle config&quot; command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile." />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/stock/jellyfish-pexels-photo.jpeg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/how-to-specify-local-ruby-gems-in-your-gemfile.html" />
+<meta name="twitter:title" content="How to specify local Ruby gems in your Gemfile" />
+<meta name="twitter:description" content="Use the &quot;bundle config&quot; command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile." />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/stock/jellyfish-pexels-photo.jpeg" />
+<meta property="og:url" content="https://rossta.net/archive/how-to-specify-local-ruby-gems-in-your-gemfile.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="How to specify local Ruby gems in your Gemfile" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/jellyfish-pexels-photo.jpeg" />
+<meta property="og:description" content="Use the &quot;bundle config&quot; command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/how-to-specify-local-ruby-gems-in-your-gemfile.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"How to specify local Ruby gems in your Gemfile","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/how-to-specify-local-ruby-gems-in-your-gemfile.html","query":null,"fragment":null},"datePublished":"2016-04-23T00:00:00Z","keywords":"ruby","description":"Use the \"bundle config\" command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    How to specify local Ruby gems in your Gemfile
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Stop adding :path in your Gemfile and use bundle config instead
+    </h2>
+</header>
+
+    <p>Let&#39;s say you&#39;re building a Ruby app and your team has extracted one or more
+gems referenced in your Gemfile, such as your custom Trello API client, <a href="https://github.com/rossta/tacokit.rb" target="_blank" rel="noopener noreferrer">Tacokit.rb</a>.</p>
+
+<pre><code class="ruby"># Gemfile
+source &quot;https://rubygems.org&quot;
+
+# lots of gems ...
+
+gem &quot;tacokit&quot;
+</code></pre>
+
+<p>Maybe Trello made some recent changes to their API that your current feature depends
+on, so you need to update the <code>Tacokit</code> gem as part of your work. You have a
+local checkout of the <code>tacokit</code> gem in another directory in your laptop.</p>
+
+<p>You add some code to the gem, but now you want to test the changes in your app. How do you do that?</p>
+
+<p>According to <em><a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile#answer-4488110" target="_blank" rel="noopener noreferrer">the most popular answer (and accepted) answer</a></em> to the question, <a href="http://stackoverflow.com/questions/4487948/how-can-i-specify-a-local-gem-in-my-gemfile" target="_blank" rel="noopener noreferrer">&quot;How can I specify a local gem in my Gemfile?&quot;</a>, we should do the following:</p>
+
+<pre><code class="ruby">gem &quot;tacokit&quot;, path: &quot;/path/to/tacokit&quot;
+</code></pre>
+
+<p>Here&#39;s my take: <strong>avoid this recommendation</strong></p>
+
+<p>...especially if you work on a team and/or deploy this code to remote servers.</p>
+
+      <h2 id="wat" class="title title-h2">
+        <a name="wat" class="anchor" href="#wat">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        WAT
+      </h2>
+    
+<p>Technically, it does work. Run <code>$ bundle update</code>, restart the app, and - boom! - our changes in
+the local <code>tacokit</code> checkout are showing up as expected.</p>
+
+<p>Then the trouble begins.</p>
+
+<p>We push our app changes and deploy to the staging server to test them out
+in the shared environment and - wait a minute - the app won&#39;t even start.</p>
+
+<pre><code class="sh">$ bundle
+The path `/Users/ross/does/not/exist` does not exist.
+</code></pre>
+
+<p>Oops! We forgot to remove the <code>:path</code> reference in the <code>Gemfile</code>.</p>
+
+<p>Let&#39;s fix that... we remove the <code>:path</code> reference, push, and redeploy. The app
+restarts fine. But while testing the feature, we start getting 500 errors. This wasn&#39;t happening locally.</p>
+
+<blockquote>
+<p>&quot;But it worked on my machine!&quot; - <em>every developer ever</em></p>
+</blockquote>
+
+<p>The Rails logs reveal we have a bunch of undefined method errors coming from calls to <code>Tacokit</code>. That&#39;s right, we forgot another key step in this workflow: pushing our local <code>Tacokit</code> changes to the remote!</p>
+
+<p>OK, after we&#39;ve done that and redeployed the app, we&#39;re still getting 500 errors.</p>
+
+<p>D&#39;oh! We were working on a <em>branch</em> of <code>tacokit</code> but we reference it in our app&#39;s <code>Gemfile</code>.</p>
+
+      <h2 id="taking-a-step-back" class="title title-h2">
+        <a name="taking-a-step-back" class="anchor" href="#taking-a-step-back">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Taking a step back
+      </h2>
+    
+<p>Good thing we weren&#39;t pushing that app feature to production. We would have been wise to run the tests on our CI server first where we would have seen the same errors (assuming we had the right tests... and a CI server).</p>
+
+<p>Using the <code>:path</code> often means pointing to a location that only exists on our local machine. Every time we want to develop against the local <code>tacokit</code> gem, we have to remember to edit the <code>Gemfile</code> to remove the option so we don&#39;t screw up our teammates or break the build. We also can&#39;t forget to point to correct branch.</p>
+
+<p>This workflow is no good because we&#39;re human and humans tend to forget to do things.</p>
+
+      <h2 id="-quot-bundle-config-local-quot-to-the-rescue" class="title title-h2">
+        <a name="-quot-bundle-config-local-quot-to-the-rescue" class="anchor" href="#-quot-bundle-config-local-quot-to-the-rescue">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        &quot;bundle config local&quot; to the rescue
+      </h2>
+    
+<p>Buried deep in the Bundler docs is a better solution for <a href="http://bundler.io/git.html#local" target="_blank" rel="noopener noreferrer">working with local git repo</a>: the <code>bundle config local</code> command. Instead of specifying the <code>:path</code> option, we can run the following on command line:</p>
+
+<pre><code class="sh">$ bundle config local.tacokit /path/to/tacokit
+</code></pre>
+
+<p>Here we instruct Bundler to look in a local resource by modifying our local Bundler configuration. That&#39;s the one that lives in
+<code>.bundle/config</code> outside of version control.</p>
+
+<p><strong>No more editing shared code for local development settings.</strong></p>
+
+<p>We can confirm the link with <code>bundle config</code>:</p>
+
+<pre><code class="sh">$ bundle config
+Settings are listed in order of priority. The top value will be used.
+local.tacokit
+Set for your local app (/Users/rossta/.bundle/config): &quot;/Users/rossta/path/to/tacokit&quot;
+</code></pre>
+
+<p>We can scope the configuration to a specific folder with the <code>--local</code> flag:</p>
+
+<pre><code class="sh">$ bundle config --local local.tacokit /path/to/tacokit
+$ bundle config
+Settings are listed in order of priority. The top value will be used.
+local.tacokit
+Set for your local app (/Users/rossta/path/to/app/.bundle/config): &quot;/Users/rossta/path/to/tacokit&quot;
+</code></pre>
+
+<p>To take advantage of this local override in the app, we have to specify the remote repo and branch in the <code>Gemfile</code>:</p>
+
+<pre><code class="ruby">gem &quot;tacokit&quot;, github: &quot;rossta/tacokit&quot;, branch: &quot;master&quot;
+</code></pre>
+
+<p>Bundler will abort if the local gem branch doesn&#39;t match the one in the <code>Gemfile</code> and checks that the sha in Gemfile.lock exists in the local repository.</p>
+
+<p><strong>This way we ensure our Gemfile.lock contains a valid reference to our local gem.</strong></p>
+
+<p>We don&#39;t get these assertions when using the <code>:path</code> option.</p>
+
+<p>It&#39;s easy to remove the local config after we don&#39;t need it:</p>
+
+<p><code>bundle config --delete local.YOUR_GEM_NAME</code></p>
+
+      <h2 id="caveats" class="title title-h2">
+        <a name="caveats" class="anchor" href="#caveats">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Caveats
+      </h2>
+    
+<p>As with the <code>:path</code> option, we still need to remember to push our
+local gem changes to the remote repository when using <code>bundle config local</code>.</p>
+
+<p>I should also mention that a good use case for using <code>:path</code> instead of <code>bundle
+config local</code> it when the local gem is in a subdirectory relative to your app,
+like when using <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" target="_blank" rel="noopener noreferrer">git submodules</a>.
+I don&#39;t often see this in practice, but there are valid reasons for doing so.
+The main point here is that the Gemfile options work for all systems where the
+repository is bundled.</p>
+
+<p>In general, I&#39;d encourage using either approach sparingly for gems that your
+team doesn&#39;t own as it&#39;s typically best to stick the official releases for
+active repositories. In my experience, it&#39;s most common to develop against local gems for
+projects that your team <em>does</em> own, so <code>bundle config local</code> will ensure your
+co-workers know where to look to verify code dependencies.</p>
+
+      <h2 id="don-39-t-use-path-use-bundle-config-local-instead" class="title title-h2">
+        <a name="don-39-t-use-path-use-bundle-config-local-instead" class="anchor" href="#don-39-t-use-path-use-bundle-config-local-instead">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Don&#39;t use :path, use bundle config local instead
+      </h2>
+    
+<p>Though convenient, using the <code>:path</code> option in our <code>Gemfile</code> to point to a local
+gem elsewhere on our machine sets us up for three potential problems without automated prevention:</p>
+
+<ul>
+<li>Committing a nonexistent lookup path on other machines</li>
+<li>Failing to point to the correct repository branch</li>
+<li>Failing to point to an existing git reference</li>
+</ul>
+
+<p>Forget the <code>:path</code> option and you&#39;ll never forget ^^this stuff^^ again.</p>
+
+<p>Just use this command:</p>
+
+<pre><code class="sh">bundle config local.YOUR_GEM_NAME
+</code></pre>
+
+<p>And don&#39;t believe everything you read on StackOverflow.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=How%20to%20specify%20local%20Ruby%20gems%20in%20your%20Gemfile%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Fhow-to-specify-local-ruby-gems-in-your-gemfile.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Apr 23, 2016
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/818387/subscriptions?ref=Ruby"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="818387"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733960" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/how-to-specify-local-ruby-gems-in-your-gemfile.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/everything-is-enumerated.html">Everything is Enumerated</a>
+    </header>
+      <p>This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/using-the-web-push-api-with-vapid.html">Using Web Push Notifications with VAPID</a>
+    </header>
+      <p>Sending push notifications in Ruby or Node.js on the open web using the Voluntary Application server Identification (VAPID) protocol.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/how-to-specify-local-ruby-gems-in-your-gemfile.html">How to specify local Ruby gems in your Gemfile</a>
+    </header>
+      <p>Use the "bundle config" command to develop against local Ruby gems instead of following the typical advice to specify the :path option in your Gemfile.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/stock/jellyfish-pexels-photo.jpeg" loading="lazy" alt="" />
+      </figure>
+  </article>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

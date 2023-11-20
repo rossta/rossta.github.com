@@ -1,0 +1,696 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Thread Pool - A Ruby Antihero - rossta.net</title>
+<meta name="description" content="A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources" />
+<meta name="keywords" content="Ruby" />
+<meta itemprop="name" content="Thread Pool - A Ruby Antihero" />
+<meta itemprop="description" content="A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources" />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/deadpool.jpg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/a-ruby-antihero-thread-pool.html" />
+<meta name="twitter:title" content="Thread Pool - A Ruby Antihero" />
+<meta name="twitter:description" content="A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources" />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/deadpool.jpg" />
+<meta property="og:url" content="https://rossta.net/archive/a-ruby-antihero-thread-pool.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Thread Pool - A Ruby Antihero" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/deadpool.jpg" />
+<meta property="og:description" content="A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources" />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/a-ruby-antihero-thread-pool.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"Thread Pool - A Ruby Antihero","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/a-ruby-antihero-thread-pool.html","query":null,"fragment":null},"datePublished":"2016-03-02T00:00:00Z","keywords":"ruby","description":"A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    Thread Pool - A Ruby Antihero
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Understanding a fundamental Ruby abstraction for concurrency
+    </h2>
+</header>
+
+    <p>One of the fundamental concepts in key Ruby libraries that embrace
+concurrency is the <a href="https://en.wikipedia.org/wiki/Thread_pool" target="_blank" rel="noopener noreferrer">thread pool</a>.</p>
+
+<p>You can find examples of thread pool implementations in gems like
+<a href="https://github.com/puma/puma" target="_blank" rel="noopener noreferrer">puma</a>,
+<a href="https://github.com/ruby-concurrency/concurrent-ruby" target="_blank" rel="noopener noreferrer">concurrent-ruby</a>,
+<a href="https://github.com/celluloid/celluloid" target="_blank" rel="noopener noreferrer">celluloid</a>,
+<a href="https://github.com/bruceadams/pmap" target="_blank" rel="noopener noreferrer">pmap</a>,
+<a href="https://github.com/grosser/parallel/blob/6ebee4ff5c0933da241a182e366eee9227b49764/lib/parallel.rb#L66" target="_blank" rel="noopener noreferrer">parallel</a>,
+and <a href="https://github.com/meh/ruby-thread" target="_blank" rel="noopener noreferrer">ruby-thread</a>.</p>
+
+<p>A thread pool is an abstraction for re-using a limited number of threads to
+perform concurrent work.</p>
+
+<p><img src="/assets/images/blog/threadpool.png" alt="Thread pool - no relation" loading="lazy" /></p>
+
+<p>General usage of a thread pool might look something like the following, where the <code>:size</code>
+represents the maximum number of threads open at any given time.</p>
+
+<pre><code class="ruby">pool = ThreadPool.new(size: 5)
+
+10_000.times do
+  pool.schedule { do_work }
+end
+
+pool.shutdown
+</code></pre>
+
+<p>The calculation would be performed 10,000 times across five separate threads.</p>
+
+<p>To get a better understanding of how thread pools work, let&#39;s implement a thread
+pool in test-driven fashion.</p>
+
+<aside class="callout panel">
+<p>
+  The code samples in this post are run on <code>rubinius-3.14</code> to take advantage of
+  parallel processing. As you may know, MRI's
+<a href="http://www.jstorimer.com/blogs/workingwithcode/8085491-nobody-understands-the-gil">global interpreter lock</a>
+ensures only one thread can execute Ruby code at any one time.
+</p>
+</aside>
+
+      <h3 id="don-39-t-be-afraid" class="title title-h3">
+        <a name="don-39-t-be-afraid" class="anchor" href="#don-39-t-be-afraid">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Don&#39;t be afraid
+      </h3>
+    
+<p>Before we dive in, let&#39;s acknowledge that Rubyists, and most OO programmers in general,
+are taught to fear multi-threaded concurrency.</p>
+
+<p>The <em>first rule</em> of concurrency on the JRuby wiki, a Ruby implementation
+designed to take advantage of native operating systems threads, is this:</p>
+
+<blockquote>
+<p>Don&#39;t do it, if you can avoid it.</p>
+</blockquote>
+
+<p>For the purpose of this post, I&#39;m going to assume the author means &quot;in
+production&quot;. In the safety of your development environment, playing with
+concurrency in Ruby can be a tremendous learning opportunity.</p>
+
+      <h3 id="a-simple-thread-pool" class="title title-h3">
+        <a name="a-simple-thread-pool" class="anchor" href="#a-simple-thread-pool">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        A simple thread pool
+      </h3>
+    
+<p>We&#39;ll implement a simple thread pool guided by tests. Our thread pool will use the
+interface we described earlier while limiting the number of threads
+used to carry out a set of concurrent &quot;jobs&quot;.</p>
+
+<pre><code class="ruby">pool = ThreadPool.new(size: 5)
+
+pool.schedule { do_work }
+
+pool.shutdown
+</code></pre>
+
+      <h3 id="basic-usage" class="title title-h3">
+        <a name="basic-usage" class="anchor" href="#basic-usage">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Basic usage
+      </h3>
+    
+<p>We&#39;ll start with a thread pool that doesn&#39;t do any concurrent processing.
+It will execute the block given to its <code>#schedule</code> method
+directly. Though we&#39;ll add other tests later to exercise concurrency in the
+implementation, this first test will assume the concurrency is already
+implemented.</p>
+
+<p>Here&#39;s our first test.</p>
+
+<pre><code class="ruby">require &#39;minitest/autorun&#39;
+require &#39;minitest/pride&#39;
+require_relative &#39;./thread_pool&#39;
+
+class TestThreadPool &lt; Minitest::Test
+  def test_basic_usage
+    pool_size = 5
+    pool = ThreadPool.new(size: pool_size)
+
+    mutex = Mutex.new
+
+    iterations = pool_size * 3
+    results = Array.new(iterations)
+
+    iterations.times do |i|
+      pool.schedule do
+        mutex.synchronize do
+          results[i] = i + 1
+        end
+      end
+    end
+    pool.shutdown
+
+    assert_equal(1.upto(pool_size * 3).to_a, results)
+  end
+end
+</code></pre>
+
+<p>Let&#39;s break it down. To test the basic usage of a thread pool scheduler, we&#39;ll pass in an array and
+augment it with in the scheduled blocks. Because <a href="http://www.jstorimer.com/pages/ruby-core-classes-arent-thread-safe" target="_blank" rel="noopener noreferrer"><code>Array</code> is not thread safe</a>,
+we need to use a <a href="http://ruby-doc.org/core-2.2.0/Mutex.html" target="_blank" rel="noopener noreferrer"><code>Mutex</code></a> object to lock the pooled threads while adding items to the array.</p>
+
+<p>The key snippet is here:</p>
+
+<pre><code class="ruby">pool.schedule do
+  mutex.synchronize do
+    results[i] = i + 1
+  end
+end
+</code></pre>
+
+<p>The test asserts that the results match <code>1.upto(15)</code> as an array.</p>
+
+<p>To make the tests pass:</p>
+
+<pre><code class="ruby">class ThreadPool
+  def initialize(size:)
+  end
+
+  def schedule(*args, &amp;block)
+    block.call(args)
+  end
+
+  def shutdown
+  end
+end
+</code></pre>
+
+<p>We&#39;ve just stubbed out the <code>#initialize</code> and <code>#shutdown</code> methods since
+additional behavior isn&#39;t needed to get the tests to pass.</p>
+
+<p>You can see the source for <a href="https://github.com/rossta/loves-enumerable/commit/fcd81ec86ae3525d8f0a3acf914507e2962fb962" target="_blank" rel="noopener noreferrer">this changeset on Github</a>.</p>
+
+      <h3 id="saving-time" class="title title-h3">
+        <a name="saving-time" class="anchor" href="#saving-time">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Saving time
+      </h3>
+    
+<p>Our next test will demonstrate that we&#39;re actually taking advantage of concurrency by
+(crudely) measuring the time taken to process multiple jobs.</p>
+
+<p>We&#39;ll use a small test helper method to measure the number of
+seconds elapsed during execution:</p>
+
+<pre><code class="ruby">def time_taken
+  now = Time.now.to_f
+  yield
+  Time.now.to_f - now
+end
+</code></pre>
+
+<p>Our test will schedule 5 jobs that will each sleep for 1 second.
+If the jobs executed serially, the total execution time would be at least 5
+seconds. Running in parallel on Rubinius, we&#39;d expect threaded-execution of 5 jobs
+across 5 threads to take less time.</p>
+
+<pre><code class="ruby">def test_time_taken
+  pool_size = 5
+  pool = ThreadPool.new(size: pool_size)
+  elapsed = time_taken do
+    pool_size.times do
+      pool.schedule { sleep 1 }
+    end
+    pool.shutdown
+  end
+  assert_operator 4.5, :&gt;, elapsed,
+    &#39;Elapsed time was too long: %.1f seconds&#39; % elapsed
+end
+</code></pre>
+
+<p>This test fails with our first pass-through implementation of <code>ThreadPool</code>. We
+can make this test pass by wrapping each scheduled job in its own thread.</p>
+
+<pre><code class="ruby">class ThreadPool
+  def initialize(size:)
+    @pool = []
+  end
+
+  def schedule(*args, &amp;block)
+    @pool &lt;&lt; Thread.new { block.call(args) }
+  end
+
+  def shutdown
+    @pool.map(&amp;:join)
+  end
+end
+</code></pre>
+
+<p>We push each of these threads onto an array, <code>@pool</code>, which we can use to join
+the threads during the <code>#shutdown</code> method. The tests pass again.</p>
+
+<p><a href="https://github.com/rossta/loves-enumerable/commit/1d1cbc808a536a449b8f6dab5b9d4e0cb037f99c" target="_blank" rel="noopener noreferrer">Source for this changeset</a></p>
+
+      <h3 id="adding-pooling" class="title title-h3">
+        <a name="adding-pooling" class="anchor" href="#adding-pooling">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Adding Pooling
+      </h3>
+    
+<p>While we&#39;ve achieved concurrency, you may notice there&#39;s (at least) one problem.</p>
+
+<p>Our current implementation will naively create a new thread for each scheduled
+job. This may not be an issue for small, trivial use cases, but it can be easily
+abused. Thread creation does not come for free; every OS has its limit.</p>
+
+<p>We&#39;ll prove it with our next test in which we&#39;ll schedule a large number of
+jobs.</p>
+
+<pre><code class="ruby">def test_pool_size_limit
+  pool_size = 5
+  pool = ThreadPool.new(size: pool_size)
+  mutex = Mutex.new
+  threads = Set.new
+
+  100_000.times do
+    pool.schedule do
+      mutex.synchronize do
+        threads &lt;&lt; Thread.current
+      end
+    end
+  end
+  pool.shutdown
+
+  assert_equal(pool_size, threads.size)
+end
+</code></pre>
+
+<p>Running these tests on my mid-2014 MacBook Pro, I hit the resource limit:</p>
+
+<pre><code>TestThreadPool#test_pool_size_limit:
+ThreadError: can&#39;t create Thread: Resource temporarily unavailable
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `initialize&#39;
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `new&#39;
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:53:in `block in test_pool_size_limit&#39;
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:52:in `times&#39;
+    /Users/ross/dev/rossta/enumerable/examples/thread_pool/thread_pool_test.rb:52:in `test_pool_size_limit&#39;
+</code></pre>
+
+<p>This is now the whole point of our <code>ThreadPool</code>, to limit the number of threads
+in use. To implement this behavior, instead of executing the scheduled job in a
+new thread, we&#39;ll add them to a <code>Queue</code>. We&#39;ll separately create a
+limited number of threads whose responsibility will be to pop new &quot;jobs&quot; off the
+queue and execute them when available.</p>
+
+<p>The beauty of <code>Queue</code> is that it is thread-safe; multiple threads in the thread pool can access this resource without corrupting its contents.</p>
+
+<p>Here&#39;s the revised implementation:</p>
+
+<pre><code class="ruby">class ThreadPool
+  def initialize(size:)
+    @size = size
+    @jobs = Queue.new
+    @pool = Array.new(size) do
+      Thread.new do
+        catch(:exit) do
+          loop do
+            job, args = @jobs.pop
+            job.call(*args)
+          end
+        end
+      end
+    end
+  end
+
+  def schedule(*args, &amp;block)
+    @jobs &lt;&lt; [block, args]
+  end
+
+  def shutdown
+    @size.times do
+      schedule { throw :exit }
+    end
+
+    @pool.map(&amp;:join)
+  end
+end
+</code></pre>
+
+<p>Let&#39;s start with the <code>#schedule</code> method. Where before we immediately creating a
+new thread to call the block, we instead push the block and arguments onto the
+new <code>@jobs</code> queue instance variable.</p>
+
+<pre><code class="ruby">def schedule(*args, &amp;block)
+  @jobs &lt;&lt; [block, args]
+end
+</code></pre>
+
+<p>This instance variable is setup in the <code>#initialize</code> method where we also
+eagerly create the maximum number of threads that will become our worker <code>@pool</code>.</p>
+
+<pre><code class="ruby">def initialize(size:)
+  @size = size
+  @jobs = Queue.new
+  @pool = Array.new(size) do
+    Thread.new do
+      catch(:exit) do
+        loop do
+          job, args = @jobs.pop
+          job.call(*args)
+        end
+      end
+    end
+  end
+end
+</code></pre>
+
+<p>Each thread runs an infinite loop that repeatedly pops jobs of the queue with
+<code>@jobs.pop</code>. The <a href="http://ruby-doc.org/stdlib-2.0.0/libdoc/thread/rdoc/Queue.html#method-i-pop" target="_blank" rel="noopener noreferrer"><code>Queue#pop</code></a> method here will block when the queue is empty so the thread will happily wait for new jobs to be scheduled at this point.</p>
+
+<p>We also use a <a href="http://ruby-doc.org/core-2.3.0/Kernel.html#method-i-catch" target="_blank" rel="noopener noreferrer"><code>catch</code></a> block. We break out of the thread loops by
+pushing <code>throw :exit</code> on to the job queue, once for each thread in the
+<code>#shutdown</code> method. This means that jobs currently executing when the shutdown
+method is called will be able to complete before the threads can be joined.</p>
+
+<pre><code class="ruby">def shutdown
+  @size.times do
+    schedule { throw :exit }
+  end
+
+  @pool.map(&amp;:join)
+end
+</code></pre>
+
+<p>Now we have a simple abstraction for handling concurrent work across a limited
+number of threads. For more on this implementation, check out the original author&#39;s <a href="http://www.burgestrand.se/articles/quick-and-simple-ruby-thread-pool.html" target="_blank" rel="noopener noreferrer">blog post on
+the subject</a>.</p>
+
+<p><a href="https://github.com/rossta/loves-enumerable/commit/cd6e89328948b9fd7e902764947163e4dd16b73d" target="_blank" rel="noopener noreferrer">Source for this changeset</a></p>
+
+      <h3 id="in-the-wild" class="title title-h3">
+        <a name="in-the-wild" class="anchor" href="#in-the-wild">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        In the Wild
+      </h3>
+    
+<p>Of course, if you&#39;re planning on using a thread pool in production code, you&#39;ll
+be better off leveraging the hard work of others. Our implementation omits
+some key considerations, like reflection, handling timeouts, dealing with
+exceptions, and better thread safety. Let&#39;s look at some alternatives in the
+community.</p>
+
+<p>The <a href="https://github.com/meh/ruby-thread" target="_blank" rel="noopener noreferrer">ruby-thread</a> project provides a few extensions to the standard library <code>Thread</code> class, including <code>Thread::Pool</code>. Usage of <code>Thread::Pool</code> is very similar to what we came up with on the surface.</p>
+
+<pre><code class="ruby">require &#39;thread/pool&#39;
+
+pool = Thread.pool(4)
+
+10.times {
+  pool.process {
+    sleep 2
+
+    puts &#39;lol&#39;
+  }
+}
+
+pool.shutdown
+</code></pre>
+
+<p>This implementation goes farther to ensure standard locking functions to work
+properly across multiple Ruby implementations. Among other things, it has
+support for handling timeouts, methods for introspecting pool objects, like
+<code>#running?</code> and <code>#terminated?</code>, and optimizations for dealing with unused
+threads. On reading the source, my impression is the implementation was heavily inspired by <a href="https://github.com/puma/puma/blob/32b1fb3742e5918e0e79ee705b48c912a1f0742d/lib/puma/thread_pool.rb" target="_blank" rel="noopener noreferrer">Puma::ThreadPool</a>, a class used internally by the puma web server. You be the judge.</p>
+
+<p><a href="https://github.com/celluloid/celluloid" target="_blank" rel="noopener noreferrer">Celluloid</a>, the most famous
+collection of concurrency abstractions, provides a thread pool class,
+most commonly accessed via a class method provided by the
+<code>Celluloid</code> mixin.</p>
+
+<pre><code class="ruby">class MyWorker
+  include Celluloid
+
+  def add_one(number)
+    # roflscale computation goes here
+    number + 1
+  end
+end
+
+MyWorker.pool
+
+pool.future(:add_one, 5).value
+</code></pre>
+
+<p>The new hotness for working with concurrency is the toolkit provided by <a href="https://github.com/ruby-concurrency/concurrent-ruby" target="_blank" rel="noopener noreferrer">concurrent-ruby</a>. While <code>Celluloid</code> is easy to get started with, <code>Concurrent</code> is the &quot;Swiss Army Knife&quot;, providing a large array of abstractions and classes, including futures, promises, thread-safe collections, maybes, and so on. <code>Concurrent</code> provides several different thread pool implementations for different purposes, each supporting a number of configurations, including min and max pool sizes, advanced shutdown behaviors, max queue size (along with a fallback policy when the job queue size is exceeded) to name a few.</p>
+
+<pre><code class="ruby">pool = Concurrent::FixedThreadPool.new(5) # 5 threads
+pool.post do
+  # some parallel work
+end
+</code></pre>
+
+<p>Consider the <a href="http://ruby-concurrency.github.io/concurrent-ruby/file.thread_pools.html" target="_blank" rel="noopener noreferrer">Thread Pool</a> overview provided in the <code>Concurrent</code> docs required reading.</p>
+
+<p>And, of course, the ultimate thread pool for Rails developers is <a href="https://github.com/mperham/sidekiq" target="_blank" rel="noopener noreferrer">Sidekiq</a>. Unlike the examples we&#39;ve discussed so far, the components of the Sidekiq thread pool model are distributed: the caller, the job queue, and the threaded workers all run in separate processes, often on separate machines, in a production environment.</p>
+
+      <h3 id="credits" class="title title-h3">
+        <a name="credits" class="anchor" href="#credits">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Credits
+      </h3>
+    
+<p>In preparing for this post, I read through the source of several thread pool
+implementations from various sources, ranging from simple examples, to internal
+interfaces, to public-facing libraries.</p>
+
+<ul>
+<li><a href="http://www.burgestrand.se/code/ruby-thread-pool/" target="_blank" rel="noopener noreferrer">A simple, annotated thread pool</a></li>
+<li><a href="https://github.com/meh/ruby-thread/blob/f25dd1184f4f4bee7cde0d54ad5ce5e32dc15279/lib/thread/pool.rb" target="_blank" rel="noopener noreferrer"><code>Thread::Pool</code></a></li>
+<li><a href="https://github.com/celluloid/celluloid/blob/c54bbde76e6a71b44c3ca6d1abf71197c64d7614/lib/celluloid/group/pool.rb" target="_blank" rel="noopener noreferrer"><code>Celluloid::Group::Pool</code></a></li>
+<li><a href="https://github.com/ruby-concurrency/concurrent-ruby/blob/536478817a3d0440f00ac09098f3ba71f0d8ce7c/lib/concurrent/executor/ruby_thread_pool_executor.rb" target="_blank" rel="noopener noreferrer"><code>Concurrent::RubyThreadPoolExecutor</code></a></li>
+<li><a href="https://github.com/puma/puma/blob/32b1fb3742e5918e0e79ee705b48c912a1f0742d/lib/puma/thread_pool.rb" target="_blank" rel="noopener noreferrer"><code>Puma::ThreadPool</code></a></li>
+</ul>
+
+<p>Though it&#39;s well documented how much <a href="http://adam.herokuapp.com/past/2009/8/13/threads_suck/" target="_blank" rel="noopener noreferrer">threads suck</a>, that shouldn&#39;t discourage Rubyists from trying to get some first-hand experience with working with threads, supporting classes from the standard library like <code>Queue</code>, <code>Mutex</code>, and <code>ConditionVariable</code> and generic abstractions like <code>ThreadPool</code>.</p>
+
+      <h3 id="connection-pool-the-sequel" class="title title-h3">
+        <a name="connection-pool-the-sequel" class="anchor" href="#connection-pool-the-sequel">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Connection Pool, the Sequel
+      </h3>
+    
+<p>Related, though not necessarily thread-based, is the concept of a connection
+pool, which limits the number of network connections to a particular service.
+You&#39;ll find connection pools in <a href="https://github.com/rails/rails/blob/107f4282bbfabc011d5ad3bcf3fb3c6fb812ad30/activerecord/lib/active_record/connection_adapters/abstract/connection_pool.rb" target="_blank" rel="noopener noreferrer">activerecord</a>, <a href="https://github.com/mongodb/mongo-ruby-driver/blob/eece2a769bbf1a302b2f70b23dc6a43490392979/lib/mongo/server/connection_pool.rb" target="_blank" rel="noopener noreferrer">mongodb</a>, and, as a standalone
+abstraction in the approrpriately-named,
+<a href="https://github.com/mperham/connection_pool" target="_blank" rel="noopener noreferrer">connection_pool</a>.</p>
+
+<p>It&#39;s good to know
+about connection pools for setting a connection to Redis from your Ruby
+applications with the <a href="https://github.com/redis/redis-rb" target="_blank" rel="noopener noreferrer">redis-rb</a> gem. As of this writing, this client does not manage a connection pool for you, so <a href="http://www.blrice.net/blog/2015/04/24/take-a-swim-in-the-connection-pool/" target="_blank" rel="noopener noreferrer">the common gotcha</a> is a memory-leak that originates from creating a lot of open connections to the Redis server. You can avoid this with <code>ConnectionPool</code>:</p>
+
+<pre><code class="ruby">redis = ConnectionPool.new { Redis.new }
+</code></pre>
+
+<p>Much like <code>ThreadPool</code>, having at least a cursory understanding of what&#39;s happening
+underneath can help you avoid issues with managing resources like network
+connections.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=Thread%20Pool%20-%20A%20Ruby%20Antihero%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Fa-ruby-antihero-thread-pool.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Mar  2, 2016
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/818387/subscriptions?ref=Ruby"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="818387"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733960" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/a-ruby-antihero-thread-pool.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/using-webpack-with-middleman.html">Using webpack with Middleman</a>
+    </header>
+      <p>Explaining how to integrate the webpack asset management tool with the Ruby static web framework Middleman</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/ancient-city-snake-case.html">Ancient City Ruby Snake Case</a>
+    </header>
+      <p>Comparing mathematical, iterative, and recursive solutions to the Snake Case challenge posed during the Ancient City Ruby Conference</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/a-ruby-antihero-thread-pool.html">Thread Pool - A Ruby Antihero</a>
+    </header>
+      <p>A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/deadpool.jpg" loading="lazy" alt="" />
+      </figure>
+  </article>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

@@ -1,0 +1,306 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Everything is Enumerated - rossta.net</title>
+<meta name="description" content="This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful." />
+<meta name="keywords" content="Rails, Ruby" />
+<meta itemprop="name" content="Everything is Enumerated" />
+<meta itemprop="description" content="This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful." />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/stock/chutternsnap-containers-unsplash.jpg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/everything-is-enumerated.html" />
+<meta name="twitter:title" content="Everything is Enumerated" />
+<meta name="twitter:description" content="This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful." />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/stock/chutternsnap-containers-unsplash.jpg" />
+<meta property="og:url" content="https://rossta.net/archive/everything-is-enumerated.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Everything is Enumerated" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/chutternsnap-containers-unsplash.jpg" />
+<meta property="og:description" content="This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/everything-is-enumerated.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"Everything is Enumerated","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/everything-is-enumerated.html","query":null,"fragment":null},"datePublished":"2018-12-21T00:00:00Z","keywords":"rails, ruby","description":"This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    Everything is Enumerated
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Using to_enum with block methods
+    </h2>
+</header>
+
+    <p>In Ruby, some methods expect a block as a callback yielding elements of some internal data structure.</p>
+
+<p>Imagine a method <code>paginated_results</code> on some <code>client</code> object that yields individual pages.</p>
+
+<pre><code class="ruby">client.paginated_results(params) { |page| puts page.contents }
+</code></pre>
+
+<p>The method may hide away some complexity in retrieving pages.</p>
+
+<pre><code class="ruby">def paginated_results(params = {})
+  before  = nil
+  max     = 1000
+  limit   = 50
+  results = []
+
+  loop do
+    page = fetch_page(params.merge(before: before, limit: limit)) # imaginary request
+
+    results += page
+
+    yield page
+
+    break if results.length &gt;= max
+
+    before = page.last[&quot;id&quot;]
+  end
+end
+</code></pre>
+
+<p>To callers of this method, there is an implicit data structure. Being Ruby, we may expect to be able to call <code>Enumerable</code> methods on this data to inspect, slice, or augment the contents in a convenient way.</p>
+
+<p>But we may not have access to method&#39;s internals and the underlying data structure, especially if we&#39;re using a method from an external library. This is the case with our <code>paginated_results</code> example; the <code>results</code> array is not exposed to the method caller.</p>
+
+<p>Callers of the method are forced to build up state from the outside. Here&#39;s a contrived example:</p>
+
+<pre><code class="ruby">table_of_contents = []
+index = 0
+
+client.paginated_results(order: :asc) do |p|
+  table_of_contents &lt;&lt; [index+1, p.title] if p.title_page?
+end
+
+puts table_of_contents
+</code></pre>
+
+<p>There&#39;s another way in Ruby! We can &quot;enumeratorize&quot; it!</p>
+
+<p>Ruby&#39;s <code>to_enum</code> method is defined on all objects. Quite simply, it can convert a method into <code>Enumerator</code>:</p>
+
+<pre><code class="ruby">client.to_enum(:paginated_results, params)
+# =&gt; &lt;Enumerator ...&gt;
+</code></pre>
+
+<p>What this gives us is an enumerable object that behaves as if we built up that array ourselves, which means we can call methods from the <code>Enumerable</code> module, chain other enumerators to augment the block arguments, use <code>lazy</code>, etc.</p>
+
+<pre><code class="ruby">client.to_enum(:paginated_results, params).
+  filter(:title_page?).
+  map.with_index { |p, i| [i+i, p.title] }
+</code></pre>
+
+<p>I love this type of expression because it&#39;s more direct, flexible, and intention revealing. Authors need be less concerned with building up state with local variables.</p>
+
+<p>In fact, this pattern is so useful that many authors have started building in <code>to_enum</code> to such methods for when the caller omits the block. The implementation for <code>paginated_results</code> might look like this:</p>
+
+<pre><code class="ruby">def paginated_results(params = {})
+  return to_enum(__method__, params) unless block_given?
+
+  # rest unchanged
+end
+</code></pre>
+
+<p>While you are free to stick with the imperative approach, I hope this post demonstrates how <code>to_enum</code> offers Rubyists a more declarative and functionally-flavored alternative.</p>
+
+      <h3 id="wrapping-up" class="title title-h3">
+        <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Wrapping up
+      </h3>
+    
+<p>When you&#39;re in a punch, you can use <code>to_enum</code> to wrap iterative methods to add otherwise missing <code>Enumerable</code> properties. And, when designing your classes, consider adopting the <code>return to_enum(__method__) unless block_given?</code> pattern in method definitions to enhance iterative methods.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=Everything%20is%20Enumerated%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Feverything-is-enumerated.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Dec 21, 2018
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/1268949/subscriptions?ref=Rails"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="1268949"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733966" />
+    <input type="hidden" name="tags[]" value="733960" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/everything-is-enumerated.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a>
+    </header>
+      <p>This time we'll walk through the steps for integrating Bootstrap 4 with Rails and Webpacker 4.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/why-rails-system-tests-matter.html">Why RSpec users should care about Rails 5.1 and system tests</a>
+    </header>
+      <p>This post explains why RSpec/Rails users should upgrade to Rails 5.1 and drop the DatabaseCleaner gem for JavaScript-enabled acceptance tests.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/everything-is-enumerated.html">Everything is Enumerated</a>
+    </header>
+      <p>This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/stock/chutternsnap-containers-unsplash.jpg" loading="lazy" alt="" />
+            <figcaption>Photo by chuttersnap on Unsplash</figcaption>
+      </figure>
+  </article>
+    <!-- Webpack on Rails course popup form -->
+    <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

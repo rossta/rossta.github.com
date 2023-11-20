@@ -1,0 +1,459 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Extracting a data component in Vue - rossta.net</title>
+<meta name="description" content="In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PD..." />
+<meta name="keywords" content="Vue" />
+<meta itemprop="name" content="Extracting a data component in Vue" />
+<meta itemprop="description" content="In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PD..." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/extracting-a-data-component-in-vue.html" />
+<meta name="twitter:title" content="Extracting a data component in Vue" />
+<meta name="twitter:description" content="In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PD..." />
+<meta property="og:url" content="https://rossta.net/archive/extracting-a-data-component-in-vue.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Extracting a data component in Vue" />
+<meta property="og:description" content="In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PD..." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/extracting-a-data-component-in-vue.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"Extracting a data component in Vue","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/extracting-a-data-component-in-vue.html","query":null,"fragment":null},"datePublished":"2018-07-15T00:00:00Z","keywords":"vue","description":"In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PDF page data.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    Extracting a data component in Vue
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Building a PDF Viewer with Vue - Part 3
+    </h2>
+</header>
+
+    <p>Vue components don&#39;t have to just be about displaying information and user interaction. In this post, we&#39;ll show how to build a component whose main job is to simply fetch data for other components. We&#39;ll use props, events, and scoped-slots to tie the pieces together.</p>
+
+      <h3 id="the-project" class="title title-h3">
+        <a name="the-project" class="anchor" href="#the-project">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The project
+      </h3>
+    
+<p>This post is part of ongoing series, <a href="/blog/series/pdf-viewer.html">Building a PDF Viewer with Vue.js</a>. The source code for this project is on Github at <a href="https://github.com/rossta/vue-pdfjs-demo" target="_blank" rel="noopener noreferrer">rossta/vue-pdfjs-demo</a>. To see the source described in this post, <a href="https://github.com/rossta/vue-pdfjs-demo/tree/tutorial/part-3-renderless-components" target="_blank" rel="noopener noreferrer">checkout the branch</a>.</p>
+
+<p>Here&#39;s the latest <a href="https://rossta.net/vue-pdfjs-demo/" target="_blank" rel="noopener noreferrer">project demo</a>.</p>
+
+      <h3 id="catching-up-from-last-time" class="title title-h3">
+        <a name="catching-up-from-last-time" class="anchor" href="#catching-up-from-last-time">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Catching up from last time
+      </h3>
+    
+<p>So far in <a href="/blog/series/pdf-viewer.html">this series</a>, we have built a simple PDF viewer to render the pages of PDF document to <code>&lt;canvas&gt;</code> elements with Vue. We have also updated our components to fetch and render PDF pages lazily as they are scrolled into the viewport. For the next feature, we want to build a preview pane into the left-hand side of the viewer.</p>
+
+<p><img src="/assets/images/screenshots/screenshot-pdf-viewer-part-3.jpg" alt="Preview of the preview" loading="lazy" /></p>
+
+<p>This preview pane will display the entire document (as smaller, clickable thumbnails), be independently-scrollable, and render PDF pages lazily, i.e., it will behave a lot like our current <code>&lt;PDFDocument&gt;</code>. First, we&#39;d like to make some of our current code reusable.</p>
+
+      <h3 id="the-why" class="title title-h3">
+        <a name="the-why" class="anchor" href="#the-why">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The why
+      </h3>
+    
+<p>The Vue docs provide helpful examples for using <a href="https://vuejs.org/v2/guide/mixins.html" target="_blank" rel="noopener noreferrer">mixins</a>, <a href="https://vuejs.org/v2/guide/custom-directive.html" target="_blank" rel="noopener noreferrer">custom directives</a>, and more. My preferred approach for sharing component functionality is <em>composition</em>, which means extracting shared code into separate components. In this post, we&#39;ll be using composition to reuse data fetching.</p>
+
+<p>Why composition? This topic deserves a separate post, but as a start, it&#39;s my preference. Borrowing from general object-oriented programming advice, I gravitate towards &quot;composition over inheritance&quot;. Practically, in Vue, this means I&#39;d like to think &quot;component-first&quot;, before reaching for mixins or <code>extends</code> (these are basically forms of inheritance).</p>
+
+<p>I also happen to agree with the drawbacks Dan Abramov enumerates in <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html" target="_blank" rel="noopener noreferrer">Mixins Considered Harmful</a>; though the context for his post is React, most of his points are relevant to Vue as well.</p>
+
+<p>As for this particular use case, we could reuse the data fetching code we wrote previously as a mixin, there&#39;s a clear problem with that approach. It would mean the components that make use of the mixin would fetch the same data independently (without extracting some other mechanism to share the data source)—which is potentially some wasted work. This may be desired for some applications, we&#39;d prefer to only fetch the PDF page data once.</p>
+
+<p>It&#39;s also worth noting that we&#39;re not currently using <a href="https://vuex.vuejs.org" target="_blank" rel="noopener noreferrer">Vuex</a> to manage application state in the project. It may be wise, as an alternative to what&#39;s described in this post, to introduce Vuex to fetch data by dispatching actions and triggering state mutations at the appropriate times. However, at this point, our data flow is fairly straightforward, top-to-bottom, which, in my opinion, favors the component-first approach. It&#39;s also simply a worthy exercise to consider data components.</p>
+
+      <h3 id="bird-39-s-eye-view" class="title title-h3">
+        <a name="bird-39-s-eye-view" class="anchor" href="#bird-39-s-eye-view">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Bird&#39;s eye view
+      </h3>
+    
+<p>Let&#39;s take a look at where we are and where we want to go. Prior to adding our feature, our component hierarchy looks like the following pseudocode:</p>
+
+<pre><code class="html">&lt;PDFDocument&gt;
+  &lt;PDFPage /&gt;
+  &lt;PDFPage /&gt;
+  &lt;PDFPage /&gt;
+  ...
+&lt;/PDFDocument&gt;
+</code></pre>
+
+<p>For our new preview feature, our preview and document components will live side-by-side.</p>
+
+<pre><code class="html">&lt;PDFPreview&gt;
+  &lt;PDFThumbnail /&gt;
+  &lt;PDFThumbnail /&gt;
+  &lt;PDFThumbnail /&gt;
+  ...
+&lt;/PDFPreview&gt;
+&lt;PDFDocument&gt;
+  &lt;PDFPage /&gt;
+  &lt;PDFPage /&gt;
+  &lt;PDFPage /&gt;
+  ...
+&lt;/PDFDocument&gt;
+</code></pre>
+
+<p>Our <code>&lt;PDFPreview&gt;</code> needs access to the same PDF data as our <code>&lt;PDFDocument&gt;</code>.</p>
+
+<p>To achieve this, we&#39;re going to wrap both the <code>&lt;PDFPreview&gt;</code> and <code>&lt;PDFThumbnail&gt;</code> in another component, whose only responsibility will be to respond to events to request page data, which it will pass to its children as props. With this approach, there is only one data source shared by the two display components.</p>
+
+<p>So our heirarchy will eventually look like this:</p>
+
+<pre><code class="html">&lt;PDFData&gt; &lt;!-- passes page data to children --&gt;
+
+  &lt;PDFPreview&gt; &lt;!-- emits events to request more pages --&gt;
+    ...
+  &lt;/PDFPreview&gt;
+  &lt;PDFDocument&gt; &lt;!-- emits events to request more pages --&gt;
+    ...
+  &lt;/PDFDocument&gt;
+
+&lt;/PDFData&gt;
+</code></pre>
+
+<p>Here we will have decoupled the logic for batching and requesting page data over the wire from the interactions and events that will trigger that behavior. For our viewer, either our document or future preview components can trigger data fetching. The data component needs to know nothing about the scrolling behavior or the logic that determines when additional pages are needed.</p>
+
+<p>Next we&#39;ll take a look at how this data component is constructed and how it will pass data to the child components.</p>
+
+      <h3 id="extracting-the-data-component" class="title title-h3">
+        <a name="extracting-the-data-component" class="anchor" href="#extracting-the-data-component">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Extracting the data component
+      </h3>
+    
+<p>Currently, the data fetching logic resides in our <code>&lt;PDFDocument&gt;</code> component. There is a method that encapsulates the logic for <a href="https://github.com/rossta/vue-pdfjs-demo/blob/4be84574ce6837379dd90b4d68194ea19b172734/src/components/PDFDocument.vue#L145" target="_blank" rel="noopener noreferrer">fetching pages in batches</a>, <a href="https://github.com/rossta/vue-pdfjs-demo/blob/4be84574ce6837379dd90b4d68194ea19b172734/src/components/PDFDocument.vue#L177" target="_blank" rel="noopener noreferrer">watchers</a> for responding to changes in the given <code>url</code> prop and <code>pdf</code> proxy object, and relevant <code>data</code> and <code>computed</code> properties for maintaining the state of PDF data. You can see <a href="https://rossta.net/blog/building-a-pdf-viewer-with-vue-part-2.html" target="_blank" rel="noopener noreferrer">the previous post</a> for more info on the implementation details. We&#39;ll move this functionality to a new <code>&lt;PDFData&gt;</code> component:</p>
+
+<pre><code class="javascript">// src/components/PDFData.vue
+
+props: {
+  url: {
+    type: String,
+    required: true,
+  },
+},
+
+data() {
+  return {
+    pages: undefined,
+    pages: [],
+    cursor: 0,
+    // ...
+  };
+},
+
+methods: {
+  fetchPages() {
+    // fetches next batch and appends to this.pages
+  },
+},
+
+computed: {
+  pageCount() {
+    return this.pdf ? this.pdf.numPages : 0;
+  },
+},
+
+// ...
+</code></pre>
+
+<p>This component will be &quot;renderless&quot;* (almost), meaning it will delegate rendering to its children. We&#39;ll use scoped slots to pass the <code>this.pages</code> data to the preview and document components. The <code>&lt;PDFData&gt;</code> needs to nothing about its children, only that it will pass data to its named children, <code>preview</code> and <code>document</code>, in its own render function:</p>
+
+<pre><code class="javascript">// src/components/PDFData.vue
+
+render(h) {
+  return h(&#39;div&#39;, [
+    this.$scopedSlots.preview({
+      pages: this.pages,
+    }),
+    this.$scopedSlots.document({
+      pages: this.pages,
+    }),
+  ]);
+},
+
+// ...
+</code></pre>
+
+<p>*Technically, this component isn&#39;t &quot;renderless&quot;—it inserts an additional <code>div</code> as a root to its scoped slots children. Otherwise, the error <code>Multiple root nodes returned from render function. Render function should return a single root node.</code> is raised in the current version of Vue I&#39;m using (<code>2.5.16</code>). The main point is that we can use components in our component hierarchy that add functionality but handoff display responsibility to its children.</p>
+
+      <h3 id="communicating-with-the-children" class="title title-h3">
+        <a name="communicating-with-the-children" class="anchor" href="#communicating-with-the-children">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Communicating with the children
+      </h3>
+    
+<p>In the <code>&lt;PDFViewer&gt;</code> we can use the <code>slot</code> attribute to render the children in the correct place and <code>slot-scope</code> to receive the <code>pages</code> property from the <code>&lt;PDFData&gt;</code> component. Though we haven&#39;t created the <code>&lt;PDFPreview&gt;</code> components, here&#39;s our template for the <code>&lt;PDFViewer&gt;</code> responsible for gluing everything together.</p>
+
+<pre><code class="html">&lt;!-- src/components/PDFViewer.vue --&gt;
+
+&lt;template&gt;
+  &lt;PDFData&gt;
+    &lt;!-- At this point in the tutorial, PDFPreview
+    doesn&#39;t exist, but this is where it will go. --&gt;
+    &lt;PDFPreview
+      slot=&quot;preview&quot;
+      slot-scope=&quot;{pages}&quot;
+      v-bind=&quot;{pages}&quot;
+      /&gt;
+
+    &lt;PDFDocument
+      slot=&quot;document&quot;
+      slot-scope=&quot;{pages}&quot;
+      v-bind=&quot;{pages}&quot;
+      /&gt;
+  &lt;/PDFData&gt;
+&lt;/template&gt;
+</code></pre>
+
+<p>To trigger data fetching, the <code>&lt;PDFData&gt;</code> component will listen for the <code>pages-fetch</code> event. Since we&#39;re using a render function, we won&#39;t be able to use the template syntax for binding to events. Instead, we&#39;ll attach the event listener using <code>this.$on</code> in the <code>created</code> hook:</p>
+
+<pre><code class="javascript">// src/components/PDFData.vue
+
+created() {
+  this.$on(&#39;pages-fetch&#39;, this.fetchPages);
+},
+
+// ...
+</code></pre>
+
+<p>Now we need to set up our <code>&lt;PDFDocument&gt;</code> to communicate with the <code>&lt;PDFData&gt;</code> component. We update <code>&lt;PDFDocument</code> to accept <code>pages</code> as props now that it is now longer responsible for fetching this data. Its <code>fetchPages</code> method, called when the component mounts or during scrolling, we&#39;ll leave in place but change its implementation (now owned by its parent <code>&lt;PDFData&gt;</code> component) to simply emit the <code>pages-fetch</code> event, for which <code>&lt;PDFData&gt;</code> is listening.</p>
+
+<pre><code class="javascript">// src/components/PDFDocument.vue
+
+props: {
+  pages: {
+    type: Array,
+    required: true,
+  },
+},
+
+data() {
+  return {
+    // removed pages and pdf properties
+    // ...
+  };
+},
+
+methods: {
+  fetchPages() {
+    this.$emit(&#39;pages-fetch&#39;);
+  },
+
+  // ...
+}
+</code></pre>
+
+      <h3 id="wrapping-up" class="title title-h3">
+        <a name="wrapping-up" class="anchor" href="#wrapping-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Wrapping up
+      </h3>
+    
+<p>That does it! We&#39;ve extracted data fetching logic completely out of the <code>&lt;PDFDocument&gt;</code> into the <code>&lt;PDFData&gt;</code>. We&#39;ve avoided the <a href="https://reactjs.org/blog/2016/07/13/mixins-considered-harmful.html" target="_blank" rel="noopener noreferrer">drawbacks of introducing mixins</a> to share behavior. Our new data component will show up separately in the Vue dev tools extension for better debugging. The application is also easier to extend so we can now add new functionality, like the preview pane. We also have a nice alternative to Vuex, which would be a new dependency, to managing a portion of our application state.</p>
+
+<p>In the next post, we&#39;ll look at extracting shared behavior so that both our preview and document components can be independently scrollable and either can trigger additional data-fetching when the scrolled to the bottom.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=Extracting%20a%20data%20component%20in%20Vue%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Fextracting-a-data-component-in-vue.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/pdf-viewer.html">PDF Viewer</a> series.
+        Published on Jul 15, 2018
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/818387/subscriptions?ref=Vue"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="818387"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733963" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/extracting-a-data-component-in-vue.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/reasons-to-choose-vue-js-in-2019.html">Seven reasons choose Vue.js in 2019</a>
+    </header>
+      <p>This post describes a bunch of reasons why developers might enjoy choosing Vue.js as the next JavaScript framework to learn in the coming year.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html">Refactoring to nested abstract components</a>
+    </header>
+      <p>Though it's often more easier to extract shared behavior as mixins to be used across components in Vue.js, this post describes at a high level how I used abstract components to achieve the same goal and the advantages of doing so.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/extracting-a-data-component-in-vue.html">Extracting a data component in Vue</a>
+    </header>
+      <p>In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PDF page data.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+  </article>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

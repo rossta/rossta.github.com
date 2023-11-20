@@ -1,0 +1,383 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Recurring events in Ruby - rossta.net</title>
+<meta name="description" content="Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available ..." />
+<meta name="keywords" content="Ruby" />
+<meta itemprop="name" content="Recurring events in Ruby" />
+<meta itemprop="description" content="Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available ..." />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/stock/clock-pexels-photo.jpg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/recurring-events-in-ruby.html" />
+<meta name="twitter:title" content="Recurring events in Ruby" />
+<meta name="twitter:description" content="Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available ..." />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/stock/clock-pexels-photo.jpg" />
+<meta property="og:url" content="https://rossta.net/archive/recurring-events-in-ruby.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Recurring events in Ruby" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/clock-pexels-photo.jpg" />
+<meta property="og:description" content="Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available ..." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/recurring-events-in-ruby.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"Recurring events in Ruby","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/recurring-events-in-ruby.html","query":null,"fragment":null},"datePublished":"2016-02-03T00:00:00Z","keywords":"ruby","description":"Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available in the Recurrence gem.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    Recurring events in Ruby
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Introducing the Montrose gem
+    </h2>
+</header>
+
+    <p>I was considering recently how I&#39;d build an <a href="http://meetedgar.com/" target="_blank" rel="noopener noreferrer">Edgar</a> clone to post updates about <a href="/">rossta.net</a> on Twitter and LinkedIn at recurring intervals, for example, every Tuesday at 9AM EST.</p>
+
+<p>For scheduling tasks, we have <a href="http://www.unixgeeks.org/security/newbie/unix/cron-1.html" target="_blank" rel="noopener noreferrer">cron</a> at the system level and even such options as the <a href="https://github.com/javan/whenever" target="_blank" rel="noopener noreferrer"><code>whenever</code></a> gem to setup cron from Rails and Sinatra applications. Rubyists can also take advantage of fantastic background job schedulers like <a href="https://github.com/jmettraux/rufus-scheduler" target="_blank" rel="noopener noreferrer"><code>rufus-scheduler</code></a> to run recurring tasks from a separate process or even an API for defining repeating <a href="https://github.com/mperham/sidekiq" target="_blank" rel="noopener noreferrer"><code>Sidekiq</code></a> jobs with <a href="https://github.com/tobiassvn/sidetiq" target="_blank" rel="noopener noreferrer"><code>Sidetiq</code></a>.</p>
+
+<p>For an Edgar clone though, we need a layer for users of the application to define their own recurrences. This means finding a way to represent time-based recurrences which are:</p>
+
+<ol>
+<li>serializable, so we can save them to the database, and</li>
+<li>enumerable, so we can determine when the next post(s) should be shared on designated social networks.</li>
+</ol>
+
+<p>It&#39;s an interesting problem to model. While we have classes like <code>Time</code>, <code>Date</code>, and event <code>ActiveSupport::Duration</code>, it&#39;s more elusive to consider recurrences. I mean, what does it mean to represent the meeting time of my <a href="http://www.meetup.com/NYC-rb/" target="_blank" rel="noopener noreferrer">NYC.rb</a> meetup: &quot;every second Tuesday of the month at 7pm&quot;.</p>
+
+<p>Solutions for this exist in Ruby, namely <a href="https://github.com/seejohnrun/ice_cube" target="_blank" rel="noopener noreferrer"><code>ice_cube</code></a>. If you&#39;re looking for a mature, up-to-date project devoted to modeling recurring events in Ruby, please check it out. I did, and highly recommend it. After playing with it for awhile, I found felt the urge for alternative semantics - like the ability to define a recurrence without a start date - and API similar to the hash-like syntax provided by another less-active recurring events library, <a href="https://github.com/fnando/recurrence" target="_blank" rel="noopener noreferrer"><code>recurrence</code></a>.</p>
+
+<p>I thought of the <a href="https://github.com/httprb/http" target="_blank" rel="noopener noreferrer"><code>HTTP</code></a> gem which bills
+itself as the following:</p>
+
+<blockquote>
+<p>HTTP (The Gem! a.k.a. http.rb) is an easy-to-use client library for making requests from Ruby. It uses a simple method chaining system for building requests, similar to Python&#39;s <a href="http://docs.python-requests.org/en/latest/" target="_blank" rel="noopener noreferrer">Requests</a>.</p>
+</blockquote>
+
+<p>Taking a cue from <code>http.rb</code> and the <code>recurrence</code> gem, I set out to create something similar for recurring events.</p>
+
+<p>Introducing <a href="https://github.com/rossta/montrose" target="_blank" rel="noopener noreferrer"><code>Montrose</code></a>.</p>
+
+<p>Montrose allows you to easily create &quot;recurrence&quot; objects through chaining:</p>
+
+<pre><code class="ruby"># Every Monday at 10:30am
+Montrose.weekly.on(:monday).at(&quot;10:30 am&quot;)
+=&gt; #&lt;Montrose::Recurrence...&gt;
+</code></pre>
+
+<p>Or the constructor hash-syntax:</p>
+
+<pre><code class="ruby">Montrose::Recurrence.new(every: :week, on: :monday, at: &quot;10:30 am&quot;)
+=&gt; #&lt;Montrose::Recurrence...&gt;
+</code></pre>
+
+<p>A Montrose recurrence responds to <code>#events</code>, which returns an <a href="/blog/what-is-enumerator.html"><code>Enumerator</code></a> that can generate timestamps:</p>
+
+<pre><code class="ruby">r = Montrose.hourly
+=&gt; #&lt;Montrose::Recurrence...&gt;
+
+r.events
+=&gt; #&lt;Enumerator:...&gt;
+
+r.events.take(10)
+=&gt; [2016-02-03 18:26:08 -0500,
+2016-02-03 19:26:08 -0500,
+2016-02-03 20:26:08 -0500,
+2016-02-03 21:26:08 -0500,
+2016-02-03 22:26:08 -0500,
+2016-02-03 23:26:08 -0500,
+2016-02-04 00:26:08 -0500,
+2016-02-04 01:26:08 -0500,
+2016-02-04 02:26:08 -0500,
+2016-02-04 03:26:08 -0500]
+</code></pre>
+
+<p>Montrose recurrences are themselves enumerable:</p>
+
+<pre><code class="ruby"># Every month starting a year from now on Friday the 13th for 5 occurrences
+r = Montrose.monthly.starting(1.year.from_now).on(friday: 13).repeat(5)
+
+r.map(&amp;:to_date)
+=&gt; [Fri, 13 Oct 2017,
+Fri, 13 Apr 2018,
+Fri, 13 Jul 2018,
+Fri, 13 Sep 2019,
+Fri, 13 Dec 2019]
+</code></pre>
+
+<p>Each chained recurrence returns a new object so they can be composed and
+merged:</p>
+
+<pre><code class="ruby"># Every week
+r1 = Montrose.every(:week)
+r2 = Montrose.on([:tuesday, :thursday])
+r3 = Montrose.at(&quot;12 pm&quot;)
+r4 = Montrose.total(4)
+
+r1.merge(r2).merge(r3).merge(r4).to_a
+=&gt; [2016-02-04 12:00:00 -0500,
+2016-02-09 12:00:00 -0500,
+2016-02-11 12:00:00 -0500,
+2016-02-16 12:00:00 -0500]
+</code></pre>
+
+<p>With a nod to DHH and the <a href="http://rubyonrails.org/doctrine" target="_blank" rel="noopener noreferrer">Rails doctrine</a>, Montrose aims to <a href="http://rubyonrails.org/doctrine/#optimize-for-programmer-happiness" target="_blank" rel="noopener noreferrer">optimize for programmer happiness</a>. Hence, there are several ways to define equivalent recurrences. For example, recurrences intervals can be configured as an explicit option, or inferred by the frequency duration.</p>
+
+<pre><code class="ruby"># Every 3 hours, all equivalent
+Montrose.hourly.interval(3)
+Montrose.every(3.hours)
+Montrose::Recurrence.new(every: :hour, interval: 3)
+Montrose::Recurrence.new(every: 3.hours)
+</code></pre>
+
+<p><code>Montrose</code> tries to provide useful feedback when you run into exceptions:</p>
+
+<pre><code class="ruby">r = Montrose.total(1)
+r.each { |t| puts t}
+Montrose::ConfigurationError: Please specify the :every option
+</code></pre>
+
+<p>Conceptually, recurrences can represent an infinite sequence. When we say
+simply &quot;every day&quot;, there is no implied ending. It&#39;s therefore possible to
+create a recurrence that can enumerate forever.</p>
+
+<pre><code class="ruby"># Every day starting now
+r = Montrose.daily
+
+# this expression will never complete, Ctrl-c!
+r.map(&amp;:to_date)
+
+# so use your `Enumerable` methods wisely
+r.lazy.map(&amp;:to_date).select { |d| d.mday &gt; 25 }.take(5).to_a
+=&gt; [Fri, 26 Feb 2016,
+Sat, 27 Feb 2016,
+Sun, 28 Feb 2016,
+Mon, 29 Feb 2016,
+Sat, 26 Mar 2016]
+</code></pre>
+
+<p>It&#39;s straightforward to convert recurrence options back to a hash.</p>
+
+<pre><code class="ruby"># Every 10 minutes starting now
+opts = Montrose::Recurrence.new(every: 10.minutes).to_h
+=&gt; {:every=&gt;:minute, :interval=&gt;10}
+
+Montrose::Recurrence.new(opts).take(3)
+=&gt; [2016-02-03 19:06:07 -0500,
+2016-02-03 19:16:07 -0500,
+2016-02-03 19:26:07 -0500]
+</code></pre>
+
+<p>Accordingly, <code>Montrose::Recurrence</code> implements <code>.dump</code> and <code>.load</code> so that you can use it with the <code>serialize</code> feature of <code>ActiveRecord</code> to back a recurrence by a database column in your Rails apps:</p>
+
+<pre><code class="ruby">class EventSeries &lt; ActiveRecord::Base
+  serialize :recurrence, Montrose::Recurrence
+end
+
+es = EventSeries.new(recurrence: Montrose.daily.at(&quot;12pm&quot;))
+es.save
+
+es = EventSeries.last
+es.recurrence
+# =&gt; #&lt;Montrose::Recurrence:...&gt;
+</code></pre>
+
+<p>This library is still in its early stages (version <code>0.2.1</code> as of this writing) and aspects of the API are still in flux, such as the ability to configure default start and end times or combines multiple, distinct recurrences in a <code>Montrose::Schedule</code>. <code>Montrose</code> has one dependency - <code>ActiveSupport</code> - for time calculations.</p>
+
+<p>There are <a href="https://github.com/rossta/montrose/issues" target="_blank" rel="noopener noreferrer">plenty of missing features</a>, including iCal serialization though Montrose already <a href="https://github.com/rossta/montrose/blob/master/spec/rfc_spec.rb" target="_blank" rel="noopener noreferrer">supports most of the examples</a> given by the iCal spec, <a href="https://www.ietf.org/rfc/rfc2445.txt" target="_blank" rel="noopener noreferrer">rfc2445</a>.</p>
+
+<p>I still haven&#39;t built that Edgar clone, but feel this is a good place from which to grow. As I said earlier, the <code>ice_cube</code> gem is a mature library and already does much of what I&#39;ve described here. Writing my own solution allowed me to think more deeply about the internal mechanisms for calculating recurrences and ultimately, once my curiosity was piqued, I couldn&#39;t stop. If, you like what <code>Montrose</code> has to offer and you&#39;re feeling adventurous, try it out in your own application and send some feedback. Don&#39;t hesitate to <a href="https://github.com/rossta/montrose" target="_blank" rel="noopener noreferrer">fork the project</a> and contribute.</p>
+
+<p>NYC.rb?</p>
+
+<pre><code class="ruby"># Second Tuesday of every month
+r = Montrose.every(:month, day: { tuesday: [2] }, at: &quot;7pm&quot;)
+</code></pre>
+
+<p>See you there.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=Recurring%20events%20in%20Ruby%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Frecurring-events-in-ruby.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/enumerable.html">Enumerable</a> series.
+        Published on Feb  3, 2016
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/818387/subscriptions?ref=Ruby"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="818387"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733960" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/recurring-events-in-ruby.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a>
+    </header>
+      <p>Hanami (formerly Lotus) is a newish Ruby framework for building web applications. Here's a few things I learned about it coming from Rails.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/clojure-iterate-in-ruby.html">Clojure's iterate in Ruby</a>
+    </header>
+      <p>Implementing the Clojure sequence functions, iterate, with Ruby's Enumerator to emulate sequences</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/recurring-events-in-ruby.html">Recurring events in Ruby</a>
+    </header>
+      <p>Montrose is an easy-to-use library for defining recurring events in Ruby. It uses a simple chaining system for building recurrences, inspired heavily by the design principles of HTTP.rb and rule definitions available in the Recurrence gem.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/stock/clock-pexels-photo.jpg" loading="lazy" alt="" />
+      </figure>
+  </article>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

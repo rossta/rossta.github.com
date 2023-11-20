@@ -1,0 +1,389 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Connect Four with SVG pattern masking - rossta.net</title>
+<meta name="description" content="An application of the technique of SVG pattern transparent to render a Connect Four board with transparent portholes." />
+<meta name="keywords" content="SVG" />
+<meta itemprop="name" content="Connect Four with SVG pattern masking" />
+<meta itemprop="description" content="An application of the technique of SVG pattern transparent to render a Connect Four board with transparent portholes." />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/connect-four-splash.png" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/connect-four-with-svg-pattern-masking.html" />
+<meta name="twitter:title" content="Connect Four with SVG pattern masking" />
+<meta name="twitter:description" content="An application of the technique of SVG pattern transparent to render a Connect Four board with transparent portholes." />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/connect-four-splash.png" />
+<meta property="og:url" content="https://rossta.net/archive/connect-four-with-svg-pattern-masking.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Connect Four with SVG pattern masking" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/connect-four-splash.png" />
+<meta property="og:description" content="An application of the technique of SVG pattern transparent to render a Connect Four board with transparent portholes." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/connect-four-with-svg-pattern-masking.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"Connect Four with SVG pattern masking","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/connect-four-with-svg-pattern-masking.html","query":null,"fragment":null},"datePublished":"2018-01-10T00:00:00Z","keywords":"svg","description":"An application of the technique of SVG pattern transparent to render a Connect Four board with transparent portholes.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    Connect Four with SVG pattern masking
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      Rendering transparent masks or making the impossible possible with SVG
+    </h2>
+</header>
+
+    <p><em>This post is <a href="/blog/series/connect-four.html">part of a series on building Connect Four with Vue.js, SVG,
+Elixir, and the Phoenix framework</a>.</em></p>
+
+<p>One of my recent side projects to learn new technologies
+has been to build a browser-based rendition of <a href="https://en.wikipedia.org/wiki/Connect_Four" target="_blank" rel="noopener noreferrer">Connect
+Four</a>.
+The fully-functional version of the game will have both a backend and frontend
+component with some good challenges including animating checkers
+falling into place and connecting two players over the network.</p>
+
+<p>In this post, we&#39;ll demonstrate rendering the static board with SVG, including
+the use of pattern masking to emulate a game board wall with portholes through
+which to view the checkers.</p>
+
+      <h2 id="let-39-s-talk-about-svg" class="title title-h2">
+        <a name="let-39-s-talk-about-svg" class="anchor" href="#let-39-s-talk-about-svg">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Let&#39;s talk about SVG
+      </h2>
+    
+<p>SVG feels scary and confusing to the uninitiated, myself included. The good news
+is that we can take a progressive approach to adopting SVG without understanding
+everything there is to know about it at first.</p>
+
+<p>Here are a few reasons why using SVG is a good fit to render the elements of a
+Connect Four game board:</p>
+
+<ul>
+<li>SVG has shape elements like <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code> that are better
+semantically than using divs to render columns and checkers using <a href="https://davidwalsh.name/css-circles" target="_blank" rel="noopener noreferrer">the rounded
+border trick</a></li>
+<li>SVG provides simple, declarative rules for positioning visual elements; no
+need to mess with picture-perfect pixels, absolute positioning, and z-indexing</li>
+<li>SVG elements animate smoothly, which will allow us to render a dropped checker
+bouncing into place with a realistic touch and that it has a coordinate system</li>
+<li>SVG provides <code>&lt;mask&gt;</code> and <code>&lt;pattern&gt;</code> elements, so we can animate falling
+checkers behind &quot;holes&quot; in the game wall</li>
+</ul>
+
+      <h2 id="pattern-masking" class="title title-h2">
+        <a name="pattern-masking" class="anchor" href="#pattern-masking">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Pattern masking
+      </h2>
+    
+<p>A first pass at the game board might be to explicitly render circles for all 42
+game cells (6 rows, 7 columns) and set their fill colors based on game state to
+red, black, or as the background color to fake an empty cell. What if, instead,
+we could render the game board with portholes punched into it? That way, the only
+<code>&lt;circle&gt;</code> elements we need to render explicitly are the checkers themselves.</p>
+
+<p>This is where SVG pattern masking comes in. A powerful feature of desktop visual
+editing tools Adobe Photoshop/Illustrator is available on the web.
+<a href="https://www.w3.org/TR/SVG/masking.html" target="_blank" rel="noopener noreferrer">Masking</a> allows for a graphic (or set of
+graphics) to act as a transparent overlay to reveal background elements. Applied
+to our game, it provides a mechanism by which we can see checkers falling
+through holes in the game board wall. To my knowledge, there&#39;s no (easy) way
+with typical HTML/CSS to accomplish this other than, perhaps, creating a
+transparent png, something we won&#39;t be able to manipulate easily
+programmatically.</p>
+
+<p>Let&#39;s start with a demonstration of pattern masking by rendering a single game
+board cell and checker.</p>
+
+<p>Within a containing <code>&lt;svg&gt;</code> element with a <code>viewBox</code> of 100x100 units, we&#39;ll
+start by adding a <code>&lt;circle&gt;</code> to represent a checker positioned slightly
+offscreen to mimic it falling into place.</p>
+
+<pre><code class="html">&lt;svg viewBox=&quot;0 0 100 100&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;circle cx=&quot;50&quot; cy=&quot;25&quot; r=&quot;45&quot; fill=&quot;#254689&quot;&gt;&lt;/circle&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The game wall is simply a <code>&lt;rect&gt;</code> positioned over the circle; once added, we
+can&#39;t see the circle anymore.</p>
+
+<pre><code class="html">&lt;svg viewBox=&quot;0 0 100 100&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+  &lt;circle cx=&quot;50&quot; cy=&quot;25&quot; r=&quot;45&quot; fill=&quot;#254689&quot;&gt;&lt;/circle&gt;
+  &lt;rect col=&quot;0&quot; width=&quot;100&quot; height=&quot;600&quot; fill=&quot;cadetblue&quot; mask=&quot;url(#cell-mask)&quot;&gt;&lt;/rect&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>Now to create the hole with a pattern mask. To accomplish this, we use
+(surprise) both a <code>&lt;pattern&gt;</code> and <code>&lt;mask&gt;</code> elements. These elements are not
+graphical, meaning, they won&#39;t be directly rendered in the view box. Instead,
+we&#39;ll later add the resulting mask as an attribute of our <code>&lt;rect&gt;</code> game wall—the
+element we want to see through. The <code>&lt;pattern&gt;</code> and <code>&lt;mask&gt;</code> elements are nested
+inside a <code>&lt;defs&gt;</code> element so they can be available for reuse.</p>
+
+<pre><code class="html">&lt;defs&gt;
+  &lt;pattern id=&quot;cell-pattern&quot; patternUnits=&quot;userSpaceOnUse&quot; width=&quot;100&quot; height=&quot;100&quot;&gt;
+    &lt;circle cx=&quot;50&quot; cy=&quot;50&quot; r=&quot;45&quot; fill=&quot;black&quot;&gt;&lt;/circle&gt;
+  &lt;/pattern&gt;
+  &lt;mask id=&quot;cell-mask&quot;&gt;
+    &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;white&quot;&gt;&lt;/rect&gt;
+    &lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;url(#cell-pattern)&quot;&gt;&lt;/rect&gt;
+  &lt;/mask&gt;
+&lt;/defs&gt;
+</code></pre>
+
+<p>The <code>&lt;pattern&gt;</code> is simply matches the size of a cell, 100x100, and it contains a
+<code>&lt;circle&gt;</code>, representing the hole, that matches the size of the checker. The
+<code>&lt;circle&gt;</code> gets a fill color of &quot;black&quot;; when applied the to <code>&lt;mask&gt;</code>, this
+this means the absence of space, or full transparency, as opposed to literal
+black.</p>
+
+<p>The <code>&lt;mask&gt;</code> is composed of two <code>&lt;rect&gt;</code> elements that match the game wall size;
+the first gets a fill color of &quot;white&quot; (opposite of &quot;black&quot; in a mask) to
+represent the part of the wall we want to be opaque. The second <code>&lt;rect&gt;</code> sits on
+top of the first and has a <code>fill</code> of <code>url(#cell-pattern)</code> which refers to the
+pattern we created above.</p>
+
+<p>Now, we can set the <code>mask</code> attribute for our game wall <code>&lt;rect&gt;</code> by referencing
+the <code>&lt;mask&gt;</code> element by id.</p>
+
+<pre><code class="html">&lt;rect width=&quot;100&quot; height=&quot;100&quot; fill=&quot;cadetblue&quot; mask=&quot;url(#cell-mask)&quot;&gt;&lt;/rect&gt;
+</code></pre>
+
+<p>This punches a hole through the wall to reveal the checker underneath.</p>
+
+<p>Here&#39;s what we have so far on <a href="https://codepen.io/rossta/pen/NXMrLg" target="_blank" rel="noopener noreferrer">CodePen</a>:</p>
+
+<p data-height="265" data-theme-id="light" data-slug-hash="NXMrLg" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/NXMrLg/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p><hr /></p>
+
+<p>A nice feature of the <code>&lt;pattern&gt;</code> element is that it repeats itself based
+on the height/width attributes we&#39;ve provided. This means we can extend the dimensions of the view
+box and our game wall <code>&lt;rect&gt;</code> to reveal the seven rows of a
+single column—we don&#39;t have to add each circular hole to the DOM explicitly! To
+build multiple columns, we&#39;ll simply, for each column, add a nested <code>&lt;svg&gt;</code>
+element at the correct x position to wrap each masked <code>&lt;rect&gt;</code>. This allows us
+to position each column relative to the container <code>&lt;svg&gt;</code> without needed to
+specify x coordinates for each child <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code>.</p>
+
+<p>Here&#39;s the full demo of a static Connect Four SVG game board on
+<a href="https://codepen.io/rossta/pen/eyrgJe" target="_blank" rel="noopener noreferrer">CodePen</a>:</p>
+
+<p data-height="370" data-theme-id="light" data-slug-hash="eyrgJe" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four board in SVG" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyrgJe/">Connect Four board in SVG</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p><hr /></p>
+
+<p>Finally, here&#39;s a sneak preview of the how the falling checker will look behind the pattern mask:</p>
+
+<p data-height="265" data-theme-id="light" data-slug-hash="eyPpog" data-default-tab="html,result" data-user="rossta" data-embed-version="2" data-pen-title="SVG mask demo" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/eyPpog/">SVG mask demo</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p><hr /></p>
+
+<p>For more related info, check out the following resources:</p>
+
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial" target="_blank" rel="noopener noreferrer">MDN SVG Tutorial</a></li>
+<li>MDN docs for <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg" target="_blank" rel="noopener noreferrer"><code>&lt;svg&gt;</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/pattern" target="_blank" rel="noopener noreferrer"><code>&lt;pattern /&gt;</code></a>, <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/mask" target="_blank" rel="noopener noreferrer"><code>&lt;mask /&gt;</code></a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/defs" target="_blank" rel="noopener noreferrer"><code>&lt;defs /&gt;</code></a></li>
+<li>Pretty much anything <a href="https://twitter.com/sarah_edo" target="_blank" rel="noopener noreferrer">Sarah Drasner</a> publishes, including <a href="http://shop.oreilly.com/product/0636920045335.do" target="_blank" rel="noopener noreferrer">SVG Animations</a></li>
+</ul>
+
+<p>In <a href="/blog/building-basic-connect-four-with-vuejs.html">the next post</a>, we&#39;ll
+take a look at using Vue.js to render the board dynamically and add checkers
+based on user interaction.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=Connect%20Four%20with%20SVG%20pattern%20masking%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Fconnect-four-with-svg-pattern-masking.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
+        Published on Jan 10, 2018
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/818387/subscriptions?ref=SVG"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="818387"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/connect-four-with-svg-pattern-masking.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/basic-connect-four-with-vuejs.html">Building basic Connect Four with Vue.js</a>
+    </header>
+      <p>Continuing our Connect Four series, we will take a look at converting a static HTML representation of a Connect Four board and add functionality and dynamic rendering with Vue.js.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/connect-four-with-svg-pattern-masking.html">Connect Four with SVG pattern masking</a>
+    </header>
+      <p>An application of the technique of SVG pattern transparent to render a Connect Four board with transparent portholes.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/rails-apps-overpacking-with-webpacker.html">These Rails apps are overpacking their JavaScript bundles</a>
+    </header>
+      <p>A case study of Rails applications making a common Webpacker mistake of rendering modules multiple times on a single page. We'll describe why the problem happens and present a Webpacker Packing Checklist for proper code-splitting.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/connect-four-splash.png" loading="lazy" alt="" />
+            <figcaption>Background Photo by Matthew Kane on Unsplash</figcaption>
+      </figure>
+  </article>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

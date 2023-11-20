@@ -1,0 +1,499 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>What I learned building an app in Hanami - rossta.net</title>
+<meta name="description" content="Hanami (formerly Lotus) is a newish Ruby framework for building web applications. Here's a few things I learned about it coming from Rails." />
+<meta name="keywords" content="Ruby, Rails" />
+<meta itemprop="name" content="What I learned building an app in Hanami" />
+<meta itemprop="description" content="Hanami (formerly Lotus) is a newish Ruby framework for building web applications. Here's a few things I learned about it coming from Rails." />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/what-i-learned-about-hanami.html" />
+<meta name="twitter:title" content="What I learned building an app in Hanami" />
+<meta name="twitter:description" content="Hanami (formerly Lotus) is a newish Ruby framework for building web applications. Here's a few things I learned about it coming from Rails." />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg" />
+<meta property="og:url" content="https://rossta.net/archive/what-i-learned-about-hanami.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="What I learned building an app in Hanami" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/fall-leaves-pexels-photo.jpg" />
+<meta property="og:description" content="Hanami (formerly Lotus) is a newish Ruby framework for building web applications. Here's a few things I learned about it coming from Rails." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/what-i-learned-about-hanami.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"What I learned building an app in Hanami","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/what-i-learned-about-hanami.html","query":null,"fragment":null},"datePublished":"2016-02-22T00:00:00Z","keywords":"ruby, rails","description":"Hanami (formerly Lotus) is a newish Ruby framework for building web applications. Here's a few things I learned about it coming from Rails.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    What I learned building an app in Hanami
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      A lightweight alternative to Rails
+    </h2>
+</header>
+
+    <p>For the past year, I&#39;ve been loosely following the progress on <a href="http://hanamirb.org" target="_blank" rel="noopener noreferrer">Hanami</a> (formerly Lotus), a new web framework
+for Ruby created by <a href="https://github.com/jodosha" target="_blank" rel="noopener noreferrer">Luca Guidi (@jodosha)</a>. I recently decided to build a small app in Hanami to get a feel for its design and to understand better its fresh perspective on web development in Ruby. In other words, to answer for myself, &quot;Is Hanami better than Rails?&quot;</p>
+
+<p><a href="https://github.com/rossta/github_groove" target="_blank" rel="noopener noreferrer">The app</a> is a simple integration between GitHub issues and the helpdesk platform, <a href="https://www.groovehq.com" target="_blank" rel="noopener noreferrer">Groove</a>.
+Visitors can login via OAuth through their GitHub accounts, connect to a Groove
+account with an API key, import their Groove tickets, and create GitHub issues
+from these tickets through the app. You can see the <a href="https://github.com/rossta/github_groove" target="_blank" rel="noopener noreferrer">source on Github</a> and play with the <a href="https://github-groove.herokuapp.com/" target="_blank" rel="noopener noreferrer">app hosted on Heroku</a>, where it would help to have accounts on both GitHub and Groove to see how it works.</p>
+
+<p>I&#39;ve made note of what I learned and some of the challenges I faced while going beyond the <a href="http://hanamirb.org/guides/" target="_blank" rel="noopener noreferrer">getting
+started guides</a> to build and deploy the app. This post is not an introduction
+to Hanami - the <a href="http://hanamirb.org/guides/" target="_blank" rel="noopener noreferrer">guides</a> serve as an excellent overview.</p>
+
+<aside class="callout panel">
+  <p>The Github-Groove app is built on <code>hanami-0.7.0</code>. As the framework is under
+heavy development (as of this writing the latest version is
+<code>v0.7.2</code>), your experience getting started with Hanami may differ.
+  </p>
+</aside>
+
+      <h3 id="hanami-opinions-are-not-rails-opinions" class="title title-h3">
+        <a name="hanami-opinions-are-not-rails-opinions" class="anchor" href="#hanami-opinions-are-not-rails-opinions">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Hanami opinions are not Rails opinions
+      </h3>
+    
+<p>Hanami has a lot in common with Rails. Both are web frameworks built on Ruby
+that employ some version of the Model-View-Controller pattern and, among other
+things, value <a href="http://rubyonrails.org/doctrine/#convention-over-configuration" target="_blank" rel="noopener noreferrer">convention over configuration</a>.
+Both frameworks are <em>opinionated</em> about how web apps should be built. In a
+nutshell, Hanami takes what it likes from Rails and draws the line on certain
+principles including avoidance of monkey-patching, enforcing modularity, and encouraging
+the use of &quot;plain old Ruby objects&quot;.</p>
+
+<p>If you&#39;re coming from Rails, you can expect to learn some new conventions in Hanami.
+<a href="http://hanamirb.org/guides/getting-started/" target="_blank" rel="noopener noreferrer">As the guides warn</a>,</p>
+
+<blockquote>
+<p>learning these conventions may be hard: without change, there is no challenge</p>
+</blockquote>
+
+<p>The framework pushes you toward &quot;monolith first&quot; while emphasizing &quot;separation of concerns&quot;. There are suggestions in the generated directory structure like how the <code>app/</code> folder is named <code>apps/</code> in Hanami encouraging you from the start to define sub-applications boundaries under one umbrella, or &quot;container&quot; in Hanami parlance. So while in Rails has engines as an opt-in feature, you build everything as an engine in Hanami. Each &quot;app&quot; gets its own set of views, controllers, assets, configuration, etc. Shared resources, like models, tend to go in <code>lib/</code>.</p>
+
+<p>You also get useful development tools like generators, migrations, and asset
+pipelines in Hanami, but expect less ceremony here. Migrations handed off to the
+venerable <a href="http://sequel.jeremyevans.net/rdoc/files/doc/schema_modification_rdoc.html" target="_blank" rel="noopener noreferrer">Sequel</a> project and the asset story is still young but passable; you won&#39;t be able to take advantage of the multitude of Rails-asset gems.</p>
+
+<p>I&#39;d be interested to see Hanami go in a different direction here, like taking advantage of the &quot;frontend explosion&quot; by providing integration with external pipelines as the static-site generator <a href="https://middlemanapp.com/advanced/external-pipeline/" target="_blank" rel="noopener noreferrer">middleman has done</a> or what <a href="http://www.shakacode.com/" target="_blank" rel="noopener noreferrer">Shakacode</a> is trying with <a href="https://webpack.github.io/" target="_blank" rel="noopener noreferrer">webpack</a> in <a href="https://github.com/shakacode/react_on_rails" target="_blank" rel="noopener noreferrer"><code>react_on_rails</code></a>.</p>
+
+<p>It&#39;s worth noting that Hanami comes with security features baked in for as one would expect, including <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)" target="_blank" rel="noopener noreferrer">CSRF protection</a> and app-level secure-by-default options for items like <a href="https://developer.mozilla.org/en-US/docs/Web/Security/CSP" target="_blank" rel="noopener noreferrer">Content Security Policy</a> and <code>X-Frame-Options</code>.</p>
+
+<p>One gotcha is that Hanami <a href="https://github.com/hanami/hanami/issues/249" target="_blank" rel="noopener noreferrer">does not itself provide any mechanism for code
+reloading</a> (at the moment). This
+was not obvious to me starting off since the development server does &quot;appear&quot; to reload code. It turns out that the dev server launches with <a href="https://github.com/rtomayko/shotgun" target="_blank" rel="noopener noreferrer">Shotgun</a> (commonly used in Sinatra projects), to serve each development request in a new process with <code>fork(2)</code>. I didn&#39;t pick up on this until several iterations in when I added the <a href="https://github.com/brandonhilkert/sucker_punch" target="_blank" rel="noopener noreferrer">SuckerPunch gem</a> and couldn&#39;t figure out why my background jobs wouldn&#39;t run in development. I added a <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/controllers/tickets/sync.rb#L11" target="_blank" rel="noopener noreferrer">sync action</a> that allows users to trigger a <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/jobs/sync_tickets_job.rb" target="_blank" rel="noopener noreferrer">background job to import ticket data</a> from Groove into the application. Long story short, kicking off background jobs in threads in the request process, as is possible with SuckerPunch, won&#39;t work without disabling Shotgun.</p>
+
+      <h3 id="hanami-mvc-is-not-rails-mvc" class="title title-h3">
+        <a name="hanami-mvc-is-not-rails-mvc" class="anchor" href="#hanami-mvc-is-not-rails-mvc">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Hanami MVC is not Rails MVC
+      </h3>
+    
+<p>With the Model-View-Controller paradigm, you&#39;ll see some big departures from
+Rails. First, controllers are not classes with &quot;RESTful&quot; methods, but
+<em>directories</em> of related action classes. In other words, instead of defining
+<code>#index</code>, <code>#show</code>, <code>#create</code>, etc. in a <code>PostsController</code>, you create a separate
+class for each action using a mixin that live in a directory that would
+represent a single controller in Rails.</p>
+
+<p>In my Github-Groove app, here&#39;s how I organize the tickets controller:</p>
+
+<pre><code class="sh">app/
+  web/
+    assets/
+    config/
+    controllers/
+      tickets/
+        index.rb
+        show.rb
+        sync.rb
+    templates/
+    views/
+    ...
+</code></pre>
+
+<p>Each &quot;action&quot; is a Rack-inspired class whose contract is only that it responds to <code>#call</code>. You still get
+familiar macros like <code>before</code> filters, but there are new ideas too, like declaring what instance variables are available to the view with <code>expose</code>, inserting action-specific middleware, and whitelisting <code>params</code> at the class level, all of which I find to be huge improvements over the Rails controller design.</p>
+
+<pre><code class="ruby">module Web::Controllers::Project
+  class Create
+    include Web::Action
+
+    expose :project
+    before :authenticate!
+
+    params do
+      param :project do
+        param :groove_access_token, presence: true
+        param :github_repository, presence: true
+      end
+    end
+
+    def call(params)
+      if params.valid?
+        @project = ProjectRepository.find_or_create_by_params(params[:project])
+        UserRepository.update_user_project(current_user, @project)
+
+        flash[:notice] = &quot;Your project has been saved!&quot;
+
+        redirect_to &quot;/project&quot;
+      end
+    end
+  end
+end
+</code></pre>
+
+<p>Arguably, the biggest efforts in Hanami appear to be at this action layer and it
+shows in the <a href="http://hanamirb.org/guides/actions/overview/" target="_blank" rel="noopener noreferrer">guides</a> and the
+<a href="https://github.com/hanami/controller/blob/master/README.md" target="_blank" rel="noopener noreferrer">README</a> where you
+can find a ton of great information for customizing these classes.</p>
+
+<p>Another big benefit in the controller design, and for most of the Hanami
+framework, is that unit-testing has a much lower barrier to entry. To get
+controller tests to work in Rails requires a ton of setup behind the scenes to
+the point where you essentially have integration tests. Controllers tests in
+Hanami are much simpler by the simple fact that getting a testable object is as
+easy as <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/spec/web/controllers/project/create_spec.rb#L5" target="_blank" rel="noopener noreferrer">instantiating a Hanami action</a>.</p>
+
+<p>In Hanami, &quot;views&quot; are classes that act more like presenter to represent a model
+or collection of models for the &quot;templates&quot;, which the place of the
+<code>views/</code> folder in Rails. Like Rails, file-naming conventions link an action,
+view, and template. The helper method story is still developing, but you can
+expect to find some surprises in the docs, like the criticism of Rails
+monkey-patching of ERB to achieve block-style helpers for things like forms.
+Expect to get tripped up by these differences in helper syntax which ironically are
+valid ERB. Hanami does support all the other popular templating engines through
+<a href="https://github.com/rtomayko/tilt" target="_blank" rel="noopener noreferrer">Tilt</a> for your preference.</p>
+
+<p>Hanami also provides <code>hanami-model</code> for the model layer as a soft-dependency so
+you can bring your own ORM if desired. If you choose to use <code>hanami-model</code> as I
+did, you can expect to leave your ActiveRecord convenience (and baggage) behind.
+Hanami&#39;s model layer emulates the <a href="http://martinfowler.com/eaaCatalog/repository.html" target="_blank" rel="noopener noreferrer">repository pattern</a> where database queries, table mapping, and entities are all separate concerns.</p>
+
+<p>Repositories become a collection of query methods:</p>
+
+<pre><code class="ruby">class ProjectRepository
+  include Hanami::Repository
+
+  def self.find_or_create_by_params(params)
+    found = find_by_groove_access_token(params[:groove_access_token])
+
+    if found
+      found.update(params)
+      update found
+    else
+      create(Project.new(params))
+    end
+  end
+
+  def self.find_by_groove_access_token(groove_access_token)
+    query do
+      where(groove_access_token: groove_access_token)
+    end.first
+  end
+end
+</code></pre>
+
+<p>Entities feel basically like POROS that provide a thin layer over attributes.
+Don&#39;t expect to find any database access, validations (by default anyhow), or callbacks here.</p>
+
+<pre><code class="ruby">class Project
+  include Hanami::Entity
+
+  attributes :groove_access_token, :github_repository, :syncing
+
+  def ready?
+    groove_access_token.present? &amp;&amp; github_repository.present?
+  end
+
+  # ...
+end
+</code></pre>
+
+<p>Validations do exist in Hanami <a href="https://github.com/hanami/validations" target="_blank" rel="noopener noreferrer">as a separate mixin</a> but these are more typically done in the params macro at the action-layer.</p>
+
+      <h2 id="expect-to-write-code" class="title title-h2">
+        <a name="expect-to-write-code" class="anchor" href="#expect-to-write-code">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Expect to write code
+      </h2>
+    
+<p>While Hanami has its own variety of &quot;magic&quot; of the kind that developers have come to
+either love or hate in Rails, you can expect to write code you might not
+otherwise have to in Rails. The framework is still young, so there are missing
+features. What&#39;s not always clear is whether these features have been left out
+by priority or choice. To figure that out takes some digging on GitHub issues, the Hanami <a href="https://gitter.im/hanami/chat" target="_blank" rel="noopener noreferrer">chat</a> and <a href="https://discuss.hanamirb.org/" target="_blank" rel="noopener noreferrer">Discourse forum</a>.</p>
+
+<p>Though its database layer has the <a href="https://github.com/jeremyevans/sequel" target="_blank" rel="noopener noreferrer">Sequel</a> library as a foundation, I didn&#39;t find the repository and entity functionality as fully-developed. I found myself writing a lot of boilerplate code in the entities and repositories with a lot of co-dependence between the classes. With some more thoughtful design and refactoring, I could probably address this issue, but at this stage, the separation of concerns is less apparent: entities and repositories appear to be tightly bound. <a href="https://github.com/hanami/model/issues/291" target="_blank" rel="noopener noreferrer">Convenience methods</a> are still in the works.</p>
+
+<p>For one, <a href="https://github.com/hanami/model/pull/244" target="_blank" rel="noopener noreferrer">associations</a> are still in development at the time of this writing (see open issue <a href="https://github.com/hanami/model/issues/35" target="_blank" rel="noopener noreferrer">here</a>). Much of my entity code was to fill this gap - to load objects linked by foreign keys via repositories like below.</p>
+
+<pre><code class="ruby">class Project
+  include Hanami::Entity
+
+  def tickets(params = {})
+    TicketRepository.all_by_project(self, params)
+  end
+end
+
+class TicketRepository
+  include Hanami::Repository
+
+  def self.all_by_project(project, _params = {})
+    query do
+      where(project_id: project.id).desc(:number)
+    end.all
+  end
+
+  # ...
+end
+</code></pre>
+
+<p>I&#39;m not sure if this is the &quot;Hanami-way&quot;, but I found myself doing this kind of
+thing a lot.</p>
+
+<p>I also ran into some unexpected issues while deploying the application to Heroku
+where its <code>HANAMI_ENV</code> is set to <code>&#39;production&#39;</code>. In many cases, custom classes I
+extracted, like one for sharing <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/repositories/pagination.rb" target="_blank" rel="noopener noreferrer">a pagination query</a> and another for <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/lib/github_groove/vendor/groove.rb" target="_blank" rel="noopener noreferrer">wrapping the <code>Groove API Ruby Client</code></a> (my <a href="https://github.com/Fodoj/groovehq/pull/16" target="_blank" rel="noopener noreferrer">fork with paginated enumeration</a>) weren&#39;t &quot;autoloaded&quot; when booting the Hanami application. To resolve this, I added explicit requires like <code>require_relative &#39;./pagination&#39;</code>. Again, I didn&#39;t have time to dig into whether this issue would be expected or not; I could have been missing something important here.</p>
+
+      <h3 id="the-community-is-still-young" class="title title-h3">
+        <a name="the-community-is-still-young" class="anchor" href="#the-community-is-still-young">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        The Community is still young
+      </h3>
+    
+<p>That brings me to the community - it&#39;s extremely supportive, but still very
+small. I encountered a lot of helpful folks on
+<a href="https://gitter.im/hanami/chat" target="_blank" rel="noopener noreferrer">chat</a> including <code>@jodosha</code> himself, but there
+simply hasn&#39;t been enough traction to reach <a href="https://stackoverflow.com/questions/tagged/hanami" target="_blank" rel="noopener noreferrer">StackOverflow</a> critical mass where just about any question you can think of in Rails already has an answer.</p>
+
+<p>This means a lot more code-spelunking in the <a href="https://github.com/hanami" target="_blank" rel="noopener noreferrer">hanami</a> repositories. To that end, I found the code extremely clean, well-documented, and approachable whereas, even today, I need to brace myself before diving into Rails source.</p>
+
+<p>That said, you can expect to run into edge cases and bugs occasionally that may
+not yet have a solution, including this <a href="https://github.com/pry/pry/issues/1471#issuecomment-187420164" target="_blank" rel="noopener noreferrer">incredibly irksome</a> issue that prevents you from accessing the pry console when using <code>binding.pry</code> in Hanami controllers and the problem I mentioned earlier that prevents you from using SuckerPunch in development with Shotgun enabled.</p>
+
+<p>Another challenge is that all those Rails-specific plugins and engines
+you&#39;ve come to rely on won&#39;t work in Hanami: Yikes, you have build authentication without Devise!
+Using <a href="https://github.com/hassox/warden" target="_blank" rel="noopener noreferrer"><code>Warden</code></a>, the general Rack-based
+authentication middleware on which Devise is based, is very feasible and you can always
+rely on <a href="https://github.com/rossta/github_groove/blob/4cb64e1a92013cf6eb56a3abd6678020640eaf5c/apps/web/application.rb#L86" target="_blank" rel="noopener noreferrer">OmniAuth like I did</a>.</p>
+
+<p>The lesson here is that with Hanami, you&#39;re much more likely to have to &quot;roll up
+your sleeves&quot; to get to the bottom of issues, figure how to do things that
+aren&#39;t covered by the guides, or otherwise, get from a Rails-specific gem.</p>
+
+      <h3 id="hanami-is-and-is-not-rails" class="title title-h3">
+        <a name="hanami-is-and-is-not-rails" class="anchor" href="#hanami-is-and-is-not-rails">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Hanami is and is not Rails
+      </h3>
+    
+<p>So should you build your next app in Hanami? Only you can answer that of course.
+The lightweight approach in Hanami means there is less to wrap your head around
+if you&#39;re coming from Rails, but there is still a learning curve nonetheless. I&#39;d say it&#39;s a worthwhile endeavor to build something small like I did at first to push the boundaries and answer the questions you have about Hanami for yourself.</p>
+
+<p>Hanami treads the same ground as Rails and aims to do a lot of the low level
+work for you so can focus on what&#39;s important - your business logic. Personally, I found a lot of advantages in the &quot;Hanami way&quot; and enjoyed the experience of the new paradigm. My &quot;Rails muscle memory&quot; tripped me up on occasion and left me pining for features that don&#39;t exist or are not as well-developed in Hanami yet. I see a lot of potential in the Hanami framework and see it growing into a viable alternative to Rails in the near future.</p>
+
+<p>Check out the <a href="https://github.com/rossta/github_groove" target="_blank" rel="noopener noreferrer">GitHub-Groove source</a> and <a href="https://github-groove.herokuapp.com/" target="_blank" rel="noopener noreferrer">demo app</a> and let me know what I could have done differently.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=What%20I%20learned%20building%20an%20app%20in%20Hanami%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Fwhat-i-learned-about-hanami.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Feb 22, 2016
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/1268949/subscriptions?ref=Ruby"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="1268949"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733960" />
+    <input type="hidden" name="tags[]" value="733966" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/what-i-learned-about-hanami.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/ancient-city-snake-case.html">Ancient City Ruby Snake Case</a>
+    </header>
+      <p>Comparing mathematical, iterative, and recursive solutions to the Snake Case challenge posed during the Ancient City Ruby Conference</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/a-ruby-antihero-thread-pool.html">Thread Pool - A Ruby Antihero</a>
+    </header>
+      <p>A thread pool is an abstraction for re-using a limited number of threads for performing work concurrently to save resources</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/what-i-learned-about-hanami.html">What I learned building an app in Hanami</a>
+    </header>
+      <p>Hanami (formerly Lotus) is a newish Ruby framework for building web applications. Here's a few things I learned about it coming from Rails.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/stock/fall-leaves-pexels-photo.jpg" loading="lazy" alt="" />
+      </figure>
+  </article>
+    <!-- Webpack on Rails course popup form -->
+    <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

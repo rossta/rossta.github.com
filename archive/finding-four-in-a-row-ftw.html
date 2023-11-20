@@ -1,0 +1,477 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Finding Four-in-a-Row for the Win - rossta.net</title>
+<meta name="description" content="In this post for the Building Connect Four with Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components." />
+<meta name="keywords" content="Vue, JavaScript" />
+<meta itemprop="name" content="Finding Four-in-a-Row for the Win" />
+<meta itemprop="description" content="In this post for the Building Connect Four with Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components." />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/purple-circles.jpg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/finding-four-in-a-row-ftw.html" />
+<meta name="twitter:title" content="Finding Four-in-a-Row for the Win" />
+<meta name="twitter:description" content="In this post for the Building Connect Four with Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components." />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/purple-circles.jpg" />
+<meta property="og:url" content="https://rossta.net/archive/finding-four-in-a-row-ftw.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Finding Four-in-a-Row for the Win" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/purple-circles.jpg" />
+<meta property="og:description" content="In this post for the Building Connect Four with Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/finding-four-in-a-row-ftw.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"Finding Four-in-a-Row for the Win","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/finding-four-in-a-row-ftw.html","query":null,"fragment":null},"datePublished":"2018-01-28T00:00:00Z","keywords":"vue, javascript","description":"In this post for the Building Connect Four with Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    Finding Four-in-a-Row for the Win
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      A win algorithm for Vue.js Connect Four
+    </h2>
+</header>
+
+    <p>With the Connect Four game we created in the <a href="/blog/animating-connect-four-with-vuejs.html">previous post</a>, we&#39;re able to use <a href="https://vuejs.org/v2/guide/transitions.html" target="_blank" rel="noopener noreferrer">Vue transitions</a> to animate checkers dropping into place on the game board. Though we&#39;re able to add checkers, we still weren&#39;t declaring the winner when four-in-a-row had been achieved—kind of the whole point of the game. We&#39;ll tackle that in this post.</p>
+
+<p>Before we dive in, here&#39;s a pen of the game with the win logic we&#39;ll be describing so you&#39;ll see where we&#39;ll end up:</p>
+
+<p data-height="529" data-theme-id="light" data-slug-hash="VydJKG" data-default-tab="js,result" data-user="rossta" data-embed-version="2" data-pen-title="Connect Four with Vue.js, SVG: detect winner and animated checkers" class="codepen">See the Pen <a href="https://codepen.io/rossta/pen/VydJKG/">Connect Four with Vue.js, SVG: detect winner and animated checkers</a> by Ross Kaffenberger (<a href="https://codepen.io/rossta">@rossta</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
+<p>When a player achieves four-in-a-row, we update the visual elements on the board to indicate the win and provide a &quot;Play again&quot; link to reset the game state.</p>
+
+      <h2 id="imagining-the-algorithm" class="title title-h2">
+        <a name="imagining-the-algorithm" class="anchor" href="#imagining-the-algorithm">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Imagining the algorithm
+      </h2>
+    
+<p>We want the game logic to evaluate the state of the board after each checker is played and before allowing the next player to drop their checker. If four-in-a-row is found, we&#39;ll want to highlight the winning segment of checkers and declare the winner in the UI. We&#39;ll also want to declare a draw if the board is full and no one has won.</p>
+
+<p>The basic skeleton of the win algorithm will work as follow:</p>
+
+<pre><code class="bash">check all viable horizonal segments FOR THE WIN. Return the winner OR
+check all viable vertical segments FTW. Return the winner OR
+check all viable &quot;forward slash&quot; segments FTW. Return the winner OR
+check all viable &quot;back slash&quot; segments FTW. Return the winner OR
+</code></pre>
+
+<p>We use the word <em>viable</em> to mean that the segment must contain four &quot;slots&quot; that exist on the game board. In other words, since the game board has seven columns, indexed as 0-6, each row contains only four horizonal segments: 0-3, 1-4, 2-5, 3-6.</p>
+
+<p>As described, it&#39;s a bit wasteful to check every possible segment in the board. This is especially true at the outset, when few checkers are on the board, or near the end when many segments have already been checked on previous turns. Since we&#39;re checking the board on each drop and we know the position of the last checker played, we can reduce the number of computations by treating the last checker as a focal point. So we update our definition of a <em>viable</em> segment to mean segments of four on the board that intersect with the last checker played.</p>
+
+<p>To figure out which segments over lap with the last checker played, we need a few values:</p>
+
+<ul>
+<li>the coordinates of the checker, the &quot;focal point&quot; of our collection of segments</li>
+<li>the minimum viable row value, i.e., the greater of first row value (0) and the value of the farthest numerical segment point to the left (<code>focalRow</code> - 3)</li>
+<li>the minimum viable column value, i.e., the greater of first col value (0) and the value of the farthest numerical segment ponit from the bottom (<code>focalCol</code> - 3)</li>
+<li>the maximum viable row value, i.e., the lesser of (<code>focalRow</code> + 3) and the top row (5)</li>
+<li>the maximum viable column value, i.e., the lesser of (<code>focalCol</code> + 3) and the last column (6)</li>
+</ul>
+
+<p>Given an object <code>lastChecker</code> of the form <code>{ row, col }</code>, and the properites <code>rowCount</code> and <code>colCount</code> representing the total number of rows and columns respectively, we can determine these values as follows in JavaScript:</p>
+
+<pre><code class="javascript">const min = num =&gt; Math.max(num - 3, 0);
+const max = (num, max) =&gt; Math.min(num + 3, max);
+
+const { row: focalRow, col: focalCol } = lastChecker;
+const minCol = min(focalCol);
+const maxCol = max(focalCol, this.colCount-1);
+const minRow = min(focalRow);
+const maxRow = max(focalRow, this.rowCount-1);
+</code></pre>
+
+<p>The min and max row and column values form the boundaries of the search space, which may be much smaller than the total number of segments on the board, especially when the last checker played is near the edges.</p>
+
+      <h2 id="checking-the-horizonal-segment" class="title title-h2">
+        <a name="checking-the-horizonal-segment" class="anchor" href="#checking-the-horizonal-segment">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Checking the horizonal segment
+      </h2>
+    
+<p>Using these values, we can select only the segments in the horizontal, vertical, and diagonal intersections with our last played checker. Let&#39;s say the last checker ended up in row 3 and column 2. There are only three horizonal segments we need to check from this position. Here&#39;s a visual:</p>
+
+<p><img src="/assets/images/blog/connect-four/check-horizontal.png" alt="" loading="lazy" /></p>
+
+<p>In the context of our <code>GameContainer</code> component, here&#39;s one way of iterating through those segments and searching for a winner:</p>
+
+<pre><code class="javascript">// GameContainer method
+checkHorizontalSegments({ focalRow, minCol, maxCol }) {
+  for (let row = focalRow, col = minCol; col &lt;= maxCol; col++) {
+
+    // the horizonal segment contains four neighboring coordinates across
+    const segment = [[row, col], [row, col+1], [row, col+2], [row, col+3]];
+
+    // this.getChecker returns the checker object { row, col, color } for a given position
+    const checkers = segment.map(([row, col]) =&gt; this.getChecker({row, col}));
+
+    // If all colors are valid and match
+    if (checkers.reduce((a, b) =&gt; a === b &amp;&amp; a !== EMPTY)) {
+      return { color: checkers[0].color, checkers };
+    }
+  }
+},
+</code></pre>
+
+<p>If a win is detected, we&#39;ll record the color and checker positions of the winning segment, which we can later use as data to show the winning state on the game board. Similar functions for checking the vertical and diagonal segments are left as an exercise for the reader... or you may inspect the <a href="https://codepen.io/rossta/pen/VydJKG" target="_blank" rel="noopener noreferrer">source of the CodePen demo</a>.</p>
+
+      <h2 id="updating-the-vue" class="title title-h2">
+        <a name="updating-the-vue" class="anchor" href="#updating-the-vue">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Updating the Vue
+      </h2>
+    
+<p>Putting this altogether, our win algorithm in JavaScript could be as follows:</p>
+
+<pre><code class="javascript">// GameContainer method
+checkForWin(lastChecker) {
+  if (!lastChecker) return;
+
+  const min = num =&gt; Math.max(num - 3, 0);
+  const max = (num, max) =&gt; Math.min(num + 3, max);
+
+  const { row: focalRow, col: focalCol } = lastChecker;
+  const minCol = min(focalCol);
+  const maxCol = max(focalCol, this.colCount-1);
+  const minRow = min(focalRow);
+  const maxRow = max(focalRow, this.rowCount-1);
+  const coords = { focalRow, focalCol, minRow, minCol, maxRow, maxCol };
+
+  return this.checkHorizontalSegments(coords) ||
+    this.checkVerticalSegments(coords) ||
+    this.checkForwardSlashSegments(coords) ||
+    this.checkBackwardSlashSegments(coords);
+},
+</code></pre>
+
+<p>Recall from the <a href="/blog/animating-connect-four-with-vuejs.html">previous post</a>, once a checker is dropped, we emit two custom events, one to create the checker component, <code>&#39;drop&#39;</code> and a second, <code>&#39;land&#39;</code>, to indicate the falling checker animation has completed. We&#39;re bubbling these events up to the <code>GameContainer</code> where we can then check for the win. For the checker drop, we lock the game from additional moves while this processing is carried out and we obtain a reference to the last checker and pass to our <code>checkForWin</code> method:</p>
+
+<pre><code class="javascript">// GameContainer method
+drop({ col, row }) {
+  if (this.isLocked) return;
+
+  this.isLocked = true;
+
+  const checker = { row, col, color };
+  this.checkForWin(checker);
+
+  // update the board
+  // switch turns
+},
+</code></pre>
+
+<p>When the animation completes, the <code>land</code> callback is triggered on the <code>GameContainer</code>. Here, we check for the win. If the winner was set by the <code>checkForWin</code> method, we&#39;ll display the win or unlock the game so the next player can play their turn.</p>
+
+<pre><code class="javascript">// GameContainer method
+land() {
+  if (this.winner) {
+    this.displayWin(winner);
+  } else {
+    this.isLocked = false;
+  }
+},
+</code></pre>
+
+<p>Display win simply sets the game status and sets a flag on each of checkers in the winner segment.</p>
+
+<pre><code class="javascript">// GameContainer method
+displayWin(winner) {
+  this.status = &#39;OVER&#39;;
+  this.winner.checkers.forEach((checker) =&gt; {
+    this.setChecker(checker, {isWinner: true});
+  });
+},
+</code></pre>
+
+<p>Our components can react to this new state by updating various elements of the UI. One approach we&#39;ve taken is to adjust the opacity of the non-winning checkers to accentuate the winners:</p>
+
+<pre><code class="javascript">// BoardChecker computed
+opacity() {
+  return (this.status === OVER &amp;&amp; !this.isWinner) ? 0.25 : 1.0;
+},
+</code></pre>
+
+      <h2 id="checking-for-a-draw" class="title title-h2">
+        <a name="checking-for-a-draw" class="anchor" href="#checking-for-a-draw">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Checking for a draw
+      </h2>
+    
+<p>There&#39;s one case we haven&#39;t yet accounted for—what if no one wins?</p>
+
+<p>It&#39;s possible for a game to reach a state where all the cells are filled with checkers, but neither player has acheived four-in-a-row. To account for this case, we&#39;ll want to check a draw before checking for the win on each turn. A draw occurs when the number of checkers played equals the number of cells:</p>
+
+<pre><code class="javascript">// GameContainer method
+checkForDraw() {
+  this.isDraw = Object.keys(this.checkers).length === this.rowCount * this.colCount;
+},
+</code></pre>
+
+<p>We&#39;ll update the <code>land</code> method to short-circuit on a draw:</p>
+
+<pre><code class="javascript">// GameContainer method
+land() {
+  if (this.isDraw) return this.displayDraw();
+
+  if (this.winner) {
+    this.displayWin(winner);
+  } else {
+    this.isLocked = false;
+  }
+},
+</code></pre>
+
+<p>Highlighting the simplicity of our Vue-based reactive system, displaying the draw means simply setting the game state to <code>&#39;OVER&#39;</code>;</p>
+
+<pre><code class="javascript">displayDraw() {
+  this.status = OVER;
+},
+</code></pre>
+
+      <h2 id="resetting-the-game" class="title title-h2">
+        <a name="resetting-the-game" class="anchor" href="#resetting-the-game">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Resetting the game
+      </h2>
+    
+<p>We can use the game status to display a message to the players and provide a &quot;Play again&quot; link:</p>
+
+<pre><code class="html">&lt;p v-if=&quot;status === &#39;OVER&#39;&quot;&gt;
+  {{ gameOverMessage }}
+  &lt;a href=&quot;#&quot; @click=&quot;reset&quot;&gt;Play again&lt;/a&gt;
+&lt;/p&gt;
+</code></pre>
+
+<p>The <code>gameOverMessage</code> is simply a computed property that switches on the winner state:</p>
+
+<pre><code class="javascript">// GameContainer computed
+gameOverMessage() {
+  if (this.winner) {
+    return `${titleize(this.winner.color)} wins!`;
+  } else {
+    return `It&#39;s a draw!`;
+  }
+},
+</code></pre>
+
+<p>For the &quot;Play again&quot; link, we just add a function to reset the game state:</p>
+
+<pre><code class="javascript">// GameContainer method
+reset() {
+  this.winner = undefined;
+  this.isLocked = false;
+  this.status = PLAY;
+  this.checkers = {};
+},
+</code></pre>
+
+      <h2 id="summing-up" class="title title-h2">
+        <a name="summing-up" class="anchor" href="#summing-up">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Summing up
+      </h2>
+    
+<p>We&#39;ve come a long way—we developed a basic algorithm to search the game board for a winner while ensuring we only traverse relevant segments. We also leveraged the simplicity of reactive Vue properties to trigger UI updates. We now have a decent version of Connect Four playable in the browser by individual(s) using the same browser. We&#39;ve also lumped a ton of logic into the game container and have no mechanism to play opponents ver the network. There&#39;s some exciting work to do ahead: we&#39;ll work on introducing additional layers to our frontend design by building on Vue libraries like <code>vue-router</code> for client-side routing and <code>vuex</code> for state managment. This will set us up to make the game playable over the network by connecting our game to an Elixir/Phoenix backend.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=Finding%20Four-in-a-Row%20for%20the%20Win%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Ffinding-four-in-a-row-ftw.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+          Part of the <a href="/blog/series/connect-four.html">Connect Four</a> series.
+        Published on Jan 28, 2018
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/818387/subscriptions?ref=Vue"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="818387"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733963" />
+    <input type="hidden" name="tags[]" value="733959" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/finding-four-in-a-row-ftw.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/deploying-vue-with-circleci-2.html">Deploying Vue with CircleCI 2.0</a>
+    </header>
+      <p>Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/deploying-vue-to-amazon-s3-with-circleci.html">Deploying a Vue.js website to AWS S3 with CircleCI 1.0</a>
+    </header>
+      <p>Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/finding-four-in-a-row-ftw.html">Finding Four-in-a-Row for the Win</a>
+    </header>
+      <p>In this post for the Building Connect Four with Vue.js and Phoenix series, we'll implement an algorithm for detecting four-in-a-row with JavaScript and display the results to our Vue.js components.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/purple-circles.jpg" loading="lazy" alt="" />
+            <figcaption>Background Photo by Peter Clarkson on Unsplash</figcaption>
+      </figure>
+  </article>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>

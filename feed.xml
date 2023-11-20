@@ -443,7 +443,7 @@ document.addEventListener(&amp;#39;[data-open-trix-editor]&amp;#39;, &amp;#39;cl
 &lt;blockquote&gt;
 &lt;p&gt;Struggling with webpack and Webpacker?&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="/webpack-on-rails/"&gt;&lt;strong&gt;Subscribe to my newsletter for occasional emails with new content.&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://signup.rossta.net" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter for occasional emails with new content.&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
       &lt;h4 id="html-request-with-the-asset-pipeline" class="title title-h4"&gt;
@@ -898,7 +898,7 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
 &lt;blockquote&gt;
 &lt;p&gt;Curious about or need help with webpack? I may be able to help! I&amp;#39;m developing a course for webpack on Rails and I frequently write about it on this blog.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter to get updates&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://signup.rossta.net" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter to get updates&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;The webpack-bundle-analyzer is a tool that you can use to visualize the contents of a webpack build. It parses the &amp;quot;stats&amp;quot; output of a webpack build and constructs an interactive &lt;a href="https://www.jasondavies.com/voronoi-treemap/" target="_blank" rel="noopener noreferrer"&gt;Voronoi treemap&lt;/a&gt; using the &lt;a href="https://carrotsearch.com/foamtree/" target="_blank" rel="noopener noreferrer"&gt;FoamTree&lt;/a&gt; library.&lt;/p&gt;
@@ -1151,7 +1151,7 @@ module.exports = environment
 &lt;blockquote&gt;
 &lt;p&gt;Curious about or need help with webpack? I may be able to help! I&amp;#39;m developing a course for Webpack on Rails and I frequently write about it on this blog.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href="https://little-fog-6985.ck.page/9c5bc129d8" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter to get updates&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://signup.rossta.net" target="_blank" rel="noopener noreferrer"&gt;&lt;strong&gt;Subscribe to my newsletter to get updates&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;The question keeps coming up, like in this &lt;a href="https://www.reddit.com/r/rails/comments/9zg7fe/confused_about_the_difference_between_sprockets/" target="_blank" rel="noopener noreferrer"&gt;Reddit post&lt;/a&gt;, or this &lt;a href="https://stackoverflow.com/questions/55232591/rails-5-2-why-still-use-assets-pipeline-with-webpacker" target="_blank" rel="noopener noreferrer"&gt;StackOverflow question&lt;/a&gt;, or this &lt;a href="https://www.reddit.com/r/rails/comments/dfww82/best_practice_for_webpacker_in_rails_6_do_i_need/" target="_blank" rel="noopener noreferrer"&gt;other Reddit post&lt;/a&gt;.&lt;/p&gt;

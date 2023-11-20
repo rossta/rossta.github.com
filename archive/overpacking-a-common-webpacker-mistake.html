@@ -1,0 +1,342 @@
+<!doctype html>
+<html class="antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<title>Overpacking: A common Webpacker mistake - rossta.net</title>
+<meta name="description" content="A big issue that comes up with Webpacker is &quot;where to put the JavaScript files&quot;. This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common g..." />
+<meta name="keywords" content="Webpack, Rails" />
+<meta itemprop="name" content="Overpacking: A common Webpacker mistake" />
+<meta itemprop="description" content="A big issue that comes up with Webpacker is &quot;where to put the JavaScript files&quot;. This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common g..." />
+<meta itemprop="image" content="https://rossta.net/assets/images/blog/stock/brandless-packing-unsplash.jpg" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:url" content="https://rossta.net/archive/overpacking-a-common-webpacker-mistake.html" />
+<meta name="twitter:title" content="Overpacking: A common Webpacker mistake" />
+<meta name="twitter:description" content="A big issue that comes up with Webpacker is &quot;where to put the JavaScript files&quot;. This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common g..." />
+<meta name="twitter:image" content="https://rossta.net/assets/images/blog/stock/brandless-packing-unsplash.jpg" />
+<meta property="og:url" content="https://rossta.net/archive/overpacking-a-common-webpacker-mistake.html" />
+<meta property="og:type" content="WTF" />
+<meta property="og:title" content="Overpacking: A common Webpacker mistake" />
+<meta property="og:image" content="https://rossta.net/assets/images/blog/stock/brandless-packing-unsplash.jpg" />
+<meta property="og:description" content="A big issue that comes up with Webpacker is &quot;where to put the JavaScript files&quot;. This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common g..." />
+<meta property="og:site_name" content="rossta.net" />
+<meta property="og:locale" content="en_US" />
+<link rel="separator" href="-" />
+    <meta charset="utf-8" />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge;chrome=1' />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="pingback" href="https://webmention.io/rossta.net/xmlrpc" />
+    <link rel="webmention" href="https://webmention.io/rossta.net/webmention" />
+    <link rel="canonical" href="https://rossta.net/archive/overpacking-a-common-webpacker-mistake.html" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Article","publisher":{"@type":"Organization","name":"Ross Kaffenberger"},"author":{"@type":"Person","name":"Ross Kaffenberger","image":{"@type":"ImageObject","url":"https://rossta.net/assets/images/me.jpg","width":400,"height":400},"url":"https://rossta.net","sameAs":["https://rossta.net/about/","https://twitter.com/rossta"]},"headline":"Overpacking: A common Webpacker mistake","url":{"scheme":"https","user":null,"password":null,"host":"rossta.net","port":null,"path":"/archive/overpacking-a-common-webpacker-mistake.html","query":null,"fragment":null},"datePublished":"2019-12-03T00:00:00Z","keywords":"webpack, rails","description":"A big issue that comes up with Webpacker is \"where to put the JavaScript files\". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.","mainEntityOfPage":{"@type":"WebPage","@id":"https://rossta.net"}}
+    </script>
+
+
+    <link rel="stylesheet" href="/css/app.f7bb33b95ea908b47d5f.css" media="all"></link>
+    <script async defer data-domain="rossta.net" src="https://plausible.io/js/plausible.outbound-links.js"></script>
+  </head>
+  <body id="application" class="leading-relaxed">
+    <header id="welcome-nav" class="top-bar text-gray-800 sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3" data-topbar>
+  <div class="flex justify-between items-center px-4 py-3 sm:p-0">
+    <h1 class="text-2xl font-bold">
+      <a class="logo" href="/"><span>rossta.net</span></a>
+    </h1>
+    <button type="button" aria-label="Menu" class="top-bar-menu-button sm:hidden block text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none">
+      <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <path class="icon" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"/>
+        <path class="icon hidden" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">blog</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
+  </nav>
+</header>
+
+    <main id="main" role="main" class="layout container">
+        <article class="post mb-12">
+    <header class="page-header mt-4">
+  <h1>
+    Overpacking: A common Webpacker mistake
+  </h1>
+    <h2 class="mt-4 text-gray-600 font-medium">
+      i.e., How I saved 6 minutes in a Rails team's deploy time
+    </h2>
+</header>
+
+    <p>I recently encountered a Rails app at work that was spending nearly seven minutes precompiling assets:</p>
+
+<p><img src="/assets/images/blog/webpack/overpack-before-fix.png" alt="CI Screenshot: Precompile assets, 6:56" loading="lazy" /></p>
+
+<p>I looked in the <code>Gemfile</code> and found the project was using Webpacker. My spidey sense started to tingle.</p>
+
+<p><em>I&#39;ve seen this before</em>.</p>
+
+<p>Leaning on prior experience, I found the problem, moved some files around, and pushed a branch with the fix up to CI.</p>
+
+<p><img src="/assets/images/blog/webpack/overpack-after-fix.png" alt="CI Screenshot: Precompile assets, 0:44" loading="lazy" /></p>
+
+<p>The build step dropped from nearly seven minutes to less than one. Big improvement! When I heard from the team, the fix also greatly improved the local development experience; before, re-compiling webpack assets on page refreshes would take a painfully long time.</p>
+
+<p>So what were the changes?</p>
+
+<blockquote>
+<p><a href="https://signup.rossta.net" target="_blank" rel="noopener noreferrer">Subscribe to my newsletter</a> to learn more about using webpack with Rails.</p>
+</blockquote>
+
+      <h3 id="a-common-problem" class="title title-h3">
+        <a name="a-common-problem" class="anchor" href="#a-common-problem">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        A Common Problem
+      </h3>
+    
+<p>First, let&#39;s take a step back. If you&#39;re new to webpack and Webpacker for Rails, chances are you may be making some simple mistakes.</p>
+
+<p>I know this because I was once in your shoes struggling to learn how webpack works. I&#39;ve also spent a lot of time helping others on my team, on StackOverflow, and via <a href="https://github.com/rails/webpacker" target="_blank" rel="noopener noreferrer"><code>rails/webpacker</code></a> Github issues.</p>
+
+<p>One of the most frequently-reported issues I&#39;ve seen is slow build times. This is often coupled with high memory and CPU usage. For Heroku users on small dynos, resource-intensive asset precompilation can lead to failed deploys.</p>
+
+<p>More often than not, the root cause is a simple oversight in directory structure—a mistake I call &quot;overpacking&quot;.</p>
+
+      <h3 id="overpacking-explained" class="title title-h3">
+        <a name="overpacking-explained" class="anchor" href="#overpacking-explained">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Overpacking explained
+      </h3>
+    
+<p>Here&#39;s the layout of the <code>app/javascript</code> directory in the Rails app <em>before</em> I introduced the fix:</p>
+
+<p><strong>rake assets:precompile — 6:56</strong></p>
+
+<pre><code class="shell">app/
+  javascript/
+    packs/
+      application.js
+      components/     # lots of files
+      images/         # lots of files
+      stylesheets/    # lots of files
+      ...
+</code></pre>
+
+<p>Here&#39;s what the project looked like building in under a minute:</p>
+
+<p><strong>rake assets:precompile — 0:44</strong></p>
+
+<pre><code class="shell">app/
+  javascript/
+    components/
+    images/
+    stylesheets/
+    ...
+    packs/
+      application.js    # just one file in packs/
+</code></pre>
+
+<p>See the difference?</p>
+
+<p>The primary change here was moving everything except <code>application.js</code> outside of the <code>packs</code> directory under <code>app/javascript</code>. (To make this work properly, I also had to update some relative paths in <code>import</code> statements.)</p>
+
+      <h3 id="webpack-entry-points" class="title title-h3">
+        <a name="webpack-entry-points" class="anchor" href="#webpack-entry-points">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        Webpack Entry Points
+      </h3>
+    
+<p>So why did this matter?</p>
+
+<p>Webpack needs at least one <strong>entry</strong> point to build the dependency graph for produce the JavaScript and CSS bundles and static assets (images, fonts, etc).</p>
+
+<blockquote>
+<p>The Webpacker project refers to entries as <strong>packs</strong>.</p>
+</blockquote>
+
+<p>&quot;Entry&quot; is listed as the first key concept on webpack&#39;s documentation site: <a href="https://webpack.js.org/concepts/#entry" target="_blank" rel="noopener noreferrer">https://webpack.js.org/concepts/#entry</a>.</p>
+
+<p>Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs webpack has to build.</p>
+
+<p>Since webpack*er*, by default, treats <em>every file</em> in the <code>packs</code> directory as a separate entry, it will build a separate dependency graph for <em>every file</em> located there.</p>
+
+<p>That also means, for <em>every file</em> in the <code>packs</code> directory, there will be at least one, possibly more, files emitted as output in the <code>public</code> directory during precompilation. If you&#39;re not linking to these files anywhere in your app, then they don&#39;t need to be emitted as output. For a large project, that could be lot of unnecessary work.</p>
+
+<p>Here&#39;s a case where Rails tries to make things easier for you—by auto-configuring entry files—while also making it easier to shoot yourself in the foot.</p>
+
+      <h3 id="a-simple-rule" class="title title-h3">
+        <a name="a-simple-rule" class="anchor" href="#a-simple-rule">       <svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+       <path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"></path>
+       </svg>
+</a>
+        A Simple Rule
+      </h3>
+    
+<p>Is your Webpacker compilation taking forever? You may be overpacking.</p>
+
+<blockquote>
+<p>If any file in Webpacker&#39;s &quot;packs&quot; directory does not also have a corresponding <code>javascript_pack_tag</code> in your application, then you&#39;re overpacking.</p>
+</blockquote>
+
+<p>Be good to yourself and your development and deployment experience by being very intentional about what files you put in your &quot;packs&quot; directory.</p>
+
+<p>Don&#39;t overpack. At best, this is wasteful; at worst, this is a productivity killer.</p>
+
+  </article>
+  <section class="mb-12">
+    <p class="text-right">
+      <a href="https://twitter.com/intent/tweet?text=Overpacking%3A%20A%20common%20Webpacker%20mistake%20-%20rossta.net&amp;url=https%3A%2F%2Frossta.net%2Farchive%2Foverpacking-a-common-webpacker-mistake.html" class="font-bold" target="_blank" rel="noopener noreferrer">Discuss it on Twitter</a>
+      &middot;
+      <span class="italic font-light">
+        Published on Dec  3, 2019
+      </span>
+    </p>
+  </section>
+  <section class="signup-form-standalone hero">
+    <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
+<form
+  action="https://app.convertkit.com/forms/1268949/subscriptions?ref=Webpack"
+  class="seva-form formkit-form"
+  method="post"
+  data-sv-form="1268949"
+  data-uid="cda82aafbf"
+  data-format="inline"
+  data-version="5"
+  data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:&quot;300&quot;,&quot;devices&quot;:null,&quot;show_once_every&quot;:&quot;7&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:null,&quot;trigger&quot;:null,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:null,&quot;devices&quot;:null,&quot;show_once_every&quot;:null}}}"
+>
+  <div>
+    <div class="mb-4">
+      <h3 class="mb-2">
+  Join the Newsletter
+</h3>
+<p>
+  Subscribe to get an occasional email about web development and Rails. Thank you!
+</p>
+
+    </div>
+    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
+    <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
+      <div class="formkit-field">
+        <label for="email_address" class="sr-only">Email address</label>
+        <input
+          class="formkit-input"
+          id="email_address"
+          name="email_address"
+          placeholder="Your email address"
+          required=""
+          type="email"
+          style="border-color: rgb(227, 227, 227); border-radius: 4px; color: rgb(0, 0, 0); font-weight: 400;"
+        />
+      </div>
+      <button
+        data-element="submit"
+        class="formkit-submit button button-green"
+      >
+        <div class="formkit-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <span>Subscribe</span>
+      </button>
+    </div>
+  </div>
+  <style>
+  </style>
+    <input type="hidden" name="tags[]" value="733964" />
+    <input type="hidden" name="tags[]" value="733966" />
+  <input type="hidden" aria-label="URL" name="fields[url]" placeholder="URL" value="https://rossta.net/archive/overpacking-a-common-webpacker-mistake.html" />
+</form>
+
+
+  </section>
+  <section class="index-posts mb-24">
+    <h2 class="mb-8">More posts</h2>
+      <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/three-ways-webpack-surprises-rails-developers.html">3 ways webpack surprises web developers</a>
+    </header>
+      <p>When I first started working with webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a>
+    </header>
+      <p>Using images bundled by webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/blog/overpacking-a-common-webpacker-mistake.html">Overpacking: A common Webpacker mistake</a>
+    </header>
+      <p>A big issue that comes up with Webpacker is "where to put the JavaScript files". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.</p>
+  </article>
+
+  </section>
+  <article class="mb-24">
+      <figure>
+        <img src="/assets/images/blog/stock/brandless-packing-unsplash.jpg" loading="lazy" alt="" />
+            <figcaption>Photo by Brandless on Unsplash</figcaption>
+      </figure>
+  </article>
+    <!-- Webpack on Rails course popup form -->
+    <script async data-uid="92c0bd55d0" src="https://little-fog-6985.ck.page/92c0bd55d0/index.js"></script>
+
+    </main>
+    <footer class="bg-silver text-xs">
+  <div class="layout container p-6">
+    <img src="/assets/images/turtle-logo.svg" loading="lazy" class="turtle w-8 mb-6" alt="" />
+    <section class="lg:flex lg:justify-between">
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Most Popular</h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a></li>
+            <li class="mb-1"><a href="/blog/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a></li>
+            <li class="mb-1"><a href="/blog/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/importing-images-with-webpacker.html">Importing images with Webpacker</a></li>
+            <li class="mb-1"><a href="/blog/from-sprockets-to-webpack.html">How we switched from Sprockets to Webpacker</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">
+          <a class="text-gray-900 hover:text-gray-700" href="blog/tags.html">
+            Categories
+          </a>
+        </h5>
+        <ul>
+            <li class="mb-1"><a href="/blog/tags/rails.html">Rails</a></li>
+            <li class="mb-1"><a href="/blog/tags/ruby.html">Ruby</a></li>
+            <li class="mb-1"><a href="/blog/tags/webpack.html">Webpack</a></li>
+            <li class="mb-1"><a href="/blog/tags/javascript.html">JavaScript</a></li>
+            <li class="mb-1"><a href="/blog/tags/vue.html">Vue</a></li>
+        </ul>
+      </section>
+      <section class="mb-8">
+        <h5 class="font-bold mb-4">Contact</h5>
+        <ul>
+          <li class="mb-1"><a target="_blank" href="mailto:ross@rossta.net" rel="me noopener nofollow">email</a></li>
+          <li class="mb-1"><a target="_blank" href="https://twitter.com/rossta" rel="me noopener nofollow">twitter</a></li>
+          <li class="mb-1"><a target="_blank" href="https://github.com/rossta" rel="me noopener nofollow">github</a></li>
+          <li class="mb-1"><a target="_blank" href="https://www.linkedin.com/in/rosskaffenberger" rel="me noopener nofollow">linkedin</a></li>
+          <li class="mb-1"><a target="_blank" href="https://stackoverflow.com/users/771838/rossta?tab=profile" rel="me noopener nofollow">stackoverflow</a></li>
+        </ul>
+      </section>
+    </section>
+    <p class="copyright text-center text-xs font-light">
+      © 2023 Ross Kaffenberger. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+    <script src="/js/runtime.ab3e4b5316b2997723cc.js"></script>"<script src="/js/app.d1ef27c9a26cf7bc4240.js"></script>"
+    
+  </body>
+</html>
