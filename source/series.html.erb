@@ -1,6 +1,6 @@
 <% content_for(:section) { "Series" } %>
 <% series_object = blog_series.find { |s| s.id == series } %>
-<% local_articles = blog("archive").articles.group_by {|a| a.metadata[:page][:series] }[series].reverse %>
+<% local_articles = blog("blog").articles.group_by {|a| a.metadata[:page][:series] }[series].reverse %>
 <%= page_header series_object.title, series_object.summary %>
 <section class="index-posts margin-top">
   <%= partial "partials/series_article_index", locals: { local_articles: local_articles } %>

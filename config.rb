@@ -33,24 +33,6 @@ activate(:external_pipeline, name: :webpack, command: build? ? "yarn build:prod"
 ## Archived Blog
 ###########################
 activate(:blog) do |blog|
-  blog.name = "archive"
-  blog.prefix = "archive"
-  blog.permalink = "/{title}.html"
-  blog.sources = "{year}-{month}-{day}-{title}.html"
-  blog.layout = "post"
-  blog.tag_template = "tag.html"
-  blog.calendar_template = "calendar.html"
-  blog.paginate = true
-  blog.per_page = 25
-  blog.default_extension = ".md"
-  blog.custom_collections = {series: {link: "/series/{series}.html", template: "series.html"}}
-  blog.publish_future_dated = true
-end
-
-###########################
-## Blog
-###########################
-activate(:blog) do |blog|
   blog.name = "blog"
   blog.prefix = "blog"
   blog.permalink = "/{title}.html"

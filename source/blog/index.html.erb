@@ -4,8 +4,8 @@ name: blog
 prefix: blog
 per_page: 25
 ---
-<% content_for(:section) { 'Blog' } %>
-<%= page_header 'Articles on rossta.net', 'Programming for the web' %>
+<% content_for(:section) { 'Archive' } %>
+<%= page_header 'Archive', 'Programming for the web' %>
 <section id="blog" class="index-posts">
   <%= partial "partials/article_index", locals: { local_articles: page_articles } %>
   <%= partial "partials/pagination" %>

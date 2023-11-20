@@ -13,7 +13,7 @@
     <h6>Tags</h6>
     <ul>
       <% blog.tags.each do |tag, articles| %>
-        <li><a href="<%= tag_path tag, "archive" %>"><%= tag %> [<%= articles.size %>]</a></li>
+        <li><a href="<%= tag_path tag, "blog" %>"><%= tag %> [<%= articles.size %>]</a></li>
       <% end %>
     </ul>
   </aside>
