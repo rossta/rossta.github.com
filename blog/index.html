@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<title>Ross Kaffenberger - rossta.net</title>
+<title>Ross Kaffenberger - blog</title>
 <meta name="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, and Elixir" />
 <meta name="keywords" content="Ross Kaffenberger, software, software developer, software engineering, computer programming, web development, test driven development, TDD, Ruby, Javascript, Ruby on Rails, Rails, Webpack, Service Worker, Progressive Web Apps, RSpec, Elixir, Clojure, HTML, CSS" />
 <meta itemprop="name" content="Ross Kaffenberger" />
 <meta itemprop="description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, and Elixir" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:site" content="rossta.net" />
+<meta name="twitter:site" content="blog" />
 <meta name="twitter:url" content="https://rossta.net/blog" />
 <meta name="twitter:title" content="Ross Kaffenberger" />
 <meta name="twitter:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, and Elixir" />
@@ -18,7 +18,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Ross Kaffenberger" />
 <meta property="og:description" content="Ross Kaffenberger writes about software engineering, computer programming, and web development in Ruby, Javascript, and Elixir" />
-<meta property="og:site_name" content="rossta.net" />
+<meta property="og:site_name" content="blog" />
 <meta property="og:locale" content="en_US" />
 <link rel="separator" href="-" />
     <meta charset="utf-8" />
@@ -47,15 +47,14 @@
     </button>
   </div>
   <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4">
-    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">archive</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/archive/">archive</a>
     <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
     <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
   </nav>
 </header>
 
     <main id="main" role="main" class="layout container">
-      
-<header class="page-header mt-4">
+      <header class="page-header mt-4">
   <h1>
     Articles on rossta.net
   </h1>
@@ -64,15 +63,164 @@
     </h2>
 </header>
 
-
 <section id="blog" class="index-posts">
-  
+    <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/rails-apps-overpacking-with-webpacker.html">These Rails apps are overpacking their JavaScript bundles</a>
+    </header>
+      <p>A case study of Rails applications making a common Webpacker mistake of rendering modules multiple times on a single page. We'll describe why the problem happens and present a Webpacker Packing Checklist for proper code-splitting.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/visual-guide-to-webpacker.html">A visual guide to Webpacker</a>
+    </header>
+      <p>Navigate the world of Webpacker and webpack on Rails with confidence using this collection of mental maps I put together.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html">Why doesn't Webpacker use my test config when I run Rails tests?</a>
+    </header>
+      <p>When running Rails system or integration tests, you might be surprised to learn that Webpacker will load your development webpack config. What's the deal?</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/webpacker-output-analysis-with-webpack-bundle-analyzer.html">The webpack plugin I can't live without</a>
+    </header>
+      <p>In this post, we'll take a look at installing and using the webpack-bundle-analyzer, perhaps the most invaluable webpack plugin, to analyze and debug the output of the webpack build in a Rails project configured to use Webpacker.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/why-does-rails-install-both-webpacker-and-sprockets.html">Why does Rails 6 include both Webpacker and Sprockets?</a>
+    </header>
+      <p>A new Rails 6 application will install both Webpacker and Sprockets by default. Don't they solve the same problem? This article dives into why Sprockets lives on even though webpack has surpassed most of its features and why you might want to choose one over the other.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/how-to-debug-webpack-on-rails.html">How to debug webpack on Rails</a>
+    </header>
+      <p>Understanding your Rails webpack configuration and build output can be a little confusing, especially if you're new to either Rails or webpack. This post contains a few tips for debugging your Webpacker setup, some specific to Rails Webpacker, some generally applicable to webpack.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/how-to-customize-webpack-for-rails-apps.html">How to customize webpack in Rails apps</a>
+    </header>
+      <p>Configuring webpack is precisely the main job of Webpacker's NPM package, @rails/webpacker. This post provides an overview of how to customize its default settings for your Rails application.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/how-to-use-webpacker-yml.html">Understanding webpacker.yml</a>
+    </header>
+      <p>Configuring Webpacker can be a daunting task. In this guide, we will take a look at the options provided via the webpacker.yml file and supported environment variable overrides.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/you-might-not-need-jquery-with-webpack.html">jQuery plugins in webpack without jQuery</a>
+    </header>
+      <p>Upgrading jQuery plugins to work with webpack is a common source of confusion. If you're lucky, you may find they can work in either context such that you might not need jQuery at all.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/reasons-to-switch-to-webpacker.html">25 reasons to switch to Webpack(er)</a>
+    </header>
+      <p>There are plenty of great reasons to switch to Webpacker, including improvements in supported syntax, development tooling, performance optimizations, and more. For Rails developers considering the upgrade from the Rails asset pipeline, start here.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/npm-version-constraints-for-rubyists.html">A guide to NPM version constraints for Rubyists</a>
+    </header>
+      <p>A reference guide to NPM version constraints for dependencies declared in the package.json file of a Rails project from the perspective of a Ruby developer familiar with similar conventions used to specify Ruby dependencies in a Gemfile.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/three-ways-webpack-surprises-rails-developers.html">3 ways webpack surprises web developers</a>
+    </header>
+      <p>When I first started working with webpack, I was in for a few surprises. I assumed how things should behave, based on my previous experience with the Rails asset pipeline, only to learn through experience how I was wrong.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/importing-images-with-webpacker.html">Importing images with Webpacker</a>
+    </header>
+      <p>Using images bundled by webpack can get confusing. 'How to reference images from JavaScript? from CSS? from Rails ERB templates? This post will demonstrate.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/overpacking-a-common-webpacker-mistake.html">Overpacking: A common Webpacker mistake</a>
+    </header>
+      <p>A big issue that comes up with Webpacker is "where to put the JavaScript files". This post demonstrates proper use of entry point files, called packs, with Webpacker and Rails and will help developers avoid a common gotcha.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/webpacker-with-bootstrap.html">Using Bootstrap with Rails Webpacker</a>
+    </header>
+      <p>This time we'll walk through the steps for integrating Bootstrap 4 with Rails and Webpacker 4.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/vue-js-is-omakase.html">Vue.js is omakase</a>
+    </header>
+      <p>Taking a page of the Rails cookbook, Vue.js manages to provide a great developer experience for those looking to hit the ground running and other wishing to customize their setup.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/reasons-to-choose-vue-js-in-2019.html">Seven reasons choose Vue.js in 2019</a>
+    </header>
+      <p>This post describes a bunch of reasons why developers might enjoy choosing Vue.js as the next JavaScript framework to learn in the coming year.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/refactoring-to-nested-abstract-components-vuejs-pdf-viewer.html">Refactoring to nested abstract components</a>
+    </header>
+      <p>Though it's often more easier to extract shared behavior as mixins to be used across components in Vue.js, this post describes at a high level how I used abstract components to achieve the same goal and the advantages of doing so.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/why-rails-system-tests-matter.html">Why RSpec users should care about Rails 5.1 and system tests</a>
+    </header>
+      <p>This post explains why RSpec/Rails users should upgrade to Rails 5.1 and drop the DatabaseCleaner gem for JavaScript-enabled acceptance tests.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/everything-is-enumerated.html">Everything is Enumerated</a>
+    </header>
+      <p>This post describes how to make enumerable methods that use blocks to iterate over an internal data structures but don't their enumerable properties and why this would be useful.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/local-ssl-for-rails-5.html">Local SSL for Rails 5 development and tests</a>
+    </header>
+      <p>Is your Rails app on SSL in production? It may be a good idea to use SSL locally too. It's just that it's typically been a pain to set up. Using SSL for Rails acceptance tests with Capybara has traditionally been even more challenging— until now.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/extracting-a-data-component-in-vue.html">Extracting a data component in Vue</a>
+    </header>
+      <p>In this tutorial, we'll illustrate the general benefits of extracting data components in Vue.js applications and apply this approach to the PDF viewer application so that multiple child components can share fetched PDF page data.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/building-a-pdf-viewer-with-vue-part-2.html">Displaying PDFs lazily with Vue</a>
+    </header>
+      <p>This tutorial demonstrates how to use Vue to defer fetching and rendering of PDF page data until elements are scrolled into the client browser.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/building-a-pdf-viewer-with-vue-part-1.html">Rendering PDF pages with PDF.js and Vue</a>
+    </header>
+      <p>This tutorial demonstrates how to create Vue.js components that can render PDFs along with tools like webpack, PDF.js, and the canvas element.</p>
+  </article>
+  <article class="index-post">
+    <header class="index-title">
+      <a href="/archive/deploying-vue-with-circleci-2.html">Deploying Vue with CircleCI 2.0</a>
+    </header>
+      <p>Our series on building Connect Four with Vue.js continues by setting up automated deployment to Amazon S3 with CircleCI and the command line tool s3deploy</p>
+  </article>
+
     <section class="border-t pt-8 pb-16">
-    Page 1 of 0
+    Page 1 of 4
+      &middot; <a href="/blog/page/2">Next</a>
   </section>
 
 </section>
-
 <section class="signup-form-standalone hero">
   <script src="https://f.convertkit.com/ckjs/ck.5.js" async></script>
 <form

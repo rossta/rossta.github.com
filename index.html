@@ -50,7 +50,7 @@
     </button>
   </div>
   <nav class="top-bar-section hidden sm:block sm:flex sm:justify-around px-2 pt-2 pb-4 homepage">
-    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/blog/">archive</a>
+    <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/archive/">archive</a>
     <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/about/">about</a>
     <a class="block px-2 py-1 hover:bg-green-200 sm:mt-0 sm:ml-2 mt-1" href="/feed.xml">feed</a>
   </nav>
@@ -148,6 +148,14 @@
 </section>
 <section class="mb-12">
   <section class="index-posts">
+      <article class="index-post mb-8">
+        <header>
+          <div class="font-bold mb-2">
+            <a href="/archive/rails-apps-overpacking-with-webpacker.html" class="text-xl">These Rails apps are overpacking their JavaScript bundles</a>
+          </div>
+        </header>
+          <p>A case study of Rails applications making a common Webpacker mistake of rendering modules multiple times on a single page. We'll describe why the problem happens and present a Webpacker Packing Checklist for proper code-splitting.</p>
+      </article>
     <!--
     <article class="index-post mb-8">
     <header>
