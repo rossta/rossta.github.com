@@ -3,7 +3,7 @@
   <% top_tags.each do |tag, articles| %>
     <article class="index-post">
       <header class="index-title">
-        <%= link_to tag, tag_path(tag, 'archive') %>
+        <%= link_to tag, tag_path(tag, 'blog') %>
         <span class="text-sm font-light text-gray-600">
           &middot; <%= articles.count %>
         </span>
