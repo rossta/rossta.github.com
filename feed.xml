@@ -6,13 +6,10 @@
   <link href="https://rossta.net/"/>
   <link href="https://rossta.net/feed.xml" rel="self"/>
   <updated>2020-09-08T00:00:00+00:00</updated>
-  <author>
-    <name>Ross Kaffenberger</name>
-  </author>
   <entry>
     <title>These Rails apps are overpacking their JavaScript bundles</title>
-    <link rel="alternate" href="/blog/rails-apps-overpacking-with-webpacker.html"/>
-    <id>/blog/rails-apps-overpacking-with-webpacker.html</id>
+    <link rel="alternate" href="/archive/rails-apps-overpacking-with-webpacker.html"/>
+    <id>/archive/rails-apps-overpacking-with-webpacker.html</id>
     <published>2020-09-08T00:00:00+00:00</published>
     <updated>2020-09-08T00:00:00+00:00</updated>
     <author>
@@ -426,8 +423,8 @@ document.addEventListener(&amp;#39;[data-open-trix-editor]&amp;#39;, &amp;#39;cl
   </entry>
   <entry>
     <title>A visual guide to Webpacker</title>
-    <link rel="alternate" href="/blog/visual-guide-to-webpacker.html"/>
-    <id>/blog/visual-guide-to-webpacker.html</id>
+    <link rel="alternate" href="/archive/visual-guide-to-webpacker.html"/>
+    <id>/archive/visual-guide-to-webpacker.html</id>
     <published>2020-08-02T00:00:00+00:00</published>
     <updated>2020-08-02T00:00:00+00:00</updated>
     <author>
@@ -669,8 +666,8 @@ webpack: bin/webpack-dev-server
   </entry>
   <entry>
     <title>Why doesn't Webpacker use my test config when I run Rails tests?</title>
-    <link rel="alternate" href="/blog/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html"/>
-    <id>/blog/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html</id>
+    <link rel="alternate" href="/archive/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html"/>
+    <id>/archive/why-doesnt-webpacker-use-my-test-config-when-i-run-rails-tests.html</id>
     <published>2020-07-20T00:00:00+00:00</published>
     <updated>2020-07-20T00:00:00+00:00</updated>
     <author>
@@ -846,8 +843,8 @@ console.log(&amp;#39;Loading config/webpack/development.js...&amp;#39;)
   </entry>
   <entry>
     <title>The webpack plugin I can't live without</title>
-    <link rel="alternate" href="/blog/webpacker-output-analysis-with-webpack-bundle-analyzer.html"/>
-    <id>/blog/webpacker-output-analysis-with-webpack-bundle-analyzer.html</id>
+    <link rel="alternate" href="/archive/webpacker-output-analysis-with-webpack-bundle-analyzer.html"/>
+    <id>/archive/webpacker-output-analysis-with-webpack-bundle-analyzer.html</id>
     <published>2020-05-17T00:00:00+00:00</published>
     <updated>2020-05-17T00:00:00+00:00</updated>
     <author>
@@ -1132,8 +1129,8 @@ module.exports = environment
   </entry>
   <entry>
     <title>Why does Rails 6 include both Webpacker and Sprockets?</title>
-    <link rel="alternate" href="/blog/why-does-rails-install-both-webpacker-and-sprockets.html"/>
-    <id>/blog/why-does-rails-install-both-webpacker-and-sprockets.html</id>
+    <link rel="alternate" href="/archive/why-does-rails-install-both-webpacker-and-sprockets.html"/>
+    <id>/archive/why-does-rails-install-both-webpacker-and-sprockets.html</id>
     <published>2020-05-09T00:00:00+00:00</published>
     <updated>2020-05-09T00:00:00+00:00</updated>
     <author>
@@ -1361,8 +1358,8 @@ import myImageUrl from &amp;#39;../images/my-image.jpg&amp;#39;
   </entry>
   <entry>
     <title>How to debug webpack on Rails</title>
-    <link rel="alternate" href="/blog/how-to-debug-webpack-on-rails.html"/>
-    <id>/blog/how-to-debug-webpack-on-rails.html</id>
+    <link rel="alternate" href="/archive/how-to-debug-webpack-on-rails.html"/>
+    <id>/archive/how-to-debug-webpack-on-rails.html</id>
     <published>2020-05-04T00:00:00+00:00</published>
     <updated>2020-05-04T00:00:00+00:00</updated>
     <author>
