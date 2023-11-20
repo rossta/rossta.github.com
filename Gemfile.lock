@@ -20,11 +20,7 @@ GEM
     concurrent-ruby (1.2.0)
     contracts (0.17)
     dotenv (2.8.1)
-    em-websocket (0.5.3)
-      eventmachine (>= 0.12.9)
-      http_parser.rb (~> 0)
     erubis (2.7.0)
-    eventmachine (1.2.7)
     execjs (2.8.1)
     fast_blank (1.0.1)
     fastimage (2.2.6)
@@ -35,7 +31,6 @@ GEM
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     hashie (3.6.0)
-    http_parser.rb (0.8.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     json (2.6.3)
@@ -84,10 +79,6 @@ GEM
       toml
       uglifier (~> 3.0)
       webrick
-    middleman-livereload (3.4.7)
-      em-websocket (~> 0.5.1)
-      middleman-core (>= 3.3)
-      rack-livereload (~> 0.3.15)
     middleman-meta-tags (0.7.0)
       middleman-core (>= 3.0.0)
     mini_portile2 (2.8.1)
@@ -113,8 +104,6 @@ GEM
     public_suffix (5.0.1)
     racc (1.6.2)
     rack (2.2.6.2)
-    rack-livereload (0.3.17)
-      rack
     rainbow (3.1.1)
     rake (13.0.6)
     rb-fsevent (0.11.2)
@@ -165,7 +154,6 @@ DEPENDENCIES
   builder
   middleman
   middleman-blog
-  middleman-livereload
   middleman-meta-tags
   nokogiri (>= 1.10.4)
   pry-byebug

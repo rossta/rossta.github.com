@@ -4,7 +4,7 @@ require "json"
 require "lib/custom_markdown_renderer"
 require "lib/custom_helpers"
 
-activate(:livereload)
+# activate(:livereload)
 activate(:meta_tags)
 
 # activate :directory_indexes
@@ -17,6 +17,24 @@ activate(:external_pipeline, name: :webpack, command: build? ? "yarn build:prod"
 activate(:blog) do |blog|
   blog.name = "blog"
   blog.prefix = "blog"
+  blog.permalink = "/{title}.html"
+  blog.sources = "{year}-{month}-{day}-{title}.html"
+  blog.layout = "post"
+  blog.tag_template = "tag.html"
+  blog.calendar_template = "calendar.html"
+  blog.paginate = true
+  blog.per_page = 25
+  blog.default_extension = ".md"
+  blog.custom_collections = {series: {link: "/series/{series}.html", template: "series.html"}}
+  blog.publish_future_dated = true
+end
+
+###########################
+## Archived Blog
+###########################
+activate(:blog) do |blog|
+  blog.name = "archive"
+  blog.prefix = "archive"
   blog.permalink = "/{title}.html"
   blog.sources = "{year}-{month}-{day}-{title}.html"
   blog.layout = "post"
@@ -97,5 +115,7 @@ end
 page("/playground.html", layout: false)
 page("/feed.xml", layout: false)
 page("/sitemap.xml", layout: false)
+
+redirect "webpack-on-rails/index.html", to: "index.html"
 
 helpers CustomHelpers

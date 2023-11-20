@@ -3,38 +3,43 @@ title: About
 author: admin
 layout: page
 ---
-
 <% content_for(:title) { "About" } %>
-
 <%= page_header "I'm Ross Kaffenberger", "Making the web better for over 20 years" %>
-
 My goal is to __help full stack web developers improve their JavaScript skills__ so that they can build better applications for their users. I'm especially interested in the intersection between __JavaScript and Ruby on Rails__.
-
 Like many of you, I discovered the joy of programming late. I know how challenging it can be to learn this completely new way of thinking while dealing with LIFE.
-
 ![I'm Ross Kaffenberger](rossta.jpg)
-
 ---
-
-I'm a software engineer at [StitchFix][sfix], where I work on distributed web applications in Ruby on Rails and build user interfaces in React. Previously, I've worked at startups like [LearnZillion][lrnz], [Devpost][devp], and [Weplay][wepl]. For more on my professional experience and background, please refer to my [résumé][resu].
-
-Checkout my projects and open source contributions on [github.com/rossta][ghub].
-
+I'm a software engineer at [Cisco Meraki][cisc], where I build products for
+network admins with Ruby on Rails and build user interfaces in React.
+Previously, I've worked at [Stitch Fix][sfix] and startups like
+[LearnZillion][lrnz], [Devpost][devp], and [Weplay][wepl]. For more on my
+professional experience and background, please refer to my [résumé][resu].
+<p>
+  Check out my
+  <%= link_to "recent posts", "/blog/" %>,
+  <%= link_to "series", "/series/" %>,
+  <%= link_to "talks", '/talks/' %>,
+  and
+  <%= link_to "projects", "/projects/" %>.
+  You can also connect with me on
+  <%= link_to "GitHub", "https://github.com/rossta" %>,
+  <%= link_to "Twitter", "https://twitter.com/rossta" %>,
+  and
+  <%= link_to "Medium", "https://medium.com/@rossta" %>.
+</p>
 Contact me at [ross at rossta.net](mailto:ross@rossta.net).
-
 Find me as `@rossta` on [Twitter][twit], [Github][ghub], and [Medium][medm].
-
 <%= partial "partials/social" %>
-
- [lrnz]: https://learnzillion.com "LearnZillion - Curriculum as a Service"
- [devp]: https://devpost.com
- [resu]: /resume.pdf
- [ghub]: https://github.com/rossta
- [twit]: https://twitter.com/rossta
- [medm]: https://medium.com/@rossta
- [wepl]: http://weplay.com "Acquired by TeamSnap"
- [tfao]: https://www.teachforamerica.org/
- [yesp]: https://www.yesprep.org/
- [hisd]: https://www.houstonisd.org/
- [ball]: http://www.botball.org/
- [sfix]: https://www.stitchfix.com/
+[lrnz]: https://learnzillion.com "LearnZillion - Curriculum as a Service"
+[devp]: https://devpost.com
+[resu]: /resume.pdf
+[ghub]: https://github.com/rossta
+[twit]: https://twitter.com/rossta
+[medm]: https://medium.com/@rossta
+[wepl]: http://weplay.com "Acquired by TeamSnap"
+[tfao]: https://www.teachforamerica.org/
+[yesp]: https://www.yesprep.org/
+[hisd]: https://www.houstonisd.org/
+[ball]: http://www.botball.org/
+[sfix]: https://www.stitchfix.com/
+[cisc]: https://meraki.cisco.com/

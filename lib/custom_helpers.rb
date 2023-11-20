@@ -159,11 +159,15 @@ module CustomHelpers
   end
 
   def current_page_tags
-    explicit_page_tags.presence || %w[JavaScript Ruby]
+    explicit_page_tags.presence || %w[Rails]
   end
 
   def explicit_page_tags
     Array(current_page.data[:tags])
+  end
+
+  def current_convertkit_tag_values
+    current_page_tags.map { |tag| convertkit_tag_value(tag) }.compact
   end
 
   def convertkit_tag_value(tag)
