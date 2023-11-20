@@ -111,23 +111,6 @@ per_page: 5
 <section class="hero-mask bg-orange-200 text-xl mb-16 py-16 text-center">
   <p>Can't wait? This site has a ton of free content to help you get started.</p>
 </section>
-<%
-  article_groups = {
-    'Overview' => 'Why upgrade?',
-    'Feature' => 'Deep dives',
-    'Guide' => 'The missing guide',
-    'WTF' => 'Webpacker WTFs',
-    'Debugging' => 'Debugging tips'
-  }
-%>
-<% article_groups.each do |type, title| %>
-  <section class="index-posts mb-8">
-    <h2 class="mb-4 text-gray-600"><%= title %></h2>
-    <%= partial "partials/article_index", locals: {
-    local_articles: webpack_on_rails_articles.select { |a| a.data.type == type }
-    } %>
-  </section>
-<% end %>
 <section class="signup-form-standalone hero-mask">
   <%= partial "partials/signup" %>
 </section>

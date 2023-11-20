@@ -120,28 +120,21 @@ module CustomHelpers
   end
 
   def top_tags
-    blog("blog").tags.sort_by { |_t, a| -a.count }.to_h
+    blog("archive").tags.sort_by { |_t, a| -a.count }.to_h
   end
 
   def top_curated_tags
-    top_tags.keys & %w[Webpack Rails Ruby JavaScript Vue]
+    top_tags.keys & %w[Rails Ruby JavaScript]
   end
 
   def top_articles
-    blog("blog").articles.select { |a| a.data[:popular] }.sort_by { |a| a.data[:popular] }
-  end
-
-  def webpack_on_rails_articles
-    @webpack_on_rails_articles ||= begin
-      tags = %w[Webpack Rails]
-      blog("blog").articles.select { |a| (tags & a.tags) == tags }
-    end
+    blog("archive").articles.select { |a| a.data[:popular] }.sort_by { |a| a.data[:popular] }
   end
 
   # Look for similar articles published since and prior to current
   # Fall back to different articles
   def related_articles(article, count = 3)
-    other_articles = blog("blog").articles - [article]
+    other_articles = blog("archive").articles - [article]
     article_tags = article.tags
     similar, different = *other_articles.partition { |a| (a.tags & article_tags).any? }
     similar_since, similar_prior = similar.partition { |a| a.date > article.date }

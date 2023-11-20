@@ -18,7 +18,7 @@
         </h5>
         <ul>
           <% top_curated_tags.take(5).each do |tag| %>
-            <li class="mb-1"><%= link_to tag, tag_path(tag, 'blog') %></li>
+            <li class="mb-1"><%= link_to tag, tag_path(tag, "archive") %></li>
           <% end %>
         </ul>
       </section>
