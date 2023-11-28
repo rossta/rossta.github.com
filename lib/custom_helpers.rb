@@ -172,17 +172,9 @@ module CustomHelpers
     ((current_page.data.tags || []) & tagged_with).any?
   end
 
+  CONVERTKIT_STANDARD_INLINE_FORM_ID = "818387"
   def convertkit_inline_form_id
-    convertkit_webpack_landing_page_form_id = "1672590"
-    convertkit_webpack_inline_form_id = "1268949"
-    convertkit_standard_inline_form_id = "818387"
-    if /webpack-on-rails\/index/.match?(current_page.path)
-      convertkit_webpack_landing_page_form_id
-    elsif current_page_tagged?(%w[Rails Webpack])
-      convertkit_webpack_inline_form_id
-    else
-      convertkit_standard_inline_form_id
-    end
+    CONVERTKIT_STANDARD_INLINE_FORM_ID
   end
 
   def convertkit_campaign
