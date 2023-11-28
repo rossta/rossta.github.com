@@ -1,7 +1,8 @@
 module CustomHelpers
   class WebpackManifest
     def entrypoints(name, type)
-      raise "Unknown webpack entrypoint type: #{type.inspect}" unless type.in?(%w(js css))
+      raise "Unknown webpack entrypoint type: #{type.inspect}" unless type.in?(%w[js css])
+
       data.dig("entrypoints", name, "assets", type)
     end
 
@@ -30,7 +31,7 @@ module CustomHelpers
   end
 
   def page_header(title, summary = nil)
-    partial("partials/page_header", locals: {title: title, summary: summary})
+    partial("partials/page_header", locals: {title:, summary:})
   end
 
   def section
@@ -76,7 +77,7 @@ module CustomHelpers
     path = current_page.path
     path = "/" if homepage?
     path = current_article.url if current_article
-    to_url(path: path)
+    to_url(path:)
   end
 
   def homepage?

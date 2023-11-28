@@ -1,0 +1,22 @@
+require:
+  - standard
+
+inherit_gem:
+  standard: config/base.yml
+
+Rails:
+  Enabled: true # enable rubocop-rails cops
+RSpec:
+  Enabled: true # enable rubocop-rspec cops
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
