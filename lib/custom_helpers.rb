@@ -56,13 +56,13 @@ module CustomHelpers
   def stylesheet_pack_tag(name)
     manifest.entrypoints(name, "css").map do |url|
       %(<link rel="stylesheet" href="#{url}" media="all"></link>)
-    end.join("")
+    end.join
   end
 
   def javascript_pack_tag(name)
     manifest.entrypoints(name, "js").map do |url|
-      %(<script src="#{url}"></script>")
-    end.join("")
+      %(<script src="#{url}"></script>)
+    end.join
   end
 
   def to_url(opts = {})
