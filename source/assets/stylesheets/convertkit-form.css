@@ -52,11 +52,11 @@
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus {
   outline: none;
 }
-.formkit-form[data-uid='cda82aafbf'] .formkit-button:hover > span,
-.formkit-form[data-uid='cda82aafbf'] .formkit-submit:hover > span,
-.formkit-form[data-uid='cda82aafbf'] .formkit-button:focus > span,
-.formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus > span {
-  background-color: rgba(0, 0, 0, 0.1);
+.formkit-form[data-uid='cda82aafbf'] .formkit-button:hover,
+.formkit-form[data-uid='cda82aafbf'] .formkit-submit:hover,
+.formkit-form[data-uid='cda82aafbf'] .formkit-button:focus,
+.formkit-form[data-uid='cda82aafbf'] .formkit-submit:focus {
+  background-color: rgba(4, 120, 87, 0.9);
 }
 .formkit-form[data-uid='cda82aafbf'] .formkit-button > span,
 .formkit-form[data-uid='cda82aafbf'] .formkit-submit > span {
