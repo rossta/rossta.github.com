@@ -27,7 +27,7 @@ Rails was once at the forefront—the Rails asset pipeline was a huge leap forwa
 
 In this post, I will elaborate on why I think think it's a good idea to make the switch. But this will assume some prerequisites; in other words, we'll first consider why you might NOT want to switch and instead stick with the Rails asset pipeline.
 
-> [Subscribe to my newsletter](https://signup.rossta.net) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](https://buttondown.email/joyofrails), Joy of Rails, to get notified about new content.
 
 ### Why not switch?
 

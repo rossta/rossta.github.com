@@ -16,7 +16,7 @@ type: Guide
 
 When [adjusting webpacker.yml](/blog/how-to-use-webpacker-yml.html) is not enough, it might be necessary to modify Webpacker's default webpack configuration. Configuring webpack is precisely the main job of Webpacker's NPM package, `@rails/webpacker`.
 
-> [Subscribe to my newsletter](https://signup.rossta.net) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](https://buttondown.email/joyofrails), Joy of Rails, to get notified about new content.
 
 This post provides an overview of how to customize its default settings for your Rails application. It's a followup to my last post on [understanding webpacker.yml](/blog/how-to-use-webpacker-yml.html).
 

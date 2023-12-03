@@ -22,7 +22,7 @@ Uncaught TypeError: $(...).myJqueryPlugin is not a function
 
 Assuming you installed it correctly, there could be a few explanations. In this post, we'll look one possible reason: with webpack, your jQuery plugin _might_ not need jQuery.
 
-> [Subscribe to my newsletter](https://signup.rossta.net) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](https://buttondown.email/joyofrails), Joy of Rails, to get notified about new content.
 
 ### Example: the Flickity plugin
 
@@ -34,8 +34,8 @@ Here's an example. The popular jQuery plugin [Flickity](https://flickity.metafiz
 $('.main-carousel').flickity({
   // options
   cellAlign: 'left',
-  contain: true
-});
+  contain: true,
+})
 ```
 
 And that works fine. Except, `Flickity` is not really a just a jQuery plugin. More on that later.
@@ -51,13 +51,13 @@ In our module-based webpack build, the usage is instead ideally:
 ```javascript
 // app/javascript/src/carousel.js
 
-import Flickity from 'flickity';
+import Flickity from 'flickity'
 
 const flickity = new Flickity('.main-carousel', {
   // options
   cellAlign: 'left',
-  contain: true
-});
+  contain: true,
+})
 ```
 
 For this plugin, jQuery is not required. How do we know that though?
@@ -79,10 +79,11 @@ Here's an excerpt from Flickity's `package.json`:
 ```json
 {
   "name": "flickity",
-  "main": "js/index.js",
+  "main": "js/index.js"
   // ...
 }
 ```
+
 This is saying thath the file `path/to/flickity/js/index.js` is the entry point. On my machine from the root of my project, I can open that file at `./node_modules/flickity/js/index.js` or on GitHub ([source](https://github.com/metafizzy/flickity/blob/c67b28accbe0642352c706cb470a8f607fa5861b/js/index.js)) (slightly modified for this article).
 
 ```
@@ -98,6 +99,7 @@ This is saying thath the file `path/to/flickity/js/index.js` is the entry point.
   return Flickity;
 });
 ```
+
 We can see this exports a module, either through the `define` function, for runtimes that support [Asynchronous Module Definition (AMD)](https://requirejs.org/docs/whyamd.html) format, or the `require` function, for runtimes that support [CommonJS](https://nodejs.org/docs/latest/api/modules.html) format. webpack supports both.
 
 ### jQuery not required
@@ -105,6 +107,7 @@ We can see this exports a module, either through the `define` function, for runt
 Note also that this file does not require the `'jquery'` package. An interesting consequence of this is that it's not even possible to use Flickity with jQuery (at least via the NPM package alone). This recently came up in a [GitHub issue for the Webpacker project](https://github.com/rails/webpacker/issues/2456).
 
 In other words, the following code with webpack:
+
 ```javascript
 // app/javascript/src/carousel.js
 import 'jquery'
@@ -113,8 +116,8 @@ import 'flickity'
 $('.main-carousel').flickity({
   // options
   cellAlign: 'left',
-  contain: true
-});
+  contain: true,
+})
 ```
 
 would result in this error:
@@ -127,10 +130,10 @@ This project can produce a separate distribution from the package available via 
 
 A similar approach exists in other plugins including:
 
-* [masonry](https://github.com/desandro/masonry)
-* [infinite-scroll](https://github.com/metafizzy/infinite-scroll)
-* [isotope](https://github.com/metafizzy/isotope)
-* [draggabilly](https://github.com/desandro/draggabilly)
+- [masonry](https://github.com/desandro/masonry)
+- [infinite-scroll](https://github.com/metafizzy/infinite-scroll)
+- [isotope](https://github.com/metafizzy/isotope)
+- [draggabilly](https://github.com/desandro/draggabilly)
 
 The main takeaway here: if the library can be initialized without jQuery, there's not much reason to use jQuery for that plugin in the first place.
 

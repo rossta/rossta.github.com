@@ -20,7 +20,7 @@ I recently encountered a Rails app at work that was spending nearly seven minute
 
 I looked in the `Gemfile` and found the project was using Webpacker. My spidey sense started to tingle.
 
-*I've seen this before*.
+_I've seen this before_.
 
 Leaning on prior experience, I found the problem, moved some files around, and pushed a branch with the fix up to CI.
 
@@ -30,7 +30,7 @@ The build step dropped from nearly seven minutes to less than one. Big improveme
 
 So what were the changes?
 
-> [Subscribe to my newsletter](https://signup.rossta.net) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](https://buttondown.email/joyofrails), Joy of Rails, to get notified about new content.
 
 ### A Common Problem
 
@@ -44,9 +44,10 @@ More often than not, the root cause is a simple oversight in directory structure
 
 ### Overpacking explained
 
-Here's the layout of the `app/javascript` directory in the Rails app *before* I introduced the fix:
+Here's the layout of the `app/javascript` directory in the Rails app _before_ I introduced the fix:
 
 **rake assets:precompile — 6:56**
+
 ```shell
 app/
   javascript/
@@ -61,6 +62,7 @@ app/
 Here's what the project looked like building in under a minute:
 
 **rake assets:precompile — 0:44**
+
 ```shell
 app/
   javascript/
@@ -88,9 +90,9 @@ Webpack needs at least one **entry** point to build the dependency graph for pro
 
 Webpack will build a separate dependency graph for every entry specified in its configuration. The more entry points you provide, the more dependency graphs webpack has to build.
 
-Since webpack*er*, by default, treats *every file* in the `packs` directory as a separate entry, it will build a separate dependency graph for *every file* located there.
+Since webpack*er*, by default, treats _every file_ in the `packs` directory as a separate entry, it will build a separate dependency graph for _every file_ located there.
 
-That also means, for *every file* in the `packs` directory, there will be at least one, possibly more, files emitted as output in the `public` directory during precompilation. If you're not linking to these files anywhere in your app, then they don't need to be emitted as output. For a large project, that could be lot of unnecessary work.
+That also means, for _every file_ in the `packs` directory, there will be at least one, possibly more, files emitted as output in the `public` directory during precompilation. If you're not linking to these files anywhere in your app, then they don't need to be emitted as output. For a large project, that could be lot of unnecessary work.
 
 Here's a case where Rails tries to make things easier for you—by auto-configuring entry files—while also making it easier to shoot yourself in the foot.
 

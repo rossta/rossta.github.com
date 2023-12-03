@@ -19,13 +19,14 @@ Webpack isn't just for JavaScript. You can bundle images with it too. [Webpacker
 
 In this post, we'll demonstrate how to reference Webpacker images from your JavaScript, CSS, and Rails views. The following examples were created using Rails 6 and Webpacker 4, but may work with other versions as well. Pre-requisites for working with Webpacker in a Rails project also include [yarn](https://yarnpkg.com/).
 
-> [Subscribe to my newsletter](https://signup.rossta.net) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](https://buttondown.email/joyofrails), Joy of Rails, to get notified about new content.
 
 ### Folder structure
 
 First, where should you put your images? It doesn't matter. The easiest place to start is under your `app/javascript` folder, the default source path for Webpacker, such as `app/javascript/images`.
 
 For the rest of this guide, we'll assume the following directory structure and files:
+
 ```
 app/javascript
 ├── components
@@ -39,6 +40,7 @@ app/javascript
 └── packs
     └── application.js
 ```
+
 > Isn't weird to put images and css in a folder called "javascript"? Depends. If you consider, from webpack's perspective, everything is a JavaScript module, it may not be so strange. Otherwise, it's possible to rename `app/javascript` or place your images elsewhere. More on that below.
 
 ### Images in JS
@@ -49,7 +51,7 @@ To reference an image from JavaScript in your Webpacker build, simply import it 
 // app/javascripts/components/Taco.js
 import TacoImage from '../images/tacos.jpg'
 
-export default function({ title }) {
+export default function ({ title }) {
   return `
   <div>
     <h1>${title}</h1>
@@ -58,9 +60,11 @@ export default function({ title }) {
   `
 }
 ```
+
 In the example above, webpack will import `TacoImage` as a url to the file. In other words, an "image module" in webpack exports a single default value, a string, representing the location of the file. Based on the default Webpacker configuration, the filename will look something like `"/packs/media/images/tacos-abcd1234.jpg"`.
 
 Importing a image also works if you're using "CSS in JS" to style a React component.
+
 ```jsx
 import React from 'react'
 
@@ -71,11 +75,7 @@ const styles = {
 }
 
 export default function ({ title }) {
-  return (
-    <div style={styles}>
-      {title}!
-    </div>
-  )
+  return <div style={styles}>{title}!</div>
 }
 ```
 
@@ -86,9 +86,10 @@ In Sprockets, when referencing images in CSS, you would use a special `image-url
 ```css
 /* app/javascript/css/main.css */
 .burritos {
-  background-image: url("../images/burritos.jpg");
+  background-image: url('../images/burritos.jpg');
 }
 ```
+
 The output for the style rule will, again, look something like `background-image: url(/packs/media/images/burritos-efgh5678.jpg);`. This technique will also work for image paths in CSS Modules.
 
 ### Images in CSS within NPM modules
@@ -98,6 +99,7 @@ One tricky bit worth mentioning is bundling images referenced in SCSS within an 
 ```
 Module not found: Error: Can't resolve '../img/controls.png'
 ```
+
 The problem is the path does not resolve properly relative to the output for this vendored SCSS. From the [Webpacker docs](https://github.com/rails/webpacker/blob/76b491750993fada8b0b0cc2546dfcfbc4aaae13/docs/css.md#resolve-url-loader):
 
 > Since Sass/libsass does not provide url rewriting, all linked assets must be relative to the output. Add the missing url rewriting using the resolve-url-loader. Place it directly after the sass-loader in the loader chain.
@@ -107,15 +109,17 @@ To fix this, you may need to get your hands dirty with some Webpacker configurat
 ```shell
 yarn add resolve-url-loader
 ```
+
 ```javascript
 // config/webpack/environment.js
 const { environment } = require('@rails/webpacker')
 
 // resolve-url-loader must be used before sass-loader
 environment.loaders.get('sass').use.splice(-1, 0, {
-  loader: 'resolve-url-loader'
+  loader: 'resolve-url-loader',
 })
 ```
+
 This loader rule, inserted in the loader pipeline for SASS/SCSS files, will ensure the proper url is written to the CSS output by webpack.
 
 ### Images in Rails views
@@ -127,6 +131,7 @@ You may be accustomed to `<%= lazy_image_tag 'tacos.jpg' %>` to reference a imag
 
 <%= image_pack_tag 'media/images/guacamole.jpg' %>
 ```
+
 Note, since Webpacker 4, the prefix `media/` is necessary and the remaining path represents the location from your webpack source path.
 
 There's a catch. This change may result in the following error:
@@ -137,6 +142,7 @@ Showing /path/to/project/app/views/lunches/index.html.erb where line #4 raised:
 
 Webpacker can't find media/images/guacamole.jpg in /path/to/project/public/packs/manifest.json.
 ```
+
 However, if you use `<%= image_pack_tag 'media/images/tacos.jpg %>`, the taco image will happily renders. What gives?
 
 Your Rails app is not being selective about cuisine. The difference is, we earlier imported the `tacos.jpg` image in webpack, but not `guacamole.jpg`.
@@ -154,6 +160,7 @@ Another way to fix this issue is to import _all_ images in the `app/javascript/i
 
 require.context('../images', true)
 ```
+
 This expression will recursively require all the files in the `images` directory. As a result, we can now render `guacamole.jpg` in a Rails view.
 
 > Note: I only recommend using `require.context` for your images if you need to render them in your Rails views; `require.context` is NOT necessary to import images into JS files like your React components, as illustrated earlier.
@@ -168,7 +175,9 @@ To rename `app/javascript`, rename the directory and tell Rails about it in `con
 default: &default
   source_path: app/frontend
 ```
+
 To add to the set of resolved paths where webpack should look for assets besides in `app/javascript`:
+
 ```yaml
 default: &default
   additional_paths:
@@ -187,5 +196,5 @@ For more on how webpack works with images, check out the [asset management docs]
 
 I also put together a sample Rails 6 Webpacker demo project on GitHub for more context:
 
-* [Images in JS, CSS, and Rails](https://github.com/rossta/rails6-webpacker-demo/compare/example/images)
-* [Images with CSS-in-JS in a React app](https://github.com/rossta/rails6-webpacker-demo/compare/example/react-image)
+- [Images in JS, CSS, and Rails](https://github.com/rossta/rails6-webpacker-demo/compare/example/images)
+- [Images with CSS-in-JS in a React app](https://github.com/rossta/rails6-webpacker-demo/compare/example/react-image)

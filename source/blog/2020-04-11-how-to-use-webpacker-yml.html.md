@@ -13,13 +13,14 @@ tags:
   - Webpack
 type: Guide
 ---
+
 Though Webpacker adds a layer of "convention over configuration" in regards to webpack integration with Rails, the need for configuration remains. In this post, I'll describe the role of the `webpacker.yml` file for Webpacker configuration.
 
 One of Webpacker's primary roles is helping Rails communicate with webpack.
 
 Here are some things both Rails and webpack need to know:
 
-> ​_Where are the source files located?_
+> ​*Where are the source files located?*
 >
 > _What file types should be bundled?_
 >
@@ -33,15 +34,18 @@ That's where `webpacker.yml` comes in.
 
 This file is read both Ruby code supplied by the Webpacker gem in the Rails server process and the JavaScript process that generates the webpack configuration via the `@rails/webpacker` NPM package. It supports a number of YAML entries which I'll describe in more detail in the [reference guide](#reference-guide).
 
-> [Subscribe to my newsletter](https://signup.rossta.net) to learn more about using webpack with Rails.
+> [Subscribe to my newsletter](https://buttondown.email/joyofrails), Joy of Rails, to get notified about new content.
 
 ### Creating and updating
 
 Webpacker expects to find this file at `config/webpacker.yml` within your Rails project. It is installed via the following command, provided by the Webpacker gem.
+
 ```sh
 rails webpacker:install
 ```
+
 The installer also generates environment-specific JavaScript files in `config/webpack/`.
+
 ```sh
 config
 │   ...
@@ -52,6 +56,7 @@ config
 │   └── test.js
 └── webpacker.yml
 ```
+
 When upgrading the Webpacker gem, it's prudent to re-run the installer command to bring in new changes from the default `webpacker.yml` template. Differences will have to be merged intentionally to avoid losing project-specific customizations.
 
 ### Limitations
@@ -79,6 +84,7 @@ The subdirectory within [`source_path`](#source_path) where your webpack entry p
 ```yaml
 source_entry_path: packs
 ```
+
 **!!!Warning!!!** Only use this directory for webpack entry points! [A common webpacker mistake](https://rossta.net/blog/overpacking-a-common-webpacker-mistake.html) is placing too many files in this directory.
 
 #### additional_paths
@@ -93,6 +99,7 @@ additional_paths:
 #### public_root_path
 
 The primary destination within your Rail application where your compiled webpack assets are output. For most applications this should be `public`, i.e., corresponding to `Rails.public_path`. When [configuring webpacker for a Rails engine](https://github.com/rails/webpacker/blob/master/docs/engines.md), this value could be relative to the engine root, such as `../public`.
+
 ```yaml
 public_root_path: public
 ```
@@ -116,6 +123,7 @@ cache_path: tmp/cache/webpacker
 #### webpack_compile_output
 
 Set to `true` to print webpack output do STDOUT or `false` to silence. Unless you're extremely confident in what you're doing, the only correct value for this setting is `true`.
+
 ```yaml
 webpack_compile_output: true
 ```
@@ -135,6 +143,7 @@ Given a webpack bundle `application.js` that imports CSS, webpacker can be confi
 ```yaml
 extract_css: true
 ```
+
 **Important** With `extract_css: true`, you must use `stylesheet_pack_tag`, i.e, `<%= stylesheet_pack_tag "application" %>`, in your Rails view. This can be easy to miss in deployed environments after using `extract_css: false` for local development.
 
 #### static_assets_extensions
@@ -143,9 +152,9 @@ Provide a list of file extensions, such as `.jpeg`, `.png`, `.woff`, that webpac
 
 ```yaml
 static_file_extensions:
-    - .jpg
-    - .jpeg
-    # ...
+  - .jpg
+  - .jpeg
+  # ...
 ```
 
 #### extensions
@@ -174,6 +183,7 @@ compile: false
 This config contains a set of key-value pairs that correspond to a subset of the `webpack-dev-server` configuration [outlined in the webpack docs](https://webpack.js.org/configuration/dev-server/).
 
 Rails only needs to know the `host`, `port`, `https` values to proxy requests to the `webpack-dev-server` in `development`. Other `dev_server` config values may be set in either `webpacker.yml` or in the webpack config exported from `config/webpack/development.js`. Make sure at least the following values are set in `webpacker.yml`:
+
 ```yaml
 development:
   # ...
@@ -184,7 +194,9 @@ development:
     public: localhost:3035
     # ..
 ```
+
 To enable auto-recompile when source files are changed:
+
 ```yaml
 development:
   # ...
@@ -193,7 +205,9 @@ development:
     inline: true
     # ...
 ```
+
 To enable [hot-module replacement](https://webpack.js.org/concepts/hot-module-replacement/):
+
 ```yaml
 development:
   # ...
@@ -205,18 +219,22 @@ development:
     hmr: true
     # ...
 ```
+
 Refer to the [Webpacker docs](https://github.com/rails/webpacker/blob/master/docs/webpack-dev-server.md) and [webpack docs](https://webpack.js.org/configuration/dev-server/) for more info.
 
 ### ENV var overrides
 
 Some Rails configuration can be overriden via ENV vars. This is especially helpful to workaround certain [limitations](#limitations). Many of the `dev_server` options can be specified in upcase with the prefix `WEBPACKER_DEV_SERVER_`, as illustrated below:
+
 ```sh
 WEBPACKER_DEV_SERVER_HOST=localhost \
 WEBPACKER_DEV_SERVER_PORT=8765 \
 WEBPACKER_DEV_SERVER_PUBLIC=localhost:8765 \
 ./bin/webpack-dev-server
 ```
+
 Other supported Webpacker ENV vars include:
+
 ```sh
 WEBPACKER_NODE_MODULES_BIN_PATH
 WEBPACKER_RELATIVE_URL_ROOT

@@ -21,7 +21,7 @@ First, we'll take a look at the "classic" way of bundling assets with Rails: the
 
 > Struggling with webpack and Webpacker?
 >
-> [**Subscribe to my newsletter for occasional emails with new content.**](https://signup.rossta.net).
+> [**Subscribe to my newsletter for occasional emails with new content.**](https://buttondown.email/joyofrails).
 
 #### HTML request with the asset pipeline
 

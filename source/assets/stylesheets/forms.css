@@ -17,16 +17,6 @@ textarea {
   height: auto;
 }
 
-form input {
-  @apply text-white font-bold py-2 px-4 rounded text-xs appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline
-  border: 1px solid #e3e3e3;
-  -webkit-flex: 1 0 auto;
-  -ms-flex: 1 0 auto;
-  flex: 1 0 auto;
-  line-height: 1.4;
-  margin: 0;
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
