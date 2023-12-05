@@ -17,7 +17,7 @@ The thing with paginated data is we can't get it all at once.
 Let's say we're using the [Trello API](https://developers.trello.com/). There are a number of Trello endpoints that return paginated data sets, such as boards, lists,
 cards, and actions (like comments, copies, moves, etc).
 
-If we're querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of "cards" <img src="<%= image_path('icons/noun_63447.png') %>" class="icon-image inline" /> <img src="<%= image_path('icons/noun_63453.png') %>" class="icon-image inline" />
+If we're querying for Trello cards marked as completed each month since last January, for example, we may need to request several pages of "cards". 
 
 In most cases, Trello will provide a default limit, typically 50, on the number of resources returned in a single request. But what if you need more than that? In this post, we'll examine a few ways to collect paginated results in Ruby.
 
